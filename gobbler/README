@@ -1,0 +1,6 @@
+ This is the libre.fm audioscrobbler server, compatible with the last.fm API.
+
+ To install visit http://yourserver.com/path/to/gobbler/install.php
+
+ As things stand you'll need the MDB2 pear module installed (and at least one MDB2 driver) this can be achieved by running "pear install mdb2 mdb2#sqlite".
+ (For distribution we can include the latest version of MDB2 in the release packages if we want to make things even simpler for people.)
