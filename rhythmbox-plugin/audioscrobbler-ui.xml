@@ -1,0 +1,14 @@
+<ui>
+  <popup name="LastfmStationViewPopup">
+    <menuitem name="DeleteLibraryPopup" action="LastfmStationDelete"/>
+  </popup>
+
+  <popup name="LastfmTrackVieWPopup">
+    <menuitem name="Ban" action="LastfmBanSong"/>
+    <menuitem name="Love" action="LastfmLoveSong"/>
+    <menuitem name="Download" action="LastfmDownloadSong"/>
+  </popup>
+
+  <popup name="LastfmSourcePopup">
+  </popup>
+</ui>
