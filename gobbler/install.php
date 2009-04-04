@@ -22,7 +22,7 @@ if (isset($_POST['install'])) {
 	}
 
 	//Create tables
-	$res = $mdb2->query("CREATE TABLE Users (username VARCHAR(64) PRIMARY KEY,
+	$mdb2->query("CREATE TABLE Users (username VARCHAR(64) PRIMARY KEY,
 		password VARCHAR(255) NOT NULL,
        		email VARCHAR(255),
        		fullname VARCHAR(255),
@@ -31,6 +31,11 @@ if (isset($_POST['install'])) {
 		location VARCHAR(255),
 		created TIMESTAMP NOT NULL,
 		modified TIMESTAMP)");
+
+	$res = $mdb2->query("CREATE TABLE Auth (token VARCHAR(32) PRIMARY KEY,
+		sk VARCHAR(32),
+		expires TIMESTAMP,
+		username VARCHAR(255) REFERENCES Users(username))");
 
 	$mdb2->disconnect();
 
