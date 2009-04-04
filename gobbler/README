@@ -4,3 +4,15 @@
 
  As things stand you'll need the MDB2 pear module installed (and at least one MDB2 driver) this can be achieved by running "pear install mdb2 mdb2#sqlite".
  (For distribution we can include the latest version of MDB2 in the release packages if we want to make things even simpler for people.)
+
+ To test the authentication API once the server is set up:
+  1. Navigate to /2.0/?method=auth.gettoken&api_key=01234567890123456789012345678901&api_sig=01234567890123456789012345678901
+     (The api_key and api_sig are only checked to be 32 characters long since Last.FM shared secrets cannot be checked)
+  2. Copy the key that is returned by the auth.gettoken method
+  3. Navigate to /api/auth/?api_key=01234567890123456789012345678901&token=<copied token>
+     (Inserting the copied token into the noted place)
+  4. Login as testuser/password (this user is hard-coded upon database setup)
+  5. Close the browser when requested
+  6. Navigate to /2.0/?method=auth.getsession&api_key=01234567890123456789012345678901&api_sig=01234567890123456789012345678901&token=<copied token>
+     (Once again substituting the old copied token into the noted place)
+  7. The 32-byte key returned between the <key> tags in this response will be used in the Submissions protocol handshake

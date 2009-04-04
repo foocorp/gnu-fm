@@ -9,8 +9,19 @@ require_once('../../database.php');
 <?php if (isset($_POST['username'], $_POST['api_key'], $_POST['token'])) { ?>
 
 <?php
+// Authenticate the user using the submitted password
+$result = $mdb2->query('SELECT username FROM Users WHERE '
+	. 'username = ' . $mdb2->quote($_POST['username'], 'text') . ' AND '
+	. 'password = ' . $mdb2->quote(md5(md5($_POST['password'])), 'text'));
+if (PEAR::isError($result))
+	die("Database error");
+if (!$result->numRows())
+	die("Authentication failed");
+
+// Bind the user to the token and cancel the expiration rule
 $result = $mdb2->query('UPDATE Auth SET '
-	. 'username = ' . $mdb2->quote($_POST['username'], 'text') . ' '
+	. 'username = ' . $mdb2->quote($_POST['username'], 'text') . ', '
+	. 'expires = ' . $mdb2->quote(0, 'integer') . ' '
 	. 'WHERE '
 	. 'token = ' . $mdb2->quote($_POST['token']));
 if (PEAR::isError($result))
@@ -28,12 +39,14 @@ if (PEAR::isError($result))
 <?php } else { ?>
 
 <?php
-$result = $mdb2->query('SELECT * FROM Auth WHERE ('
-	. 'token = ' . $mdb2->quote($_GET['token'], 'text') . ')');
+// Ensures the token exists and is not already bound to a user
+$result = $mdb2->query('SELECT * FROM Auth WHERE '
+	. 'token = ' . $mdb2->quote($_GET['token'], 'text') . ' AND '
+	. 'username IS NULL');
 if (PEAR::isError($result))
 	die("Database error");
 if (!$result->numRows())
-	die("Invalid key");
+	die("Invalid token");
 ?>
 
 <form method="post" action="">

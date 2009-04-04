@@ -53,24 +53,43 @@ function method_auth_gettoken() {
 		. $mdb2->quote(time() + 3600, 'integer')
 		. ")");
 	if (PEAR::isError($result))
-		report_failure(LFM_TOKEN_ERROR);
+		report_failure(LFM_SERVICE_OFFLINE);
 	
 	print("<lfm status=\"ok\">\n");
 	print("    <token>$key</token></lfm>");
 }
 
 function method_auth_getsession() {
+	global $mdb2;
+	
 	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
 		report_failure(LFM_INVALID_SIGNATURE);
 	
-	if (!isset($_GET['token']) || !valid_token($_GET['token']))
+	if (!isset($_GET['token']))
 		report_failure(LFM_INVALID_TOKEN);
 	
+	// Check for a token that (1) is bound to a user, and (2) is not bound to a session
+	$result = $mdb2->query('SELECT username FROM Auth WHERE '
+		. 'token = ' . $mdb2->quote($_GET['token'], 'text') . ' AND '
+		. 'username IS NOT NULL AND sk IS NULL');
+	if (PEAR::isError($result))
+		report_failure(LFM_SERVICE_OFFLINE);
+	if (!$result->numRows())
+		report_failure(LFM_INVALID_TOKEN);
+	
+	$username = $result->fetchOne(0);
 	$session = md5(time() . rand());
+	
+	// Update the Auth record with the new session key
+	$result = $mdb2->query('UPDATE Auth SET '
+		. 'sk = ' . $mdb2->quote($session, 'text') . ' WHERE '
+		. 'token = ' . $mdb2->quote($_GET['token'], 'text'));
+	if (PEAR::isError($result))
+		report_failure(LFM_SERVICE_OFFLINE);
 	
 	print("<lfm status=\"ok\">\n");
 	print("    <session>\n");
-	print("        <name>A User</name>\n");
+	print("        <name>$username</name>\n");
 	print("        <key>$session</key>\n");
 	print("        <subscriber>0</subscriber>\n");
 	print("    </session>\n");
@@ -83,10 +102,6 @@ function valid_api_key($key) {
 
 function valid_api_sig($sig) {
 	return strlen($sig) == 32;
-}
-
-function valid_token($token) {
-	return strlen($token) == 32;
 }
 
 function report_failure($code) {
