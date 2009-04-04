@@ -37,7 +37,29 @@ if (isset($_POST['install'])) {
 		sk VARCHAR(32),
 		expires TIMESTAMP,
 		username VARCHAR(255) REFERENCES Users(username))");
-	
+
+	$mdb2->query("CREATE TABLE Artist(
+		name VARCHAR(255) PRIMARY KEY,
+		mbid VARCHAR(36),
+		streamable int,
+		bio_published TIMESTAMP,
+		bio_content TEXT)");
+
+	$mdb2->query("CREATE TABLE Album(
+		id int PRIMARY KEY,
+		name VARCHAR(255),
+		artist_name VARCHAR(255) REFERENCES Artist(name) ,
+		mbid VARCHAR(36) ,
+		releasedate DATE,
+		listeners int,
+		playcount int)");
+
+	// Table for registering similar artists
+	$mdb2->query("CREATE TABLE Similar_Artist(
+		name_a VARCHAR(255) REFERENCES Artist(name),
+		name_b VARCHAR(255) REFERENCES Artist(name),
+		PRIMARY KEY(name_a, name_b))");
+
 	// Test user configuration
 	$res = $mdb2->query("INSERT INTO Users
 		(username, password, created)
