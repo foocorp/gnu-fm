@@ -11,7 +11,7 @@ if (isset($_POST['install'])) {
 	$dbms = $_POST['dbms'];
 	if($dbms == "sqlite") {
 		$filename = $_POST['filename'];
-		$connect_string = "sqlite://" . $_POST['filename'];
+		$connect_string = "sqlite:///" . $filename;
 	} else {
 		$connect_string = $dbms . "://" . $_POST['username'] . ":" . $_POST['password'] . "@" . $_POST['hostname'] . ":" . $_POST['port'] . "/" . $_POST['dbname'];
 	}
@@ -23,9 +23,9 @@ if (isset($_POST['install'])) {
 
 	//Create tables
 	$mdb2->query("CREATE TABLE Users (username VARCHAR(64) PRIMARY KEY,
-		password VARCHAR(255) NOT NULL,
-       		email VARCHAR(255),
-       		fullname VARCHAR(255),
+		password VARCHAR(32) NOT NULL,
+		email VARCHAR(255),
+		fullname VARCHAR(255),
 		bio TEXT,
 		homepage VARCHAR(255),
 		location VARCHAR(255),
@@ -36,7 +36,13 @@ if (isset($_POST['install'])) {
 		sk VARCHAR(32),
 		expires TIMESTAMP,
 		username VARCHAR(255) REFERENCES Users(username))");
-
+	
+	// Test user configuration
+	$res = $mdb2->query("INSERT INTO Users
+		(username, password, created)
+		VALUES
+		('testuser', '" . md5(md5('password')) . "', " . time() . ")");
+	
 	$mdb2->disconnect();
 
 	//Write out the configuration
@@ -74,7 +80,7 @@ if (isset($_POST['install'])) {
 		<h1>Gobbler Installer</h1>
 		<form method="post">
 			Database Management System: <br />
-			<input type="radio" name="dbms" value="sqlite" onclick='showSqlite()' checked>SQLite</input><br />
+			<input type="radio" name="dbms" value="sqlite" onclick='showSqlite()' checked>SQLite (use an absolute path)</input><br />
 			<input type="radio" name="dbms" value="mysql" onclick='showNetworkDBMS()'>MySQL</input><br />
 			<input type="radio" name="dbms" value="pgsql" onclick='showNetworkDBMS()'>PostgreSQL</input><br />
 			<br />
