@@ -65,6 +65,32 @@ if (isset($_POST['install'])) {
 		name_b VARCHAR(255) REFERENCES Artist(name),
 		PRIMARY KEY(name_a, name_b))");
 
+	$mdb2->query("CREATE TABLE Track(
+		name VARCHAR(255),
+		artist VARCHAR(255) REFERENCES Artist(name),
+		album VARCHAR(255) REFERENCES Album(name),
+		mbid VARCHAR(36),
+		duration int,
+		streamable int,
+		license VARCHAR(255),
+		downloadurl VARCHAR(255),
+		PRIMARY KEY(name, artist))");
+
+	$mdb2->query("CREATE TABLE Scrobbles(
+		username VARCHAR(255) REFERENCES User(username),
+		track VARCHAR(255) REFERENCES Track(name),
+		artist VARCHAR(255) REFERENCES Artist(name),
+		rating VARCHAR(1),
+		playcount int,
+		lastplayed TIMESTAMP,
+		PRIMARY KEY(username, track, artist))");
+
+	$mdb2->query("CREATE TABLE Scrobble_Sessions(
+		username VARCHAR(255) REFERENCES User(username),
+		sessionid VARCHAR(32),
+		expires TIMESTAMP,
+		PRIMARY KEY(username, sessionid))");
+
 	// Test user configuration
 	$res = $mdb2->query("INSERT INTO Users
 		(username, password, created)

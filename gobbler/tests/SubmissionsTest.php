@@ -1,5 +1,6 @@
 <?php
 require_once('PHPUnit/Framework.php');
+require_once('HTTP/Request.php');
 
 class SubmissionsTest extends PHPUnit_Framework_TestCase
 {
@@ -16,6 +17,19 @@ class SubmissionsTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals("BADAUTH", trim($result[0]));
 	}
 
+
+	public function testScrobble() {
+		$result = $this->standardLogin("testuser", "password");
+		$this->assertEquals("OK", trim($result[0]));
+
+		$session_id = trim($result[1]);
+		$scrobble_server = trim($result[3]);
+		$result = $this->scrobble($scrobble_server, $session_id, "Richard Stallman", "The Free Software Song");
+		echo $result;
+		$this->assertEquals("OK", $result);
+	}
+
+
 	private function standardLogin($username, $password) {
 		require("../config.php");
 
@@ -23,6 +37,18 @@ class SubmissionsTest extends PHPUnit_Framework_TestCase
 		$token = md5(md5($password) . $timestamp);
 		$response = file($submissions_server . "/?hs=true&p=1.2&u=$username&t=$timestamp&a=$token");
 		return $response;
+	}
+
+	private function scrobble($server, $session_id, $artist, $track) {
+		$r = new HTTP_Request($server);
+		$r->setMethod(HTTP_REQUEST_METHOD_POST);
+		$r->addPostData('s', $session_id);
+		$r->addPostData('a[0]', $artist);
+		$r->addPostData('t[0]', $track);
+		$r->addPostData('i[0]', time());
+		$r->addPostData('o[0]', 'U');
+		$r->sendRequest();
+		return $r->getResponseBody();
 	}
 
 }

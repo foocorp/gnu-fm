@@ -29,8 +29,14 @@ if(isset($_GET['hs'])) {
 		die("BADAUTH");
 	}
 
+	$session_id = md5($auth_token . time());
+	$mdb2->query("INSERT INTO Scrobble_Sessions(username, sessionid, expires) VALUES ("
+		. $mdb2->quote($username, "text") . ","
+		. $mdb2->quote($session_id, "text") . ","
+		. $mdb2->quote(time() + 86400) . ")");
+
 	echo "OK\n";
-	echo "1\n"; // TODO: Real session ids
+	echo $session_id . "\n";
 	echo $submissions_server . "/nowplaying/1.2/\n";
 	echo $submissions_server . "/submissions/1.2/\n";
 }
