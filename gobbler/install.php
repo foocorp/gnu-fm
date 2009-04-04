@@ -41,7 +41,7 @@ if (isset($_POST['install'])) {
 	$res = $mdb2->query("INSERT INTO Users
 		(username, password, created)
 		VALUES
-		('testuser', '" . md5(md5('password')) . "', " . time() . ")");
+		('testuser', '" . md5('password') . "', " . time() . ")");
 	
 	$mdb2->disconnect();
 
