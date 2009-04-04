@@ -25,4 +25,4 @@ Submissions API:
  To test standard authentication:
 
  1. Visit /?hs=true&p=1.2&u=testuser&t=1238855138&a=a40dfdc5aa3012c64425a5953267b232
- 2. You should receive "OK". (In the future this will be followed by session id, now playing server and submission server addresses)
+ 2. You should receive "OK" (followed by a session id, and the URL for the now playing and submissions servers).

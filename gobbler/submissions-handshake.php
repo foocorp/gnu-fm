@@ -2,6 +2,7 @@
 // Implements the submissions handshake protocol as detailed at: http://www.last.fm/api/submissions
 
 require_once('auth-utils.php');
+require_once('config.php');
 
 $supported_protocols = array("1.2", "1.2.1");
 
@@ -29,6 +30,9 @@ if(isset($_GET['hs'])) {
 	}
 
 	echo "OK\n";
+	echo "1\n"; // TODO: Real session ids
+	echo $submissions_server . "/nowplaying/1.2/\n";
+	echo $submissions_server . "/submissions/1.2/\n";
 }
 
 

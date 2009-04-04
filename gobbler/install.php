@@ -45,15 +45,18 @@ if (isset($_POST['install'])) {
 	
 	$mdb2->disconnect();
 
+	$submissions_server = $_POST['submissions'];
+
 	//Write out the configuration
-	$config = '<? $connect_string = "' . $connect_string . '"; ?>';
+	$config = "<? \$connect_string = '" . $connect_string . "';\n \$submissions_server = '" . $submissions_server . "'; ?>";
 
 	$conf_file = fopen("config.php", "w");
 	$result = fwrite($conf_file, $config);
 	fclose($conf_file);
 
 	if(!$result) {
-		die("Unable to write to file '<i>config.php</i>'. Please create this file and copy the following in to it: <br /><pre>" . str_replace("<", "&lt;", $config) . "</pre>");
+		$print_config = str_replace("<", "&lt;", $config);
+		die("Unable to write to file '<i>config.php</i>'. Please create this file and copy the following in to it: <br /><pre>" . $print_config . "</pre>");
 	}	
 
 	die("Configuration completed successfully!");
@@ -79,6 +82,7 @@ if (isset($_POST['install'])) {
 	<body onload="showSqlite()">
 		<h1>Gobbler Installer</h1>
 		<form method="post">
+			<h2>Database</h2>
 			Database Management System: <br />
 			<input type="radio" name="dbms" value="sqlite" onclick='showSqlite()' checked>SQLite (use an absolute path)</input><br />
 			<input type="radio" name="dbms" value="mysql" onclick='showNetworkDBMS()'>MySQL</input><br />
@@ -94,6 +98,9 @@ if (isset($_POST['install'])) {
 				Username: <input type="text" name="username" /><br />
 				Password: <input type="password" name="password" /><br />
 			</div>
+			<br />
+			<h2>Servers</h2>
+			Submissions Server URL: <input type="text" name="submissions" value="http://localhost/" /><br />
 			<br />
 			<input type="submit" value="Install" name="install" />
 		</form>
