@@ -1,5 +1,6 @@
 <?
 require_once('../../database.php');
+require_once('../../scrobble-utils.php');
 
 if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t']) || !isset($_POST['i']) || !isset($_POST['o'])) {
 	die("FAILED Required POST parameters are not set");
@@ -41,42 +42,13 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		$mbid = 'NULL';
 	}
 
-	$res = $mdb2->query("SELECT name FROM Artist WHERE name = " . $artist);
-	if(PEAR::isError($res)) {
-		die("FAILED " . $res->getMessage());
-	}
-
-	if(!$res->numRows()) {
-		// Artist doesn't exist, so we create them
-		$mdb2->query("INSERT INTO Artist (name) VALUES (" . $artist . ")");
-	}
-
+	createArtistIfNew($artist);
 	if($album != 'NULL') {
-		$res = $mdb2->query("SELECT name FROM Artist WHERE name = " . $album);
-		if(PEAR::isError($res)) {
-			die("FAILED " . $res->getMessage());
-		}
-
-		if(!$res->numRows()) {
-			// Album doesn't exist, so create it
-			$mdb2->query("INSERT INTO Album (name, artist_name) VALUES (" . $album . ", " . $artist . ")");
-		}
+		createAlbumIfNew($artist, $album);
 	}
+	createTrackIfNew($artist, $album, $track, $mbid);
 
-	$res = $mdb2->query("SELECT name FROM Track WHERE name = " . $track);
-	if(PEAR::isError($res)) {
-		die("FAILED " . $res->getMessage());
-	}
-
-	if(!$res->numRows()) {
-		// Create new track
-		$mdb2->query("INSERT INTO Track (name, artist, album, mbid) VALUES ("
-			. $track . ", "
-			. $artist . ", "
-			. $album . ", "
-			. $mbid . ")");
-	}
-
+	// Scrobble!
 	$res = $mdb2->query("SELECT playcount FROM Scrobbles WHERE username = " . $username . " AND track = " . $track . " AND artist = " . $artist);
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage());
