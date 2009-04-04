@@ -43,7 +43,12 @@ if (isset($_POST['install'])) {
 		mbid VARCHAR(36),
 		streamable int,
 		bio_published TIMESTAMP,
-		bio_content TEXT)");
+		bio_content TEXT,
+		bio_summary TEXT,
+		image_small VARCHAR(255),
+		image_medium VARCHAR(255),
+		image_large VARCHAR(255),
+		url VARCHAR(255))");
 
 	$mdb2->query("CREATE TABLE Album(
 		id int PRIMARY KEY,
