@@ -12,7 +12,7 @@ require_once('../../database.php');
 // Authenticate the user using the submitted password
 $result = $mdb2->query('SELECT username FROM Users WHERE '
 	. 'username = ' . $mdb2->quote($_POST['username'], 'text') . ' AND '
-	. 'password = ' . $mdb2->quote(md5(md5($_POST['password'])), 'text'));
+	. 'password = ' . $mdb2->quote(md5($_POST['password']), 'text'));
 if (PEAR::isError($result))
 	die("Database error");
 if (!$result->numRows())
