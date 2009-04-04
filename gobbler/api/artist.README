@@ -1,0 +1,9 @@
+Static preliminary artist-class.
+
+Methods:
+
+ - getInfo($api_key, $artist, $mbid, $lang)
+   * Returns a SimpleXMLElement. To print, run through XML::prettyXML() to get
+     a nicely indented form. To screw indentation, just run asXML() on the returned
+     object.
+
