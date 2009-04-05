@@ -12,5 +12,8 @@ if (isset($_GET['hs']) && isset($_GET['p'])) {
 	} elseif (substr($_GET['p'], 0, 3) == "1.1") {
 		require_once('submissions/1.1/handshake.php');
 	}
+} else {
+	//If we're not handshaking then just display some nice stats
+	require_once('display.php');
 }
 ?>
