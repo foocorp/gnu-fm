@@ -13,7 +13,7 @@ class XML {
 	$xml->addAttribute("status", $status);
 	$error = $xml->addChild("error", $errtext);
 	$error->addAttribute("code", $errcode);
-	return(XML::prettyXML($xml));
+	return($xml);
     }
 }
 ?>
