@@ -25,7 +25,7 @@ $submissions_server = trim($response[3]);
 $r = new HTTP_Request($submissions_server);
 $r->setMethod(HTTP_REQUEST_METHOD_POST);
 
-for($i = 1; $i < count($data); $i++) {
+for($i = 1; $i < count($data); $i++) { // skip the first row
 	$row = explode("\t", $data[$i]);
 
 	$track = $row[1];
@@ -39,8 +39,13 @@ for($i = 1; $i < count($data); $i++) {
 	$r->addPostData('a['.$i.']', $artist);
 	$r->addPostData('t['.$i.']', $track);
 	$r->addPostData('i['.$i.']', $time);
+
+	$r->sendRequest();
+
+	echo "Sending ". $artist . " playing " . $track . "... ";
+	sleep(1);
+	echo $r->getResponseBody();
 }
 
-$r->sendRequest();
-echo $r->getResponseBody();
+
 ?>
