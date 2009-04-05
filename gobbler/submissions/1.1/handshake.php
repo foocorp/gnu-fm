@@ -32,10 +32,14 @@ if(!$res->numRows()) {
 }
 $password = $res->fetchOne(0);
 $session_id = md5($password . $timestamp);
-$mdb2->query("INSERT INTO Scrobble_Sessions(username, sessionid, expires) VALUES ("
+$res = $mdb2->query("INSERT INTO Scrobble_Sessions(username, sessionid, expires) VALUES ("
 	. $mdb2->quote($username, "text") . ","
 	. $mdb2->quote($session_id, "text") . ","
 	. $mdb2->quote(time() + 86400) . ")");
+
+if(PEAR::isError($res)) {
+        die("FAILED " . $res->getMessage());
+}
 
 echo "UPTODATE\n";
 echo $timestamp . "\n";
