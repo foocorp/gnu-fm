@@ -50,11 +50,11 @@ if (isset($_POST['install'])) {
 		image_large VARCHAR(255))");
 
 	$mdb2->query("CREATE TABLE Album(
-		id int PRIMARY KEY,
 		name VARCHAR(255),
-		artist_name VARCHAR(255) REFERENCES Artist(name) ,
-		mbid VARCHAR(36) ,
-		releasedate DATE");
+		artist_name VARCHAR(255) REFERENCES Artist(name),
+		mbid VARCHAR(36),
+		releasedate DATE,
+		PRIMARY KEY(name, artist_name))");
 
 	// Table for registering similar artists
 	$mdb2->query("CREATE TABLE Similar_Artist(
