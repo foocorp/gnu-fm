@@ -17,15 +17,21 @@ require_once('database.php');
 </License>
 </rdf:RDF>
 -->
-		<title>Libre.fm Scrobble Server</title>
+		<title>Libre.fm Gobble Server</title>
 	</head>
 
 	<body>
-		<h1>Libre.fm Scrobble Server</h1>
+		<h1>Libre.fm Gobble Server</h1>
 		
-		<p>This site handles <em>scrobble</em> and <em>now playing</em> submissions from client applications and offers access to our web services API. If you just want to use <a href="http://libre.fm">libre.fm</a> then you probably want to visit the <a href="http://libre.fm">main site</a>, but if you're a developer then here are some useful stats to help you see what's happening.</p>
+<p>This site handles <em>gobble</em> and <em>now playing</em>
+submissions from client applications and offers access to our web
+services API. If you just want to use <a
+href="http://libre.fm">libre.fm</a> then you probably want to
+visit the <a href="http://libre.fm">main site</a>, but if you're
+a developer then here are some useful stats to help you see
+what's happening.</p>
 
-		<h2>Last 10 Scrobbles</h2>
+		<h2>Last 10 Gobbles</h2>
 
 		<table>
 			<tr><th>User</th><th>Artist</th><th>Track</th><th>Time</th></tr>
