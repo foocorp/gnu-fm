@@ -2,11 +2,11 @@
 require_once('../../database.php');
 require_once('../../scrobble-utils.php');
 
-if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t']) || !isset($_POST['i']) || !isset($_POST['o'])) {
+if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t']) || !isset($_POST['i'])) {
 	die("FAILED Required POST parameters are not set");
 }
 
-if(!is_array($_POST['a']) || !is_array($_POST['t']) || !is_array($_POST['i']) || !is_array($_POST['o'])) {
+if(!is_array($_POST['a']) || !is_array($_POST['t']) || !is_array($_POST['i'])) {
 	die("FAILED Track parameters must be arrays");
 }
 
@@ -34,8 +34,12 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		$album = 'NULL';
 	}
 	$track = $mdb2->quote($_POST['t'][$i], "text");
-	$time = (int) $_POST['i'][$i];
-	$origin = $mdb2->quote($_POST['o'][$i], "text");
+	if(is_numeric($_POST['i'][$i])) {
+		$time = (int) $_POST['i'][$i];
+	} else {
+		// 1.1 time format
+		$time = strtotime($_POST['i'][$i]);
+	}
 	if(isset($_POST['m'][$i])) {
 		$mbid = $mdb2->quote($_POST['m'][$i], "text");
 	} else {
@@ -49,29 +53,11 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	createTrackIfNew($artist, $album, $track, $mbid);
 
 	// Scrobble!
-	$res = $mdb2->query("SELECT playcount FROM Scrobbles WHERE username = " . $username . " AND track = " . $track . " AND artist = " . $artist);
-	if(PEAR::isError($res)) {
-		die("FAILED " . $res->getMessage());
-	}
-
-	if(!$res->numRows()) {
-		// New scrobble entry
-		$mdb2->query("INSERT INTO Scrobbles (username, artist, track, lastplayed, playcount) VALUES ("
-			. $username . ", "
-			. $artist . ", "
-			. $track . ", "
-			. $time . ", "
-			. "1)");
-	} else {
-		$playcount = $res->fetchOne(0);
-		$playcount++;
-		$mdb2->query("UPDATE Scrobbles SET "
-			. "playcount = " . $playcount . ", "
-			. "lastplayed = " . $time
-			. " WHERE username = " . $username 
-			. " AND artist = " . $artist 
-			. " AND track = " . $track);
-	}
+	$mdb2->query("INSERT INTO Scrobbles (username, artist, track, time) VALUES ("
+		. $username . ", "
+		. $artist . ", "
+		. $track . ", "
+		. $time . ")");
 }
 
 die("OK");

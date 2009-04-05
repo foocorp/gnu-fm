@@ -80,10 +80,8 @@ if (isset($_POST['install'])) {
 		username VARCHAR(255) REFERENCES User(username),
 		track VARCHAR(255) REFERENCES Track(name),
 		artist VARCHAR(255) REFERENCES Artist(name),
-		rating VARCHAR(1),
-		playcount int,
-		lastplayed TIMESTAMP,
-		PRIMARY KEY(username, track, artist))");
+		time TIMESTAMP,
+		PRIMARY KEY(username, track, artist, time))");
 
 	$mdb2->query("CREATE TABLE Scrobble_Sessions(
 		username VARCHAR(255) REFERENCES User(username),
