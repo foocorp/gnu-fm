@@ -8,6 +8,7 @@ require_once('database.php');
 		<title>Libre.fm Gobble Server</title>
    <link rel="stylesheet" href="reset-fonts-grids.css" type="text/css">
    <link rel="stylesheet" href="base.css" type="text/css">
+   <link rel="stylesheet" href="librefm.css" type="text/css">
 <!--
 <rdf:RDF xmlns="http://web.resource.org/cc/"
          xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -21,7 +22,7 @@ require_once('database.php');
 </head>
 <body>
 <div id="doc3" class="yui-t5">
-   <div id="hd" role="banner"><h1>Libre.fm Gobble Server</h1></div>
+   <div id="hd" role="banner"><h1><a href="/">Libre.fm Gobble Server</a></h1></div>
    <div id="bd" role="main">
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
@@ -70,7 +71,7 @@ require_once('database.php');
 </div>
 </div>
 	</div>
-	<div class="yui-b">
+	<div class="yui-b sidebar">
 <p>This site handles <em>gobble</em> and <em>now playing</em>
 submissions from client applications and offers access to our web
 services API. If you just want to use <a
