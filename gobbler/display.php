@@ -5,8 +5,9 @@ require_once('database.php');
  "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
+		<title>Libre.fm Gobble Server</title>
+   <link rel="stylesheet" href="reset-fonts-grids.css" type="text/css">
+   <link rel="stylesheet" href="base.css" type="text/css">
 <!--
 <rdf:RDF xmlns="http://web.resource.org/cc/"
          xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -17,19 +18,13 @@ require_once('database.php');
 </License>
 </rdf:RDF>
 -->
-		<title>Libre.fm Gobble Server</title>
-	</head>
-
-	<body>
-		<h1>Libre.fm Gobble Server</h1>
-		
-<p>This site handles <em>gobble</em> and <em>now playing</em>
-submissions from client applications and offers access to our web
-services API. If you just want to use <a
-href="http://libre.fm">libre.fm</a> then you probably want to
-visit the <a href="http://libre.fm">main site</a>, but if you're
-a developer then here are some useful stats to help you see
-what's happening.</p>
+</head>
+<body>
+<div id="doc" class="yui-t5">
+   <div id="hd" role="banner"><h1>Libre.fm Gobble Server</h1></div>
+   <div id="bd" role="main">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 		<h2>Last 10 Gobbles</h2>
 
@@ -72,6 +67,21 @@ what's happening.</p>
         alt="Valid HTML 4.01 Strict" height="31" width="88"></a>
   </p>
 
-
-	</body>
-</html>	
+</div>
+</div>
+	</div>
+	<div class="yui-b">
+<p>This site handles <em>gobble</em> and <em>now playing</em>
+submissions from client applications and offers access to our web
+services API. If you just want to use <a
+href="http://libre.fm">libre.fm</a> then you probably want to
+visit the <a href="http://libre.fm">main site</a>, but if you're
+a developer then here are some useful stats to help you see
+what's happening.</p>
+</div>
+	
+	</div>
+   <div id="ft" role="contentinfo"><p><a href="http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm">http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm</a></p></div>
+</div>
+</body>
+</html>
