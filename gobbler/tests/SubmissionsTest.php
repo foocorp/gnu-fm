@@ -39,6 +39,7 @@ class SubmissionsTest extends PHPUnit_Framework_TestCase
 		return $response;
 	}
 
+
 	private function scrobble($server, $session_id, $artist, $track) {
 		$r = new HTTP_Request($server);
 		$r->setMethod(HTTP_REQUEST_METHOD_POST);
