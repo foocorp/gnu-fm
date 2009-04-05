@@ -1,0 +1,23 @@
+html, body, #doc3,h1{margin: 0; padding: 0;}
+
+#hd{background: #980101 url(i/header.png) no-repeat;
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+#hd a{
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    padding-top: 70px;
+    height: 0px !important;
+    height /**/: 70px;
+    width: 418px;
+    cursor: pointer;
+}
+
+.yui-b, #ft{padding: 1em;}
