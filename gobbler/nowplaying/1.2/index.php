@@ -3,7 +3,7 @@ require_once('../../database.php');
 require_once('../../scrobble-utils.php');
 
 if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t'])) {
-	die("FAILED Required POST parameters are not set");
+	die("FAILED Required POST parameters are not set\n");
 }
 
 $session_id = $_POST['s'];
@@ -48,6 +48,6 @@ $mdb2->query("INSERT INTO Now_Playing (username, artist, track, expires) VALUES 
 	. $expires . ")");
 
 
-die("OK");
+die("OK\n");
 
 ?>

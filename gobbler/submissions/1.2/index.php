@@ -3,11 +3,11 @@ require_once('../../database.php');
 require_once('../../scrobble-utils.php');
 
 if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t']) || !isset($_POST['i'])) {
-	die("FAILED Required POST parameters are not set");
+	die("FAILED Required POST parameters are not set\n");
 }
 
 if(!is_array($_POST['a']) || !is_array($_POST['t']) || !is_array($_POST['i'])) {
-	die("FAILED Track parameters must be arrays");
+	die("FAILED Track parameters must be arrays\n");
 }
 
 $session_id = $_POST['s'];
@@ -48,6 +48,6 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		. $time . ")");
 }
 
-die("OK");
+die("OK\n");
 
 ?>
