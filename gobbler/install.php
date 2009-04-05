@@ -30,19 +30,19 @@ if (isset($_POST['install'])) {
 		bio TEXT,
 		homepage VARCHAR(255),
 		location VARCHAR(255),
-		created TIMESTAMP NOT NULL,
-		modified TIMESTAMP)");
+		created int NOT NULL,
+		modified int)");
 
 	$res = $mdb2->query("CREATE TABLE Auth (token VARCHAR(32) PRIMARY KEY,
 		sk VARCHAR(32),
-		expires TIMESTAMP,
+		expires int,
 		username VARCHAR(64) REFERENCES Users(username))");
 
 	$mdb2->query("CREATE TABLE Artist(
 		name VARCHAR(255) PRIMARY KEY,
 		mbid VARCHAR(36),
 		streamable int,
-		bio_published TIMESTAMP,
+		bio_published int,
 		bio_content TEXT,
 		bio_summary TEXT,
 		image_small VARCHAR(255),
@@ -80,20 +80,20 @@ if (isset($_POST['install'])) {
 		username VARCHAR(64) REFERENCES Users(username),
 		track VARCHAR(255) REFERENCES Track(name),
 		artist VARCHAR(255) REFERENCES Artist(name),
-		time TIMESTAMP,
+		time int,
 		PRIMARY KEY(username, track, artist, time))");
 
 	$mdb2->query("CREATE TABLE Scrobble_Sessions(
 		username VARCHAR(64) REFERENCES Users(username),
 		sessionid VARCHAR(32),
-		expires TIMESTAMP,
+		expires int,
 		PRIMARY KEY(username, sessionid))");
 
-	$mdb2->query("CREATE TABLE Now_Playing(
-		username VARCHAR(64) REFERENCES Users(username) PRIMARY KEY,
+	$res = $mdb2->query("CREATE TABLE Now_Playing(
+		username VARCHAR(64) PRIMARY KEY REFERENCES Users(username),
 		track VARCHAR(255) REFERENCES Track(name),
 		artist VARCHAR(255) REFERENCES Artist(name),
-		expires TIMESTAMP)");
+		expires int)");
 
 	// Test user configuration
 	$res = $mdb2->query("INSERT INTO Users
