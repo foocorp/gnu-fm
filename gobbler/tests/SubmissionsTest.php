@@ -8,6 +8,7 @@ class SubmissionsTest extends PHPUnit_Framework_TestCase
 	public function testStandardAuth() {
 		$result = $this->standardLogin("testuser", "password");
 		$this->assertEquals("OK", trim($result[0]));
+		sleep(1);
 	}
 
 
@@ -15,6 +16,7 @@ class SubmissionsTest extends PHPUnit_Framework_TestCase
 	public function testFailedStandardAuth() {
 		$result = $this->standardLogin("testuser", "icanhazsecurity?");
 		$this->assertEquals("BADAUTH", trim($result[0]));
+		sleep(1);
 	}
 
 
@@ -25,8 +27,20 @@ class SubmissionsTest extends PHPUnit_Framework_TestCase
 		$session_id = trim($result[1]);
 		$scrobble_server = trim($result[3]);
 		$result = $this->scrobble($scrobble_server, $session_id, "Richard Stallman", "The Free Software Song");
-		echo $result;
 		$this->assertEquals("OK", $result);
+		sleep(1);
+	}
+
+
+	public function testNowPlaying() {
+		$result = $this->standardLogin("testuser", "password");
+		$this->assertEquals("OK", trim($result[0]));
+
+		$session_id = trim($result[1]);
+		$nowplaying_server = trim($result[2]);
+		$result = $this->nowPlaying($nowplaying_server, $session_id, "The Libre.fm Players", "Let Freedom Ring");
+		$this->assertEquals("OK", $result);
+		sleep(1);
 	}
 
 
@@ -52,4 +66,14 @@ class SubmissionsTest extends PHPUnit_Framework_TestCase
 		return $r->getResponseBody();
 	}
 
+
+	private function nowPlaying($server, $session_id, $artist, $track) {
+		$r = new HTTP_Request($server);
+		$r->setMethod(HTTP_REQUEST_METHOD_POST);
+		$r->addPostData('s', $session_id);
+		$r->addPostData('a', $artist);
+		$r->addPostData('t', $track);
+		$r->sendRequest();
+		return $r->getResponseBody();
+	}
 }

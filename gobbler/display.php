@@ -27,7 +27,7 @@ require_once('database.php');
 					if($field == "time") {
 						$value = strftime("%c", $value);
 					}
-					echo "<td>$value</td>";
+					echo "<td>". stripslashes($value) . "</td>";
 				}
 				echo "</tr>";
 			}
@@ -37,6 +37,15 @@ require_once('database.php');
 		
 		<h2>Now Playing?</h2>
 
-			<p><em>Coming soon</em></p>
+		<?php
+			$res = $mdb2->query("SELECT username, artist, track FROM Now_Playing ORDER BY expires DESC LIMIT 10");
+			if(PEAR::isError($res)) {
+				die($res->getMessage());
+			}
+			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+				echo "<p>" . stripslashes($row["username"]) . " is listening to " . stripslashes($row["track"]) . " by " . stripslashes($row["artist"]) . "</p>";
+			}
+		?>
+
 	</body>
 </html>	

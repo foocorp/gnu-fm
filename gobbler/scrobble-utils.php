@@ -1,6 +1,24 @@
 <?
 require_once('database.php');
 
+function usernameFromSID($session_id) {
+	global $mdb2;
+
+	// Delete any expired session ids
+	$mdb2->query("DELETE FROM Scrobble_Sessions WHERE expires < " . time());
+
+	$res = $mdb2->query("SELECT username FROM Scrobble_Sessions WHERE sessionid = " . $mdb2->quote($session_id, "text"));
+	if(PEAR::isError($res)) {
+		die("FAILED " . $res->getMessage());
+	}
+
+	if(!$res->numRows()) {
+		die("BADSESSION");
+	}
+
+	return $res->fetchOne(0);
+}
+
 function createArtistIfNew($artist) {
 	global $mdb2;
 

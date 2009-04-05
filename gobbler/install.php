@@ -36,7 +36,7 @@ if (isset($_POST['install'])) {
 	$res = $mdb2->query("CREATE TABLE Auth (token VARCHAR(32) PRIMARY KEY,
 		sk VARCHAR(32),
 		expires TIMESTAMP,
-		username VARCHAR(255) REFERENCES Users(username))");
+		username VARCHAR(64) REFERENCES Users(username))");
 
 	$mdb2->query("CREATE TABLE Artist(
 		name VARCHAR(255) PRIMARY KEY,
@@ -77,17 +77,23 @@ if (isset($_POST['install'])) {
 		PRIMARY KEY(name, artist))");
 
 	$mdb2->query("CREATE TABLE Scrobbles(
-		username VARCHAR(255) REFERENCES User(username),
+		username VARCHAR(64) REFERENCES Users(username),
 		track VARCHAR(255) REFERENCES Track(name),
 		artist VARCHAR(255) REFERENCES Artist(name),
 		time TIMESTAMP,
 		PRIMARY KEY(username, track, artist, time))");
 
 	$mdb2->query("CREATE TABLE Scrobble_Sessions(
-		username VARCHAR(255) REFERENCES User(username),
+		username VARCHAR(64) REFERENCES Users(username),
 		sessionid VARCHAR(32),
 		expires TIMESTAMP,
 		PRIMARY KEY(username, sessionid))");
+
+	$mdb2->query("CREATE TABLE Now_Playing(
+		username VARCHAR(64) REFERENCES Users(username) PRIMARY KEY,
+		track VARCHAR(255) REFERENCES Track(name),
+		artist VARCHAR(255) REFERENCES Artist(name),
+		expires TIMESTAMP)");
 
 	// Test user configuration
 	$res = $mdb2->query("INSERT INTO Users

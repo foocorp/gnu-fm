@@ -12,19 +12,7 @@ if(!is_array($_POST['a']) || !is_array($_POST['t']) || !is_array($_POST['i'])) {
 
 $session_id = $_POST['s'];
 
-// Delete any expired session ids
-$mdb2->query("DELETE FROM Scrobble_Sessions WHERE expires < " . time());
-
-$res = $mdb2->query("SELECT username FROM Scrobble_Sessions WHERE sessionid = " . $mdb2->quote($session_id, "text"));
-if(PEAR::isError($res)) {
-	die("FAILED " . $res->getMessage());
-}
-
-if(!$res->numRows()) {
-	die("BADSESSION");
-}
-
-$username = $mdb2->quote($res->fetchOne(0), "text");
+$username = $mdb2->quote(usernameFromSID($session_id), "text");
 
 for($i = 0; $i < count($_POST['a']); $i++) {
 	$artist = $mdb2->quote($_POST['a'][$i], "text");
