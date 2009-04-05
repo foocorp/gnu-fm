@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+	<head profile="http://gmpg.org/xfn/11">
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<title>libre.fm</title>
+       	<link type='text/css' rel="stylesheet" href="./style/screen.css" media="screen" charset="utf-8" />
+	</head>
+    <body>
+        <div id='title' class='vcard'>
+
+            <h1 class='fn org'><a href='http://libre.fm' rel='bookmark' title='libre.fm home' class='url'>libre.fm</a></h1>
+            <h2>music. freedom.</h2>
+            <div id='links'>
+                <ul>
+                    <li><a href='https://savannah.nongnu.org/svn/?group=librefm'>source code</a></li>
+                    <li><a href='http://lists.autonomo.us/mailman/listinfo/libre-fm'>mailing list</a></li>
+                    <li><a href='http://ideas.libre.fm'>ideas wiki</a></li>
+
+                </ul>
+            </div>
+        </div>
+        <div id='introduction'>
+            <p><strong>libre.fm</strong> is a community project to help you keep track of <strong>music</strong> you <strong>like</strong> and <strong>share</strong> with your friends...</p>
+
+            <p>here you can <strong>discover</strong> new music, and meet new <strong>people</strong> who share your tastes.</p>
+            <p><small>...sounds familiar, but wait</small></p>
+            <ul>
+                <li>there's complete public source code,</li>
+
+                <li>licensed under the <strong>gnu agpl</strong></li>
+                <li>&amp; you <strong>own</strong> your data...</li>
+                <li>using our service, or <strong>running your own</strong>.</li>
+                <li>get started and hacking today!</li>
+
+            </ul>
+        </div>
+        <!-- Registration form. -->
+        <div id='register'>
+            <form action='' method='post'>
+                <fieldset>
+                    <legend>sign up:</legend>
+
+                    <label for='fullname'>you:<span>(that's your real name.)</span></label>
+
+                    <input id='fullname' name='fullname' type='text' value='' maxlength='255'/>
+
+                    <label for='username'>your nickname:<span>(no more than 64 chars.)</span></label>
+                    <input id='username' name='username' type='text' value='' maxlength='64' />
+
+                    <label for='email'>your e-mail:<span>(must be valid!)</span></label>
+                    <input id='email' name='email' type='text' value='' maxlength='64' />
+
+                    <label for='location'>location:<span>(like 'CABA, Buenos Aires, Argentina')</span></label>
+                    <input id='location' name='location' type='text' value='' maxlength='255' />
+
+                    <label for='password'>your password:<span>(32 chars tops.)</span></label>
+                    <input id='password' name='password' type='password' value='' maxlength='32'/>
+
+                    <label for='password-repeat'>your password again<span>(you should repeat it.)</span></label>
+                    <input id='password-repeat' name='password-repeat' type='password' value='' maxlength='32'/>
+
+                    <label for='bio'>about yourself:<span>(we want to know you! in 140 chars.)</span></label>
+                    <input id='bio' name='bio' type='text' value='' maxlength='140'/>
+
+                    <input type='submit' value="OK, I'm in" />
+                </fieldset>
+
+            </form>
+        </div>
+        <div id='credits'>
+            <dl>
+                <dt>powered by</dt>
+                <dd class='vcard'><a href='http://www.gnu.org/licenses/agpl.html' class='url'><span class='fn org'>GNU</span> <span rel='license'>AGPL v3</span></a></dd>
+                <dd class='vcard'><span class='fn org'><a href='http://autonomo.us' class='url'>autonomo.us</a></span></dd>
+                <dd class='vcard'><span class='fn org'><a href='http://foocorp.org' class='url'>foocorp</a></span></dd>
+            </dl>
+        </div>
+    </body>
+</html>
+

@@ -1,0 +1,129 @@
+/*
+ * CSS principal para kiwwwi.com.ar
+ * fauno <fauno@zenbe.com>
+ * mar ene  6 23:11:57 ARST 2009
+ */
+
+
+/* Tango Palette
+
+Butter              #fce94f #edd400 #c41000
+Orange              #fcaf3e #f57900 #ce5c00
+Chocolate           #e9b96e #c17d11 #8f5902
+Chameleon           #8ae234 #73d216 #4e9a06
+Sky Blue            #729fcf #3465a4 #204a87
+Plum                #ad7fa8 #75507b #5c3566
+Scarlet Red         #ef2929 #cc0000 #a40000
+
+Aluminium           #eeeeec #d3d7cf #babdb6
+                    #888a85 #555753 #2e3436
+
+*/
+
+
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {
+	margin: 0;
+	padding: 0;
+}
+
+html * {
+	padding: 0;
+	margin: 0;
+	outline: none;
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+    font-family: Monospace;
+    font-size: 2em;
+    background-color: #eeeeec;
+    color: #2e3436;
+}
+    a {
+        text-decoration: none;
+        outline: none;
+        color: #3465a4;
+    }
+    img {
+        border: none;
+    }
+
+    div#title {
+        width: 100%;
+        background-color: #2e3436;
+        color: #eeeeec;
+    }
+        div#title h1, div#title h2 {
+            padding: 0 0 0 10%;
+        }
+        div#title a {
+            color: #eeeeec;
+        }
+        div#title div#links {
+            font-size: .6em;
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: .4em;
+        }
+            div#title div#links ul {
+                list-style: none
+            }
+    div#introduction, div#register {
+        width: 80%;
+        margin:auto;
+    }
+        div#introduction ul {
+            list-style-image: url('../img/24x24/asterisk.png');
+        }
+    div#register {
+        margin: 1em auto 0 auto;
+    }
+        div#register form {
+            width: 20em;
+            margin: 0 auto;
+        }
+        div#register form fieldset {
+            border:solid 2px #b7ddf2;
+            background:#ebf4fb;
+        }
+            div#register form fieldset legend {
+                margin: 1.2em 0 0 .5em;
+                border-top:solid 2px #b7ddf2;
+            }
+            div#register form fieldset label {
+                display:block;
+                font-weight:bold;
+                text-align:right;
+                width:15em;
+                float:left;
+                font-size: .6em;
+            }
+            div#register form fieldset label span {
+                color:#666666;
+                display:block;
+                font-weight:normal;
+                text-align:right;
+                font-size: .59em
+            }
+            div#register form fieldset input {
+                float:left;
+                font-size:.7em;
+                padding:.2em .1em;
+                border:solid 1px #aacfe4;
+                width:200px;
+                margin:2px 0 20px 10px;
+            }
+            div#register form fieldset input[type=submit] {
+                width: 25em
+            }
+        div#credits {
+        }
+            div#credits dl dd {
+                float: left;
+                padding: .2em .5em;
+            }
