@@ -27,7 +27,7 @@ class SubmissionsTest extends PHPUnit_Framework_TestCase
 		$session_id = trim($result[1]);
 		$scrobble_server = trim($result[3]);
 		$result = $this->scrobble($scrobble_server, $session_id, "Richard Stallman", "The Free Software Song");
-		$this->assertEquals("OK", $result);
+		$this->assertEquals("OK", trim($result));
 		sleep(1);
 	}
 
@@ -39,7 +39,7 @@ class SubmissionsTest extends PHPUnit_Framework_TestCase
 		$session_id = trim($result[1]);
 		$nowplaying_server = trim($result[2]);
 		$result = $this->nowPlaying($nowplaying_server, $session_id, "The Libre.fm Players", "Let Freedom Ring");
-		$this->assertEquals("OK", $result);
+		$this->assertEquals("OK", trim($result));
 		sleep(1);
 	}
 
