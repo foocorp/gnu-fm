@@ -47,17 +47,14 @@ if (isset($_POST['install'])) {
 		bio_summary TEXT,
 		image_small VARCHAR(255),
 		image_medium VARCHAR(255),
-		image_large VARCHAR(255),
-		url VARCHAR(255))");
+		image_large VARCHAR(255))");
 
 	$mdb2->query("CREATE TABLE Album(
 		id int PRIMARY KEY,
 		name VARCHAR(255),
 		artist_name VARCHAR(255) REFERENCES Artist(name) ,
 		mbid VARCHAR(36) ,
-		releasedate DATE,
-		listeners int,
-		playcount int)");
+		releasedate DATE");
 
 	// Table for registering similar artists
 	$mdb2->query("CREATE TABLE Similar_Artist(

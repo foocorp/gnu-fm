@@ -1,6 +1,7 @@
 <?php
 
 require_once('../database.php');
+require_once('../api/artist.php');
 
 # Error constants
 define("LFM_INVALID_SERVICE",       2);
@@ -37,8 +38,18 @@ $error_text = array(
 # Resolves method= parameters to handler functions
 $method_map = array(
 	"auth.gettoken"             => method_auth_gettoken,
-	"auth.getsession"           => method_auth_getsession
-);
+	"auth.getsession"           => method_auth_getsession,
+	"artist.gettoptracks"       => method_artist_gettoptracks
+    );
+
+function method_artist_gettoptracks() {
+    if (!isset($_GET['artist'])) {
+	report_failure(LFM_INVALID_SIGNATURE);
+    }
+
+    print(XML::prettyXML(Artist::getTopTracks($_GET['artist'])));
+
+}
 
 function method_auth_gettoken() {
 	global $mdb2;

@@ -1,8 +1,6 @@
 <?php
 require_once('../database.php');
-require_once('./xml.php');
-
-print(XML::prettyXML(Artist::getTopTracks("Judas Priest")));
+require_once('xml.php');
 
 class Artist {
 
@@ -32,7 +30,7 @@ class Artist {
 	$artist = $xml->addChild("artist", null);
 	$artist->addChild("name", $row['name']);
 	$artist->addChild("mbid", $row['mbid']);
-	$artist->addChild("url", $row['url']);
+	//$artist->addChild("url", $row['url']);
 	$artist->addChild("streamable", $row['streamable']);
 
 	$bio = $artist->addChild("bio", null);
@@ -48,7 +46,12 @@ class Artist {
     public static function getTopTracks($artist) {
 	global $mdb2;
 
-	$res = $mdb2->query("SELECT Track.*, COUNT(*) AS freq, COUNT(DISTINCT Scrobbles.username) AS dist FROM Scrobbles,Track WHERE Scrobbles.track = Track.name AND Track.artist =" . $mdb2->quote($artist, 'text') . " GROUP BY Track.name ORDER BY freq DESC");
+	$res = $mdb2->query("SELECT Track.*, COUNT(*) AS freq, COUNT(DISTINCT Scrobbles.username) AS dist 
+	    FROM Scrobbles,Track 
+	    WHERE Scrobbles.track = Track.name 
+	    AND Track.artist =" . $mdb2->quote($artist, 'text') . 
+	    " GROUP BY Track.name 
+	    ORDER BY freq DESC LIMIT 50");
 
 	if (PEAR::isError($res) || !$res->numRows()) {
 	    return(XML::error("failed", "7", "Invalid resource specified"));
