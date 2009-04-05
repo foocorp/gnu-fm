@@ -17,9 +17,6 @@ require_once('database.php');
 </License>
 </rdf:RDF>
 -->
-
-<html>
-	<head>
 		<title>Libre.fm Scrobble Server</title>
 	</head>
 
