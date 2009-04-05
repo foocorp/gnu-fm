@@ -20,7 +20,7 @@ require_once('database.php');
 -->
 </head>
 <body>
-<div id="doc" class="yui-t5">
+<div id="doc3" class="yui-t5">
    <div id="hd" role="banner"><h1>Libre.fm Gobble Server</h1></div>
    <div id="bd" role="main">
 	<div id="yui-main">
