@@ -28,10 +28,14 @@ if(!$authed) {
 }
 
 $session_id = md5($auth_token . time());
-$mdb2->query("INSERT INTO Scrobble_Sessions(username, sessionid, expires) VALUES ("
+$res = $mdb2->query("INSERT INTO Scrobble_Sessions(username, sessionid, expires) VALUES ("
 	. $mdb2->quote($username, "text") . ","
 	. $mdb2->quote($session_id, "text") . ","
 	. $mdb2->quote(time() + 86400) . ")");
+
+if(PEAR::isError($res)) {
+	die("FAILED " . $res->getMessage());
+}
 
 echo "OK\n";
 echo $session_id . "\n";
