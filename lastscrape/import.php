@@ -25,11 +25,11 @@ $submissions_server = trim($response[3]);
 $r = new HTTP_Request($submissions_server);
 $r->setMethod(HTTP_REQUEST_METHOD_POST);
 
-for($i = 0; $i < count($data); $i++) {
+for($i = 1; $i < count($data); $i++) {
 	$row = explode("\t", $data[$i]);
 
-	$track = $row[0];
-	$artist = $row[1];
+	$track = $row[1];
+	$artist = $row[0];
 	$time = strtotime($row[2]);
 	if(!$time) {
 		$time = time();
