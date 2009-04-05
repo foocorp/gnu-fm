@@ -46,6 +46,9 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		. $artist . ", "
 		. $track . ", "
 		. $time . ")");
+
+        // Destroy now_playing since it is almost certainly obsolescent
+        $mdb2->query("DELETE FROM Now_Playing WHERE username = " . $username);
 }
 
 die("OK\n");
