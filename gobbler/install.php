@@ -1,4 +1,4 @@
-<?
+<?php
 require_once('MDB2.php');
 require_once('version.php');
 
@@ -100,7 +100,7 @@ if (isset($_POST['install'])) {
 	$submissions_server = $_POST['submissions'];
 
 	//Write out the configuration
-	$config = "<? \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$submissions_server = '" . $submissions_server . "'; ?>";
+	$config = "<?php \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$submissions_server = '" . $submissions_server . "'; ?>";
 
 	$conf_file = fopen("config.php", "w");
 	$result = fwrite($conf_file, $config);
