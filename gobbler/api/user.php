@@ -1,8 +1,6 @@
 <?php
 require_once('../database.php');
-require_once('./xml.php');
-
-print(XML::prettyXML(User::getRecentTracks("testuser", "5")));
+require_once('xml.php');
 
 class User {
 
@@ -20,7 +18,12 @@ class User {
 	$user_node = $xml->addChild("user", null);
 	$user_node->addChild("name", $row['username']);
 	$user_node->addChild("email", $row['email']);
+	$user_node->addChild("homepage", $row['homepage']);
 	$user_node->addChild("location", $row['location']);
+	$user_node->addChild("bio", $row['bio']);
+	$user_node->addChild("profile_created", strftime("%c", $row['created']));
+	if (isset($row['modified']))
+	    $user_node->addChild("profile_updated", strftime("%c", $row['modified']));
 
 	return($xml);
     }
