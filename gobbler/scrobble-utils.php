@@ -22,14 +22,14 @@ function usernameFromSID($session_id) {
 function createArtistIfNew($artist) {
 	global $mdb2;
 
-	$res = $mdb2->query("SELECT name FROM Artist WHERE name = " . htmlentities($artist));
+	$res = $mdb2->query("SELECT name FROM Artist WHERE name = " . utf8html($artist));
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage());
 	}
 
 	if(!$res->numRows()) {
 		// Artist doesn't exist, so we create them
-		$res = $mdb2->query("INSERT INTO Artist (name) VALUES (" . htmlentities($artist) . ")");
+		$res = $mdb2->query("INSERT INTO Artist (name) VALUES (" . utf8html($artist) . ")");
 		if(PEAR::isError($res)) {
 			die("FAILED " . $res->getMessage());
 		}
@@ -39,14 +39,14 @@ function createArtistIfNew($artist) {
 function createAlbumIfNew($artist, $album) {
 	global $mdb2;
 
-	$res = $mdb2->query("SELECT name FROM Album WHERE name = " . htmlentities($album));
+	$res = $mdb2->query("SELECT name FROM Album WHERE name = " . utf8html($album));
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage());
 	}
 
 	if(!$res->numRows()) {
 		// Album doesn't exist, so create it
-		$res = $mdb2->query("INSERT INTO Album (name, artist_name) VALUES (" . htmlentities($album) . ", " . htmlentities($artist) . ")");
+		$res = $mdb2->query("INSERT INTO Album (name, artist_name) VALUES (" . utf8html($album) . ", " . utf8html($artist) . ")");
 		if(PEAR::isError($res)) {
 			die("FAILED " . $res->getMessage());
 		}
@@ -56,7 +56,7 @@ function createAlbumIfNew($artist, $album) {
 function createTrackIfNew($artist, $album, $track, $mbid) {
 	global $mdb2;
 
-	$res = $mdb2->query("SELECT name FROM Track WHERE name = " . htmlentities($track) . " AND artist = " . htmlentities($artist));
+	$res = $mdb2->query("SELECT name FROM Track WHERE name = " . utf8html($track) . " AND artist = " . utf8html($artist));
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage());
 	}
@@ -64,14 +64,17 @@ function createTrackIfNew($artist, $album, $track, $mbid) {
 	if(!$res->numRows()) {
 		// Create new track
 		$res = $mdb2->query("INSERT INTO Track (name, artist, album, mbid) VALUES ("
-			. htmlentities($track) . ", "
-			. htmlentities($artist) . ", "
-			. htmlentities($album) . ", "
-			. htmlentities($mbid) . ")");
+			. utf8html($track) . ", "
+			. utf8html($artist) . ", "
+			. utf8html($album) . ", "
+			. utf8html($mbid) . ")");
 		if(PEAR::isError($res)) {
 			die("FAILED " . $res->getMessage());
 		}
 	}
 }
 
+function utf8html(&$input) {
+    $input = utf8_encode(htmlentities($input));
+}
 ?>
