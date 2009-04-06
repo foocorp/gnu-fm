@@ -101,9 +101,10 @@ if (isset($_POST['install'])) {
 	$mdb2->disconnect();
 
 	$submissions_server = $_POST['submissions'];
+	$install_path = dirname(__FILE__) . "/";
 
 	//Write out the configuration
-	$config = "<?php \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$submissions_server = '" . $submissions_server . "'; ?>";
+	$config = "<?php \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$submissions_server = '" . $submissions_server . "';\n\$install_path = '" . $install_path . "'; ?>";
 
 	$conf_file = fopen("config.php", "w");
 	$result = fwrite($conf_file, $config);
