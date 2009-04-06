@@ -37,7 +37,7 @@ require_once('database.php');
   $req_user = $_GET["u"];
 $req_artist = $_GET["a"];
 $req_track = $_GET["t"];
-
+  
 
 if ($req_user) {
 
@@ -56,7 +56,7 @@ if ($req_user) {
 			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE track = '" . $req_track . "' ORDER BY time DESC LIMIT 10");
 
 			echo "<h2>Last 10 Gobbles of " . $req_track . "</h2>";
-
+			
 } elseif (!$res) {
 
 			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
@@ -76,7 +76,7 @@ if ($req_user) {
 				die($res->getMessage());
 			}
 			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-				echo "<tr>";
+				<?php echo ($i % 2 == 0) ? "<td class=\"even\">" : "<td class=\"odd\">";?>
 				foreach($row as $field => $value) {
 					if($field == "time") {
 						$value = strftime("%c", $value);
@@ -88,11 +88,11 @@ if ($req_user) {
 
 		?>
 		</table>
-
+		
 		<h2>Now Playing?</h2>
 
 		<?php
-			$res = $mdb2->query("SELECT username, artist, track FROM Now_Playing WHERE username = '" . $req_user . "' ORDER BY expires DESC LIMIT 10 ");
+			$res = $mdb2->query("SELECT username, artist, track FROM Now_Playing ORDER BY expires DESC LIMIT 10");
 			if(PEAR::isError($res)) {
 				die($res->getMessage());
 			}
@@ -136,7 +136,7 @@ if ($req_user) {
 </div>
 </div>
 	</div>
-
+	
 	</div>
    <div id="ft" style="contentinfo">
 
