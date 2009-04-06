@@ -22,7 +22,9 @@ html, body, #doc3,h1{margin: 0; padding: 0;}
 
 .yui-b, #ft{padding: 1em;}
 
-table tr {
+table tr {background-color: black, color: white;}
+
+table tr.even {
 	background:		rgb(237, 255, 237);
 }
 
