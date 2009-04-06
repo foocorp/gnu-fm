@@ -79,6 +79,14 @@ require_once('database.php');
 			}
 			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
 			echo "<p>" . stripslashes($row["total"]) . " tracks.</p>";
+
+			$res = $mdb2->query("SELECT COUNT(*) as total from Users");
+			if(PEAR::isError($res)) {
+				die($res->getMessage());
+			}
+			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+			echo "<p>" . stripslashes($row["total"]) . " users.</p>";
+
 		?>
  <p>
     <a href="http://validator.w3.org/check?uri=referer"><img
