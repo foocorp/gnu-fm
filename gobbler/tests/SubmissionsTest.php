@@ -26,7 +26,8 @@ class SubmissionsTest extends PHPUnit_Framework_TestCase
 
 		$session_id = trim($result[1]);
 		$scrobble_server = trim($result[3]);
-		$result = $this->scrobble($scrobble_server, $session_id, "Richard Stallman", "The Free Software Song");
+		$result = $this->scrobble($scrobble_server, $session_id, "Richard Stallman", 
+		    "The Free Software Song", "b25b9595-54ed-7605-8ac2-20b7b2e0a026");
 		$this->assertEquals("OK", trim($result));
 		sleep(1);
 	}
@@ -38,7 +39,8 @@ class SubmissionsTest extends PHPUnit_Framework_TestCase
 
 		$session_id = trim($result[1]);
 		$nowplaying_server = trim($result[2]);
-		$result = $this->nowPlaying($nowplaying_server, $session_id, "The Libre.fm Players", "Let Freedom Ring");
+		$result = $this->nowPlaying($nowplaying_server, $session_id, "The Libre.fm Players", "Let Freedom Ring",
+		    "b25b9595-54ed-7605-8ac2-20b7b2e0a026");
 		$this->assertEquals("OK", trim($result));
 		sleep(1);
 	}
@@ -61,13 +63,14 @@ class SubmissionsTest extends PHPUnit_Framework_TestCase
 		$r->addPostData('a[0]', $artist);
 		$r->addPostData('t[0]', $track);
 		$r->addPostData('i[0]', time());
+		$r->addPostData('m[0]', $mbid);
 		$r->addPostData('o[0]', 'U');
 		$r->sendRequest();
 		return $r->getResponseBody();
 	}
 
 
-	private function nowPlaying($server, $session_id, $artist, $track) {
+	private function nowPlaying($server, $session_id, $artist, $track, $mbid) {
 		$r = new HTTP_Request($server);
 		$r->setMethod(HTTP_REQUEST_METHOD_POST);
 		$r->addPostData('s', $session_id);

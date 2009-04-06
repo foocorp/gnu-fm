@@ -78,6 +78,7 @@ if (isset($_POST['install'])) {
 		track VARCHAR(255) REFERENCES Track(name),
 		artist VARCHAR(255) REFERENCES Artist(name),
 		time int,
+		mbid VARCHAR(36),
 		PRIMARY KEY(username, track, artist, time))");
 
 	$mdb2->query("CREATE TABLE Scrobble_Sessions(
@@ -90,6 +91,7 @@ if (isset($_POST['install'])) {
 		username VARCHAR(64) PRIMARY KEY REFERENCES Users(username),
 		track VARCHAR(255) REFERENCES Track(name),
 		artist VARCHAR(255) REFERENCES Artist(name),
+		mbid VARCHAR(36),
 		expires int)");
 
 	// Test user configuration

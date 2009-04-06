@@ -44,11 +44,12 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	createTrackIfNew($artist, $album, $track, $mbid);
 
 	// Scrobble!
-	$mdb2->query("INSERT INTO Scrobbles (username, artist, track, time) VALUES ("
+	$mdb2->query("INSERT INTO Scrobbles (username, artist, track, time, mbid) VALUES ("
 		. $username . ", "
 		. $artist . ", "
 		. $track . ", "
-		. $time . ")");
+		. $time . ", "
+		. $mbid . ")");
 
         // Destroy now_playing since it is almost certainly obsolescent
         $mdb2->query("DELETE FROM Now_Playing WHERE username = " . $username);
