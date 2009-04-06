@@ -5,6 +5,9 @@ require_once('../../scrobble-utils.php');
 if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t'])) {
 	die("FAILED Required POST parameters are not set\n");
 }
+if(empty($_POST['s']) || empty($_POST['a']) || empty($_POST['t'])) {
+	die("FAILED Required POST parameters are empty\n");
+}
 
 $session_id = $_POST['s'];
 
@@ -21,7 +24,7 @@ if(isset($_POST['l']) && is_numeric($_POST['l'])) {
 	$expires = time() + (int) $_POST['l'];
 } else {
 	$expires = time() + 250; //Expire in 5 minutes if we don't know the track length
-}	
+}
 
 if(isset($_POST['m'])) {
 	$mbid = $mdb2->quote($_POST['m'], "text");
