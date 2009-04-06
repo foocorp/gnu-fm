@@ -22,5 +22,10 @@ html, body, #doc3,h1{margin: 0; padding: 0;}
 
 .yui-b, #ft{padding: 1em;}
 
-.odd { background:#F4B624 !important; color:#000; }
-.even { background:#FFFFFF !important; color:#000; } 
+table tr {
+	background:		rgb(237, 255, 237);
+}
+
+table tr.odd {
+	background:		rgb(217, 249, 217);
+}
