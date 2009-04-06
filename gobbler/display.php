@@ -77,8 +77,8 @@ require_once('database.php');
 			if(PEAR::isError($res)) {
 				die($res->getMessage());
 			}
-			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)
-			echo "<p>" . stripslashes($row["total"]) . " tracks."</p>";
+			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+			echo "<p>" . stripslashes($row["total"]) . " tracks.</p>";
 		?>
  <p>
     <a href="http://validator.w3.org/check?uri=referer"><img
