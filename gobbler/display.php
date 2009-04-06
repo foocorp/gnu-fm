@@ -41,10 +41,21 @@ $req_track = $_GET["t"];
 
 if ($req_user) {
 
+			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE username = '" . $req_user . "' ORDER BY time DESC LIMIT 10");
+
+			break;
 
 } elseif ($req_artist) {
 
+			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
+
+			break;
+
 } elseif ($req_track) {
+
+			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
+			
+			break;
 
 } elseif (!$res) {
 
