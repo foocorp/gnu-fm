@@ -23,8 +23,8 @@ require_once('database.php');
 </head>
 <body>
 <div id="doc3" class="yui-t7">
-   <div id="hd" role="banner"><h1><a href="http://libre.fm/">Libre.fm Gobble Server</a></h1></div>
-   <div id="bd" role="main">
+   <div id="hd" style="banner"><h1><a href="http://libre.fm/">Libre.fm Gobble Server</a></h1></div>
+   <div id="bd" style="main">
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 
@@ -138,7 +138,7 @@ if ($req_user) {
 	</div>
 	
 	</div>
-   <div id="ft" role="contentinfo">
+   <div id="ft" style="contentinfo">
 
 <p>This site handles <em>gobble</em> and <em>now playing</em>
 submissions from client applications and offers access to our web
