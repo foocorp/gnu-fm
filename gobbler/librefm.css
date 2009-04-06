@@ -21,3 +21,6 @@ html, body, #doc3,h1{margin: 0; padding: 0;}
 }
 
 .yui-b, #ft{padding: 1em;}
+
+.odd { background:#F4B624; color:#000; }
+.even { background:#FFFFFF; color:#000; } 
