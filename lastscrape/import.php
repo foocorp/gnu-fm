@@ -25,7 +25,7 @@ $submissions_server = trim($response[3]);
 $r = new HTTP_Request($submissions_server);
 $r->setMethod(HTTP_REQUEST_METHOD_POST);
 
-for($i = 1; $i < count($data); $i++) { // skip the first row
+for($i = 0; $i < count($data); $i++) {
 	$row = explode("\t", $data[$i]);
 
 	$track = $row[1];
@@ -42,8 +42,7 @@ for($i = 1; $i < count($data); $i++) { // skip the first row
 
 	$r->sendRequest();
 
-	echo "Sending ". $artist . " playing " . $track . "... ";
-	sleep(1);
+	echo $i . "/" . count($data) ."   sending ". $artist . " playing " . $track .".. ";
 	echo $r->getResponseBody();
 }
 
