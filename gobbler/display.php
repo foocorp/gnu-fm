@@ -22,13 +22,15 @@ require_once('database.php');
 -->
 </head>
 <body>
-<div id="doc3" class="yui-t5">
+<div id="doc3" class="yui-t7">
    <div id="hd" role="banner"><h1><a href="http://libre.fm/">Libre.fm Gobble Server</a></h1></div>
    <div id="bd" role="main">
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 
-  <p>This is a demo site for the libre.fm 'gobbler' server. That name might change. If you'd like an account, come to our IRC channel and ask mattl, Elleo or Clint nicely. You'll need to supply us with a username, password and email address. You'll also need to be comfortable editing your 'hosts' file and understand the implications of doing that.</p>
+  <p>This is a demo site for the libre.fm 'gobbler' server. That name might change. If you'd like an account, come to our IRC channel and ask mattl, Elleo or Clint nicely. You'll need to supply us with a username, password and email address.</p>
+
+<p>You'll also need to be comfortable editing your 'hosts' file and understand the implications of doing that.</p>
 
 		<?php
 
