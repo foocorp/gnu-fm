@@ -32,6 +32,8 @@ class User {
 	global $mdb2;
 
 	$timestamp;
+	if (!isset($time)) 
+	    $time = "overall";
 
 	if (strcmp($time, "overall") == 0) {
 	    $timestamp = 0;

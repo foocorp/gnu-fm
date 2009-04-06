@@ -41,8 +41,18 @@ $method_map = array(
 	"auth.gettoken"             => method_auth_gettoken,
 	"auth.getsession"           => method_auth_getsession,
 	"artist.gettoptracks"       => method_artist_gettoptracks,
-	"user.getinfo"		    => method_user_getinfo
+	"user.getinfo"		    => method_user_getinfo,
+	"user.gettoptracks"	    => method_user_gettoptracks
     );
+
+function method_user_gettoptracks() {
+    if (!isset($_GET['user'])) {
+	report_failure(LFM_INVALID_SIGNATURE);
+    }
+
+    header("Content-Type: text/xml");
+    print(XML::prettyXML(User::getTopTracks($_GET['user'], $_GET['period'])));
+}
 
 function method_user_getinfo() {
     if (!isset($_GET['user'])) {
