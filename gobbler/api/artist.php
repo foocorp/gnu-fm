@@ -64,7 +64,7 @@ class Artist {
 	while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
 	    $track = $root->addChild("track", null);
 	    $track->addAttribute("rank", $i);
-	    $track->addChild("name", $row['name']);
+	    $track->addChild("name", htmlentities($row['name']));
 	    $track->addChild("mbid", $row['mbid']);
 	    $track->addChild("playcount", $row['freq']);
 	    $track->addChild("listeners", $row['dist']);

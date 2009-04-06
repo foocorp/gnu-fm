@@ -66,9 +66,10 @@ class User {
 	$root->addAttribute("type", $time);
 	$i = 1;
 	while(($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
+
 	    $track = $root->addChild("track", null);
 	    $track->addAttribute("rank", $i);
-	    $track->addChild("name", $row['name']);
+	    $track->addChild("name", htmlentities($row['name']));
 	    $track->addChild("playcount", $row['freq']);
 	    $i++;
 	}
@@ -103,7 +104,7 @@ class User {
 	    $track = $root->addChild("track", null);
 	    $artist = $track->addChild("artist", $row['artist']);
 	    $artist->addAttribute("mbid", $row['artmbid']);
-	    $track->addChild("name", $row['name']);
+	    $track->addChild("name", htmlentities($row['name']));
 	}
 
 	return($xml);
