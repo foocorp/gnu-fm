@@ -22,6 +22,8 @@ function usernameFromSID($session_id) {
 function createArtistIfNew($artist) {
 	global $mdb2;
 
+	$artist = $mdb2->quote($artist, 'text');
+
 	$res = $mdb2->query("SELECT name FROM Artist WHERE name = " . ($artist));
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage());
@@ -38,6 +40,9 @@ function createArtistIfNew($artist) {
 
 function createAlbumIfNew($artist, $album) {
 	global $mdb2;
+
+	$artist = $mdb2->quote($artist, 'text');
+	$album = $mdb2->quote($album, 'text');
 
 	$res = $mdb2->query("SELECT name FROM Album WHERE name = " . ($album));
 	if(PEAR::isError($res)) {
@@ -56,6 +61,10 @@ function createAlbumIfNew($artist, $album) {
 function createTrackIfNew($artist, $album, $track, $mbid) {
 	global $mdb2;
 
+	$artist = $mdb2->quote($artist, 'text');
+	$album = $mdb2->quote($album, 'text');
+	$track = $mdb2->quote($track, 'text');
+	$mbid = $mdb2->quote($mbid, 'text');
 	$res = $mdb2->query("SELECT name FROM Track WHERE name = " . ($track) . " AND artist = " . ($artist));
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage());

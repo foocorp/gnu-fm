@@ -34,8 +34,8 @@ class Artist {
 
 	$bio = $artist->addChild("bio", null);
 	$bio->addChild("published", $row['bio_published']);
-	$bio->addChild("summary", utf8_encode(htmlentities($row['bio_summary'])));
-	$bio->addChild("content", utf8_encode(htmlentities($row['bio_content'])));
+	$bio->addChild("summary", repamp($row['bio_summary']));
+	$bio->addChild("content", repamp($row['bio_content']));
 
 	$res->free();
 
@@ -58,7 +58,7 @@ class Artist {
 
 	$xml = new SimpleXMLElement("<lfm status=\"ok\"></lfm>");
 	$root = $xml->addChild("toptracks", null);
-	$root->addAttribute("artist", utf8_encode(htmlentities($artist)));
+	$root->addAttribute("artist", repamp($artist));
 	$i = 1;
 
 	// Loop over every result and add as children to "toptracks".
@@ -66,7 +66,7 @@ class Artist {
 	while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
 	    $track = $root->addChild("track", null);
 	    $track->addAttribute("rank", $i);
-	    $track->addChild("name", utf8_encode(htmlentities($row['name'])));
+	    $track->addChild("name", repamp($row['name']));
 	    $track->addChild("mbid", $row['mbid']);
 	    $track->addChild("playcount", $row['freq']);
 	    $track->addChild("listeners", $row['dist']);

@@ -34,7 +34,7 @@ class User {
 	$timestamp;
 	if (!isset($time)) 
 	    $time = "overall";
-
+	//TODO: Do better, this is too ugly :\
 	if (strcmp($time, "overall") == 0) {
 	    $timestamp = 0;
 	} else if (strcmp($time, "3month") == 0) {
@@ -69,7 +69,7 @@ class User {
 
 	    $track = $root->addChild("track", null);
 	    $track->addAttribute("rank", $i);
-	    $track->addChild("name", utf8_encode(htmlentities($row['name'])));
+	    $track->addChild("name", repamp($row['name']));
 	    $track->addChild("playcount", $row['freq']);
 	    $i++;
 	}
@@ -102,9 +102,9 @@ class User {
 
 	while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
 	    $track = $root->addChild("track", null);
-	    $artist = $track->addChild("artist", utf8_encode(htmlentities($row['artist'])));
+	    $artist = $track->addChild("artist", repamp($row['artist']));
 	    $artist->addAttribute("mbid", $row['artmbid']);
-	    $track->addChild("name", utf8_encode(htmlentities($row['name'])));
+	    $track->addChild("name", repamp($row['name']));
 	}
 
 	return($xml);

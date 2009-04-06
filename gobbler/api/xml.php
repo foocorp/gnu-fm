@@ -16,4 +16,9 @@ class XML {
 	return($xml);
     }
 }
+
+function repamp($input) {
+    $input = str_replace('&', '&amp;', $input);
+    return($input);
+}
 ?>
