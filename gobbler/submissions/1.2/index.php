@@ -3,7 +3,10 @@ require_once('../../database.php');
 require_once('../../scrobble-utils.php');
 
 if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t']) || !isset($_POST['i'])) {
-	die("FAILED Required POST parameters are not set\n");
+	die("Failed Required POST parameters are not set\n");
+}
+if(empty($_POST['s']) || empty($_POST['a']) || empty($_POST['t']) || empty($_POST['i'])) {
+	die("Failed Required POST parameters are empty\n");
 }
 
 if(!is_array($_POST['a']) || !is_array($_POST['t']) || !is_array($_POST['i'])) {
@@ -16,7 +19,7 @@ $username = $mdb2->quote(usernameFromSID($session_id), "text");
 
 for($i = 0; $i < count($_POST['a']); $i++) {
 	$artist = $mdb2->quote($_POST['a'][$i], "text");
-	if(isset($_POST['b'][$i])) {
+	if(isset($_POST['b'][$i]) && !empty($_POST['b'])) {
 		$album = $mdb2->quote($_POST['b'][$i], "text");
 	} else {
 		$album = 'NULL';
