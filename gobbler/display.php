@@ -76,7 +76,7 @@ if ($req_user) {
 				die($res->getMessage());
 			}
 			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-				<?php echo ($i % 2 == 0) ? "<td class=\"even\">" : "<td class=\"odd\">";?>
+				echo ($i % 2 == 0) ? "<td class=\"even\">" : "<td class=\"odd\">";
 				foreach($row as $field => $value) {
 					if($field == "time") {
 						$value = strftime("%c", $value);
