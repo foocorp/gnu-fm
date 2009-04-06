@@ -28,10 +28,6 @@ require_once('database.php');
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 
-		<h2>Last 10 Gobbles</h2>
-
-		<table>
-			<tr><th>User</th><th>Artist</th><th>Track</th><th>Time</th></tr>
 		<?php
 
   $req_user = $_GET["u"];
@@ -43,24 +39,34 @@ if ($req_user) {
 
 			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE username = '" . $req_user . "' ORDER BY time DESC LIMIT 10");
 
+			echo "<h2>Last 10 Gobbles by " . $req_user . "</h2>";
 
 } elseif ($req_artist) {
 
-			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
+			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE artist = '" . $req_artist ."' ORDER BY time DESC LIMIT 10");
 
-			break;
+			echo "<h2>Last 10 Gobbles of " . $req_artist . "</h2>";
 
 } elseif ($req_track) {
 
-			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
-			
-			break;
+			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE track = '" . $req_track . "' ORDER BY time DESC LIMIT 10");
 
+			echo "<h2>Last 10 Gobbles of " . $req_track . "</h2>";
+			
 } elseif (!$res) {
 
 			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
 
+			echo "<h2>Last 10 Gobbles</h2>";
+
 }
+
+?>
+
+		<table>
+			<tr><th>User</th><th>Artist</th><th>Track</th><th>Time</th></tr>
+
+<?php
 
 			if(PEAR::isError($res)) {
 				die($res->getMessage());
