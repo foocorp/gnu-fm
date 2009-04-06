@@ -82,7 +82,7 @@ if ($req_user) {
 				echo ($i % 2 == 0) ? "<tr class=\"even\">" : "<tr class=\"odd\">";
 				foreach($row as $field => $value) {
 					if($field == "time") {
-						$value = human_timestamp($value);
+						$value = '<abbr title=\'' . strftime('%c', $value) . '\'>' . human_timestamp($value) . '</abbr>';
 					}
 					echo "<td>". stripslashes($value) . "</td>";
 				}
