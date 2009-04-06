@@ -63,6 +63,23 @@ require_once('database.php');
 			}
 		?>
 
+		<h2>Statistics</h2>
+
+		<?php
+			$res = $mdb2->query("SELECT COUNT(*) as total from Scrobbles");
+			if(PEAR::isError($res)) {
+				die($res->getMessage());
+			}
+			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)
+			echo "<p>" . stripslashes($row["total"]) . " gobbles."</p>";
+
+			$res = $mdb2->query("SELECT COUNT(*) as total from Track");
+			if(PEAR::isError($res)) {
+				die($res->getMessage());
+			}
+			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)
+			echo "<p>" . stripslashes($row["total"]) . " tracks."</p>";
+		?>
  <p>
     <a href="http://validator.w3.org/check?uri=referer"><img
         src="http://www.w3.org/Icons/valid-html401"
