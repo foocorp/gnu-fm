@@ -3,7 +3,7 @@ class XML {
     public static function prettyXML($xml) {
 	$dom = new DOMDocument('1.0'); 
 	$dom->preserveWhitespace = false;
-	$dom->loadXML($xml->asXML());  
+	$dom->loadXML(utf8_encode($xml->asXML()));  
 	$dom->formatOutput = true;
 	return($dom->saveXML());
     } 
