@@ -75,7 +75,9 @@ if ($req_user) {
 			if(PEAR::isError($res)) {
 				die($res->getMessage());
 			}
+			$i = 0;
 			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+			$i++;
 				echo ($i % 2 == 0) ? "<tr class=\"even\">" : "<tr class=\"odd\">";
 				foreach($row as $field => $value) {
 					if($field == "time") {
@@ -83,7 +85,7 @@ if ($req_user) {
 					}
 					echo "<td>". stripslashes($value) . "</td>";
 				}
-				echo "</tr>";
+				echo "</tr>\n";
 			}
 
 		?>
