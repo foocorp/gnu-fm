@@ -60,7 +60,7 @@ if ($req_user) {
 			
 } elseif (!$res) {
 
-			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 100");
+			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
 
 			echo "<h2>last 100 Gobbles</h2>";
 
@@ -97,7 +97,7 @@ if ($req_user) {
 		<h2>Now Playing?</h2>
 
 		<?php
-			$res = $mdb2->query("SELECT username, artist, track FROM Now_Playing ORDER BY expires DESC LIMIT 100");
+			$res = $mdb2->query("SELECT username, artist, track FROM Now_Playing ORDER BY expires DESC LIMIT 10");
 			if(PEAR::isError($res)) {
 				die($res->getMessage());
 			}
