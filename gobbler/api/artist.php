@@ -28,15 +28,14 @@ class Artist {
 	$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
 
 	$artist = $xml->addChild("artist", null);
-	$artist->addChild("name", $row['name']);
+	$artist->addChild("name", utf8_encode($row['name']));
 	$artist->addChild("mbid", $row['mbid']);
-	//$artist->addChild("url", $row['url']);
 	$artist->addChild("streamable", $row['streamable']);
 
 	$bio = $artist->addChild("bio", null);
 	$bio->addChild("published", $row['bio_published']);
-	$bio->addChild("summary", $row['bio_summary']);
-	$bio->addChild("content", $row['bio_content']);
+	$bio->addChild("summary", utf8_encode(htmlentities($row['bio_summary'])));
+	$bio->addChild("content", utf8_encode(htmlentities($row['bio_content'])));
 
 	$res->free();
 
@@ -59,12 +58,15 @@ class Artist {
 
 	$xml = new SimpleXMLElement("<lfm status=\"ok\"></lfm>");
 	$root = $xml->addChild("toptracks", null);
-	$root->addAttribute("artist", $artist);
+	$root->addAttribute("artist", utf8_encode(htmlentities($artist)));
 	$i = 1;
+
+	// Loop over every result and add as children to "toptracks".
+	// Encode trackname as utf8 and replace bad symbols with html-equivalents
 	while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
 	    $track = $root->addChild("track", null);
 	    $track->addAttribute("rank", $i);
-	    $track->addChild("name", htmlentities($row['name']));
+	    $track->addChild("name", utf8_encode(htmlentities($row['name'])));
 	    $track->addChild("mbid", $row['mbid']);
 	    $track->addChild("playcount", $row['freq']);
 	    $track->addChild("listeners", $row['dist']);
