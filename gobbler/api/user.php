@@ -49,7 +49,7 @@ class User {
 	    return(XML::error("error", "13", "Invalid method signature supplied"));
 	}
 
-	$res = $mdb2->query("SELECT Track.*, Artist.mbid artmbid, COUNT(*) AS freq 
+	$res = $mdb2->query("SELECT Track.*, Artist.mbid AS artmbid, COUNT(*) AS freq 
 	    FROM Track, Scrobbles,Artist 
 	    WHERE Scrobbles.username =" . $mdb2->quote($username, 'text') . "
 	    AND Scrobbles.track = Track.name AND Scrobbles.time > " . $timestamp . " AND Track.artist = Artist.name 
@@ -71,6 +71,8 @@ class User {
 	    $track->addAttribute("rank", $i);
 	    $track->addChild("name", repamp($row['name']));
 	    $track->addChild("playcount", $row['freq']);
+	    $artist = $track->addChild("artist", repamp($row['artist']));
+	    $artist->addChild("mbid", $row['artmbid']);
 	    $i++;
 	}
 
