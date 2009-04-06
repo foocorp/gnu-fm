@@ -1,6 +1,7 @@
 <?php
 header('Content-type: text/html; charset=utf-8');
 require_once('database.php');
+require_once('utils/human-time.php');
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
  "http://www.w3.org/TR/html4/strict.dtd">
@@ -81,7 +82,7 @@ if ($req_user) {
 				echo ($i % 2 == 0) ? "<tr class=\"even\">" : "<tr class=\"odd\">";
 				foreach($row as $field => $value) {
 					if($field == "time") {
-						$value = strftime("%c", $value);
+						$value = human_timestamp($value);
 					}
 					echo "<td>". stripslashes($value) . "</td>";
 				}
