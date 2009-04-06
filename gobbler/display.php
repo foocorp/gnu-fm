@@ -132,7 +132,10 @@ if ($req_user) {
 </div>
 </div>
 	</div>
-	<div class="yui-b sidebar">
+	
+	</div>
+   <div id="ft" role="contentinfo">
+
 <p>This site handles <em>gobble</em> and <em>now playing</em>
 submissions from client applications and offers access to our web
 services API. If you just want to use <a
@@ -140,10 +143,8 @@ href="http://libre.fm">libre.fm</a> then you probably want to
 visit the <a href="http://libre.fm">main site</a>, but if you're
 a developer then here are some useful stats to help you see
 what's happening.</p>
-</div>
-	
-	</div>
-   <div id="ft" role="contentinfo"><p><a href="http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm">http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm</a></p></div>
+
+<p><a href="http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm">http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm</a></p></div>
 </div>
 </body>
 </html>
