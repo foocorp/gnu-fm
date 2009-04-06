@@ -70,7 +70,7 @@ require_once('database.php');
 			if(PEAR::isError($res)) {
 				die($res->getMessage());
 			}
-			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)
+			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
 			echo "<p>" . stripslashes($row["total"]) . " gobbles."</p>";
 
 			$res = $mdb2->query("SELECT COUNT(*) as total from Track");
