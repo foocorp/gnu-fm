@@ -33,7 +33,25 @@ require_once('database.php');
 		<table>
 			<tr><th>User</th><th>Artist</th><th>Track</th><th>Time</th></tr>
 		<?php
+
+  $req_user = $_GET["u"];
+$req_artist = $_GET["a"];
+$req_track = $_GET["t"];
+  
+
+if ($req_user) {
+
+
+} elseif ($req_artist) {
+
+} elseif ($req_track) {
+
+} elseif (!$res) {
+
 			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
+
+}
+
 			if(PEAR::isError($res)) {
 				die($res->getMessage());
 			}
@@ -93,6 +111,7 @@ require_once('database.php');
         src="http://www.w3.org/Icons/valid-html401"
         alt="Valid HTML 4.01 Strict" height="31" width="88"></a>
   </p>
+
 
 </div>
 </div>
