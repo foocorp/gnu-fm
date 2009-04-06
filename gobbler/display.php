@@ -62,7 +62,7 @@ if ($req_user) {
 
 			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
 
-			echo "<h2>last 100 Gobbles</h2>";
+			echo "<h2>last 10 Gobbles</h2>";
 
 }
 
