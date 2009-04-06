@@ -43,7 +43,6 @@ if ($req_user) {
 
 			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE username = '" . $req_user . "' ORDER BY time DESC LIMIT 10");
 
-			break;
 
 } elseif ($req_artist) {
 
