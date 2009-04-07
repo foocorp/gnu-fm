@@ -1,3 +1,5 @@
+<?php
+
 /* Libre.fm -- a free network service for sharing your music listening habits
 
    Copyright (C) 2009 Libre.fm Project
@@ -17,7 +19,6 @@
 
 */
 
-<?php
 header('Content-type: text/html; charset=utf-8');
 require_once('database.php');
 require_once('utils/human-time.php');

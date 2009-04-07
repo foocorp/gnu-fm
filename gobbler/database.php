@@ -1,3 +1,5 @@
+<?php
+
 /* Libre.fm -- a free network service for sharing your music listening habits
 
    Copyright (C) 2009 Libre.fm Project
@@ -17,7 +19,6 @@
 
 */
 
-<?
 
 if(!file_exists(dirname(__FILE__) . "/config.php")) {
 	die("Please run the <a href='install.php'>Install</a> script to configure your installation");
