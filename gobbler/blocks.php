@@ -101,13 +101,20 @@ if ($req_user) {
                                 $i++;
                                 echo "<div id='card".$i."' class='singlecard'>";
 				foreach($row as $field => $value) {
-					if($field == "time") {
-						$value = strftime("%c", $value);
+					if($field == "artist") {
+						echo "<div class='".stripslashes($field)."'><a href='/blocks.php?a=".
+						    stripslashes($value)."'>"  .stripslashes($value) . "</a></div>";
 					}
-                                        if($field == "username") {
+					else if($field == "track") {
+						echo "<div class='".stripslashes($field)."'><a href='/blocks.php?t=".
+						    stripslashes($value)."'>"  .stripslashes($value) . "</a></div>";
+					}
+					else if($field == "time") {
+						$value = strftime("%c", $value);
+						echo "<div class='".stripslashes($field)."'>". stripslashes($value) . "</div>";
+					}
+					else if($field == "username") {
 					    echo "<div class='".stripslashes($field)."'><a href='/blocks.php?u=" . stripslashes($value) . "'>" . stripslashes($value) . "</a></div>";
-                                        } else {
-					    echo "<div class='".stripslashes($field)."'>". stripslashes($value) . "</div>";
                                         }
                                 }
 				echo "</div>";

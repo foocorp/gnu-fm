@@ -122,12 +122,22 @@ body{background-image: none;}
     overflow: hidden;
 }
 
+.artist a {
+    text-decoration:none;
+    color: #000;
+}
+
 .track {
     margin-top:0px;
     padding:5px;
     font-size: 110%;
     height: 70px;
     overflow: hidden;
+}
+
+.track a {
+    text-decoration:none;
+    color: #000;
 }
 
 .time {
