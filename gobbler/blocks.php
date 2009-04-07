@@ -53,10 +53,11 @@ if (!isset($config_version) || $config_version != $version) {
    <div id="bd" style="main">
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
-
+<div id='message'>
   <p>This is a demo site for the libre.fm 'gobbler' server. That name might change. If you'd like an account, come to our IRC channel and ask mattl, Elleo or Clint nicely. You'll need to supply us with a username, password and email address.</p>
 
 <p>You'll also need to be comfortable editing your 'hosts' file and understand the implications of doing that.</p>
+</div>
 
 <div id="cards">
 		<?php
@@ -117,6 +118,7 @@ if ($req_user) {
 <div id="nowplaying">
 		<h2>Now Playing?</h2>
 
+<div id="nowtracks">
 		<?php
                         if(empty($req_user)) {
                                $res = $mdb2->query("SELECT username, artist, track FROM Now_Playing ORDER BY expires DESC LIMIT 10");
@@ -132,9 +134,9 @@ if ($req_user) {
 			}
 		?>
 </div>
+</div>
 <div id="statistics">
 		<h2>Statistics</h2>
-
 		<?php
 			$res = $mdb2->query("SELECT COUNT(*) as total from Scrobbles");
 			if(PEAR::isError($res)) {
