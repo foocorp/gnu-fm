@@ -1,3 +1,4 @@
+<?php
 /* Libre.fm -- a free network service for sharing your music listening habits
 
    Copyright (C) 2009 Libre.fm Project
@@ -15,9 +16,8 @@
    You should have received a copy of the GNU Affero General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-*/
+ */
 
-<?php
 require_once('../database.php');
 require_once('xml.php');
 
