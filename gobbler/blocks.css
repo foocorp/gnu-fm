@@ -22,11 +22,14 @@ License AGPL
 }
 
 .singlecard {
+    position:relative;
     width: 150px;
     height: 150px;
     float:left;
     margin: 10px;
     border: 1px dashed #444;
+    -moz-border-radius-topleft: 15px;
+    -webkit-border-radius-topleft: 15px;
     -moz-border-radius-bottomright: 15px;
     -webkit-border-radius-bottomright: 15px;
     border: 1px solid #ccc;
@@ -52,11 +55,21 @@ License AGPL
     text-decoration:none;
 }
 
-.artist, .track , .time {
-    margin-top: 2px;
+.artist {
+    margin-top:5px;
+    font-size: 80%;
+}
+
+.track {
+    margin-top:20px;
+    font-size: 110%;
 }
 
 .time {
+    position:absolute;
+    bottom:8px;
+    left: 8px;
+    margin-top: 2px;
     color: #ccc;
     font-size:8px;
 }

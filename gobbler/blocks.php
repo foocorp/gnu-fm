@@ -95,7 +95,9 @@ if ($req_user) {
 			if(PEAR::isError($res)) {
 				die($res->getMessage());
 			}
+                        $i=0;
 			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+                                $i++;
                                 echo "<div id='card".$i."' class='singlecard'>";
 				foreach($row as $field => $value) {
 					if($field == "time") {
