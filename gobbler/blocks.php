@@ -34,8 +34,8 @@ if (!isset($config_version) || $config_version != $version) {
 		<title>Libre.fm Gobble Server</title>
    <link rel="stylesheet" href="reset-fonts-grids.css" type="text/css">
    <link rel="stylesheet" href="base.css" type="text/css">
-   <link rel="stylesheet" href="blocks.css" type="text/css">
    <link rel="stylesheet" href="librefm.css" type="text/css">
+   <link rel="stylesheet" href="blocks.css" type="text/css">
 <!--
 <rdf:RDF xmlns="http://web.resource.org/cc/"
          xmlns:dc="http://purl.org/dc/elements/1.1/"
