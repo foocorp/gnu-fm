@@ -30,6 +30,7 @@ License AGPL
     -moz-border-radius: 15px;
     -webkit-border-radius: 15px;
     border: 1px solid #ccc;
+    background: #fff;
     overflow:hidden;
 }
 
@@ -37,7 +38,12 @@ License AGPL
     background-color: #000;
     color: #fff;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 15px;
+    line-height: 15px;
+    -moz-border-radius-topleft: 15px;
+    -moz-border-radius-topright: 15px;
+    -webkit-border-radius-topleft: 15px;
+    -webkit-border-radius-topright: 15px;
     text-align:left;
 }
 
