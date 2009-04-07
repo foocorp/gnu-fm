@@ -112,7 +112,7 @@ if ($req_user) {
 
 		?>
 </div>
-
+<div id="nowplaying">
 		<h2>Now Playing?</h2>
 
 		<?php
@@ -124,7 +124,8 @@ if ($req_user) {
 				echo "<p>" . stripslashes($row["username"]) . " is listening to " . stripslashes($row["track"]) . " by " . stripslashes($row["artist"]) . "</p>";
 			}
 		?>
-
+</div>
+<div id="statistics">
 		<h2>Statistics</h2>
 
 		<?php
@@ -150,6 +151,7 @@ if ($req_user) {
 			echo "<p>" . stripslashes($row["total"]) . " users.</p>";
 
 		?>
+</div>
  <p>
     <a href="http://validator.w3.org/check?uri=referer"><img
         src="http://www.w3.org/Icons/valid-html401"
