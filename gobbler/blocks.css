@@ -48,10 +48,33 @@ body{background-image: none;}
     padding: 0 10px;
 }
 
-#nowplaying {
-    clear:both;
+#message {
+    width: 290px;
+    padding: 5px;
 }
 
+#nowplaying {
+    -moz-border-radius: 15px;
+    margin: 20px auto;
+    width: 780px;
+    height: 200px;
+    background: #eee;
+    padding: 10px;
+    overflow:auto;
+    clear:both;
+}
+#nowtracks {
+    overflow:auto;
+}
+#nowplaying p {
+    display: block;
+    background: #fff;
+    -moz-border-radius: 5px;
+    padding: 5px;
+    width: 760px;
+    overflow:hidden;
+    margin: 2px auto;
+}
 .singlecard {
     position:relative;
     width: 150px;
@@ -96,6 +119,8 @@ body{background-image: none;}
     padding:5px;
     margin-top:20px;
     font-size: 110%;
+    height: 80%;
+    overflow: hidden;
 }
 
 .time {
