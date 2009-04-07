@@ -7,11 +7,10 @@ License AGPL
 
 body{background-image: none;}
 #cards {
-    width: 800px;
-    padding:10px;
+    width: 820px;
     margin: 10px auto;
     text-align:center;
-    clear:both;
+    padding: 0;
 }
 
 #statistics {
@@ -49,11 +48,14 @@ body{background-image: none;}
 }
 
 #message {
+    position: absolute;
     width: 290px;
     padding: 5px;
 }
 
 #nowplaying {
+    position: relative;
+    left: -5px;
     -moz-border-radius: 15px;
     margin: 20px auto;
     width: 780px;
@@ -80,7 +82,7 @@ body{background-image: none;}
     width: 150px;
     height: 150px;
     float:left;
-    margin: 10px;
+    margin: 5px;
     border: 1px dashed #444;
     -moz-border-radius-topleft: 15px;
     -webkit-border-radius-topleft: 15px;
