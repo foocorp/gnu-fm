@@ -22,7 +22,7 @@ require_once('utils/human-time.php');
 </License>
 </rdf:RDF>
 -->
-  <!-- //
+<!-- //
 
    Libre.fm -- a free network service for sharing your music listening habits
 
@@ -41,7 +41,8 @@ require_once('utils/human-time.php');
    You should have received a copy of the GNU Affero General Public License
    along with this program.  If not, see http://www.gnu.org/licenses/
 
-						    // -->
+-->
+
 </head>
 <body>
 <div id="doc3" class="yui-t7">
