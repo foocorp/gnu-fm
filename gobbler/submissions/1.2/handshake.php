@@ -1,3 +1,4 @@
+<?
 /* Libre.fm -- a free network service for sharing your music listening habits
 
    Copyright (C) 2009 Libre.fm Project
@@ -17,7 +18,6 @@
 
 */
 
-<?
 // Implements the submissions handshake protocol as detailed at: http://www.last.fm/api/submissions
 
 require_once('auth-utils.php');
