@@ -19,10 +19,6 @@
 
 */
 
-?>
-
-<?php
-
 if(!file_exists(dirname(__FILE__) . "/config.php")) {
 	die("Please run the <a href='install.php'>Install</a> script to configure your installation");
 }
