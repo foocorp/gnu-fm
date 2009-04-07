@@ -48,6 +48,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		$time = (int) $_POST['i'][$i];
 	} else {
 		// 1.1 time format
+		date_default_timezone_set("UTC");
 		$time = strtotime($_POST['i'][$i]);
 	}
 	if(isset($_POST['m'][$i])) {
