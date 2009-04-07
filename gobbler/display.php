@@ -8,7 +8,7 @@ require_once('utils/human-time.php');
  "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-		<title>Libre.fm Gobble Server</title>
+<title>Libre.fm Gobble Server (rev $Id$)</title>
    <link rel="stylesheet" href="reset-fonts-grids.css" type="text/css">
    <link rel="stylesheet" href="base.css" type="text/css">
    <link rel="stylesheet" href="librefm.css" type="text/css">
