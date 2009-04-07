@@ -1,5 +1,7 @@
 html, body, #doc3,h1{margin: 0; padding: 0;}
 
+body{background-image: url(i/bg.png);}
+
 #hd{background: #980101 url(i/header.png) no-repeat;
     border: 0;
     margin: 0;
