@@ -106,6 +106,7 @@ if ($req_user) {
                                         } else {
 					    echo "<div class='".stripslashes($field)."'>". stripslashes($value) . "</div>";
                                         }
+                                }
 				echo "</div>";
 			}
 
