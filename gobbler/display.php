@@ -1,5 +1,11 @@
 <?php
 
+header('Content-type: text/html; charset=utf-8');
+require_once('database.php');
+require_once('utils/human-time.php');
+?>
+<!--
+
 /* Libre.fm -- a free network service for sharing your music listening habits
 
    Copyright (C) 2009 Libre.fm Project
@@ -19,10 +25,7 @@
 
 */
 
-header('Content-type: text/html; charset=utf-8');
-require_once('database.php');
-require_once('utils/human-time.php');
-?>
+-->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
  "http://www.w3.org/TR/html4/strict.dtd">
 <html>
