@@ -14,14 +14,21 @@ License AGPL
     clear:both;
 }
 
+#statistics {
+    clear:both;
+}
+#nowplaying {
+    clear:both;
+}
+
 .singlecard {
     width: 100px;
     height: 100px;
     float:left;
     margin: 10px;
     border: 1px dashed #444;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
     border: 1px solid #ccc;
     overflow:hidden;
 }
@@ -32,6 +39,11 @@ License AGPL
     font-weight: bold;
     font-size: 12px;
     text-align:left;
+}
+
+.username a {
+    color: #fff;
+    text-decoration:none;
 }
 
 .artist, .track , .time {
