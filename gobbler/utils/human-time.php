@@ -38,7 +38,7 @@
             break;
         case ($diff < 3600):
             # less than an hour
-            return ceil($diff / 60) . ' minutes ago';
+            return round($diff / 60) . ' minutes ago';
             break;
         case ($diff < 7200):
             # between an hour and two
@@ -46,7 +46,7 @@
             break;
         case ($diff < 86400):
             # less than a day
-            return ceil($diff / 3600) . ' hours ago';
+            return round($diff / 3600) . ' hours ago';
             break;
         case ($diff < 172800):
             # less than two days
@@ -54,7 +54,7 @@
             break;
         case ($diff < 604800):
             # less than a week
-            return ceil($diff / 86400) . ' days ago';
+            return round($diff / 86400) . ' days ago';
             break;
         case ($diff < 691200):
             # a week an a day
@@ -62,7 +62,7 @@
             break;
         case ($diff < 2764800):
             # less than a month
-            return ceil($diff / 691200) . ' weeks ago';
+            return round($diff / 691200) . ' weeks ago';
             break;
         case ($diff < 4579200):
             # a month and three weeks
@@ -70,7 +70,7 @@
             break;
         case ($diff < 33177600);
             # less than a year
-            return ceil($diff / 2764800) . ' months ago';
+            return round($diff / 2764800) . ' months ago';
             break;
         case ($diff < 35942400):
             # a year and a month
