@@ -1,0 +1,87 @@
+html, body, #doc3,h1{margin: 0; padding: 0;}
+
+#hd{background: #980101 url(images/header.png) no-repeat;
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+#hd a{
+	display: block;
+	text-decoration: none;
+	overflow: hidden;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	padding-top: 70px;
+	height: 0px !important;
+	height /**/: 70px;
+	width: 418px;
+	cursor: pointer;
+}
+
+#menu {
+	float: left;
+	background: #980101;
+	padding: 1em;
+	margin-right: 1em;
+	margin-bottom: 1em;
+}
+
+#menu a {
+	color: white;
+	text-decoration: none;
+}
+
+#menu a:hover {
+	text-decoration: underline;
+}
+
+h2 {
+	font-size: 2em;
+}
+
+.yui-b, #ft{padding: 1em;}
+
+.odd { background:#F4B624 !important; color:#000; }
+.even { background:#FFFFFF !important; color:#000; } 
+
+div#register, div#login {
+	margin: 1em auto 0 auto;
+}
+div#register form, div#login form {
+	width: 30em;
+	margin: 0 auto;
+}
+div#register form fieldset, div#login form fieldset {
+	border:solid 2px #980101;
+}
+div#register form fieldset label, div#login form fieldset label {
+	display:block;
+	font-weight:bold;
+	text-align:right;
+	width:15em;
+	float:left;
+	font-size: 1em;
+}
+div#register form fieldset label span {
+	color:#666666;
+	display:block;
+	font-weight:normal;
+	text-align:right;
+	font-size: .59em
+}
+div#register form fieldset input, div#login form fieldset input {
+	float:left;
+	font-size:.7em;
+	padding:.2em .1em;
+	border:solid 1px #980101;
+	width:200px;
+	margin:2px 0 20px 10px;
+}
+div#register form fieldset input[type=submit], div#login form fieldset input[type=submit] {
+	background: white;
+	margin: 0;
+	width: 100%;
+}
+
