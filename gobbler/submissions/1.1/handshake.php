@@ -1,3 +1,4 @@
+<?php
 /* Libre.fm -- a free network service for sharing your music listening habits
 
    Copyright (C) 2009 Libre.fm Project
@@ -17,7 +18,6 @@
 
 */
 
-<?
 // Implements the submissions handshake protocol 1.1 as detailed at: http://www.audioscrobbler.net/wiki/Protocol1.1.merged
 //
 // By sending the timestamp as the md5 challenge then creating the session key from md5(md5($password) . $timestamp) we can
