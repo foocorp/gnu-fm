@@ -23,7 +23,7 @@ if(isset($_POST['invite'])) {
 
 		$url = $base_url . "/register.php?authcode=" . $code;
 		$headers = "From: Libre.fm Invitations <invitations@libre.fm>";
-		mail($email, "Libre.fm Invitation", "Hi!\n\nClearly " . $username . " really likes you, because they've sent you an inivitation to join http://libre.fm\n Just visit " . $url . " to sign up, all the cool kids are doing it.\n", $headers);
+		mail($email, "Libre.fm Invitation", "Hi!\n\nClearly " . $username . " really likes you, because they've sent you an inivitation to join http://libre.fm\n\nJust visit " . $url . " to sign up, all the cool kids are doing it.\n", $headers);
 		$smarty->assign("sent", true);
 	} else {
 		$smarty->assign("errors", $errors);
