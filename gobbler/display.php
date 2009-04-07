@@ -175,6 +175,8 @@ visit the <a href="http://libre.fm">main site</a>, but if you're
 a developer then here are some useful stats to help you see
 what's happening.</p>
 
+<h3>$Id$</h3>
+
 <p><a href="http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm">http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm</a></p></div>
 </div>
 </body>
