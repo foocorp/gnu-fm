@@ -118,7 +118,12 @@ if ($req_user) {
 		<h2>Now Playing?</h2>
 
 		<?php
-			$res = $mdb2->query("SELECT username, artist, track FROM Now_Playing ORDER BY expires DESC LIMIT 10");
+                        if(empty($req_user)) {
+                               $res = $mdb2->query("SELECT username, artist, track FROM Now_Playing ORDER BY expires DESC LIMIT 10");
+                        } else {
+                               $res = $mdb2->query("SELECT username, artist, track FROM Now_Playing WHERE username = '" . stripslashes($req_user) . "' ORDER BY expires DESC LIMIT 10");
+                        }
+
 			if(PEAR::isError($res)) {
 				die($res->getMessage());
 			}
