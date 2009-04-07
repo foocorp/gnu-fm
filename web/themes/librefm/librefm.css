@@ -1,4 +1,4 @@
-html, body, #doc3,h1{margin: 0; padding: 0;}
+html, body, #doc3,h1{margin: 0; padding: 0; font-family: Liberation Sans, Verdana}
 
 #hd{background: #980101 url(images/header.png) no-repeat;
 	border: 0;
@@ -54,17 +54,17 @@ div#register form, div#login form {
 	margin: 0 auto;
 }
 div#register form fieldset, div#login form fieldset {
-	border:solid 2px #980101;
+	border: none;
+    padding: 0;
 }
 div#register form fieldset label, div#login form fieldset label {
-	display:block;
+	float:left;
 	font-weight:bold;
 	text-align:right;
-	width:15em;
-	float:left;
 	font-size: 1em;
+    width: 10em;
 }
-div#register form fieldset label span {
+div#register form fieldset label span, div#login form fieldset label span {
 	color:#666666;
 	display:block;
 	font-weight:normal;
@@ -73,9 +73,8 @@ div#register form fieldset label span {
 }
 div#register form fieldset input, div#login form fieldset input {
 	float:left;
-	font-size:.7em;
+	font-size:1em;
 	padding:.2em .1em;
-	border:solid 1px #980101;
 	width:200px;
 	margin:2px 0 20px 10px;
 }
