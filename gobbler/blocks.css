@@ -22,8 +22,8 @@ License AGPL
 }
 
 .singlecard {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     float:left;
     margin: 10px;
     border: 1px dashed #444;
@@ -40,6 +40,7 @@ License AGPL
     font-weight: bold;
     font-size: 15px;
     line-height: 15px;
+    height: 20px;
     -moz-border-radius-topleft: 15px;
     -moz-border-radius-topright: 15px;
     -webkit-border-radius-topleft: 15px;
@@ -48,6 +49,7 @@ License AGPL
 }
 
 .username a {
+    margin-left:5px;
     color: #fff;
     text-decoration:none;
 }
