@@ -94,6 +94,12 @@ if (isset($_POST['install'])) {
 		mbid VARCHAR(36),
 		expires int)");
 
+	$res = $mdb2->query("CREATE TABLE Invitations(
+		inviter VARCHAR(64) REFERENCES Users(username),
+		invitee VARCHAR(64) REFERENCES Users(username),
+		code VARCHAR(32),
+		PRIMARY KEY(inviter, invitee, code))");
+
 	// Test user configuration
 	$res = $mdb2->query("INSERT INTO Users
 		(username, password, created)
