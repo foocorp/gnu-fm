@@ -1,3 +1,5 @@
+<?php
+
 /* Libre.fm -- a free network service for sharing your music listening habits
 
    Copyright (C) 2009 Libre.fm Project
@@ -17,8 +19,6 @@
 
 */
 
-
-<?
 require_once('database.php');
 
 function check_web_auth($username, $token, $timestamp, $api_key, $sk) {
