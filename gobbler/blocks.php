@@ -19,13 +19,13 @@
 
 */
 
+header('Content-type: text/html; charset=utf-8');
 require_once('database.php');
 require_once('version.php');
 
 if (!isset($config_version) || $config_version != $version) {
 	die("Configuration file is out of date. Please delete it (and associated database) and <a href='install.php'>reinstall</a>."); //TODO: Upgrade script for release versions
 }
-header('Content-type: text/html; charset=utf-8');
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
  "http://www.w3.org/TR/html4/strict.dtd">
