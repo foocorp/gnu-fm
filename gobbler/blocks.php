@@ -25,11 +25,7 @@ require_once('version.php');
 if (!isset($config_version) || $config_version != $version) {
 	die("Configuration file is out of date. Please delete it (and associated database) and <a href='install.php'>reinstall</a>."); //TODO: Upgrade script for release versions
 }
-?>
-
-<?php
-header('Content-type: text/html; charset=utf-8');
-require_once('database.php');
+hi i eader('Content-type: text/html; charset=utf-8');
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
  "http://www.w3.org/TR/html4/strict.dtd">
@@ -62,6 +58,7 @@ require_once('database.php');
 
 <p>You'll also need to be comfortable editing your 'hosts' file and understand the implications of doing that.</p>
 
+<div id="cards">
 		<?php
 
   $req_user = $_GET["u"];
@@ -95,10 +92,6 @@ if ($req_user) {
 
 }
 
-?>
-<div id="cards">
-<?php
-
 			if(PEAR::isError($res)) {
 				die($res->getMessage());
 			}
@@ -108,8 +101,11 @@ if ($req_user) {
 					if($field == "time") {
 						$value = strftime("%c", $value);
 					}
-					echo "<div class='".stripslashes($field)."'>". stripslashes($value) . "</div>";
-				}
+                                        if($field == "username") {
+					    echo "<div class='".stripslashes($field)."'><a href='/blocks.php?u=" . stripslashes($value) . "'>" . stripslashes($value) . "</a></div>";
+                                        } else {
+					    echo "<div class='".stripslashes($field)."'>". stripslashes($value) . "</div>";
+                                        }
 				echo "</div>";
 			}
 

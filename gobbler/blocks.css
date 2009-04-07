@@ -11,6 +11,7 @@ License AGPL
     padding:10px;
     margin: 10px auto;
     text-align:center;
+    clear:both;
 }
 
 .singlecard {
@@ -18,7 +19,21 @@ License AGPL
     height: 100px;
     float:left;
     margin: 10px;
-    padding:10px;
     border: 1px dashed #444;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid #ccc;
+    overflow:hidden;
 }
 
+.username {
+    background-color: #000;
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    text-align:left;
+}
+
+.artist, .track , .time {
+    margin-top: 2px;
+}
