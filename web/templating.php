@@ -1,3 +1,5 @@
+<?php
+
 /* Libre.fm -- a free network service for sharing your music listening habits
 
    Copyright (C) 2009 Libre.fm Project
@@ -16,6 +18,8 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
+?>
 
 <?php
 require_once("config.php");
