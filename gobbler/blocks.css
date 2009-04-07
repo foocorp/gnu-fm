@@ -113,13 +113,15 @@ body{background-image: none;}
     padding:5px;
     margin-top:5px;
     font-size: 80%;
+    height: 30px;
+    overflow: hidden;
 }
 
 .track {
+    margin-top:0px;
     padding:5px;
-    margin-top:20px;
     font-size: 110%;
-    height: 80%;
+    height: 70px;
     overflow: hidden;
 }
 
