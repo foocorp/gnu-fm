@@ -21,20 +21,29 @@ html, body, #doc3,h1{margin: 0; padding: 0; font-family: Liberation Sans, Verdan
 }
 
 #menu {
+  color: #eee;
 	float: left;
 	background: #980101;
 	padding: 1em;
 	margin-right: 1em;
 	margin-bottom: 1em;
+  width: 160px;
+  font-size: 90%;
 }
 
 #menu a {
-	color: white;
+	color: #CC8F5C;
 	text-decoration: none;
 }
 
 #menu a:hover {
 	text-decoration: underline;
+}
+
+#main {
+  float: left;
+  padding-left: 30px;
+  width: 770px;
 }
 
 h2 {
@@ -102,3 +111,22 @@ div#login form fieldset input[type=submit] {
 	width: 100%;
 }
 
+/* sidebar navigation */
+
+ul#navigation { padding: 0; margin: 0; }
+#navigation li { list-style-type: none; padding-bottom: 5px; }
+#navigation li ul { padding: 0; margin-left: 20px; margin-top: 0px; }
+
+/* the lists on the front and explore pages */
+/* TODO: Do rounded corners for browsers other than Gecko as well? */
+
+ul.listcloud { padding: 0px; margin: 0px; }
+ul.listcloud li { float: left; margin-right: 10px; margin-bottom: 10px; list-style-type: none; padding: 10px; border: 1px solid #000; background-color: #eee; -moz-border-radius: 5px; }
+ul.listcloud li dl { margin: 0; padding: 0; }
+ul.listcloud li dt { margin: 0; padding: 0; }
+ul.listcloud li dd { margin: 0; padding: 0; }
+
+ul.listcloud li dt a { color: #630000; text-decoration: none; }
+ul.listcloud li dt a:hover { text-decoration: underline; }
+
+ul#topartists.listcloud dd { font-size: 80%; }

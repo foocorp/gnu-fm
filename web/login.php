@@ -59,7 +59,8 @@ if(isset($_POST['login'])) {
 
 if($logged_in) {
 	// Send the user to the welcome page when they've logged in
-	$smarty->display("welcome.tpl");
+  header("Location: index.php");
+	//$smarty->display("welcome.tpl");
 } else {
 	$smarty->display("login.tpl");
 }

@@ -18,6 +18,6 @@
 </head>
 <body>
 <div id="doc3" class="yui-t7">
-	<div id="hd" style="banner"><h1><a href="http://libre.fm/">Libre.fm</a></h1></div>
+	<div id="hd" style="banner"><h1><a href="{$base_url}">Libre.fm</a></h1></div>
 	{include file='menu.tpl'}
 	<div id="main">
