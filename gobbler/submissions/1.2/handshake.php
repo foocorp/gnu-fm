@@ -47,7 +47,7 @@ if(!$authed) {
 }
 
 $session_id = md5($auth_token . time());
-$res = $mdb2->query("INSERT INTO Scrobble_Sessions(username, sessionid, expires, client) VALUES ("
+$res = $mdb2->query("INSERT INTO Scrobble_Sessions(username, sessionid, client, expires) VALUES ("
 	. $mdb2->quote($username, "text") . ","
 	. $mdb2->quote($session_id, "text") . ","
 	. $mdb2->quote($client, "text") . ","
