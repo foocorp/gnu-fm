@@ -61,6 +61,15 @@ class Album {
 	 * @return An array of Track objects
 	 */
 	function getTracks() {
+		global $mdb2;
+		$res = $mdb2->query("SELECT name, artist FROM Track WHERE artist = "
+			. $mdb2->quote($this->artist->name, "text") . " AND album = "
+			. $mdb2->quote($this->name));
+		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+			$tracks[] = new Track($row["name"], $row["artist"]);
+		}
+
+		return $tracks;
 	}
 
 }

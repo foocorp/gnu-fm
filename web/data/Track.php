@@ -21,6 +21,8 @@
 
 
 require_once($install_path . '/database.php');
+require_once($install_path . "/data/Artist.php");
+require_once($install_path . "/data/Album.php");
 
 /**
  * Represents track data
@@ -29,6 +31,7 @@ require_once($install_path . '/database.php');
  */
 class Track {
 
+	public $name, $artist, $album, $mbid, $duration, $streamable, $license, $downloadurl;
 
 	/**
 	 * Track constructor
@@ -37,6 +40,24 @@ class Track {
 	 * @param string artist The name of the artist who recorded this track
 	 */
 	function __construct($name, $artist) {
+		global $mdb2;
+		$res = $mdb2->query("SELECT name, artist, album, duration, streamable, license, downloadurl, mbid FROM Track WHERE "
+			. "name = " . $mdb2->quote($name, "text") . " AND "
+			. "artist = " . $mdb2->quote($artist, "text"));
+		if(!$res->numRows()) {
+			$this->name = "No such track.";
+		} else {
+			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
+			$this->name = $row["name"];
+			$this->mbid = $row["mbid"];
+			$this->artist = new Artist($row["artist"]);
+			$this->album = new Album($row["album"], $row["artist"]);
+			$this->duration = $row["duration"];
+			$this->streamable = $row["streamable"];
+			$this->license = $row["license"];
+			$this->downloadurl = $row["downloadurl"];
+		}
+
 	}
 
 
