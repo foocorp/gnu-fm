@@ -51,7 +51,7 @@ if(!$res->numRows()) {
 }
 $password = $res->fetchOne(0);
 $session_id = md5($password . $timestamp);
-$res = $mdb2->query("INSERT INTO Scrobble_Sessions(username, sessionid, expires, client) VALUES ("
+$res = $mdb2->query("INSERT INTO Scrobble_Sessions(username, sessionid, client, expires) VALUES ("
 	. $mdb2->quote($username, "text") . ","
 	. $mdb2->quote($session_id, "text") . ","
 	. $mdb2->quote($client, "text") . ","
