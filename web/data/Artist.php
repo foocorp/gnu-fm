@@ -88,7 +88,7 @@ class Artist {
 		$res = $mdb2->query("SELECT name, artist FROM Track WHERE artist = "
 			. $mdb2->quote($this->name, "text"));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-			$tracks[] = new Track($res["name"], $res["artist"]);
+			$tracks[] = new Track($row["name"], $row["artist"]);
 		}
 
 		return $tracks;
