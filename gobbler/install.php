@@ -108,6 +108,7 @@ if (isset($_POST['install'])) {
 	$mdb2->query("CREATE TABLE Scrobble_Sessions(
 		username VARCHAR(64) REFERENCES Users(username),
 		sessionid VARCHAR(32),
+		client CHAR(3),
 		expires int,
 		PRIMARY KEY(username, sessionid))");
 

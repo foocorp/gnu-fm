@@ -30,11 +30,11 @@ require_once('config.php');
 $supported_protocols = array("1.1");
 
 
-if(!isset($_GET['p']) || !isset($_GET['u'])) {
+if(!isset($_GET['p']) || !isset($_GET['u']) || !isset($_GET['c'])) {
 	die("FAILED\n");
 }
 
-$protocol = $_GET['p']; $username = $_GET['u']; 
+$protocol = $_GET['p']; $username = $_GET['u']; $client = $_GET['c'];
 
 if(!in_array($protocol, $supported_protocols))  {
 	die("FAILED Unsupported protocol version\n");
@@ -51,9 +51,10 @@ if(!$res->numRows()) {
 }
 $password = $res->fetchOne(0);
 $session_id = md5($password . $timestamp);
-$res = $mdb2->query("INSERT INTO Scrobble_Sessions(username, sessionid, expires) VALUES ("
+$res = $mdb2->query("INSERT INTO Scrobble_Sessions(username, sessionid, expires, client) VALUES ("
 	. $mdb2->quote($username, "text") . ","
 	. $mdb2->quote($session_id, "text") . ","
+	. $mdb2->quote($client, "text") . ","
 	. $mdb2->quote(time() + 86400) . ")");
 
 if(PEAR::isError($res)) {
