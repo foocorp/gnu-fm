@@ -19,34 +19,49 @@
 
 */
 
-require_once("database.php");
-require_once("templating.php");
+require_once('database.php');
+require_once('templating.php');
+require_once('utils/EmailAddressValidator.php');
 
 if(!$logged_in) {
-	$smarty->display("login.tpl");
+	$smarty->display('login.tpl');
 	die();
 }
 
 if(isset($_POST['invite'])) {
 
-	$errors = "";
+	$errors = '';
 	$email = $_POST['email'];
-	if(empty($email)) {
-		$errors .= "You must enter an e-mail address.<br />";
+
+    $mail_validator = new EmailAddressValidator();
+
+	if($mail_validator->check_email_address($email)) {
+		$errors .= 'You must enter a valid e-mail address.<br />';
 	}
+
+    # clean up
+    unset($mail_validator);
 
 	if(empty($errors)) {
 		$code = md5(md5($username) . time());
-		$mdb2->query("INSERT INTO Invitations (inviter, code) VALUES ("
-			. $mdb2->quote($username, "text") . ", "
-			. $mdb2->quote($code, "text") . ")");
+		$mdb2->query('INSERT INTO Invitations (inviter, code) VALUES ('
+			. $mdb2->quote($username, 'text') . ', '
+			. $mdb2->quote($code, 'text') . ')');
 
-		$url = $base_url . "/register.php?authcode=" . $code;
-		$headers = "From: Libre.fm Invitations <invitations@libre.fm>";
-		mail($email, "Libre.fm Invitation", "Hi!\n\nClearly " . $username . " really likes you, because they've sent you an inivitation to join http://libre.fm\n\nJust visit " . $url . " to sign up, all the cool kids are doing it.\n", $headers);
-		$smarty->assign("sent", true);
+		$url = $base_url . '/register.php?authcode=' . $code;
+        $headers = 'From: Libre.fm Invitations <invitations@libre.fm>';
+        $subject = 'Libre.fm Invitation';
+        $body = 'Hi!' . "\n\n" .
+            'Clearly ' . $username . ' really likes you, because he/she\'s inviting you to join http://libre.fm!' . "\n\n" .
+            'Just visit ' . $url . ' to sign up, all the cool kids are doing it.\n';
+
+        mail($email, $subject, $body, $headers);
+
+        unset($url, $subject, $body, $headers);
+
+		$smarty->assign('sent', true);
 	} else {
-		$smarty->assign("errors", $errors);
+		$smarty->assign('errors', $errors);
 	}
 
 }
