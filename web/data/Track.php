@@ -31,7 +31,7 @@ require_once($install_path . "/data/Album.php");
  */
 class Track {
 
-	public $name, $artist, $album, $mbid, $duration, $streamable, $license, $downloadurl;
+	public $name, $artist_name, $album_name, $mbid, $duration, $streamable, $license, $downloadurl;
 
 	/**
 	 * Track constructor
@@ -50,8 +50,8 @@ class Track {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
 			$this->name = $row["name"];
 			$this->mbid = $row["mbid"];
-			$this->artist = new Artist($row["artist"]);
-			$this->album = new Album($row["album"], $row["artist"]);
+			$this->artist_name = $row["artist"];
+			$this->album_name = $row["album"];
 			$this->duration = $row["duration"];
 			$this->streamable = $row["streamable"];
 			$this->license = $row["license"];

@@ -27,7 +27,7 @@ require_once("data/Album.php");
 $album = new Album($_GET['album'], $_GET['artist']);
 
 $smarty->assign("name", $album->name);
-$smarty->assign("artist", $album->artist->name);
+$smarty->assign("artist", $album->artist_name);
 $smarty->assign("tracks", $album->getTracks());
 
 $smarty->display("album.tpl");
