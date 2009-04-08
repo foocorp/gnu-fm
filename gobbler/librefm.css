@@ -33,3 +33,5 @@ table tr.even {
 table tr.odd {
 	background:		rgb(217, 249, 217);
 }
+
+.large {font-size: 120%;}
