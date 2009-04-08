@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /* Libre.fm -- a free network service for sharing your music listening habits
 
@@ -35,8 +35,8 @@ if(isset($_POST['invite'])) {
 
     $mail_validator = new EmailAddressValidator();
 
-	if($mail_validator->check_email_address($email)) {
-		$errors .= 'You must enter a valid e-mail address.<br />';
+    if($mail_validator->check_email_address($email)) {
+		$errors .= 'You must enter a valid e-mail address('.$email.').<br />';
 	}
 
     # clean up
