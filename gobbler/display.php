@@ -84,7 +84,7 @@ if ($req_user) {
 					if($field == "time") {
 						$value = '<abbr title=\'' . strftime('%c', $value) . '\'>' . human_timestamp($value) . '</abbr>';
 					}
-					echo "<td>". stripslashes($value) . "</td>";
+					echo "<td>". strip_tags(stripslashes($value)) . "</td>";
 				}
 				echo "</tr>\n";
 			}
@@ -100,7 +100,7 @@ if ($req_user) {
 				die($res->getMessage());
 			}
 			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-				echo "<p>" . stripslashes($row["username"]) . " is listening to " . stripslashes($row["track"]) . " by " . stripslashes($row["artist"]) . "</p>";
+				echo "<p>" . strip_tags(stripslashes($row["username"])) . " is listening to " . strip_tags(stripslashes($row["track"])) . " by " . strip_tags(stripslashes($row["artist"])) . "</p>";
 			}
 		?>
 
