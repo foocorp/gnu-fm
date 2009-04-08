@@ -10,9 +10,9 @@
   {section name=i loop=$albums}
   <li>
     <dl>
-      <dt><a href="album.php?artist={$name|urlencode}&album={$album[i]->name|urlencode}">
-        {$album[i]->name}</a></dt>
-	<dd>{$album[i]->releasedate}</dd>
+      <dt><a href="album.php?artist={$name|urlencode}&album={$albums[i]->name|urlencode}">
+        {$albums[i]->name}</a></dt>
+	<dd>{$albums[i]->releasedate}</dd>
     </dl>
   </li>
   {/section}

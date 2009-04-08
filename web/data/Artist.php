@@ -46,7 +46,7 @@ class Artist {
 		$res = $mdb2->query("SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large FROM Artist WHERE "
 			. "name = " . $mdb2->quote($name, "text"));
 		if(!$res->numRows()) {
-			$this->artist_name = "No such artist.";
+			$this->name = "No such artist.";
 			$this->bio_summary = "Sorry we don't have a record of this artist in our database.";
 		} else {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
@@ -69,10 +69,10 @@ class Artist {
 	 */
 	function getAlbums() {
 		global $mdb2;
-		$res = $mdb2->query("SELECT name FROM Album WHERE artist_name = "
+		$res = $mdb2->query("SELECT name, artist_name FROM Album WHERE artist_name = "
 			. $mdb2->quote($this->name, "text"));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-			$albums[] = new Album($row["name"], $row["artist"]);
+			$albums[] = new Album($row["name"], $row["artist_name"]);
 		}
 
 		return $albums;
