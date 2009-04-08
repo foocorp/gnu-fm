@@ -1,0 +1,9 @@
+Options +FollowSymLinks
+RewriteEngine on
+
+RewriteRule ^user/(.+)/$ display.php?u=$1 [NC]
+RewriteRule ^user/(.+)$ display.php?u=$1 [NC]
+RewriteRule ^artist/(.+)/$ display.php?a=$1 [NC]
+RewriteRule ^artist/(.+)$ display.php?a=$1 [NC]
+RewriteRule ^track/(.+)$ display.php?t=$1 [NC]
+RewriteRule ^track/(.+)$ display.php?t=$1 [NC]

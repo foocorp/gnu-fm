@@ -27,9 +27,9 @@ require_once('utils/human-time.php');
 <html>
 <head>
 <title>Libre.fm Gobble Server (rev $Id$)</title>
-   <link rel="stylesheet" href="reset-fonts-grids.css" type="text/css">
-   <link rel="stylesheet" href="base.css" type="text/css">
-   <link rel="stylesheet" href="librefm.css" type="text/css">
+   <link rel="stylesheet" href="/reset-fonts-grids.css" type="text/css">
+   <link rel="stylesheet" href="/base.css" type="text/css">
+   <link rel="stylesheet" href="/librefm.css" type="text/css">
 <!--
 <rdf:RDF xmlns="http://web.resource.org/cc/"
          xmlns:dc="http://purl.org/dc/elements/1.1/"
