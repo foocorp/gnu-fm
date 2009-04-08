@@ -32,8 +32,7 @@ $data = file($argv[4]);
 
 $timestamp = time();
 $token = md5(md5($password) . $timestamp);
-$response = file($server . "/?hs=true&p=1.2&u=$username&t=$timestamp&a=$token");
-
+$response = file($server . "/?hs=true&p=1.2&u=$username&t=$timestamp&a=$token&c=import");
 if(trim($response[0]) != "OK") {
 	die("Couldn't login\n");
 }

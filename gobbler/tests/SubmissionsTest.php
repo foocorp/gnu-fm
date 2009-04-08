@@ -70,7 +70,7 @@ class SubmissionsTest extends PHPUnit_Framework_TestCase
 
 		$timestamp = time();
 		$token = md5(md5($password) . $timestamp);
-		$response = file($submissions_server . "/?hs=true&p=1.2&u=$username&t=$timestamp&a=$token");
+		$response = file($submissions_server . "/?hs=true&p=1.2&u=$username&t=$timestamp&a=$token&c=unittest");
 		return $response;
 	}
 
