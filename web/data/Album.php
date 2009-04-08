@@ -20,6 +20,8 @@
 */
 
 require_once($install_path . '/database.php');
+require_once($install_path . '/data/Artist.php');
+require_once($install_path . '/data/Track.php');
 
 /**
  * Represents album data
@@ -29,6 +31,7 @@ require_once($install_path . '/database.php');
  */
 class Album {
 
+	public $name, $artist, $mbid, $releasedate;
 
 	/**
 	 * Album constructor
@@ -37,6 +40,19 @@ class Album {
 	 * @param string artist The name of the artist who recorded this album
 	 */
 	function __construct($name, $artist) {
+		global $mdb2;
+		$res = $mdb2->query("SELECT name, artist_name, mbid, releasedate FROM Album WHERE "
+			. "name = " . $mdb2->quote($name, "text") . " AND "
+			. "artist_name = " . $mdb2->quote($artist, "text"));
+		if(!$res->numRows()) {
+			$this->name = "No such album.";
+		} else {
+			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
+			$this->name = $row["name"];
+			$this->mbid = $row["mbid"];
+			$this->artist = new Artist($row["artist_name"]);
+			$this->releasedate = $row["releasedate"];
+		}
 	}
 
 	/**
