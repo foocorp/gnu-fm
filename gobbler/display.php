@@ -29,9 +29,7 @@ require_once('utils/human-time.php');
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 
-  <p>This is a demo site for the libre.fm 'gobbler' server. That name might change. If you'd like an account, come to our IRC channel and ask mattl, Elleo or Clint nicely. You'll need to supply us with a username, password and email address.</p>
-
-<p>You'll also need to be comfortable editing your 'hosts' file and understand the implications of doing that.</p>
+  <p class="large">This is a demo site for the libre.fm 'gobbler' server. Things are in a state of constant development.</p>
 
 		<?php
 
@@ -155,7 +153,7 @@ what's happening.</p>
 
 <h3>$Id$</h3>
 
-<p><a href="http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm">http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm</a></p></div>
+<p><a href="http://www.gnu.org/licenses/agpl.html">GNU Affero General Public License v3 or later</a>. Source: <a href="http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm">http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm</a></p></div>
 </div>
 </body>
 </html>
