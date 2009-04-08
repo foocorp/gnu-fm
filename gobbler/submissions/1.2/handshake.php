@@ -30,7 +30,7 @@ if(!isset($_GET['p']) || !isset($_GET['u']) || !isset($_GET['t']) || !isset($_GE
 	die("BADAUTH\n");
 }
 
-$protocol = $_GET['p']; $username = $_GET['u']; $timestamp = $_GET['t']; $auth_token = $_GET['a']; $client = $_GET['c']
+$protocol = $_GET['p']; $username = $_GET['u']; $timestamp = $_GET['t']; $auth_token = $_GET['a']; $client = $_GET['c'];
 
 if(!in_array($protocol, $supported_protocols))  {
 	die("FAILED Unsupported protocol version\n");
