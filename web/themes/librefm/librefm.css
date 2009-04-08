@@ -46,39 +46,57 @@ h2 {
 .odd { background:#F4B624 !important; color:#000; }
 .even { background:#FFFFFF !important; color:#000; } 
 
-div#register, div#login {
+/*
+ * We should use a class down here ¬¬ (fauno)
+ */
+
+div#invite,
+div#register,
+div#login {
 	margin: 1em auto 0 auto;
 }
-div#register form, div#login form {
+div#invite form,
+div#register form,
+div#login form {
 	width: 30em;
 	margin: 0 auto;
 }
-div#register form fieldset, div#login form fieldset {
+div#invite form fieldset,
+div#register form fieldset,
+div#login form fieldset {
 	border: none;
     padding: 0;
 }
-div#register form fieldset label, div#login form fieldset label {
+div#invite form fieldset label,
+div#register form fieldset label,
+div#login form fieldset label {
 	float:left;
 	font-weight:bold;
 	text-align:right;
 	font-size: 1em;
     width: 10em;
 }
-div#register form fieldset label span, div#login form fieldset label span {
+div#invite form fieldset label span,
+div#register form fieldset label span,
+div#login form fieldset label span {
 	color:#666666;
 	display:block;
 	font-weight:normal;
 	text-align:right;
 	font-size: .59em
 }
-div#register form fieldset input, div#login form fieldset input {
+div#invite form fieldset input,
+div#register form fieldset input,
+div#login form fieldset input {
 	float:left;
 	font-size:1em;
 	padding:.2em .1em;
 	width:200px;
 	margin:2px 0 20px 10px;
 }
-div#register form fieldset input[type=submit], div#login form fieldset input[type=submit] {
+div#invite form fieldset input[type=submit],
+div#register form fieldset input[type=submit],
+div#login form fieldset input[type=submit] {
 	background: white;
 	margin: 0;
 	width: 100%;
