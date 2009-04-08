@@ -31,7 +31,7 @@ require_once($install_path . '/data/Track.php');
  */
 class Album {
 
-	public $name, $artist, $mbid, $releasedate;
+	public $name, $artist_name, $mbid, $releasedate;
 
 	/**
 	 * Album constructor
@@ -50,7 +50,7 @@ class Album {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
 			$this->name = $row["name"];
 			$this->mbid = $row["mbid"];
-			$this->artist = new Artist($row["artist_name"]);
+			$this->artist_name = $row["artist_name"];
 			$this->releasedate = $row["releasedate"];
 		}
 	}
@@ -63,7 +63,7 @@ class Album {
 	function getTracks() {
 		global $mdb2;
 		$res = $mdb2->query("SELECT name, artist FROM Track WHERE artist = "
-			. $mdb2->quote($this->artist->name, "text") . " AND album = "
+			. $mdb2->quote($this->artist_name, "text") . " AND album = "
 			. $mdb2->quote($this->name));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 			$tracks[] = new Track($row["name"], $row["artist"]);
