@@ -22,6 +22,8 @@
 
 require_once($install_path . '/database.php');
 require_once($install_path . "/data/sanitize.php");
+require_once($install_path . "/data/Album.php");
+require_once($install_path . "/data/Track.php");
 
 /**
  * Represents artist data
@@ -70,7 +72,7 @@ class Artist {
 		$res = $mdb2->query("SELECT name FROM Album WHERE artist_name = "
 			. $mdb2->quote($this->name, "text"));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-			$albums[] = new Album($res["name"], $res["artist"]);
+			$albums[] = new Album($row["name"], $row["artist"]);
 		}
 
 		return $albums;

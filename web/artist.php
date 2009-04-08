@@ -28,6 +28,7 @@ $artist = new Artist($_GET['artist']);
 
 $smarty->assign("name", $artist->name);
 $smarty->assign("bio_summary", $artist->bio_summary);
+$smarty->assign("albums", $artist->getAlbums());
 
 $smarty->display("artist.tpl");
 
