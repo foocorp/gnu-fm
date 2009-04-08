@@ -35,7 +35,7 @@ if(isset($_POST['invite'])) {
 
     $mail_validator = new EmailAddressValidator();
 
-    if($mail_validator->check_email_address($email)) {
+    if(!$mail_validator->check_email_address($email)) {
 		$errors .= 'You must enter a valid e-mail address('.$email.').<br />';
 	}
 
