@@ -23,11 +23,8 @@ require_once('database.php');
 require_once('templating.php');
 require_once('utils/EmailAddressValidator.php');
 
-if(!isset($_POST['request'])) {
-    $smarty->display('request.tpl');
-}
 
-else {
+if (isset($_POST['request'])) {
     $errors = '';
     $email = $_POST['email'];
 
@@ -48,3 +45,5 @@ else {
     }
 }
 
+$smarty->display("request.tpl");
+?>
