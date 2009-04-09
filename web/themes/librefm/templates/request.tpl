@@ -1,6 +1,6 @@
 {include file='header.tpl'}
 
-<h2>Invite</h2>
+<h2>Request invite</h2>
 
 {if isset($errors)}
 	<p id='errors'>{$errors}</p>
