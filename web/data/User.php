@@ -53,7 +53,6 @@ class User {
                         $this->bio = $row["bio"];
                         $this->location = $row["location"];
                 }
-                $this->getscrobbles(10);
         }
 	function getscrobbles($number) {
 		global $mdb2;	
