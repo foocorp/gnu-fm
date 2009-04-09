@@ -33,5 +33,4 @@ $smarty->assign("topartists", $res->fetchAll(MDB2_FETCHMODE_ASSOC));
 
 $smarty->display("explore-artists.tpl");
 
-
 ?>

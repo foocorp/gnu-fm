@@ -5,6 +5,7 @@
 	<title>Libre.fm</title>
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/base.css" type="text/css">
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/librefm.css" type="text/css">
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <!--
 <rdf:RDF xmlns="http://web.resource.org/cc/"
          xmlns:dc="http://purl.org/dc/elements/1.1/"
