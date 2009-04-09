@@ -6,6 +6,9 @@
   <ul id="navigation">
   {if isset($logged_in)}
   		<li>Invites disabled</li>
+		{if $userlevel > 0}
+		    <li><a href="/admin.php">Admin panel</a></li>
+		{/if}
 	{else}
   	<li><a href="{$base_url}/login.php">Login</a></li>
 	  <li><a href="{$base_url}/request.php">Request invitation</a></li>
