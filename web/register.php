@@ -75,7 +75,7 @@ if(isset($_POST['register'])) {
 			. time() . ")");
 		// Remove auth code and set their username as the invitee
 		$mdb2->query("UPDATE Invitations SET code = NULL, invitee = " . $mdb2->quote($username, "text") . " WHERE code = " . $mdb2->quote($authcode, "text"));
-		$removesql = "DELETE FROM Invitation_Request WHERE email=" . $mdb2->qoute($email, 'text');
+		$removesql = "DELETE FROM Invitation_Request WHERE email=" . $mdb2->quote($email, 'text');
 		$mdb2->exec($removesql);
 		$smarty->assign("registered", true);
 	} else {
