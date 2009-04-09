@@ -23,6 +23,9 @@ require_once('database.php');
 require_once('templating.php');
 require_once('utils/EmailAddressValidator.php');
 
+echo "<p>Invites are disabled.</p>";
+
+/*
 if(!$logged_in) {
 	$smarty->display('login.tpl');
 	die();
@@ -68,3 +71,4 @@ if(isset($_POST['invite'])) {
 
 $smarty->display("invite.tpl");
 ?>
+*/
