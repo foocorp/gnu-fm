@@ -3,7 +3,7 @@
 <h2>{$user}'s profile</h2>
 Username: {$user} <br />
 Real Name: {$fullname} <br />
-Homepage: {$homepage} <br />
+Homepage: <a href="{$homepage}">{$homepage}</a> <br />
 Location: {$location} <br />
 Bio: {$bio} <br />
 <hr>
