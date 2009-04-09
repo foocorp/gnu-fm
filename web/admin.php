@@ -27,12 +27,14 @@ function sendEmail($email) {
     global $mdb2;
     global $base_url;
     $code = md5(md5($username) . time());
-    $mdb2->query('INSERT INTO Invitations (inviter, code) VALUES (' 
+    $sql = 'INSERT INTO Invitations (inviter, code) VALUES (' 
 	. $mdb2->quote($username, 'text') . ', ' 
-	. $mdb2->quote($code, 'text') . ')');
+	. $mdb2->quote($code, 'text') . ')';
 
-    if (PEAR::isError($mdb2)) {
-	    die($mdb2->getMessage());
+    $affected =& $mdb2->exec($sql);
+
+    if (PEAR::isError($affected)) {
+	    die($affected->getMessage());
     }
       
     $url = $base_url . '/register.php?authcode=' . $code;
