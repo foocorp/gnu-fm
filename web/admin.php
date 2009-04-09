@@ -18,27 +18,55 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-
+require_once('auth.php');
 require_once('database.php');
 require_once('templating.php');
 
 
-$res = $mdb2->query("SELECT userlevel FROM Users WHERE username=" . $mdb2->quote($user, 'text'));
-if ($res->numRows() != 1) {
-    $smarty->assign("error", "Error!");
-    $smarty->assign("details", "Invalid user specified.");
-    $smarty->display("error.tpl");
-    die();
+function sendEmail($email) {
+
+    $code = md5(md5($username) . time());
+    $mdb2->query('INSERT INTO Invitations (inviter, code) VALUES (' . $mdb2->quote($username, 'text') . ', ' . $mdb2->quote($code, 'text') . ')');
+      
+    $url = $base_url . '/register.php?authcode=' . $code;
+    $headers = 'From: Libre.fm Invitations <invitations@libre.fm>';
+    $subject = 'Libre.fm Invitation';
+    $body = 'Hi!' . "\n\n" . 'You requested an invite to libre.fm, and here it is! Just click the link and fill in your details.';
+    mail($email, $subject, $body, $headers);
+    unset($url, $subject, $body, $headers);
 }
 
-$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
-if ($row['userlevel'] < 2) {	
+if ($userlevel < 2) {	
     $smarty->assign("error", "Error!");
     $smarty->assign("details", "Invalid privileges.");
     $smarty->display("error.tpl");
     die();
 } else {
-    $smarty->display('admin.tpl');
-    echo "Access to admin-panel granted.";
-
+    $action = $_GET['action'];
+    if (isset($action)) {
+	if ($action == "invite") {
+	    if (!isset($_GET['email'])) {	
+	        $smarty->assign("error", "Error!");
+	        $smarty->assign("details", "Missing email.");
+		$smarty->display("error.tpl");
+		die();
+	    } else {
+		// Send the email
+		sendEmail($_GET['email']);
+		$smarty->assign('sent', true);
+	    }
+	} else {
+	    $smarty->assign('error', "Error!");
+	    $smarty->assign('error', 'Missing argument!');
+	    $smarty->display('error.tpl');
+	    die();
+	}
+    }
+    
 }
+
+$res = $mdb2->query("SELECT email FROM Invitation_Request ORDER BY time ASC");
+$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+$smarty->assign('emails', $data);
+$smarty->display('admin.tpl');
+?>
