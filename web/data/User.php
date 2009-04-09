@@ -57,7 +57,7 @@ class User {
         }
 	function getscrobbles($number) {
 		global $mdb2;	
-		$res = $mdb2->query("SELECT * FROM Scrobbles WHERE username = " .$mdb2->quote($this->name, "text") . " LIMIT ".$mdb2->quote($number, "integer"));
+		$res = $mdb2->query("SELECT * FROM Scrobbles WHERE username = " .$mdb2->quote($this->name, "text") . " ORDER BY time DESC LIMIT ".$mdb2->quote($number, "integer"));
 		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
                 foreach($data as &$i) { 
 			$i["timehuman"] = human_timestamp($i["time"]);
