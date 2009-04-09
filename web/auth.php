@@ -26,7 +26,7 @@ session_start();
 if(isset($_SESSION['session_id'])) {
 	$res = $mdb2->query("SELECT username,userlevel FROM Scrobble_Sessions,Users WHERE "
 		. "sessionid = " . $mdb2->quote($_SESSION['session_id'], "text")
-	       	. " AND expires > " . time() . " AND Users.username = username");
+	       	. " AND expires > " . time() . " AND Users.username = ". $username);
 	if(!$res->numRows()) {
 		// Session is invalid
 		unset($_SESSION['session_id']);
