@@ -21,10 +21,11 @@
 require_once('auth.php');
 require_once('database.php');
 require_once('templating.php');
-
+require_once('config.php');
 
 function sendEmail($email) {
     global $mdb2;
+    global $base_url;
     $code = md5(md5($username) . time());
     $mdb2->query('INSERT INTO Invitations (inviter, code) VALUES (' . $mdb2->quote($username, 'text') . ', ' . $mdb2->quote($code, 'text') . ')');
       
