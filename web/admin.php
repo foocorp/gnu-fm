@@ -32,6 +32,7 @@ function sendEmail($email) {
     $headers = 'From: Libre.fm Invitations <invitations@libre.fm>';
     $subject = 'Libre.fm Invitation';
     $body = 'Hi!' . "\n\n" . 'You requested an invite to libre.fm, and here it is! Just click the link and fill in your details.';
+    $body .= "\n\n" . $url;
     mail($email, $subject, $body, $headers);
     unset($url, $subject, $body, $headers);
 }
