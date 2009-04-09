@@ -6,9 +6,6 @@ Real Name: {$fullname} <br />
 Homepage: {$homepage} <br />
 Location: {$location} <br />
 Bio: {$bio} <br />
-{if $userlevel > 1}
-<a href="/admin.php">Admin Panel</a><br />
-{/if}
 <hr>
 <b>Latest 10 Gobbles:</b>
 <ul id="scrobbles" class="listcloud">
