@@ -20,6 +20,7 @@
 {/section}
 </ul><br />
 <b>Invited people</b>
+<ul id="invitees">
 {section name=i loop=$emails}
 {if ($emails[i].status == '1')}
   <li>
