@@ -62,9 +62,9 @@ if (!isset($config_version) || $config_version != $version) {
 <div id="cards">
 		<?php
 
-  $req_user = $_GET["u"];
-$req_artist = $_GET["a"];
-$req_track = $_GET["t"];
+  $req_user = stripslashes($_GET["u"]);
+$req_artist = stripslashes($_GET["a"]);
+$req_track = stripslashes($_GET["t"]);
 
 
 if ($req_user) {
