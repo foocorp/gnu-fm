@@ -36,7 +36,7 @@ class User {
         public $name, $email, $fullname, $bio, $location, $homepage, $error,$userlevel;
 
         /**
-         * Artist constructor
+         * User constructor
          *
          * @param string name The name of the artist to load
          */
@@ -54,15 +54,25 @@ class User {
 			$this->location = $row["location"];
 			$this->userlevel = $row["userlevel"];
                 }
-        }
-	function getscrobbles($number) {
+	}
+
+
+	/**
+	 * Get a user's scrobles ordered by time
+	 *
+	 * @param int number The number of scrobbles to return
+	 * @return An array of scrobbles
+	 */
+	function getScrobbles($number) {
 		global $mdb2;	
 		$res = $mdb2->query("SELECT * FROM Scrobbles WHERE username = " .$mdb2->quote($this->name, "text") . " ORDER BY time DESC LIMIT ".$mdb2->quote($number, "integer"));
 		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-                foreach($data as &$i) { 
+		foreach($data as &$i) { 
+			$i = sanitize($i);
 			$i["timehuman"] = human_timestamp($i["time"]);
 		}
                 return $data;
-        }
+	}
+
 }
 

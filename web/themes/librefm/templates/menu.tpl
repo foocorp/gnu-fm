@@ -1,6 +1,6 @@
 <div id="menu">
 	{if isset($logged_in)}
-  <p>Logged in as: {$username}</p>
+  <p>Logged in as: <a href="{$base_url}/profile.php?user={$username|urlencode}">{$username}</a></p>
   {/if}
 
   <ul id="navigation">
