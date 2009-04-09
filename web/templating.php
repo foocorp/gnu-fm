@@ -30,6 +30,7 @@ $smarty->assign("base_url", $base_url);
 if($logged_in) {
 	$smarty->assign("logged_in", true);
 	$smarty->assign("username", $username);
+	$smarty->assign("userlevel", $userlevel);
 }
 
 ?>

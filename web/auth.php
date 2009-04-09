@@ -32,8 +32,9 @@ if(isset($_SESSION['session_id'])) {
 		unset($_SESSION['session_id']);
 	} else {
 		$logged_in = true;
-		$username = $res->fetchOne(0);
-		$userlevel = $res->fetchOne(1);
+		$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+		$username = $row['username'];
+		$userlevel = $row['userlevel'];
 	}
 }
 ?>
