@@ -2,14 +2,17 @@
 
 <h2>Admin panel</h2>
 <hr>
-<b>Latest 10 Gobbles:</b>
-<ul id="scrobbles" class="listcloud">
-{section name=i loop=$scrobbles}
+
+{if isset($sent)}
+<b>Email was sent successfully!</b>
+{/if}
+<b>Requests for invites</b>
+<ul id="invites">
+{section name=i loop=$emails}
   <li>
     <dl>
-      <dt><a href="artist.php?artist={$scrobbles[i].artist|stripslashes|urlencode}">
-        {$scrobbles[i].artist|stripslashes}</a></dt>
-      <dd>{$scrobbles[i].track|stripslashes}<br /><small>{$scrobbles[i].timehuman}</small></dd>
+      <dt><a href="admin.php?invite={$emails[i].email|stripslashes|urlencode}">
+        {$emails[i].email|stripslashes}</a></dt>
     </dl>
   </li>
 {/section}
