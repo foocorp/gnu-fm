@@ -62,28 +62,28 @@ if (!isset($config_version) || $config_version != $version) {
 <div id="cards">
 		<?php
 
-  $req_user = stripslashes($_GET["u"]);
-$req_artist = stripslashes($_GET["a"]);
-$req_track = stripslashes($_GET["t"]);
+  $req_user = $_GET["u"];
+$req_artist = $_GET["a"];
+$req_track = $_GET["t"];
 
 
 if ($req_user) {
 
 			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE username = '" . $req_user . "' ORDER BY time DESC LIMIT 15");
 
-			echo "<h2>Last 15 Gobbles by " . $req_user . "</h2>";
+			echo "<h2>Last 15 Gobbles by " . stripslashes($req_user) . "</h2>";
 
 } elseif ($req_artist) {
 
 			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE artist = '" . $req_artist ."' ORDER BY time DESC LIMIT 15");
 
-			echo "<h2>Last 15 Gobbles of " . $req_artist . "</h2>";
+			echo "<h2>Last 15 Gobbles of " . stripslashes($req_artist) . "</h2>";
 
 } elseif ($req_track) {
 
 			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE track = '" . $req_track . "' ORDER BY time DESC LIMIT 15");
 
-			echo "<h2>Last 15 Gobbles of " . $req_track . "</h2>";
+			echo "<h2>Last 15 Gobbles of " . stripslashes($req_track) . "</h2>";
 
 } elseif (!$res) {
 
