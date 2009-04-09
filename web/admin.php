@@ -27,13 +27,20 @@ function sendEmail($email) {
     global $mdb2;
     global $base_url;
     $code = md5(md5($username) . time());
-    $mdb2->query('INSERT INTO Invitations (inviter, code) VALUES (' . $mdb2->quote($username, 'text') . ', ' . $mdb2->quote($code, 'text') . ')');
+    $mdb2->query('INSERT INTO Invitations (inviter, code) VALUES (' 
+	. $mdb2->quote($username, 'text') . ', ' 
+	. $mdb2->quote($code, 'text') . ')');
+
+    if (PEAR::isError($mdb2)) {
+	    die($mdb2->getMessage());
+    }
       
     $url = $base_url . '/register.php?authcode=' . $code;
     $headers = 'From: Libre.fm Invitations <invitations@libre.fm>';
     $subject = 'Libre.fm Invitation';
     $body = 'Hi!' . "\n\n" . 'You requested an invite to libre.fm, and here it is! Just click the link and fill in your details.';
     $body .= "\n\n" . $url;
+    $body .= "\n\n - The Libre.fm Team";
     mail($email, $subject, $body, $headers);
     unset($url, $subject, $body, $headers);
 }
