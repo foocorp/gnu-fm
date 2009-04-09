@@ -64,6 +64,6 @@ if(PEAR::isError($res)) {
 echo "UPTODATE\n";
 echo $timestamp . "\n";
 echo $submissions_server . "/submissions/1.2/\n";
-echo "INTERVAL 0\n";
+echo "INTERVAL 1\n";
 
 ?>
