@@ -1,14 +1,6 @@
 {include file='header.tpl'}
 
-<h2>{$user}'s profile</h2>
-Username: {$user} <br />
-Real Name: {$fullname} <br />
-Homepage: {$homepage} <br />
-Location: {$location} <br />
-Bio: {$bio} <br />
-{if $userlevel > 1}
-<a href="/admin.php">Admin Panel</a><br />
-{/if}
+<h2>Admin panel</h2>
 <hr>
 <b>Latest 10 Gobbles:</b>
 <ul id="scrobbles" class="listcloud">
