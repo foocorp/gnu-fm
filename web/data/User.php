@@ -22,6 +22,7 @@
 
 require_once($install_path . '/database.php');
 require_once($install_path . "/data/sanitize.php");
+require_once($install_path . "/utils/human-time.php");
 
 /**
  * Represents User data
@@ -52,12 +53,16 @@ class User {
                         $this->bio = $row["bio"];
                         $this->location = $row["location"];
                 }
+                $this->getscrobbles(10);
         }
-	function getgobbles($number) {	
-		$res = $mdb2->query("SELECT "); /* stub for now */
-		
+	function getscrobbles($number) {
+		global $mdb2;	
+		$res = $mdb2->query("SELECT * FROM Scrobbles WHERE username = " .$mdb2->quote($this->name, "text") . " LIMIT ".$mdb2->quote($number, "integer"));
+		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+                foreach($data as &$i) { 
+			$i["timehuman"] = human_timestamp($i["time"]);
+		}
+                return $data;
         }
-
-
 }
 
