@@ -36,9 +36,9 @@ if (isset($_POST['request'])) {
     unset($validator);
 
     if(empty($errors)) {
-	$mdb2->query('INSERT INTO Invitation_Request (email, time) VALUES('
+	$mdb2->query('INSERT INTO Invitation_Request (email, time, status) VALUES('
 	    . $mdb2->quote($email, 'text') . ', '
-	    . time() . ')');
+	    . time() . ', 0)');
 	$smarty->assign('reg', true);
     } else {
 	$smarty->assign('errors', $errors);

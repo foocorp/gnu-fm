@@ -66,6 +66,8 @@ if ($userlevel < 2) {
 		// Send the email
 		sendEmail($_GET['email']);
 		$smarty->assign('sent', true);
+		$sql = "UPDATE Invitation_Request SET status=1 WHERE email=" . $mdb2->quote($_GET['email'], 'text');
+		$mdb2->exec($sql);
 	    }
 	} else {
 	    $smarty->assign('error', "Error!");
@@ -77,7 +79,7 @@ if ($userlevel < 2) {
     
 }
 
-$res = $mdb2->query("SELECT email FROM Invitation_Request ORDER BY time ASC");
+$res = $mdb2->query("SELECT email,status FROM Invitation_Request ORDER BY time ASC");
 $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 $smarty->assign('emails', $data);
 $smarty->display('admin.tpl');
