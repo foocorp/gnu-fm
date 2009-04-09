@@ -12,7 +12,7 @@
   <li>
     <dl>
       <dt><a href="admin.php?action=invite&email={$emails[i].email|stripslashes|urlencode}">
-        {$emails[i].email|stripslashes}</a> {if $emails.[i].status = 1} <b>INVITED</b>{if}</dt>
+        {$emails[i].email|stripslashes}</a> {if ($emails[i].status == '1')} <b>INVITED</b>{if}</dt>
     </dl>
   </li>
 {/section}
