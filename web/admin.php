@@ -24,7 +24,7 @@ require_once('templating.php');
 
 
 function sendEmail($email) {
-
+    global $mdb2;
     $code = md5(md5($username) . time());
     $mdb2->query('INSERT INTO Invitations (inviter, code) VALUES (' . $mdb2->quote($username, 'text') . ', ' . $mdb2->quote($code, 'text') . ')');
       
