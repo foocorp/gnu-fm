@@ -5,7 +5,7 @@
 
   <ul id="navigation">
   {if isset($logged_in)}
-  		<li><a href="{$base_url}/invite.php">Invite a friend</a></li>
+  		<li>Invites disabled</li>
 	{else}
   	<li><a href="{$base_url}/login.php">Login</a></li>
 	  <li><a href="{$base_url}/register.php">Register</a></li>

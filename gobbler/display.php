@@ -99,7 +99,7 @@ if ($req_user) {
 				echo ($i % 2 == 0) ? "<tr class=\"even\">" : "<tr class=\"odd\">";
 				foreach($row as $field => $value) {
 					if($field == "username"){
-					$value = "<a href=\"/?u=" . $value . "\">$value</a>";}
+					$value = "<a href=\"/user/" . $value . "\">$value</a>";}
 					if($field == "time") {
 						$value = '<abbr title=\'' . strftime('%c', $value) . '\'>' . human_timestamp($value) . '</abbr>';
 					}
