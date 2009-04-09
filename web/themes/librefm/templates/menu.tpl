@@ -8,7 +8,7 @@
   		<li>Invites disabled</li>
 	{else}
   	<li><a href="{$base_url}/login.php">Login</a></li>
-	  <li><a href="{$base_url}/register.php">Register</a></li>
+	  <li><a href="{$base_url}/request.php">Request invitation</a></li>
 	{/if}
     <li>Explore:
       <ul>
