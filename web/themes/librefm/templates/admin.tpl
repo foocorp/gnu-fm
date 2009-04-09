@@ -4,7 +4,7 @@
 <hr>
 
 {if isset($sent)}
-<b>Email was sent successfully!</b>
+<b>Email was sent successfully!</b><br/ >
 {/if}
 <b>Requests for invites</b>
 <ul id="invites">
