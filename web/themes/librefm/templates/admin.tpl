@@ -9,7 +9,7 @@
 <b>Requests for invites</b>
 <ul id="invites">
 {section name=i loop=$emails}
-{if}($emails[i].status == '0')}
+{if ($emails[i].status == '0')}
   <li>
     <dl>
       <dt><a href="admin.php?action=invite&email={$emails[i].email|stripslashes|urlencode}">
@@ -21,7 +21,7 @@
 </ul><br />
 <b>Invited people</b>
 {section name=i loop=$emails}
-{if}($emails[i].status == '1')}
+{if ($emails[i].status == '1')}
   <li>
     <dl>
       <dt><a href="admin.php?action=invite&email={$emails[i].email|stripslashes|urlencode}">
