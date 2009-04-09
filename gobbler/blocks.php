@@ -103,11 +103,11 @@ if ($req_user) {
 				foreach($row as $field => $value) {
 					if($field == "artist") {
 						echo "<div class='".stripslashes($field)."'><a href='/blocks.php?a=".
-						    stripslashes($value)."'>"  .stripslashes($value) . "</a></div>";
+						    htmlspecialchars(stripslashes($value), ENT_QUOTES)."'>"  .stripslashes($value) . "</a></div>";
 					}
 					else if($field == "track") {
 						echo "<div class='".stripslashes($field)."'><a href='/blocks.php?t=".
-						    stripslashes($value)."'>"  .stripslashes($value) . "</a></div>";
+						    htmlspecialchars(stripslashes($value), ENT_QUOTES)."'>"  .stripslashes($value) . "</a></div>";
 					}
 					else if($field == "time") {
 						$value = strftime("%c", $value);
