@@ -39,6 +39,7 @@ if(isset($user->name)) {
 	$smarty->assign("bio", $user->bio);
 	$smarty->assign("homepage", $user->homepage);
 	$smarty->assign("location", $user->location);
+	$smarty->assign("scrobbles", $user->getscrobbles(10));
 	$smarty->display("profile.tpl");
 } else {
 	$smarty->assign("error", "User not found");
