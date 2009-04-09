@@ -11,7 +11,7 @@
 {section name=i loop=$emails}
   <li>
     <dl>
-      <dt><a href="admin.php?invite={$emails[i].email|stripslashes|urlencode}">
+      <dt><a href="admin.php?action=invite&email={$emails[i].email|stripslashes|urlencode}">
         {$emails[i].email|stripslashes}</a></dt>
     </dl>
   </li>
