@@ -52,6 +52,7 @@ if (isset($_POST['install'])) {
 		location VARCHAR(255),
 		created int NOT NULL,
 		modified int,
+		userlevel int DEFAULT 0,
 		FULLTEXT(fullname, bio, location));");
 
 	$res = $mdb2->query("CREATE TABLE Auth (token VARCHAR(32) PRIMARY KEY,

@@ -21,30 +21,24 @@
 
 require_once('database.php');
 require_once('templating.php');
-require_once('data/User.php');
-require_once('utils/EmailAddressValidator.php');
 
-if(!isset($_GET['user'])) {
-	$smarty->assign("error", "Error!");
-	$smarty->assign("details", "User not set! You shouldn't be here!");
-	$smarty->display("error.tpl");
-	die();
+
+$res = $mdb2->query("SELECT userlevel FROM Users WHERE username=" . $mdb2->quote($user, 'text'));
+if ($res->numRows() != 1) {
+    $smarty->assign("error", "Error!");
+    $smarty->assign("details", "Invalid user specified.");
+    $smarty->display("error.tpl");
+    die();
 }
 
-$user = new User($_GET['user']);
-if(isset($user->name)) { 
-	$smarty->assign("user", $user->name);
-	$smarty->assign("email", $user->email);
-	$smarty->assign("fullname", $user->fullname);
-	$smarty->assign("bio", $user->bio);
-	$smarty->assign("homepage", $user->homepage);
-	$smarty->assign("location", $user->location);
-	$smarty->assign("scrobbles", $user->getscrobbles(10));
-	$smarty->assign("userlevel", $user->userlevel);
-	$smarty->display("profile.tpl");
+$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+if ($row['userlevel'] < 2) {	
+    $smarty->assign("error", "Error!");
+    $smarty->assign("details", "Invalid privileges.");
+    $smarty->display("error.tpl");
+    die();
 } else {
-	$smarty->assign("error", "User not found");
-	$smarty->assign("details", "Shall I call in a missing persons report?");
-	$smarty->display("error.tpl");
+    $smarty->display('admin.tpl');
+    echo "Access to admin-panel granted.";
+
 }
-?>

@@ -33,7 +33,7 @@ require_once($install_path . "/utils/human-time.php");
 class User {
 
 
-        public $name, $email, $fullname, $bio, $location, $homepage, $error;
+        public $name, $email, $fullname, $bio, $location, $homepage, $error,$userlevel;
 
         /**
          * Artist constructor
@@ -51,7 +51,8 @@ class User {
                         $this->fullname = $row["fullname"];
                         $this->homepage = $row["homepage"];
                         $this->bio = $row["bio"];
-                        $this->location = $row["location"];
+			$this->location = $row["location"];
+			$this->userlevel = $row["userlevel"];
                 }
         }
 	function getscrobbles($number) {
