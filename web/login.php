@@ -22,6 +22,7 @@
 
 require_once('database.php');
 require_once('templating.php');
+require_once($install_path . '/data/User.php');
 
 if(isset($_POST['login'])) {
 
@@ -53,6 +54,9 @@ if(isset($_POST['login'])) {
 			$_SESSION['session_id'] = $session_id;
 			$logged_in = true;
 			$smarty->assign('logged_in', true);
+
+            $_SESSION['user'] = new User($username);
+            $smarty->assign('user', $_SESSION['user']);
 		}
 	}
 }

@@ -1,9 +1,27 @@
 html, body, #doc3,h1{margin: 0; padding: 0; font-family: Liberation Sans, Verdana}
+html {
+    background-color: #ECECEC;
+    color: #2e3436;
+}
+
+a {
+    text-decoration: none;
+    outline: none;
+    color: #3465a4;
+}
+
+img {
+    border: none
+}
 
 #hd{background: #980101 url(images/header.png) no-repeat;
+    background-position: 15px top;
+    -moz-border-radius-bottomleft: 10px;
+    -moz-border-radius-bottomright: 10px;
+    width: 80%;
 	border: 0;
-	margin: 0;
-	padding: 0;
+	margin: auto;
+	padding: 0 15px;
 }
 
 #hd a{
@@ -21,27 +39,34 @@ html, body, #doc3,h1{margin: 0; padding: 0; font-family: Liberation Sans, Verdan
 }
 
 #menu {
-  color: #eee;
-	float: left;
-	background: #980101;
-	padding: 1em;
-	margin-right: 1em;
-	margin-bottom: 1em;
-  width: 160px;
-  font-size: 90%;
+    color: #666;
+	margin: .5em auto;
+    font-size: .8em;
+    width: 80%;
+    clear: both;
 }
+    div#menu ul li {
+        padding: 0 1em;
+        display: inline
+    }
+    #menu a {
+    	text-decoration: none;
+        color: #2e3436
+    }
 
-#menu a {
-	color: #CC8F5C;
-	text-decoration: none;
-}
-
-#menu a:hover {
-	text-decoration: underline;
-}
+    #menu a:hover {
+    	text-decoration: underline;
+    }
+    #menu a:visited {
+        color: #2e3436;
+    }
 
 #main {
-  padding-left: 215px;
+    width: 75%;
+    margin: auto;
+    background-color: #FFF;
+    padding: 2em;
+    -moz-border-radius: 10px
 }
 
 h2 {
@@ -49,6 +74,8 @@ h2 {
 	margin-bottom: 5px;
 }
 
+div#footer a {
+}
 .yui-b, #ft{padding: 1em;}
 
 .odd { background:#F4B624 !important; color:#000; }
@@ -105,7 +132,6 @@ div#login form fieldset input {
 div#invite form fieldset input[type=submit],
 div#register form fieldset input[type=submit],
 div#login form fieldset input[type=submit] {
-	background: white;
 	margin: 0;
 	width: 100%;
 }
@@ -147,7 +173,8 @@ ul#topartists.listcloud dd { font-size: 80%; }
     color: #666666
 }
 
-dl.gobbles { }
+dl.gobbles {
+}
     dl.gobbles dt.artist a {
         text-decoration: none;
         color: #2e3436;
