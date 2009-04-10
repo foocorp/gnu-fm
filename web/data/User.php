@@ -64,16 +64,7 @@ class User {
 	 * @return An array of scrobbles
 	 */
 	function getScrobbles($number) {
-		global $mdb2;
-		$res = $mdb2->query('SELECT * FROM Scrobbles WHERE username = ' .$mdb2->quote($this->name, 'text') . ' ORDER BY time DESC LIMIT '.$mdb2->quote($number, 'integer'));
-		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-		foreach($data as &$i) { 
-			$row = sanitize($i);
-			$row['timehuman'] = human_timestamp($row['time']);
-			$row['artisturl'] = Server::getArtistURL($row['artist']);
-			$result[] = $row;
-		}
-		return $result;
+		return Server::getRecentScrobbles($number, $this->name);
 	}
 
 	/**
@@ -95,25 +86,8 @@ class User {
 	 *
 	 * @return An array of nowplaying data
 	 */
-	function getNP() {
-		global $mdb2;
-
-		$res = $mdb2->query('SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url FROM Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE username=' . $mdb2->quote($this->name, 'text'));
-
-		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-		foreach($data as &$i) {
-			$row = sanitize($i);
-			if($row["name"] == "") {
-				$clientstr = strip_tags(stripslashes($row["client"])) . " (unknown, please tell us what this is)";
-			} else {
-				$clientstr = "<a href=\"" . strip_tags(stripslashes($row["url"])) . "\">" . strip_tags(stripslashes($row["name"])) . "</a>";
-			}
-
-			$row["clientstr"] = $clientstr;
-			$row["artisturl"] = Server::getArtistURL($row["artist"]);
-			$result[] = $row;
-		}
-		return $result;
+	function getNowPlaying($number) {
+		return Server::getNowPlaying($number, $this->name);
 	}
 
 }
