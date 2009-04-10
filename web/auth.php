@@ -20,21 +20,21 @@
 */
 
 require_once('database.php');
+require_once('data/User.php');
 
 session_start();
 
 if(isset($_SESSION['session_id'])) {
-	$res = $mdb2->query('SELECT Users.username,userlevel FROM Scrobble_Sessions,Users WHERE '
+	$res = $mdb2->query('SELECT username FROM Scrobble_Sessions WHERE '
 		. 'sessionid = ' . $mdb2->quote($_SESSION['session_id'], 'text')
-	       	. ' AND expires > ' . time() . ' AND Users.username = Scrobble_Sessions.username');
+	       	. ' AND expires > ' . time());
 	if(!$res->numRows()) {
 		// Session is invalid
 		unset($_SESSION['session_id']);
 	} else {
 		$logged_in = true;
 		$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
-		$username = $row['username'];
-		$userlevel = $row['userlevel'];
+		$u_user = new User($row['username']);
 	}
 }
 ?>

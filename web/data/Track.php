@@ -121,4 +121,13 @@ class Track {
 		$this->_listenercount = $row['listeners'];
 	}
 
+	/**
+	 * Retrieve the artist for this track.
+	 *
+	 * @return An artist object
+	 */
+	function getArtist() {
+		return new Artist($this->artist_name);
+	}
+
 }

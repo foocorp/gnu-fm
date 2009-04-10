@@ -30,8 +30,7 @@ $smarty->assign('base_url', $base_url);
 if(isset($logged_in)) {
 	$smarty->assign('logged_in', true);
 	// Pre-fix this user's details with u to avoid confusion with other users
-	$smarty->assign('u_username', $username);
-	$smarty->assign('u_userlevel', $userlevel);
+	$smarty->assign('u_user', $u_user);
 }
 
 ?>

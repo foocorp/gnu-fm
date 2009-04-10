@@ -33,45 +33,44 @@ require_once($install_path . '/utils/human-time.php');
 class User {
 
 
-        public $name, $email, $fullname, $bio, $location, $homepage, $error,$userlevel;
+	public $name, $email, $fullname, $bio, $location, $homepage, $error, $userlevel;
 
-        /**
-         * User constructor
-         *
-         * @param string $name The name of the user to load
-         */
-        function __construct($name) {
-                global $mdb2;
-                $res = $mdb2->query('SELECT * FROM Users WHERE '
-                        . 'username = ' . $mdb2->quote($name, 'text'));
-                if($res->numRows()) {
-                        $row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
-                        $this->name      = $row['username'];
-                        $this->email     = $row['email'];
-                        $this->fullname  = $row['fullname'];
-                        $this->homepage  = $row['homepage'];
-                        $this->bio       = $row['bio'];
-            			$this->location  = $row['location'];
-            			$this->userlevel = $row['userlevel'];
-                }
-	    }
+	/**
+	 * User constructor
+	 *
+	 * @param string $name The name of the user to load
+	 */
+	function __construct($name) {
+		global $mdb2;
+		$res = $mdb2->query('SELECT * FROM Users WHERE '
+			. 'username = ' . $mdb2->quote($name, 'text'));
+		if($res->numRows()) {
+			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
+			$this->name	  = $row['username'];
+			$this->email	 = $row['email'];
+			$this->fullname  = $row['fullname'];
+			$this->homepage  = $row['homepage'];
+			$this->bio	   = $row['bio'];
+			$this->location  = $row['location'];
+			$this->userlevel = $row['userlevel'];
+		}
+	}
 
-
-        /**
-         * Get a user's scrobbles ordered by time
-         *
-         * @param int $number The number of scrobbles to return
-         * @return An array of scrobbles
-         */
-        function getScrobbles($number) {
-            global $mdb2;
-            $res = $mdb2->query('SELECT * FROM Scrobbles WHERE username = ' .$mdb2->quote($this->name, 'text') . ' ORDER BY time DESC LIMIT '.$mdb2->quote($number, 'integer'));
-            $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-            foreach($data as &$i) {
-                $i = sanitize($i);
-                $i['timehuman'] = human_timestamp($i['time']);
-            }
-            return $data;
+	/**
+	 * Get a user's scrobbles ordered by time
+	 *
+	 * @param int $number The number of scrobbles to return
+	 * @return An array of scrobbles
+	 */
+	function getScrobbles($number) {
+		global $mdb2;
+		$res = $mdb2->query('SELECT * FROM Scrobbles WHERE username = ' .$mdb2->quote($this->name, 'text') . ' ORDER BY time DESC LIMIT '.$mdb2->quote($number, 'integer'));
+		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+		foreach($data as &$i) { 
+			$i = sanitize($i);
+			$i['timehuman'] = human_timestamp($i['time']);
+		}
+		return $data;
 	}
 
 	/**
@@ -84,29 +83,37 @@ class User {
 		return "http://www.gravatar.com/avatar/" . md5($this->email) . "?s=" . $size . "&d=monsterid";
 	}
 
-        /**
-         * Get a user's now-playing tracks
-         *
-         * @return An array of nowplaying data
-         */
-        function getNP() {
-            global $mdb2;
-
-	    $res = $mdb2->query('SELECT username, artist, track, client,
- ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE username=' . $mdb2->quote($this->name, 'text'));
-
-            $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-            foreach($data as &$i) {
-                $i = sanitize($i);
-                if($i["name"] == "") {
-		    $clientstr = strip_tags(stripslashes($i["client"])) . "(unknown, please tell us what this is)";
-                } else {
-		    $clientstr = "<a href=\"" . strip_tags(stripslashes($i["url"])) . "\">" . strip_tags(stripslashes($i["name"])) . "</a>";
+	function getURL() {
+		global $friendly_urls, $base_url;
+		if($friendly_urls) {
+			return $base_url . "/user/" . urlencode(stripslashes($this->name));
+		} else {
+			return $base_url . "/profile.php?user=" . urlencode(stripslashes($this->name));
 		}
+	}
 
-		$i["clientstr"] = $clientstr;
-            }
-            return $data;
+	/**
+	 * Get a user's now-playing tracks
+	 *
+	 * @return An array of nowplaying data
+	 */
+	function getNP() {
+		global $mdb2;
+
+		$res = $mdb2->query('SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url FROM Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE username=' . $mdb2->quote($this->name, 'text'));
+
+		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+		foreach($data as &$i) {
+			$i = sanitize($i);
+			if($i["name"] == "") {
+				$clientstr = strip_tags(stripslashes($i["client"])) . "(unknown, please tell us what this is)";
+			} else {
+				$clientstr = "<a href=\"" . strip_tags(stripslashes($i["url"])) . "\">" . strip_tags(stripslashes($i["name"])) . "</a>";
+			}
+
+			$i["clientstr"] = $clientstr;
+		}
+		return $data;
 	}
 
 }
