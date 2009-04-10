@@ -172,7 +172,10 @@ what's happening.</p>
 
 <h3>$Id$</h3>
 
-<p><a href="http://www.gnu.org/licenses/agpl.html">GNU Affero General Public License v3 or later</a>. Source: <a href="http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm">http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm</a></p></div>
+<p><a href="http://www.gnu.org/licenses/agpl.html">GNU Affero General Public License v3 or later</a>. Source: <a href="http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm">http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm</a></p>
+<p><a href="/data">Data dumps are here</a</p>
+
+</div>
 </div>
 </body>
 </html>
