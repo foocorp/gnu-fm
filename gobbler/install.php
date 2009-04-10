@@ -120,7 +120,7 @@ if (isset($_POST['install'])) {
 		mbid VARCHAR(36),
 		expires int)");
 
-	$res ) $mdb2->query("CREATE TABLE Invitation_Request(
+	$res = $mdb2->query("CREATE TABLE Invitation_Request(
 	    email VARCHAR(255) PRIMARY KEY,
 	    time int");
 
