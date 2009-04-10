@@ -5,7 +5,8 @@ import random
 from django.contrib.sites.models import Site
 from django.http import HttpResponse
 
-from gobbler.models import Album, Artist, Gobble, GobblerUser, Md5Password, NowPlaying, Session, Track
+from gobbler.models import (Album, Artist, Gobble, GobblerUser, Md5Password,
+                            NowPlaying, Session, Track)
 from web.views import frontpage
 
 
