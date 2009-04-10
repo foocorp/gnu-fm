@@ -120,9 +120,9 @@ if ($req_user) {
 			}
 			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 				if($row["name"] == "") {
-				  $client = strip_tags(stripslashes($row["name"]));
-				} else {
 				  $client = strip_tags(stripslashes($row["client"])) . "(unknown, please tell us what this is)";
+				} else {
+				  $client = strip_tags(stripslashes($row["name"]));
 				}
 				echo "<p>" . strip_tags(stripslashes($row["username"])) . " is listening to " . strip_tags(stripslashes($row["track"])) . " by " . strip_tags(stripslashes($row["artist"])) . " with " . $client . "</p>";
 			}
