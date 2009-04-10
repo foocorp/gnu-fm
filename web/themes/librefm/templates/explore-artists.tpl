@@ -13,6 +13,5 @@
   </li>
   {/section}
 </ul>
-
-
+<div class="cleaner">&nbsp;</div>
 {include file='footer.tpl'}
