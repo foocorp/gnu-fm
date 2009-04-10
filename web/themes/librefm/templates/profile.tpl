@@ -24,7 +24,7 @@
 <h3>Now Playing:</h3>
 <ul>
     {section name=i loop=$nowplaying}
-<li>{$nowplaying[i].track} by {$nowplaying[i].artist} with {$nowplaying[i].client}</li>
+<li>{$nowplaying[i].track} by {$nowplaying[i].artist} with {$nowplaying[i].clientstr}</li>
     {/section}
 </ul>
 {/if}
