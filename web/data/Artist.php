@@ -39,15 +39,17 @@ class Artist {
 	/**
 	 * Artist constructor
 	 *
-	 * @param string name The name of the artist to load
+	 * @param string $name The name of the artist to load
+	 * @param string $mbid The mbid of the artist (optional)
 	 */
-	function __construct($name) {
+	function __construct($name, $mbid=false) {
 		global $mdb2;
+
 		$res = $mdb2->query("SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large FROM Artist WHERE "
+			. "mbid = " . $mdb2->quote($mbid, "text") . " OR "
 			. "name = " . $mdb2->quote($name, "text"));
 		if(!$res->numRows()) {
-			$this->name = "No such artist.";
-			$this->bio_summary = "Sorry we don't have a record of this artist in our database.";
+			PEAR::raiseError("No such artist.");
 		} else {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
 			$this->name = $row["name"];
@@ -69,10 +71,10 @@ class Artist {
 	 */
 	function getAlbums() {
 		global $mdb2;
-		$res = $mdb2->query("SELECT name, artist_name FROM Album WHERE artist_name = "
+		$res = $mdb2->query("SELECT name FROM Album WHERE artist_name = "
 			. $mdb2->quote($this->name, "text"));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-			$albums[] = new Album($row["name"], $row["artist_name"]);
+			$albums[] = new Album($row["name"], $this->name);
 		}
 
 		return $albums;
@@ -85,15 +87,34 @@ class Artist {
 	 */
 	function getTracks() {
 		global $mdb2;
-		$res = $mdb2->query("SELECT name, artist FROM Track WHERE artist = "
+		$res = $mdb2->query("SELECT name FROM Track WHERE artist = "
 			. $mdb2->quote($this->name, "text"));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-			$tracks[] = new Track($row["name"], $row["artist"]);
+			$tracks[] = new Track($row["name"], $this->name);
 		}
 
 		return $tracks;
 	}
 
+	/**
+	 * Retrieves an artist's most popular tracks
+	 *
+	 * @param int $tracks the number of tracks to return
+	 * @return An array of Track objects
+	 */
+	function getTopTracks($number) {
+		global $mdb2;
+		$res = $mdb2->query("SELECT track, COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE "
+			. " artist = " . $mdb2->quote($this->name, 'text')
+			. " GROUP BY track ORDER BY freq DESC LIMIT " . $mdb2->quote($number, "integer"));
+		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+			$track = new Track($row["track"], $this->name);
+			$track->setPlayCount($row["freq"]);
+			$track->setListenerCount($row["listeners"]);
+			$tracks[] = $track;
+		}
 
+		return $tracks;
+	}
 
 }
