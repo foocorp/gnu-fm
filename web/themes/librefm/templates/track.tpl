@@ -1,13 +1,11 @@
 {include file='header.tpl'}
 
 <h2>{$name}</h2><br />
-<h3>Artist: {$artist}</h3><br />
-<h3>Album: {$album}</h3>
+<b>Artist: {$artist}</b><br />
+<b>Album: {$album}</b>
 
 <ul id="tracks">
-  <li>
-      Duration: {$duration}
-  </li>
+{if isset($duration)}<li> Duration: {$duration}</li>{/if}
   <li>
       Playcount: {$playcount}
   </li>
