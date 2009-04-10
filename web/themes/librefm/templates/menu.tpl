@@ -1,12 +1,12 @@
 <div id="menu">
     <ul id="navigation">
 {if ($logged_in)}
-        <li><a href="{$base_url}/profile.php?user={$username|urlencode}">{$username}</a></li>
+        <li><a href="{$base_url}/profile.php?user={$u_username|urlencode}">{$u_username}</a></li>
 {/if}
 
 {if ($logged_in)}
         <li>Invites disabled</li>
-    {if $userlevel > 0}
+    {if $u_userlevel > 0}
         <li><a href="/admin.php">Admin panel</a></li>
     {/if}
 {else}

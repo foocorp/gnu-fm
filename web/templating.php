@@ -29,8 +29,9 @@ $smarty->compile_dir = $install_path. '/themes/' . $default_theme . '/templates_
 $smarty->assign('base_url', $base_url);
 if(isset($logged_in)) {
 	$smarty->assign('logged_in', true);
-	$smarty->assign('username', $username);
-	$smarty->assign('userlevel', $userlevel);
+	// Pre-fix this user's details with u to avoid confusion with other users
+	$smarty->assign('u_username', $username);
+	$smarty->assign('u_userlevel', $userlevel);
 }
 
 ?>
