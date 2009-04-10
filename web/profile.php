@@ -41,6 +41,7 @@ if(isset($user->name)) {
 	$smarty->assign('scrobbles', $user->getScrobbles(20));
 	$smarty->assign('userlevel', $user->userlevel);
 	$smarty->assign('avatar', $user->getAvatar());
+	$smarty->assign('nowplaying', $user->getNP());
 	$smarty->display('profile.tpl');
 } else {
 	$smarty->assign('error', 'User not found');

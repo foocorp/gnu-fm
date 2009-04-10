@@ -67,7 +67,7 @@ class User {
             global $mdb2;
             $res = $mdb2->query('SELECT * FROM Scrobbles WHERE username = ' .$mdb2->quote($this->name, 'text') . ' ORDER BY time DESC LIMIT '.$mdb2->quote($number, 'integer'));
             $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-            foreach($data as &$i) { 
+            foreach($data as &$i) {
                 $i = sanitize($i);
                 $i['timehuman'] = human_timestamp($i['time']);
             }
@@ -82,6 +82,24 @@ class User {
 	 */
 	function getAvatar($size=64) {
 		return "http://www.gravatar.com/avatar/" . md5($this->email) . "?s=" . $size . "&d=monsterid";
+	}
+
+        /**
+         * Get a user's now-playing tracks
+         *
+         * @return An array of nowplaying data
+         */
+        function getNP() {
+            global $mdb2;
+
+	    $res = $mdb2->query('SELECT username, artist, track, client,
+ ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE username=' . $mdb->quote($this->name, 'text');
+
+            $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+            foreach($data as &$i) {
+                $i = sanitize($i);
+            }
+            return $data;
 	}
 
 }
