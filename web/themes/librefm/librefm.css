@@ -191,3 +191,7 @@ dl.gobbles {
         color: #666;
         font-size: .7em
     }
+
+h3 {
+	clear: left;
+}

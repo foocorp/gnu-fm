@@ -40,6 +40,7 @@ if(isset($user->name)) {
 	$smarty->assign('location', $user->location);
 	$smarty->assign('scrobbles', $user->getScrobbles(20));
 	$smarty->assign('userlevel', $user->userlevel);
+	$smarty->assign('avatar', $user->getAvatar());
 	$smarty->display('profile.tpl');
 } else {
 	$smarty->assign('error', 'User not found');
