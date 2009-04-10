@@ -82,6 +82,8 @@ class Server {
 			$i["clientstr"] = $clientstr;
 			$i["userurl"] = Server::getUserURL($i["username"]);
 		}
+
+		return $data;
 	}
 
 	/**
