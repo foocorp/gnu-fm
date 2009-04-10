@@ -20,7 +20,7 @@
         <p>{$bio}</p>
     </dd>
 </dl>
-{if $smarty.nowplaying|@count > 0}
+{if $nowplaying|@count > 0}
 <h3>Now Playing:</h3>
 <ul>
     {section name=i loop=$nowplaying}
