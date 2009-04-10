@@ -114,12 +114,17 @@ if ($req_user) {
 		<h2>Now Playing?</h2>
 
 		<?php
-			$res = $mdb2->query("SELECT username, artist, track, ClientCodes.name from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT 10");
+			$res = $mdb2->query("SELECT username, artist, track, client, ClientCodes.name from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT 10");
 			if(PEAR::isError($res)) {
 				die($res->getMessage());
 			}
 			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-				echo "<p>" . strip_tags(stripslashes($row["username"])) . " is listening to " . strip_tags(stripslashes($row["track"])) . " by " . strip_tags(stripslashes($row["artist"])) . " with " . strip_tags(stripslashes($row["name"])) . "</p>";
+				if($row["name"] == "") {
+				  $client = strip_tags(stripslashes($row["name"]));
+				} else {
+				  $client = strip_tags(stripslashes($row["client"])) . "(unknown, please tell us what this is)";
+				}
+				echo "<p>" . strip_tags(stripslashes($row["username"])) . " is listening to " . strip_tags(stripslashes($row["track"])) . " by " . strip_tags(stripslashes($row["artist"])) . " with " . $client . "</p>";
 			}
 		?>
 
