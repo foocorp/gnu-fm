@@ -130,6 +130,12 @@ if (isset($_POST['install'])) {
 		code VARCHAR(32),
 		PRIMARY KEY(inviter, invitee, code))");
 
+	$res = $mdb2->query("CREATE TABLE ClientCodes(
+                code CHAR(3),
+                name VARCHAR(32),
+                url VARCHAR(256),
+                PRIMARY KEY(code))");
+
 	// Test user configuration
 	$res = $mdb2->query("INSERT INTO Users
 		(username, password, created)
