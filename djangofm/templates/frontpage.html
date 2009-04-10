@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h2>Welcome</h2>
+<p><strong><span class='vcard fn org'>django.fm</span></strong> is a free
+network service that will allow users to share their musical tastes with other
+people.</p>
+
+<h3>What's hot? Recently gobbled.</h3>
+
+<ul id="recenttracks" class="listcloud">
+  {% for gobble in recently_gobbled %}
+  <li>
+    <dl>
+      <dt><a href="{{ gobble.artist.get_absolute_url }}">{{ gobble.artist }}</a></dt>
+      <dd>{{ gobble.track.name }}</dd>
+    </dl>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

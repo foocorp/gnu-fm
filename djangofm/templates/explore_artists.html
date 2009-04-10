@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h2>Explore popular artists</h2>
+
+<ul id="topartists" class="listcloud">
+  {% for artist in artists %}
+  <li>
+    <dl>
+      <dt><a href="{{ artist.artist.get_absolute_url }}">{{ artist.artist }}</a></dt>
+      <dd>{{ artist.count }} gobbles</dd>
+    </dl>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
