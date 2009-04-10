@@ -71,7 +71,7 @@ img {
 
 h2 {
 	font-size: 2em;
-	margin-bottom: 5px;
+	margin: 5px;
 }
 
 div#footer a {
@@ -146,7 +146,7 @@ ul#navigation { padding: 0; margin: 0; }
 /* TODO: Do rounded corners for browsers other than Gecko as well? */
 
 ul.listcloud { padding: 0px; margin: 0px; }
-ul.listcloud li { float: left; margin-right: 10px; margin-bottom: 10px; list-style-type: none; padding: 10px; border: 1px solid #000; background-color: #eee; -moz-border-radius: 5px; }
+ul.listcloud li { float: left; margin-right: 10px; margin-bottom: 10px; list-style-type: none; padding: 10px; border: 1px solid #000; background-color: #eee; -moz-border-radius: 5px; height: 2.2em; }
 ul.listcloud li dl { margin: 0; padding: 0; }
 ul.listcloud li dt { margin: 0; padding: 0; }
 ul.listcloud li dd { margin: 0; padding: 0; }
