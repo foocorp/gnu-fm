@@ -24,7 +24,10 @@
 <h3>Now Playing:</h3>
 <ul>
     {section name=i loop=$nowplaying}
-<li>{$nowplaying[i].track} by {$nowplaying[i].artist} with {$nowplaying[i].clientstr}</li>
+<li>{$nowplaying[i].track}
+by
+<a href="artist.php?artist={$nowplaying[i].artist|stripslashes|urlencode|htmlspecialchars}">{$nowplaying[i].artist}</a>
+with {$nowplaying[i].clientstr}</li>
     {/section}
 </ul>
 {/if}
