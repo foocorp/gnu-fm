@@ -24,9 +24,9 @@ require_once('database.php');
 session_start();
 
 if(isset($_SESSION['session_id'])) {
-	$res = $mdb2->query("SELECT Users.username,userlevel FROM Scrobble_Sessions,Users WHERE "
-		. "sessionid = " . $mdb2->quote($_SESSION['session_id'], "text")
-	       	. " AND expires > " . time() . " AND Users.username = Scrobble_Sessions.username");
+	$res = $mdb2->query('SELECT Users.username,userlevel FROM Scrobble_Sessions,Users WHERE '
+		. 'sessionid = ' . $mdb2->quote($_SESSION['session_id'], 'text')
+	       	. ' AND expires > ' . time() . ' AND Users.username = Scrobble_Sessions.username');
 	if(!$res->numRows()) {
 		// Session is invalid
 		unset($_SESSION['session_id']);

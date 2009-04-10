@@ -38,7 +38,7 @@ if(isset($user->name)) {
 	$smarty->assign('bio', $user->bio);
 	$smarty->assign('homepage', $user->homepage);
 	$smarty->assign('location', $user->location);
-	$smarty->assign('scrobbles', $user->getScrobbles(10));
+	$smarty->assign('scrobbles', $user->getScrobbles(20));
 	$smarty->assign('userlevel', $user->userlevel);
 	$smarty->display('profile.tpl');
 } else {

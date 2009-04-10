@@ -6,7 +6,7 @@
 	<p id='errors'>{$errors}</p>
 {/if}
 
-<div id="login">
+<div id='login'>
 	<form action='' method='post'>
 		<fieldset>
 			<label for='username'>Username<span>&nbsp;</span></label>
@@ -15,7 +15,7 @@
 			<label for='password'>Password<span>&nbsp;</span></label>
 			<input id='password' name='password' type='password' value=''/>
 
-			<input type='submit' name='login' value="Let me in!" />
+			<input type='submit' name='login' value='Let me in!' />
 		</fieldset>
 
 	</form>

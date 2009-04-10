@@ -20,7 +20,7 @@
         <p>{$bio}</p>
     </dd>
 </dl>
-<h3>Latest 10 Gobbles:</h3>
+<h3>Latest {$scrobbles|@count} Gobbles:</h3>
 {section name=i loop=$scrobbles}
     {if $smarty.capture.artist_last <> $scrobbles[i].artist}
         {if $scrobbles[i] != $scrobbles[0]} 
