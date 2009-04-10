@@ -30,6 +30,9 @@ $smarty->assign("name", $track->name);
 $smarty->assign("artist", $track->artist_name);
 $smarty->assign("album", $track->album_name);
 $smarty->assign("duration", $track->duration);
+if (is_null($track->duration)) {
+    $smarty->assign("duration", false);
+}
 $smarty->assign("license", $track->license);
 $smarty->assign("playcount", $track->getPlayCount());
 $smarty->assign("listeners", $track->getListenerCount());
