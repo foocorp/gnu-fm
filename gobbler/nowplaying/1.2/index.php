@@ -61,10 +61,10 @@ createTrackIfNew($artist, $album, $track, $mbid);
 $mdb2->query("DELETE FROM Now_Playing WHERE expires < " . time());
 
 //Delete this user's last playing song (if any)
-$mdb2->query("DELETE FROM Now_Playing WHERE username = " . $username);
+$mdb2->query("DELETE FROM Now_Playing WHERE sessionid = " . $session_id);
 
-$mdb2->query("INSERT INTO Now_Playing (username, artist, track, expires, mbid) VALUES ("
-	. $username . ", "
+$mdb2->query("INSERT INTO Now_Playing (sessionid, artist, track, expires, mbid) VALUES ("
+	. $session_id . ", "
 	. $artist . ", "
 	. $track . ", "
 	. $expires . ", "
