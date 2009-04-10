@@ -93,7 +93,7 @@ class User {
             global $mdb2;
 
 	    $res = $mdb2->query('SELECT username, artist, track, client,
- ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE username=' . $mdb->quote($this->name, 'text');
+ ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE username=' . $mdb->quote($this->name, 'text'));
 
             $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
             foreach($data as &$i) {
