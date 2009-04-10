@@ -98,6 +98,13 @@ class User {
             $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
             foreach($data as &$i) {
                 $i = sanitize($i);
+                if($i["name"] == "") {
+		    $clientstr = strip_tags(stripslashes($i["client"])) . "(unknown, please tell us what this is)";
+                } else {
+		    $clientstr = "<a href=\"" . strip_tags(stripslashes($i["url"])) . "\">" . strip_tags(stripslashes($i["name"])) . "</a>";
+		}
+
+		$i["clientstr"] = $clientstr;
             }
             return $data;
 	}
