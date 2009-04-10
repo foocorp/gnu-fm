@@ -33,11 +33,13 @@ class Track {
 
 	public $name, $artist_name, $album_name, $mbid, $duration, $streamable, $license, $downloadurl;
 
+	private $_playcount = false, $_listenercount = false;
+
 	/**
 	 * Track constructor
 	 *
-	 * @param string name The name of the track to load
-	 * @param string artist The name of the artist who recorded this track
+	 * @param string $name The name of the track to load
+	 * @param string $artist The name of the artist who recorded this track
 	 */
 	function __construct($name, $artist) {
 		global $mdb2;
@@ -60,5 +62,63 @@ class Track {
 
 	}
 
+	/**
+	 * Sets the playcount
+	 *
+	 * @param int $playcount The number of plays this track has received
+	 */
+	function setPlayCount($playcount) {
+		$this->_playcount = $playcount;
+	}
+
+	/**
+	 * Sets the number of listeners
+	 *
+	 * @param int $listeners The number of people who've listened to this track
+	 */
+	function setListenerCount($listeners) {
+		$this->_listenercount = $listeners;
+	}
+
+	/**
+	 *
+	 * @return An int indicating the number of times this track has been played
+	 */
+	function getPlayCount() {
+		if($this->_playcount) {
+			// If we've been given a cached value from another SQL call use that
+			return $this->_playcount;
+		}
+
+		$this->_getPlayCountAndListenerCount();
+		return $this->_playcount;
+	}
+
+	/**
+	 *
+	 * @return An int indicating the number of listeners this track has
+	 */
+	function getListenerCount() {
+		if($this->_listeners) {
+			return $this->_listenercount;
+		}
+
+		$this->_getPlayCountAndListenerCount();
+		return $this->_listenercount;
+	}
+
+
+	private function _getPlayCountAndListenerCount() {
+		global $mdb2;
+
+		$res = $mdb2->query("SELECT COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE "
+			. " artist = " . $mdb2->quote($this->artist_name, 'text') 
+			. " AND track = " . $mdb2->quote($this->name, "text")
+			. " GROUP BY track ORDER BY freq DESC");
+
+		$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+		$this->_playcount = $row['freq'];
+		$this->_listenercount = $row['listeners'];
+	}
 
 }

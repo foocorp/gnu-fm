@@ -18,31 +18,29 @@
 
  */
 
-require_once('../database.php');
+require_once($install_path . '/database.php');
+require_once($install_path . '/data/User.php');
 require_once('xml.php');
 
-class User {
+class UserXML {
 
     public static function getInfo($username) {
-	global $mdb2;
 
-	$res = $mdb2->query("SELECT * FROM Users WHERE username=" . $mdb2->quote($username, 'text'));
-	if (PEAR::isError($res) || !$res->numRows()) {
+	$user = new User($username);
+	if (PEAR::isError($user)) {
 	    return(XML::error("failed", "7", "Invalid resource specified"));
 	}
 
-	$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
-
 	$xml = new SimpleXMLElement("<lfm status=\"ok\"></lfm>");
 	$user_node = $xml->addChild("user", null);
-	$user_node->addChild("name", $row['username']);
-	$user_node->addChild("email", $row['email']);
-	$user_node->addChild("homepage", $row['homepage']);
-	$user_node->addChild("location", $row['location']);
-	$user_node->addChild("bio", $row['bio']);
-	$user_node->addChild("profile_created", strftime("%c", $row['created']));
+	$user_node->addChild("name", $user->name);
+	$user_node->addChild("email", $user->email);
+	$user_node->addChild("homepage", $user->homepage);
+	$user_node->addChild("location", $user->location);
+	$user_node->addChild("bio", $user->bio);
+	$user_node->addChild("profile_created", strftime("%c", $user->created));
 	if (isset($row['modified']))
-	    $user_node->addChild("profile_updated", strftime("%c", $row['modified']));
+	    $user_node->addChild("profile_updated", strftime("%c", $user->modified));
 
 	return($xml);
     }
