@@ -34,6 +34,5 @@ $smarty->assign("license", $track->license);
 $smarty->assign("playcount", $track->getPlayCount());
 $smarty->assign("listeners", $track->getListenerCount());
 
-$smarty->display("track.tpl";
-
+$smarty->display("track.tpl");
 ?>
