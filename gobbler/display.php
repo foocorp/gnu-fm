@@ -114,7 +114,7 @@ if ($req_user) {
 		<h2>Now Playing?</h2>
 
 		<?php
-			$res = $mdb2->query("SELECT username, artist, track FROM Now_Playing ORDER BY expires DESC LIMIT 10");
+			$res = $mdb2->query("SELECT username, artist, track, client from Now_Playing left outer join Scrobble_Sessions on Now_Playing.sessionid=Scrobble_Sessions.sessionid ORDER BY expires DESC LIMIT 10");
 			if(PEAR::isError($res)) {
 				die($res->getMessage());
 			}

@@ -128,9 +128,9 @@ if ($req_user) {
 <div id="nowtracks">
 		<?php
                         if(empty($req_user)) {
-                               $res = $mdb2->query("SELECT username, artist, track FROM Now_Playing ORDER BY expires DESC LIMIT 10");
+                               $res = $mdb2->query("SELECT username, artist, track, client from Now_Playing left outer join Scrobble_Sessions on Now_Playing.sessionid=Scrobble_Sessions.sessionid ORDER BY expires DESC LIMIT 10");
                         } else {
-                               $res = $mdb2->query("SELECT username, artist, track FROM Now_Playing WHERE username = '" . stripslashes($req_user) . "' ORDER BY expires DESC LIMIT 10");
+                               $res = $mdb2->query("SELECT username, artist, track, client from Now_Playing left outer join Scrobble_Sessions on Now_Playing.sessionid=Scrobble_Sessions.sessionid WHERE username = '" . stripslashes($req_user) . "' ORDER BY expires DESC LIMIT 10");
                         }
 
 			if(PEAR::isError($res)) {
