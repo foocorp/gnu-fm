@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h2>{{ album.artist }} - {{ album.name }}</h2>
+
+<ul id="tracks">
+  {% for track in tracks %}
+  <li><a href="{{ track.get_absolute_url }}">{{ track.name }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}
