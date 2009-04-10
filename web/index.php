@@ -19,16 +19,16 @@
 
 */
 
-require_once("database.php");
-require_once("templating.php");
+require_once('database.php');
+require_once('templating.php');
 
-$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
+$res = $mdb2->query('SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10');
 
 if(PEAR::isError($res)) {
   die($res->getMessage());
 }
 
-$smarty->assign("recenttracks", $res->fetchAll(MDB2_FETCHMODE_ASSOC));
+$smarty->assign('recenttracks', $res->fetchAll(MDB2_FETCHMODE_ASSOC));
 
-$smarty->display("welcome.tpl");
+$smarty->display('welcome.tpl');
 ?>
