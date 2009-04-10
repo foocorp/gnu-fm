@@ -12,7 +12,7 @@ musical tastes with other people.</p>
     <dl>
       <dt><a href="artist.php?artist={$recenttracks[recent].artist|stripslashes|urlencode}">
         {$recenttracks[recent].artist|stripslashes|htmlspecialchars}</a></dt>
-      <dl>{$recenttracks[recent].track|stripslashes|htmlspecialchars}</dl>
+      <dd>{$recenttracks[recent].track|stripslashes|htmlspecialchars}</dd>
     </dl>
     </li>
   {/section}
