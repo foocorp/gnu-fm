@@ -5,7 +5,7 @@
 <b>Album: {$album}</b>
 
 <ul id="tracks">
-{if empty($duration)}<li> Duration: {$duration}</li>{/if}
+{if !empty($duration)}<li> Duration: {$duration}</li>{/if}
   <li>
       Playcount: {$playcount}
   </li>
