@@ -17,5 +17,5 @@ musical tastes with other people.</p>
     </li>
   {/section}
 </ul>
-
+<div class="cleaner">&nbsp;</div>
 {include file='footer.tpl'}
