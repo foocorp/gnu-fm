@@ -21,6 +21,7 @@
 
 require_once('database.php');
 require_once('templating.php');
+require_once($install_path . "/data/sanitize.php");
 
 $res = $mdb2->query('SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10');
 
