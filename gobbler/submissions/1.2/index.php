@@ -72,7 +72,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		. $mbid . ")");
 
         // Destroy now_playing since it is almost certainly obsolescent
-        $mdb2->query("DELETE FROM Now_Playing WHERE username = " . $username);
+        $mdb2->query("DELETE FROM Now_Playing WHERE sessionid = " . $session_id);
 }
 
 die("OK\n");

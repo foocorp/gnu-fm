@@ -114,7 +114,7 @@ if (isset($_POST['install'])) {
 		PRIMARY KEY(username, sessionid))");
 
 	$res = $mdb2->query("CREATE TABLE Now_Playing(
-		username VARCHAR(64) PRIMARY KEY REFERENCES Users(username),
+		sessionid VARCHAR(32) PRIMARY KEY REFERENCES Scrobble_Sessions(sessionid),
 		track VARCHAR(255) REFERENCES Track(name),
 		artist VARCHAR(255) REFERENCES Artist(name),
 		mbid VARCHAR(36),
