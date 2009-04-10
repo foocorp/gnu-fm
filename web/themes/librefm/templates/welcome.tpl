@@ -13,7 +13,7 @@ musical tastes with other people.</p>
       <dt><a href="artist.php?artist={$nowplaying[np].artist|stripslashes|urlencode}">
         {$nowplaying[np].artist|stripslashes|htmlspecialchars}</a></dt>
       <dd>{$nowplaying[np].track|stripslashes|htmlspecialchars}</dd>
-      <dd>{$nowplaying[np].username|stripslashes|htmlspecialchars}</dd>
+      <dd><a href="http://alpha.libre.fm/profile.php?user={$nowplaying[np].username|stripslashes|urlencode}">{$nowplaying[np].username|stripslashes|htmlspecialchars}</a></dd>
       <dd>{$nowplaying[np].clientstr}</dd>
     </dl>
     </li>
