@@ -28,7 +28,7 @@
         {/if}
         <dl class='gobbles'>
             <dt class='artist'>
-                <a href="artist.php?artist={$scrobbles[i].artist|stripslashes|urlencode}">{$scrobbles[i].artist}</a>
+                <a href="artist.php?artist={$scrobbles[i].artist|stripslashes|urlencode|htmlspecialchars}">{$scrobbles[i].artist}</a>
             </dt>
     {/if}
       <dd class='gobble'><span class='track-name'>{$scrobbles[i].track|stripslashes}</span><small>{$scrobbles[i].timehuman}</small></dd>

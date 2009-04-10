@@ -8,11 +8,11 @@ musical tastes with other people.</p>
 
 <ul id="recenttracks" class="listcloud">
   {section name=recent loop=$recenttracks}
-  <li>
+   <li>
     <dl>
       <dt><a href="artist.php?artist={$recenttracks[recent].artist|stripslashes|urlencode}">
-        {$recenttracks[recent].artist|stripslashes}</a></dt>
-      <dd>{$recenttracks[recent].track|stripslashes}</dd>
+        {$recenttracks[recent].artist|stripslashes|htmlspecialchars}</a></dt>
+      <dl>{$recenttracks[recent].track|stripslashes|htmlspecialchars}</dl>
     </dl>
     </li>
   {/section}
