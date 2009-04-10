@@ -38,10 +38,14 @@ class Server {
 	 * @param int $number The number of scrobbles to return
 	 * @return An array of scrobbles or a PEAR_Error in case of failure
 	 */
-	static function getRecentScrobbles($number) {
+	static function getRecentScrobbles($number=10, $username=false) {
 		global $mdb2;
-		
-		$res = $mdb2->query('SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10');
+
+		if($username) {
+			$res = $mdb2->query('SELECT username, artist, track, time FROM Scrobbles WHERE username = ' . $mdb2->quote($username, "text") . ' ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
+		} else {
+			$res = $mdb2->query('SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
+		}
 
 		if(PEAR::isError($res)) {
 			return $res;
@@ -50,7 +54,8 @@ class Server {
 		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 		foreach($data as $i) {
 			$row = sanitize($i);
-			$row["userurl"] = Server::getUserURL($i["username"]);
+			$row["userurl"] = Server::getUserURL($row["username"]);
+			$row["artisturl"] = Server::getArtistURL($row["artist"]);
 			$result[] = $row;
 		}
 
@@ -63,10 +68,14 @@ class Server {
 	 * @param int $number The maximum number of tracks to return
 	 * @return An array of now playing data or a PEAR_Error in case of failure
 	 */
-	static function getNowPlaying($number) {
+	static function getNowPlaying($number, $username=false) {
 		global $mdb2;
 
-		$res = $mdb2->query('SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
+		if($username) {
+			$res = $mdb2->query('SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE username = ' . $mdb2->quote($username, "text") . ' ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
+		} else {
+			$res = $mdb2->query('SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
+		}
 
 		if(PEAR::isError($res)) {
 			return $res;
@@ -82,6 +91,7 @@ class Server {
 			}
 			$row["clientstr"] = $clientstr;
 			$row["userurl"] = Server::getUserURL($row["username"]);
+			$row["artisturl"] = Server::getArtistURL($row["artist"]);
 			$result[] = $row;
 		}
 

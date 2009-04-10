@@ -10,7 +10,7 @@ musical tastes with other people.</p>
   {section name=np loop=$nowplaying}
    <li>
     <dl>
-      <dt><a href="artist.php?artist={$nowplaying[np].artist|stripslashes|urlencode}">
+      <dt><a href="{$nowplaying[np].artisturl}">
         {$nowplaying[np].artist|stripslashes|htmlspecialchars}</a></dt>
       <dd>{$nowplaying[np].track|stripslashes|htmlspecialchars}</dd>
       <dd><a href="{$nowplaying[np].userurl}">{$nowplaying[np].username|stripslashes|htmlspecialchars}</a></dd>
@@ -26,7 +26,7 @@ musical tastes with other people.</p>
   {section name=recent loop=$recenttracks}
    <li>
     <dl>
-      <dt><a href="artist.php?artist={$recenttracks[recent].artist|stripslashes|urlencode}">
+      <dt><a href="{$recenttracks[recent].artisturl}">
         {$recenttracks[recent].artist|stripslashes|htmlspecialchars}</a></dt>
       <dd>{$recenttracks[recent].track|stripslashes|htmlspecialchars}</dd>
       <dd><a href="{$recenttracks[recent].userurl}">{$recenttracks[recent].username|stripslashes|htmlspecialchars}</a></dd>
