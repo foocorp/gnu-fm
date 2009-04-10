@@ -158,6 +158,7 @@ ul#topartists.listcloud dd { font-size: 80%; }
 
 ul#nowplaying.listcloud li { float: left; margin-right: 10px; margin-bottom: 10px; list-style-type: none; padding: 10px; border: 1px solid #000; background-color: #eee; -moz-border-radius: 5px; height: 4.4em; }
 
+ul#recenttracks.listcloud li { height: 3.4em; }
 /* Users */
 .user {
     font-size: .8em;
