@@ -21,35 +21,11 @@
 
 require_once('database.php');
 require_once('templating.php');
-require_once($install_path . "/data/sanitize.php");
+require_once("data/sanitize.php");
+require_once("data/Server.php");
 
-$res = $mdb2->query('SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10');
-
-if(PEAR::isError($res)) {
-  die($res->getMessage());
-}
-
-$smarty->assign('recenttracks', $res->fetchAll(MDB2_FETCHMODE_ASSOC));
-
-
-$res = $mdb2->query('SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC');
-
-if(PEAR::isError($res)) {
-  die($res->getMessage());
-}
-
-$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-foreach($data as &$i) {
-    $i = sanitize($i);
-    if($i["name"] == "") {
-        $clientstr = strip_tags(stripslashes($i["client"])) . "(unknown, please tell us what this is)";
-    } else {
-        $clientstr = "<a href=\"" . strip_tags(stripslashes($i["url"])) . "\">" . strip_tags(stripslashes($i["name"])) . "</a>";
-    }
-    $i["clientstr"] = $clientstr;
-}
-
-$smarty->assign('nowplaying', $data);
+$smarty->assign('recenttracks', Server::getRecentScrobbles(10));
+$smarty->assign('nowplaying', Server::getNowPlaying(10));
 
 $smarty->display('welcome.tpl');
 ?>

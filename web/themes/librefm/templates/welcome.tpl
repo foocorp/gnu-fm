@@ -13,7 +13,7 @@ musical tastes with other people.</p>
       <dt><a href="artist.php?artist={$nowplaying[np].artist|stripslashes|urlencode}">
         {$nowplaying[np].artist|stripslashes|htmlspecialchars}</a></dt>
       <dd>{$nowplaying[np].track|stripslashes|htmlspecialchars}</dd>
-      <dd><a href="http://alpha.libre.fm/profile.php?user={$nowplaying[np].username|stripslashes|urlencode}">{$nowplaying[np].username|stripslashes|htmlspecialchars}</a></dd>
+      <dd><a href="{$nowplaying[np].userurl}">{$nowplaying[np].username|stripslashes|htmlspecialchars}</a></dd>
       <dd>{$nowplaying[np].clientstr}</dd>
     </dl>
     </li>
@@ -29,6 +29,7 @@ musical tastes with other people.</p>
       <dt><a href="artist.php?artist={$recenttracks[recent].artist|stripslashes|urlencode}">
         {$recenttracks[recent].artist|stripslashes|htmlspecialchars}</a></dt>
       <dd>{$recenttracks[recent].track|stripslashes|htmlspecialchars}</dd>
+      <dd><a href="{$recenttracks[recent].userurl}">{$recenttracks[recent].username|stripslashes|htmlspecialchars}</a></dd>
     </dl>
     </li>
   {/section}
