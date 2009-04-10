@@ -1,6 +1,6 @@
 {include file='header.tpl'}
 
-<h2>{$user}'s profile</h2>
+<h2>{$user}'{if $user|substr:-1 != 's'}s{/if} profile</h2>
 <dl class='user vcard'>
     <dt class='fn'>
         <span class='family-name'>{$fullname}</span>
