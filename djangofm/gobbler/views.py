@@ -2,6 +2,7 @@ from datetime import datetime
 import md5
 import random
 
+from django.contrib.sites.models import Site
 from django.http import HttpResponse
 
 from gobbler.models import Album, Artist, Gobble, GobblerUser, Md5Password, NowPlaying, Session, Track
@@ -22,9 +23,10 @@ def handshake_11(request):
     session,created = Session.objects.get_or_create(user=guser)
     session.key = challenge
     session.save()
+    domain = Site.objects.get_current().domain
     return HttpResponse("\n".join(["UPTODATE",
                                    challenge,
-                                   "http://127.0.0.1:80/protocol_1.1/",
+                                   "http://%s/protocol_1.1/" % (domain,),
                                    "INTERVAL 0"]))
 
 
@@ -47,10 +49,11 @@ def handshake_12(request):
     session,created = Session.objects.get_or_create(user=guser)
     session.key = session_id.hexdigest()
     session.save()
+    domain = Site.objects.get_current().domain
     return HttpResponse("\n".join(["OK",
                                    session_id.hexdigest(),
-                                   "http://127.0.0.1:80/nowplaying/",
-                                   "http://127.0.0.1:80/protocol_1.2/"]))
+                                   "http://%s/nowplaying/" % (domain,),
+                                   "http://%s/protocol_1.2/" % (domain,)]))
 
 
 def index(request):
