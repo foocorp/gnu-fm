@@ -8,7 +8,7 @@
     </dt>
     <dd class='avatar'>
         <!-- Avatar placeholder  -->
-        <img src='{$avatar}' class='photo'/>
+        <img src='{$avatar}' class='photo' alt="avatar" />
     </dd>
     <dd class='org'>
         <a href='{$homepage}' rel='bookmark' class='url'>{$homepage}</a>
