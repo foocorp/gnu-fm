@@ -30,5 +30,20 @@ if(PEAR::isError($res)) {
 
 $smarty->assign('recenttracks', $res->fetchAll(MDB2_FETCHMODE_ASSOC));
 
+
+$res = $mdb2->query('SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY time DESC');
+$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+foreach($data as &$i) {
+    $i = sanitize($i);
+    if($i["name"] == "") {
+        $clientstr = strip_tags(stripslashes($i["client"])) . "(unknown, please tell us what this is)";
+    } else {
+        $clientstr = "<a href=\"" . strip_tags(stripslashes($i["url"])) . "\">" . strip_tags(stripslashes($i["name"])) . "</a>";
+    }
+    $i["clientstr"] = $clientstr;
+}
+
+$smarty->assign('nowplaying', $data);
+
 $smarty->display('welcome.tpl');
 ?>
