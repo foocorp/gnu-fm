@@ -23,6 +23,7 @@
 require_once($install_path . '/database.php');
 require_once($install_path . "/data/Artist.php");
 require_once($install_path . "/data/Album.php");
+require_once($install_path . "/data/Server.php");
 
 /**
  * Represents track data

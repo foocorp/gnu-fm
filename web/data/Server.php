@@ -104,4 +104,13 @@ class Server {
 		}
 	}
 
+	static function getArtistURL($artist) {
+		global $friendly_urls, $base_url;
+		if($friendly_urls) {
+			return $base_url . "/artist/" . urlencode(stripslashes($artist));
+		} else {
+			return $base_url . "/artist.php?artist=" . urlencode(stripslashes($artist));
+		}
+	}
+
 }

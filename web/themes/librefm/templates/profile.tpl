@@ -26,7 +26,7 @@
     {section name=i loop=$nowplaying}
 <li>{$nowplaying[i].track}
 by
-<a href="artist.php?artist={$nowplaying[i].artist|stripslashes|urlencode|htmlspecialchars}">{$nowplaying[i].artist}</a>
+<a href="{$nowplaying[i].artisturl}">{$nowplaying[i].artist}</a>
 with {$nowplaying[i].clientstr}</li>
     {/section}
 </ul>
@@ -40,7 +40,7 @@ with {$nowplaying[i].clientstr}</li>
         {/if}
         <dl class='gobbles'>
             <dt class='artist'>
-                <a href="artist.php?artist={$scrobbles[i].artist|stripslashes|urlencode|htmlspecialchars}">{$scrobbles[i].artist}</a>
+                <a href="{$scrobbles[i].artisturl}">{$scrobbles[i].artist}</a>
             </dt>
     {/if}
       <dd class='gobble'><span class='track-name'>{$scrobbles[i].track|stripslashes}</span><small>{$scrobbles[i].timehuman}</small></dd>
