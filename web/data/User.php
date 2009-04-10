@@ -23,6 +23,7 @@
 require_once($install_path . '/database.php');
 require_once($install_path . '/data/sanitize.php');
 require_once($install_path . '/utils/human-time.php');
+require_once($install_path . '/data/Server.php');
 
 /**
  * Represents User data
@@ -67,10 +68,12 @@ class User {
 		$res = $mdb2->query('SELECT * FROM Scrobbles WHERE username = ' .$mdb2->quote($this->name, 'text') . ' ORDER BY time DESC LIMIT '.$mdb2->quote($number, 'integer'));
 		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 		foreach($data as &$i) { 
-			$i = sanitize($i);
-			$i['timehuman'] = human_timestamp($i['time']);
+			$row = sanitize($i);
+			$row['timehuman'] = human_timestamp($row['time']);
+			$row['artisturl'] = Server::getArtistURL($row['artist']);
+			$result[] = $row;
 		}
-		return $data;
+		return $result;
 	}
 
 	/**
@@ -84,12 +87,7 @@ class User {
 	}
 
 	function getURL() {
-		global $friendly_urls, $base_url;
-		if($friendly_urls) {
-			return $base_url . "/user/" . urlencode(stripslashes($this->name));
-		} else {
-			return $base_url . "/profile.php?user=" . urlencode(stripslashes($this->name));
-		}
+		return Server::getUserURL($this->name);
 	}
 
 	/**
@@ -104,16 +102,18 @@ class User {
 
 		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 		foreach($data as &$i) {
-			$i = sanitize($i);
-			if($i["name"] == "") {
-				$clientstr = strip_tags(stripslashes($i["client"])) . "(unknown, please tell us what this is)";
+			$row = sanitize($i);
+			if($row["name"] == "") {
+				$clientstr = strip_tags(stripslashes($row["client"])) . " (unknown, please tell us what this is)";
 			} else {
-				$clientstr = "<a href=\"" . strip_tags(stripslashes($i["url"])) . "\">" . strip_tags(stripslashes($i["name"])) . "</a>";
+				$clientstr = "<a href=\"" . strip_tags(stripslashes($row["url"])) . "\">" . strip_tags(stripslashes($row["name"])) . "</a>";
 			}
 
-			$i["clientstr"] = $clientstr;
+			$row["clientstr"] = $clientstr;
+			$row["artisturl"] = Server::getArtistURL($row["artist"]);
+			$result[] = $row;
 		}
-		return $data;
+		return $result;
 	}
 
 }
