@@ -22,29 +22,28 @@
 require_once('database.php');
 require_once('templating.php');
 require_once('data/User.php');
-require_once('utils/EmailAddressValidator.php');
 
-if(!isset($_GET['user'])) {
-	$smarty->assign("error", "Error!");
-	$smarty->assign("details", "User not set! You shouldn't be here!");
-	$smarty->display("error.tpl");
+if(!isset($_GET['user']) && $logged_in == false) {
+	$smarty->assign('error', 'Error!');
+	$smarty->assign('details', 'User not set! You shouldn\'t be here!');
+	$smarty->display('error.tpl');
 	die();
 }
 
 $user = new User($_GET['user']);
 if(isset($user->name)) { 
-	$smarty->assign("user", $user->name);
-	$smarty->assign("email", $user->email);
-	$smarty->assign("fullname", $user->fullname);
-	$smarty->assign("bio", $user->bio);
-	$smarty->assign("homepage", $user->homepage);
-	$smarty->assign("location", $user->location);
-	$smarty->assign("scrobbles", $user->getScrobbles(10));
-	$smarty->assign("userlevel", $user->userlevel);
-	$smarty->display("profile.tpl");
+	$smarty->assign('user', $user->name);
+	$smarty->assign('email', $user->email);
+	$smarty->assign('fullname', $user->fullname);
+	$smarty->assign('bio', $user->bio);
+	$smarty->assign('homepage', $user->homepage);
+	$smarty->assign('location', $user->location);
+	$smarty->assign('scrobbles', $user->getScrobbles(10));
+	$smarty->assign('userlevel', $user->userlevel);
+	$smarty->display('profile.tpl');
 } else {
-	$smarty->assign("error", "User not found");
-	$smarty->assign("details", "Shall I call in a missing persons report?");
-	$smarty->display("error.tpl");
+	$smarty->assign('error', 'User not found');
+	$smarty->assign('details', 'Shall I call in a missing persons report?');
+	$smarty->display('error.tpl');
 }
 ?>

@@ -21,8 +21,8 @@
 
 
 require_once($install_path . '/database.php');
-require_once($install_path . "/data/sanitize.php");
-require_once($install_path . "/utils/human-time.php");
+require_once($install_path . '/data/sanitize.php');
+require_once($install_path . '/utils/human-time.php');
 
 /**
  * Represents User data
@@ -42,37 +42,37 @@ class User {
          */
         function __construct($name) {
                 global $mdb2;
-                $res = $mdb2->query("SELECT * FROM Users WHERE "
-                        . "username = " . $mdb2->quote($name, "text"));
+                $res = $mdb2->query('SELECT * FROM Users WHERE '
+                        . 'username = ' . $mdb2->quote($name, 'text'));
                 if($res->numRows()) {
                         $row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
-                        $this->name = $row["username"];
-                        $this->email = $row["email"];
-                        $this->fullname = $row["fullname"];
-                        $this->homepage = $row["homepage"];
-                        $this->bio = $row["bio"];
-			$this->location = $row["location"];
-			$this->userlevel = $row["userlevel"];
+                        $this->name      = $row['username'];
+                        $this->email     = $row['email'];
+                        $this->fullname  = $row['fullname'];
+                        $this->homepage  = $row['homepage'];
+                        $this->bio       = $row['bio'];
+            			$this->location  = $row['location'];
+            			$this->userlevel = $row['userlevel'];
                 }
-	}
+	    }
 
 
-	/**
-	 * Get a user's scrobles ordered by time
-	 *
-	 * @param int number The number of scrobbles to return
-	 * @return An array of scrobbles
-	 */
-	function getScrobbles($number) {
-		global $mdb2;	
-		$res = $mdb2->query("SELECT * FROM Scrobbles WHERE username = " .$mdb2->quote($this->name, "text") . " ORDER BY time DESC LIMIT ".$mdb2->quote($number, "integer"));
-		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-		foreach($data as &$i) { 
-			$i = sanitize($i);
-			$i["timehuman"] = human_timestamp($i["time"]);
-		}
-                return $data;
-	}
+        /**
+         * Get a user's scrobbles ordered by time
+         *
+         * @param int number The number of scrobbles to return
+         * @return An array of scrobbles
+         */
+        function getScrobbles($number) {
+            global $mdb2;
+            $res = $mdb2->query('SELECT * FROM Scrobbles WHERE username = ' .$mdb2->quote($this->name, 'text') . ' ORDER BY time DESC LIMIT '.$mdb2->quote($number, 'integer'));
+            $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+            foreach($data as &$i) { 
+                $i = sanitize($i);
+                $i['timehuman'] = human_timestamp($i['time']);
+            }
+            return $data;
+        }
 
 }
 

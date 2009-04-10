@@ -19,6 +19,6 @@
 </head>
 <body>
 <div id="doc3" class="yui-t7">
-	<div id="hd" style="banner"><h1><a href="{$base_url}">Libre.fm</a></h1></div>
+	<div id="hd" class='vcard'><h1 class='fn org'><a href="{$base_url}" class='url'>Libre.fm</a></h1></div>
 	{include file='menu.tpl'}
 	<div id="main">

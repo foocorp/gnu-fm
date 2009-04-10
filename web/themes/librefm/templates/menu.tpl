@@ -1,10 +1,10 @@
 <div id="menu">
-	{if isset($logged_in)}
+	{if ($logged_in)}
   <p>Logged in as: <a href="{$base_url}/profile.php?user={$username|urlencode}">{$username}</a></p>
   {/if}
 
   <ul id="navigation">
-  {if isset($logged_in)}
+  {if ($logged_in)}
   		<li>Invites disabled</li>
 		{if $userlevel > 0}
 		    <li><a href="/admin.php">Admin panel</a></li>

@@ -1,25 +1,40 @@
 {include file='header.tpl'}
 
 <h2>{$user}'s profile</h2>
-Username: {$user} <br />
-Real Name: {$fullname} <br />
-Homepage: <a href="{$homepage}">{$homepage}</a> <br />
-Location: {$location} <br />
-Bio: {$bio} <br />
-<hr>
-<b>Latest 10 Gobbles:</b>
-<ul id="scrobbles" class="listcloud">
+<dl class='user vcard'>
+    <dt class='fn'>
+        <span class='family-name'>{$fullname}</span>
+        (<span class='nickname'>{$user}</span>)
+    </dt>
+    <dd class='avatar'>
+        <!-- Avatar placeholder  -->
+        <img src='{$avatar}' class='photo'/>
+    </dd>
+    <dd class='org'>
+        <a href='{$homepage}' rel='bookmark' class='url'>{$homepage}</a>
+    </dd>
+    <dd class='adr'>
+        <span class='locality'>{$location}</span>
+    </dd>
+    <dd class='bio'>
+        <p>{$bio}</p>
+    </dd>
+</dl>
+<h3>Latest 10 Gobbles:</h3>
 {section name=i loop=$scrobbles}
-  <li>
-    <dl>
-      <dt><a href="artist.php?artist={$scrobbles[i].artist|stripslashes|urlencode}">
-        {$scrobbles[i].artist|stripslashes}</a></dt>
-      <dd>{$scrobbles[i].track|stripslashes}<br /><small>{$scrobbles[i].timehuman}</small></dd>
-    </dl>
-  </li>
+    {if $smarty.capture.artist_last <> $scrobbles[i].artist}
+        {if $i > 0}
+        </dl>
+        {/if}
+        <dl class='gobbles'>
+            <dt class='artist'>
+                <a href="artist.php?artist={$scrobbles[i].artist|stripslashes|urlencode}">{$scrobbles[i].artist}</a>
+            </dt>
+    {/if}
+      <dd class='gobble'><span class='track-name'>{$scrobbles[i].track|stripslashes}</span><small>{$scrobbles[i].timehuman}</small></dd>
+    {capture name=artist_last}{$scrobbles[i].artist}{/capture}
 {/section}
-</ul>
-
+    </dl>
 
 
 {include file='footer.tpl'}

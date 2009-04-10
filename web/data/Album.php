@@ -41,17 +41,17 @@ class Album {
 	 */
 	function __construct($name, $artist) {
 		global $mdb2;
-		$res = $mdb2->query("SELECT name, artist_name, mbid, releasedate FROM Album WHERE "
-			. "name = " . $mdb2->quote($name, "text") . " AND "
-			. "artist_name = " . $mdb2->quote($artist, "text"));
+		$res = $mdb2->query('SELECT name, artist_name, mbid, releasedate FROM Album WHERE '
+			. 'name = ' . $mdb2->quote($name, 'text') . ' AND '
+			. 'artist_name = ' . $mdb2->quote($artist, 'text'));
 		if(!$res->numRows()) {
-			$this->name = "No such album.";
+			$this->name = 'No such album.';
 		} else {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
-			$this->name = $row["name"];
-			$this->mbid = $row["mbid"];
-			$this->artist_name = $row["artist_name"];
-			$this->releasedate = $row["releasedate"];
+			$this->name = $row['name'];
+			$this->mbid = $row['mbid'];
+			$this->artist_name = $row['artist_name'];
+			$this->releasedate = $row['releasedate'];
 		}
 	}
 
@@ -62,11 +62,11 @@ class Album {
 	 */
 	function getTracks() {
 		global $mdb2;
-		$res = $mdb2->query("SELECT name, artist FROM Track WHERE artist = "
-			. $mdb2->quote($this->artist_name, "text") . " AND album = "
+		$res = $mdb2->query('SELECT name, artist FROM Track WHERE artist = '
+			. $mdb2->quote($this->artist_name, 'text') . ' AND album = '
 			. $mdb2->quote($this->name));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-			$tracks[] = new Track($row["name"], $row["artist"]);
+			$tracks[] = new Track($row['name'], $row['artist']);
 		}
 
 		return $tracks;
