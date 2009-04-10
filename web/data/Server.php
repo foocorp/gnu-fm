@@ -49,11 +49,12 @@ class Server {
 
 		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 		foreach($data as $i) {
-			$i = sanitize($i);
-			$i["userurl"] = Server::getUserURL($i["username"]);
+			$row = sanitize($i);
+			$row["userurl"] = Server::getUserURL($i["username"]);
+			$result[] = $row;
 		}
 
-		return $data;
+		return $result;
 	}
 
 	/**
@@ -73,17 +74,18 @@ class Server {
 
 		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 		foreach($data as &$i) {
-			$i = sanitize($i);
-			if($i["name"] == "") {
-				$clientstr = strip_tags(stripslashes($i["client"])) . " (unknown, please tell us what this is)";
+			$row = sanitize($i);
+			if($row["name"] == "") {
+				$clientstr = strip_tags(stripslashes($row["client"])) . " (unknown, please tell us what this is)";
 			} else {
-				$clientstr = "<a href=\"" . strip_tags(stripslashes($i["url"])) . "\">" . strip_tags(stripslashes($i["name"])) . "</a>";
+				$clientstr = "<a href=\"" . strip_tags(stripslashes($row["url"])) . "\">" . strip_tags(stripslashes($row["name"])) . "</a>";
 			}
-			$i["clientstr"] = $clientstr;
-			$i["userurl"] = Server::getUserURL($i["username"]);
+			$row["clientstr"] = $clientstr;
+			$row["userurl"] = Server::getUserURL($row["username"]);
+			$result[] = $row;
 		}
 
-		return $data;
+		return $result;
 	}
 
 	/**
