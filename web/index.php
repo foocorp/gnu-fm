@@ -31,7 +31,7 @@ if(PEAR::isError($res)) {
 $smarty->assign('recenttracks', $res->fetchAll(MDB2_FETCHMODE_ASSOC));
 
 
-$res = $mdb2->query('SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY time DESC');
+$res = $mdb2->query('SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC');
 
 if(PEAR::isError($res)) {
   die($res->getMessage());
