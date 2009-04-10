@@ -38,7 +38,7 @@ class User {
         /**
          * User constructor
          *
-         * @param string name The name of the artist to load
+         * @param string $name The name of the user to load
          */
         function __construct($name) {
                 global $mdb2;
@@ -60,7 +60,7 @@ class User {
         /**
          * Get a user's scrobbles ordered by time
          *
-         * @param int number The number of scrobbles to return
+         * @param int $number The number of scrobbles to return
          * @return An array of scrobbles
          */
         function getScrobbles($number) {
@@ -72,7 +72,17 @@ class User {
                 $i['timehuman'] = human_timestamp($i['time']);
             }
             return $data;
-        }
+	}
+
+	/**
+	 * Retrieve a user's avatar via the gravatar service
+	 *
+	 * @param int $size The desired size of the avatar (between 1 and 512 pixels)
+	 * @return A URL to the user's avatar image
+	 */
+	function getAvatar($size=64) {
+		return "http://www.gravatar.com/avatar/" . md5($this->email) . "?s=" . $size . "&d=monsterid";
+	}
 
 }
 
