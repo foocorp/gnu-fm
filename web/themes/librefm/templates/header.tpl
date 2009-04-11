@@ -25,9 +25,9 @@
 	</div>
    <div id="bd" role="main">
    <div id="coolio">
-	<div class="yui-g" id="banner">
-	  <img src="http://libre.fm/i/topblock.png" alt="" />
-	</div>
+	{if ($logged_in)}<div class="yui-g" id="banner">
+	  <a href="/request.php"><img src="http://libre.fm/i/topblock.png" alt="" /></a>
+	</div>{/if}
 <div class="yui-gc">
     <div class="yui-u first" id="content">
     <div style="padding: 10px;">
