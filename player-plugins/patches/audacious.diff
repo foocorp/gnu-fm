@@ -1,0 +1,217 @@
+diff --exclude=.deps -rupN audacious-plugins-1.5.1.orig/src/scrobbler/configure.c audacious-plugins-1.5.1/src/scrobbler/configure.c
+--- audacious-plugins-1.5.1.orig/src/scrobbler/configure.c	2008-05-23 18:44:20.000000000 -0400
++++ audacious-plugins-1.5.1/src/scrobbler/configure.c	2009-04-09 10:38:24.000000000 -0400
+@@ -21,7 +21,7 @@
+ #include "configure.h"
+ #include "plugin.h"
+ 
+-GtkWidget *entry1, *entry2, *ge_entry1, *ge_entry2, *cfgdlg;
++GtkWidget *entry1, *entry2, *entry3, *ge_entry1, *ge_entry2, *cfgdlg;
+ guint apply_timeout = 0; /* ID of timeout to save new config */
+ gboolean running = TRUE; /* if plugin threads are running */
+ 
+@@ -48,6 +48,7 @@ static void saveconfig(void)
+ 
+     const char *uid = gtk_entry_get_text(GTK_ENTRY(entry1));
+     const char *pwd = gtk_entry_get_text(GTK_ENTRY(entry2));
++    const char *svr = gtk_entry_get_text(GTK_ENTRY(entry3));
+     const char *ge_uid = gtk_entry_get_text(GTK_ENTRY(ge_entry1));
+     const char *ge_pwd = gtk_entry_get_text(GTK_ENTRY(ge_entry2));
+ 
+@@ -56,8 +57,10 @@ static void saveconfig(void)
+         unsigned char md5pword[16], ge_md5pword[16];
+ 
+         if (uid != NULL && uid[0] != '\0' && strlen(uid) &&
+-            pwd != NULL && pwd[0] != '\0' && strlen(pwd))
++            pwd != NULL && pwd[0] != '\0' && strlen(pwd) &&
++            svr != NULL && pwd[0] != '\0' && strlen(svr))
+         {
++	    aud_cfg_db_set_string(cfgfile, "audioscrobbler", "server", (char *)svr);
+             aud_cfg_db_set_string(cfgfile, "audioscrobbler", "username", (char *)uid);
+             md5_init(&md5state);
+             md5_append(&md5state, (unsigned const char *)pwd, strlen(pwd));
+@@ -65,12 +68,13 @@ static void saveconfig(void)
+             aud_cfg_db_set_string(cfgfile, "audioscrobbler", "password",
+                                  hexify((char*)md5pword, sizeof(md5pword)));
+         } else if (!uid || uid[0] == '\0') {
++            aud_cfg_db_set_string(cfgfile, "audioscrobbler", "server", "post.audioscrobbler.com");
+             aud_cfg_db_set_string(cfgfile, "audioscrobbler", "username", "");
+             aud_cfg_db_set_string(cfgfile, "audioscrobbler", "password", "");
+         }
+ 
+         if (ge_uid != NULL && ge_uid[0] != '\0' && strlen(ge_uid) &&
+-            ge_pwd != NULL && ge_pwd[0] != '\0' && strlen(ge_pwd))
++            ge_pwd != NULL && ge_pwd[0] != '\0' && strlen(ge_pwd)) 
+         {
+             aud_cfg_db_set_string(cfgfile, "audioscrobbler", "ge_username", (char *)ge_uid);
+             md5_init(&md5state);
+@@ -155,15 +159,21 @@ create_cfgdlg(void)
+   gtk_table_set_row_spacings (GTK_TABLE(table1), 6);
+   gtk_table_set_col_spacings (GTK_TABLE(table1), 6);
+ 
++  label1 = gtk_label_new (_("Server:"));
++  gtk_widget_show (label1);
++  gtk_table_attach_defaults (GTK_TABLE (table1), label1, 0, 1, 2, 3);
++  gtk_label_set_justify (GTK_LABEL (label1), GTK_JUSTIFY_RIGHT);
++  gtk_misc_set_alignment (GTK_MISC (label1), 1, 0.5);
++
+   label2 = gtk_label_new (_("Username:"));
+   gtk_widget_show (label2);
+-  gtk_table_attach_defaults (GTK_TABLE (table1), label2, 0, 1, 2, 3);
++  gtk_table_attach_defaults (GTK_TABLE (table1), label2, 0, 1, 3, 4);
+   gtk_label_set_justify (GTK_LABEL (label2), GTK_JUSTIFY_RIGHT);
+   gtk_misc_set_alignment (GTK_MISC (label2), 1, 0.5);
+ 
+   label3 = gtk_label_new (_("Password:"));
+   gtk_widget_show (label3);
+-  gtk_table_attach (GTK_TABLE (table1), label3, 0, 1, 3, 4,
++  gtk_table_attach (GTK_TABLE (table1), label3, 0, 1, 4, 5,
+                     (GtkAttachOptions) (GTK_FILL),
+                     (GtkAttachOptions) (0), 0, 0);
+   gtk_label_set_justify (GTK_LABEL (label3), GTK_JUSTIFY_RIGHT);
+@@ -171,12 +181,17 @@ create_cfgdlg(void)
+ 
+   entry1 = gtk_entry_new ();
+   gtk_widget_show (entry1);
+-  gtk_table_attach_defaults (GTK_TABLE (table1), entry1, 1, 2, 2, 3);
++  gtk_table_attach_defaults (GTK_TABLE (table1), entry1, 1, 2, 3, 4);
+ 
+   entry2 = gtk_entry_new ();
+   gtk_entry_set_visibility(GTK_ENTRY(entry2), FALSE);
+   gtk_widget_show (entry2);
+-  gtk_table_attach_defaults (GTK_TABLE (table1), entry2, 1, 2, 3, 4);
++  gtk_table_attach_defaults (GTK_TABLE (table1), entry2, 1, 2, 4, 5);
++
++  entry3 = gtk_entry_new ();
++  gtk_entry_set_text(GTK_ENTRY(entry3), "post.audioscrobbler.com");
++  gtk_widget_show (entry3);
++  gtk_table_attach_defaults (GTK_TABLE (table1), entry3, 1, 2, 2, 3);
+ 
+   label1 = gtk_label_new (_("<b>Last.FM</b>"));
+   gtk_label_set_use_markup (GTK_LABEL (label1), TRUE);
+@@ -234,6 +249,7 @@ create_cfgdlg(void)
+ 
+         if ((db = aud_cfg_db_open())) {
+                 gchar *username = NULL;
++                gchar *servername = NULL;
+ 		// last fm
+                 aud_cfg_db_get_string(db, "audioscrobbler", "username",
+                         &username);
+@@ -242,6 +258,13 @@ create_cfgdlg(void)
+                         g_free(username);
+ 			username = NULL;
+                 }
++                aud_cfg_db_get_string(db, "audioscrobbler", "server",
++                        &servername);
++                if (servername) {
++                        gtk_entry_set_text(GTK_ENTRY(entry3), servername);
++                        g_free(servername);
++			servername = NULL;
++                }
+ 		// gerpok
+                 aud_cfg_db_get_string(db, "audioscrobbler", "ge_username",
+                         &username);
+diff --exclude=.deps -rupN audacious-plugins-1.5.1.orig/src/scrobbler/plugin.c audacious-plugins-1.5.1/src/scrobbler/plugin.c
+--- audacious-plugins-1.5.1.orig/src/scrobbler/plugin.c	2008-05-23 18:44:20.000000000 -0400
++++ audacious-plugins-1.5.1/src/scrobbler/plugin.c	2009-04-09 10:42:13.000000000 -0400
+@@ -97,7 +97,7 @@ static void aud_hook_playback_end(gpoint
+ }
+ 
+ void start(void) {
+-	char *username = NULL, *password = NULL;
++	char *username = NULL, *password = NULL, *server = NULL;
+ 	char *ge_username = NULL, *ge_password = NULL;
+ 	mcs_handle_t *cfgfile;
+ 	sc_going = 1;
+@@ -109,6 +109,8 @@ void start(void) {
+ 				&username);
+ 		aud_cfg_db_get_string(cfgfile, "audioscrobbler", "password",
+ 				&password);
++		aud_cfg_db_get_string(cfgfile, "audioscrobbler", "server",
++				&server);
+ 		aud_cfg_db_get_string(cfgfile, "audioscrobbler", "ge_username",
+ 				&ge_username);
+ 		aud_cfg_db_get_string(cfgfile, "audioscrobbler", "ge_password",
+@@ -116,7 +118,7 @@ void start(void) {
+ 		aud_cfg_db_close(cfgfile);
+ 	}
+ 
+-	if ((!username || !password) || (!*username || !*password))
++	if ((!username || !password || !server) || (!*username || !*password || !*server))
+ 	{
+ 		pdebug("username/password not found - not starting last.fm support",
+ 			DEBUG);
+@@ -124,10 +126,10 @@ void start(void) {
+ 	}
+ 	else
+ 	{
+-		sc_init(username, password);
+-
++		sc_init(username, password, server);
+ 		g_free(username);
+ 		g_free(password);
++		g_free(server);
+ 	}
+ 	
+ 	if ((!ge_username || !ge_password) || (!*ge_username || !*ge_password))
+diff --exclude=.deps -rupN audacious-plugins-1.5.1.orig/src/scrobbler/scrobbler.c audacious-plugins-1.5.1/src/scrobbler/scrobbler.c
+--- audacious-plugins-1.5.1.orig/src/scrobbler/scrobbler.c	2008-05-23 18:44:20.000000000 -0400
++++ audacious-plugins-1.5.1/src/scrobbler/scrobbler.c	2009-04-09 10:54:23.000000000 -0400
+@@ -14,9 +14,8 @@
+ 
+ #include <audacious/plugin.h>
+ 
+-#define SCROBBLER_HS_URL "http://post.audioscrobbler.com"
+ #define SCROBBLER_CLI_ID "aud"
+ #define SCROBBLER_HS_WAIT 1800
+ #define SCROBBLER_SB_WAIT 10
+ #define SCROBBLER_VERSION "1.2"
+ #define SCROBBLER_IMPLEMENTATION "0.2"      /* This is the implementation, not the player version. */
+@@ -41,6 +40,7 @@ static char     *sc_submit_url, /* queue
+         *sc_session_id,
+         *sc_username = NULL,
+         *sc_password = NULL,
++	*sc_server = NULL,
+         *sc_challenge_hash,
+         sc_response_hash[65535],
+         *sc_srv_res,
+@@ -482,8 +482,8 @@ static int sc_handshake(void)
+     hexify(auth, strlen(auth));
+     auth_tmp = g_strdup(sc_response_hash);
+ 
+-    g_snprintf(buf, sizeof(buf), "%s/?hs=true&p=%s&c=%s&v=%s&u=%s&t=%ld&a=%s",
+-            SCROBBLER_HS_URL, SCROBBLER_VERSION,
++    g_snprintf(buf, sizeof(buf), "http://%s/?hs=true&p=%s&c=%s&v=%s&u=%s&t=%ld&a=%s",
++            sc_server, SCROBBLER_VERSION,
+             SCROBBLER_CLI_ID, SCROBBLER_IMPLEMENTATION, sc_username, time(NULL),
+             auth_tmp);
+     g_free(auth_tmp);
+@@ -1060,7 +1060,7 @@ static void sc_checkhandshake(void)
+ 
+ /* Called at session startup*/
+ 
+-void sc_init(char *uname, char *pwd)
++void sc_init(char *uname, char *pwd, char *svr)
+ {
+     sc_hs_status = sc_hs_timeout = sc_hs_errors = sc_submit_timeout =
+         sc_srv_res_size = sc_giveup = sc_major_error_present =
+@@ -1071,6 +1071,7 @@ void sc_init(char *uname, char *pwd)
+         sc_challenge_hash = sc_major_error = NULL;
+     sc_username = strdup(uname);
+     sc_password = strdup(pwd);
++    sc_server = strdup(svr);
+     read_cache();
+     pdebug("scrobbler starting up", DEBUG);
+ }
+diff --exclude=.deps -rupN audacious-plugins-1.5.1.orig/src/scrobbler/scrobbler.h audacious-plugins-1.5.1/src/scrobbler/scrobbler.h
+--- audacious-plugins-1.5.1.orig/src/scrobbler/scrobbler.h	2008-05-23 18:44:20.000000000 -0400
++++ audacious-plugins-1.5.1/src/scrobbler/scrobbler.h	2009-04-09 10:43:46.000000000 -0400
+@@ -8,7 +8,7 @@
+ gboolean sc_timeout(gpointer data);
+ 
+ int sc_idle(GMutex *);
+-void sc_init(char *, char *);
++void sc_init(char *, char *, char *);
+ void sc_addentry(GMutex *, Tuple *, int);
+ void sc_cleaner(void);
+ int sc_catch_error(void);
