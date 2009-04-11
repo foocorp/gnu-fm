@@ -27,12 +27,10 @@ global $u_user;
 $username = $u_user->username;
 $userlevel = $u_user->userlevel;
 
-function sendEmail($email) {
+function sendEmail($email, $username) {
     global $mdb2;
     global $base_url;
     global $u_user;	
-    $username = $u_user->username;
-    $userlevel = $u_user->userlevel;
     $code = md5(md5($username) . time());
 
     // Insert the invitation into the table
@@ -72,7 +70,7 @@ if ($userlevel < 2) {
 		die();
 	    } else {
 		// Send the email
-		sendEmail($_GET['email']);
+		sendEmail($_GET['email'], $username);
 		$smarty->assign('sent', true);
 		$sql = "UPDATE Invitation_Request SET status=1 WHERE email=" . $mdb2->quote($_GET['email'], 'text');
 		$mdb2->exec($sql);
