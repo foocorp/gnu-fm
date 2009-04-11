@@ -26,30 +26,33 @@ require_once('utils/human-time.php');
  "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Libre.fm Gobble Server (rev $Id$)</title>
+   <title>Libre.fm &mdash; discover new music</title>
    <link rel="stylesheet" href="/reset-fonts-grids.css" type="text/css">
    <link rel="stylesheet" href="/base.css" type="text/css">
    <link rel="stylesheet" href="/librefm.css" type="text/css">
-<!--
-<rdf:RDF xmlns="http://web.resource.org/cc/"
-         xmlns:dc="http://purl.org/dc/elements/1.1/"
-         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-<license rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/us/" />
-</Work>
-<License rdf:about="http://creativecommons.org/licenses/by-sa/3.0/us/">
-</License>
-</rdf:RDF>
--->
 </head>
 <body>
-<div id="doc3" class="yui-t7">
-   <div id="hd" style="banner"><h1><a href="http://libre.fm/">Libre.fm Gobble Server</a></h1></div>
-   <div id="bd" style="main">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+<div id="doc2" class="yui-t7">
+   <div id="hd" role="navigation"><h1><a href="/">Header</a></h1>
 
-  <p class="large">This is a demo site for the libre.fm 'gobbler' server. Things are in a state of constant development.</p>
-
+     <ul>
+       <li><a href="https://savannah.nongnu.org/svn/?group=librefm">Code</a></li>
+       <li><a href="http://blog.libre.fm/">Blog</a></li>
+       <li><a href="http://ideas.libre.fm/">Wiki</a></li>
+       <li><a href="http://lists.autonomo.us/mailman/listinfo/libre-fm">List</a></li>
+       <li><a href="https://savannah.nongnu.org/bugs/?group=librefm">Bugs</a></li>
+       <li id="login"><a href="http://alpha.libre.fm/login.php">Log in</a></li>
+     </ul>
+     
+   </div>
+   <div id="bd" role="main">
+   <div id="coolio">
+	<div class="yui-g" id="banner">
+	  <a href="http://alpha.libre.fm/"><img src="http://libre.fm/i/topblock.png" alt="" /></a>
+	</div>
+<div class="yui-gc">
+    <div class="yui-u first" id="content">
+    <div style="padding: 10px;">
 		<?php
 
   $req_user = $_GET["u"];
@@ -153,34 +156,80 @@ if ($req_user) {
 			echo "<p>" . stripslashes($row["total"]) . " users.</p>";
 
 		?>
- <p>
-    <a href="http://validator.w3.org/check?uri=referer"><img
-        src="http://www.w3.org/Icons/valid-html401"
-        alt="Valid HTML 4.01 Strict" height="31" width="88"></a>
-  </p>
+    </div></div>
+    <div class="yui-u" id="sidebar">
+    <div style="padding: 10px;">
+      <h3>Explore popular artists</h3>
 
+<ul class="tagcloud">
+  <li class="tc t1"><a href="#">They Might Be Giants</a></li>
+  <li class="tc t3"><a href="#">John Lennon</a></li>
+  <li class="tc t1"><a href="#">Half Man Half Biscuit</a></li>
+  <li class="tc t3"><a href="#">Explosions in the sky</a></li>
+  <li class="tc t1"><a href="#">Belle and Sebastian</a></li>
+  <li class="tc t2"><a href="#">nine inch nails</a></li>
+  <li class="tc t5"><a href="#">Pulp</a></li>
+  <li class="tc t1"><a href="#">Radiohead</a></li>
+  <li class="tc t6"><a href="#">Tom Lehrer</a></li>
+  <li class="tc t2"><a href="#">The Beatles</a></li>
+  <li class="tc t3"><a href="#">Dead Kennedys</a></li>
+  <li class="tc t4"><a href="#">Bishop Allen</a></li>
+  <li class="tc t2"><a href="#">The Orb</a></li>
+  <li class="tc t3"><a href="#">gorillaz</a></li>
+  <li class="tc t4"><a href="#">Carbon Based Lifeforms</a></li>
+  <li class="tc t5"><a href="#">Laura Cantrell</a></li>
+  <li class="tc t6"><a href="#">Jem</a></li>
+  <li class="tc t1"><a href="#">Solar Fields</a></li>
+  <li class="tc t4"><a href="#">billy talent</a></li>
+  <li class="tc t3"><a href="#">Blur</a></li>
+  </ul>
 
+      
+    </div></div>
+</div></div>
+<div class="yui-g" id="artists">
+
+  <strong><a href="http://libre.fm/contact/">Talk to us</a></strong> if you're in a band, represent a
+  label or music service, we'd like to talk ideas and
+  possibilities. While our intention is eventually provide download
+  and streaming services for freely-licensed music, we are also
+  interested in linking all bands to respectable DRM-free music
+  services.
+  
 </div>
-</div>
-	</div>
-	
-	</div>
-   <div id="ft" style="contentinfo">
-
-<p>This site handles <em>gobble</em> and <em>now playing</em>
+<div class="yui-g">
+    <div class="yui-u first" id="links">
+This site handles <em>gobble</em> and <em>now playing</em>
 submissions from client applications and offers access to our web
 services API. If you just want to use <a
 href="http://libre.fm">libre.fm</a> then you probably want to
 visit the <a href="http://libre.fm">main site</a>, but if you're
 a developer then here are some useful stats to help you see
-what's happening.</p>
+what's happening.
+</div>
+    <div class="yui-u" id="moarlinks">
+<a href="http://www.gnu.org/licenses/agpl.html">GNU Affero General Public License v3 or later</a>. Source: <a href="http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm">http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm</a>
+</div>
+</div>
 
-<h3>$Id$</h3>
+	</div>
+   <div id="ft" role="navigation">
 
-<p><a href="http://www.gnu.org/licenses/agpl.html">GNU Affero General Public License v3 or later</a>. Source: <a href="http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm">http://svn.savannah.gnu.org/viewvc/trunk/gobbler/?root=librefm</a></p>
+     <ul>
+       <li class="copy">&copy; 2009 Libre.fm Project</li>
+       <li><a href="http://libre.fm/contributors/">Contributors</a></li>
+       <li><a href="http://libre.fm/licensing/">Licensing information</a></li>
+       <li><a href="http://libre.fm/developer/">Developers</a></li>
+       <li><a href="http://libre.fm/api/">API</a></li>
+       <li><a href="http://libre.fm/download/">Download</a></li>
+     </ul>
+
+     <p><img src="http://libre.fm/i/cc-by-sa.png" alt="Attribution-ShareAlike 3.0" /></p>
+
 <p><a href="/data">Data dumps are here</a</p>
 
-</div>
+   </div>
 </div>
 </body>
 </html>
+

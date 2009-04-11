@@ -1,37 +1,75 @@
-html, body, #doc3,h1{margin: 0; padding: 0;}
+html{background-color: #ececec;}
 
-body{background-image: url(i/bg.png);}
+#coolio {background-color: white; padding: 15px;}
 
-#hd{background: #980101 url(i/header.png) no-repeat;
-    border: 0;
-    margin: 0;
-    padding: 0;
-}
+#hd {background-color: #980101; margin-top: -9px;}
 
-#hd a{
-    display: block;
-    text-decoration: none;
-    overflow: hidden;
-    border: 0;
-    margin: 0;
-    padding: 0;
-    padding-top: 70px;
-    height: 0px !important;
-    height /**/: 70px;
-    width: 418px;
-    cursor: pointer;
-}
+#bd{padding: 5px;}
 
-.yui-b, #ft{padding: 1em;}
+#hd {margin-bottom: 8px; height: 70px; position: relative;}
 
-table tr {background-color: black, color: white;}
+#hd ul{ margin: 0; padding: 0; line-height: 70px; position: absolute; top: 0; right: 20px;}
 
-table tr.even {
-	background:		rgb(237, 255, 237);
-}
+#hd li a{ color: white; text-decoration: none; }
 
-table tr.odd {
-	background:		rgb(217, 249, 217);
-}
+#login a{ color: yellow !important; }
 
-.large {font-size: 120%;}
+#hd li{ display: inline; font-size: 21px; text-transform: lowercase; font-weight: bold; margin-right: 20px;}
+
+#banner { height: 345px; position: relative;}
+
+#banner img{ position: absolute; top: -12px; left: 0; }
+
+#sidebar {background-color: #eee;}
+
+#content { font-size: 140%; }
+
+#artists{background-color: lightblue; margin: 15px 0 15px 0; padding: 5px;}
+
+#links, #moarlinks, #ft{font-size: 85%;}
+
+#ft{margin-top: 15px; height: 102px;position: relative;}
+
+#ft p{ text-align: right;}
+
+#ft li{ display: inline; margin-right: 0.5em; }
+
+#ft li.copy { margin-right: 1em; }
+
+#hd h1{ background: #980101 url(http://alpha.libre.fm/themes/librefm/images/header.png) no-repeat;
+     border: 0;
+     padding: 0;
+     }
+
+#hd h1 a{ 
+       display: block;
+       text-decoration: none;
+       overflow: hidden;
+       border: 0;
+       margin: 0;
+       padding: 0;
+       padding-top: 70px;
+       height: 0px !important;
+       height /**/: 70px;
+       width: 418px;
+       cursor: pointer;
+     }
+
+li{ line-height: 1.6em; }
+
+.tagcloud { margin: 0; padding: 0; text-align: center; }
+
+
+.tagcloud li{ display: inline; margin-right: 0.2em; line-height: 1.2em; }
+
+.tagcloud .t1 { font-size: 200%; }
+.tagcloud .t2 { font-size: 180%; }
+.tagcloud .t3 { font-size: 160%; }
+.tagcloud .t4 { font-size: 140%; }
+.tagcloud .t5 { font-size: 120%; }
+.tagcloud .t6 { font-size: 100%; }
+
+a:hover { color: red !important; }
+a:visited{ color: #07c;}
+
+.highlight{ background-color: #ffb;}
