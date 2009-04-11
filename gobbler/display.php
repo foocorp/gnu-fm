@@ -64,25 +64,25 @@ if ($req_user) {
 
 			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE username = '" . $req_user . "' ORDER BY time DESC LIMIT 100");
 
-			echo "<h2>last 100 Gobbles by " . $req_user . "</h2>";
+			echo "<h2>" . $req_user . "'s most recent listening data</h2>";
 
 } elseif ($req_artist) {
 
 			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE artist = '" . $req_artist ."' ORDER BY time DESC LIMIT 100");
 
-			echo "<h2>last 100 Gobbles of " . $req_artist . "</h2>";
+			echo "<h2>Last 100 Tracks by " . $req_artist . "</h2>";
 
 } elseif ($req_track) {
 
 			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE track = '" . $req_track . "' ORDER BY time DESC LIMIT 100");
 
-			echo "<h2>last 100 Gobbles of " . $req_track . "</h2>";
+			echo "<h2>Last 100 plays of " . $req_track . "</h2>";
 			
 } elseif (!$res) {
 
-			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
+			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 25");
 
-			echo "<h2>last 10 Gobbles</h2>";
+			echo "<h2>Last 25 tracks received</h2>";
 
 }
 
