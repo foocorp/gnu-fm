@@ -26,7 +26,7 @@
    <div id="bd" role="main">
    <div id="coolio">
 	<div class="yui-g" id="banner">
-	  <img src="/i/topblock.png" alt="" />
+	  <img src="http://libre.fm/i/topblock.png" alt="" />
 	</div>
 <div class="yui-gc">
     <div class="yui-u first" id="content">
