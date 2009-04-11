@@ -26,7 +26,9 @@ require_once('config.php');
 function sendEmail($email) {
     global $mdb2;
     global $base_url;
-    global $username;
+    global $u_user;
+    $username = $u_user->username;
+    $userlevel = $u_user->userlevel;
     $code = md5(md5($username) . time());
     $sql = 'INSERT INTO Invitations (inviter, code) VALUES (' 
 	. $mdb2->quote($username, 'text') . ', ' 
