@@ -32,13 +32,15 @@ def parse_track(row):
 		return (None, None, None)
 
 def fetch_tracks(user, request_delay=0.5):
-	num_pages = 1
 	url = 'http://last.fm/user/%s/library/recent' % user
 	soup = BeautifulSoup(urllib2.urlopen(url))
-	num_pages = int(soup.find('a', 'lastpage').contents[0]) + 1
+	try:
+		num_pages = int(soup.find('a', 'lastpage').contents[0])
+	except:
+		num_pages = 1
 	
 	all_data = []
-	for cur_page in range(1, num_pages):
+	for cur_page in range(1, num_pages + 1):
 		data = parse_page(url + '?page=' + str(cur_page))
 		all_data += data
 		if cur_page < num_pages:
