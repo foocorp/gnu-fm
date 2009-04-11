@@ -73,3 +73,6 @@ a:hover { color: red !important; }
 a:visited{ color: #07c;}
 
 .highlight{ background-color: #ffb;}
+
+th{background-color: black; color: white;}
+tr.odd{background-color: #edf3fe;}
