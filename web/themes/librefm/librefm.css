@@ -163,18 +163,34 @@ ul#recenttracks.listcloud li { height: 3.4em; }
 .user {
     font-size: .8em;
 }
+.user .fn {
+    margin-bottom: .3em;
+}
 .photo, .avatar {
     max-height: 96px;
     max-width: 96px;
     min-height: 32px;
     min-width: 32px;
     float: left;
+    margin-right: .3em
 }
 .user .bio {
 }
 .user .nickname {
     color: #666666
 }
+/*
+dl.now-playing * {
+    display: inline
+}
+    */
+  dl.now-playing dt {
+      font-size: 1em;
+  }
+  dl.now-playing dd {
+      font-size: .8em;
+      color: #666
+  }
 
 dl.gobbles {
 }
