@@ -184,13 +184,25 @@ dl.now-playing * {
     display: inline
 }
     */
-  dl.now-playing dt {
+  dl.now-playing dt, dl.recent-tracks dt {
       font-size: 1em;
+      margin-top: .3em
   }
   dl.now-playing dd {
       font-size: .8em;
-      color: #666
+      color: #666;
+      display: inline;
+      margin: 0
   }
+  dl.now-playing dd.track-name {
+      display:block
+  }
+  dl.recent-tracks dd span.username {
+      font-size: .7em
+  }
+/*  dl.recent-tracks dd.track-name:before {
+      content: '| ';
+  }*/
 
 dl.gobbles {
 }
@@ -213,4 +225,9 @@ dl.gobbles {
 
 h3 {
 	clear: left;
+}
+
+
+.clear {
+    clear: both;
 }

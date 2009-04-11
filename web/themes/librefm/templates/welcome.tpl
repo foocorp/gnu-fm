@@ -6,41 +6,36 @@ musical tastes with other people.</p>
 
 <h3>Now playing</h3>
 
-<ul id="nowplaying" class="listcloud">
+<dl class='now-playing'>
   {section name=np loop=$nowplaying}
-   <li>
-    <dl>
-      <dt><a href="{$nowplaying[np].artisturl}">
-        {$nowplaying[np].artist|stripslashes|htmlspecialchars}</a></dt>
-      <dd>
-{if $nowplaying[np].mbid <> ""}
-<a href="http://musicbrainz.org/track/{$nowplaying[np].mbid}.html">
-{/if}
-{$nowplaying[np].track|stripslashes|htmlspecialchars}
-{if $nowplaying[np].mbid <> ""}
-</a>
-{/if}
-</dd>
-      <dd><a href="{$nowplaying[np].userurl}">{$nowplaying[np].username|stripslashes|htmlspecialchars}</a></dd>
-      <dd>{$nowplaying[np].clientstr}</dd>
+    <dt class='artist-name'>
+        <a href='{$nowplaying[np].artisturl}'>{$nowplaying[np].artist|stripslashes|htmlspecialchars}</a>
+    </dt>
+    <dd class='track-name'>
+        {if $nowplaying[np].mbid <> ''}
+        <a href='http://musicbrainz.org/track/{$nowplaying[np].mbid}.html'>
+        {/if}
+        {$nowplaying[np].track|stripslashes|htmlspecialchars}
+        {if $nowplaying[np].mbid <> ''}
+        </a>
+        {/if}
+    </dd>
+    <dd class='username'><a href='{$nowplaying[np].userurl}'>{$nowplaying[np].username|stripslashes|htmlspecialchars}</a></dd>
+    <dd>using <span class='gobbler'>{$nowplaying[np].clientstr}</span></dd>
     </dl>
-    </li>
   {/section}
-</ul>
+</dl>
 
 <h3>What's hot? Recently gobbled.</h3>
 
-<ul id="recenttracks" class="listcloud">
+<dl class='recent-tracks'>
   {section name=recent loop=$recenttracks}
-   <li>
-    <dl>
-      <dt><a href="{$recenttracks[recent].artisturl}">
-        {$recenttracks[recent].artist|stripslashes|htmlspecialchars}</a></dt>
-      <dd>{$recenttracks[recent].track|stripslashes|htmlspecialchars}</dd>
-      <dd><a href="{$recenttracks[recent].userurl}">{$recenttracks[recent].username|stripslashes|htmlspecialchars}</a></dd>
-    </dl>
-    </li>
+      <dd class='artist-name'><a href='{$recenttracks[recent].artisturl}'>
+        {$recenttracks[recent].artist|stripslashes|htmlspecialchars}</a>:
+      <span class='track-name'>{$recenttracks[recent].track|stripslashes|htmlspecialchars}</span> &mdash;
+      <span class='username'><a href='{$recenttracks[recent].userurl}'>{$recenttracks[recent].username|stripslashes|htmlspecialchars}</a></span></dd>
+
   {/section}
-</ul>
-<div class="cleaner">&nbsp;</div>
+    </dl>
+<div class='cleaner'>&nbsp;</div>
 {include file='footer.tpl'}
