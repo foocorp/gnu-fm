@@ -1,233 +1,78 @@
-html, body, #doc3,h1{margin: 0; padding: 0; font-family: Liberation Sans, Verdana}
-html {
-    background-color: #ECECEC;
-    color: #2e3436;
-}
+html{background-color: #ececec;}
 
-a {
-    text-decoration: none;
-    outline: none;
-    color: #3465a4;
-}
+#coolio {background-color: white; padding: 15px;}
 
-img {
-    border: none
-}
+#hd {background-color: #980101; margin-top: -9px;}
 
-#hd{background: #980101 url(images/header.png) no-repeat;
-    background-position: 15px top;
-    -moz-border-radius-bottomleft: 10px;
-    -moz-border-radius-bottomright: 10px;
-    width: 80%;
-	border: 0;
-	margin: auto;
-	padding: 0 15px;
-}
+#bd{padding: 5px;}
 
-#hd a{
-	display: block;
-	text-decoration: none;
-	overflow: hidden;
-	border: 0;
-	margin: 0;
-	padding: 0;
-	padding-top: 70px;
-	height: 0px !important;
-	height /**/: 70px;
-	width: 418px;
-	cursor: pointer;
-}
+#hd {margin-bottom: 8px; height: 70px; position: relative;}
 
-#menu {
-    color: #666;
-	margin: .5em auto;
-    font-size: .8em;
-    width: 80%;
-    clear: both;
-}
-    div#menu ul li {
-        padding: 0 1em;
-        display: inline
-    }
-    #menu a {
-    	text-decoration: none;
-        color: #2e3436
-    }
+#hd ul{ margin: 0; padding: 0; line-height: 70px; position: absolute; top: 0; right: 20px;}
 
-    #menu a:hover {
-    	text-decoration: underline;
-    }
-    #menu a:visited {
-        color: #2e3436;
-    }
+#hd li a{ color: white; text-decoration: none; }
 
-#main {
-    width: 75%;
-    margin: auto;
-    background-color: #FFF;
-    padding: 2em;
-    -moz-border-radius: 10px
-}
+#login a{ color: yellow !important; }
 
-h2 {
-	font-size: 2em;
-	margin: 5px;
-}
+#hd li{ display: inline; font-size: 21px; text-transform: lowercase; font-weight: bold; margin-right: 20px;}
 
-div#footer a {
-}
-.yui-b, #ft{padding: 1em;}
+#banner { height: 345px; position: relative;}
 
-.odd { background:#F4B624 !important; color:#000; }
-.even { background:#FFFFFF !important; color:#000; } 
+#banner img{ position: absolute; top: -12px; left: 0; }
 
-/*
- * We should use a class down here ¬¬ (fauno)
- */
+#sidebar {background-color: #eee;}
 
-div#invite,
-div#register,
-div#login {
-	margin: 1em auto 0 auto;
-}
-div#invite form,
-div#register form,
-div#login form {
-	width: 30em;
-	margin: 0 auto;
-}
-div#invite form fieldset,
-div#register form fieldset,
-div#login form fieldset {
-	border: none;
-    padding: 0;
-}
-div#invite form fieldset label,
-div#register form fieldset label,
-div#login form fieldset label {
-	float:left;
-	font-weight:bold;
-	text-align:right;
-	font-size: 1em;
-    width: 10em;
-}
-div#invite form fieldset label span,
-div#register form fieldset label span,
-div#login form fieldset label span {
-	color:#666666;
-	display:block;
-	font-weight:normal;
-	text-align:right;
-	font-size: .59em
-}
-div#invite form fieldset input,
-div#register form fieldset input,
-div#login form fieldset input {
-	float:left;
-	font-size:1em;
-	padding:.2em .1em;
-	width:200px;
-	margin:2px 0 20px 10px;
-}
-div#invite form fieldset input[type=submit],
-div#register form fieldset input[type=submit],
-div#login form fieldset input[type=submit] {
-	margin: 0;
-	width: 100%;
-}
+#hd, #sidebar, #coolio, #artists {-moz-border-radius: 8px;}
 
-/* sidebar navigation */
+#artists{background-color: lightblue; margin: 15px 0 15px 0; padding: 5px;}
 
-ul#navigation { padding: 0; margin: 0; }
-#navigation li { list-style-type: none; padding-bottom: 5px; }
-#navigation li ul { padding: 0; margin-left: 20px; margin-top: 0px; }
+#links, #moarlinks, #ft{font-size: 85%;}
 
-/* the lists on the front and explore pages */
-/* TODO: Do rounded corners for browsers other than Gecko as well? */
+#ft{margin-top: 15px; height: 102px;position: relative;}
 
-ul.listcloud { padding: 0px; margin: 0px; }
-ul.listcloud li { float: left; margin-right: 10px; margin-bottom: 10px; list-style-type: none; padding: 10px; border: 1px solid #000; background-color: #eee; -moz-border-radius: 5px; height: 2.2em; }
-ul.listcloud li dl { margin: 0; padding: 0; }
-ul.listcloud li dt { margin: 0; padding: 0; }
-ul.listcloud li dd { margin: 0; padding: 0; }
+#ft p{ text-align: right;}
 
-ul.listcloud li dt a { color: #630000; text-decoration: none; }
-ul.listcloud li dt a:hover { text-decoration: underline; }
+#ft li{ display: inline; margin-right: 0.5em; }
 
-ul#topartists.listcloud dd { font-size: 80%; }
+#ft li.copy { margin-right: 1em; }
 
-ul#nowplaying.listcloud li { float: left; margin-right: 10px; margin-bottom: 10px; list-style-type: none; padding: 10px; border: 1px solid #000; background-color: #eee; -moz-border-radius: 5px; height: 4.4em; }
+#hd h1{ background: #980101 url(http://alpha.libre.fm/themes/librefm/images/header.png) no-repeat;
+     border: 0;
+     padding: 0;
+     }
 
-ul#recenttracks.listcloud li { height: 3.4em; }
-/* Users */
-.user {
-    font-size: .8em;
-}
-.user .fn {
-    margin-bottom: .3em;
-}
-.photo, .avatar {
-    max-height: 96px;
-    max-width: 96px;
-    min-height: 32px;
-    min-width: 32px;
-    float: left;
-    margin-right: .3em
-}
-.user .bio {
-}
-.user .nickname {
-    color: #666666
-}
-/*
-dl.now-playing * {
-    display: inline
-}
-    */
-  dl.now-playing dt, dl.recent-tracks dt {
-      font-size: 1em;
-      margin-top: .3em
-  }
-  dl.now-playing dd {
-      font-size: .8em;
-      color: #666;
-      display: inline;
-      margin: 0
-  }
-  dl.now-playing dd.track-name {
-      display:block
-  }
-  dl.recent-tracks dd span.username {
-      font-size: .7em
-  }
-/*  dl.recent-tracks dd.track-name:before {
-      content: '| ';
-  }*/
+#hd h1 a{ 
+       display: block;
+       text-decoration: none;
+       overflow: hidden;
+       border: 0;
+       margin: 0;
+       padding: 0;
+       padding-top: 70px;
+       height: 0px !important;
+       height /**/: 70px;
+       width: 418px;
+       cursor: pointer;
+     }
 
-dl.gobbles {
-}
-    dl.gobbles dt.artist a {
-        text-decoration: none;
-        color: #2e3436;
-    }
-    dl.gobbles dt.artist a:hover {
-        text-decoration: underline;
-    }
-    dl.gobbles dd.gobble span.track-name {
-        font-weight: bold;
-        font-size: .8em
-    }
-    dl.gobbles dd.gobble small {
-        display: block;
-        color: #666;
-        font-size: .7em
-    }
+li{ line-height: 1.6em; }
 
-h3 {
-	clear: left;
-}
+.tagcloud { margin: 0; padding: 0; text-align: center; }
 
 
-.clear {
-    clear: both;
-}
+.tagcloud li{ display: inline; margin-right: 0.2em; line-height: 1.2em; }
+
+.tagcloud .t1 { font-size: 200%; }
+.tagcloud .t2 { font-size: 180%; }
+.tagcloud .t3 { font-size: 160%; }
+.tagcloud .t4 { font-size: 140%; }
+.tagcloud .t5 { font-size: 120%; }
+.tagcloud .t6 { font-size: 100%; }
+
+a:hover { color: red !important; }
+a:visited{ color: #07c;}
+
+.highlight{ background-color: #ffb;}
+
+th{background-color: black; color: white;}
+tr.odd{background-color: #edf3fe;}

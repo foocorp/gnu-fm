@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">  
 <head>
 	<title>Libre.fm</title>
+	<link rel="stylesheet" href="{$base_url}/themes/librefm/reset-fonts-grids.css" type="text/css" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/base.css" type="text/css" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/librefm.css" type="text/css" />
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -18,7 +19,15 @@
 -->
 </head>
 <body>
-<div id="doc3" class="yui-t7">
-	<div id="hd" class='vcard'><h1 class='fn org'><a href="{$base_url}" class='url'>Libre.fm</a></h1></div>
+<div id="doc2" class="yui-t7">
+	<div id="hd" role="navigation" class='vcard'><h1 class='fn org'><a href="{$base_url}" class='url'>Libre.fm</a></h1>
 	{include file='menu.tpl'}
-	<div id="main">
+	</div>
+   <div id="bd" role="main">
+   <div id="coolio">
+	<div class="yui-g" id="banner">
+	  <img src="/i/topblock.png" alt="" />
+	</div>
+<div class="yui-gc">
+    <div class="yui-u first" id="content">
+    <div style="padding: 10px;">

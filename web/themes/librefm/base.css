@@ -129,9 +129,3 @@ input[type="reset"],
 input[type="submit"] {
 	padding:1px;
 }
-
-/* cleaner divs - to allow regular flow for parents of floated elements */
-
-div.cleaner {
-    clear:both;
-}
