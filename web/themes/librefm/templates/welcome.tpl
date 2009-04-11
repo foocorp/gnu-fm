@@ -12,7 +12,15 @@ musical tastes with other people.</p>
     <dl>
       <dt><a href="{$nowplaying[np].artisturl}">
         {$nowplaying[np].artist|stripslashes|htmlspecialchars}</a></dt>
-      <dd>{$nowplaying[np].track|stripslashes|htmlspecialchars}</dd>
+      <dd>
+{if $nowplaying[np].mbid <> ""}
+<a href="http://musicbrainz.org/track/{$nowplaying[np].mbid}.html">
+{/if}
+{$nowplaying[np].track|stripslashes|htmlspecialchars}
+{if $nowplaying[np].mbid <> ""}
+</a>
+{/if}
+</dd>
       <dd><a href="{$nowplaying[np].userurl}">{$nowplaying[np].username|stripslashes|htmlspecialchars}</a></dd>
       <dd>{$nowplaying[np].clientstr}</dd>
     </dl>
