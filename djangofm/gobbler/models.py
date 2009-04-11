@@ -131,10 +131,18 @@ class Md5Password(models.Model):
 class NowPlaying(models.Model):
     user = models.OneToOneField(GobblerUser, primary_key=True)
     track = models.ForeignKey(Track)
+    expires = models.DateTimeField(editable=False)
 
     @property
     def artist(self):
         return self.track.album.artist
+
+    def save(self, force_insert=False, force_update=False):
+        if self.track.length is not None:
+            self.expires = datetime.now() + self.track.length
+        else:
+            self.expires = datetime.now() + 300
+        super(NowPlaying, self).save(force_insert, force_update)
 
     def __unicode__(self):
         return "%s is playing %s" % (self.user, self.track)
