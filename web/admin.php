@@ -24,10 +24,10 @@ require_once('templating.php');
 require_once('config.php');
 
 global $u_user;
-$username = $u_user->username;
+$username = $u_user->name;
 $userlevel = $u_user->userlevel;
 
-function sendEmail($email, $username) {
+function sendEmail($email) {
     global $mdb2;
     global $base_url;
     global $u_user;	
@@ -70,7 +70,7 @@ if ($userlevel < 2) {
 		die();
 	    } else {
 		// Send the email
-		sendEmail($_GET['email'], $username);
+		sendEmail($_GET['email']);
 		$smarty->assign('sent', true);
 		$sql = "UPDATE Invitation_Request SET status=1 WHERE email=" . $mdb2->quote($_GET['email'], 'text');
 		$mdb2->exec($sql);
