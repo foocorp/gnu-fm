@@ -22,14 +22,13 @@
 </dl>
 {if $nowplaying|@count > 0}
 <h3>Now Playing:</h3>
-<ul>
+<dl class='now-playing'>
     {section name=i loop=$nowplaying}
-<li>{$nowplaying[i].track}
-by
-<a href="{$nowplaying[i].artisturl}">{$nowplaying[i].artist}</a>
-with {$nowplaying[i].clientstr}</li>
+    <dt class='track-name'>{$nowplaying[i].track}</dt>
+    <dd>by <span class='artist-name'><a href='{$nowplaying[i].artisturl}'>{$nowplaying[i].artist}</a></span></dd>
+    <dd>with <span class='gobbler'>{$nowplaying[i].clientstr}</span></dd>
     {/section}
-</ul>
+</dl>
 {/if}
 
 <h3>Latest {$scrobbles|@count} Gobbles:</h3>
