@@ -45,9 +45,6 @@ with {$nowplaying[i].clientstr}</li>
     {/if}
       <dd class='gobble'><span class='track-name'>{$scrobbles[i].track|stripslashes}</span><small>{$scrobbles[i].timehuman}</small></dd>
       {capture name=artist_last}{$scrobbles[i].artist}{/capture}
-    {if $smarty.capture.artist_last <> $scrobbles[i].artist}
-
-    {/if}
 {/section}
     </dl>
 

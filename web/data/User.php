@@ -65,6 +65,7 @@ class User {
 	 */
 	function getScrobbles($number) {
 		$data = Server::getRecentScrobbles($number, $this->name);
+		if(!isset($data)) { return array(); }
 		foreach($data as &$i) {
   			$i['timehuman'] = human_timestamp($i['time']);
 		}
