@@ -22,7 +22,6 @@ musical tastes with other people.</p>
     </dd>
     <dd class='username'><a href='{$nowplaying[np].userurl}'>{$nowplaying[np].username|stripslashes|htmlspecialchars}</a></dd>
     <dd>using <span class='gobbler'>{$nowplaying[np].clientstr}</span></dd>
-    </dl>
   {/section}
 </dl>
 
