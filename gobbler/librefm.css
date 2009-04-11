@@ -22,7 +22,7 @@ html{background-color: #ececec;}
 
 #sidebar {background-color: #eee;}
 
-#sidebar, #coolio, #artists {-moz-border-radius: 8px;}
+#hd, #sidebar, #coolio, #artists {-moz-border-radius: 8px;}
 
 #artists{background-color: lightblue; margin: 15px 0 15px 0; padding: 5px;}
 
