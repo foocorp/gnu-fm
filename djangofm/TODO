@@ -1,0 +1,6 @@
+ * profiles (excluding recently gobbled tracks)
+ * registration/invitation
+ * include all information in libre.fm database schema in django.fm database schema
+ * allow libre.fm and django.fm to run from the same database
+ * now playing expiries
+ * client identification
