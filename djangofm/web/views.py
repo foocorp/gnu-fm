@@ -19,7 +19,7 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 
-from gobbler.models import Album, Artist, Gobble, GobblerUser
+from gobbler.models import Album, Artist, Gobble, GobblerUser, NowPlaying
 
 
 def album(request, artist_slug, album_slug):
@@ -47,9 +47,11 @@ def explore_artists(request):
 
 
 def frontpage(request):
+    now_playing = NowPlaying.objects.all()
     recent_gobbles = Gobble.objects.order_by('-id')[:10]
     return render_to_response("frontpage.html",
-                              {'recently_gobbled': recent_gobbles},
+                              {'recently_gobbled': recent_gobbles,
+                               'now_playing': now_playing},
                               context_instance=RequestContext(request))
 
 

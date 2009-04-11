@@ -132,6 +132,10 @@ class NowPlaying(models.Model):
     user = models.OneToOneField(GobblerUser, primary_key=True)
     track = models.ForeignKey(Track)
 
+    @property
+    def artist(self):
+        return self.track.album.artist
+
     def __unicode__(self):
         return "%s is playing %s" % (self.user, self.track)
 

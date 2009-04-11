@@ -6,6 +6,20 @@
 network service that will allow users to share their musical tastes with other
 people.</p>
 
+<h3>Now playing</h3>
+
+<ul id="nowplaying" class="listcloud">
+  {% for np in now_playing %}
+  <li>
+    <dl>
+      <dt><a href="{{ np.artist.get_absolute_url }}">{{ np.artist }}</a></dt>
+      <dd><a href="{{ np.track.get_absolute_url }}">{{ np.track.name }}</a></dd>
+      <dd><a href="/profile/{{ np.user }}/">{{ np.user }}</a></dd>
+    </dl>
+  </li>
+  {% endfor %}
+</ul>
+
 <h3>What's hot? Recently gobbled.</h3>
 
 <ul id="recenttracks" class="listcloud">
