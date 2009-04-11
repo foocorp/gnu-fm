@@ -118,11 +118,11 @@ def now_playing(request):
     return HttpResponse("OK\n")
 
 
-def _count_submissions(request):
+def _count_submissions(p):
     i = 0
     while True:
         try:
-            p['a[%d]' % i+1]
+            p['a[%d]' % (i+1)]
             i += 1
         except:
             break
@@ -153,7 +153,7 @@ def protocol_11(request):
         expected_token = md5.new(guser.get_md5() + session.key)
         if p['s'] != expected_token.hexdigest():
             return HttpResponse("BADAUTH\nINTERVAL 0\n")
-        i = _count_submissions(request)
+        i = _count_submissions(p)
         for j in range(i+1):
             artist_name,track_name,album_name,time,mbid,length = _get_info(p, j)
             artist,c = Artist.objects.get_or_create(name=artist_name)
@@ -182,7 +182,7 @@ def protocol_12(request):
         session = Session.objects.get(key=p['s'])
     except Session.DoesNotExist:
         return HttpResponse("BADSESSION\n")
-    i = _count_submissions(request)
+    i = _count_submissions(p)
     for j in range(i+1):
         artist_name,track_name,album_name,time,mbid,length = _get_info(p, j)
         source = p['o[%d]' % j]
