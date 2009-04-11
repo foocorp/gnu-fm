@@ -103,7 +103,7 @@ class Track(models.Model):
     length = models.PositiveSmallIntegerField(blank=True)
     album = models.ForeignKey(Album, null=True)
     mbid = models.CharField(max_length=256, blank=True)
-    slug = models.SlugField(unique=True, editable=False)
+    slug = models.SlugField(editable=False)
 
     def get_absolute_url(self):
         return "%s%s/" % (self.album.get_absolute_url(), self.name)
@@ -114,6 +114,9 @@ class Track(models.Model):
 
     def __unicode__(self):
         return "%s - %s" % (self.album.artist, self.name)
+
+    class Meta:
+        unique_together = ('album', 'slug')
 
 
 class Session(models.Model):
