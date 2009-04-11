@@ -99,7 +99,7 @@ class Album(models.Model):
 class Track(models.Model):
     name = models.CharField(max_length=256)
     track_number = models.PositiveSmallIntegerField(blank=True, null=True)
-    length = models.PositiveSmallIntegerField(blank=True)
+    length = models.PositiveSmallIntegerField(null=True)
     album = models.ForeignKey(Album, null=True)
     mbid = models.CharField(max_length=256, blank=True)
     slug = models.SlugField(editable=False)
@@ -147,7 +147,6 @@ class Gobble(models.Model):
     source = models.CharField(choices=SOURCE_CHOICES, max_length=1)
     rating = models.CharField(choices=RATING_CHOICES, max_length=1,
                               blank=True)
-    length = models.PositiveSmallIntegerField()
 
     @property
     def artist(self):
