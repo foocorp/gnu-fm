@@ -114,23 +114,6 @@ if ($req_user) {
 		?>
 		</table>
 		
-		<h2>Now Playing?</h2>
-
-		<?php
-			$res = $mdb2->query("SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT 10");
-			if(PEAR::isError($res)) {
-				die($res->getMessage());
-			}
-			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-				if($row["name"] == "") {
-				  $client = strip_tags(stripslashes($row["client"])) . "(unknown, please tell us what this is)";
-				} else {
-				  $client = "<a href=\"" . strip_tags(stripslashes($row["url"])) . "\">" . strip_tags(stripslashes($row["name"])) . "</a>";
-				}
-				echo "<p>" . strip_tags(stripslashes($row["username"])) . " is listening to " . strip_tags(stripslashes($row["track"])) . " by " . strip_tags(stripslashes($row["artist"])) . " with " . $client . "</p>";
-			}
-		?>
-
     </div></div>
     <div class="yui-u" id="sidebar">
     <div style="padding: 10px;">
@@ -159,6 +142,23 @@ if ($req_user) {
 			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
 			echo "<p>" . stripslashes($row["total"]) . " users.</p>";
 
+		?>
+
+		<h2>Now Playing?</h2>
+
+		<?php
+			$res = $mdb2->query("SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT 10");
+			if(PEAR::isError($res)) {
+				die($res->getMessage());
+			}
+			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+				if($row["name"] == "") {
+				  $client = strip_tags(stripslashes($row["client"])) . "(unknown, please tell us what this is)";
+				} else {
+				  $client = "<a href=\"" . strip_tags(stripslashes($row["url"])) . "\">" . strip_tags(stripslashes($row["name"])) . "</a>";
+				}
+				echo "<p>" . strip_tags(stripslashes($row["username"])) . " is listening to " . strip_tags(stripslashes($row["track"])) . " by " . strip_tags(stripslashes($row["artist"])) . " with " . $client . "</p>";
+			}
 		?>
 
 
