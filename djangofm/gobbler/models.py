@@ -43,7 +43,6 @@ SOURCE_CHOICES = (
 class GobblerUser(User):
 
     def set_password(self, raw_password):
-        print "set password"
         import random
         algo = 'sha1'
         salt = get_hexdigest(algo, str(random.random()), str(random.random()))[:5]
