@@ -61,10 +61,14 @@ class User {
 	 * Get a user's scrobbles ordered by time
 	 *
 	 * @param int $number The number of scrobbles to return
-	 * @return An array of scrobbles
+	 * @return An array of scrobbles with human time
 	 */
 	function getScrobbles($number) {
-		return Server::getRecentScrobbles($number, $this->name);
+		$data = Server::getRecentScrobbles($number, $this->name);
+		foreach($data as &$i) {
+  			$i['timehuman'] = human_timestamp($i['time']);
+		}
+		return $data;
 	}
 
 	/**
