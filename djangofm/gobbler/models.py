@@ -64,7 +64,7 @@ admin.site.register(GobblerUser, UserAdmin)
 
 
 class Artist(models.Model):
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(unique=True, editable=False)
 
     def get_absolute_url(self):
