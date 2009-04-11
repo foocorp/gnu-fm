@@ -31,6 +31,7 @@ function sendEmail($email) {
     global $mdb2;
     global $base_url;
     global $u_user;	
+    $username = $u_user->name;
     $code = md5(md5($username) . time());
 
     // Insert the invitation into the table
