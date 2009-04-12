@@ -26,7 +26,7 @@ session_start();
 if(isset($_SESSION['session_id'])) {
 	$res = $mdb2->query('SELECT username FROM Scrobble_Sessions WHERE '
 		. 'sessionid = ' . $mdb2->quote($_SESSION['session_id'], 'text')
-	       	. ' AND expires > ' . $mdb2->quote(date('Y-m-d G:i:s', time()), 'timestamp'));
+		. ' AND expires > ' . $mdb2->quote(time(), 'integer'));
 	if(PEAR::isError ($res) || !$res->numRows()) {
 		// Session is invalid
 		unset($_SESSION['session_id']);
