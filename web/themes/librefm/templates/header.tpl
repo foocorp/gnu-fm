@@ -29,8 +29,13 @@
 	{if ($logged_in)}
 	<!-- put something here -->
         {else}
+	{if $welcome}
 	<div class="yui-g" id="banner">     
 	  <a href="/request.php"><img src="http://libre.fm/i/topblock.png" alt="" /></a>
+	{else}
+	<div class="yui-g">     
+	  <a href="/request.php"><img src="http://alpha.libre.fm/themes/librefm/images/topblocksmall.png" alt="" /></a>
+	{/if}
 	</div>{/if}
 <div class="yui-gc">
     <div class="yui-u first" id="content">
