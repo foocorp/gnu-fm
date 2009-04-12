@@ -1,0 +1,176 @@
+/*
+ * Alpha specific CSS
+ *
+ */
+a {
+    text-decoration: none;
+    outline: none;
+    color: #3465a4;
+}
+
+img {
+    border: none
+}
+
+
+h2 {
+	font-size: 2em;
+	margin: 5px;
+}
+
+div#footer a {
+}
+.yui-b, #ft{padding: 1em;}
+
+.odd { background:#F4B624 !important; color:#000; }
+.even { background:#FFFFFF !important; color:#000; } 
+
+/*
+ * We should use a class down here ¬¬ (fauno)
+ */
+
+div#invite,
+div#register,
+div#login {
+	margin: 1em auto 0 auto;
+}
+div#invite form,
+div#register form,
+div#login form {
+	width: 30em;
+	margin: 0 auto;
+}
+div#invite form fieldset,
+div#register form fieldset,
+div#login form fieldset {
+	border: none;
+    padding: 0;
+}
+div#invite form fieldset label,
+div#register form fieldset label,
+div#login form fieldset label {
+	float:left;
+	font-weight:bold;
+	text-align:right;
+	font-size: 1em;
+    width: 10em;
+}
+div#invite form fieldset label span,
+div#register form fieldset label span,
+div#login form fieldset label span {
+	color:#666666;
+	display:block;
+	font-weight:normal;
+	text-align:right;
+	font-size: .59em
+}
+div#invite form fieldset input,
+div#register form fieldset input,
+div#login form fieldset input {
+	float:left;
+	font-size:1em;
+	padding:.2em .1em;
+	width:200px;
+	margin:2px 0 20px 10px;
+}
+div#invite form fieldset input[type=submit],
+div#register form fieldset input[type=submit],
+div#login form fieldset input[type=submit] {
+	margin: 0;
+	width: 100%;
+}
+
+/* sidebar navigation */
+
+ul#navigation { padding: 0; margin: 0; }
+#navigation li { list-style-type: none; padding-bottom: 5px; }
+#navigation li ul { padding: 0; margin-left: 20px; margin-top: 0px; }
+
+/* the lists on the front and explore pages */
+/* TODO: Do rounded corners for browsers other than Gecko as well? */
+
+ul.listcloud { padding: 0px; margin: 0px; }
+ul.listcloud li { float: left; margin-right: 10px; margin-bottom: 10px; list-style-type: none; padding: 10px; border: 1px solid #000; background-color: #eee; -moz-border-radius: 5px; height: 2.2em; }
+ul.listcloud li dl { margin: 0; padding: 0; }
+ul.listcloud li dt { margin: 0; padding: 0; }
+ul.listcloud li dd { margin: 0; padding: 0; }
+
+ul.listcloud li dt a { color: #630000; text-decoration: none; }
+ul.listcloud li dt a:hover { text-decoration: underline; }
+
+ul#topartists.listcloud dd { font-size: 80%; }
+
+ul#nowplaying.listcloud li { float: left; margin-right: 10px; margin-bottom: 10px; list-style-type: none; padding: 10px; border: 1px solid #000; background-color: #eee; -moz-border-radius: 5px; height: 4.4em; }
+
+ul#recenttracks.listcloud li { height: 3.4em; }
+/* Users */
+.user {
+    font-size: .8em;
+}
+.user .fn {
+    margin-bottom: .3em;
+}
+.photo, .avatar {
+    max-height: 96px;
+    max-width: 96px;
+    min-height: 32px;
+    min-width: 32px;
+    float: left;
+    margin-right: .3em
+}
+.user .bio {
+}
+.user .nickname {
+    color: #666666
+}
+  dl.now-playing dt, dl.recent-tracks dt {
+      font-size: 1em;
+      margin-top: .3em
+  }
+  dl.now-playing dd {
+      font-size: .8em;
+      color: #666;
+      display: inline;
+      margin: 0
+  }
+  dl.now-playing dd.track-name {
+      display:block
+  }
+  dl.recent-tracks dd span.username {
+      font-size: .7em
+  }
+  dl.now-playing dt {
+      font-size: 1em;
+  }
+  dl.now-playing dd {
+      font-size: .8em;
+      color: #666
+  }
+
+dl.gobbles {
+}
+    dl.gobbles dt.artist a {
+        text-decoration: none;
+        color: #2e3436;
+    }
+    dl.gobbles dt.artist a:hover {
+        text-decoration: underline;
+    }
+    dl.gobbles dd.gobble span.track-name {
+        font-weight: bold;
+        font-size: .8em
+    }
+    dl.gobbles dd.gobble small {
+        display: block;
+        color: #666;
+        font-size: .7em
+    }
+
+h3 {
+	clear: left;
+}
+
+
+.clear {
+    clear: both;
+}

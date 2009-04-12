@@ -24,7 +24,7 @@ require_once('templating.php');
 require_once("data/sanitize.php");
 require_once("data/Server.php");
 
-$smarty->assign('recenttracks', Server::getRecentScrobbles(10));
+$smarty->assign('recenttracks', Server::getRecentScrobbles(20));
 $smarty->assign('nowplaying', Server::getNowPlaying(10));
 
 $smarty->display('welcome.tpl');
