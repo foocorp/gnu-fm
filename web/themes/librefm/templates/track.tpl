@@ -5,8 +5,9 @@
 {include file='player.tpl'}<br />
 
 <b>Artist: {$track->artist_name}</b><br />
-<b>Album: {$track->album_name}</b>
-
+<b>Album: {$track->album_name}</b><br />
+<br />
+<a href="{$track->licenseurl}"><img src="{$base_url}/themes/librefm/images/licenses/{$track->license}.png" /></a>
 
 <ul id="tracks">
 {if !empty($track->duration)}<li> Duration: {$track->duration}</li>{/if}
