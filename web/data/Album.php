@@ -81,4 +81,21 @@ class Album {
 		return $tracks;
 	}
 
+	/**
+	 * Gives the URL for this album
+	 *
+	 * @return A string containing the URL of this album
+	 */
+	function getURL() {
+		global $friendly_urls, $base_url;
+        $artist_encoded = urlencode(stripslashes($this->artistname));
+        $album_encoded = urlencode(stripslashes($this->name));
+		if($friendly_urls) {
+			return $base_url . "/artist/" . $artist_encoded . "/album/" . $album_encoded;
+		} else {
+			return $base_url . "/artist.php?artist=" . $artist_encoded . "&album=" . $album_encoded;
+		}
+	}
+
+
 }
