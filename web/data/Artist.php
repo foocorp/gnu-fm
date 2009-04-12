@@ -72,10 +72,10 @@ class Artist {
 	 */
 	function getAlbums() {
 		global $mdb2;
-		$res = $mdb2->query("SELECT name FROM Album WHERE artist_name = "
-			. $mdb2->quote($this->name, "text"));
+		$res = $mdb2->query("SELECT COUNT(*) as scrobbles,Track.album FROM Scrobbles JOIN Track ON Scrobbles.track = Track.name WHERE Track.artist = "
+			. $mdb2->quote($this->name, "text") . " AND Track.artist = Scrobbles.artist AND Track.album IS NOT NULL GROUP BY Track.album");
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-			$albums[] = new Album($row["name"], $this->name);
+			$albums[] = new Album($row["album"], $this->name, $row['scrobbles']);
 		}
 
 		return $albums;

@@ -100,7 +100,7 @@ ul.listcloud li dd { margin: 0; padding: 0; }
 ul.listcloud li dt a { color: #630000; text-decoration: none; }
 ul.listcloud li dt a:hover { text-decoration: underline; }
 
-ul#topartists.listcloud dd { font-size: 80%; line-height: 1.2em; }
+ul#topartists.listcloud dd, ul#albums.listcloud dd { font-size: 80%; line-height: 1.2em; }
 
 ul#nowplaying.listcloud li { float: left; margin-right: 10px; margin-bottom: 10px; list-style-type: none; padding: 10px; border: 1px solid #000; background-color: #eee; -moz-border-radius: 5px; height: 4.4em; }
 
