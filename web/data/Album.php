@@ -39,7 +39,7 @@ class Album {
 	 * @param string name The name of the album to load
 	 * @param string artist The name of the artist who recorded this album
 	 */
-	function __construct($name, $artist) {
+	function __construct($name, $artist, $scrobbles) {
 		global $mdb2;
 		$res = $mdb2->query('SELECT name, artist_name, mbid, releasedate FROM Album WHERE '
 			. 'name = ' . $mdb2->quote($name, 'text') . ' AND '
@@ -52,6 +52,7 @@ class Album {
 			$this->mbid = $row['mbid'];
 			$this->artist_name = $row['artist_name'];
 			$this->releasedate = $row['releasedate'];
+            $this->c = $scrobbles;
 		}
 	}
 

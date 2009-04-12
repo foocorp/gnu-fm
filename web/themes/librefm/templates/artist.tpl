@@ -13,6 +13,7 @@
       <dt><a href="album.php?artist={$name|urlencode}&album={$albums[i]->name|urlencode}">
         {$albums[i]->name}</a></dt>
 	<dd>{$albums[i]->releasedate}</dd>
+    <dd>{$albums[i]->c} gobbles</dd>
     </dl>
   </li>
   {/section}
