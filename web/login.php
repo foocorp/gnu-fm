@@ -49,7 +49,7 @@ if(isset($_POST['login'])) {
 			$mdb2->query('INSERT INTO Scrobble_Sessions (username, sessionid, expires) VALUES ('
 				. $mdb2->quote($username, 'text') . ', '
 				. $mdb2->quote($session_id, 'text') . ', '
-				. $mdb2->quote(date('Y-m-d G:i:s', time() + 604800), 'timestamp') . ')');
+				. $mdb2->quote( time() + 604800, 'integer') . ')');
 
 			$logged_in = true;
 			$smarty->assign('logged_in', true);
