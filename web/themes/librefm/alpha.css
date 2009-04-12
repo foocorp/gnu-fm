@@ -149,7 +149,7 @@ ul#recenttracks.listcloud li { height: 3.4em; }
       color: #666
   }
 
-dl.gobbles {
+dl.gobbles * {
 }
     dl.gobbles dt.artist a {
         text-decoration: none;
@@ -163,7 +163,7 @@ dl.gobbles {
         font-size: .8em
     }
     dl.gobbles dd.gobble small {
-        display: block;
+        margin-left: .5em;
         color: #666;
         font-size: .7em
     }
