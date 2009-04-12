@@ -20,7 +20,7 @@
 
 // fakes the radio xspf generation
 
-require_once('config.php');
+require_once('../config.php');
 
 if(!isset($_GET['sk']) || !isset($_GET['desktop'])) {
 	die("Uh-oh\n");
