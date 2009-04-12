@@ -22,6 +22,7 @@
 require_once($install_path . '/database.php');
 require_once($install_path . '/data/Artist.php');
 require_once($install_path . '/data/Track.php');
+require_once($install_path . "/resolve-external.php");
 
 /**
  * Represents album data
@@ -31,7 +32,7 @@ require_once($install_path . '/data/Track.php');
  */
 class Album {
 
-	public $name, $artist_name, $mbid, $releasedate;
+	public $name, $artist_name, $mbid, $releasedate, $image;
 
 	/**
 	 * Album constructor
@@ -52,16 +53,24 @@ class Album {
 			$this->mbid = $row['mbid'];
 			$this->artist_name = $row['artist_name'];
 			$this->releasedate = $row['releasedate'];
+			$this->image = resolve_external_url($row['image']);
 		}
-        $res = $mdb2->query('SELECT COUNT(*) AS scrobbles FROM Scrobbles JOIN Track ON Scrobbles.track = Track.name WHERE Scrobbles.artist ='
-                            . $mdb2->quote($artist, 'text') . 'AND Track.album ='
-                            . $mdb2->quote($name, 'text'));
+
+	}
+
+
+	function getPlayCount() {
+		global $mdb2;
+		$res = $mdb2->query('SELECT COUNT(*) AS scrobbles FROM Scrobbles JOIN Track ON Scrobbles.track = Track.name WHERE Scrobbles.artist ='
+			. $mdb2->quote($this->artist_name, 'text') . 'AND Track.album ='
+			. $mdb2->quote($this->name, 'text'));
 		if(!$res->numRows()) {
-			$this->c = 0;
+			$c = 0;
 		} else {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
-			$this->c = $row['scrobbles'];
+			$c = $row['scrobbles'];
 		}
+		return $c;
 	}
 
 	/**

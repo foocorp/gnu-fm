@@ -13,7 +13,7 @@
       <dt><a href="{$albums[i]->getURL()}">
         {$albums[i]->name}</a></dt>
 	<dd>{$albums[i]->releasedate}</dd>
-    <dd>{$albums[i]->c} gobbles</dd>
+    <dd>{$albums[i]->getPlayCount()} plays</dd>
     </dl>
   </li>
   {/section}
