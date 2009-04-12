@@ -79,7 +79,7 @@ if (isset($_POST['install'])) {
 		mbid VARCHAR(36),
 		image VARCHAR(255),
 		artwork_license VARCHAR(255),
-		releasedate DATE,
+		releasedate int,
 		albumurl VARCHAR(255),
 		PRIMARY KEY(name, artist_name),
 		FULLTEXT(name,artist_name));");
