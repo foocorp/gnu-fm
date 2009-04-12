@@ -90,9 +90,9 @@ class User {
         /**
          * Get a user's top artists
          *
-         * @return An array of artists for the top 10 artists
+         * @return An array of artists for the top 40 artists
 	 *         with a percent field, which represents each
-	 *         artist in comparison to the most popular.
+	 *         artists position in the cloud.
          */
 	function getTagCloud() {
 		global $mdb2;
