@@ -150,34 +150,30 @@ class JamendoImport:
 				artist = self.proc_artist(elem)
 
 				if self.artist_exists(artist["name"]):
-					print "Updating Artist: %s" % artist["name"]
 					try:
 						self.cursor.execute("UPDATE Artist SET image_small = %s, homepage = %s, mbid = %s WHERE name = %s", (artist["image"], artist["url"], artist["mbid"], artist["name"]))
 					except Exception,  e:
-						print "Couldn't update artist %s: %s" % (artist["name"], e.message)
+						pass
 				else:
-					print "Creating Artist: %s" % artist["name"]
 					try:
 						self.cursor.execute("INSERT INTO Artist (name, image_small, mbid, homepage)  VALUES (%s, %s, %s, %s)", (artist["name"], artist["image"], artist["url"], artist["mbid"]))
 					except Exception,  e:
-						print "Couldn't create artist %s: %s" % (artist["name"], e.message)
+						pass
 
 				for album in artist["albums"]:
 					if self.album_exists(artist["name"], album["name"]):
-						print "Updating Album: %s by %s" % (album["name"], artist["name"])
 						try:
 							self.cursor.execute("UPDATE Album SET albumurl = %s, image = %s, artwork_license = %s, mbid = %s, releasedate = %s WHERE name = %s AND artist_name = %s", 
 									(album["url"], album["image"], album["license_artwork"], album["mbid"], album["releasedate"],
 									album["name"], artist["name"]))
 						except Exception,  e:
-							print "Couldn't update album %s by %s: %s" % (album["name"], artist["name"], e.message)
+							pass
 					else:
-						print "Creating Album: %s by %s" % (album["name"], artist["name"])
 						try:
 							self.cursor.execute("INSERT INTO Album (name, artist_name, albumurl, image, artwork_license, mbid, releasedate, downloadurl) VALUES (%s, %s, %s, %s, %s, %s, %s)",
 									(album["name"], artist["name"], album["url"], album["image"], album["license_artwork"], album["mbid"], album["releasedate"], album["downloadurl"]))
 						except Exception,  e:
-							print "Couldn't create album %s by %s: %s" % (album["name"], artist["name"], e.message)
+							pass
 
 					for tag in album["tags"]:
 						if not self.tag_exists(tag, artist["name"], album["name"]):
@@ -185,24 +181,22 @@ class JamendoImport:
 								self.cursor.execute("INSERT INTO Tags (tag, artist, album) VALUES (%s, %s, %s)",
 										(tag, artist["name"], album["name"]))
 							except Exception,  e:
-								print "Couldn't add tag %s to album %s by %s: %s" % (tag, album["name"], artist["name"], e.message)
+								pass
 
 					for track in album["tracks"]:
 						if self.track_exists(artist["name"], album["name"], track["name"]):
-							print "Updating Track: %s by %s" % (track["name"], artist["name"])
 							try:
 								self.cursor.execute("UPDATE Track SET downloadurl = %s, streamurl = %s, mbid = %s, license = %s WHERE name = %s AND artist = %s AND album = %s",
 										(track["downloadurl"], track["streamurl"], track["mbid"], track["license"],
 										track["name"], artist["name"], album["name"]))
 							except Exception,  e:
-								print "Couldn't update track %s by %s: %s" (track["name"], artist["name"], e.message)
+								pass
 						else:
-							print "Creating Track: %s by %s" % (track["name"], artist["name"])
 							try:
 								self.cursor.execute("INSERT INTO Track (name, artist, album, mbid, downloadurl, streamurl, license) VALUES (%s, %s, %s, %s, %s, %s, %s)",
 										(track["name"], artist["name"], album["name"], track["mbid"], track["downloadurl"], track["streamurl"], track["license"]))
 							except Exception,  e:
-								print "Couldn't create track %s by %s: %s" % (track["name"], artist["name"], e.message)
+								pass
 
 						for tag in track["tags"]:
 							if not self.tag_exists(tag, artist["name"], album["name"], track["name"]):
@@ -210,7 +204,7 @@ class JamendoImport:
 									self.cursor.execute("INSERT INTO Tags (tag, artist, album, track) VALUES (%s, %s, %s, %s)",
 											(tag, artist["name"], album["name"], track["name"]))
 								except Exception,  e:
-									print "Couldn't add tag %s to track %s by %s: %s" % (tag, track["name"], artist["name"], e.message)
+									pass
 
 
 
