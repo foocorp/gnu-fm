@@ -32,7 +32,6 @@ if(!isset($_GET['user']) && $logged_in == false) {
 }
 
 $user = new User($_GET['user']);
-$user_tagcloud = new TagCloud('Scrobbles', 'artist', 40, $_GET['user']);
 
 if(isset($user->name)) { 
 	$smarty->assign('user', $user->name);
@@ -45,7 +44,7 @@ if(isset($user->name)) {
 	$smarty->assign('userlevel', $user->userlevel);
 	$smarty->assign('avatar', $user->getAvatar());
 	$smarty->assign('nowplaying', $user->getNowPlaying(10));
-	$smarty->assign('user_tagcloud', $user_tagcloud->tagcloud);
+	$smarty->assign('user_tagcloud', TagCloud::GenerateTagCloud('Scrobbles', 'artist', 40, $user->name));
 	$smarty->assign('profile', true);
 	$smarty->display('profile.tpl');
 } else {

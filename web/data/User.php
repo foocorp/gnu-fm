@@ -87,26 +87,6 @@ class User {
 	}
 
 
-        /**
-         * Get a user's top artists
-         *
-         * @return An array of artists for the top 40 artists
-	 *         with a percent field, which represents each
-	 *         artists position in the cloud.
-         */
-	function getTagCloud() {
-		global $mdb2;
-                $res = $mdb2->query(" SELECT artist, count(artist) AS count FROM Scrobbles WHERE "
-                        . 'username = ' . $mdb2->quote($this->name, 'text')
-                        . " GROUP BY artist ORDER BY count DESC LIMIT 40");
-                $data= $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-		foreach($data as $count => &$i) {
-			$i['percent'] = (int) ($count/(count($data)/5)+1);
-		}
-		sort($data);
-		return $data;
-	}
-
 	/**
 	 * Get a user's now-playing tracks
 	 *
