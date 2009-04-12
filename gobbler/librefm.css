@@ -71,7 +71,7 @@ li{ line-height: 1.6em; }
 
 .tagcloud a:hover{background-color: #07c; color: white;}
 
-a:hover { color: red !important; }
+a:hover { color: red; }
 a:visited{ color: #07c;}
 
 .highlight{ background-color: #ffb;}
