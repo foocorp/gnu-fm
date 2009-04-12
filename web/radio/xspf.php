@@ -41,7 +41,7 @@ $name = $row["name"];
 $artist = $row["artist"];
 $album = $row["album"];
 $duration = $row["duration"];
-if($duration = "") {
+if($duration == "") {
     $duration = "180000";
 }
 $downloadurl = $row["downloadurl"];
