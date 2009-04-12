@@ -42,6 +42,8 @@ function usernameFromSID($session_id) {
 function createArtistIfNew($artist) {
 	global $mdb2;
 
+	$artist = NoSpamTracks($artist);
+
 	$res = $mdb2->query("SELECT name FROM Artist WHERE name = " . ($artist));
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage());
@@ -77,6 +79,7 @@ function createTrackIfNew($artist, $album, $track, $mbid) {
 	global $mdb2;
 
 	$track = NoSpamTracks($track);
+	$artist = NoSpamTracks($artist);
 
 	$res = $mdb2->query("SELECT name FROM Track WHERE name = " . ($track) . " AND artist = " . ($artist));
 	if(PEAR::isError($res)) {
