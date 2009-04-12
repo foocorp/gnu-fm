@@ -14,8 +14,7 @@
 
 	<form action='' method='post'>
 		<fieldset>
-	        <p><a href='http://libre.fm' rel='bookmark' class='vcard fn org url'>libre.fm</a> has unfortunately moved to a
-		closed alpha, but type in your email address and you'll receive an invitation to join as soon as possible!</p>
+	        <p><a href='http://libre.fm' rel='bookmark' class='vcard fn org url'>libre.fm</a> is now in alpha. We're slowly adding new users, so if you're interested, type in your email address and you'll receive an invitation in a few days time.</p>
 
 			<label for='email'>Email <span>must be valid!</span></label>
 			<input id='email' name='email' type='text' value='' />
