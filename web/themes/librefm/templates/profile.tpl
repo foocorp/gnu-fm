@@ -52,7 +52,7 @@
       <h3>User's favorite artists</h3>
 <ul class="tagcloud">
 {section name=i loop=$tagcloud}
-  <li class="tc t{$tagcloud[i].percent}"><a href="#">{$tagcloud[i].artist|stripslashes}</a></li>
+  <li class="tc t{$tagcloud[i].percent}"><a href="/artist/{$tagcloud[i].artist|stripslashes}">{$tagcloud[i].artist|stripslashes}</a></li>
 {/section}
   </ul>
 {include file='footer.tpl'}
