@@ -24,7 +24,10 @@ require_once("database.php");
 require_once("templating.php");
 require_once("data/Server.php");
 
-$smarty->assign("topartists", Server::getTopArtists(20));
+$aTopArtists = Server::getTopArtists(20);
+if (!PEAR::isError ($aTopArtists)) {
+    $smarty->assign("topartists", $aTopArtists);
+}
 $smarty->assign("explore", true);
 $smarty->display("explore-artists.tpl");
 
