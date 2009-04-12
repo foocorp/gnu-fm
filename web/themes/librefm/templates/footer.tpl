@@ -57,7 +57,7 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metu
        <li><a href="/download/">Download</a></li>
      </ul>
 
-     <p><img src="/i/cc-by-sa.png" alt="Attribution-ShareAlike 3.0" /></p>
+     <p><a href='http://creativecommons.org/licenses/by-sa/3.0/' rel='license'><img src="{$base_url}/i/cc-by-sa.png" alt="Attribution-ShareAlike 3.0" /></a></p>
 
    </div>
 </div>
