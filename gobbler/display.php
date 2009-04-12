@@ -80,9 +80,9 @@ if ($req_user) {
 			
 } elseif (!$res) {
 
-			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 25");
+			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
 
-			echo "<h2>Last 25 tracks received</h2>";
+			echo "<h2>Last 10 tracks received</h2>";
 
 }
 
