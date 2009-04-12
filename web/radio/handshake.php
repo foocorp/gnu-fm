@@ -24,15 +24,15 @@ if(!isset($_GET['username']) || !isset($_GET['passwordmd5'])) {
 	die("BADAUTH\n");
 }
 
-echo "session=00000000000000000000000000000000\n"
-echo "stream_url=this.is.broken.$_GET['username'].example.com\n"
-echo "subscriber=0\n"
-echo "framehack=0..\n"
-echo "base_url=alpha.libre.fm\n"
-echo "base_path=/radio\n"
-echo "info_message=\n"
-echo "fingerprint_upload_url=http://this.is.broken.example.com/fingerprint/upload.php\n"
-echo "permit_bootstrap=0\n"
-echo "freetrial=0\n"
+echo "session=00000000000000000000000000000000\n";
+echo "stream_url=this.is.broken.$_GET['username'].example.com\n";
+echo "subscriber=0\n";
+echo "framehack=0..\n";
+echo "base_url=alpha.libre.fm\n";
+echo "base_path=/radio\n";
+echo "info_message=\n";
+echo "fingerprint_upload_url=http://this.is.broken.example.com/fingerprint/upload.php\n";
+echo "permit_bootstrap=0\n";
+echo "freetrial=0\n";
 
 ?>
