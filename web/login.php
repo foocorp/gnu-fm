@@ -38,8 +38,7 @@ if(isset($_POST['login'])) {
 	}
 
 	if(empty($errors)) {
-
-		$res = $mdb2->query('SELECT username FROM Users WHERE ' 
+		$res = $mdb2->query('SELECT username FROM Users WHERE '
  			. ' username = ' . $mdb2->quote($username, 'text')
 			. ' AND password = ' . $mdb2->quote(md5($password), 'text'));
 		if(!$res->numRows()) {
@@ -50,12 +49,13 @@ if(isset($_POST['login'])) {
 			$mdb2->query('INSERT INTO Scrobble_Sessions (username, sessionid, expires) VALUES ('
 				. $mdb2->quote($username, 'text') . ', '
 				. $mdb2->quote($session_id, 'text') . ', '
-				. $mdb2->quote(time() + 604800) . ')'); // Web sessions last a week
-			$_SESSION['session_id'] = $session_id;
+				. $mdb2->quote(date('Y-m-d G:i:s', time() + 604800), 'timestamp') . ')');
+
 			$logged_in = true;
 			$smarty->assign('logged_in', true);
 
             $_SESSION['user'] = new User($username);
+            $_SESSION['session_id'] = $session_id;
             $smarty->assign('user', $_SESSION['user']);
 		}
 	}
