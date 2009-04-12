@@ -92,7 +92,7 @@ ul#navigation { padding: 0; margin: 0; }
 /* TODO: Do rounded corners for browsers other than Gecko as well? */
 
 ul.listcloud { padding: 0px; margin: 0px; }
-ul.listcloud li { float: left; margin-right: 10px; margin-bottom: 10px; list-style-type: none; padding: 10px; border: 1px solid #000; background-color: #eee; -moz-border-radius: 5px; height: 2.2em; }
+ul.listcloud li { float: left; margin-right: 10px; margin-bottom: 10px; list-style-type: none; padding: 0 10px; border: 1px solid #000; background-color: #eee; -moz-border-radius: 5px; height: 2.8em; }
 ul.listcloud li dl { margin: 0; padding: 0; }
 ul.listcloud li dt { margin: 0; padding: 0; }
 ul.listcloud li dd { margin: 0; padding: 0; }
@@ -100,7 +100,7 @@ ul.listcloud li dd { margin: 0; padding: 0; }
 ul.listcloud li dt a { color: #630000; text-decoration: none; }
 ul.listcloud li dt a:hover { text-decoration: underline; }
 
-ul#topartists.listcloud dd { font-size: 80%; }
+ul#topartists.listcloud dd { font-size: 80%; line-height: 1.2em; }
 
 ul#nowplaying.listcloud li { float: left; margin-right: 10px; margin-bottom: 10px; list-style-type: none; padding: 10px; border: 1px solid #000; background-color: #eee; -moz-border-radius: 5px; height: 4.4em; }
 
