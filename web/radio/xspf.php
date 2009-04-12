@@ -32,8 +32,6 @@ echo "<creator>Last.fm</creator>\n"
 echo "<link rel=\"http://www.last.fm/skipsLeft\">9999</link>\n"
 echo "<trackList>\n"
 
-loop
-
 $res = $mdb2->query("SELECT name, artist, album, duration, downloadurl, streamurl WHERE streamurl IS NOT NULL AND license='http://creativecommons.org/licenses/by/3.0/' AND streamurl like 'jamendo://track/stream/%' LIMIT 5";
 
 while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
@@ -48,24 +46,24 @@ $streamurl = $row["streamurl"];
 if(ereg("jamendo://track/stream/(.*)", $streamurl, $regs)) {
 $jmtrack = $regs[1];
 
-echo "    <track>\n"
-echo "        <location>http://api.jamendo.com/get2/stream/track/redirect/?id=$jmtrack&streamencoding=ogg2</location>\n"
-echo "        <title>$name</title>\n"
-echo "        <id>$jmtrack</id>\n"
-echo "        <album>$album</album>\n"
-echo "        <creator>$artist</creator>\n"
-echo "        <duration>$duration</duration>\n"
-echo "        <image></image>\n"
-echo "        <lastfm:trackauth>00000</lastfm:trackauth>\n"
-echo "        <lastfm:albumId>0000000</lastfm:albumId>\n"
-echo "        <lastfm:artistId>00000000</lastfm:artistId>        \n"
-echo "                <link rel="http://www.last.fm/artistpage"></link>\n"
-echo "        <link rel="http://www.last.fm/albumpage"></link>\n"
-echo "        <link rel="http://www.last.fm/trackpage"></link>\n"
-echo "        <link rel="http://www.last.fm/buyTrackURL"></link>\n"
-echo "        <link rel="http://www.last.fm/buyAlbumURL"></link>\n"
-echo "        <link rel="http://www.last.fm/freeTrackURL">$downloadurl</link>\n"
-echo "    </track>\n"
+echo "    <track>\n";
+echo "        <location>http://api.jamendo.com/get2/stream/track/redirect/?id=$jmtrack&streamencoding=ogg2</location>\n";
+echo "        <title>$name</title>\n";
+echo "        <id>$jmtrack</id>\n";
+echo "        <album>$album</album>\n";
+echo "        <creator>$artist</creator>\n";
+echo "        <duration>$duration</duration>\n";
+echo "        <image></image>\n";
+echo "        <lastfm:trackauth>00000</lastfm:trackauth>\n";
+echo "        <lastfm:albumId>0000000</lastfm:albumId>\n";
+echo "        <lastfm:artistId>00000000</lastfm:artistId>\n";
+echo "                <link rel="http://www.last.fm/artistpage"></link>\n";
+echo "        <link rel="http://www.last.fm/albumpage"></link>\n";
+echo "        <link rel="http://www.last.fm/trackpage"></link>\n";
+echo "        <link rel="http://www.last.fm/buyTrackURL"></link>\n";
+echo "        <link rel="http://www.last.fm/buyAlbumURL"></link>\n";
+echo "        <link rel="http://www.last.fm/freeTrackURL">$downloadurl</link>\n";
+echo "    </track>\n";
 
 }
 
