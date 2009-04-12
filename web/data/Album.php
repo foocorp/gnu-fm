@@ -87,12 +87,7 @@ class Album {
 	 * @return A string containing the URL of this album
 	 */
 	function getURL() {
-		global $friendly_urls, $base_url;
-		if($friendly_urls) {
-			return $base_url . "/artist/" . urlencode(stripslashes($this->artist_name)) . "/album/" . urlencode(stripslashes($this->name));
-		} else {
-			return $base_url . "/artist.php?artist=" . urlencode(stripslashes($this->artist_name)) . "&album=" . urlencode(stripslashes($this->name));
-		}
+		return Server::getAlbumURL($this->artist_name, $this->name);
 	}
 
 
