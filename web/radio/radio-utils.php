@@ -18,26 +18,15 @@
 
 */
 
-require_once("../database.php");
-require_once("radio-utils.php");
+function radio_title_from_url($url) {
 
-if(!isset($_GET['session']) || !isset($_GET['url'])) {
-	die("FAILED\n");
+	if(substr($url, 0, 20) == "lastfm://globaltags/") {
+		$tag = substr($url, 20);
+		return "Libre.fm " . ucwords($tag) . " Tag Radio";
+	}
+
+	return $url;
+
 }
-
-$session = $_GET["session"];
-$url = $_GET["url"];
-
-$res = $mdb2->query("SELECT username FROM Radio_Sessions WHERE session = " . $mdb2->quote($session, "text"));
-
-if(!$res->numRows()) {
-        die("BADSESSION\n");
-}
-
-$mdb2->query("UPDATE Radio_Sessions SET url = " . $mdb2->quote($url, "text") . " WHERE session = " . $mdb2->quote($session, "text"));
-
-echo "response=OK\n";
-echo "url=http://libre.fm\n"; // Need to parse the station request and give a real URL
-echo "stationname=" . radio_title_from_url($url) ."\n";
 
 ?>

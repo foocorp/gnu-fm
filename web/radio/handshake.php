@@ -18,15 +18,26 @@
 
 */
 
-// fakes the radio handshake protocol
+require_once("../database.php");
 
 if(!isset($_GET['username']) || !isset($_GET['passwordmd5'])) {
 	die("BADAUTH\n");
 }
 
 $username = $_GET['username'];
+$passmd5 = $_GET['passwordmd5'];
 
-echo "session=00000000000000000000000000000000\n";
+$res = $mdb2->query("SELECT username FROM Users WHERE username = " . $mdb2->quote($username, "text") . " AND password = " . $mdb2->quote($passmd5, "text"));
+if (!$res->numRows()) {
+	die("BADAUTH\n");
+}
+
+$session = md5($passmd5 . time());
+
+$mdb2->query("INSERT INTO Radio_Sessions (username, session) VALUES ( " . $mdb2->quote($username, "text") . ", " . $mdb2->quote($session, "text") . ")");
+
+
+echo "session=" . $session . "\n";
 echo "stream_url=this.is.broken.$username.example.com\n";
 echo "subscriber=0\n";
 echo "framehack=0..\n";
