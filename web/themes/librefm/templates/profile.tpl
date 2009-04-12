@@ -3,7 +3,7 @@
 <h2>{$user}'{if $user|substr:-1 != 's'}s{/if} profile</h2>
 <dl class='user vcard'>
     <dt class='fn'>
-        <span class='family-name'>{$fullname}</span>
+        <span class='family-name'>{$fullname|utf8_encode}</span>
         (<span class='nickname'>{$user}</span>)
     </dt>
     <dd class='avatar'>
@@ -52,7 +52,7 @@
       <h3>User's favorite artists</h3>
 <ul class="tagcloud">
 {section name=i loop=$tagcloud}
-  <li class="tc t{$tagcloud[i].percent}"><a href="/artist/{$tagcloud[i].artist|stripslashes}">{$tagcloud[i].artist|stripslashes}</a></li>
+  <li style='font-size:{$tagcloud[i].size}'><a href='/artist/{$tagcloud[i].artist|urlencode}' rel='tag'>{$tagcloud[i].artist}</a></li>
 {/section}
   </ul>
 {include file='footer.tpl'}
