@@ -98,10 +98,10 @@ class User {
 		global $mdb2;
                 $res = $mdb2->query(" SELECT artist, count(artist) AS count FROM Scrobbles WHERE "
                         . 'username = ' . $mdb2->quote($this->name, 'text')
-                        . " GROUP BY artist ORDER BY count DESC LIMIT 10");
+                        . " GROUP BY artist ORDER BY count DESC LIMIT 40");
                 $data= $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-		foreach($data as &$i) {
-			$i['percent'] = 6-(int)(($i['count']/$data[0]['count'])*5);
+		foreach($data as $count => &$i) {
+			$i['percent'] = (int) ($count/(count($data)/5)+1);
 		}
 		sort($data);
 		return $data;
