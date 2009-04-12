@@ -30,50 +30,27 @@ class TagCloud {
     * @param float $max_font_size maximum font size (px, em, %, etc)
     * @return array tagcloud
     */
-    #function __construct($table, $field, $limit = 40, $sizes = 6, $max_font_size = 3, $username = null) {
-    function __construct($table, $field, $limit = 40, $username = null) {
+    static function generateTagCloud($table, $field, $limit = 40, $username = null) {
         global $mdb2;
-
-        if (!is_string($field))          return false;
+        if (!is_string($field))          return false;	
         if (!is_string($table))          return false;
         if (!is_integer($limit))         return false;
-      # if (!is_integer($sizes))         return false;
-      # if (!is_numeric($max_font_size)) return false;
-
+        global $mdb2;
+	$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
         $query = "SELECT $field, count(*) AS count FROM $table";
         $query .= (!is_null($username)) ? ' WHERE username = ' . $mdb2->quote($username, 'text') : null;
         $query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
-
         $res = $mdb2->query($query);
-        
         if (!$res->numRows()) {
-            return false;
+        	return false;
         } else {
-            $this->tagcloud = $res->FetchAll(MDB2_FETCHMODE_ASSOC); 
-
-            $this->min = end($this->tagcloud);
-            $this->max = reset($this->tagcloud);
-
-            # scramble results
-            shuffle($this->tagcloud);
-
-            # creates a range of possible font sizes
-            # $range_of_sizes = range(0, $max_font_size, round($max_font_size / $sizes));
-            $range_of_sizes = array('xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large');
-
-            foreach ($this->tagcloud as $row => &$data) {
-                # gets a size from range_of_sizes
-                $data['size'] = $range_of_sizes[floor(((count($range_of_sizes) - 1) * $data['count']) / $this->max['count'])];
-                $data[$field] = stripslashes($data[$field]);
-            }
-
-            $res = null; 
-            unset($res);
+                $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+                foreach($data as $count => &$i) {
+                        $i['size'] = $sizes[(int) ($count/(count($data)/7))];
+                }
+                sort($data);
+                return $data;
         }
-    }
-
-    function __destruct() {
-       unset($this->max, $this->min, $range_of_sizes, $data, $this->tagcloud); 
     }
 }
 ?>
