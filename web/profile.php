@@ -53,6 +53,4 @@ if(isset($user->name)) {
 	$smarty->display('error.tpl');
 }
 
-$user_tagcloud->__destruct();
-
 ?>

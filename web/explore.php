@@ -30,7 +30,7 @@ if(PEAR::isError($res)) {
 }
 
 $smarty->assign("topartists", $res->fetchAll(MDB2_FETCHMODE_ASSOC));
-
+$smarty->assign("explore", true);
 $smarty->display("explore-artists.tpl");
 
 ?>
