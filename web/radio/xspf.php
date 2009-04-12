@@ -48,7 +48,7 @@ if(ereg("jamendo://track/stream/(.*)", $streamurl, $regs)) {
 $jmtrack = $regs[1];
 
 echo "    <track>\n";
-echo "        <location>http://api.jamendo.com/get2/stream/track/redirect/?id=$jmtrack&streamencoding=ogg2</location>\n";
+echo "        <location>http://api.jamendo.com/get2/stream/track/redirect/?id=$jmtrack&amp;streamencoding=ogg2</location>\n";
 echo "        <title>$name</title>\n";
 echo "        <id>$jmtrack</id>\n";
 echo "        <album>$album</album>\n";
