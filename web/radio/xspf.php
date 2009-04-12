@@ -33,7 +33,7 @@ echo "<creator>Last.fm</creator>\n";
 echo "<link rel=\"http://www.last.fm/skipsLeft\">9999</link>\n";
 echo "<trackList>\n";
 
-$res = $mdb2->query("SELECT name, artist, album, duration, downloadurl, streamurl WHERE streamurl IS NOT NULL AND license='http://creativecommons.org/licenses/by/3.0/' AND streamurl like 'jamendo://track/stream/%' LIMIT 5");
+$res = $mdb2->query("SELECT name, artist, album, duration, downloadurl, streamurl FROM Track WHERE license='http://creativecommons.org/licenses/by/3.0/' AND streamurl LIKE 'jamendo://track/stream/%' LIMIT 5");
 
 while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 
