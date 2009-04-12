@@ -5,7 +5,7 @@
 <ul id="tracks">
   {section name=i loop=$tracks}
   <li>
-      <a href="track.php?artist={$artist|urlencode}&track={$tracks[i]->name|urlencode}">{$tracks[i]->name}</a>
+      <a href="{$tracks[i]->getURL()}">{$tracks[i]->name}</a>
   </li>
   {/section}
 </ul>
