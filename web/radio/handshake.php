@@ -24,8 +24,10 @@ if(!isset($_GET['username']) || !isset($_GET['passwordmd5'])) {
 	die("BADAUTH\n");
 }
 
+$username = $_GET['username'];
+
 echo "session=00000000000000000000000000000000\n";
-echo "stream_url=this.is.broken.$_GET['username'].example.com\n";
+echo "stream_url=this.is.broken.$username.example.com\n";
 echo "subscriber=0\n";
 echo "framehack=0..\n";
 echo "base_url=alpha.libre.fm\n";
