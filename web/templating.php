@@ -24,6 +24,10 @@ require_once('auth.php');
 require_once('smarty/Smarty.class.php');
 
 $smarty = new Smarty();
+
+$smarty->caching = 1;
+$smarty->compile_check = true;
+
 $smarty->template_dir = $install_path . '/themes/'. $default_theme . '/templates/';
 $smarty->compile_dir = $install_path. '/themes/' . $default_theme . '/templates_c/';
 $smarty->assign('base_url', $base_url);
