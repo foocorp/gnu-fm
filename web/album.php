@@ -28,7 +28,10 @@ $album = new Album($_GET['album'], $_GET['artist']);
 
 $smarty->assign("name", $album->name);
 $smarty->assign("artist", $album->artist_name);
-$smarty->assign("tracks", $album->getTracks());
+$aAlbumTracks = $album->getTracks();
+if (!PEAR::isError($aAlbumTracks )) {
+	$smarty->assign("tracks", $aAlbumTracks);
+}
 
 $smarty->display("album.tpl");
 

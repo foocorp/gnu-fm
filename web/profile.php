@@ -33,18 +33,27 @@ if(!isset($_GET['user']) && $logged_in == false) {
 
 $user = new User($_GET['user']);
 
-if(isset($user->name)) { 
+if(isset($user->name)) {
 	$smarty->assign('user', $user->name);
 	$smarty->assign('email', $user->email);
 	$smarty->assign('fullname', $user->fullname);
 	$smarty->assign('bio', $user->bio);
 	$smarty->assign('homepage', $user->homepage);
 	$smarty->assign('location', $user->location);
-	$smarty->assign('scrobbles', $user->getScrobbles(20));
+	$aUserScrobbles = $user->getScrobbles(20);
+	if (!PEAR::isError ($aUserScrobbles)) {
+		$smarty->assign('scrobbles', $aUserScrobbles);
+	}
 	$smarty->assign('userlevel', $user->userlevel);
 	$smarty->assign('avatar', $user->getAvatar());
-	$smarty->assign('nowplaying', $user->getNowPlaying(10));
-	$smarty->assign('user_tagcloud', TagCloud::GenerateTagCloud('Scrobbles', 'artist', 40, $user->name));
+	$aUserNowPlaying = $user->getNowPlaying(10);
+	if (!PEAR::isError ($aUserNowPlaying)) {
+		$smarty->assign('nowplaying', $aUserNowPlaying);
+	}
+	$aUserTagCloud =  TagCloud::GenerateTagCloud('Scrobbles', 'artist', 40, $user->name);
+	if (!PEAR::isError ($aUserTagCloud)) {
+		$smarty->assign('user_tagcloud',$aUserTagCloud);
+	}
 	$smarty->assign('profile', true);
 	$smarty->display('profile.tpl');
 } else {
