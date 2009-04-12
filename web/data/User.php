@@ -86,6 +86,26 @@ class User {
 		return Server::getUserURL($this->name);
 	}
 
+
+        /**
+         * Get a user's top artists
+         *
+         * @return An array of artists for the top 10 artists
+	 *         with a percent field, which represents each
+	 *         artist in comparison to the most popular.
+         */
+	function getTagCloud() {
+		global $mdb2;
+                $res = $mdb2->query(" SELECT artist, count(artist) AS count FROM Scrobbles WHERE "
+                        . 'username = ' . $mdb2->quote($this->name, 'text')
+                        . " GROUP BY artist ORDER BY count DESC LIMIT 10");
+                $data= $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+		foreach($data as &$i) {
+			$i['percent'] = 6-(int)(($i['count']/$data[0]['count'])*5);
+		}
+		return $data;
+	}
+
 	/**
 	 * Get a user's now-playing tracks
 	 *

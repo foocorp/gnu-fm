@@ -42,6 +42,8 @@ if(isset($user->name)) {
 	$smarty->assign('userlevel', $user->userlevel);
 	$smarty->assign('avatar', $user->getAvatar());
 	$smarty->assign('nowplaying', $user->getNowPlaying(10));
+	$smarty->assign('tagcloud', $user->getTagCloud());
+	$smarty->assign('profile', true);
 	$smarty->display('profile.tpl');
 } else {
 	$smarty->assign('error', 'User not found');

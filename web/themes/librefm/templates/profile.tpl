@@ -46,6 +46,13 @@
       {capture name=artist_last}{$scrobbles[i].artist}{/capture}
 {/section}
     </dl>
-
-
+</div></div>
+    <div class="yui-u" id="sidebar">
+    <div style="padding: 10px;">
+      <h3>User's favorite artists</h3>
+<ul class="tagcloud">
+{section name=i loop=$tagcloud}
+  <li class="tc t{$tagcloud[i].percent}"><a href="#">{$tagcloud[i].artist}</a></li>
+{/section}
+  </ul>
 {include file='footer.tpl'}
