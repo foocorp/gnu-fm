@@ -70,13 +70,17 @@ if (isset($_POST['install'])) {
 		image_small VARCHAR(255),
 		image_medium VARCHAR(255),
 		image_large VARCHAR(255),
+		homepage VARCHAR(255),
 		FULLTEXT(name,bio_summary));");
 
 	$mdb2->query("CREATE TABLE Album(
 		name VARCHAR(255),
 		artist_name VARCHAR(255) REFERENCES Artist(name),
 		mbid VARCHAR(36),
+		image VARCHAR(255),
+		artwork_license VARCHAR(255),
 		releasedate DATE,
+		albumurl VARCHAR(255),
 		PRIMARY KEY(name, artist_name),
 		FULLTEXT(name,artist_name));");
 
@@ -95,6 +99,7 @@ if (isset($_POST['install'])) {
 		streamable int,
 		license VARCHAR(255),
 		downloadurl VARCHAR(255),
+		streamurl VARCHAR(255),
 		PRIMARY KEY(name, artist),
 		FULLTEXT(name,artist,album,license));");
 
@@ -121,8 +126,8 @@ if (isset($_POST['install'])) {
 		expires int)");
 
 	$res = $mdb2->query("CREATE TABLE Invitation_Request(
-	    email VARCHAR(255) PRIMARY KEY,
-	    time int");
+		email VARCHAR(255) PRIMARY KEY,
+		time int");
 
 	$res = $mdb2->query("CREATE TABLE Invitations(
 		inviter VARCHAR(64) REFERENCES Users(username),
@@ -131,10 +136,18 @@ if (isset($_POST['install'])) {
 		PRIMARY KEY(inviter, invitee, code))");
 
 	$res = $mdb2->query("CREATE TABLE ClientCodes(
-                code CHAR(3),
-                name VARCHAR(32),
-                url VARCHAR(256),
-                PRIMARY KEY(code))");
+		code CHAR(3),
+		name VARCHAR(32),
+		url VARCHAR(256),
+		PRIMARY KEY(code))");
+
+	$res = $mdb2->query("CREATE TABLE Tags(
+		username VARCHAR(64) REFERENCES Users(username),
+		tag VARCHAR(64),
+		artist VARCHAR(255) REFERENCES Artist(name),
+		album VARCHAR(255) REFERENCES Album(name),
+		track VARCHAR(255) REFERENCES Track(name),
+		PRIMARY KEY(username, tag, artist, album, track))");
 
 	// Test user configuration
 	$res = $mdb2->query("INSERT INTO Users
