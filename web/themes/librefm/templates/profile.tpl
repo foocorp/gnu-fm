@@ -51,8 +51,8 @@
     <div style="padding: 10px;">
       <h3>User's favorite artists</h3>
 <ul class="tagcloud">
-{section name=i loop=$tagcloud}
-  <li style='font-size:{$tagcloud[i].size}'><a href='/artist/{$tagcloud[i].artist|urlencode}' rel='tag'>{$tagcloud[i].artist}</a></li>
+{section name=i loop=$user_tagcloud}
+  <li style='font-size:{$user_tagcloud[i].size}'><a href='/artist/{$user_tagcloud[i].artist|urlencode}' rel='tag'>{$user_tagcloud[i].artist}</a></li>
 {/section}
   </ul>
 {include file='footer.tpl'}
