@@ -76,6 +76,8 @@ function createAlbumIfNew($artist, $album) {
 function createTrackIfNew($artist, $album, $track, $mbid) {
 	global $mdb2;
 
+	$track = NoSpamTracks($track);
+
 	$res = $mdb2->query("SELECT name FROM Track WHERE name = " . ($track) . " AND artist = " . ($artist));
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage());
@@ -93,4 +95,16 @@ function createTrackIfNew($artist, $album, $track, $mbid) {
 		}
 	}
 }
+
+function NoSpamTracks ($track) {
+
+  // This function exists to remove things like '(PREVIEW: buy it at www.magnatune.com)' from track names.
+
+  $track = str_replace("(PREVIEW: buy it at www.magnatune.com)", "", $track);
+
+  return $track;
+  
+}
+
+
 ?>
