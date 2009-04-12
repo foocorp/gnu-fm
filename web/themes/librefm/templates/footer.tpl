@@ -1,8 +1,8 @@
     </div></div>
+{if !$profile}
     <div class="yui-u" id="sidebar">
     <div style="padding: 10px;">
       <h3>Explore popular artists</h3>
-
 <ul class="tagcloud">
   <li class="tc t1"><a href="#">They Might Be Giants</a></li>
   <li class="tc t3"><a href="#">John Lennon</a></li>
@@ -24,10 +24,9 @@
   <li class="tc t1"><a href="#">Solar Fields</a></li>
   <li class="tc t4"><a href="#">billy talent</a></li>
   <li class="tc t3"><a href="#">Blur</a></li>
-  </ul>
-
-      
+  </ul>     
     </div></div>
+{/if}
 </div></div>
 <div class="yui-g" id="artists">
 
