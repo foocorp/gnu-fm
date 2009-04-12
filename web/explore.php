@@ -22,14 +22,9 @@
 
 require_once("database.php");
 require_once("templating.php");
+require_once("data/Server.php");
 
-$res = $mdb2->query("SELECT COUNT(artist) as c, artist FROM Scrobbles GROUP BY artist ORDER BY c DESC LIMIT 0,20");
-
-if(PEAR::isError($res)) {
-  die($res->getMessage());
-}
-
-$smarty->assign("topartists", $res->fetchAll(MDB2_FETCHMODE_ASSOC));
+$smarty->assign("topartists", Server::getTopArtists(20));
 $smarty->assign("explore", true);
 $smarty->display("explore-artists.tpl");
 

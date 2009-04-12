@@ -6,7 +6,7 @@
   {section name=popular loop=$topartists}
   <li>
     <dl>
-      <dt><a href="artist.php?artist={$topartists[popular].artist|stripslashes|urlencode}">
+      <dt><a href="{$topartists[popular].artisturl}">
         {$topartists[popular].artist|stripslashes}</a></dt>
       <dd>{$topartists[popular].c} gobbles</dd>
     </dl>
