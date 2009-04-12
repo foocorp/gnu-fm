@@ -57,12 +57,12 @@ echo "        <image></image>\n";
 echo "        <lastfm:trackauth>00000</lastfm:trackauth>\n";
 echo "        <lastfm:albumId>0000000</lastfm:albumId>\n";
 echo "        <lastfm:artistId>00000000</lastfm:artistId>\n";
-echo "                <link rel="http://www.last.fm/artistpage"></link>\n";
-echo "        <link rel="http://www.last.fm/albumpage"></link>\n";
-echo "        <link rel="http://www.last.fm/trackpage"></link>\n";
-echo "        <link rel="http://www.last.fm/buyTrackURL"></link>\n";
-echo "        <link rel="http://www.last.fm/buyAlbumURL"></link>\n";
-echo "        <link rel="http://www.last.fm/freeTrackURL">$downloadurl</link>\n";
+echo "                <link rel=\"http://www.last.fm/artistpage\"></link>\n";
+echo "        <link rel=\"http://www.last.fm/albumpage\"></link>\n";
+echo "        <link rel=\"http://www.last.fm/trackpage\"></link>\n";
+echo "        <link rel=\"http://www.last.fm/buyTrackURL\"></link>\n";
+echo "        <link rel=\"http://www.last.fm/buyAlbumURL\"></link>\n";
+echo "        <link rel=\"http://www.last.fm/freeTrackURL\">$downloadurl</link>\n";
 echo "    </track>\n";
 
 }
