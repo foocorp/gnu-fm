@@ -1,0 +1,147 @@
+#!/usr/bin/python
+
+import lxml.etree as ET
+import codecs, locale, sys
+sys.stdout = codecs.getwriter(locale.getdefaultlocale()[1])(sys.stdout, 'replace')
+
+def tardescape(lol):
+
+	if lol:
+		lol = lol.replace('\\', '\\\\')
+		lol = lol.replace('"','\\\"')
+
+	return lol
+
+tree = ET.parse("/tmp/dbdump_artistalbumtrack.xml")
+
+wuggie = tree.getiterator("artist")
+
+print """
+DROP TABLE jm_artist;
+DROP TABLE jm_album;
+DROP TABLE jm_track;
+CREATE TABLE jm_artist (id varchar(10), name varchar(255), url varchar(255), image varchar(255), mbgid varchar(36));
+CREATE TABLE jm_album (id varchar(10), artist varchar(10), name varchar(255), url varchar(255), genre varchar(4), mbgid varchar(36), licenseartwork varchar(255), releasedate char(26));
+CREATE TABLE jm_track (id varchar(10), album varchar(10), name varchar(255), mbgid varchar(36), tracknum varchar(3), genre varchar(4), license varchar(255));
+"""
+
+for i in wuggie:
+	Eid = i.find("id")
+	Ename = i.find("name")
+	Eurl = i.find("url")
+	Eimage = i.find("image")
+	Embgid = i.find("mbgid")
+
+	if Eid == None:
+		id = ""
+	else:
+		id = Eid.text
+
+	if Ename == None:
+		name = ""
+	else:
+		name = Ename.text
+
+	if Eurl == None:
+		url = ""
+	else:
+		url = Eurl.text
+
+	if Eimage == None:
+		image = ""
+	else:
+		image = Eimage.text
+
+	if Embgid.text == None:
+		mbgid = ""
+	else:
+		mbgid = Embgid.text
+
+	print "INSERT INTO jm_artist (id, name, url, image, mbgid) VALUES (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\");" % (tardescape(id), tardescape(name), tardescape(url), tardescape(image), tardescape(mbgid))
+
+	for j in i.findall("Albums/album"):
+		Aid = j.find("id")
+		Aname = j.find("name")
+		Aurl = j.find("url")
+		Agenre = j.find("id3genre")
+		Ambgid = j.find("mbgid")
+		Alicenseartwork = j.find("license_artwork")
+		Areleasedate = j.find("releasedate")
+
+		if Aid == None:
+			aid = ""
+		else:
+			aid = Aid.text
+
+		if Aname == None:
+			aname = ""
+		else:
+			aname = Aname.text
+
+		if Aurl == None:
+			aurl = ""
+		else:
+			aurl = Aurl.text
+
+		if Agenre == None:
+			genre = ""
+		else:
+			genre = Agenre.text
+
+		if Ambgid.text == None:
+			ambgid = ""
+		else:
+			ambgid = Ambgid.text
+
+		if Alicenseartwork == None:
+			licenseartwork = ""
+		else:
+			licenseartwork = Alicenseartwork.text
+
+		if Areleasedate == None:
+			releasedate = ""
+		else:
+			releasedate = Areleasedate.text
+
+		print "INSERT INTO jm_album (id, artist, name, url, genre, mbgid, licenseartwork, releasedate) VALUES (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\");" % (tardescape(aid), tardescape(id), tardescape(aname), tardescape(aurl), tardescape(genre), tardescape(ambgid), tardescape(licenseartwork), tardescape(releasedate))
+
+		for k in j.findall("Tracks/track"):
+
+			Tid = k.find("id")
+			Tname = k.find("name")
+			Tmbgid = k.find("mbgid")
+			Tnumalbum = k.find("numalbum")
+			Tgenre = k.find("id3genre")
+			Tlicense = k.find("license")
+	
+			if Tid == None:
+				tid = ""
+			else:
+				tid = Tid.text
+	
+			if Tname == None:
+				tname = ""
+			else:
+				tname = Tname.text
+	
+			if Tmbgid.text == None:
+				tmbgid = ""
+			else:
+				tmbgid = Tmbgid.text
+	
+			if Tnumalbum == None:
+				tracknum = ""
+			else:
+				tracknum = Tnumalbum.text
+	
+			if Tgenre == None:
+				tgenre = ""
+			else:
+				tgenre = Tgenre.text
+
+			if Tlicense == None:
+				tlicense = ""
+			else:
+				tlicense = Tlicense.text
+
+			print "INSERT INTO jm_track (id, album, name, mbgid, tracknum, genre, license) VALUES (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\");" % (tardescape(tid), tardescape(aid), tardescape(tname), tardescape(tmbgid), tardescape(tracknum), tardescape(tgenre), tardescape(tlicense))
