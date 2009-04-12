@@ -18,6 +18,11 @@ function process_jamendo_url($url) {
 		return "http://api.jamendo.com/get2/bittorrent/file/plain/?album_id=" . $id . "&type=archive&class=ogg3";
 	}
 
+	if (substr($url, 10, 10) == "album/art/") {
+		$id = substr($url, 20);
+		return "http://api.jamendo.com/get2/image/album/redirect/?id=" . $id . "&imagesize=400";
+	}
+
 	// We don't know what this is
 	return $url;
 }

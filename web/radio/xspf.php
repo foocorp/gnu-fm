@@ -1,4 +1,4 @@
-<?
+<?php
 /* Libre.fm -- a free network service for sharing your music listening habits
 
    Copyright (C) 2009 Libre.fm Project
@@ -18,60 +18,61 @@
 
 */
 
-// fakes the radio xspf generation
-
-require_once('../config.php');
 require_once('../database.php');
+require_once('../data/Track.php');
+require_once("radio-utils.php");
 
 if(!isset($_GET['sk']) || !isset($_GET['desktop'])) {
-	die("Uh-oh\n");
+	die("BADSESSION\n");
 }
 
+$session = $_GET["sk"];
+
+$res = $mdb2->query("SELECT url FROM Radio_Sessions WHERE session = " . $mdb2->quote($session, "text"));
+
+if(!$res->numRows()) {
+	die("BADSESSION\n");
+}
+
+$url = $res->fetchOne(0);
+
+$title = radio_title_from_url($url);
+
 echo "<playlist version=\"1\" xmlns:lastfm=\"http://www.audioscrobbler.net/dtd/xspf-lastfm\">\n";
-echo "<title>Fake Jamendo Playlist</title>\n";
+echo "<title>$title</title>\n";
 echo "<creator>libre.fm</creator>\n";
 echo "<link rel=\"http://www.last.fm/skipsLeft\">9999</link>\n";
 echo "<trackList>\n";
 
-$res = $mdb2->query("SELECT name, artist, album, duration, downloadurl, streamurl FROM Track WHERE license='http://creativecommons.org/licenses/by/3.0/' AND streamurl LIKE 'jamendo://track/stream/%' LIMIT 5");
+$res = $mdb2->query("SELECT name, artist, album FROM Track WHERE streamurl != '' LIMIT 10");
 
 while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 
-$name = $row["name"];
-$artist = $row["artist"];
-$album = $row["album"];
-$duration = $row["duration"];
-if($duration == "") {
-    $duration = "180000";
-}
-$downloadurl = $row["downloadurl"];
-$streamurl = $row["streamurl"];
+	$track = new Track($row["name"], $row["artist"]);
+	$album = new Album($row["album"], $row["artist"]);
+	$artist = new Artist($row["artist"]);
 
-if(ereg("jamendo://track/stream/(.*)", $streamurl, $regs)) {
-$jmtrack = $regs[1];
+	if($track->duration == 0) {
+		$track->duration = 1800;
+	}
 
-echo "    <track>\n";
-echo "        <location>http://api.jamendo.com/get2/stream/track/redirect/?id=$jmtrack&amp;streamencoding=ogg2</location>\n";
-echo "        <title>$name</title>\n";
-echo "        <id>$jmtrack</id>\n";
-echo "        <album>$album</album>\n";
-echo "        <creator>$artist</creator>\n";
-echo "        <duration>$duration</duration>\n";
-echo "        <image></image>\n";
-echo "        <lastfm:trackauth>00000</lastfm:trackauth>\n";
-echo "        <lastfm:albumId>0000000</lastfm:albumId>\n";
-echo "        <lastfm:artistId>00000000</lastfm:artistId>\n";
-echo "                <link rel=\"http://www.last.fm/artistpage\"></link>\n";
-echo "        <link rel=\"http://www.last.fm/albumpage\"></link>\n";
-echo "        <link rel=\"http://www.last.fm/trackpage\"></link>\n";
-echo "        <link rel=\"http://www.last.fm/buyTrackURL\"></link>\n";
-echo "        <link rel=\"http://www.last.fm/buyAlbumURL\"></link>\n";
-echo "        <link rel=\"http://www.last.fm/freeTrackURL\">$downloadurl</link>\n";
-echo "    </track>\n";
+	echo "    <track>\n";
+	echo "        <location>" . htmlentities($track->streamurl) . "</location>\n";
+	echo "        <title>" . $track->name . "</title>\n";
+	echo "        <id>" . $track->name . "</id>\n";
+	echo "        <album>" . $album->name . "</album>\n";
+	echo "        <creator>" . $artist->name . "</creator>\n";
+	echo "        <duration>" . $track->duration . "</duration>\n";
+	echo "        <image>".  $album->image . "</image>\n";
+	echo "        <link rel=\"http://www.last.fm/artistpage\">" . htmlentities($artist->getURL()) . "</link>\n";
+	echo "        <link rel=\"http://www.last.fm/albumpage\">" . htmlentities($album->getURL()) . "</link>\n";
+	echo "        <link rel=\"http://www.last.fm/trackpage\">" . htmlentities($track->getURL()) . "</link>\n";
+	echo "        <link rel=\"http://www.last.fm/buyTrackURL\"></link>\n";
+	echo "        <link rel=\"http://www.last.fm/buyAlbumURL\"></link>\n";
+	echo "        <link rel=\"http://www.last.fm/freeTrackURL\">" . htmlentities($track->downloadurl) . "</link>\n";
+	echo "    </track>\n";
 
-}
-
-}
+	}
 
 echo "</trackList>\n";
 echo "</playlist>\n";
