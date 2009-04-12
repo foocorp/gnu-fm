@@ -163,14 +163,14 @@ class JamendoImport:
 				for album in artist["albums"]:
 					if self.album_exists(artist["name"], album["name"]):
 						try:
-							self.cursor.execute("UPDATE Album SET albumurl = %s, image = %s, artwork_license = %s, mbid = %s, releasedate = %s WHERE name = %s AND artist_name = %s", 
-									(album["url"], album["image"], album["license_artwork"], album["mbid"], album["releasedate"],
+							self.cursor.execute("UPDATE Album SET albumurl = %s, image = %s, artwork_license = %s, mbid = %s, releasedate = %s, downloadurl = %s WHERE name = %s AND artist_name = %s", 
+									(album["url"], album["image"], album["license_artwork"], album["mbid"], album["releasedate"], album["downloadurl"],
 									album["name"], artist["name"]))
 						except Exception,  e:
 							pass
 					else:
 						try:
-							self.cursor.execute("INSERT INTO Album (name, artist_name, albumurl, image, artwork_license, mbid, releasedate, downloadurl) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+							self.cursor.execute("INSERT INTO Album (name, artist_name, albumurl, image, artwork_license, mbid, releasedate, downloadurl) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
 									(album["name"], artist["name"], album["url"], album["image"], album["license_artwork"], album["mbid"], album["releasedate"], album["downloadurl"]))
 						except Exception,  e:
 							pass
