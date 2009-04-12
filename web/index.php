@@ -26,6 +26,7 @@ require_once("data/Server.php");
 
 $smarty->assign('recenttracks', Server::getRecentScrobbles(20));
 $smarty->assign('nowplaying', Server::getNowPlaying(10));
+$smarty->assign('welcome', true);
 
 $smarty->display('welcome.tpl');
 ?>
