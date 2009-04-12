@@ -10,7 +10,7 @@
   {section name=i loop=$albums}
   <li>
     <dl>
-      <dt><a href="{$base_url}/album.php?artist={$name|urlencode}&album={$albums[i]->name|urlencode}">
+      <dt><a href="{$albums[i]->getURL()}">
         {$albums[i]->name}</a></dt>
 	<dd>{$albums[i]->releasedate}</dd>
     <dd>{$albums[i]->c} gobbles</dd>
