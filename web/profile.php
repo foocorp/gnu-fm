@@ -22,6 +22,7 @@
 require_once('database.php');
 require_once('templating.php');
 require_once('data/User.php');
+require_once('data/TagCloud.php');
 
 if(!isset($_GET['user']) && $logged_in == false) {
 	$smarty->assign('error', 'Error!');
@@ -31,6 +32,8 @@ if(!isset($_GET['user']) && $logged_in == false) {
 }
 
 $user = new User($_GET['user']);
+$tagcloud = new TagCloud('Scrobbles', 'artist', 40, $_GET['user']);
+
 if(isset($user->name)) { 
 	$smarty->assign('user', $user->name);
 	$smarty->assign('email', $user->email);
@@ -42,7 +45,7 @@ if(isset($user->name)) {
 	$smarty->assign('userlevel', $user->userlevel);
 	$smarty->assign('avatar', $user->getAvatar());
 	$smarty->assign('nowplaying', $user->getNowPlaying(10));
-	$smarty->assign('tagcloud', $user->getTagCloud());
+	$smarty->assign('tagcloud', $tagcloud->tagcloud);
 	$smarty->assign('profile', true);
 	$smarty->display('profile.tpl');
 } else {
@@ -50,4 +53,7 @@ if(isset($user->name)) {
 	$smarty->assign('details', 'Shall I call in a missing persons report?');
 	$smarty->display('error.tpl');
 }
+
+$tagcloud->__destruct();
+
 ?>
