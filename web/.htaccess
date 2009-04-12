@@ -2,6 +2,6 @@ Options +FollowSymLinks
 RewriteEngine on
 
 RewriteRule ^user/(.+)$ profile.php?user=$1 [NC]
-RewriteRule ^artist/(.+)$ artist.php?artist=$1 [NC]
 RewriteRule ^track/(.+)$ track.php?track=$1 [NC]
 RewriteRule ^artist/(.+)/album/(.+)$ album.php?artist=$1&album=$2 [NC]
+RewriteRule ^artist/(.+)$ artist.php?artist=$1 [NC]
