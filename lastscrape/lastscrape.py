@@ -11,13 +11,11 @@ sys.stdout = codecs.lookup('utf-8')[-1](sys.stdout)
 
 def parse_page(page):
 	soup = BeautifulSoup(urllib2.urlopen(page))
-	page_data = []
 	for row in soup.find('table', 'tracklist big').findAll('tr'):
 		artist, track, timestamp = parse_track(row)
 		# Tracks submitted before 2005 have no timestamp
 		if artist and track:
-			page_data.append((artist, track, timestamp))
-	return page_data
+			yield (artist, track, timestamp)
 
 def parse_track(row):
 	try:
@@ -38,14 +36,12 @@ def fetch_tracks(user, request_delay=0.5):
 		num_pages = int(soup.find('a', 'lastpage').contents[0])
 	except:
 		num_pages = 1
-	
-	all_data = []
 	for cur_page in range(1, num_pages + 1):
-		data = parse_page(url + '?page=' + str(cur_page))
-		all_data += data
+		tracks = parse_page(url + '?page=' + str(cur_page))
+		for artist, track, timestamp in tracks:
+			yield (artist, track, timestamp)
 		if cur_page < num_pages:
 			time.sleep(request_delay)
-	return all_data
 
 def main(*args):
 	if len(args) == 2:
