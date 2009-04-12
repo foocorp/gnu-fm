@@ -103,6 +103,7 @@ class User {
 		foreach($data as &$i) {
 			$i['percent'] = 6-(int)(($i['count']/$data[0]['count'])*5);
 		}
+		sort($data);
 		return $data;
 	}
 
