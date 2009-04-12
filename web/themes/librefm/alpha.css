@@ -29,6 +29,8 @@ div#footer a {
  * We should use a class down here ¬¬ (fauno)
  */
 
+form input {font-size: 140%;}
+
 div#invite,
 div#register,
 div#login {
