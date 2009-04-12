@@ -24,6 +24,7 @@ require_once($install_path . '/database.php');
 require_once($install_path . "/data/Artist.php");
 require_once($install_path . "/data/Album.php");
 require_once($install_path . "/data/Server.php");
+require_once($install_path . "/resolve-external.php");
 
 /**
  * Represents track data
@@ -32,7 +33,7 @@ require_once($install_path . "/data/Server.php");
  */
 class Track {
 
-	public $name, $artist_name, $album_name, $mbid, $duration, $streamable, $license, $downloadurl;
+	public $name, $artist_name, $album_name, $mbid, $duration, $streamable, $license, $downloadurl, $streamurl;
 
 	private $_playcount = false, $_listenercount = false;
 
@@ -44,7 +45,7 @@ class Track {
 	 */
 	function __construct($name, $artist) {
 		global $mdb2;
-		$res = $mdb2->query("SELECT name, artist, album, duration, streamable, license, downloadurl, mbid FROM Track WHERE "
+		$res = $mdb2->query("SELECT name, artist, album, duration, streamable, license, downloadurl, streamurl, mbid FROM Track WHERE "
 			. "name = " . $mdb2->quote($name, "text") . " AND "
 			. "artist = " . $mdb2->quote($artist, "text"));
 		if(!$res->numRows()) {
@@ -58,7 +59,8 @@ class Track {
 			$this->duration = $row["duration"];
 			$this->streamable = $row["streamable"];
 			$this->license = $row["license"];
-			$this->downloadurl = $row["downloadurl"];
+			$this->downloadurl = resolve_external_url($row["downloadurl"]);
+			$this->streamurl = resolve_external_url($row["streamurl"]);
 		}
 
 	}

@@ -81,6 +81,7 @@ if (isset($_POST['install'])) {
 		artwork_license VARCHAR(255),
 		releasedate int,
 		albumurl VARCHAR(255),
+		downloadurl VARCHAR(255),
 		PRIMARY KEY(name, artist_name),
 		FULLTEXT(name,artist_name));");
 
