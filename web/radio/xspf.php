@@ -26,11 +26,11 @@ if(!isset($_GET['sk']) || !isset($_GET['desktop'])) {
 	die("Uh-oh\n");
 }
 
-echo "<playlist version=\"1\" xmlns:lastfm=\"http://www.audioscrobbler.net/dtd/xspf-lastfm\">\n"
-echo "<title></title>\n"
-echo "<creator>Last.fm</creator>\n"
-echo "<link rel=\"http://www.last.fm/skipsLeft\">9999</link>\n"
-echo "<trackList>\n"
+echo "<playlist version=\"1\" xmlns:lastfm=\"http://www.audioscrobbler.net/dtd/xspf-lastfm\">\n";
+echo "<title></title>\n";
+echo "<creator>Last.fm</creator>\n";
+echo "<link rel=\"http://www.last.fm/skipsLeft\">9999</link>\n";
+echo "<trackList>\n";
 
 $res = $mdb2->query("SELECT name, artist, album, duration, downloadurl, streamurl WHERE streamurl IS NOT NULL AND license='http://creativecommons.org/licenses/by/3.0/' AND streamurl like 'jamendo://track/stream/%' LIMIT 5";
 
