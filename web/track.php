@@ -26,16 +26,7 @@ require_once("data/Track.php");
 
 $track = new Track($_GET['track'], $_GET['artist']);
 
-$smarty->assign("name", $track->name);
-$smarty->assign("artist", $track->artist_name);
-$smarty->assign("album", $track->album_name);
-$smarty->assign("duration", $track->duration);
-if (empty($track->duration)) {
-    $smarty->assign("duration", false);
-}
-$smarty->assign("license", $track->license);
-$smarty->assign("playcount", $track->getPlayCount());
-$smarty->assign("listeners", $track->getListenerCount());
+$smarty->assign("track", $track);
 
 $smarty->display("track.tpl");
 ?>

@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="http://turtle.libre.fm/base.css" type="text/css" />
 	<link rel="stylesheet" href="http://turtle.libre.fm/librefm.css" type="text/css" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/alpha.css" type="text/css" />
+	<script type="text/javascript" src="{$base_url}/js/player.js"></script>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <!--
 <rdf:RDF xmlns="http://web.resource.org/cc/"
