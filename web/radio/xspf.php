@@ -28,8 +28,8 @@ if(!isset($_GET['sk']) || !isset($_GET['desktop'])) {
 }
 
 echo "<playlist version=\"1\" xmlns:lastfm=\"http://www.audioscrobbler.net/dtd/xspf-lastfm\">\n";
-echo "<title></title>\n";
-echo "<creator>Last.fm</creator>\n";
+echo "<title>Fake Jamendo Playlist</title>\n";
+echo "<creator>libre.fm</creator>\n";
 echo "<link rel=\"http://www.last.fm/skipsLeft\">9999</link>\n";
 echo "<trackList>\n";
 
