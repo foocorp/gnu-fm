@@ -1,5 +1,5 @@
     </div></div>
-{if !$profile}
+{if !$profile && !explore}
     <div class="yui-u" id="sidebar">
         <div style="padding: 10px;">
             <h3>Explore popular artists</h3>
