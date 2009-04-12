@@ -69,6 +69,6 @@ echo "    </track>\n";
 
 }
 
-echo "</trackList>\n"
-echo "</playlist>\n"
+echo "</trackList>\n";
+echo "</playlist>\n";
 ?>
