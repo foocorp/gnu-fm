@@ -1,31 +1,15 @@
     </div></div>
 {if !$profile}
     <div class="yui-u" id="sidebar">
-    <div style="padding: 10px;">
-      <h3>Explore popular artists</h3>
-<ul class="tagcloud">
-  <li class="tc t1"><a href="#">They Might Be Giants</a></li>
-  <li class="tc t3"><a href="#">John Lennon</a></li>
-  <li class="tc t1"><a href="#">Half Man Half Biscuit</a></li>
-  <li class="tc t3"><a href="#">Explosions in the sky</a></li>
-  <li class="tc t1"><a href="#">Belle and Sebastian</a></li>
-  <li class="tc t2"><a href="#">nine inch nails</a></li>
-  <li class="tc t5"><a href="#">Pulp</a></li>
-  <li class="tc t1"><a href="#">Radiohead</a></li>
-  <li class="tc t6"><a href="#">Tom Lehrer</a></li>
-  <li class="tc t2"><a href="#">The Beatles</a></li>
-  <li class="tc t3"><a href="#">Dead Kennedys</a></li>
-  <li class="tc t4"><a href="#">Bishop Allen</a></li>
-  <li class="tc t2"><a href="#">The Orb</a></li>
-  <li class="tc t3"><a href="#">gorillaz</a></li>
-  <li class="tc t4"><a href="#">Carbon Based Lifeforms</a></li>
-  <li class="tc t5"><a href="#">Laura Cantrell</a></li>
-  <li class="tc t6"><a href="#">Jem</a></li>
-  <li class="tc t1"><a href="#">Solar Fields</a></li>
-  <li class="tc t4"><a href="#">billy talent</a></li>
-  <li class="tc t3"><a href="#">Blur</a></li>
-  </ul>     
-    </div></div>
+        <div style="padding: 10px;">
+            <h3>Explore popular artists</h3>
+            <ul class="tagcloud">
+    {section name=i loop=$tagcloud}
+                <li style='font-size:{$tagcloud[i].size}'><a href='/artist/{$tagcloud[i].artist|urlencode}' rel='tag'>{$tagcloud[i].artist}</a></li>
+    {/section}
+            </ul>     
+        </div>
+    </div>
 {/if}
 </div></div>
 <div class="yui-g" id="artists">
