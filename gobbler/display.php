@@ -43,7 +43,7 @@ require_once('utils/human-time.php');
        <li><a href="https://savannah.nongnu.org/bugs/?group=librefm">Bugs</a></li>
        <li id="login"><a href="http://alpha.libre.fm/login.php">Log in</a></li>
      </ul>
-     
+
    </div>
    <div id="bd" role="main">
    <div id="coolio">
@@ -55,29 +55,29 @@ require_once('utils/human-time.php');
     <div style="padding: 10px;">
 		<?php
 
-  $req_user = $_GET["u"];
-$req_artist = $_GET["a"];
-$req_track = $_GET["t"];
-  
+$req_user	= urldecode($_GET["u"]);
+$req_artist	= urldecode($_GET["a"]);
+$req_track	= urldecode($_GET["t"]);
+
 
 if ($req_user) {
-
-			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE username = '" . $req_user . "' ORDER BY time DESC LIMIT 100");
+//			echo "SELECT username, artist, track, time FROM Scrobbles WHERE username = '" . $mdb2->quote($req_user, 'text') . "' ORDER BY time DESC LIMIT 100";
+			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE username = " . $mdb2->quote($req_user, 'text') . " ORDER BY time DESC LIMIT 100");
 
 			echo "<h2>" . $req_user . "'s most recent listening data</h2>";
 
 } elseif ($req_artist) {
 
-			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE artist = '" . $req_artist ."' ORDER BY time DESC LIMIT 100");
+			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE artist = '" . $mdb2->quote($req_artist, 'text') ."' ORDER BY time DESC LIMIT 100");
 
 			echo "<h2>Last 100 Tracks by " . $req_artist . "</h2>";
 
 } elseif ($req_track) {
 
-			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE track = '" . $req_track . "' ORDER BY time DESC LIMIT 100");
+			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE track = '" . $mdb2->quote($req_track, 'text') . "' ORDER BY time DESC LIMIT 100");
 
 			echo "<h2>Last 100 plays of " . $req_track . "</h2>";
-			
+
 } elseif (!$res) {
 
 			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
@@ -90,7 +90,7 @@ if ($req_user) {
 
 		<table>
 			<tr><th>User</th><th>Artist</th><th>Track</th><th>Time</th></tr>
-			
+
 <?php
 
 			if(PEAR::isError($res)) {
@@ -113,7 +113,7 @@ if ($req_user) {
 
 		?>
 		</table>
-		
+
     </div></div>
     <div class="yui-u" id="sidebar">
     <div style="padding: 10px;">
@@ -162,7 +162,7 @@ if ($req_user) {
 		?>
 
 
-      
+
     </div></div>
 </div></div>
 <div class="yui-g" id="artists">
@@ -173,7 +173,7 @@ if ($req_user) {
   and streaming services for freely-licensed music, we are also
   interested in linking all bands to respectable DRM-free music
   services.
-  
+
 </div>
 <div class="yui-g">
     <div class="yui-u first" id="links">
@@ -204,7 +204,7 @@ what's happening.
 
      <p><img src="http://libre.fm/i/cc-by-sa.png" alt="Attribution-ShareAlike 3.0" /></p>
 
-<p><a href="/data">Data dumps are here</a</p>
+<p><a href="/data">Data dumps are here</a></p>
 
    </div>
 </div>
