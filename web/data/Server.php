@@ -123,4 +123,14 @@ class Server {
 		}
 	}
 
+    static function getAlbumURL($artist, $album) {
+        global $friendly_urls, $base_url;
+        $artist_encoded = urlencode(stripslashes($artist));
+        $album_encoded = urlencode(stripslashes($album));
+		if($friendly_urls) {
+			return $base_url . "/artist/" . $artist_encoded . "/album/" . $album_encoded;
+		} else {
+			return $base_url . "/artist.php?artist=" . $artist_encoded . "&album=" . $album_encoded;
+		}
+	}
 }
