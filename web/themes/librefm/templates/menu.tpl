@@ -12,5 +12,5 @@
         <li><a href="{$base_url}/request.php">Request invitation</a></li>
 {/if}
         <li>Explore:</li>
-        <li><a href="explore.php?mode=artists">Artists</a></li>
+        <li><a href="{$base_url}/explore.php?mode=artists">Artists</a></li>
   </ul>
