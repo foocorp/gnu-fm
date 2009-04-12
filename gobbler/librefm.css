@@ -69,6 +69,8 @@ li{ line-height: 1.6em; }
 .tagcloud .t5 { font-size: 120%; }
 .tagcloud .t6 { font-size: 100%; }
 
+.tagcloud a:hover{background-color: #07c; color: white;}
+
 a:hover { color: red !important; }
 a:visited{ color: #07c;}
 
