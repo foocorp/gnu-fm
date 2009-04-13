@@ -22,6 +22,8 @@ require_once('../database.php');
 require_once('../data/Track.php');
 require_once("radio-utils.php");
 
+// These deaths should probably just return an empty playlist
+
 if(!isset($_GET['sk']) || !isset($_GET['desktop'])) {
 	die("BADSESSION\n");
 }
@@ -50,7 +52,7 @@ if(ereg("l(ast|ibre)fm://globaltags/(.*)", $url, $regs)) {
 	die("FAILED\n");
 }
 
-$res = $mdb2->query("SELECT Track.name, Track.artist, Track.album FROM Track LEFT OUTER JOIN Tags ON Track.name=Tags.track AND Track.artist=Tags.artist AND Track.album=Tags.album WHERE streamurl<>'' AND tag = " . $mdb2->quote($tag, "text"));
+$res = $mdb2->query("SELECT Track.name, Track.artist, Track.album FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist=Tags.artist AND Track.album=Tags.album WHERE streamurl<>'' AND tag = " . $mdb2->quote($tag, "text"));
 
 $avail = $res->numRows();
 
