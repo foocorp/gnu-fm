@@ -23,10 +23,9 @@ def parse_track(row):
 	try:
 		track_info = row.find('td', 'subjectCell')
 		artist, track = track_info.findAll('a')
-		timestamp = row.find('abbr')
+		timestamp = row.find('abbr')['title']
 		artist = artist.contents[0].strip()
 		track = track.contents[0].strip()
-		timestamp = str(timestamp).split('"')[1].strip()
 		return (artist, track, timestamp)
 	except:
 		# Parsing failed
