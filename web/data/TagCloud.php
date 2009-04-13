@@ -41,7 +41,7 @@ class TagCloud {
         $query .= (!is_null($username) || ($table == "Scrobbles")) ? ' WHERE ' : null;
         $query .= (!is_null($username)) ? ' username = ' . $mdb2->quote($username, 'text') : null;
         $query .= (!is_null($username) && ($table == "Scrobbles")) ? ' AND ' : null;
-        $query .= ($table == "Scrobbles") ? ' username = ' . $mdb2->quote($username, 'text') : null;
+        $query .= ($table == "Scrobbles") ? ' rating <> "S" ' : null;
         $query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
         $res = $mdb2->query($query);
         if (!$res->numRows()) {
