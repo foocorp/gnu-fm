@@ -44,7 +44,7 @@ echo "<creator>libre.fm</creator>\n";
 echo "<link rel=\"http://www.last.fm/skipsLeft\">9999</link>\n";
 echo "<trackList>\n";
 
-if(ereg("l(ast|ibre)fm://globaltags/(.*)", $url, $regs) {
+if(ereg("l(ast|ibre)fm://globaltags/(.*)", $url, $regs)) {
 	$tag = $regs[2];
 } else {
 	die "FAILED\n";
