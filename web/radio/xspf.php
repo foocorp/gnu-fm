@@ -50,10 +50,21 @@ if(ereg("l(ast|ibre)fm://globaltags/(.*)", $url, $regs)) {
 	die("FAILED\n");
 }
 
-// This needs some kind of randomization
-$res = $mdb2->query("SELECT Track.name, Track.artist, Track.album FROM Track LEFT OUTER JOIN Tags ON Track.name=Tags.track AND Track.artist=Tags.artist AND Track.album=Tags.album WHERE streamurl<>'' AND tag = " . $mdb2->quote($tag, "text") . " LIMIT 5");
+$res = $mdb2->query("SELECT Track.name, Track.artist, Track.album FROM Track LEFT OUTER JOIN Tags ON Track.name=Tags.track AND Track.artist=Tags.artist AND Track.album=Tags.album WHERE streamurl<>'' AND tag = " . $mdb2->quote($tag, "text"));
 
-while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+$avail = $res->numRows();
+
+// This needs some kind of deduplication among other things
+$tr[1] = $rand(1,$avail);
+$tr[2] = $rand(1,$avail);
+$tr[3] = $rand(1,$avail);
+$tr[4] = $rand(1,$avail);
+$tr[5] = $rand(1,$avail);
+sort($tr);
+
+	for($i=1; $i<6; $i++) {
+
+	$row = $res->seek($tr[$i]);
 
 	$track = new Track($row["name"], $row["artist"]);
 	$album = new Album($row["album"], $row["artist"]);
