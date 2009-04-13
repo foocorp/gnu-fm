@@ -185,7 +185,7 @@ class JamendoImport:
 
 					for track in album["tracks"]:
 
-						if "http://creativecommons.org/licenses/by-sa" not in track["license"] and "http://creativecommons.org/licenses/by/" in track["license"]:
+						if "http://creativecommons.org/licenses/by-sa" not in track["license"] and not "http://creativecommons.org/licenses/by/" in track["license"]:
 							track["streamurl"] = ""
 
 						if self.track_exists(artist["name"], album["name"], track["name"]):
