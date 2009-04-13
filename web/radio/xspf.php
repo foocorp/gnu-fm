@@ -64,15 +64,10 @@ $tr[3] = rand(1,$avail);
 $tr[4] = rand(1,$avail);
 sort($tr);
 
-echo "<debug>".$tr[0]."</debug>\n";
-echo "<debug>".$tr[1]."</debug>\n";
-echo "<debug>".$tr[2]."</debug>\n";
-echo "<debug>".$tr[3]."</debug>\n";
-echo "<debug>".$tr[4]."</debug>\n";
-
 	for($i=0; $i<5; $i++) {
 
-	$row = $res->seek($tr[$i]);
+	$res->seek($tr[$i]);
+	$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
 
 	$track = new Track($row["name"], $row["artist"]);
 	$album = new Album($row["album"], $row["artist"]);
