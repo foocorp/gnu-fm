@@ -14,11 +14,11 @@ musical tastes with other people.</p>
     <dd class='track-name'>
         {if $nowplaying[np].mbid <> ''}
         <a href='http://musicbrainz.org/track/{$nowplaying[np].mbid}.html'>
-        {else}
-        <a href="{$nowplaying[np].trackurl}">
         {/if}
         {$nowplaying[np].track|stripslashes|htmlspecialchars}
+        {if $nowplaying[np].mbid <> ''}
         </a>
+        {/if}
     </dd>
     <dd class='username'><a href='{$nowplaying[np].userurl}'>{$nowplaying[np].username|stripslashes|htmlspecialchars}</a></dd>
     <dd>using <span class='gobbler'>{$nowplaying[np].clientstr}</span></dd>
