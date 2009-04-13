@@ -64,9 +64,10 @@ $mdb2->query("DELETE FROM Now_Playing WHERE expires < " . time());
 //Delete this user's last playing song (if any)
 $mdb2->query("DELETE FROM Now_Playing WHERE sessionid = " . $sess);
 
-$mdb2->query("INSERT INTO Now_Playing (sessionid, artist, track, expires, mbid) VALUES ("
+$mdb2->query("INSERT INTO Now_Playing (sessionid, artist, album, track, expires, mbid) VALUES ("
 	. $sess . ", "
 	. $artist . ", "
+	. $album . ", "
 	. $track . ", "
 	. $expires . ", "
 	. $mbid . ")");
