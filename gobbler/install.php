@@ -127,6 +127,7 @@ if (isset($_POST['install'])) {
 		sessionid VARCHAR(32) PRIMARY KEY REFERENCES Scrobble_Sessions(sessionid),
 		track VARCHAR(255) REFERENCES Track(name),
 		artist VARCHAR(255) REFERENCES Artist(name),
+		album VARCHAR(255) REFERENCES Album(name),
 		mbid VARCHAR(36),
 		expires int)");
 
