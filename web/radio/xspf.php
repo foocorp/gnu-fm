@@ -57,20 +57,20 @@ $res = $mdb2->query("SELECT Track.name, Track.artist, Track.album FROM Track INN
 $avail = $res->numRows();
 
 // This needs some kind of deduplication among other things
+$tr[0] = rand(1,$avail);
 $tr[1] = rand(1,$avail);
 $tr[2] = rand(1,$avail);
 $tr[3] = rand(1,$avail);
 $tr[4] = rand(1,$avail);
-$tr[5] = rand(1,$avail);
 sort($tr);
 
-echo "<debug>".$tr[1]."</debug>";
-echo "<debug>".$tr[2]."</debug>";
-echo "<debug>".$tr[3]."</debug>";
-echo "<debug>".$tr[4]."</debug>";
-echo "<debug>".$tr[5]."</debug>";
+echo "<debug>".$tr[0]."</debug>\n";
+echo "<debug>".$tr[1]."</debug>\n";
+echo "<debug>".$tr[2]."</debug>\n";
+echo "<debug>".$tr[3]."</debug>\n";
+echo "<debug>".$tr[4]."</debug>\n";
 
-	for($i=1; $i<6; $i++) {
+	for($i=0; $i<5; $i++) {
 
 	$row = $res->seek($tr[$i]);
 
