@@ -41,6 +41,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		case "ASCII":
 		case "UTF-8":
 			$artist = $mdb2->quote($_POST['a'][$i], "text");
+			break;
 		default:
 			die("FAILED Bad encoding in artist submission $i\n");
 		}
@@ -59,7 +60,8 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	switch (mb_detect_encoding($_POST['t'][$i])) {
 		case "ASCII":
 		case "UTF-8":
-			$track = $mdb2->quote($_POST['t'][$i], "text");
+		    $track = $mdb2->quote($_POST['t'][$i], "text");
+		    break;
 		default:
 			die("FAILED Bad encoding in title submission $i\n");
 	}
