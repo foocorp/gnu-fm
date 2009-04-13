@@ -98,9 +98,9 @@ class Server {
 		global $mdb2;
 
 		if($username) {
-			$res = $mdb2->query('SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE username = ' . $mdb2->quote($username, "text") . ' ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT username, artist, album, track, client, ClientCodes.name, ClientCodes.url, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE username = ' . $mdb2->quote($username, "text") . ' ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		} else {
-			$res = $mdb2->query('SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT username, artist, album, track, client, ClientCodes.name, ClientCodes.url, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		}
 
 		if(PEAR::isError($res)) {
