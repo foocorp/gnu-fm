@@ -37,13 +37,32 @@ $session_id = $_POST['s'];
 $username = $mdb2->quote(usernameFromSID($session_id), "text");
 
 for($i = 0; $i < count($_POST['a']); $i++) {
-	$artist = $mdb2->quote($_POST['a'][$i], "text");
+		switch (mb_detect_encoding($_POST['a'][$i])) {
+		case "ASCII":
+		case "UTF-8":
+			$artist = $mdb2->quote($_POST['a'][$i], "text");
+		default:
+			die "FAILED Bad encoding in artist submission $i\n"
+		}
 	if(isset($_POST['b'][$i]) && !empty($_POST['b'])) {
-		$album = $mdb2->quote($_POST['b'][$i], "text");
+		switch (mb_detect_encoding($_POST['b'][$i])) {
+		case "ASCII":
+		case "UTF-8":
+			$album = $mdb2->quote($_POST['b'][$i], "text");
+			break;
+		default:
+			die "FAILED Bad encoding in album submission $i\n";
+		}
 	} else {
 		$album = 'NULL';
 	}
-	$track = $mdb2->quote($_POST['t'][$i], "text");
+	switch (mb_detect_encoding($_POST['t'][$i])) {
+		case "ASCII":
+		case "UTF-8":
+			$track = $mdb2->quote($_POST['t'][$i], "text");
+		default:
+			die "FAILED Bad encoding in title submission $i\n"
+	}
 	if(is_numeric($_POST['i'][$i])) {
 		$time = (int) $_POST['i'][$i];
 	} else {
