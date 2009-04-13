@@ -51,7 +51,7 @@ if(ereg("l(ast|ibre)fm://globaltags/(.*)", $url, $regs)) {
 }
 
 // This needs some kind of randomization
-$res = $mdb2->query("SELECT name, artist, album FROM Track WHERE streamurl <> '' AND tag=". $mdb2->quote($tag, "text") ." LIMIT 5");
+$res = $mdb2->query("SELECT Track.name, Track.artist, Track.album FROM Track LEFT OUTER JOIN Tags ON Track.name=Tags.track AND Track.artist=Tags.artist AND Track.album=Tags.album WHERE streamurl<>'' AND tag = " . $mdb2->quote($tag, "text") . " LIMIT 5");
 
 while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 
