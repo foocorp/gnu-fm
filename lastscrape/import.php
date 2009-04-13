@@ -63,6 +63,8 @@ for($i = 0; $i < count($data); $i++) {
 // current row number.
 	$r->sendRequest();
 
+// It should also do error checking.
+
 // even though this is broken and useless, people are hammering the server with multiple
 // requests per second, so throttle the uselessness a bit
 	sleep(2);
