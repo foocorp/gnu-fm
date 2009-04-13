@@ -42,9 +42,9 @@ class Server {
 		global $mdb2;
 
 		if($username) {
-			$res = $mdb2->query('SELECT username, artist, track, album, time FROM Scrobbles WHERE rating<>"S" AND username = ' . $mdb2->quote($username, "text") . ' ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT username, artist, track, album, time FROM Scrobbles WHERE username = ' . $mdb2->quote($username, "text") . ' ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		} else {
-			$res = $mdb2->query('SELECT username, artist, track, album, time FROM Scrobbles WHERE rating<>"S" ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT username, artist, track, album, time FROM Scrobbles ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		}
 
 		if(PEAR::isError($res)) {
@@ -72,7 +72,7 @@ class Server {
     static function getTopArtists($number=20) {
         global $mdb2;
 
-        $res = $mdb2->query("SELECT COUNT(artist) as c, artist FROM Scrobbles WHERE rating<>'S' GROUP BY artist ORDER BY c DESC LIMIT 0,20");
+        $res = $mdb2->query("SELECT COUNT(artist) as c, artist FROM Scrobbles GROUP BY artist ORDER BY c DESC LIMIT 0,20");
 
         if(PEAR::isError($res)) {
             return $res;

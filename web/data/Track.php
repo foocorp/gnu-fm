@@ -116,7 +116,7 @@ class Track {
 	private function _getPlayCountAndListenerCount() {
 		global $mdb2;
 
-		$res = $mdb2->query("SELECT COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE rating<>'S' AND "
+		$res = $mdb2->query("SELECT COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE "
 			. " artist = " . $mdb2->quote($this->artist_name, 'text') 
 			. " AND track = " . $mdb2->quote($this->name, "text")
 			. " GROUP BY track ORDER BY freq DESC");
