@@ -184,6 +184,10 @@ class JamendoImport:
 								pass
 
 					for track in album["tracks"]:
+
+						if "http://creativecommons.org/licenses/by-sa" not in track["license"] and "http://creativecommons.org/licenses/by/" in track["license"]:
+							track["streamurl"] = ""
+
 						if self.track_exists(artist["name"], album["name"], track["name"]):
 							try:
 								self.cursor.execute("UPDATE Track SET downloadurl = %s, streamurl = %s, mbid = %s, license = %s WHERE name = %s AND artist = %s AND album = %s",
