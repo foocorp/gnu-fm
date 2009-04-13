@@ -64,6 +64,12 @@ $tr[4] = rand(1,$avail);
 $tr[5] = rand(1,$avail);
 sort($tr);
 
+echo "<debug>".$tr[1]."</debug>";
+echo "<debug>".$tr[2]."</debug>";
+echo "<debug>".$tr[3]."</debug>";
+echo "<debug>".$tr[4]."</debug>";
+echo "<debug>".$tr[5]."</debug>";
+
 	for($i=1; $i<6; $i++) {
 
 	$row = $res->seek($tr[$i]);
