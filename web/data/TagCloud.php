@@ -38,9 +38,9 @@ class TagCloud {
         global $mdb2;
 	$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
         $query = "SELECT $field, count(*) AS count FROM $table";
-        $query .= (!is_null($username) || ($table == "Scrobbles")) ? ' WHERE ';
+        $query .= (!is_null($username) || ($table == "Scrobbles")) ? ' WHERE ' : null;
         $query .= (!is_null($username)) ? ' username = ' . $mdb2->quote($username, 'text') : null;
-        $query .= (!is_null($username) && ($table == "Scrobbles")) ? ' AND ';
+        $query .= (!is_null($username) && ($table == "Scrobbles")) ? ' AND ' : null;
         $query .= ($table == "Scrobbles") ? ' username = ' . $mdb2->quote($username, 'text') : null;
         $query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
         $res = $mdb2->query($query);
