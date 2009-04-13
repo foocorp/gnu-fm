@@ -58,6 +58,9 @@ for($i = 0; $i < count($data); $i++) {
 	$r->addPostData('t['.$i.']', $track);
 	$r->addPostData('i['.$i.']', $time);
 
+// This is highly broken.  It should consolidate each set of 50 submissions
+// into each batch, then reset $i to 0 (and $i should be decoupled from the
+// current row number.
 	$r->sendRequest();
 
 	echo $i . "/" . count($data) ."   sending ". $artist . " playing " . $track .".. ";
