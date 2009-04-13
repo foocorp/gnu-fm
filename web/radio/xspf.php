@@ -44,7 +44,14 @@ echo "<creator>libre.fm</creator>\n";
 echo "<link rel=\"http://www.last.fm/skipsLeft\">9999</link>\n";
 echo "<trackList>\n";
 
-$res = $mdb2->query("SELECT name, artist, album FROM Track WHERE streamurl != '' LIMIT 10");
+if(ereg("l(ast|ibre)fm://globaltags/(.*)", $url, $regs) {
+	$tag = $regs[2];
+} else {
+	die "FAILED\n";
+}
+
+// This needs some kind of randomization
+$res = $mdb2->query("SELECT name, artist, album FROM Track WHERE streamurl <> '' AND tag='". $mdb2->quote($tag, "text") ."' LIMIT 5");
 
 while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 
