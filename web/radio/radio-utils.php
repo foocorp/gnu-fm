@@ -25,6 +25,11 @@ function radio_title_from_url($url) {
 		return "Libre.fm " . ucwords($tag) . " Tag Radio";
 	}
 
+	if(substr($url, 0, 21) == "librefm://globaltags/") {
+		$tag = substr($url, 21);
+		return "Libre.fm " . ucwords($tag) . " Tag Radio";
+	}
+
 	return $url;
 
 }
