@@ -111,6 +111,9 @@ if (isset($_POST['install'])) {
 		artist VARCHAR(255) REFERENCES Artist(name),
 		time int,
 		mbid VARCHAR(36),
+		source VARCHAR(6),
+		rating CHAR(1),
+		length INT(4),
 		PRIMARY KEY(username, track, artist, time))");
 
 	$mdb2->query("CREATE TABLE Scrobble_Sessions(

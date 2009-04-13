@@ -77,6 +77,21 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	} else {
 		$mbid = 'NULL';
 	}
+	if(isset($_POST['o'][$i])) {
+		$source = $mdb2->quote($_POST['o'][$i], "text");
+	} else {
+		$source = 'NULL';
+	}
+	if(isset($_POST['r'][$i])) {
+		$rating = $mdb2->quote($_POST['r'][$i], "text");
+	} else {
+		$rating = 'NULL';
+	}
+	if(isset($_POST['l'][$i])) {
+		$length = $mdb2->quote($_POST['l'][$i], "integer");
+	} else {
+		$length = 'NULL';
+	}
 
 	createArtistIfNew($artist);
 	if($album != 'NULL') {
