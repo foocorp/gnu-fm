@@ -63,6 +63,10 @@ for($i = 0; $i < count($data); $i++) {
 // current row number.
 	$r->sendRequest();
 
+// even though this is broken and useless, people are hammering the server with multiple
+// requests per second, so throttle the uselessness a bit
+	sleep(2);
+
 	echo $i . "/" . count($data) ."   sending ". $artist . " playing " . $track .".. ";
 	echo $r->getResponseBody();
 }
