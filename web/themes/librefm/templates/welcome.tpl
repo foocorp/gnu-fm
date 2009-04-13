@@ -14,11 +14,11 @@ musical tastes with other people.</p>
     <dd class='track-name'>
         {if $nowplaying[np].mbid <> ''}
         <a href='http://musicbrainz.org/track/{$nowplaying[np].mbid}.html'>
+        {else}
+        <a href="{$nowplaying[np].trackurl}">
         {/if}
         {$nowplaying[np].track|stripslashes|htmlspecialchars}
-        {if $nowplaying[np].mbid <> ''}
         </a>
-        {/if}
     </dd>
     <dd class='username'><a href='{$nowplaying[np].userurl}'>{$nowplaying[np].username|stripslashes|htmlspecialchars}</a></dd>
     <dd>using <span class='gobbler'>{$nowplaying[np].clientstr}</span></dd>
@@ -31,7 +31,7 @@ musical tastes with other people.</p>
   {section name=recent loop=$recenttracks}
       <dd class='artist-name'><a href='{$recenttracks[recent].artisturl}'>
         {$recenttracks[recent].artist|stripslashes|htmlspecialchars}</a>:
-      <span class='track-name'>{$recenttracks[recent].track|stripslashes|htmlspecialchars}</span> &mdash;
+      <span class='track-name'><a href="{$recenttracks[recent].trackurl}">{$recenttracks[recent].track|stripslashes|htmlspecialchars}</a></span> &mdash;
       <span class='username'><a href='{$recenttracks[recent].userurl}'>{$recenttracks[recent].username|stripslashes|htmlspecialchars}</a></span></dd>
 
   {/section}

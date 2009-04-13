@@ -42,7 +42,7 @@
                 <a href="{$scrobbles[i].artisturl}">{$scrobbles[i].artist}</a>
             </dt>
     {/if}
-      <dd class='gobble'><span class='track-name'>{$scrobbles[i].track|stripslashes}</span><small>{$scrobbles[i].timehuman}</small></dd>
+      <dd class='gobble'><span class='track-name'><a href="{$scrobbles[i].trackurl}">{$scrobbles[i].track|stripslashes}</a></span><small>{$scrobbles[i].timehuman}</small></dd>
       {capture name=artist_last}{$scrobbles[i].artist}{/capture}
 {/section}
     </dl>
