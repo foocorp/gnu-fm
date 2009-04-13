@@ -55,11 +55,11 @@ $res = $mdb2->query("SELECT Track.name, Track.artist, Track.album FROM Track LEF
 $avail = $res->numRows();
 
 // This needs some kind of deduplication among other things
-$tr[1] = $rand(1,$avail);
-$tr[2] = $rand(1,$avail);
-$tr[3] = $rand(1,$avail);
-$tr[4] = $rand(1,$avail);
-$tr[5] = $rand(1,$avail);
+$tr[1] = rand(1,$avail);
+$tr[2] = rand(1,$avail);
+$tr[3] = rand(1,$avail);
+$tr[4] = rand(1,$avail);
+$tr[5] = rand(1,$avail);
 sort($tr);
 
 	for($i=1; $i<6; $i++) {
