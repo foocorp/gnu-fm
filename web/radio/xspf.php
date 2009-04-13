@@ -47,7 +47,7 @@ echo "<trackList>\n";
 if(ereg("l(ast|ibre)fm://globaltags/(.*)", $url, $regs)) {
 	$tag = $regs[2];
 } else {
-	die "FAILED\n";
+	die("FAILED\n");
 }
 
 // This needs some kind of randomization
