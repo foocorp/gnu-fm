@@ -40,7 +40,7 @@ define("LFM_SUBSCRIPTION_REQD",	18);
 
 # Error descriptions as per API documentation
 $error_text = array(
-	LFM_INVALID_SERVICE		=> "Invalid service -This service does not exist",
+	LFM_INVALID_SERVICE		=> "Invalid service - This service does not exist",
 	LFM_INVALID_METHOD		=> "Invalid Method - No method with that name in this package",
 	LFM_INVALID_TOKEN		=> "Invalid authentication token supplied",
 	LFM_INVALID_FORMAT		=> "Invalid format - This service doesn't exist in that format",

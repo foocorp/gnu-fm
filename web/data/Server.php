@@ -42,9 +42,9 @@ class Server {
 		global $mdb2;
 
 		if($username) {
-			$res = $mdb2->query('SELECT username, artist, track, time FROM Scrobbles WHERE username = ' . $mdb2->quote($username, "text") . ' ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT username, artist, track, album, time FROM Scrobbles WHERE username = ' . $mdb2->quote($username, "text") . ' ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		} else {
-			$res = $mdb2->query('SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT username, artist, track, album, time FROM Scrobbles ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		}
 
 		if(PEAR::isError($res)) {
@@ -56,6 +56,7 @@ class Server {
 			$row = sanitize($i);
 			$row["userurl"] = Server::getUserURL($row["username"]);
 			$row["artisturl"] = Server::getArtistURL($row["artist"]);
+			$row["trackurl"] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
 			$result[] = $row;
 		}
 
