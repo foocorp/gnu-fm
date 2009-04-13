@@ -107,6 +107,7 @@ if (isset($_POST['install'])) {
 	$mdb2->query("CREATE TABLE Scrobbles(
 		username VARCHAR(64) REFERENCES Users(username),
 		track VARCHAR(255) REFERENCES Track(name),
+		album VARCHAR(255) REFERENCES Album(name),
 		artist VARCHAR(255) REFERENCES Artist(name),
 		time int,
 		mbid VARCHAR(36),
