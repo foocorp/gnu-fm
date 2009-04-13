@@ -107,8 +107,8 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		. $track . ", "
 		. $time . ", "
 		. $mbid . ", "
-		. $source . ",");
-		. $rating . ",");
+		. $source . ","
+		. $rating . ","
 		. $length . ")");
 
         // Destroy now_playing since it is almost certainly obsolescent
