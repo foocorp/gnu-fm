@@ -10,27 +10,32 @@ from BeautifulSoup import BeautifulSoup
 sys.stdout = codecs.lookup('utf-8')[-1](sys.stdout)
 
 def parse_page(page):
+	"""Parse a page of recently listened tracks and return a list."""
 	soup = BeautifulSoup(urllib2.urlopen(page))
-	for row in soup.find('table', 'tracklist big').findAll('tr'):
+	for row in soup.find('table', 'candyStriped tracklist').findAll('tr'):
 		artist, track, timestamp = parse_track(row)
 		# Tracks submitted before 2005 have no timestamp
 		if artist and track:
 			yield (artist, track, timestamp)
 
 def parse_track(row):
+	"""Return a tuple containing track data."""
 	try:
-		artist, track = row.findAll('a', 'primary')
-		timestamp = row.find('td', 'border dateCell last')
+		track_info = row.find('td', 'subjectCell')
+		artist, track = track_info.findAll('a')
+		timestamp = row.find('abbr')
 		artist = artist.contents[0].strip()
 		track = track.contents[0].strip()
-		timestamp = timestamp.contents[0].strip()
+		timestamp = str(timestamp).split('"')[1].strip()
 		return (artist, track, timestamp)
 	except:
 		# Parsing failed
+		print 'parsing failed'
 		return (None, None, None)
 
 def fetch_tracks(user, request_delay=0.5):
-	url = 'http://last.fm/user/%s/library/recent' % user
+	"""Fetch all tracks from a profile page and return a list."""
+	url = 'http://last.fm/user/%s/tracks' % user
 	soup = BeautifulSoup(urllib2.urlopen(url))
 	try:
 		num_pages = int(soup.find('a', 'lastpage').contents[0])
