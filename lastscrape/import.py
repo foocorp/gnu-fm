@@ -1,6 +1,13 @@
 #!/usr/bin/python
 from datetime import datetime
 import getpass
+# The md5 module is deprecated since Python 2.5
+try:
+    import hashlib
+    md5hash = hashlib.md5
+except ImportError:
+    import md5
+    md5hash = md5.new
 import md5
 from optparse import OptionParser
 import time
@@ -20,7 +27,7 @@ if server[:7] != "http://":
 password = getpass.getpass()
 
 timestamp = int(time.time())
-token = md5.new(md5.new(password).hexdigest() + str(timestamp)).hexdigest()
+token = md5hash(md5hash(password).hexdigest() + str(timestamp)).hexdigest()
 auth_url = "%s/?hs=true&p=1.2&u=%s&t=%d&a=%s&c=imp" % (server, username,
                                                        timestamp, token)
 response = urlopen(auth_url).read()
