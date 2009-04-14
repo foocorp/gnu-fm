@@ -82,7 +82,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	} else {
 		$source = 'NULL';
 	}
-	if(empty($_POST['r'][$i])) {
+	if(!empty($_POST['r'][$i])) {
 		$rating = $mdb2->quote($_POST['r'][$i], "text");
 	} else {
 		$rating = $mdb2->quote("0", "text"); // use the fake rating code 0 for now
