@@ -2,7 +2,7 @@
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">  
 <head>
-	<title>Libre.fm</title>
+	<title>Libre.fm &mdash; discover new music</title>
 	<link rel="stylesheet" href="http://turtle.libre.fm/reset-fonts-grids.css" type="text/css" />
 	<link rel="stylesheet" href="http://turtle.libre.fm/base.css" type="text/css" />
 	<link rel="stylesheet" href="http://turtle.libre.fm/librefm.css" type="text/css" />
