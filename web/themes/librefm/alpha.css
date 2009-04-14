@@ -149,20 +149,20 @@ ul#recenttracks.listcloud li { height: 3.4em; }
       color: #666
   }
 
-dl.gobbles * {
+ul.gobbles * {
 }
-    dl.gobbles dt.artist a {
+    ul.gobbles .contributor a {
         text-decoration: none;
         color: #2e3436;
     }
-    dl.gobbles dt.artist a:hover {
+    ul.gobbles .contributor a:hover {
         text-decoration: underline;
     }
-    dl.gobbles dd.gobble span.track-name {
+    ul.gobbles .track-name {
         font-weight: bold;
         font-size: .8em
     }
-    dl.gobbles dd.gobble small {
+    ul.gobbles small {
         margin-left: .5em;
         color: #666;
         font-size: .7em

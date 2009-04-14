@@ -49,7 +49,7 @@
 					class="fn url" href="{$scrobbles[i].artisturl}"
 					>{$scrobbles[i].artist}</a>
 			</div>
-			<div><a class="fn" property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl}">{$scrobbles[i].track}</a></div>
+			<div><a class="fn track-name" property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl}">{$scrobbles[i].track}</a></div>
 			<small about="{$scrobbles[i].id}" property="dc:date" content="{$scrobbles[i].timeiso}" datatype="xsd:dateTime">{$scrobbles[i].timehuman}</small>
 		</div>
 	</li>
