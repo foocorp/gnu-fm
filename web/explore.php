@@ -20,9 +20,17 @@
 */
 
 
-require_once("database.php");
-require_once("templating.php");
-require_once("data/Server.php");
+require_once('database.php');
+require_once('templating.php');
+require_once('data/sanitize.php');
+require_once('data/Server.php');
+require_once('data/TagCloud.php');
+
+// This should be contextual based on the mode= parameter?
+$aTagCloud = TagCloud::GenerateTagCloud('Scrobbles', 'artist');
+if (!PEAR::isError ($aTagCloud)) {
+        $smarty->assign('tagcloud', $aTagCloud);
+}
 
 $aTopArtists = Server::getTopArtists(20);
 if (!PEAR::isError ($aTopArtists)) {
