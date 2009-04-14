@@ -32,6 +32,10 @@ if(!isset($_GET['p']) || !isset($_GET['u']) || !isset($_GET['t']) || !isset($_GE
 
 $protocol = $_GET['p']; $username = $_GET['u']; $timestamp = $_GET['t']; $auth_token = $_GET['a']; $client = $_GET['c'];
 
+if($client == "import") {
+	die("FAILED Import scripts are broken\n"); // this should be removed or changed to check the version once import.php is fixed
+}
+
 if(!in_array($protocol, $supported_protocols))  {
 	die("FAILED Unsupported protocol version\n");
 }
