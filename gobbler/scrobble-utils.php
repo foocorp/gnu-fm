@@ -68,7 +68,19 @@ function createAlbumIfNew($artist, $album) {
 
 	if(!$res->numRows()) {
 		// Album doesn't exist, so create it
+	        
+	  $art = getAlbumArt($artist, $album);
+	  if ($art) {
+	    $license = "amazon";
+
+	    $res = $mdb2->query("INSERT INTO Album (name, artist_name, image, artwork_license) VALUES (" . ($album) . ", " . ($artist) . ", " . ($art) . "," . ($license) .")");
+
+	  } else {
+
 		$res = $mdb2->query("INSERT INTO Album (name, artist_name) VALUES (" . ($album) . ", " . ($artist) . ")");
+
+	  }
+
 		if(PEAR::isError($res)) {
 			die("FAILED " . $res->getMessage());
 		}
@@ -109,5 +121,31 @@ function NoSpamTracks ($track) {
   
 }
 
+function getAlbumArt($artist, $album) {
+
+  $Access_Key_ID = "1EST86JB355JBS3DFE82"; // this is mattl's personal key :)
+
+        $SearchIndex='Music';
+$Keywords=urlencode($artist.' '.$album);
+        $Operation = "ItemSearch";
+$Version = "2007-07-16";
+        $ResponseGroup = "ItemAttributes,Images";
+$request=
+        "http://ecs.amazonaws.com/onca/xml"
+                . "?Service=AWSECommerceService"
+. "&AssociateTag=" . $Associate_tag
+. "&AWSAccessKeyId=" . $Access_Key_ID
+. "&Operation=" . $Operation
+. "&Version=" . $Version
+. "&SearchIndex=" . $SearchIndex
+. "&Keywords=" . $Keywords
+. "&ResponseGroup=" . $ResponseGroup;
+
+$aws_xml = simplexml_load_file($request) or die("xml response not loading");
+
+$image = $aws_xml->Items->Item->MediumImage->URL;
+        $URI = $aws_xml->Items->Item->DetailPageURL;
+        return $image;
+}
 
 ?>
