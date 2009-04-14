@@ -191,9 +191,9 @@ class JamendoImport:
 						otherid = "jm:"
 
 						try:
-							x += str(int(track["id"]))
+							otherid += str(int(track["id"]))
 						except:
-							x += "unknown"
+							otherid += "unknown"
 
 						if self.track_exists(artist["name"], album["name"], track["name"]):
 							try:
