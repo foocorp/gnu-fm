@@ -188,6 +188,11 @@ class JamendoImport:
 						if "http://creativecommons.org/licenses/by-sa" not in track["license"] and not "http://creativecommons.org/licenses/by/" in track["license"]:
 							track["streamurl"] = ""
 
+						try:
+							duration = int(track["duration"])
+						except:
+							duration = null
+
 						otherid = "jm:"
 
 						try:
@@ -198,14 +203,14 @@ class JamendoImport:
 						if self.track_exists(artist["name"], album["name"], track["name"]):
 							try:
 								self.cursor.execute("UPDATE Track SET downloadurl = %s, streamurl = %s, mbid = %s, license = %s, duration = %s, otherid = %s WHERE name = %s AND artist = %s AND album = %s",
-										(track["downloadurl"], track["streamurl"], track["mbid"], track["license"], track["duration"], otherid,
+										(track["downloadurl"], track["streamurl"], track["mbid"], track["license"], duration, otherid,
 										track["name"], artist["name"], album["name"]))
 							except Exception,  e:
 								pass
 						else:
 							try:
 								self.cursor.execute("INSERT INTO Track (name, artist, album, mbid, downloadurl, streamurl, license, duration, otherid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-										(track["name"], artist["name"], album["name"], track["mbid"], track["downloadurl"], track["streamurl"], track["license"], track["duration"], otherid))
+										(track["name"], artist["name"], album["name"], track["mbid"], track["downloadurl"], track["streamurl"], track["license"], duration, otherid))
 							except Exception,  e:
 								pass
 
