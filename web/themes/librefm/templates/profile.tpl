@@ -4,7 +4,7 @@
 <div about="{$id}" typeof="foaf:Agent" class="user vcard">
 	<div class='avatar'>
 		<!-- Avatar placeholder  -->
-		<img rel="foaf:depiction" src="{$avatar}" alt="avatar" />
+		<img rel="foaf:depiction" src="{$avatar}" alt="avatar" class="photo" />
 	</div>
 	<dt>
 		<span class="fn" property="foaf:name">{$fullname|utf8_encode}</span>
