@@ -49,7 +49,7 @@
 		<div about="{$scrobbles[i].id_track}" typeof="mo:Track" class="haudio">
 			<div rev="mo:track">
 				<div typeof="mo:Record">
-					<img rel="foaf:depiction" src="http://ecx.images-amazon.com/images/I/415F39TK6RL._SL50_.jpg" class="albumart" alt="" />
+					<img rel="foaf:depiction" src="http://ecx.images-amazon.com/images/I/415F39TK6RL._SL50_.jpg" class="photo" alt="" />
 				</div>
 			</div>
 			<div rel="foaf:maker" class="contributor vcard">
