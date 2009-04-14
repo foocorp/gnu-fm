@@ -31,8 +31,7 @@ $artist = new Artist($_GET['artist']);
 $smarty->assign("name", $artist->name);
 $smarty->assign("bio_summary", $artist->bio_summary);
 
-// Should this show tracks?
-$aTagCloud = TagCloud::GenerateTagCloud('Scrobbles', 'artist');
+$aTagCloud = TagCloud::GenerateTagCloud('Scrobbles', 'track', 40, $artist->name);
 if (!PEAR::isError ($aTagCloud)) {
         $smarty->assign('tagcloud', $aTagCloud);
 }
