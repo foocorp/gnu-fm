@@ -82,10 +82,10 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	} else {
 		$source = 'NULL';
 	}
-	if(isset($_POST['r'][$i])) {
+	if(empty($_POST['r'][$i])) {
 		$rating = $mdb2->quote($_POST['r'][$i], "text");
 	} else {
-		$rating = "'0'"; // use the fake rating code 0 for now
+		$rating = $mdb2->quote("0", "text"); // use the fake rating code 0 for now
 	}
 	if(isset($_POST['l'][$i])) {
 		$length = $mdb2->quote($_POST['l'][$i], "integer");
