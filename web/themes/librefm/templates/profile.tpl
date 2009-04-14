@@ -46,8 +46,12 @@
 {section name=i loop=$scrobbles}
 
 	<li about="{$scrobbles[i].id}" typeof="gob:ScrobbleEvent" rel="gob:track_played">
-        <img src="http://ecx.images-amazon.com/images/I/415F39TK6RL._SL50_.jpg" class="albumart" />
 		<div about="{$scrobbles[i].id_track}" typeof="mo:Track" class="haudio">
+			<div rev="mo:track">
+				<div typeof="mo:Record">
+					<img rel="foaf:depiction" src="http://ecx.images-amazon.com/images/I/415F39TK6RL._SL50_.jpg" class="albumart" alt="" />
+				</div>
+			</div>
 			<div rel="foaf:maker" class="contributor vcard">
 				<a about="{$scrobbles[i].id_artist}" typeof="mo:MusicArtist" property="foaf:name" rel="foaf:page"
 					class="fn url" href="{$scrobbles[i].artisturl}"
