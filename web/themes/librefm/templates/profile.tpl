@@ -2,9 +2,9 @@
 
 <h2 property="dc:title">{$user}'{if $user|substr:-1 != 's'}s{/if} profile</h2>
 <div about="{$id}" typeof="foaf:Agent" class="user vcard">
-	<div class='avatar'>
+	<div class="avatar" rel="foaf:depiction">
 		<!-- Avatar placeholder  -->
-		<img rel="foaf:depiction" src="{$avatar}" alt="avatar" class="photo" />
+		<img src="{$avatar}" alt="avatar" class="photo" />
 	</div>
 	<dt>
 		<span class="fn" property="foaf:name">{$fullname|utf8_encode}</span>
@@ -49,7 +49,7 @@
 		<div about="{$scrobbles[i].id_track}" typeof="mo:Track" class="haudio">
 			<div rev="mo:track">
 				<div typeof="mo:Record">
-					<img rel="foaf:depiction" src="http://ecx.images-amazon.com/images/I/415F39TK6RL._SL50_.jpg" class="photo" alt="" />
+					<span rel="foaf:depiction"><img src="http://ecx.images-amazon.com/images/I/415F39TK6RL._SL50_.jpg" class="photo" alt="" /></span>
 				</div>
 			</div>
 			<div rel="foaf:maker" class="contributor vcard">
