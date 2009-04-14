@@ -122,7 +122,7 @@ if (isset($_POST['install'])) {
 		mbid VARCHAR(36),
 		source VARCHAR(6),
 		rating CHAR(1),
-		length INT(4),
+		length INTEGER,
 		PRIMARY KEY(username, track, artist, time));");
 
 	$mdb2->query("CREATE TABLE Scrobble_Sessions(
@@ -138,7 +138,7 @@ if (isset($_POST['install'])) {
 		artist VARCHAR(255) REFERENCES Artist(name),
 		album VARCHAR(255) REFERENCES Album(name),
 		mbid VARCHAR(36),
-		expires int);");
+		expires INTEGER);");
 
 	$res = $mdb2->query("CREATE TABLE Invitation_Request(
 		email VARCHAR(255) PRIMARY KEY,
