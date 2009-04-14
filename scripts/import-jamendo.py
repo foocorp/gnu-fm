@@ -2,7 +2,7 @@
 
 import xml.etree.cElementTree as ElementTree
 import sys, gzip, time
-import MySQLdb
+import MySQLdb as ordbms
 
 genremap = {
 	0 : "Blues",
@@ -136,7 +136,7 @@ genremap = {
 class JamendoImport:
 
 	def __init__(self, hostname, username, password, database):
-		self.conn = MySQLdb.connect (host = hostname,
+		self.conn = ordbms.connect (host = hostname,
 			user = username,
 			passwd = password,
 			db = database)
