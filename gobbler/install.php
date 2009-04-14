@@ -43,6 +43,18 @@ if (isset($_POST['install'])) {
 	}
 
 	//Create tables
+
+	/* Suggested additions to the Users table:
+	 *
+	 *   webid VARCHAR(255)
+	 *      - stores the WebID for the user. see http://esw.w3.org/topic/WebID
+	 *      - web/data/User.php already uses this field if present
+	 *
+	 *   avatar VARCHAR(255) 
+	 *      - stores a URI for the person's avatar / photo.
+	 *      - will need a small mod to web/data/User.php once added.
+	 */
+
 	$mdb2->query("CREATE TABLE Users (username VARCHAR(64) PRIMARY KEY,
 		password VARCHAR(32) NOT NULL,
 		email VARCHAR(255),
