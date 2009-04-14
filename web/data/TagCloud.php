@@ -35,8 +35,7 @@ class TagCloud {
         if (!is_string($field))          return false;	
         if (!is_string($table))          return false;
         if (!is_integer($limit))         return false;
-        global $mdb2;
-	$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
+    	$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
         $query = "SELECT $field, count(*) AS count FROM $table";
         $query .= (!is_null($username) || ($table == "Scrobbles")) ? ' WHERE ' : null;
         $query .= (!is_null($username)) ? ' username = ' . $mdb2->quote($username, 'text') : null;
