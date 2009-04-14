@@ -73,7 +73,7 @@ function createAlbumIfNew($artist, $album) {
 	  if ($art) {
 	    $license = "amazon";
 
-	    $res = $mdb2->query("INSERT INTO Album (name, artist_name, image, artwork_license) VALUES (" . ($album) . ", " . ($artist) . ", " . ($art) . "," . ($license) .")");
+	    $res = $mdb2->query("INSERT INTO Album (name, artist_name, image, artwork_license) VALUES (" . ($album) . ", " . ($artist) . ", " . ($art) . ", " . ($license) .")");
 
 	  } else {
 
