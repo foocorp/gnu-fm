@@ -64,8 +64,7 @@ if (isset($_POST['install'])) {
 		location VARCHAR(255),
 		created int NOT NULL,
 		modified int,
-		userlevel int DEFAULT 0,
-		FULLTEXT(fullname, bio, location));");
+		userlevel int DEFAULT 0);");
 
 	$res = $mdb2->query("CREATE TABLE Auth (token VARCHAR(32) PRIMARY KEY,
 		sk VARCHAR(32),
@@ -82,8 +81,7 @@ if (isset($_POST['install'])) {
 		image_small VARCHAR(255),
 		image_medium VARCHAR(255),
 		image_large VARCHAR(255),
-		homepage VARCHAR(255),
-		FULLTEXT(name,bio_summary));");
+		homepage VARCHAR(255));");
 
 	$mdb2->query("CREATE TABLE Album(
 		name VARCHAR(255),
@@ -94,8 +92,7 @@ if (isset($_POST['install'])) {
 		releasedate int,
 		albumurl VARCHAR(255),
 		downloadurl VARCHAR(255),
-		PRIMARY KEY(name, artist_name),
-		FULLTEXT(name,artist_name));");
+		PRIMARY KEY(name, artist_name));");
 
 	// Table for registering similar artists
 	$mdb2->query("CREATE TABLE Similar_Artist(
@@ -114,8 +111,7 @@ if (isset($_POST['install'])) {
 		downloadurl VARCHAR(255),
 		streamurl VARCHAR(255),
 		otherid VARCHAR(16),
-		PRIMARY KEY(name, artist),
-		FULLTEXT(name,artist,album,license));");
+		PRIMARY KEY(name, artist));");
 
 	$mdb2->query("CREATE TABLE Scrobbles(
 		username VARCHAR(64) REFERENCES Users(username),
