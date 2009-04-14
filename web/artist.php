@@ -20,14 +20,22 @@
 */
 
 
-require_once("database.php");
-require_once("templating.php");
-require_once("data/Artist.php");
+require_once('database.php');
+require_once('templating.php');
+require_once('data/sanitize.php');
+require_once('data/Server.php');
+require_once('data/TagCloud.php');
 
 $artist = new Artist($_GET['artist']);
 
 $smarty->assign("name", $artist->name);
 $smarty->assign("bio_summary", $artist->bio_summary);
+
+// Should this show tracks?
+$aTagCloud = TagCloud::GenerateTagCloud('Scrobbles', 'artist');
+if (!PEAR::isError ($aTagCloud)) {
+        $smarty->assign('tagcloud', $aTagCloud);
+}
 
 $aArtistAlbums = $artist->getAlbums();
 if (!PEAR::isError($aArtistAlbums)) {
