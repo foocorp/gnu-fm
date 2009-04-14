@@ -48,7 +48,7 @@ require_once('utils/human-time.php');
    <div id="bd" role="main">
    <div id="coolio">
 	<div class="yui-g" id="banner">
-	  <a href="http://alpha.libre.fm/"><img src="http://libre.fm/i/topblock.png" alt="" /></a>
+	  <a href="http://alpha.libre.fm/"><img src="http://alpha.libre.fm/themes/librefm/images/topblocksmall.png" alt="" /></a>
 	</div>
 <div class="yui-gc">
     <div class="yui-u first" id="content">

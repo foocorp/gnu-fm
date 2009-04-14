@@ -16,7 +16,7 @@ html{background-color: #ececec;}
 
 #hd li{ display: inline; font-size: 21px; text-transform: lowercase; font-weight: bold; margin-right: 20px;}
 
-#banner { height: 345px; position: relative;}
+#banner { height: 139px; position: relative;}
 
 #banner img{ position: absolute; top: -12px; left: 0; }
 
