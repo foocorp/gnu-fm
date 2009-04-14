@@ -98,7 +98,7 @@ if (isset($_POST['install'])) {
 	$mdb2->query("CREATE TABLE Similar_Artist(
 		name_a VARCHAR(255) REFERENCES Artist(name),
 		name_b VARCHAR(255) REFERENCES Artist(name),
-		PRIMARY KEY(name_a, name_b))");
+		PRIMARY KEY(name_a, name_b));");
 
 	$mdb2->query("CREATE TABLE Track(
 		name VARCHAR(255),
@@ -123,14 +123,14 @@ if (isset($_POST['install'])) {
 		source VARCHAR(6),
 		rating CHAR(1),
 		length INT(4),
-		PRIMARY KEY(username, track, artist, time))");
+		PRIMARY KEY(username, track, artist, time));");
 
 	$mdb2->query("CREATE TABLE Scrobble_Sessions(
 		username VARCHAR(64) REFERENCES Users(username),
 		sessionid VARCHAR(32),
 		client CHAR(3),
 		expires int,
-		PRIMARY KEY(username, sessionid))");
+		PRIMARY KEY(username, sessionid));");
 
 	$res = $mdb2->query("CREATE TABLE Now_Playing(
 		sessionid VARCHAR(32) PRIMARY KEY REFERENCES Scrobble_Sessions(sessionid),
@@ -138,23 +138,23 @@ if (isset($_POST['install'])) {
 		artist VARCHAR(255) REFERENCES Artist(name),
 		album VARCHAR(255) REFERENCES Album(name),
 		mbid VARCHAR(36),
-		expires int)");
+		expires int);");
 
 	$res = $mdb2->query("CREATE TABLE Invitation_Request(
 		email VARCHAR(255) PRIMARY KEY,
-		time int");
+		time int);");
 
 	$res = $mdb2->query("CREATE TABLE Invitations(
 		inviter VARCHAR(64) REFERENCES Users(username),
 		invitee VARCHAR(64) REFERENCES Users(username),
 		code VARCHAR(32),
-		PRIMARY KEY(inviter, invitee, code))");
+		PRIMARY KEY(inviter, invitee, code));");
 
 	$res = $mdb2->query("CREATE TABLE ClientCodes(
 		code CHAR(3),
 		name VARCHAR(32),
 		url VARCHAR(256),
-		PRIMARY KEY(code))");
+		PRIMARY KEY(code));");
 
 	$res = $mdb2->query("CREATE TABLE Tags(
 		username VARCHAR(64) REFERENCES Users(username),
@@ -162,13 +162,13 @@ if (isset($_POST['install'])) {
 		artist VARCHAR(255) REFERENCES Artist(name),
 		album VARCHAR(255) REFERENCES Album(name),
 		track VARCHAR(255) REFERENCES Track(name),
-		PRIMARY KEY(username, tag, artist, album, track))");
+		PRIMARY KEY(username, tag, artist, album, track));");
 
 	// Test user configuration
 	$res = $mdb2->query("INSERT INTO Users
 		(username, password, created)
 		VALUES
-		('testuser', '" . md5('password') . "', " . time() . ")");
+		('testuser', '" . md5('password') . "', " . time() . ");");
 	
 	$mdb2->disconnect();
 
