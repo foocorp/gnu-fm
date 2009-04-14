@@ -22,7 +22,7 @@
 	<link rel="icon" href="{$base_url}/favicon.ico" type="image/x-icon">
 	<script type="text/javascript" src="{$base_url}/js/player.js"></script>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-	<link rel="license" rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/us/" />
+	<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/" />
 </head>
 
 <body>
