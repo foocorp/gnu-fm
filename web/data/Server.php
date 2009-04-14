@@ -24,6 +24,7 @@ require_once($install_path . '/data/Artist.php');
 require_once($install_path . '/data/Track.php');
 require_once($install_path . '/data/User.php');
 require_once($install_path . "/data/sanitize.php");
+require_once($install_path . '/utils/linkeddata.php');
 
 /**
  * Provides access to server-wide data
@@ -42,9 +43,9 @@ class Server {
 		global $mdb2;
 
 		if($username) {
-			$res = $mdb2->query('SELECT username, artist, track, album, time FROM Scrobbles WHERE rating<>"S" AND username = ' . $mdb2->quote($username, "text") . ' ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT username, artist, track, album, time, mbid FROM Scrobbles WHERE rating<>"S" AND username = ' . $mdb2->quote($username, "text") . ' ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		} else {
-			$res = $mdb2->query('SELECT username, artist, track, album, time FROM Scrobbles WHERE rating<>"S" ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT username, artist, track, album, time, mbid FROM Scrobbles WHERE rating<>"S" ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		}
 
 		if(PEAR::isError($res)) {
@@ -54,9 +55,18 @@ class Server {
 		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 		foreach($data as $i) {
 			$row = sanitize($i);
+			
 			$row["userurl"] = Server::getUserURL($row["username"]);
 			$row["artisturl"] = Server::getArtistURL($row["artist"]);
 			$row["trackurl"] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
+
+  			$row['timehuman'] = human_timestamp($row['time']);
+			$row["timeiso"]   = date('c', (int)$row['time']);
+			
+			$row['id']        = identifierScrobbleEvent($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid']);
+			$row['id_artist'] = identifierArtist($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid']);
+			$row['id_track']  = identifierTrack($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid']);
+
 			$result[] = $row;
 		}
 
