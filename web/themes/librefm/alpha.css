@@ -106,21 +106,21 @@ ul#nowplaying.listcloud li { float: left; margin-right: 10px; margin-bottom: 10p
 
 ul#recenttracks.listcloud li { height: 3.4em; }
 /* Users */
-.user {
-    font-size: .8em;
-}
 .user .fn {
     margin-bottom: .3em;
 }
-.photo, .avatar {
+.avatar {
     max-height: 96px;
     max-width: 96px;
     min-height: 32px;
     min-width: 32px;
     float: left;
-    margin-right: .3em
+    margin: .3em;
 }
 .user .bio {
+}
+.user .fn {
+    font-size: 1.2em;
 }
 .user .nickname {
     color: #666666
@@ -149,7 +149,12 @@ ul#recenttracks.listcloud li { height: 3.4em; }
       color: #666
   }
 
+ul.gobbles {
+    margin-left: 0;
+}
+
 ul.gobbles * {
+    list-style: none;
 }
     ul.gobbles .contributor a {
         text-decoration: none;
@@ -167,6 +172,10 @@ ul.gobbles * {
         color: #666;
         font-size: .7em
     }
+    ul.gobbles li img.albumart {
+        float: left;
+        margin-right: 6px;
+    }
 
 h3 {
 	clear: left;
@@ -175,4 +184,13 @@ h3 {
 
 .clear {
     clear: both;
+}
+
+.user {
+    -moz-border-radius-bottomleft:8px;
+    -moz-border-radius-bottomright:8px;
+    -moz-border-radius-topleft:8px;
+    -moz-border-radius-topright:8px;
+    background-color: #EEE;
+    padding-top: .4em;
 }

@@ -1,7 +1,11 @@
 {include file='header.tpl'}
 
 <h2 property="dc:title">{$user}'{if $user|substr:-1 != 's'}s{/if} profile</h2>
-<dl about="{$id}" typeof="foaf:Agent" class="user vcard">
+<div about="{$id}" typeof="foaf:Agent" class="user vcard">
+	<div class='avatar'>
+		<!-- Avatar placeholder  -->
+		<img rel="foaf:depiction" src="{$avatar}" alt="avatar" />
+	</div>
 	<dt>
 		<span class="fn" property="foaf:name">{$fullname|utf8_encode}</span>
 		<span rel="foaf:holdsAccount" rev="sioc:account_of">
@@ -12,10 +16,6 @@
 			</span>
 		</span>
 	</dt>
-	<dd class='avatar'>
-		<!-- Avatar placeholder  -->
-		<img rel="foaf:depiction" src="{$avatar}" class="photo" alt="avatar" />
-	</dd>
 	{if $homepage}
 	<dd>
 		<a href="{$homepage}" rel="foaf:homepage" rev="foaf:primaryTopic" class="url">{$homepage}</a>
@@ -25,7 +25,8 @@
 		<span class="label" property="rdfs:label">{$location}</span>
 	</dd>
 	<dd class="note" property="bio:olb">{$bio}</dd>
-</dl>
+    <hr style="border: none; clear: both;" />
+</div>
 
 
 {if $nowplaying|@count > 0}
@@ -39,12 +40,13 @@
 </dl>
 {/if}
 
-<h3>Latest {$scrobbles|@count} Gobbles:</h3>
+<h3>Latest {$scrobbles|@count} Plays:</h3>
 
 <ul class="gobbles" about="{$id}" rev="gob:user">
 {section name=i loop=$scrobbles}
 
 	<li about="{$scrobbles[i].id}" typeof="gob:ScrobbleEvent" rel="gob:track_played">
+        <img src="http://ecx.images-amazon.com/images/I/415F39TK6RL._SL50_.jpg" class="albumart" />
 		<div about="{$scrobbles[i].id_track}" typeof="mo:Track" class="haudio">
 			<div rel="foaf:maker" class="contributor vcard">
 				<a about="{$scrobbles[i].id_artist}" typeof="mo:MusicArtist" property="foaf:name" rel="foaf:page"
