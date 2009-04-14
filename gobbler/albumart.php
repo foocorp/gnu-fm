@@ -35,7 +35,7 @@ require_once('database.php');
 				}
 
 			}
-
+?>
 </body>
 </html>
 
