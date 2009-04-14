@@ -186,12 +186,12 @@ class JamendoImport:
 					for track in album["tracks"]:
 
 						if "http://creativecommons.org/licenses/by-sa" not in track["license"] and not "http://creativecommons.org/licenses/by/" in track["license"]:
-							track["streamurl"] = ""
+							track["streamurl"] = None
 
 						try:
 							duration = int(track["duration"])
 						except:
-							duration = null
+							duration = None
 
 						otherid = "jm:"
 
