@@ -29,7 +29,7 @@ require_once('database.php');
 			$i = 0;
 			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 			$i++;
-			echo $field[0];
+			echo $name;
 			}
 ?>
 </body>
