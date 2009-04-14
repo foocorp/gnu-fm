@@ -17,7 +17,7 @@
 		<img rel="foaf:depiction" src="{$avatar}" class="photo" alt="avatar" />
 	</dd>
 	<dd>
-		<a href="{$homepage}" rel="foaf:homepage" rev="foaf:primaryTopic" class="url">{$homepage}</a>
+		<a href="{$homepage}" rel="foaf:homepage" class="url">{$homepage}</a>
 	</dd>
 	<dd rel="foaf:based_near">
 		<span class="label" property="rdfs:label">{$location}</span>
@@ -49,7 +49,7 @@
 					class="fn url" href="{$scrobbles[i].artisturl}"
 					>{$scrobbles[i].artist}</a>
 			</div>
-			<div><a class="fn track-name" property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl}">{$scrobbles[i].track}</a></div>
+			<div><a class="fn" property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl}">{$scrobbles[i].track}</a></div>
 			<small about="{$scrobbles[i].id}" property="dc:date" content="{$scrobbles[i].timeiso}" datatype="xsd:dateTime">{$scrobbles[i].timehuman}</small>
 		</div>
 	</li>
