@@ -204,7 +204,7 @@ class JamendoImport:
 								pass
 						else:
 							try:
-								self.cursor.execute("INSERT INTO Track (name, artist, album, mbid, downloadurl, streamurl, license, duration) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+								self.cursor.execute("INSERT INTO Track (name, artist, album, mbid, downloadurl, streamurl, license, duration, otherid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
 										(track["name"], artist["name"], album["name"], track["mbid"], track["downloadurl"], track["streamurl"], track["license"], track["duration"], otherid))
 							except Exception,  e:
 								pass
