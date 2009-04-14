@@ -1,3 +1,5 @@
+<?php
+
 function identifierScrobbleEvent ($username, $artist, $track, $time, $mbid=NULL)
 {
 	global $base_url;
