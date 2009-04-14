@@ -26,20 +26,25 @@ class TagCloud {
     * @param string $table table name to be queried
     * @param string $field field name to count
     * @param integer $limit limit of the query
-    * @param integer $sizes quantity of possible sizes
-    * @param float $max_font_size maximum font size (px, em, %, etc)
+    * @param string $constraint username or artistname depending on field
+    * inaccurate @param integer $sizes quantity of possible sizes
+    * inaccurate @param float $max_font_size maximum font size (px, em, %, etc)
     * @return array tagcloud
     */
-    static function generateTagCloud($table, $field, $limit = 40, $username = null) {
+    static function generateTagCloud($table, $field, $limit = 40, $constraint = null) {
         global $mdb2;
         if (!is_string($field))          return false;	
         if (!is_string($table))          return false;
         if (!is_integer($limit))         return false;
     	$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
         $query = "SELECT $field, count(*) AS count FROM $table";
-        $query .= (!is_null($username) || ($table == "Scrobbles")) ? ' WHERE ' : null;
-        $query .= (!is_null($username)) ? ' username = ' . $mdb2->quote($username, 'text') : null;
-        $query .= (!is_null($username) && ($table == "Scrobbles")) ? ' AND ' : null;
+        $query .= (!is_null($constraint) || ($table == "Scrobbles")) ? ' WHERE ' : null;
+	if ($field == "track") {
+        $query .= (!is_null($constraint)) ? ' artist = ' . $mdb2->quote($constraint, 'text') : null;
+	} else {
+        $query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
+	}
+        $query .= (!is_null($constraint) && ($table == "Scrobbles")) ? ' AND ' : null;
         $query .= ($table == "Scrobbles") ? ' rating <> "S" ' : null;
         $query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
         $res = $mdb2->query($query);
