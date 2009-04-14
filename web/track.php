@@ -19,14 +19,21 @@
 
 */
 
-
-require_once("database.php");
-require_once("templating.php");
-require_once("data/Track.php");
+require_once('database.php');
+require_once('templating.php');
+require_once('data/sanitize.php');
+require_once('data/Server.php');
+require_once('data/TagCloud.php');
 
 $track = new Track($_GET['track'], $_GET['artist']);
 
 $smarty->assign("track", $track);
+
+// no idea how this would be track-relevant
+$aTagCloud = TagCloud::GenerateTagCloud('Scrobbles', 'artist');
+if (!PEAR::isError ($aTagCloud)) {
+        $smarty->assign('tagcloud', $aTagCloud);
+}
 
 $smarty->display("track.tpl");
 ?>
