@@ -3,12 +3,13 @@ Introduction
 
 Lastscrape is a quick hack for pulling listened tracks from any Last.fm
 profile library. It is written in Python and requires the BeautifulSoup
-module (version ).[1] Version 3.1 of it seems to be broken.[2]
+module.[1] Version 3.1 of it seems to be broken[2] so use version
+3.0.7a.
 
 How it works
 ------------
 
-The script loads the page at <http://last.fm/user/PROFILE/library/recent>,
+The script loads the page at <http://last.fm/user/PROFILE/tracks>,
 where PROFILE is any Last.fm profile name. It checks how many pages the
 library has, then loops through all of them, gathering all the tracks
 you've listened.
