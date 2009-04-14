@@ -32,6 +32,7 @@ require_once('database.php');
 				foreach($row as $field => $value) {
 					if($field == "name"){
 					  echo $value;
+					}  
 				}
 			}
 ?>
