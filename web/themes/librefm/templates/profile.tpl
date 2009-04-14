@@ -39,21 +39,19 @@
 
 <h3>Latest {$scrobbles|@count} Gobbles:</h3>
 
-<ul id="scrobbles" class="listcloud" about="{$id}" rev="gob:user">
+<ul class="gobbles" about="{$id}" rev="gob:user">
 {section name=i loop=$scrobbles}
 
 	<li about="{$scrobbles[i].id}" typeof="gob:ScrobbleEvent" rel="gob:track_played">
-		<dl about="{$scrobbles[i].id_track}" typeof="mo:Track">
-			<dt rel="foaf:maker">
+		<div about="{$scrobbles[i].id_track}" typeof="mo:Track" class="haudio">
+			<div rel="foaf:maker" class="contributor vcard">
 				<a about="{$scrobbles[i].id_artist}" typeof="mo:MusicArtist" property="foaf:name" rel="foaf:page"
-					href="{$scrobbles[i].artisturl}"
+					class="fn url" href="{$scrobbles[i].artisturl}"
 					>{$scrobbles[i].artist}</a>
-			</dt>
-			<dd>
-				<div><a property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl}">{$scrobbles[i].track}</a></div>
-				<small about="{$scrobbles[i].id}" property="dc:date" content="{$scrobbles[i].timeiso}" datatype="xsd:dateTime">{$scrobbles[i].timehuman}</small>
-			</dd>
-		</dl>
+			</div>
+			<div><a class="fn" property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl}">{$scrobbles[i].track}</a></div>
+			<small about="{$scrobbles[i].id}" property="dc:date" content="{$scrobbles[i].timeiso}" datatype="xsd:dateTime">{$scrobbles[i].timehuman}</small>
+		</div>
 	</li>
 	
 {/section}
