@@ -63,19 +63,19 @@ if (isset($_POST['install'])) {
 		homepage VARCHAR(255),
 		location VARCHAR(255),
 		created int NOT NULL,
-		modified int,
-		userlevel int DEFAULT 0);");
+		modified INTEGER,
+		userlevel INTEGER DEFAULT 0);");
 
 	$res = $mdb2->query("CREATE TABLE Auth (token VARCHAR(32) PRIMARY KEY,
 		sk VARCHAR(32),
-		expires int,
+		expires INTEGER,
 		username VARCHAR(64) REFERENCES Users(username))");
 
 	$mdb2->query("CREATE TABLE Artist(
 		name VARCHAR(255) PRIMARY KEY,
 		mbid VARCHAR(36),
-		streamable int,
-		bio_published int,
+		streamable INTEGER,
+		bio_published INTEGER,
 		bio_content TEXT,
 		bio_summary TEXT,
 		image_small VARCHAR(255),
@@ -89,7 +89,7 @@ if (isset($_POST['install'])) {
 		mbid VARCHAR(36),
 		image VARCHAR(255),
 		artwork_license VARCHAR(255),
-		releasedate int,
+		releasedate INTEGER,
 		albumurl VARCHAR(255),
 		downloadurl VARCHAR(255),
 		PRIMARY KEY(name, artist_name));");
@@ -105,8 +105,8 @@ if (isset($_POST['install'])) {
 		artist VARCHAR(255) REFERENCES Artist(name),
 		album VARCHAR(255) REFERENCES Album(name),
 		mbid VARCHAR(36),
-		duration int,
-		streamable int,
+		duration INTEGER,
+		streamable INTEGER,
 		license VARCHAR(255),
 		downloadurl VARCHAR(255),
 		streamurl VARCHAR(255),
@@ -118,7 +118,7 @@ if (isset($_POST['install'])) {
 		track VARCHAR(255) REFERENCES Track(name),
 		album VARCHAR(255) REFERENCES Album(name),
 		artist VARCHAR(255) REFERENCES Artist(name),
-		time int,
+		time INTEGER,
 		mbid VARCHAR(36),
 		source VARCHAR(6),
 		rating CHAR(1),
@@ -129,7 +129,7 @@ if (isset($_POST['install'])) {
 		username VARCHAR(64) REFERENCES Users(username),
 		sessionid VARCHAR(32),
 		client CHAR(3),
-		expires int,
+		expires INTEGER,
 		PRIMARY KEY(username, sessionid));");
 
 	$res = $mdb2->query("CREATE TABLE Now_Playing(
@@ -142,7 +142,7 @@ if (isset($_POST['install'])) {
 
 	$res = $mdb2->query("CREATE TABLE Invitation_Request(
 		email VARCHAR(255) PRIMARY KEY,
-		time int);");
+		time INTEGER);");
 
 	$res = $mdb2->query("CREATE TABLE Invitations(
 		inviter VARCHAR(64) REFERENCES Users(username),
