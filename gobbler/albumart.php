@@ -31,7 +31,7 @@ require_once('database.php');
 			$i++;
 				foreach($row as $field => $value) {
 					if($field == "name"){
-					  $echo value;
+					  echo $value;
 				}
 			}
 ?>
