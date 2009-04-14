@@ -19,7 +19,6 @@
 
 */
 
-
 require_once($install_path . '/database.php');
 require_once($install_path . '/data/sanitize.php');
 require_once($install_path . '/utils/human-time.php');
@@ -35,6 +34,7 @@ class User {
 
 
 	public $name, $email, $fullname, $bio, $location, $homepage, $error, $userlevel;
+	public $id, $acctid;
 
 	/**
 	 * User constructor
@@ -42,9 +42,14 @@ class User {
 	 * @param string $name The name of the user to load
 	 */
 	function __construct($name) {
+
+		global $base_url;
+		$base = preg_replace('#/$#', '', $base_url);
+
 		global $mdb2;
 		$res = $mdb2->query('SELECT * FROM Users WHERE '
 			. 'username = ' . $mdb2->quote($name, 'text'));
+
 		if($res->numRows()) {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
 			$this->name	  = $row['username'];
@@ -54,7 +59,12 @@ class User {
 			$this->bio	   = $row['bio'];
 			$this->location  = $row['location'];
 			$this->userlevel = $row['userlevel'];
+			$this->id = $row["webid"];
+			$this->acctid = $base.'/user/' . urlencode($this->name) . '#acct';
 		}
+		
+		if (! strlen($this->id))
+			$this->id = $base.'/user/' . urlencode($this->name) . '#me';
 	}
 
 	/**
@@ -66,9 +76,6 @@ class User {
 	function getScrobbles($number) {
 		$data = Server::getRecentScrobbles($number, $this->name);
 		if(!isset($data)) { return array(); }
-		foreach($data as &$i) {
-  			$i['timehuman'] = human_timestamp($i['time']);
-		}
 		return $data;
 	}
 

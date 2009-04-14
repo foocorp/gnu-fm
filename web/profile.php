@@ -34,6 +34,8 @@ if(!isset($_GET['user']) && $logged_in == false) {
 $user = new User($_GET['user']);
 
 if(isset($user->name)) {
+	$smarty->assign("id", $user->id);
+	$smarty->assign("acctid", $user->acctid);
 	$smarty->assign('user', $user->name);
 	$smarty->assign('email', $user->email);
 	$smarty->assign('fullname', $user->fullname);
