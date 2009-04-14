@@ -74,7 +74,9 @@ sort($tr);
 	$artist = new Artist($row["artist"]);
 
 	if($track->duration == 0) {
-		$track->duration = 1800;
+		$duration = 180000;
+	} else {
+		$duration = $track->duration * 1000;
 	}
 
 	echo "    <track>\n";
