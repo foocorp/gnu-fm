@@ -69,9 +69,9 @@ function createAlbumIfNew($artist, $album) {
 	if(!$res->numRows()) {
 		// Album doesn't exist, so create it
 	        
-	  $art = getAlbumArt($artist, $album);
+	  $art = $mdb2->quote(getAlbumArt($artist, $album));
 	  if ($art) {
-	    $license = "amazon";
+	    $license = $mdb2->quote("amazon");
 
 	    $res = $mdb2->query("INSERT INTO Album (name, artist_name, image, artwork_license) VALUES (" . ($album) . ", " . ($artist) . ", " . ($art) . ", " . ($license) .")");
 
