@@ -50,7 +50,7 @@
 					>{$scrobbles[i].artist}</a>
 			</dt>
 			<dd>
-				<a property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl}">{$scrobbles[i].track}</a>
+				<div><a property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl}">{$scrobbles[i].track}</a></div>
 				<small about="{$scrobbles[i].id}" property="dc:date" content="{$scrobbles[i].timeiso}" datatype="xsd:dateTime">{$scrobbles[i].timehuman}</small>
 			</dd>
 		</dl>
