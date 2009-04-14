@@ -16,9 +16,11 @@
 		<!-- Avatar placeholder  -->
 		<img rel="foaf:depiction" src="{$avatar}" class="photo" alt="avatar" />
 	</dd>
+	{if $homepage}
 	<dd>
-		<a href="{$homepage}" rel="foaf:homepage" class="url">{$homepage}</a>
+		<a href="{$homepage}" rel="foaf:homepage" rev="foaf:primaryTopic" class="url">{$homepage}</a>
 	</dd>
+	{/if}
 	<dd rel="foaf:based_near">
 		<span class="label" property="rdfs:label">{$location}</span>
 	</dd>
