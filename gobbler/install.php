@@ -101,6 +101,7 @@ if (isset($_POST['install'])) {
 		license VARCHAR(255),
 		downloadurl VARCHAR(255),
 		streamurl VARCHAR(255),
+		otherid VARCHAR(16),
 		PRIMARY KEY(name, artist),
 		FULLTEXT(name,artist,album,license));");
 
