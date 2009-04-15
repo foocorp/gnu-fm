@@ -8,6 +8,30 @@
                 <li style='font-size:{$tagcloud[i].size}'><a href='/artist/{$tagcloud[i].artist|urlencode}' title='This artist was played {$tagcloud[i].count} times' rel='tag'>{$tagcloud[i].artist}</a></li>
     {/section}
             </ul>     
+
+
+	    <h4>Coming soon</h4>
+
+	    <ul>
+	    <li>Groups</li>
+	    <li>Improved streaming support</li>
+	    <li>Events</li>
+	    <li>Improved artist pages</li>
+	    <li>Album art</li>
+	    </ul>
+
+	    <h3>Developers</h3>
+
+	    <p>If you'd like to get started hacking on Libre.fm, <a href="https://savannah.nongnu.org/my/groups.php?words=libre.fm#searchgroup">join the project today</a>.</p>
+
+	    <h3>Calling all Free Culture artists</h3>
+
+	    <p>Get involved on the <a
+	    href="http://lists.autonomo.us/mailman/listinfo/libre-fm">mailing
+	    list</a> and <a
+	    href="https://savannah.nongnu.org/bugs/?group=librefm">tell
+	    us the features</a> <strong>you want to see</strong>.</p>
+
         </div>
     </div>
 {/if}
