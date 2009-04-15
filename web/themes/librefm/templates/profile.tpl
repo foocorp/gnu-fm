@@ -76,7 +76,7 @@
 <ul class="tagcloud" about="{$id}">
 	{section name=i loop=$user_tagcloud}
 	<li style="font-size:{$user_tagcloud[i].size}"><a
-	href="/artist/{$user_tagcloud[i].artist|urlencode|escape:"html":"UTF-8"}" rel="{if $user_tagcloud[i].size|substr:-5 ==
+	href="/artist/{$user_tagcloud[i].artist|escape:'url':'UTF-8'}" rel="{if $user_tagcloud[i].size|substr:-5 ==
 	'large'}foaf:interest {/if}tag">{$user_tagcloud[i].artist|escape:"html":"UTF-8"}</a></li>
 	{/section}
 </ul>
