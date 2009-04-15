@@ -38,7 +38,7 @@
 </div></div>
 <div class="yui-g" id="artists">
 
-  <strong><a href="/contact/">Talk to us</a></strong> if you're in a band, represent a
+  <strong><a href="http://libre.fm/contact/">Talk to us</a></strong> if you're in a band, represent a
   label or music service, we'd like to talk ideas and
   possibilities. While our intention is eventually provide download
   and streaming services for freely-licensed music, we are also
@@ -57,12 +57,12 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metu
    <div id="ft" role="navigation">
 
      <ul>
-       <li class="copy">&copy; 2009 Libre.fm Project</li>
-       <li><a href="/contributors/">Contributors</a></li>
-       <li><a href="/licensing/">Licensing information</a></li>
-       <li><a href="/developer/">Developers</a></li>
-       <li><a href="/api/">API</a></li>
-       <li><a href="/download/">Download</a></li>
+       <li class="copy">&copy; 2009 <a href="http://libre.fm/">Libre.fm</a> Project</li>
+       <li><a href="http://libre.fm/contributors/">Contributors</a></li>
+       <li><a href="http://libre.fm/licensing/">Licensing information</a></li>
+       <li><a href="http://libre.fm/developer/">Developers</a></li>
+       <li><a href="http://libre.fm/api/">API</a></li>
+       <li><a href="http://libre.fm/download/">Download</a></li>
      </ul>
 
      <p><a href='http://creativecommons.org/licenses/by-sa/3.0/' rel='license'><img src="{$base_url}/i/cc-by-sa.png" alt="Attribution-ShareAlike 3.0" /></a></p>
