@@ -5,7 +5,7 @@
 
 	<div class="avatar" rel="foaf:depiction">
 		<!-- Avatar placeholder  -->
-		<img src="{$avatar}" alt="avatar" class="photo" />
+		<img src="{$avatar|htmlentities}" alt="avatar" class="photo" />
 	</div>
 	
 	<dl>

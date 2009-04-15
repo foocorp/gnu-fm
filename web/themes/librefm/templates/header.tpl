@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
     "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<!-- @role doesn't validate with this DTD, but is useful for accessibility -->
 <html
 	version="XHTML+RDFa 1.0"
 	xmlns="http://www.w3.org/1999/xhtml"
@@ -15,14 +16,14 @@
 	
 <head profile="http://www.w3.org/1999/xhtml/vocab">
 	<title>Libre.fm &mdash; discover new music</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<link rel="stylesheet" href="http://turtle.libre.fm/reset-fonts-grids.css" type="text/css" />
 	<link rel="stylesheet" href="http://turtle.libre.fm/base.css" type="text/css" />
 	<link rel="stylesheet" href="http://turtle.libre.fm/librefm.css" type="text/css" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/alpha.css" type="text/css" />
-	<link rel="icon" href="{$base_url}/favicon.ico" type="image/x-icon">
-	<script type="text/javascript" src="{$base_url}/js/player.js"></script>
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="icon" href="{$base_url}/favicon.ico" type="image/x-icon" />
 	<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/" />
+	<script type="text/javascript" src="{$base_url}/js/player.js"></script>
 </head>
 
 <body>
