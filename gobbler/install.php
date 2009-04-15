@@ -55,7 +55,8 @@ if (isset($_POST['install'])) {
 	 *      - will need a small mod to web/data/User.php once added.
 	 */
 
-	$mdb2->query("CREATE TABLE Users (username VARCHAR(64) PRIMARY KEY,
+	$mdb2->query("CREATE TABLE Users (
+		username VARCHAR(64) PRIMARY KEY,
 		password VARCHAR(32) NOT NULL,
 		email VARCHAR(255),
 		fullname VARCHAR(255),
@@ -66,7 +67,8 @@ if (isset($_POST['install'])) {
 		modified INTEGER,
 		userlevel INTEGER DEFAULT 0);");
 
-	$res = $mdb2->query("CREATE TABLE Auth (token VARCHAR(32) PRIMARY KEY,
+	$res = $mdb2->query("CREATE TABLE Auth (
+		token VARCHAR(32) PRIMARY KEY,
 		sk VARCHAR(32),
 		expires INTEGER,
 		username VARCHAR(64) REFERENCES Users(username))");
@@ -84,7 +86,7 @@ if (isset($_POST['install'])) {
 		homepage VARCHAR(255));");
 
 	$mdb2->query("CREATE TABLE Album(
-		name VARCHAR(255) PRIMARY KEY,
+		name VARCHAR(255),
 		artist_name VARCHAR(255) REFERENCES Artist(name),
 		mbid VARCHAR(36),
 		image VARCHAR(255),
@@ -100,9 +102,9 @@ if (isset($_POST['install'])) {
 		PRIMARY KEY(name_a, name_b));");
 
 	$mdb2->query("CREATE TABLE Track(
-		name VARCHAR(255) PRIMARY KEY,
+		name VARCHAR(255),
 		artist VARCHAR(255) REFERENCES Artist(name),
-		album VARCHAR(255) REFERENCES Album(name),
+		album VARCHAR(255),
 		mbid VARCHAR(36),
 		duration INTEGER,
 		streamable INTEGER,
@@ -113,8 +115,8 @@ if (isset($_POST['install'])) {
 
 	$mdb2->query("CREATE TABLE Scrobbles(
 		username VARCHAR(64) REFERENCES Users(username),
-		track VARCHAR(255) REFERENCES Track(name),
-		album VARCHAR(255) REFERENCES Album(name),
+		track VARCHAR(255),
+		album VARCHAR(255),
 		artist VARCHAR(255) REFERENCES Artist(name),
 		time INTEGER,
 		mbid VARCHAR(36),
@@ -130,9 +132,9 @@ if (isset($_POST['install'])) {
 
 	$res = $mdb2->query("CREATE TABLE Now_Playing(
 		sessionid VARCHAR(32) PRIMARY KEY REFERENCES Scrobble_Sessions(sessionid),
-		track VARCHAR(255) REFERENCES Track(name),
+		track VARCHAR(255),
 		artist VARCHAR(255) REFERENCES Artist(name),
-		album VARCHAR(255) REFERENCES Album(name),
+		album VARCHAR(255),
 		mbid VARCHAR(36),
 		expires INTEGER);");
 
@@ -156,9 +158,8 @@ if (isset($_POST['install'])) {
 		username VARCHAR(64) REFERENCES Users(username),
 		tag VARCHAR(64),
 		artist VARCHAR(255) REFERENCES Artist(name),
-		album VARCHAR(255) REFERENCES Album(name),
-		track VARCHAR(255) REFERENCES Track(name),
-		PRIMARY KEY(username, tag, artist, album, track));");
+		album VARCHAR(255),
+		track VARCHAR(255));");
 
 	// Test user configuration
 	$res = $mdb2->query("INSERT INTO Users
