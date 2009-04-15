@@ -53,8 +53,8 @@
 	<li about="{$scrobbles[i].id}" typeof="gob:ScrobbleEvent" rel="gob:track_played">
 		<div about="{$scrobbles[i].id_track}" typeof="mo:Track" class="haudio">
 			<div rev="mo:track">
-				<div typeof="mo:Record">
-					<span rel="foaf:depiction"><img src="http://ecx.images-amazon.com/images/I/415F39TK6RL._SL50_.jpg" class="photo" alt="" /></span>
+				<div typeof="mo:Record" property="dc:title" content="{$scrobbles[i].album}">
+					<span{if $scrobbles[i].albumart != '/i/qm50.png'} rel="foaf:depiction"{/if}><img src="{$scrobbles[i].albumart}" class="albumart{if $scrobbles[i].albumart != '/i/qm50.png'} photo{/if}" title="{$scrobbles[i].album}" alt="Album: {$scrobbles[i].album}"  /></span>
 				</div>
 			</div>
 			<div rel="foaf:maker" class="contributor vcard">
