@@ -43,9 +43,9 @@ class Server {
 		global $mdb2;
 
 		if($username) {
-			$res = $mdb2->query('SELECT username, artist, track, album, time, mbid FROM Scrobbles WHERE rating<>"S" AND username = ' . $mdb2->quote($username, "text") . ' ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT s.username, s.artist, s.track, s.album, s.time, s.mbid, a.mbid AS artist_mbid FROM Scrobbles s LEFT JOIN Artists a ON s.artist=a.artist WHERE s.rating<>"S" AND s.username = ' . $mdb2->quote($username, "text") . ' ORDER BY s.time DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		} else {
-			$res = $mdb2->query('SELECT username, artist, track, album, time, mbid FROM Scrobbles WHERE rating<>"S" ORDER BY time DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT s.username, s.artist, s.track, s.album, s.time, s.mbid, a.mbid AS artist_mbid FROM Scrobbles s LEFT JOIN Artists a ON s.artist=a.artist WHERE s.rating<>"S" ORDER BY s.time DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		}
 
 		if(PEAR::isError($res)) {
@@ -63,9 +63,9 @@ class Server {
   			$row['timehuman'] = human_timestamp($row['time']);
 			$row["timeiso"]   = date('c', (int)$row['time']);
 			
-			$row['id']        = identifierScrobbleEvent($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid']);
-			$row['id_artist'] = identifierArtist($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid']);
-			$row['id_track']  = identifierTrack($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid']);
+			$row['id']        = identifierScrobbleEvent($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid']);
+			$row['id_artist'] = identifierArtist($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid']);
+			$row['id_track']  = identifierTrack($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid']);
 
 			// We really want to get an image URI from the database and only fall back to qm50.png if we can't find an image.
 			$row['albumart'] = '/i/qm50.png';
