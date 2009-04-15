@@ -24,6 +24,12 @@ require_once('database.php');
 require_once('templating.php');
 require_once($install_path . '/data/User.php');
 
+if(isset($_SESSION['session_id']) && $_GET['action'] == 'logout') {
+    session_unset();
+    session_destroy();
+    header('Location: index.php');
+}
+
 if(isset($_POST['login'])) {
 
 	$errors = '';
