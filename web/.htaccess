@@ -1,9 +1,9 @@
 Options +FollowSymLinks
 RewriteEngine on
 
-RewriteRule ^user/([^/]+)/?$					profile.php?user=$1			[NC]
-RewriteRule ^artist/([^/]+)/track/([^/]+)/?$			track.php?artist=$1&track=$2		[NC]
-RewriteRule ^artist/([^/]+)/album/([^/]+)/track/([^/]+)/?$	track.php?artist=$1&album=$2&track=$3	[NC]
-RewriteRule ^artist/([^/]+)/album/([^/]+)/?$			album.php?artist=$1&album=$2 		[NC]
-RewriteRule ^artist/([^/]+)/?$					artist.php?artist=$1			[NC]
-RewriteRule ^logout 						login.php?action=logout			[NC]
+RewriteRule ^user/([^/]+)/?$					profile.php?user=$1			[B,NC]
+RewriteRule ^artist/([^/]+)/track/([^/]+)/?$			track.php?artist=$1&track=$2		[B,NC]
+RewriteRule ^artist/([^/]+)/album/([^/]+)/track/([^/]+)/?$	track.php?artist=$1&album=$2&track=$3	[B,NC]
+RewriteRule ^artist/([^/]+)/album/([^/]+)/?$			album.php?artist=$1&album=$2 		[B,NC]
+RewriteRule ^artist/([^/]+)/?$					artist.php?artist=$1			[B,NC]
+RewriteRule ^logout 						login.php?action=logout			[B,NC]
