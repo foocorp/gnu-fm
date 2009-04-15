@@ -3,7 +3,9 @@ require_once('simpletest/unit_tester.php');
 require_once('simpletest/browser.php');
 require_once('simpletest/reporter.php');
 
-define(URL, 'http://ponape.com.ar/libre.fm/librefm/tests');
+define(URL, 'http://ponape.com.ar/libre.fm/trunk/tests');
+define(USERNAME, 'testuser');
+define(PASSWORD, 'goodpassword');
 
 include('web/database.php');
 include('web/data/TagCloud.php');
@@ -48,17 +50,17 @@ class testLibreFM extends UnitTestCase {
     }
 
     function testWebLoginBad() {
-        $badlogin = $this->WebLogin('testuser', 'badpassword');
+        $badlogin = $this->WebLogin(USERNAME, 'badpassword');
 
         $this->assertEqual($badlogin->getUrl(), URL . '/web/login.php');
     }
     function testWebLoginGood() {
-        $goodlogin = $this->WebLogin('testuser', 'goodpassword');
+        $goodlogin = $this->WebLogin(USERNAME, PASSWORD);
 
         $this->assertEqual($goodlogin->getUrl(), URL . '/web/index.php');
     }
     function testWebLogout() {
-        $logout = $this->WebLogin('testuser', 'goodpassword');
+        $logout = $this->WebLogin(USERNAME, PASSWORD);
         $this->assertTrue(preg_match('/login\.php\?action=logout/', $logout->getContent()));
         $logout->click('logout');
         $this->assertFalse(preg_match('/login\.php\?action=logout/', $logout->getContentAsText()));
