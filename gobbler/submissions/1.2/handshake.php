@@ -40,6 +40,10 @@ if(!in_array($protocol, $supported_protocols))  {
 	die("FAILED Unsupported protocol version\n");
 }
 
+if(abs($timestamp - time()) > 300) {
+	die("BADTIME\n"); // let's try a 5-minute tolerance
+}
+
 if(isset($_GET['api_key']) && isset($_GET['sk'])) {
 	$authed = check_web_auth($username, $auth_token, $timestamp, $_GET['api_key'], $_GET['sk']);
 } else {
