@@ -43,9 +43,9 @@ class Server {
 		global $mdb2;
 
 		if($username) {
-			$res = $mdb2->query('SELECT s.username, s.artist, s.track, s.album, s.time, s.mbid, a.mbid AS artist_mbid FROM Scrobbles s LEFT JOIN Artists a ON s.artist=a.name WHERE s.rating<>"S" AND s.username = ' . $mdb2->quote($username, "text") . ' ORDER BY s.time DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT s.username, s.artist, s.track, s.album, s.time, s.mbid, a.mbid AS artist_mbid FROM Scrobbles s LEFT JOIN Artist a ON s.artist=a.name WHERE s.rating<>"S" AND s.username = ' . $mdb2->quote($username, "text") . ' ORDER BY s.time DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		} else {
-			$res = $mdb2->query('SELECT s.username, s.artist, s.track, s.album, s.time, s.mbid, a.mbid AS artist_mbid FROM Scrobbles s LEFT JOIN Artists a ON s.artist=a.name WHERE s.rating<>"S" ORDER BY s.time DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT s.username, s.artist, s.track, s.album, s.time, s.mbid, a.mbid AS artist_mbid FROM Scrobbles s LEFT JOIN Artist a ON s.artist=a.name WHERE s.rating<>"S" ORDER BY s.time DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		}
 
 		if(PEAR::isError($res)) {
