@@ -57,7 +57,7 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metu
    <div id="ft" role="navigation">
 
      <ul>
-       <li class="copy">&copy; 2009 <a href="http://libre.fm/">Libre.fm</a> Project</li>
+       <li class="copy">&copy; 2009 <a href="http://libre.fm/">Libre.fm</a> Project | A <a href="http://foocorp.org/">FooCorp</a> thing.</li>
        <li><a href="http://libre.fm/contributors/">Contributors</a></li>
        <li><a href="http://libre.fm/licensing/">Licensing information</a></li>
        <li><a href="http://libre.fm/developer/">Developers</a></li>
