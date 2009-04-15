@@ -44,8 +44,8 @@ if(isset($_POST['register'])) {
 
 
 	//Basic validation
-	if(empty($username)) {
-		$errors .= "You must enter a username.<br />";
+	if(!preg_match("/^[a-zA-Z0-9_]{1,}$/", $username)) {
+		$errors .= "Your username must be atleast 1 character in length and only consist of <i>a-z, A-Z, 0-9</i> and _ (underscore).<br />";
 	}
 	if(empty($password)) {
 		$errors .= "You must enter a password.<br />";
