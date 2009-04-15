@@ -7,6 +7,7 @@
     {if $u_user->userlevel > 0}
         <li><a href="/admin.php">Admin panel</a></li>
     {/if}
+	<li><a href="{$base_url}/login.php?action=logout">Logout</a></li>
 {else}
         <li><a href="{$base_url}/login.php">Login</a></li>
         <li><a href="{$base_url}/request.php">Request invitation</a></li>
