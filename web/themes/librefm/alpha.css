@@ -14,7 +14,7 @@ img {
 
 
 h2 {
-	font-size: 2em;
+	font-size: 131%;
 	margin: 5px;
 }
 
@@ -29,7 +29,7 @@ div#footer a {
  * We should use a class down here ¬¬ (fauno)
  */
 
-form input {font-size: 140%;}
+form input {font-size: 138.5%;}
 
 div#invite,
 div#register,
@@ -54,7 +54,6 @@ div#login form fieldset label {
 	float:left;
 	font-weight:bold;
 	text-align:right;
-	font-size: 1em;
     width: 10em;
 }
 div#invite form fieldset label span,
@@ -64,13 +63,12 @@ div#login form fieldset label span {
 	display:block;
 	font-weight:normal;
 	text-align:right;
-	font-size: .59em
+	font-size: 77%;
 }
 div#invite form fieldset input,
 div#register form fieldset input,
 div#login form fieldset input {
 	float:left;
-	font-size:1em;
 	padding:.2em .1em;
 	width:200px;
 	margin:2px 0 20px 10px;
@@ -100,7 +98,7 @@ ul.listcloud li dd { margin: 0; padding: 0; }
 ul.listcloud li dt a { color: #630000; text-decoration: none; }
 ul.listcloud li dt a:hover { text-decoration: underline; }
 
-ul#topartists.listcloud dd, ul#albums.listcloud dd { font-size: 80%; line-height: 1.2em; }
+ul#topartists.listcloud dd, ul#albums.listcloud dd { font-size: 77%; line-height: 1.2em; }
 
 ul#nowplaying.listcloud li { float: left; margin-right: 10px; margin-bottom: 10px; list-style-type: none; padding: 10px; border: 1px solid #000; background-color: #eee; -moz-border-radius: 5px; height: 4.4em; }
 
@@ -120,17 +118,16 @@ ul#recenttracks.listcloud li { height: 3.4em; }
 .user .bio {
 }
 .user .fn {
-    font-size: 1.2em;
+    font-size: 93%;
 }
 .user .nickname {
     color: #666666
 }
   dl.now-playing dt, dl.recent-tracks dt {
-      font-size: 1em;
       margin-top: .3em
   }
   dl.now-playing dd {
-      font-size: .8em;
+      font-size: 77%;
       color: #666;
       display: inline;
       margin: 0
@@ -139,13 +136,13 @@ ul#recenttracks.listcloud li { height: 3.4em; }
       display:block
   }
   dl.recent-tracks dd span.username {
-      font-size: .7em
+      font-size: 77%;
   }
   dl.now-playing dt {
-      font-size: 1em;
+      font-size: 93%;
   }
   dl.now-playing dd {
-      font-size: .8em;
+      font-size: 85%;
       color: #666
   }
 
@@ -165,12 +162,12 @@ ul.gobbles * {
     }
     ul.gobbles .track-name {
         font-weight: bold;
-        font-size: .8em
+        font-size: 77%;
     }
     ul.gobbles small {
         margin-left: .5em;
         color: #666;
-        font-size: .7em
+        font-size: 77%;
     }
     ul.gobbles li img.albumart {
         float: left;
