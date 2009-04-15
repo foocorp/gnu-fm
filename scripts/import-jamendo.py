@@ -318,6 +318,8 @@ class JamendoImport:
 			if track_e.tag == "license":
 				track["license"] = track_e.text
 
+			if track_e.tag == "duration":
+				track["duration"] = track_e.text
 
 			if track_e.tag == "Tags":
 				for tag_e in track_e.getchildren():
