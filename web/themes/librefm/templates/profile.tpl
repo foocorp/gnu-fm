@@ -76,7 +76,7 @@
 <h3>{$user}'{if $user|substr:-1 != 's'}s{/if} top artists</h3>
 <ul class="tagcloud" about="{$id}">
 	{section name=i loop=$user_tagcloud}
-	<li style='font-size:{$user_tagcloud[i].size}'><a href='/artist/{$user_tagcloud[i].artist|urlencode|htmlentities}' rel='foaf:interest tag'>{$user_tagcloud[i].artist|htmlentities}</a></li>
+	<li style="font-size:{$user_tagcloud[i].size}"><a href="/artist/{$user_tagcloud[i].artist|urlencode|htmlentities}" rel="{if $user_tagcloud[i].size|substr:-5 != 'large'}foaf:interest{/if} tag">{$user_tagcloud[i].artist|htmlentities}</a></li>
 	{/section}
 </ul>
 
