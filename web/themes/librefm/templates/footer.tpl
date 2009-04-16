@@ -59,12 +59,17 @@
    <div id="ft" role="navigation">
 
      <ul>
-       <li class="copy">&copy; 2009 <a href="http://libre.fm/">Libre.fm</a> Project | A <a href="http://foocorp.org/">FooCorp</a> thing.</li>
+       <li class="copy">&copy; 2009 <a href="http://libre.fm/">Libre.fm</a> Project</li>
        <li><a href="http://libre.fm/contributors/">Contributors</a></li>
        <li><a href="http://libre.fm/licensing/">Licensing information</a></li>
        <li><a href="http://libre.fm/developer/">Developers</a></li>
        <li><a href="http://libre.fm/api/">API</a></li>
        <li><a href="http://libre.fm/download/">Download</a></li>
+     </ul>
+
+     <ul>
+     <li>A <a href="http://foocorp.org/">FooCorp</a> thing.</li>
+     <li><a href="http://autonomo.us/">autonomo.us</a></li>
      </ul>
 
      <p><a href='http://creativecommons.org/licenses/by-sa/3.0/' rel='license'><img src="{$base_url}/i/cc-by-sa.png" alt="Attribution-ShareAlike 3.0" /></a></p>
