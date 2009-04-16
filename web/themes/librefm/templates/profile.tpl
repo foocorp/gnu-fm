@@ -10,7 +10,7 @@
 	
 	<dl>
 		<dt>
-			<span class="fn" property="foaf:name">{$fullname}</span>
+			<span class="fn" property="foaf:name">{$fullname|utf8_encode}</span>
 			<span rel="foaf:holdsAccount" rev="sioc:account_of">
 				<span about="{$acctid}" typeof="sioc:User">
 					(<span class="nickname" property="foaf:accountName">{$user}</span>)
