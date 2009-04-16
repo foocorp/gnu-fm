@@ -53,8 +53,8 @@
 	<li about="{$scrobbles[i].id}" typeof="gob:ScrobbleEvent" rel="gob:track_played">
 		<div about="{$scrobbles[i].id_track}" typeof="mo:Track" class="haudio">
 			<div rev="mo:track">
-				<div typeof="mo:Record"{if $scrobbles[i].album} property="dc:title" content="{$scrobbles[i].album}"{/if}>
-					<span{if $scrobbles[i].albumart != '/i/qm50.png'} rel="foaf:depiction"{/if}><img src="{$scrobbles[i].albumart}" class="albumart{if $scrobbles[i].albumart != '/i/qm50.png'} photo{/if}" {if $scrobbles[i].album}title="{$scrobbles[i].album}" alt="Album: {$scrobbles[i].album}"{else}alt="Unknown album"{/if}  /></span>
+				<div about="{$scrobbles[i].id_album}" typeof="mo:Record"{if $scrobbles[i].album} property="dc:title" content="{$scrobbles[i].album}"{/if}>
+					<span{if $scrobbles[i].album_image != '/i/qm50.png'} rel="foaf:depiction"{/if}><img height="50" width="50" src="{$scrobbles[i].album_image}" class="albumart{if $scrobbles[i].album_image != '/i/qm50.png'} photo{/if}" {if $scrobbles[i].album}title="{$scrobbles[i].album}" alt="Album: {$scrobbles[i].album}"{else}alt="Unknown album"{/if}  /></span>
 				</div>
 			</div>
 			<div rel="foaf:maker" class="contributor vcard">

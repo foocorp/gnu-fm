@@ -43,9 +43,50 @@ class Server {
 		global $mdb2;
 
 		if($username) {
-			$res = $mdb2->query('SELECT s.username, s.artist, s.track, s.album, s.time, s.mbid, a.mbid AS artist_mbid FROM Scrobbles s LEFT JOIN Artist a ON s.artist=a.name WHERE s.rating<>"S" AND s.username = ' . $mdb2->quote($username, "text") . ' ORDER BY s.time DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query(
+				'SELECT
+					s.username, 
+					s.artist, 
+					s.track, 
+					s.album, 
+					s.time, 
+					s.mbid, 
+					a.mbid AS artist_mbid,
+					l.mbid AS album_mbid,
+					l.image AS album_image
+				FROM Scrobbles s 
+				LEFT JOIN Artist a
+					ON s.artist=a.name
+				LEFT JOIN Album l
+					ON l.artist_name=s.artist
+					AND l.name=s.album
+				WHERE s.rating<>"S"
+					AND s.username = ' . $mdb2->quote($username, "text") . ' 
+				ORDER BY
+					s.time DESC 
+				LIMIT ' . $mdb2->quote($number, "integer"));
 		} else {
-			$res = $mdb2->query('SELECT s.username, s.artist, s.track, s.album, s.time, s.mbid, a.mbid AS artist_mbid FROM Scrobbles s LEFT JOIN Artist a ON s.artist=a.name WHERE s.rating<>"S" ORDER BY s.time DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query(
+				'SELECT
+					s.username,
+					s.artist, 
+					s.track,
+					s.album,
+					s.time,
+					s.mbid,
+					a.mbid AS artist_mbid,
+					l.mbid AS album_mbid,
+					l.image AS album_image
+				FROM Scrobbles s
+				LEFT JOIN Artist a
+					ON s.artist=a.name
+				LEFT JOIN Album l
+					ON l.artist_name=s.artist
+					AND l.name=s.album
+				WHERE s.rating<>"S"
+				ORDER BY
+					s.time DESC 
+				LIMIT ' . $mdb2->quote($number, "integer"));
 		}
 
 		if(PEAR::isError($res)) {
@@ -63,12 +104,13 @@ class Server {
   			$row['timehuman'] = human_timestamp($row['time']);
 			$row["timeiso"]   = date('c', (int)$row['time']);
 			
-			$row['id']        = identifierScrobbleEvent($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid']);
-			$row['id_artist'] = identifierArtist($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid']);
-			$row['id_track']  = identifierTrack($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid']);
+			$row['id']        = identifierScrobbleEvent($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id_artist'] = identifierArtist($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id_track']  = identifierTrack($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id_album']  = identifierAlbum($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 
-			// We really want to get an image URI from the database and only fall back to qm50.png if we can't find an image.
-			$row['albumart'] = '/i/qm50.png';
+			if (! $row['album_image'])
+				$row['album_image'] = '/i/qm50.png';
 			
 			$result[] = $row;
 		}
