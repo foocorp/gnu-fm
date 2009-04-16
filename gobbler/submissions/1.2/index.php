@@ -35,6 +35,7 @@ if(!is_array($_POST['a']) || !is_array($_POST['t']) || !is_array($_POST['i'])) {
 $session_id = $_POST['s'];
 
 $username = $mdb2->quote(usernameFromSID($session_id), "text");
+$rowvalues = "";
 
 for($i = 0; $i < count($_POST['a']); $i++) {
 		switch (mb_detect_encoding($_POST['a'][$i])) {
@@ -100,7 +101,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	createTrackIfNew($artist, $album, $track, $mbid);
 
 	// Scrobble!
-	$mdb2->query("INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES ("
+	$rowvalues .= "("
 		. $username . ", "
 		. $artist . ", "
 		. $album . ", "
@@ -109,10 +110,23 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		. $mbid . ", "
 		. $source . ","
 		. $rating . ","
-		. $length . ")");
+		. $length . ")";
 
+	if((($i % 50) == 49) || ($i == count($_POST['a']))) {
+
+	// Scrobble!
+	$mdb2->query("INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES" . $rowvalues);
+        if(PEAR::isError($res)) {
+                die("FAILED " . $res->getMessage());
+        }
+
+	$rowvalues = "";
+
+	} elseif($i == 0) {
         // Destroy now_playing since it is almost certainly obsolescent
         $mdb2->query("DELETE FROM Now_Playing WHERE sessionid = " . $session_id);
+	}
+
 }
 
 die("OK\n");
