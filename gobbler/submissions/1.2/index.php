@@ -112,7 +112,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		. $rating . ","
 		. $length . ")";
 
-	if((($i % 50) == 49) || ($i == count($_POST['a']))) {
+	if((($i % 50) == 49) || ($i+1 == count($_POST['a']))) {
 
 	// Scrobble!
 	$mdb2->query("INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES" . $rowvalues);
