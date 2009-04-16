@@ -120,12 +120,16 @@ for($i = 0; $i < count($_POST['a']); $i++) {
                 die("FAILED " . $res->getMessage());
         }
 
+	if($i<50) {
+	        // Destroy now_playing since it is almost certainly obsolescent
+	        $mdb2->query("DELETE FROM Now_Playing WHERE sessionid = " . $session_id);
+	}
 	$rowvalues = "";
 
-	} elseif($i == 0) {
-        // Destroy now_playing since it is almost certainly obsolescent
-        $mdb2->query("DELETE FROM Now_Playing WHERE sessionid = " . $session_id);
+	} else {
+	$rowvalues .= ",";
 	}
+
 
 }
 
