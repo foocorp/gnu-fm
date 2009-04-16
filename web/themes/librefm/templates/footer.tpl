@@ -48,9 +48,11 @@
 </div>
 <div class="yui-g">
     <div class="yui-u first" id="links">
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat.    </div>
+    <p>Get started with Libre.fm -- <a href="http://ideas.libre.fm/index.php/Using_turtle">We have help</a></p>
+    </div>
     <div class="yui-u" id="moarlinks">
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat.    </div>
+<p>$Id$</p>
+    </div>
 </div>
 
 	</div>
