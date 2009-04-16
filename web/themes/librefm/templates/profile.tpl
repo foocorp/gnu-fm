@@ -55,7 +55,7 @@
 			<div rev="mo:track">
 				<div about="{$scrobbles[i].id_album}" typeof="mo:Record"{if $scrobbles[i].album} property="dc:title" content="{$scrobbles[i].album}"{/if}>
 					{if $scrobbles[i].albumurl}<a rel="foaf:page" href="{$scrobbles[i].albumurl}">{/if}
-						<span{if $scrobbles[i].album_image != '/i/qm50.png'} about="{$scrobbles[i].id_album}" rel="foaf:depiction"{/if}>
+						<span{if $scrobbles[i].album_image != '/i/qm50.png'} rel="foaf:depiction"{/if}{if $scrobbles[i].albumurl} about="{$scrobbles[i].id_album}"{/if}>
 							<img height="50" width="50" src="{$scrobbles[i].album_image}" class="albumart{if $scrobbles[i].album_image != '/i/qm50.png'} photo{/if}" {if $scrobbles[i].album}title="{$scrobbles[i].album}" alt="Album: {$scrobbles[i].album}"{else}alt="Unknown album"{/if}  />
 						</span>
 					{if $scrobbles[i].albumurl}</a>{/if}
