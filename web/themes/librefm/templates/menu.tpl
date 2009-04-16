@@ -5,13 +5,12 @@
 
 {if ($logged_in)}
     {if $u_user->userlevel > 0}
-        <li><a href="/admin.php">Admin panel</a></li>
+        <li><a href="/admin.php">admin</a></li>
     {/if}
+        <li><a href="http://ideas.libre.fm/index.php/Using_turtle">Help</a></li>
 	<li><a href="{$base_url}/login.php?action=logout">Logout</a></li>
 {else}
         <li><a href="{$base_url}/login.php">Login</a></li>
         <li><a href="{$base_url}/request.php">Request invitation</a></li>
 {/if}
-        <li>Explore:</li>
-        <li><a href="{$base_url}/explore.php?mode=artists">Artists</a></li>
   </ul>
