@@ -74,6 +74,8 @@
 
      <p><a href='http://creativecommons.org/licenses/by-sa/3.0/' rel='license'><img src="{$base_url}/i/cc-by-sa.png" alt="Attribution-ShareAlike 3.0" /></a></p>
 
+     <h6>Help translate libre.fm into your language</h6>
+
      <ul>
      <li><a href="http://aa.libre.fm">aa</a></li>
      <li><a href="http://ab.libre.fm">ab</a></li>
