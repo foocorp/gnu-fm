@@ -7,10 +7,10 @@
     {if $u_user->userlevel > 0}
         <li><a href="/admin.php">admin</a></li>
     {/if}
-        <li><a href="http://ideas.libre.fm/index.php/Using_turtle">Help</a></li>
 	<li><a href="{$base_url}/login.php?action=logout">Logout</a></li>
 {else}
         <li><a href="{$base_url}/login.php">Login</a></li>
-        <li><a href="{$base_url}/request.php">Request invitation</a></li>
 {/if}
+	<li><a href="https://savannah.nongnu.org/bugs/?group=librefm">Bugs</a></li>
+	<li><a href="http://ideas.libre.fm/index.php/Using_turtle">Help</a></li>
   </ul>
