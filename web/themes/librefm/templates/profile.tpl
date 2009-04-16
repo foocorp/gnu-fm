@@ -54,7 +54,7 @@
 		<div about="{$scrobbles[i].id_track}" typeof="mo:Track" class="haudio">
 			<div rev="mo:track">
 				<div about="{$scrobbles[i].id_album}" typeof="mo:Record"{if $scrobbles[i].album} property="dc:title" content="{$scrobbles[i].album}"{/if}>
-					<span{if $scrobbles[i].album_image != '/i/qm50.png'} rel="foaf:depiction"{/if}><img height="50" width="50" src="{$scrobbles[i].album_image}" class="albumart{if $scrobbles[i].album_image != '/i/qm50.png'} photo{/if}" {if $scrobbles[i].album}title="{$scrobbles[i].album}" alt="Album: {$scrobbles[i].album}"{else}alt="Unknown album"{/if}  /></span>
+					<span{if $scrobbles[i].album_image != '/i/qm50.png'} rel="foaf:depiction"{/if}>{if $scrobbles[i].albumurl}<a href="{$scrobbles[i].albumurl}">{/if}<img height="50" width="50" src="{$scrobbles[i].album_image}" class="albumart{if $scrobbles[i].album_image != '/i/qm50.png'} photo{/if}" {if $scrobbles[i].album}title="{$scrobbles[i].album}" alt="Album: {$scrobbles[i].album}"{else}alt="Unknown album"{/if}  />{if $scrobbles[i].albumurl}</a>{/if}</span>
 				</div>
 			</div>
 			<div rel="foaf:maker" class="contributor vcard">

@@ -98,6 +98,8 @@ class Server {
 			$row = sanitize($i);
 			
 			$row["userurl"] = Server::getUserURL($row["username"]);
+			if ($row['album'])
+				$row["albumurl"] = Server::getAlbumURL($row["artist"], $row["album"]);
 			$row["artisturl"] = Server::getArtistURL($row["artist"]);
 			$row["trackurl"] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
 
