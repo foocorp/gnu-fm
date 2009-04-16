@@ -35,6 +35,12 @@ class CleanUp:
 			if "&quot;" in oldname:
 				newname = newname.replace("&quot;","\"")
 
+			if "&lt;" in oldname:
+				newname = newname.replace("&lt;","<")
+
+			if "&gt;" in oldname:
+				newname = newname.replace("&gt;",">")
+
 			if oldname <> newname:
 				print "%s >>>INTO>>> %s" % (oldname, newname)
 				try:
