@@ -202,6 +202,11 @@ what's happening.
        <li><a href="http://libre.fm/download/">Download</a></li>
      </ul>
 
+     <ul>
+     <li><a href="http://foocorp.org">A FooCorp thing</a></li>
+     <li><a href="http://autonomo.us/">autonomo.us</a></li>
+     </ul>
+
      <p><img src="http://libre.fm/i/cc-by-sa.png" alt="Attribution-ShareAlike 3.0" /></p>
 
 <p><a href="/data">Data dumps are here</a></p>
