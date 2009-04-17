@@ -43,6 +43,8 @@ for($i = 0; $i < $c; $i++) {
 		. $mdb2->quote("P", "text") . ", "
 		. $mdb2->quote(180, integer) . ")";
 
+echo "$i / $count\n";
+
 	if((($i % 50) == 49) || ($i+1 == $count)) {
 
 
