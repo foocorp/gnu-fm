@@ -45,7 +45,7 @@ for($i = 0; $i < $c; $i++) {
 
 	// Scrobble!
 		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES" . $rowvalues;
-		$res =& $mdb2->exec($sql);
+		$res =& $mdb2->query($sql);
 		if(PEAR::isError($res)) {
 		    $msg = $res->getMessage();
 		    reportError($msg, $sql);
