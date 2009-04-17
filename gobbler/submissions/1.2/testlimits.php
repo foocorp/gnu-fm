@@ -30,7 +30,7 @@ $time = time();
 
 $rowvalues = "";
 
-for($i = 0; $i < $c; $i++) {
+for($i = 0; $i < $count; $i++) {
 	// Scrobble!
 	$rowvalues .= "("
 		. $mdb2->quote("testuser", "text") . ", "
