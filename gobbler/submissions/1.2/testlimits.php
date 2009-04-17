@@ -44,7 +44,7 @@ for($i = 0; $i < $c; $i++) {
 	if((($i % 50) == 49) || ($i+1 == $count)) {
 
 	// Scrobble!
-		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES" . $rowvalues);
+		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES" . $rowvalues;
 		$res =& $mdb2->exec($sql);
 		if(PEAR::isError($res)) {
 		    $msg = $res->getMessage();
