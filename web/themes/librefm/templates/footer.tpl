@@ -113,7 +113,6 @@
      <li><a href="http://cy.libre.fm">cy</a></li>
      <li><a href="http://da.libre.fm">da</a></li>
      <li><a href="http://de.libre.fm">de</a></li>
-     <li><a href="http://de.libre.fm">de</a></li>
      <li><a href="http://dv.libre.fm">dv</a></li>
      <li><a href="http://dz.libre.fm">dz</a></li>
      <li><a href="http://ee.libre.fm">ee</a></li>
@@ -123,7 +122,6 @@
      <li><a href="http://eo.libre.fm">eo</a></li>
      <li><a href="http://es.libre.fm">es</a></li>
      <li><a href="http://et.libre.fm">et</a></li>
-     <li><a href="http://eu.libre.fm">eu</a></li>
      <li><a href="http://eu.libre.fm">eu</a></li>
      <li><a href="http://fa.libre.fm">fa</a></li>
      <li><a href="http://fa.libre.fm">fa</a></li>
@@ -164,7 +162,6 @@
      <li><a href="http://ja.libre.fm">ja</a></li>
      <li><a href="http://jv.libre.fm">jv</a></li>
      <li><a href="http://ka.libre.fm">ka</a></li>
-     <li><a href="http://ka.libre.fm">ka</a></li>
      <li><a href="http://kg.libre.fm">kg</a></li>
      <li><a href="http://ki.libre.fm">ki</a></li>
      <li><a href="http://kj.libre.fm">kj</a></li>
@@ -201,7 +198,6 @@
      <li><a href="http://ms.libre.fm">ms</a></li>
      <li><a href="http://mt.libre.fm">mt</a></li>
      <li><a href="http://my.libre.fm">my</a></li>
-     <li><a href="http://my.libre.fm">my</a></li>
      <li><a href="http://na.libre.fm">na</a></li>
      <li><a href="http://nb.libre.fm">nb</a></li>
      <li><a href="http://nd.libre.fm">nd</a></li>
@@ -228,7 +224,6 @@
      <li><a href="http://rm.libre.fm">rm</a></li>
      <li><a href="http://rn.libre.fm">rn</a></li>
      <li><a href="http://ro.libre.fm">ro</a></li>
-     <li><a href="http://ro.libre.fm">ro</a></li>
      <li><a href="http://ru.libre.fm">ru</a></li>
      <li><a href="http://rw.libre.fm">rw</a></li>
      <li><a href="http://sa.libre.fm">sa</a></li>
@@ -238,12 +233,10 @@
      <li><a href="http://sg.libre.fm">sg</a></li>
      <li><a href="http://si.libre.fm">si</a></li>
      <li><a href="http://sk.libre.fm">sk</a></li>
-     <li><a href="http://sk.libre.fm">sk</a></li>
      <li><a href="http://sl.libre.fm">sl</a></li>
      <li><a href="http://sm.libre.fm">sm</a></li>
      <li><a href="http://sn.libre.fm">sn</a></li>
      <li><a href="http://so.libre.fm">so</a></li>
-     <li><a href="http://sq.libre.fm">sq</a></li>
      <li><a href="http://sq.libre.fm">sq</a></li>
      <li><a href="http://sr.libre.fm">sr</a></li>
      <li><a href="http://ss.libre.fm">ss</a></li>
