@@ -39,7 +39,7 @@ for($i = 0; $i < $c; $i++) {
 		. $mdb2->quote("", "text") . ", "
 		. $mdb2->quote("P", "text") . ", "
 		. $mdb2->quote("P", "text") . ", "
-		. $mdb2->quote(180, integer) . ")"
+		. $mdb2->quote(180, integer) . ")";
 
 	if((($i % 50) == 49) || ($i+1 == $count)) {
 
