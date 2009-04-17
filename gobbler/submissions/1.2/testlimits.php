@@ -43,10 +43,7 @@ for($i = 0; $i < $count; $i++) {
 		. $mdb2->quote("P", "text") . ", "
 		. $mdb2->quote(180, integer) . ")";
 
-echo "$i / $count\n";
-
-	if((($i % 50) == 49) || ($i+1 == $count)) {
-
+	if($i+1 == $count) {
 
 	// Scrobble!
 		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES" . $rowvalues;
