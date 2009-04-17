@@ -35,13 +35,13 @@ for($i = 0; $i < $count; $i++) {
 	$rowvalues .= "("
 		. $mdb2->quote("testuser", "text") . ", "
 		. $mdb2->quote("Metallica", "text") . ", "
-		. $mdb2->quote("Death Magnet", "text") . ", "
-		. $mdb2->quote("That Was Just Your Life", "text") . ", "
+		. $mdb2->quote("Ride the Lightning", "text") . ", "
+		. $mdb2->quote("Ride the Lightning", "text") . ", "
 		. $mdb2->quote($time + $i, "integer") . ", "
-		. $mdb2->quote("", "text") . ", "
+		. $mdb2->quote("19bc7363-eb0a-450d-ab1d-1f3082072e0a", "text") . ", "
 		. $mdb2->quote("P", "text") . ", "
 		. $mdb2->quote("P", "text") . ", "
-		. $mdb2->quote(180, integer) . ")";
+		. $mdb2->quote(393, integer) . ")";
 
 	if($i+1 == $count) {
 
