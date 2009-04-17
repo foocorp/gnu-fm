@@ -65,7 +65,10 @@ if (isset($_POST['install'])) {
 		location VARCHAR(255),
 		created int NOT NULL,
 		modified INTEGER,
-		userlevel INTEGER DEFAULT 0);");
+		userlevel INTEGER DEFAULT 0,
+		webid_uri VARCHAR(255),
+		avatar_uri VARCHAR(255),
+		location_uri VARCHAR(255) REFERENCES Places(location_uri));");
 
 	$res = $mdb2->query("CREATE TABLE Auth (
 		token VARCHAR(32) PRIMARY KEY,
@@ -160,6 +163,12 @@ if (isset($_POST['install'])) {
 		artist VARCHAR(255) REFERENCES Artist(name),
 		album VARCHAR(255),
 		track VARCHAR(255));");
+
+	$res = $mdb2->query("CREATE TABLE Places(
+		location_uri VARCHAR(255),
+		lat float,
+		long float,
+		country varchar(2));");
 
 	// Test user configuration
 	$res = $mdb2->query("INSERT INTO Users
