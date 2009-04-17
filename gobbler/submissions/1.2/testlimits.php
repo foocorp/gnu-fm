@@ -28,6 +28,8 @@ if(!isset($_GET['c'])) {
 $count = $_GET['c'];
 $time = time();
 
+$rowvalues = "";
+
 for($i = 0; $i < $c; $i++) {
 	// Scrobble!
 	$rowvalues .= "("
@@ -43,14 +45,16 @@ for($i = 0; $i < $c; $i++) {
 
 	if((($i % 50) == 49) || ($i+1 == $count)) {
 
+
 	// Scrobble!
 		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES" . $rowvalues;
+		echo "$sql\n";
 		$res =& $mdb2->query($sql);
 		if(PEAR::isError($res)) {
 		    $msg = $res->getMessage();
 		    reportError($msg, $sql);
                 die("FAILED " . $msg . "\nError has been reported to site administrators.");
-        }
+        	}
 
 	$rowvalues = "";
 
