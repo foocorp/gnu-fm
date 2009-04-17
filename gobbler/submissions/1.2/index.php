@@ -117,7 +117,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	// Scrobble!
 	$res = $mdb2->query("INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES" . $rowvalues);
         if(PEAR::isError($res)) {
-                die("FAILED " . $res->getMessage()) . "\n";
+                die("FAILED " . $res->getMessage() . "\n");
         }
 
 	if($i<50) {
