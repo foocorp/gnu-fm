@@ -120,7 +120,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		if(PEAR::isError($res)) {
 		    $msg = $res->getMessage();
 		    reportError($msg, $sql);
-                die("FAILED " . $msg . "\nError has been reported to site administrators.");
+                die("FAILED " . $msg . "\nError has been reported to site administrators.\n");
         }
 
 	if($i<50) {
