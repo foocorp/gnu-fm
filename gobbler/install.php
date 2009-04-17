@@ -166,9 +166,9 @@ if (isset($_POST['install'])) {
 
 	$res = $mdb2->query("CREATE TABLE Places(
 		location_uri VARCHAR(255),
-		lat float,
-		long float,
-		country varchar(2));");
+		latitude FLOAT,
+		longitude FLOAT,
+		country CHAR(2));");
 
 	// Test user configuration
 	$res = $mdb2->query("INSERT INTO Users
