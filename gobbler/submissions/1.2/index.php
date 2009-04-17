@@ -112,28 +112,22 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		. $rating . ","
 		. $length . ")";
 
-	if((($i % 50) == 49) || ($i+1 == count($_POST['a']))) {
+	if(($i+1) == count($_POST['a'])) {
 
 	// Scrobble!
 		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES" . $rowvalues;
-		$res =& $mdb2->exec($sql);
+		$res =& $mdb2->query($sql);
 		if(PEAR::isError($res)) {
 		    $msg = $res->getMessage();
 		    reportError($msg, $sql);
                 die("FAILED " . $msg . "\nError has been reported to site administrators.\n");
-        }
+        	}
 
-	if($i<50) {
 	        // Destroy now_playing since it is almost certainly obsolescent
 	        $mdb2->query("DELETE FROM Now_Playing WHERE sessionid = " . $session_id);
-	}
-	$rowvalues = "";
-
 	} else {
 	$rowvalues .= ",";
 	}
-
-
 }
 
 die("OK\n");
