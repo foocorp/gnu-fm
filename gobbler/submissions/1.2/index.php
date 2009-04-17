@@ -115,9 +115,12 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	if((($i % 50) == 49) || ($i+1 == count($_POST['a']))) {
 
 	// Scrobble!
-	$res = $mdb2->query("INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES" . $rowvalues);
-        if(PEAR::isError($res)) {
-                die("FAILED " . $res->getMessage() . "\n");
+		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES" . $rowvalues);
+		$res =& $mdb2->exec($sql);
+		if(PEAR::isError($res)) {
+		    $msg = $res->getMessage();
+		    reportError($msg, $sql);
+                die("FAILED " . $msg . "\nError has been reported to site administrators.");
         }
 
 	if($i<50) {
