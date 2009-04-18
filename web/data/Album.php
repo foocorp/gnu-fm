@@ -136,10 +136,11 @@ $aws_xml = simplexml_load_file($request) or die("xml response not loading");
 $image = $aws_xml->Items->Item->MediumImage->URL;
         $URI = $aws_xml->Items->Item->DetailPageURL;
 
+	if ($image == "") { $image = "/i/qm50.png"; $license = "unknown-to-amazon";}
 	
 	if ($image) {
 
-	  $license = "amazon";
+          if ($license == "") { $license = "amazon"; }
 
 		  $sql = ("UPDATE Album SET image = '" 
 
