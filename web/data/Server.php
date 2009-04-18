@@ -53,7 +53,8 @@ class Server {
 					s.mbid, 
 					a.mbid AS artist_mbid,
 					l.mbid AS album_mbid,
-					l.image AS album_image
+					l.image AS album_image,
+                                        l.artwork_license
 				FROM Scrobbles s 
 				LEFT JOIN Artist a
 					ON s.artist=a.name
@@ -76,7 +77,8 @@ class Server {
 					s.mbid,
 					a.mbid AS artist_mbid,
 					l.mbid AS album_mbid,
-					l.image AS album_image
+					l.image AS album_image,
+                                        l.artwork_license
 				FROM Scrobbles s
 				LEFT JOIN Artist a
 					ON s.artist=a.name
@@ -111,8 +113,11 @@ class Server {
 			$row['id_track']  = identifierTrack($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 			$row['id_album']  = identifierAlbum($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 
-			if (! $row['album_image'])
+			if (! $row['album_image']) 
 				$row['album_image'] = '/i/qm50.png';
+
+			if ($row['artwork_license'] == "amazon")
+			  $row['album_image'] = str_replace("SL160","SL50",$row['album_image']);
 			
 			$result[] = $row;
 		}
