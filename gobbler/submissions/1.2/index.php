@@ -129,7 +129,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
         	}
 
 	        // Destroy now_playing since it is almost certainly obsolescent
-	        $mdb2->query("DELETE FROM Now_Playing WHERE sessionid = " . $session_id);
+	        $mdb2->exec("DELETE FROM Now_Playing WHERE sessionid = " . $session_id);
 	} else {
 	$rowvalues .= ",";
 	}
