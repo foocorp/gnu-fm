@@ -108,6 +108,8 @@ class Album {
 		return Server::getAlbumURL($this->artist_name, $this->name);
 	}
 
+}
+
 	function go_get_album_art($artist, $album){
 
   $Access_Key_ID = "1EST86JB355JBS3DFE82"; // this is mattl's personal key :)
@@ -150,5 +152,3 @@ $image = $aws_xml->Items->Item->MediumImage->URL;
 	}
 	
 	}
-
-}
