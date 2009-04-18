@@ -141,8 +141,12 @@ $image = $aws_xml->Items->Item->MediumImage->URL;
 
 	  $license = "amazon";
 
-		  $sql = ("INSERT INTO Album (image, artwork_license) VALUES ('"
-			. ($image) . "', '"
+		  $sql = ("UPDATE Album SET image = '" 
+
+			  . ($image) . "', "
+
+			  . " artwork_license = '"
+
 			. ($license) . "') WHERE Artist = '"
                         . ($artist) . "' AND Album = '"
 				      . ($album) ."'");
