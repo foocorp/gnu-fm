@@ -141,13 +141,16 @@ $image = $aws_xml->Items->Item->MediumImage->URL;
 
 	  $license = "amazon";
 
-		  $res = $mdb2->query("INSERT INTO Album (image, artwork_license) VALUES ("
+		  $sql = ("INSERT INTO Album (image, artwork_license) VALUES ("
 			. ($image) . ", "
 			. ($license) . ") WHERE Artist = "
                         . ($artist) . " AND Album = "
 				      . ($album));
+
+		  $res = $mdb2->query($sql);
+
 		if(PEAR::isError($res)) {
-			die("FAILED " . $res->getMessage());
+		  die("FAILED " . $res->getMessage() . " query was :" . $sql);
 		}
 
 	}
