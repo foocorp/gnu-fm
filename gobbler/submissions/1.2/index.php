@@ -124,7 +124,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		$res =& $mdb2->exec($sql);
 		if(PEAR::isError($res)) {
 		    $msg = $res->getMessage();
-		    reportError($msg, $sql);
+		    // reportError($msg, $sql);
                 die("FAILED " . $msg . "\nError has been reported to site administrators.\n");
         	}
 
