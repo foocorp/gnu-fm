@@ -147,7 +147,7 @@ $image = $aws_xml->Items->Item->MediumImage->URL;
 
 			  . " artwork_license = '"
 
-			. ($license) . "') WHERE Artist = '"
+			. ($license) . "' WHERE Artist = '"
                         . ($artist) . "' AND Album = '"
 				      . ($album) ."'");
 
