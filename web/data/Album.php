@@ -57,9 +57,9 @@ class Album {
 
 			// this	hack brought to	you by	mattl
 
-                        if ($row['image'] == ""){
-                           go_get_album_art($this->artist_name, $this->name);
-                        }
+                        //if ($row['image'] == ""){
+			//go_get_album_art($this->artist_name, $this->name);
+                        //}
 
 			// mattl hack ovar
 
