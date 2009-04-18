@@ -34,14 +34,14 @@ if (PEAR::isError($mdb2)) {
 
 function reportError($text, $data) {
     // make a fresh connection
-    $mdb2 = MDB2::connect($connect_string);
-    if (!PEAR::isError($mdb2)) {
-	    die($mdb2->getMessage());
+    $mdbe = MDB2::connect($connect_string);
+    if (!PEAR::isError($mdbe)) {
+	    die($mdbe->getMessage());
     }
 
-    $mdb2->exec("INSERT INTO Error (msg, data, time) VALUES ("
-	. $mdb2->quote($text, 'text') . ", "
-	. $mdb2->quote($data, 'text') . ", "
+    $mdbe->exec("INSERT INTO Error (msg, data, time) VALUES ("
+	. $mdbe->quote($text, 'text') . ", "
+	. $mdbe->quote($data, 'text') . ", "
 	. time() . ")");
 }
 ?>
