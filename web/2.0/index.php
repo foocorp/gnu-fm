@@ -19,6 +19,7 @@
 
 */
 
+require_once('../config.php');
 require_once('../database.php');
 require_once('../api/ArtistXML.php');
 require_once('../api/UserXML.php');
