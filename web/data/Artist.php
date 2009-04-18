@@ -76,9 +76,8 @@ class Artist {
 			. $mdb2->quote($this->name, "text"));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 			$albums[] = new Album($row["name"], $this->name);
-			$albums_art[] = new Album($row["image"], $this->image);
 		}
-
+	      
 		return $albums;
 	}
 
