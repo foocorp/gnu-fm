@@ -33,7 +33,13 @@ if (PEAR::isError($mdb2)) {
 }
 
 function reportError($text, $data) {
-    $mdb2->query("INSERT INTO Error (msg, data, time) VALUES("
+    // make a fresh connection
+    $mdb2 =& MDB2::connect($connect_string);
+    if (!PEAR::isError($mdb2)) {
+	    die($mdb2->getMessage());
+    }
+
+    $mdb2->exec("INSERT INTO Error (msg, data, time) VALUES ("
 	. $mdb2->quote($text, 'text') . ", "
 	. $mdb2->quote($data, 'text') . ", "
 	. time() . ")");
