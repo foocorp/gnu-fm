@@ -58,6 +58,11 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	} else {
 		$album = 'NULL';
 	}
+
+	if (!isset($_POST['t'][$i])) {
+	    continue; // If we get here with an empty trackname we drop it and move on to the next	
+	}
+
 	switch (mb_detect_encoding($_POST['t'][$i])) {
 		case "ASCII":
 		case "UTF-8":

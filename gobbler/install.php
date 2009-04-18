@@ -170,6 +170,12 @@ if (isset($_POST['install'])) {
 		longitude FLOAT,
 		country CHAR(2));");
 
+	$res = $mdb2->query("CREATE TABLE Error(
+		    id int(11) AUTO_INCREMENT KEY,
+		    msg text,
+		    data text,
+		    time int);");
+
 	// Test user configuration
 	$res = $mdb2->query("INSERT INTO Users
 		(username, password, created)
