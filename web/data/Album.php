@@ -144,8 +144,8 @@ $image = $aws_xml->Items->Item->MediumImage->URL;
 		  $sql = ("INSERT INTO Album (image, artwork_license) VALUES ('"
 			. ($image) . "', '"
 			. ($license) . "') WHERE Artist = '"
-                        . ($artist) . "' AND Album = "
-				      . ($album)');
+                        . ($artist) . "' AND Album = '"
+				      . ($album) ."'");
 
 		  $res = $mdb2->query($sql);
 
