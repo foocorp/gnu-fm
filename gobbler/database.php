@@ -34,7 +34,7 @@ if (PEAR::isError($mdb2)) {
 
 function reportError($text, $data) {
     // make a fresh connection
-    $mdb2 =& MDB2::connect($connect_string);
+    $mdb2 = MDB2::connect($connect_string);
     if (!PEAR::isError($mdb2)) {
 	    die($mdb2->getMessage());
     }
