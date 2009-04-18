@@ -111,6 +111,7 @@ class Album {
 }
 
 	function go_get_album_art($artist, $album){
+		global $mdb2;
 
   $Access_Key_ID = "1EST86JB355JBS3DFE82"; // this is mattl's personal key :)
 
@@ -151,4 +152,4 @@ $image = $aws_xml->Items->Item->MediumImage->URL;
 
 	}
 	
-	}
+}
