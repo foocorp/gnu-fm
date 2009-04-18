@@ -142,15 +142,20 @@ $image = $aws_xml->Items->Item->MediumImage->URL;
 
           if ($license == "") { $license = "amazon"; }
 
-		  $sql = ("UPDATE Album SET image = '" 
+	  $license = $mdb2->quote($license);
+	  $image = $mdb2->quote($image);
+	  $album = $mdb2->quote($album);
+	  $artist = $mdb2->quote($artist);
 
-			  . ($image) . "', "
+		  $sql = ("UPDATE Album SET image = " 
 
-			  . " artwork_license = '"
+			  . ($image) . ", "
 
-			. ($license) . "' WHERE artist_name = '"
-                        . ($artist) . "' AND name = '"
-				      . ($album) ."'");
+			  . " artwork_license = "
+
+			. ($license) . " WHERE artist_name = "
+                        . ($artist) . " AND name = "
+				      . ($album));
 
 		  $res = $mdb2->query($sql);
 
