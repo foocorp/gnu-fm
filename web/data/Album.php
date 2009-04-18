@@ -142,7 +142,7 @@ $image = $aws_xml->Items->Item->MediumImage->URL;
 			. ($image) . ", "
 			. ($license) . ") WHERE Artist = "
                         . ($artist) . " AND Album = "
-				      . ($album))
+				      . ($album));
 		if(PEAR::isError($res)) {
 			die("FAILED " . $res->getMessage());
 		}
