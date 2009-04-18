@@ -136,7 +136,7 @@ $image = $aws_xml->Items->Item->MediumImage->URL;
 	
 	if ($image) {
 
-	        $license = "amazon"
+	  $license = "amazon";
 
 		  $res = $mdb2->query("INSERT INTO Album (image, artwork_license) VALUES ("
 			. ($image) . ", "
