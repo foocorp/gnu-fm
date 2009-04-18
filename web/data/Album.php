@@ -57,7 +57,7 @@ class Album {
 
 			// this	hack brought to	you by	mattl
 
-                        if ($this->image == ""){
+                        if ($row['image'] == ""){
                            go_get_album_art($this->artist_name, $this->name);
                         }
 
