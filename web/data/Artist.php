@@ -72,10 +72,11 @@ class Artist {
 	 */
 	function getAlbums() {
 		global $mdb2;
-		$res = $mdb2->query("SELECT name FROM Album WHERE artist_name = "
+		$res = $mdb2->query("SELECT name, image FROM Album WHERE artist_name = "
 			. $mdb2->quote($this->name, "text"));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 			$albums[] = new Album($row["name"], $this->name);
+			$albums_art[] = new Album{$row["artwork"], $this->image);
 		}
 
 		return $albums;
