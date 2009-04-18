@@ -11,8 +11,8 @@
   <li>
     <dl>
       <dt><a href="{$albums[i]->getURL()}">
-        {$albums[i]->name}</a></dt>
-	<dd>{$albums[i]->releasedate}{if ($image)}<img src="{$albums_art[i]}" alt="$albums[i]->name}" />{/if}</dd>
+        {$albums[i]->name}</a>
+	<br/><img src="{$albums_art[i]}" alt="$albums[i]->name}" /></dt>
     <dd>{$albums[i]->getPlayCount()} plays</dd>
     </dl>
   </li>
