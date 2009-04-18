@@ -54,6 +54,15 @@ class Album {
 			$this->artist_name = $row['artist_name'];
 			$this->releasedate = $row['releasedate'];
 			$this->image = resolve_external_url($row['image']);
+
+			// this	hack brought to	you by	mattl
+
+                        if ($this->image == ""){
+                           go_get_album_art($this->artist_name, $this->name);
+                        }
+
+			// mattl hack ovar
+
 		}
 
 	}
@@ -99,5 +108,47 @@ class Album {
 		return Server::getAlbumURL($this->artist_name, $this->name);
 	}
 
+	function go_get_album_art($artist, $album){
+
+  $Access_Key_ID = "1EST86JB355JBS3DFE82"; // this is mattl's personal key :)
+
+        $SearchIndex='Music';
+$Keywords=urlencode($artist.' '.$album);
+        $Operation = "ItemSearch";
+$Version = "2007-07-16";
+        $ResponseGroup = "ItemAttributes,Images";
+$request=
+        "http://ecs.amazonaws.com/onca/xml"
+                . "?Service=AWSECommerceService"
+. "&AssociateTag=" . $Associate_tag
+. "&AWSAccessKeyId=" . $Access_Key_ID
+. "&Operation=" . $Operation
+. "&Version=" . $Version
+. "&SearchIndex=" . $SearchIndex
+. "&Keywords=" . $Keywords
+. "&ResponseGroup=" . $ResponseGroup;
+
+$aws_xml = simplexml_load_file($request) or die("xml response not loading");
+
+$image = $aws_xml->Items->Item->MediumImage->URL;
+        $URI = $aws_xml->Items->Item->DetailPageURL;
+
+	
+	if ($image) {
+
+	        $license = "amazon"
+
+		$res = $mdb2->query("INSERT INTO Album (image, artwork_license) VALUES ("
+			. ($image) . ", "
+			. ($license) . ") WHERE Artist = "
+                        . ($artist) . " AND Album = "
+			. ($album)
+		if(PEAR::isError($res)) {
+			die("FAILED " . $res->getMessage());
+		}
+
+	}
+	
+	}
 
 }
