@@ -123,7 +123,7 @@ class Album {
 	 * @return A string containing the URL of this album
 	 */
 	function getURL() {
-		return Server::getAlbumURL(urlencode($this->artist_name), urlencode($this->name));
+		return Server::getAlbumURL($this->artist_name, $this->name);
 	}
 
 }
