@@ -125,7 +125,7 @@ if (isset($_POST['install'])) {
 		mbid VARCHAR(36),
 		source VARCHAR(6),
 		rating CHAR(1),
-		length INTEGER));");
+		length INTEGER);");
 
 	$mdb2->query("CREATE TABLE Scrobble_Sessions(
 		username VARCHAR(64) REFERENCES Users(username),
