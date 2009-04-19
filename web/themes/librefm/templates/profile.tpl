@@ -29,6 +29,9 @@
 		</dd>
 		<dd class="note" property="bio:olb">{$bio}</dd>
 	</dl>
+
+	<hr style="border: none; clear: both;" />
+
 </div>
 
 <hr style="border: none; clear: both;" />
