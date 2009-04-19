@@ -36,6 +36,7 @@ $session_id = $_POST['s'];
 
 $username = $mdb2->quote(usernameFromSID($session_id), "text");
 $rowvalues = "";
+$actualcount = 0;
 
 for($i = 0; $i < count($_POST['a']); $i++) {
 		switch (mb_detect_encoding($_POST['a'][$i])) {
@@ -109,7 +110,9 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	}
 	createTrackIfNew($artist, $album, $track, $mbid);
 
-	if(!scrobbleExists($username, $artist, $track, $time)) {
+	$exists = scrobbleExists($username, $artist, $track, $time);
+
+	if(!$exists) {
 	// Scrobble!
 	$rowvalues .= "("
 		. $username . ", "
@@ -121,9 +124,11 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		. $source . ","
 		. $rating . ","
 		. $length . ")";
+
+	$actualcount++;
 	}
 
-	if(($i+1) == count($_POST['a'])) {
+	if(($i+1) == count($_POST['a']) && $actualcount>0) {
 
 	// Scrobble!
 		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES" . $rowvalues;
@@ -137,7 +142,9 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	        // Destroy now_playing since it is almost certainly obsolescent
 	        $mdb2->exec("DELETE FROM Now_Playing WHERE sessionid = " . $session_id);
 	} else {
-	$rowvalues .= ",";
+		if(!$exists) {
+			$rowvalues .= ",";
+		}
 	}
 }
 
