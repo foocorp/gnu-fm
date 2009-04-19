@@ -48,7 +48,7 @@ class Album {
 			. 'name = ' . $mdb2->quote($name, 'text') . ' AND '
 			. 'artist_name = ' . $mdb2->quote($artist, 'text'));
 		if(!$res->numRows()) {
-			$this->name = 'No such album.';
+			$this->name = 'No such album: ' . $name;
 		} else {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
 			$this->name = $row['name'];

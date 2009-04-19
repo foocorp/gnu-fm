@@ -52,7 +52,7 @@ class Artist {
 			. "mbid = " . $mdb2->quote($mbid, "text") . " OR "
 			. "name = " . $mdb2->quote($name, "text"));
 		if(!$res->numRows()) {
-			PEAR::raiseError("No such artist.");
+			PEAR::raiseError("No such artist: " . $name);
 		} else {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
 			$this->name = $row["name"];
