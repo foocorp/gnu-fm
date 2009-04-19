@@ -4,8 +4,8 @@
 
 {include file='player.tpl'}<br />
 
-<b>Artist: {$track->artist_name}</b><br />
-<b>Album: {$track->album_name}</b><br />
+<b>Artist: <a href="{$artisturl}">{$track->artist_name}</a></b><br />
+<b>Album: <a href="{$albumurl}">{$track->album_name}</a></b><br />
 <br />
 <a href="{$track->licenseurl}"><img src="{$base_url}/themes/librefm/images/licenses/{$track->license}.png" /></a>
 
