@@ -25,7 +25,7 @@ musical tastes with other people.</p>
   {/section}
 </dl>
 
-<h3>What's hot? Recently gobbled.</h3>
+<h3>What's hot? Recently played.</h3>
 
 <dl class='recent-tracks'>
   {section name=recent loop=$recenttracks}
