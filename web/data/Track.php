@@ -136,7 +136,7 @@ class Track {
 	}
 
 	function getURL() {
-		return Server::getTrackURL($this->artist_name, $this->album_name, $this->name);
+		return Server::getTrackURL(urlencode($this->artist_name), urlencode($this->album_name), urlencode($this->name));
 	}
 
 }
