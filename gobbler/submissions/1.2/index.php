@@ -80,7 +80,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		$time = strtotime($_POST['i'][$i]);
 	}
 	if(isset($_POST['m'][$i])) {
-		$mbid = $mdb2->quote($_POST['m'][$i], "text");
+		$mbid = $mdb2->quote(rtrim($_POST['m'][$i]), "text");
 	} else {
 		$mbid = 'NULL';
 	}
