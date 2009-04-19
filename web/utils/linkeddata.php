@@ -1,13 +1,17 @@
 <?php
 
-function identifierScrobbleEvent ($username, $artist, $track, $time, $mbid=NULL, $ambid=NULL, $lmbid=NULL)
+function identifierScrobbleEvent ($username, $artist, $track, $album, $time, $mbid=NULL, $ambid=NULL, $lmbid=NULL)
 {
 	global $base_url;
+
+	if ($username && $artist && $track && $time)
+		return null;
+
 	$microhash = substr(md5($artist . '//' . $track), 0, 4);
 	return $base_url . sprintf('/user/%s#%s.%s', urlencode($username), urlencode($time), urlencode($microhash));
 }
 
-function identifierTrack ($username, $artist, $track, $time, $mbid=NULL, $ambid=NULL, $lmbid=NULL)
+function identifierTrack ($username, $artist, $track, $album, $time, $mbid=NULL, $ambid=NULL, $lmbid=NULL)
 {
 	if (!empty($mbid))
 	{
@@ -15,33 +19,37 @@ function identifierTrack ($username, $artist, $track, $time, $mbid=NULL, $ambid=
 	}
 	else
 	{
-		return identifierScrobbleEvent($username, $artist, $track, $time, $mbid, $ambid, $lmbid) . '.track';
+		return identifierScrobbleEvent($username, $artist, $track, $album, $time, $mbid, $ambid, $lmbid) . '.track';
 	}
 }
 
-function identifierArtist ($username, $artist, $track, $time, $mbid=NULL, $ambid=NULL, $lmbid=NULL)
+function identifierArtist ($username, $artist, $track, $album, $time, $mbid=NULL, $ambid=NULL, $lmbid=NULL)
 {
 	# Eventually look up MBIDs from Artists table?
 	if (!empty($ambid))
 	{
 		return sprintf('http://dbtune.org/musicbrainz/resource/artist/%s', strtolower($ambid));
 	}
-	else
-	{
-		return identifierScrobbleEvent($username, $artist, $track, $time, $mbid, $ambid, $lmbid) . '.artist';
-	}
+
+	$u = identifierScrobbleEvent($username, $artist, $track, $album, $time, $mbid, $ambid, $lmbid) . '.artist';
+	if ($u) return $u;
+
+	global $base_url;
+	return $base_url . sprintf('/artist/%s#artist', urlencode($artist));
 }
 
-function identifierAlbum ($username, $artist, $track, $time, $mbid=NULL, $ambid=NULL, $lmbid=NULL)
+function identifierAlbum ($username, $artist, $track, $album, $time, $mbid=NULL, $ambid=NULL, $lmbid=NULL)
 {
 	# Eventually look up MBIDs from Artists table?
 	if (!empty($lmbid))
 	{
 		return sprintf('http://dbtune.org/musicbrainz/resource/record/%s', strtolower($lmbid));
 	}
-	else
-	{
-		return identifierScrobbleEvent($username, $artist, $track, $time, $mbid, $ambid, $lmbid) . '.album';
-	}
+	
+	$u = identifierScrobbleEvent($username, $artist, $track, $album, $time, $mbid, $ambid, $lmbid) . '.album';
+	if ($u) return $u;
+
+	global $base_url;
+	return $base_url . sprintf('/artist/%s/album/%s#this', urlencode($artist), urlencode($album));
 }
 

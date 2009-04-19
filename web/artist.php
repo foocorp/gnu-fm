@@ -29,6 +29,7 @@ require_once('data/TagCloud.php');
 $artist = new Artist($_GET['artist']);
 
 $smarty->assign("name", $artist->name);
+$smarty->assign("id", $artist->id);
 $smarty->assign("bio_summary", $artist->bio_summary);
 
 $aTagCloud = TagCloud::GenerateTagCloud('Scrobbles', 'artist');

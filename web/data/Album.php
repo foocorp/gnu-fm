@@ -23,6 +23,7 @@ require_once($install_path . '/database.php');
 require_once($install_path . '/data/Artist.php');
 require_once($install_path . '/data/Track.php');
 require_once($install_path . "/resolve-external.php");
+require_once($install_path . '/utils/linkeddata.php');
 
 /**
  * Represents album data
@@ -33,6 +34,7 @@ require_once($install_path . "/resolve-external.php");
 class Album {
 
 	public $name, $artist_name, $mbid, $releasedate, $image;
+	public $id;
 
 	/**
 	 * Album constructor
@@ -54,6 +56,8 @@ class Album {
 			$this->artist_name = $row['artist_name'];
 			$this->releasedate = $row['releasedate'];
 			$this->image = resolve_external_url($row['image']);
+
+			$this->id = identifierAlbum(null, $this->artist_name, null, $this->name, null, null, null, $this->mbid);
 
 			// this	hack brought to	you by	mattl
 

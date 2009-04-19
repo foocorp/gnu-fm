@@ -108,10 +108,10 @@ class Server {
   			$row['timehuman'] = human_timestamp($row['time']);
 			$row["timeiso"]   = date('c', (int)$row['time']);
 			
-			$row['id']        = identifierScrobbleEvent($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
-			$row['id_artist'] = identifierArtist($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
-			$row['id_track']  = identifierTrack($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
-			$row['id_album']  = identifierAlbum($row['username'], $row['artist'], $row['track'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id']        = identifierScrobbleEvent($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id_artist'] = identifierArtist($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id_track']  = identifierTrack($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id_album']  = identifierAlbum($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 
 			if (! $row['album_image']) 
 				$row['album_image'] = '/i/qm50.png';
