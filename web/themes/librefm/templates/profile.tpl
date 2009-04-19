@@ -30,11 +30,9 @@
 		<dd class="note" property="bio:olb">{$bio}</dd>
 	</dl>
 
-	<hr style="border: none; clear: both;" />
+	<hr style="border: 1px solid transparent; clear: both;" />
 
 </div>
-
-<hr style="border: none; clear: both;" />
 
 {if $nowplaying|@count > 0}
 <h3>Now Playing:</h3>
