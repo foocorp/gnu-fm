@@ -1,14 +1,14 @@
 {include file='header.tpl'}
 
-<h2>{$name}</h2>
+<div about="{$id}" typeof="mo:MusicalArtist">
 
-<div id="bio">
-	{$bio_summary}
-</div>
+<h2 property="foaf:name" rel="foaf:page" rev="foaf:primaryTopic" resource="">{$name}</h2>
 
-<ul id="albums" class="listcloud">
+<div id="bio" property="bio:olb" datatype="">{$bio_summary}</div>
+
+<ul id="albums" class="listcloud" rel="foaf:made" rev="foaf:maker">
   {section name=i loop=$albums}
-  <li>
+  <li about="{$albums[i]->id}">
     <dl>
       <dt><a href="{$albums[i]->getURL()}">
         <img src="{$albums[i]->getAlbumArt()}" alt="{$albums[i]->name}" width="160" /></a></dt>

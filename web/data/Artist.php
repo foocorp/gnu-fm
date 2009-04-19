@@ -25,6 +25,7 @@ require_once($install_path . "/data/sanitize.php");
 require_once($install_path . "/data/Album.php");
 require_once($install_path . "/data/Track.php");
 require_once($install_path . "/data/Server.php");
+require_once($install_path . '/utils/linkeddata.php');
 
 /**
  * Represents artist data
@@ -36,6 +37,7 @@ class Artist {
 
 
 	public $name, $mbid, $streamable, $bio_content, $bio_published, $bio_summary, $image_small, $image_medium, $image_large;
+	public $id;
 
 	/**
 	 * Artist constructor
@@ -62,6 +64,8 @@ class Artist {
 			$this->image_small = $row["image_small"];
 			$this->image_medium = $row["image_medium"];
 			$this->image_large = $row["image_large"];
+
+			$this->id = identifierArtist(null, $this->name, null, null, null, null, $this->mbid, null);
 		}
 	}
 
