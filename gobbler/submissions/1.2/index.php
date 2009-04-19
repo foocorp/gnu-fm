@@ -60,8 +60,8 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		$album = 'NULL';
 	}
 
-	if (!isset($_POST['t'][$i])) {
-	    continue; // If we get here with an empty trackname we drop it and move on to the next	
+	if (!isset($_POST['t'][$i]) || !isset($_POST['a'][$i]) || !isset($_POST['i'][$i])) {
+	    die("FAILED Track $i was submitted with empty mandatory field(s).\n");
 	}
 
 	switch (mb_detect_encoding($_POST['t'][$i])) {
@@ -101,7 +101,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	}
 
 	if(($timestamp - time()) > 600) {
-        die("FAILED Submitted track has timestamp in the future\n"); // let's try a 10-minute tolerance
+            die("FAILED Submitted track has timestamp in the future\n"); // let's try a 10-minute tolerance
 	}
 
 	createArtistIfNew($artist);
