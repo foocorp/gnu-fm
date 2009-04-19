@@ -29,8 +29,8 @@ $track = new Track(urldecode($_GET['track']), urldecode($_GET['artist']));
 
 
 $smarty->assign("track", $track);
-$smarty->assign("albumurl", Server::getAlbumURL($track->artist, $track->album));
-$smarty->assign("artisturl", Server::getArtistURL($track->artist));
+$smarty->assign("albumurl", Server::getAlbumURL($track->artist_name, $track->album_name));
+$smarty->assign("artisturl", Server::getArtistURL($track->artist_name));
 
 // no idea how this would be track-relevant
 $aTagCloud = TagCloud::GenerateTagCloud('Scrobbles', 'artist');
