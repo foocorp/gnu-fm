@@ -111,6 +111,20 @@ function createTrackIfNew($artist, $album, $track, $mbid) {
 	}
 }
 
+function scrobbleExists($username, $artist, $track, $time) {
+	global $mdb2;
+
+	$res = $mdb2->query("SELECT time FROM Scrobbles WHERE username = " . ($username) . " AND artist = " . ($artist) . " AND track = " . ($track) . " AND time = " . ($time));
+	if(PEAR::isError($res)) {
+		die("FAILED " . $res->getMessage());
+	}
+
+	if(!$res->numRows()) {
+		return false;
+	} else {
+		return true;
+	}
+}
 function NoSpamTracks ($track) {
 
   // This function exists to remove things like '(PREVIEW: buy it at www.magnatune.com)' from track names.

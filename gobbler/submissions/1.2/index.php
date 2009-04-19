@@ -105,6 +105,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	}
 	createTrackIfNew($artist, $album, $track, $mbid);
 
+	if(!scrobbleExists($username, $artist, $track, $time)) {
 	// Scrobble!
 	$rowvalues .= "("
 		. $username . ", "
@@ -116,6 +117,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		. $source . ","
 		. $rating . ","
 		. $length . ")";
+	}
 
 	if(($i+1) == count($_POST['a'])) {
 
