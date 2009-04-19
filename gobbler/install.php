@@ -155,6 +155,7 @@ if (isset($_POST['install'])) {
 		code CHAR(3),
 		name VARCHAR(32),
 		url VARCHAR(256),
+		free CHAR(1),
 		PRIMARY KEY(code));");
 
 	$res = $mdb2->query("CREATE TABLE Tags(
