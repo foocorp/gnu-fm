@@ -19,6 +19,7 @@
 */
 
 require_once($install_path . '/database.php');
+require_once($install_path . '/data/Server.php');
 
 class TagCloud {
    /*
@@ -55,6 +56,11 @@ class TagCloud {
                 foreach($data as $count => &$i) {
                         $i['size'] = $sizes[(int) ($count/(count($data)/7))];
                 }
+
+                foreach($data as &$i){
+			$i['pageurl'] = Server::getArtistURL($i['artist']);
+                }
+
                 sort($data);
                 return $data;
         }
