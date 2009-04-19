@@ -21,14 +21,14 @@
 require_once('../../database.php');
 require_once('../../scrobble-utils.php');
 
-if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t']) || !isset($_POST['i'])) {
+if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t']) || !isset($_POST['i']) || !isset($_POST['o'])) {
 	die("Failed Required POST parameters are not set\n");
 }
-if(empty($_POST['s']) || empty($_POST['a']) || empty($_POST['t']) || empty($_POST['i'])) {
+if(empty($_POST['s']) || empty($_POST['a']) || empty($_POST['t']) || empty($_POST['i']) || empty($_POST['o'])) {
 	die("Failed Required POST parameters are empty\n");
 }
 
-if(!is_array($_POST['a']) || !is_array($_POST['t']) || !is_array($_POST['i'])) {
+if(!is_array($_POST['a']) || !is_array($_POST['t']) || !is_array($_POST['i']) || !is_array($_POST['o'])) {
 	die("FAILED Track parameters must be arrays\n");
 }
 
