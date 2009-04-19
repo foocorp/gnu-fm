@@ -50,7 +50,7 @@ class Track {
 			. "name = " . $mdb2->quote($name, "text") . " AND "
 			. "artist = " . $mdb2->quote($artist, "text"));
 		if(!$res->numRows()) {
-			$this->name = "No such track.";
+			$this->name = "No such track: " . $name;
 		} else {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
 			$this->name = $row["name"];
