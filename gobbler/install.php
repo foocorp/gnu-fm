@@ -182,7 +182,7 @@ if (isset($_POST['install'])) {
 		(username, password, created)
 		VALUES
 		('testuser', '" . md5('password') . "', " . time() . ");");
-	
+
 	$mdb2->disconnect();
 
 	$submissions_server = $_POST['submissions'];
@@ -198,7 +198,7 @@ if (isset($_POST['install'])) {
 	if(!$result) {
 		$print_config = str_replace("<", "&lt;", $config);
 		die("Unable to write to file '<i>config.php</i>'. Please create this file and copy the following in to it: <br /><pre>" . $print_config . "</pre>");
-	}	
+	}
 
 	die("Configuration completed successfully!");
 }
