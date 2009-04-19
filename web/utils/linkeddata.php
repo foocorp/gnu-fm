@@ -32,7 +32,7 @@ function identifierArtist ($username, $artist, $track, $album, $time, $mbid=NULL
 	}
 
 	$u = identifierScrobbleEvent($username, $artist, $track, $album, $time, $mbid, $ambid, $lmbid) . '.artist';
-	if ($u) return $u;
+	if ($u != '.artist') return $u;
 
 	global $base_url;
 	return $base_url . sprintf('/artist/%s#artist', urlencode($artist));
@@ -47,7 +47,7 @@ function identifierAlbum ($username, $artist, $track, $album, $time, $mbid=NULL,
 	}
 	
 	$u = identifierScrobbleEvent($username, $artist, $track, $album, $time, $mbid, $ambid, $lmbid) . '.album';
-	if ($u) return $u;
+	if ($u != '.album') return $u;
 
 	global $base_url;
 	return $base_url . sprintf('/artist/%s/album/%s#this', urlencode($artist), urlencode($album));
