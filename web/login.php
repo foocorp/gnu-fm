@@ -69,9 +69,20 @@ if(isset($_POST['login'])) {
 
 if(isset($logged_in) && $logged_in) {
 	// Send the user to the welcome page when they've logged in
-  header('Location: index.php');
 	//$smarty->display('welcome.tpl');
+
+	// Check that return URI is on this server. Prevents possible phishing uses.
+	if ( substr($_POST['return'], 0, 1) == '/' )
+		{ header(sprintf('Location: http://%s%s', $_SERVER['SERVER_NAME'], $_POST['return']));
+	else
+		{ header("Location: $base_url"); }
+
 } else {
+	if ( substr($_REQUEST['return'], 0, 1) == '/' )
+		{ $smarty->assign('return', $_REQUEST['return']); }
+	else
+		{ $smarty->assign('return', ''); }
+	
 	$smarty->display('login.tpl');
 }
 ?>

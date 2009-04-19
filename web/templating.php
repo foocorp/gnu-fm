@@ -27,7 +27,10 @@ $smarty = new Smarty();
 
 $smarty->template_dir = $install_path . '/themes/'. $default_theme . '/templates/';
 $smarty->compile_dir = $install_path. '/themes/' . $default_theme . '/templates_c/';
+
 $smarty->assign('base_url', $base_url);
+$smarty->assign('this_page', $_SERVER['REQUEST_URI']);
+
 if(isset($logged_in)) {
 	$smarty->assign('logged_in', true);
 	// Pre-fix this user's details with u to avoid confusion with other users

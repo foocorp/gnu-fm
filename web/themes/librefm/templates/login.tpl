@@ -16,6 +16,7 @@
 			<input id='password' name='password' type='password' value=''/>
 
 			<input type='submit' name='login' value='Let me in!' />
+			<input name="return" type="hidden" value="{$return|htmlentities}" />
 		</fieldset>
 
 	</form>
