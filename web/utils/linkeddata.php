@@ -4,7 +4,7 @@ function identifierScrobbleEvent ($username, $artist, $track, $album, $time, $mb
 {
 	global $base_url;
 
-	if ($username && $artist && $track && $time)
+	if (!($username && $artist && $track && $time))
 		return null;
 
 	$microhash = substr(md5($artist . '//' . $track), 0, 4);
