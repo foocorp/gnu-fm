@@ -160,11 +160,11 @@ class Server {
 		global $mdb2;
 
 		if($username) {
-			$res = $mdb2->query('SELECT username, artist, track, album, client, ClientCodes.name, ClientCodes.url, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE username = ' . $mdb2->quote($username, "text") . ' ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
-			$res = $mdb2->query('SELECT username, artist, album, track, client, ClientCodes.name, ClientCodes.url, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE username = ' . $mdb2->quote($username, "text") . ' ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT username, artist, track, album, client, ClientCodes.name, ClientCodes.url, ClientCodes.free, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE username = ' . $mdb2->quote($username, "text") . ' ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT username, artist, album, track, client, ClientCodes.name, ClientCodes.url, ClientCodes.free, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE username = ' . $mdb2->quote($username, "text") . ' ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		} else {
-			$res = $mdb2->query('SELECT username, artist, track, album, client, ClientCodes.name, ClientCodes.url, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
-			$res = $mdb2->query('SELECT username, artist, album, track, client, ClientCodes.name, ClientCodes.url, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT username, artist, track, album, client, ClientCodes.name, ClientCodes.url, ClientCodes.free, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT username, artist, album, track, client, ClientCodes.name, ClientCodes.url, ClientCodes.free, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		}
 
 		if(PEAR::isError($res)) {
@@ -174,10 +174,13 @@ class Server {
 		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 		foreach($data as &$i) {
 			$row = sanitize($i);
+			// this logic should be cleaned up and the free/nonfree decision be moved into the smarty templates
 			if($row["name"] == "") {
 				$clientstr = strip_tags(stripslashes($row["client"])) . " (unknown, please tell us what this is)";
-			} else {
+			} elseif($row["free"] == "Y") {
 				$clientstr = "<a href=\"" . strip_tags(stripslashes($row["url"])) . "\">" . strip_tags(stripslashes($row["name"])) . "</a>";
+			} else {
+				$clientstr = strip_tags(stripslashes($row["name"]));
 			}
 			$row["clientstr"] = $clientstr;
 			$row["userurl"] = Server::getUserURL($row["username"]);
