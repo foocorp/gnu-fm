@@ -73,7 +73,7 @@ if(isset($logged_in) && $logged_in) {
 
 	// Check that return URI is on this server. Prevents possible phishing uses.
 	if ( substr($_POST['return'], 0, 1) == '/' )
-		{ header(sprintf('Location: http://%s%s', $_SERVER['SERVER_NAME'], $_POST['return']));
+		{ header(sprintf('Location: http://%s%s', $_SERVER['SERVER_NAME'], $_POST['return'])); }
 	else
 		{ header("Location: $base_url"); }
 
