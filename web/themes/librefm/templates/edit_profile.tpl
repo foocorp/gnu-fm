@@ -47,11 +47,10 @@
 			<td><a href="#dfn_id" rel="glossary">What's this?</a></td>
 		</tr>
 		<tr>
-			<td colspan="2" align="center">
+			<td colspan="3" align="center">
 				<input type="submit" value="Change" />
 				<input name="submit" value="1" type="hidden" />
 			</td>
-			<td>&nbsp;</td>
 		</tr>
 	</table>
 </form>
