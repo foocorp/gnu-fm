@@ -90,6 +90,13 @@ if ($_POST['submit'])
 		$user->avatar_uri   = $_POST['avatar_uri'];
 	}
 
+	if (isset($errors[0]))
+	{
+		header("Content-Type: text/plain");
+		print_r($errors);
+		exit;
+	}
+
 }
 
 if(isset($user->name))
@@ -117,7 +124,7 @@ if(isset($user->name))
 	}
 	else
 	{
-		$smarty->assign("id",           ($user->id));
+		$smarty->assign("id",           ($user->webid_uri));
 		$smarty->assign('fullname',     ($user->fullname));
 		$smarty->assign('bio',          ($user->bio));
 		$smarty->assign('homepage',     ($user->homepage));
