@@ -99,5 +99,5 @@ if (isset($_POST['request']) && isset($_POST['user'])) {
     }
 } 
 
-$smarty->display("recover.tpl");
+$smarty->display("recovery.tpl");
 ?>
