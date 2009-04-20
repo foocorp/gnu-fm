@@ -41,7 +41,8 @@ if($logged_in == false)
 	die();
 }
 
-$user = $_SESSION['user'];
+# Doesn't seem to work - $user = $_SESSION['user'];
+$user = new User($_SESSION['user']->name);
 
 $errors = array();
 
@@ -114,8 +115,8 @@ if(isset($user->name))
 	$smarty->assign('fullname',     getPostVar('fullname',     $user->fullname));
 	$smarty->assign('bio',          getPostVar('bio',          $user->bio));
 	$smarty->assign('homepage',     getPostVar('homepage',     $user->homepage));
-	$smarty->assign('location',     'TEST'); # getPostVar('location',     $user->location));
-	$smarty->assign('location_uri', print_r($_SESSION, 1));# getPostVar('location_uri', $user->location_uri));
+	$smarty->assign('location',     getPostVar('location',     $user->location));
+	$smarty->assign('location_uri', getPostVar('location_uri', $user->location_uri));
 	$smarty->assign('avatar_uri',   getPostVar('avatar_uri',   $user->avatar_uri));
 
 	# And display the page.
