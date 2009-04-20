@@ -53,13 +53,11 @@ def fetch_tracks(user, request_delay=0.5):
 def main(*args):
     if len(args) == 2:
         # Print to stdout
-        print u'Artist\tTrack\tTimestamp'
         for artist, track, timestamp in fetch_tracks(args[1]):
             print u'%s\t%s\t%s' % (artist, track, timestamp)
     elif len(args) == 3:
         # Write to file
         f = codecs.open(args[2], 'w', 'utf-8')
-        f.write(u'Artist\tTrack\tTimestamp\n')
         for artist, track, timestamp in fetch_tracks(args[1]):
             f.write(u'%s\t%s\t%s\n' % (artist, track, timestamp))
         f.close()

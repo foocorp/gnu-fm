@@ -165,6 +165,11 @@ if (isset($_POST['install'])) {
 		    msg text,
 		    data text,
 		    time int);");
+	$res = $mdb2->query("CREATE TABLE Recovery_Request(
+		    username VARCHAR(64),
+		    email VARCHAR(255),
+		    code VARCHAR(32),
+		    int expires);");
 
 	// Test user configuration
 	$res = $mdb2->query("INSERT INTO Users
