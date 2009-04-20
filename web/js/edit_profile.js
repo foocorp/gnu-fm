@@ -27,9 +27,9 @@ function unrecognised ( msg )
 	return 0;
 }
 
-function doit ()
+function LocationCheck ()
 {
-	if ( !$('#loc').val() )
+	if ( !$('#location').val() )
 	{
 		return unrecognised("You must enter a location.");
 	}
@@ -54,7 +54,7 @@ function doit ()
 	}
 
 	$.getJSON("/location-ws.php",
-		{ 'q' : $('#loc').val() },
+		{ 'q' : $('#location').val() },
 		function (data, status)
 		{
 			$('#loading').hide();
