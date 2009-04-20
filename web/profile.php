@@ -42,6 +42,7 @@ if(isset($user->name)) {
 	$smarty->assign('bio', $user->bio);
 	$smarty->assign('homepage', $user->homepage);
 	$smarty->assign('location', $user->location);
+	$smarty->assign('location_uri', $user->location_uri);
 	$aUserScrobbles = $user->getScrobbles(20);
 	if (!PEAR::isError ($aUserScrobbles)) {
 		$smarty->assign('scrobbles', $aUserScrobbles);

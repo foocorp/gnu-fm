@@ -117,6 +117,9 @@ class User {
 	 * @return A URL to the user's avatar image
 	 */
 	function getAvatar($size=64) {
+		if (!empty($this->avatar_uri))
+			return $this->avatar_uri;
+	
 		return "http://www.gravatar.com/avatar/" . md5($this->email) . "?s=" . $size . "&d=monsterid";
 	}
 
