@@ -110,13 +110,13 @@ if(isset($user->name))
 	$smarty->assign('email', $user->email);
 	
 	# This is what we're going to let them change.
-	$smarty->assign("id",           ifsetor($_POST['id']),           $user->id));
-	$smarty->assign('fullname',     ifsetor($_POST['fullname']),     $user->fullname));
-	$smarty->assign('bio',          ifsetor($_POST['bio']),          $user->bio));
-	$smarty->assign('homepage',     ifsetor($_POST['homepage']),     $user->homepage));
-	$smarty->assign('location',     ifsetor($_POST['location']),     $user->location));
-	$smarty->assign('location_uri', ifsetor($_POST['location_uri']), $user->location_uri));
-	$smarty->assign('avatar_uri',   ifsetor($_POST['avatar_uri']),   $user->avatar_uri));
+	$smarty->assign("id",           ifsetor($_POST['id'],           $user->id));
+	$smarty->assign('fullname',     ifsetor($_POST['fullname'],     $user->fullname));
+	$smarty->assign('bio',          ifsetor($_POST['bio'],          $user->bio));
+	$smarty->assign('homepage',     ifsetor($_POST['homepage'],     $user->homepage));
+	$smarty->assign('location',     ifsetor($_POST['location'],     $user->location));
+	$smarty->assign('location_uri', ifsetor($_POST['location_uri'], $user->location_uri));
+	$smarty->assign('avatar_uri',   ifsetor($_POST['avatar_uri'],   $user->avatar_uri));
 
 	# And display the page.
 	$smarty->assign('errors', $errors);
