@@ -49,6 +49,10 @@ class TagCloud {
         $query .= ($table == "Scrobbles") ? ' rating <> "S" ' : null;
         $query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
         $res = $mdb2->query($query);
+	if (PEAR::isError($res)) {
+        	echo("ERROR" . $res->getMessage());
+	}
+
         if (!$res->numRows()) {
         	return false;
         } else {
