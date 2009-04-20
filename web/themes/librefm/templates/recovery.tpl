@@ -18,9 +18,9 @@
 	        <p><a href='http://libre.fm' rel='bookmark' class='vcard fn org url'>libre.fm</a> Password Recovery</p>
 
 			<label for='username'>Username <span>must be valid!</span></label>
-			<input id='username' name='username' type='text' value='' />
+			<input id='username' name='user' type='text' value='' />
 
-			<input type='submit' name='request' value='Recover my password!'/>
+			<input type='submit' name='recover' value='Recover my password!'/>
 		</fieldset>
 
 	</form>
