@@ -88,6 +88,8 @@ if ($_POST['submit'])
 		$user->location     = $_POST['location'];
 		$user->location_uri = $_POST['location_uri'];
 		$user->avatar_uri   = $_POST['avatar_uri'];
+		
+		$user->save();
 	}
 
 	if (isset($errors[0]))
@@ -96,7 +98,6 @@ if ($_POST['submit'])
 		print_r($errors);
 		exit;
 	}
-
 }
 
 if(isset($user->name))
