@@ -7,11 +7,11 @@
 <form action="{$base_url}/edit_profile.php" method="post">
 	<table>
 		<tr>
-			<th align="right"><label for="fullname">Full name:</label></th>
+			<th align="right" valign="top"><label for="fullname">Full name:</label></th>
 			<td><input name="fullname" id="fullname" value="{$fullname|htmlentities}" /></td>
 		</tr>
 		<tr>
-			<th align="right" rowspan="2" valign="top"><label for="location">Location:</label></th>
+			<th align="right" valign="top" rowspan="2"><label for="location">Location:</label></th>
 			<td><input name="location" id="location" value="{$location|htmlentities}" /></td>
 		</tr>
 		<tr>
@@ -22,19 +22,19 @@
 			</td>
 		</tr>
 		<tr>
-			<th align="right"><label for="homepage">Homepage URL:</label></th>
+			<th align="right" valign="top"><label for="homepage">Homepage URL:</label></th>
 			<td><input name="homepage" id="homepage" value="{$homepage|htmlentities}" /></td>
 		</tr>
 		<tr>
-			<th align="right"><label for="avatar_uri">Avatar URL:</label></th>
+			<th align="right" valign="top"><label for="avatar_uri">Avatar URL:</label></th>
 			<td><input name="avatar_uri" id="avatar_uri" value="{$avatar_uri|htmlentities}" /></td>
 		</tr>
 		<tr>
-			<th align="right"><label for="bio">Mini Biography:</label></th>
-			<td><input name="bio" id="bio" value="{$bio|htmlentities}" /></td>
+			<th align="right" valign="top"><label for="bio">Mini Biography:</label></th>
+			<td><textarea name="bio" id="bio" rows="6" cols="30" style="width:100%;min-width:20em">{$bio|htmlentities}</textarea></td>
 		</tr>
 		<tr>
-			<th align="right"><label for="id">WebID (FOAF):</label></th>
+			<th align="right" valign="top"><label for="id">WebID (FOAF):</label></th>
 			<td><input name="id" id="id" value="{$id|htmlentities}" /></td>
 		</tr>
 		<tr>
