@@ -29,6 +29,7 @@
 		<tr>
 			<th align="right" valign="top"><label for="homepage">Homepage URL:</label></th>
 			<td><input name="homepage" id="homepage" value="{$homepage|htmlentities}" /></td>
+			<td>&nbsp;</td>
 		</tr>
 		<tr>
 			<th align="right" valign="top"><label for="avatar_uri">Avatar URL:</label></th>
@@ -38,6 +39,7 @@
 		<tr>
 			<th align="right" valign="top"><label for="bio">Mini Biography:</label></th>
 			<td><textarea name="bio" id="bio" rows="6" cols="30" style="width:100%;min-width:20em">{$bio|htmlentities}</textarea></td>
+			<td>&nbsp;</td>
 		</tr>
 		<tr>
 			<th align="right" valign="top"><label for="id">WebID (FOAF):</label></th>
@@ -49,6 +51,7 @@
 				<input type="submit" value="Change" />
 				<input name="submit" value="1" type="hidden" />
 			</td>
+			<td>&nbsp;</td>
 		</tr>
 	</table>
 </form>
