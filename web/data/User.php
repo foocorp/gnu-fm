@@ -34,7 +34,7 @@ class User {
 
 
 	public $name, $email, $fullname, $bio, $location, $homepage, $error, $userlevel;
-	public $id, $acctid;
+	public $id, $acctid, $avatar_uri, $location_uri;
 
 	/**
 	 * User constructor
@@ -47,24 +47,55 @@ class User {
 		$base = preg_replace('#/$#', '', $base_url);
 
 		global $mdb2;
-		$res = $mdb2->query('SELECT * FROM Users WHERE '
-			. 'username = ' . $mdb2->quote($name, 'text'));
+		$res = $mdb2->query('SELECT * FROM Users WHERE ' . 'username = ' . $mdb2->quote($name, 'text'));
 
 		if($res->numRows()) {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
-			$this->name	  = $row['username'];
-			$this->email	 = $row['email'];
-			$this->fullname  = $row['fullname'];
-			$this->homepage  = $row['homepage'];
-			$this->bio	   = $row['bio'];
-			$this->location  = $row['location'];
-			$this->userlevel = $row['userlevel'];
-			$this->id = $row["webid"];
-			$this->acctid = $base.'/user/' . urlencode($this->name) . '#acct';
+			$this->name         = $row['username'];
+			$this->email	    = $row['email'];
+			$this->fullname     = $row['fullname'];
+			$this->homepage     = $row['homepage'];
+			$this->bio	    = $row['bio'];
+			$this->location     = $row['location'];
+			$this->location_uri = $row['location_uri'];
+			$this->userlevel    = $row['userlevel'];
+			$this->id           = $row["webid_uri"];
+			$this->avatar_uri   = $row["avatar_uri"];
+			$this->acctid       = $base.'/user/' . urlencode($this->name) . '#acct';
 		}
 		
-		if (! strlen($this->id))
+		if (! preg_match('/\:/', $this->id))
 			$this->id = $base.'/user/' . urlencode($this->name) . '#me';
+	}
+	
+	function save ()
+	{
+		global $mdb2;
+		$q = sprintf("UPDATE Users SET "
+				. "email=%s "     # Send a confirmation email first??
+				. "fullname=%s "
+				. "homepage=%s "
+				. "bio=%s "
+				. "location=%s "
+				. "userlevel=%d "
+				. "webid_uri=%s "
+				. "location_uri=%s "
+				. "avatar_uri=%s "
+				. "WHERE username=%s"
+				, $mdb2->quote($this->email, 'text')
+				, $mdb2->quote($this->fullname, 'text')
+				, $mdb2->quote($this->homepage, 'text')
+				, $mdb2->quote($this->bio, 'text')
+				, $mdb2->quote($this->location, 'text')
+				, $this->userlevel
+				, $mdb2->quote($this->id, 'text')
+				, $mdb2->quote($this->location_uri, 'text')
+				, $mdb2->quote($this->avatar_uri, 'text')
+				, $mdb2->quote($this->username, 'text'));
+				
+		$res = $mdb2->query($q);	# Should probably check the return value and do something useful.
+		
+		return 1;
 	}
 
 	/**
