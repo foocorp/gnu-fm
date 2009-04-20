@@ -14,7 +14,7 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
 	xml:lang="en">
 	
-<head profile="http://www.w3.org/1999/xhtml/vocab http://purl.org/uF/hCard/1.0/ http://purl.org/uF/hAudio/0.9/ http://purl.org/uF/rel-tag/1.0/">
+<head profile="http://www.w3.org/1999/xhtml/vocab http://purl.org/uF/2008/03/ http://purl.org/uF/hAudio/0.9/">
 	<title>Libre.fm &mdash; discover new music</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<link rel="stylesheet" href="http://turtle.libre.fm/reset-fonts-grids.css" type="text/css" />

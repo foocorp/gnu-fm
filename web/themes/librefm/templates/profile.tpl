@@ -21,7 +21,7 @@
 		</dt>
 		{if $homepage}
 		<dd>
-			<a href="{$homepage}" rel="foaf:homepage" rev="foaf:primaryTopic" class="url">{$homepage}</a>
+			<a href="{$homepage}" rel="me foaf:homepage" rev="foaf:primaryTopic" class="url">{$homepage}</a>
 		</dd>
 		{/if}
 		<dd rel="foaf:based_near">
