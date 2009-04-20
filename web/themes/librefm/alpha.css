@@ -15,7 +15,7 @@ img {
 
 h2 {
 	font-size: 131%;
-	margin: 5px;
+	margin: 5px 5px 10px 0;
 }
 
 div#footer a {
@@ -132,6 +132,15 @@ ul#recenttracks.listcloud li { height: 3.4em; }
       display: inline;
       margin: 0
   }
+  
+  dl dd{
+      padding: 0 0 .3em 0;
+  }
+  
+  dl.recent-tracks .track-name a{
+      color: #2e3436;
+  }
+  
   dl.now-playing dd.track-name {
       display:block
   }
@@ -156,6 +165,7 @@ ul.gobbles * {
     ul.gobbles .contributor a {
         text-decoration: none;
         color: #2e3436;
+        font-weight: bold;
     }
     ul.gobbles .contributor a:hover {
         text-decoration: underline;
@@ -165,13 +175,14 @@ ul.gobbles * {
         font-size: 77%;
     }
     ul.gobbles small {
-        margin-left: .5em;
         color: #666;
+        display:block;
         font-size: 77%;
+        margin-top: -0.4em;
     }
     ul.gobbles li img.albumart {
         float: left;
-        margin-right: 6px;
+        margin-right: 10px;
     }
 
 h3 {
@@ -189,7 +200,7 @@ h3 {
     -moz-border-radius-topleft:8px;
     -moz-border-radius-topright:8px;
     background-color: #EEE;
-    padding-top: .4em;
+    padding: .4em .4em 0 .1em;
 }
 
 .vcard .edit { float:right; }
