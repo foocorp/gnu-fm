@@ -92,7 +92,7 @@ class User {
 				, $mdb2->quote($this->id, 'text')
 				, (empty($this->location_uri) ? 'NULL' : $mdb2->quote($this->location_uri, 'text'))
 				, $mdb2->quote($this->avatar_uri, 'text')
-				, $mdb2->quote($this->username, 'text'));
+				, $mdb2->quote($this->name, 'text'));
 				
 		$res = $mdb2->query($q);
 		
