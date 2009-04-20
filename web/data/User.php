@@ -95,6 +95,12 @@ class User {
 				
 		$res = $mdb2->query($q);	# Should probably check the return value and do something useful.
 		
+		if(PEAR::isError($res)) {
+			header("Content-Type: text/plain");
+			print_r($res);
+			exit;
+		}
+
 		return 1;
 	}
 

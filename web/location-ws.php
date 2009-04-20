@@ -48,12 +48,12 @@ $uri =  sprintf('http://ws.geonames.org/searchJSON?q=%s&maxRows=%d&lang=%s&style
 # We'll try to use cURL if the extension is installed on this server.
 if (function_exists('curl_init'))
 {
+	header("Content-Type: application/json");
 	$ch = curl_init($uri);
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	curl_setopt($ch, CURLOPT_USERAGENT, 'libre.fm');
 	$output = curl_exec($ch);
 	curl_close($ch);
-	header("Content-Type: application/json");
 	echo $output;
 }
 
