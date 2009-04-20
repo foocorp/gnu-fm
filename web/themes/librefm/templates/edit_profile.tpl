@@ -2,6 +2,8 @@
 
 <h2 property="dc:title">Edit your profile</h2>
 
+<p><strong>The form below is still <em>very</em> experimental. Using this may wreck your account!</strong></p>
+
 <script type="text/javascript" src="{$base_url}/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="{$base_url}/js/edit_profile.js"></script>
 <form action="{$base_url}/edit_profile.php" method="post">
