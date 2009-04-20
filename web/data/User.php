@@ -72,6 +72,18 @@ class User {
 	function save ()
 	{
 		global $mdb2;
+		
+		if (!empty($this->location_uri))
+		{
+			$res = $mdb2->query('SELECT * FROM Places WHERE location_uri = ' . $mdb2->quote($this->location_uri, 'text'));
+			
+			if(! $res->numRows())
+			{
+				$mdb2->query('INSERT INTO Places VALUES (' . $mdb2->quote($this->location_uri, 'text') . ')');
+			}
+		}
+
+		
 		$q = sprintf("UPDATE Users SET "
 				. "email=%s, "     # Send a confirmation email first??
 				. "fullname=%s, "
