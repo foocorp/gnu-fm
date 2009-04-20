@@ -34,7 +34,7 @@ class User {
 
 
 	public $name, $email, $fullname, $bio, $location, $homepage, $error, $userlevel;
-	public $id, $acctid, $avatar_uri, $location_uri;
+	public $id, $acctid, $avatar_uri, $location_uri, $webid_uri;
 
 	/**
 	 * User constructor
@@ -60,6 +60,7 @@ class User {
 			$this->location_uri = $row['location_uri'];
 			$this->userlevel    = $row['userlevel'];
 			$this->id           = $row["webid_uri"];
+			$this->webid_uri    = $row["webid_uri"];
 			$this->avatar_uri   = $row["avatar_uri"];
 			$this->acctid       = $base.'/user/' . urlencode($this->name) . '#acct';
 		}
@@ -89,11 +90,11 @@ class User {
 				, $mdb2->quote($this->location, 'text')
 				, $this->userlevel
 				, $mdb2->quote($this->id, 'text')
-				, $mdb2->quote($this->location_uri, 'text')
+				, (empty($this->location_uri) ? 'NULL' : $mdb2->quote($this->location_uri, 'text'))
 				, $mdb2->quote($this->avatar_uri, 'text')
 				, $mdb2->quote($this->username, 'text'));
 				
-		$res = $mdb2->query($q);	# Should probably check the return value and do something useful.
+		$res = $mdb2->query($q);
 		
 		if(PEAR::isError($res)) {
 			header("Content-Type: text/plain");
