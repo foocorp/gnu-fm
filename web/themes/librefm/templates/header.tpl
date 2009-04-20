@@ -17,9 +17,9 @@
 <head profile="http://www.w3.org/1999/xhtml/vocab http://purl.org/uF/2008/03/ http://purl.org/uF/hAudio/0.9/">
 	<title>Libre.fm &mdash; discover new music</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-	<link rel="stylesheet" href="http://turtle.libre.fm/reset-fonts-grids.css" type="text/css" />
-	<link rel="stylesheet" href="http://turtle.libre.fm/base.css" type="text/css" />
-	<link rel="stylesheet" href="http://turtle.libre.fm/librefm.css" type="text/css" />
+	<link rel="stylesheet" href="{$base_url}/themes/librefm/reset-fonts-grids.css" type="text/css" />
+	<link rel="stylesheet" href="{$base_url}/themes/librefm/base.css" type="text/css" />
+	<link rel="stylesheet" href="{$base_url}/themes/librefm/librefm.css" type="text/css" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/alpha.css" type="text/css" />
 	<link rel="icon" href="{$base_url}/favicon.ico" type="image/x-icon" />
 	<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/" />
@@ -40,10 +40,10 @@
         {else}
 	{if $welcome}
 	<div class="yui-g" id="banner">     
-	  <a href="/request.php"><img src="http://libre.fm/i/topblock.png" alt="" /></a>
+	  <a href="{$base_url}/request.php"><img src="{$base_url}/i/topblock.png" alt="" /></a>
 	{else}
 	<div class="yui-g">     
-	  <a href="/request.php"><img src="http://alpha.libre.fm/themes/librefm/images/topblocksmall.png" alt="" /></a>
+	  <a href="{$base_url}/request.php"><img src="{$base_url}/themes/librefm/images/topblocksmall.png" alt="" /></a>
 	{/if}
 	</div>{/if}
 <div class="yui-gc">
