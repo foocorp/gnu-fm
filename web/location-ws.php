@@ -52,9 +52,8 @@ if (function_exists('curl_init'))
 	$ch = curl_init($uri);
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	curl_setopt($ch, CURLOPT_USERAGENT, 'libre.fm');
-	$output = curl_exec($ch);
+	curl_exec($ch);
 	curl_close($ch);
-	echo $output;
 }
 
 # Otherwise, we'll fall back to direct socket calls. Ugly.
