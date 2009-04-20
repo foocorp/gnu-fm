@@ -7,6 +7,10 @@
 		<!-- Avatar placeholder  -->
 		<img src="{$avatar|htmlentities}" alt="avatar" class="photo" />
 	</div>
+
+	{if $isme}
+	<a class="edit" href="{$base_url}/edit_profile.php">[edit]</a>
+	{/if}
 	
 	<dl>
 		<dt>
