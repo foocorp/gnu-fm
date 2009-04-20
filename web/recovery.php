@@ -68,8 +68,8 @@ if (isset($_POST['recover']) && isset($_POST['user'])) {
     $res = $mdb2->query("SELECT * FROM Users WHERE username='" 
        . $mdb2->quote($username, 'text') . "'");	
 
-    if ($res->numRows() == 0) {
-	$errors .= "Invalid username.\n";
+    if (PEAR::isError($res) || $res->numRows() == 0) {
+	$errors .= "User not found.\n";
 	$smarty->assign('errors', $errors);
 	$smarty->assign('error.tpl');
 	die();
