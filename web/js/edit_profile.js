@@ -53,7 +53,7 @@ function doit ()
 		loading.style.marginLeft = '-16px';
 	}
 
-	$.getJSON("location-ws.php",
+	$.getJSON("/location-ws.php",
 		{ 'q' : $('#loc').val() },
 		function (data, status)
 		{
