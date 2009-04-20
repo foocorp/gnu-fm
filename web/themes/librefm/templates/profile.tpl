@@ -15,7 +15,7 @@
 				<span about="{$acctid}" typeof="sioc:User">
 					(<span class="nickname" property="foaf:accountName">{$user}</span>)
 					<span rel="foaf:accountServiceHomepage" resource="{$base_url}"></span>
-					<span rel="foaf:homepage" rev="foaf:primaryTopic" resource=""></span>
+					<span rel="foaf:accountHomepage" rev="foaf:topic" resource=""></span>
 				</span>
 			</span>
 		</dt>
@@ -30,7 +30,7 @@
 		<dd class="note" property="bio:olb">{$bio}</dd>
 	</dl>
 
-	<hr style="border: 1px solid transparent; clear: both;" />
+	<hr style="border: 1px solid transparent; clear: both;" rel="foaf:page" rev="foaf:primaryTopic" resource="" />
 
 </div>
 
