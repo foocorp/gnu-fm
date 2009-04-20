@@ -192,6 +192,8 @@ h3 {
     padding-top: .4em;
 }
 
+.vcard .edit { float:right; }
+
 #chooser { position: relative; }
 #chooser_list { position: absolute; width: 26em; background: #eee; }
 #chooser_list { border: 1px solid #999; padding: 0; margin: 0; list-style: none; }
