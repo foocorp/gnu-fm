@@ -40,6 +40,7 @@
 		<tr>
 			<td colspan="2" align="center">
 				<input type="submit" value="Change" />
+				<input name="submit" value="1" type="hidden" />
 			</td>
 		</tr>
 	</table>
