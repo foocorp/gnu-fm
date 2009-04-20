@@ -191,3 +191,12 @@ h3 {
     background-color: #EEE;
     padding-top: .4em;
 }
+
+#chooser { position: relative; }
+#chooser_list { position: absolute; width: 26em; background: #eee; }
+#chooser_list { border: 1px solid #999; padding: 0; margin: 0; list-style: none; }
+#chooser_list li { border: 1px solid #bbb; padding: 2px; margin: 1px; font-size: 67%; }
+#chooser_list li:hover, #chooser_list li.hover { background: #ffd; }
+#location_uri_label { font-size: 80%; }
+#location_uri_label.ok { color: green; }
+#location_uri_label.no { color: red; }
