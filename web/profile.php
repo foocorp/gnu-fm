@@ -57,6 +57,7 @@ if(isset($user->name)) {
 	if (!PEAR::isError ($aUserTagCloud)) {
 		$smarty->assign('user_tagcloud',$aUserTagCloud);
 	}
+	$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
 	$smarty->assign('profile', true);
 	$smarty->display('profile.tpl');
 } else {

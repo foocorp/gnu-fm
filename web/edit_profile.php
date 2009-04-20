@@ -90,6 +90,9 @@ if ($_POST['submit'])
 		$user->avatar_uri   = $_POST['avatar_uri'];
 		
 		$user->save();
+
+		header("Location: " . $base_url . "/user/" . $user->name);
+		exit;
 	}
 
 	if (isset($errors[0]))
