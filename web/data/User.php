@@ -73,14 +73,14 @@ class User {
 	{
 		global $mdb2;
 		$q = sprintf("UPDATE Users SET "
-				. "email=%s "     # Send a confirmation email first??
-				. "fullname=%s "
-				. "homepage=%s "
-				. "bio=%s "
-				. "location=%s "
-				. "userlevel=%d "
-				. "webid_uri=%s "
-				. "location_uri=%s "
+				. "email=%s, "     # Send a confirmation email first??
+				. "fullname=%s, "
+				. "homepage=%s, "
+				. "bio=%s, "
+				. "location=%s, "
+				. "userlevel=%d, "
+				. "webid_uri=%s, "
+				. "location_uri=%s, "
 				. "avatar_uri=%s "
 				. "WHERE username=%s"
 				, $mdb2->quote($this->email, 'text')
