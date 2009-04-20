@@ -44,7 +44,7 @@ class Server {
 
 		if($username) {
 			$res = $mdb2->query(
-				'SELECT
+				"SELECT
 					s.username, 
 					s.artist, 
 					s.track, 
@@ -61,14 +61,14 @@ class Server {
 				LEFT JOIN Album l
 					ON l.artist_name=s.artist
 					AND l.name=s.album
-				WHERE s.rating<>"S"
-					AND s.username = ' . $mdb2->quote($username, "text") . ' 
+				WHERE s.rating<>'S'
+					AND s.username = " . $mdb2->quote($username, "text") . ' 
 				ORDER BY
 					s.time DESC 
 				LIMIT ' . $mdb2->quote($number, "integer"));
 		} else {
 			$res = $mdb2->query(
-				'SELECT
+				"SELECT
 					s.username,
 					s.artist, 
 					s.track,
@@ -85,10 +85,10 @@ class Server {
 				LEFT JOIN Album l
 					ON l.artist_name=s.artist
 					AND l.name=s.album
-				WHERE s.rating<>"S"
+				WHERE s.rating<>'S'
 				ORDER BY
 					s.time DESC 
-				LIMIT ' . $mdb2->quote($number, "integer"));
+				LIMIT " . $mdb2->quote($number, "integer"));
 		}
 
 		if(PEAR::isError($res)) {
