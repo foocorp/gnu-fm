@@ -25,7 +25,7 @@
 		</dd>
 		{/if}
 		<dd rel="foaf:based_near">
-			<span{if $location_uri} about="{$location_uri}"{/if} class="label" property="rdfs:label">{$location}</span>
+			<span{if $location_uri} about="{$location_uri}"{/if} class="label" property="rdfs:comment">{$location}</span>
 		</dd>
 		<dd class="note" property="bio:olb">{$bio}</dd>
 	</dl>
