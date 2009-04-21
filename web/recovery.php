@@ -65,13 +65,14 @@ if (isset($_GET['code'])) {
 if (isset($_POST['recover']) && isset($_POST['user'])) {
     $username = $_POST['user'];
 
-    $res = $mdb2->query("SELECT * FROM Users WHERE username='" 
+    $res = $mdb2->query("SELECT * FROM 'Users' WHERE username='" 
        . $mdb2->quote($username, 'text') . "'");	
 
     if (PEAR::isError($res) || $res->numRows() == 0) {
 	$errors .= "User not found.\n";
 	$smarty->assign('errors', $errors);
 	$smarty->assign('error.tpl');
+	$smarty->display('error.tpl');
 	die();
     } else {
 	$row = $res->fetchOne(MDB2_FETCHMODE_ASSOC);
