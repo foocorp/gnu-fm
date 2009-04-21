@@ -169,7 +169,8 @@ if (isset($_POST['install'])) {
 		    username VARCHAR(64),
 		    email VARCHAR(255),
 		    code VARCHAR(32),
-		    int expires);");
+		    expires int, 
+		    PRIMARY KEY(username));");
 
 // uncomment these to solve performance problems with getRecentScrobbles
 // 	$res = $mdb2->exec("CREATE INDEX album_artistname_idx ON Album(artist_name)");
