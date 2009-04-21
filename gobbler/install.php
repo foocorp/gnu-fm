@@ -171,6 +171,11 @@ if (isset($_POST['install'])) {
 		    code VARCHAR(32),
 		    int expires);");
 
+// uncomment these to solve performance problems with getRecentScrobbles
+// 	$res = $mdb2->exec("CREATE INDEX album_artistname_idx ON Album(artist_name)");
+// 	$res = $mdb2->exec("CREATE INDEX scrobbles_artist_idx ON Scrobbles(artist)");
+//	$res = $mdb2->exec("CREATE INDEX scrobbles_time_idx ON Scrobbles(time)");
+
 	// Test user configuration
 	$res = $mdb2->query("INSERT INTO Users
 		(username, password, created)
