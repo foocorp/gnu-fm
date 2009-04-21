@@ -34,7 +34,7 @@ def parse_track(row):
         return (None, None, None)
 
 
-def fetch_tracks(user, request_delay=0.5):
+def fetch_tracks(user, request_delay=2):
     """Fetch all tracks from a profile page and return a list."""
     url = 'http://last.fm/user/%s/tracks' % user
     soup = BeautifulSoup(urllib2.urlopen(url))
@@ -60,6 +60,7 @@ def main(*args):
         f = codecs.open(args[2], 'w', 'utf-8')
         for artist, track, timestamp in fetch_tracks(args[1]):
             f.write(u'%s\t%s\t%s\n' % (artist, track, timestamp))
+            print u'%s\t%s\t%s' % (artist, track, timestamp)
         f.close()
     else:
         print __doc__
