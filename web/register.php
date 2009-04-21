@@ -22,14 +22,16 @@
 require_once("database.php");
 require_once("templating.php");
 
-$authcode = $_GET["authcode"];
+
+// Moving to open alpha
+/*$authcode = $_GET["authcode"];
 
 $res = $mdb2->query("SELECT inviter FROM Invitations WHERE code = " . $mdb2->quote($authcode, "text"));
 if(!$res->numRows()) {
 	$invalid_authcode = true;
 } else {
 	$invalid_authcode = false;
-}
+}*/
 
 if(isset($_POST['register'])) {
 
@@ -87,8 +89,8 @@ if(isset($_POST['register'])) {
 		$smarty->assign("errors", $errors);
 	}
 }
-$smarty->assign("invalid_authcode", $invalid_authcode);
-$smarty->assign("authcode", $authcode);
+//$smarty->assign("invalid_authcode", $invalid_authcode);
+//$smarty->assign("authcode", $authcode);
 
 $smarty->display("register.tpl");
 ?>
