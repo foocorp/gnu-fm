@@ -21,7 +21,7 @@
 
 require_once("database.php");
 require_once("templating.php");
-
+require_once("utils/EmailAddressValidator.php");
 
 // Moving to open alpha
 /*$authcode = $_GET["authcode"];
@@ -47,7 +47,7 @@ if(isset($_POST['register'])) {
 
 	//Basic validation
 	if(!preg_match("/^[a-zA-Z0-9_]{3,}$/", $username)) {
-		$errors .= "Your username must be atleast 1 character in length and only consist of <i>a-z, A-Z, 0-9</i> and _ (underscore).<br />";
+		$errors .= "Your username must be atleast 3 character in length and only consist of <i>a-z, A-Z, 0-9</i> and _ (underscore).<br />";
 	}
 	if(empty($password)) {
 		$errors .= "You must enter a password.<br />";
@@ -57,6 +57,11 @@ if(isset($_POST['register'])) {
 	}
 	if(empty($email)) {
 		$errors .= "You must enter an e-mail address.<br />";
+	} else {
+	    $validator = new EmailAddressValidator();
+	    if (!$validator->check_email_address($email)) {
+		$errors .= "You must provide a valid email address!";
+	    }
 	}
 
 	//Check this username is available
@@ -94,7 +99,7 @@ if(isset($_POST['register'])) {
 		$smarty->assign("email", $email);
 		$smarty->assign("location", $location);
 		$smarty->assign("bio", $bio);
-		$smarty->assign("errors", $errors);
+		$smarty->assign("error", $errors);
 		$smarty->assign("registered", false);
 	}
 }
