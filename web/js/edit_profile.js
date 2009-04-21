@@ -33,30 +33,11 @@ function LocationCheck ()
 		return unrecognised("You must enter a location.");
 	}
 
-	if ($('#loading')[0])
-	{
-		$('#loading').show();
-	}
-	else
-	{
-		var loading = document.createElement('IMG');
-		loading.id = 'loading';
-		document.body.appendChild(loading);
-		loading.src = '/i/loading.gif';
-		loading.style.height = '32px';
-		loading.style.width = '32px';
-		loading.style.position = 'absolute';
-		loading.style.top = '50%';
-		loading.style.left = '50%';
-		loading.style.marginTop = '-16px';
-		loading.style.marginLeft = '-16px';
-	}
-
-	$.getJSON("/location-ws.php",
-		{ 'q' : $('#location').val() },
-		function (data, status)
+	ajaxLoading(1);
+	
+	var ajaxSuccess = function (data, status)
 		{
-			$('#loading').hide();
+			ajaxLoading(0);
 
 			if (! data.geonames[0])
 			{
@@ -133,5 +114,50 @@ function LocationCheck ()
 					);
 				list.appendChild(item);
 			}
+		};
+		
+	var ajaxError = function (XMLHttpRequest, textStatus, errorThrown)
+		{
+			ajaxLoading(0);
+			return unrecognised("Request error: " + textStatus);
+		};
+
+	$.ajax({
+			'type' : 'GET' ,
+			'url' : "/location-ws.php" ,
+			'data' : { 'q' : $('#location').val() },
+			'dataType' : 'json' ,
+			'timeout' : 30000 ,
+			'success' : ajaxSuccess ,
+			'error' : ajaxError 
 		});
+}
+
+function ajaxLoading (l)
+{
+	if (l==1)
+	{
+		if ($('#loading')[0])
+		{
+			$('#loading').show();
+		}
+		else
+		{
+			var loading = document.createElement('IMG');
+			loading.id = 'loading';
+			document.body.appendChild(loading);
+			loading.src = '/i/loading.gif';
+			loading.style.height = '32px';
+			loading.style.width = '32px';
+			loading.style.position = 'absolute';
+			loading.style.top = '50%';
+			loading.style.left = '50%';
+			loading.style.marginTop = '-16px';
+			loading.style.marginLeft = '-16px';
+		}
+	}
+	else
+	{
+		$('#loading').hide();
+	}
 }
