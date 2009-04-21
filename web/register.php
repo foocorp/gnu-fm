@@ -95,7 +95,7 @@ if(isset($_POST['register'])) {
 		$smarty->assign("location", $location);
 		$smarty->assign("bio", $bio);
 		$smarty->assign("errors", $errors);
-		$smarty->assign"registered", false);
+		$smarty->assign("registered", false);
 	}
 }
 //$smarty->assign("invalid_authcode", $invalid_authcode);
