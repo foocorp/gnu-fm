@@ -22,8 +22,7 @@ function unrecognised ( msg )
 	$('#location_uri')[0].value = '';
 	$('#location_uri_label').removeClass('ok');
 	$('#location_uri_label').addClass('no');
-	$('#location_uri_label').text('Unrecognised location');
-	window.alert( msg );
+	$('#location_uri_label').text( msg );
 	return 0;
 }
 
