@@ -213,3 +213,30 @@ h3 {
 #location_uri_label { font-size: 80%; }
 #location_uri_label.ok { color: green; }
 #location_uri_label.no { color: red; }
+
+ul#albums * {
+    padding: 0;
+    margin: 0;
+}
+ul#albums li {
+    list-style-type: none;
+    float: left;
+}
+ul#albums img.album, ul#albums li {
+    width: 160px;
+    height: 160px;
+}
+ul#albums img.album {
+    vertical-align: middle;
+}
+ul#albums dl dd.description {
+    line-height: 1.2em;
+    font-size: .7em;
+    margin: -1.4em 0 0 0;
+    padding: .1em .5em;
+    color: #FFF;
+    background-color: #000;
+    opacity: .75;
+    /* IE */
+    filter: alpha(opacity=75);
+}
