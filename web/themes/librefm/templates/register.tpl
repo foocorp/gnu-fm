@@ -26,8 +26,8 @@
 			<label for='fullname'>You:<span>(that's your real name.)</span></label>
 			<input id='fullname' name='fullname' type='text' value='{$fullname}' maxlength='255'/>
 	
-			<label for='username'>Your nickname:<span>(no more than 64 chars.)</span></label>
-			<input id='username' name='username' type='text' value='{$username}' maxlength='64' />
+			<label for='username'>Your nickname:<span>(no more than 16 chars.)</span></label>
+			<input id='username' name='username' type='text' value='{$username}' maxlength='16' />
 
 			<label for='email'>Your e-mail:<span>(must be valid!)</span></label>
 			<input id='email' name='email' type='text' value='{$email}' maxlength='64' />

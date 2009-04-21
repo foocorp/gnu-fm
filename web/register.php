@@ -46,8 +46,8 @@ if(isset($_POST['register'])) {
 
 
 	//Basic validation
-	if(!preg_match("/^[a-zA-Z0-9_]{3,}$/", $username)) {
-		$errors .= "Your username must be atleast 3 character in length and only consist of <i>a-z, A-Z, 0-9</i> and _ (underscore).<br />";
+	if(!preg_match("/^[a-zA-Z0-9_]{3,16}$/", $username)) {
+		$errors .= "Your username must be atleast 3 characters in length (max 16)  and only consist of <i>a-z, A-Z, 0-9</i> and _ (underscore).<br />";
 	}
 	if(empty($password)) {
 		$errors .= "You must enter a password.<br />";
