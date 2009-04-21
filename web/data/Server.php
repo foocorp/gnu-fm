@@ -134,7 +134,7 @@ class Server {
     static function getTopArtists($number=20) {
         global $mdb2;
 
-        $res = $mdb2->query("SELECT COUNT(artist) as c, artist FROM Scrobbles WHERE rating<>'S' GROUP BY artist ORDER BY c DESC LIMIT 0,20");
+        $res = $mdb2->query("SELECT COUNT(artist) as c, artist FROM Scrobbles WHERE rating<>'S' GROUP BY artist ORDER BY c DESC LIMIT 20");
 
         if(PEAR::isError($res)) {
             return $res;
