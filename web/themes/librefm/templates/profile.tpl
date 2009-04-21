@@ -43,8 +43,8 @@
 <!-- We should try to make this list work like the gobbles list. -->
 <dl class='now-playing'>
     {section name=i loop=$nowplaying}
-    <dt class='track-name'>{$nowplaying[i].track}</dt>
-    <dd>by <span class='artist-name'><a href='{$nowplaying[i].artisturl}'>{$nowplaying[i].artist}</a></span></dd>
+    <dt class='track-name'>{$nowplaying[i].track|htmlentities}</dt>
+    <dd>by <span class='artist-name'><a href='{$nowplaying[i].artisturl}'>{$nowplaying[i].artist|htmlentities}</a></span></dd>
     <dd>with <span class='gobbler'>{$nowplaying[i].clientstr}</span></dd>
     {/section}
 </dl>
@@ -69,9 +69,9 @@
 			<div rel="foaf:maker" class="contributor vcard">
 				<a about="{$scrobbles[i].id_artist}" typeof="mo:MusicArtist" property="foaf:name" rel="foaf:page"
 					class="fn url" href="{$scrobbles[i].artisturl}"
-					>{$scrobbles[i].artist}</a>
+					>{$scrobbles[i].artist|htmlentities}</a>
 			</div>
-			<div><a class="fn" property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl}">{$scrobbles[i].track}</a></div>
+			<div><a class="fn" property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl}">{$scrobbles[i].track|htmlentities}</a></div>
 			<small about="{$scrobbles[i].id}" property="dc:date" content="{$scrobbles[i].timeiso}" datatype="xsd:dateTime">{$scrobbles[i].timehuman}</small>
 		</div>
 	</li>
