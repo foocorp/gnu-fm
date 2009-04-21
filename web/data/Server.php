@@ -180,7 +180,7 @@ class Server {
 			} elseif($row["free"] == "Y") {
 				$clientstr = "<a href=\"" . strip_tags(stripslashes($row["url"])) . "\">" . strip_tags(stripslashes($row["name"])) . "</a>";
 			} else {
-				$clientstr = strip_tags(stripslashes($row["name"]));
+				$clientstr = "<a href=\"http://en.wikipedia.org/wiki/Category:Free_media_players\">" . strip_tags(stripslashes($row["name"]) . "</a>");
 			}
 			$row["clientstr"] = $clientstr;
 			$row["userurl"] = Server::getUserURL($row["username"]);
