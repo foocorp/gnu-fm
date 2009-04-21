@@ -67,14 +67,22 @@ if(isset($_POST['register'])) {
 
 	if(empty($errors)) {
 		// Create the user
-		$mdb2->query("INSERT INTO Users (username, password, email, fullname, bio, location, created) VALUES ("
+		$sql = "INSERT INTO Users (username, password, email, fullname, bio, location, created) VALUES ("
 			. $mdb2->quote($username, "text") . ", "
 			. $mdb2->quote(md5($password), "text") . ", "
 			. $mdb2->quote($email, "text") . ", "
 			. $mdb2->quote($fullname, "text") . ", "
 			. $mdb2->quote($bio, "text") . ", "
 			. $mdb2->quote($location, "text") . ", "
-			. time() . ")");
+			. time() . ")";
+		$insert = $mdb2->exec($sql);
+		if (PEAR::isError($insert)) {
+		    reportError("Create user, insert, register.php", $sql);
+		    $errors .= "An error occurred.";
+		    $smarty->assign('error', $errors);
+		    $smarty->display('error.tpl');
+		    die();
+		}
 		// Remove auth code and set their username as the invitee
 		//$mdb2->query("UPDATE Invitations SET code = NULL, invitee = " . $mdb2->quote($username, "text") . " WHERE code = " . $mdb2->quote($authcode, "text"));
 		//$removesql = "DELETE FROM Invitation_Request WHERE email=" . $mdb2->quote($email, 'text');
@@ -87,6 +95,7 @@ if(isset($_POST['register'])) {
 		$smarty->assign("location", $location);
 		$smarty->assign("bio", $bio);
 		$smarty->assign("errors", $errors);
+		$smarty->assign"registered", false);
 	}
 }
 //$smarty->assign("invalid_authcode", $invalid_authcode);
