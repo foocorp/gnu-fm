@@ -2,11 +2,7 @@
 
 <h2>Register</h2>
 
-{if !isset($authcode) }
-	<p>Sorry! You need to have an invite to be able to register.</p>
-{elseif $invalid_authcode }
-	<p>Sorry! That invitation code is either invalid or has already been used.</p>
-{elseif isset($registered) }
+{if isset($registered) }
 	<p>You're now registered with libre.fm! Yay!</p>
 	<p><small>(p.s. we love you)</small></p>
 {else}
