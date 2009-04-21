@@ -9,7 +9,7 @@
 		{/if}
 	</div>
 
-	<ul id="albums" class="listcloud" rel="foaf:made" rev="foaf:maker">
+	<ul id="albums" rel="foaf:made" rev="foaf:maker">
 		{section name=i loop=$albums}
 		<li about="{$albums[i]->id}" property="dc:title" content="{$albums[i]->name|escape:'html'}" typeof="mo:Record" class="haudio">
 			<dl>
