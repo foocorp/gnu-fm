@@ -231,12 +231,12 @@ ul#albums img.album {
 }
 ul#albums dl dd.description {
     line-height: 1.2em;
-    font-size: .7em;
+    font-size: .8em;
     margin: -1.4em 0 0 0;
     padding: .1em .5em;
     color: #FFF;
     background-color: #000;
-    opacity: .75;
+    opacity: .85;
     /* IE */
-    filter: alpha(opacity=75);
+    filter: alpha(opacity=85);
 }
