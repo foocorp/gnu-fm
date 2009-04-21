@@ -34,7 +34,7 @@ def parse_track(row):
         return (None, None, None)
 
 
-def fetch_tracks(user, request_delay=2):
+def fetch_tracks(user, request_delay=0.5):
     """Fetch all tracks from a profile page and return a list."""
     url = 'http://last.fm/user/%s/tracks' % user
     soup = BeautifulSoup(urllib2.urlopen(url))
