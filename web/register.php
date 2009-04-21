@@ -60,7 +60,7 @@ if(isset($_POST['register'])) {
 	} else {
 	    $validator = new EmailAddressValidator();
 	    if (!$validator->check_email_address($email)) {
-		$errors .= "You must provide a valid email address!";
+		$errors .= "You must provide a valid email address!<br />";
 	    }
 	}
 
