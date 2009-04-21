@@ -65,7 +65,7 @@ if(isset($_POST['register'])) {
 		$errors .= "Sorry, that username is already registered.<br />";
 	}
 
-	if(empty($errors) && !$invalid_authcode) {
+	if(empty($errors)) {
 		// Create the user
 		$mdb2->query("INSERT INTO Users (username, password, email, fullname, bio, location, created) VALUES ("
 			. $mdb2->quote($username, "text") . ", "
@@ -76,9 +76,9 @@ if(isset($_POST['register'])) {
 			. $mdb2->quote($location, "text") . ", "
 			. time() . ")");
 		// Remove auth code and set their username as the invitee
-		$mdb2->query("UPDATE Invitations SET code = NULL, invitee = " . $mdb2->quote($username, "text") . " WHERE code = " . $mdb2->quote($authcode, "text"));
-		$removesql = "DELETE FROM Invitation_Request WHERE email=" . $mdb2->quote($email, 'text');
-		$mdb2->exec($removesql);
+		//$mdb2->query("UPDATE Invitations SET code = NULL, invitee = " . $mdb2->quote($username, "text") . " WHERE code = " . $mdb2->quote($authcode, "text"));
+		//$removesql = "DELETE FROM Invitation_Request WHERE email=" . $mdb2->quote($email, 'text');
+		//$mdb2->exec($removesql);
 		$smarty->assign("registered", true);
 	} else {
 		$smarty->assign("username", $username);
