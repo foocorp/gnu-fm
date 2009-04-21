@@ -3,8 +3,15 @@
 <h2>Register</h2>
 
 {if isset($registered) }
-	<p>You're now registered with libre.fm! Yay!</p>
-	<p><small>(p.s. we love you)</small></p>
+	<h2>You're now registered with libre.fm!</h2>
+	
+	<ul>
+	<li><a href="http://ideas.libre.fm/index.php/Using_turtle">Find out how to start sending us your listening habits</a></li>
+	<li><a href="http://lists.autonomo.us/mailman/listinfo/libre-fm">Join our mailing list</a></li>
+	<li><a href="http://blog.libre.fm/">Read our blog</a> and <a href="http://identi.ca/mattl">subscribe to Matt (our founder) on identi.ca</a></li>
+	</ul>
+
+
 {else}
 
 	{if isset($errors) }
