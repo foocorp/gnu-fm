@@ -107,7 +107,7 @@ if(isset($_POST['register'])) {
 		if (PEAR::isError($insert)) {
 		    reportError("Create user, insert, register.php", $sql);
 		    $errors .= "An error occurred.";
-		    $smarty->assign('error', $errors);
+		    $smarty->assign('errors', $errors);
 		    $smarty->display('error.tpl');
 		    die();
 		}
@@ -121,7 +121,7 @@ if(isset($_POST['register'])) {
 		if (PEAR::isError($res)) {
 		    reportError("AccountActivation, insert, register.php", $sql);
 		    $errors .= "An error occurred.";
-		    $smarty->assign('error', $errors);
+		    $smarty->assign('errors', $errors);
 		    $smarty->display('error.tpl');
 		    die();
 		}
