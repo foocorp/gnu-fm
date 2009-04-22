@@ -73,8 +73,6 @@ if ($_POST['submit'])
 	{
 		if ($_POST['password_1'] != $_POST['password_2'])
 			$errors[] = "Passwords do not match.";
-		if (strlen($_POST['password_1']) > 32)
-			$errors[] = "Password is too long. (32 char limit.)";
 	}
 
 	if (!empty($_POST['location_uri']))
@@ -98,7 +96,7 @@ if ($_POST['submit'])
 		$user->avatar_uri   = $_POST['avatar_uri'];
 		
 		if (!empty( $_POST['password_1'] ))
-			$user->password = $_POST['password_1'];
+			$user->password = md5($_POST['password_1']);
 		
 		$user->save();
 
