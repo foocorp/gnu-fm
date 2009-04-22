@@ -134,7 +134,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES" . $rowvalues;
 		$res =& $mdb2->exec($sql);
 		if(PEAR::isError($res)) {
-		    $msg = $res->getMessage();
+		    $msg = $res->getMessage() . " - " . $res->getUserInfo();
 		    reportError($msg, $sql);
                 die("FAILED " . $msg . "\nError has been reported to site administrators.\n");
         	}
