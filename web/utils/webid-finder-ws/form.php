@@ -113,6 +113,11 @@ input.wide
 			print "</html>\n";
 			exit;
 		}
+
+		else
+		{
+			print "<p>Sorry, couldn't find your WebID that way. Try another method.</p>\n";
+		}
 	}
 ?>
 
