@@ -75,7 +75,7 @@ if (isset($_POST['user'])) {
 	$smarty->display('error.tpl');
 	die();
     } else {
-	$row = $res->fetchOne(MDB2_FETCHMODE_ASSOC);
+	$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
 	$code = md5($username . $row['email'] . time());
 	$sql = "INSERT INTO Recovery_Request (username, email, code, expires) VALUES("
 	     . $mdb2->quote($username, 'text') . ", " 
