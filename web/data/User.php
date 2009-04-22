@@ -35,6 +35,7 @@ class User {
 
 	public $name, $email, $fullname, $bio, $location, $homepage, $error, $userlevel;
 	public $id, $acctid, $avatar_uri, $location_uri, $webid_uri;
+	public $password;
 
 	/**
 	 * User constructor
@@ -54,6 +55,7 @@ class User {
 			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
 
 			$this->name         = $row['username'];
+			$this->password     = $row['password'];
 			$this->email	    = $row['email'];
 			$this->fullname     = $row['fullname'];
 			$this->homepage     = $row['homepage'];
@@ -88,6 +90,7 @@ class User {
 		
 		$q = sprintf("UPDATE Users SET "
 				. "email=%s, "     # Send a confirmation email first??
+				. "password=%s, "
 				. "fullname=%s, "
 				. "homepage=%s, "
 				. "bio=%s, "
@@ -98,6 +101,7 @@ class User {
 				. "avatar_uri=%s "
 				. "WHERE username=%s"
 				, $mdb2->quote($this->email, 'text')
+				, $mdb2->quote($this->password, 'text')
 				, $mdb2->quote($this->fullname, 'text')
 				, $mdb2->quote($this->homepage, 'text')
 				, $mdb2->quote($this->bio, 'text')
