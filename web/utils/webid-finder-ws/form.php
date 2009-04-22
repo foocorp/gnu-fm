@@ -149,7 +149,7 @@ input.wide
 		</div>
 	</li>
 
-	<li>
+<!--	<li>
 		<input class="radio" type="radio" name="source" value="opera" id="src_opera" />
 		<label for="src_opera">
 			<img src="opera.png" alt="">
@@ -160,7 +160,7 @@ input.wide
 			<br /><input class="wide text" name="opera" id="opera" />
 		</div>
 	</li>
-
+-->
 	<li>
 		<input class="radio" type="radio" name="source" value="web" id="src_web" />
 		<label for="src_web">
