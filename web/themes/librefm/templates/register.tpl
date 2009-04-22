@@ -2,8 +2,13 @@
 
 <h2>Register</h2>
 
+{if isset($activated)}
+	<h2>Your account has been activated! You may now login!</h2>
+{/if}
+
 {if isset($registered) }
-	<h2>You're now registered with libre.fm!</h2>
+	<h2>You're now registered with libre.fm! An email has been sent to the email address you
+	provided. Please follow the link in the email to activate your account!</h2>
 	
 	<ul>
 	<li><a href="http://ideas.libre.fm/index.php/Using_turtle">Find out how to start sending us your listening habits</a></li>

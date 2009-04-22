@@ -63,7 +63,12 @@ if (isset($_POST['install'])) {
 		userlevel INTEGER DEFAULT 0,
 		webid_uri VARCHAR(255),
 		avatar_uri VARCHAR(255),
+		active integer DEFAULT 1,
 		location_uri VARCHAR(255) REFERENCES Places(location_uri));");
+
+	$mdb2->query("CREATE TABLE AccountActivation(
+		username VARCHAR(64),
+		authcode VARCHAR(32))");
 
 	$res = $mdb2->query("CREATE TABLE Auth (
 		token VARCHAR(32) PRIMARY KEY,
