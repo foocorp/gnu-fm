@@ -124,7 +124,7 @@ function LocationCheck ()
 
 	$.ajax({
 			'type' : 'GET' ,
-			'url' : "/location-ws.php" ,
+			'url' : "/utils/location-ws.php" ,
 			'data' : { 'q' : $('#location').val() },
 			'dataType' : 'json' ,
 			'timeout' : 30000 ,
@@ -164,7 +164,7 @@ function ajaxLoading (l)
 
 function webidLookup ()
 {
-	window.open("/webid-finder-ws/form.php?javascript=id",
+	window.open("/utils/webid-finder-ws/form.php?javascript=id",
 		"webid-finder",
 		"status=1,location=1,resizable=1,scrollbars=1,width=560,height=400");
 }
