@@ -69,7 +69,6 @@ input.wide
 <?php
 	if ($_REQUEST['submit'])
 	{
-		ini_set('include_path', '.:/usr/lib64/php/:' . ini_get('include_path'));
 		require_once 'guts.php';
 		
 		switch ($_REQUEST['source'])
