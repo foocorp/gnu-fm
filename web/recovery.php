@@ -58,11 +58,11 @@ if (isset($_GET['code'])) {
 	 . $mdb2->quote($email, 'text');
 
     $mdb2->exec($sql);
-    $sql = "DELETE FROM Recovery_Request WHERE code=" . $mdb2->quote($_GET['code'], 'text');
-    $mdb2->exec($sql);
 
     $content = "Hi!\n\nYour password has been set to " . $password . "\n\n - The Libre.fm Team";
     sendEmail($content, $email);
+    $sql = "DELETE FROM Recovery_Request WHERE code=" . $mdb2->quote($_GET['code'], 'text');
+    $mdb2->exec($sql);
     $smarty->assign('changed', true);
 }
 
