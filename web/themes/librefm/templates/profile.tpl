@@ -45,7 +45,7 @@
     {section name=i loop=$nowplaying}
     <dt class='track-name'>{$nowplaying[i].track|escape:'html':'UTF-8'}</dt>
     <dd>by <span class='artist-name'><a href='{$nowplaying[i].artisturl|escape:'html':'UTF-8'}'>{$nowplaying[i].artist|escape:'html':'UTF-8'}</a></span></dd>
-    <dd>with <span class='gobbler'>{$nowplaying[i].clientstr|escape:'html':'UTF-8'}</span></dd>
+    <dd>with <span class='gobbler'>{$nowplaying[i].clientstr}</span></dd>
     {/section}
 </dl>
 {/if}
