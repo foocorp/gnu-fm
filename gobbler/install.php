@@ -44,6 +44,12 @@ if (isset($_POST['install'])) {
 
 	//Create tables
 
+	$res = $mdb2->query("CREATE TABLE Places(
+		location_uri VARCHAR(255),
+		latitude FLOAT,
+		longitude FLOAT,
+		country CHAR(2));");
+
 	$mdb2->query("CREATE TABLE Users (
 		username VARCHAR(64) PRIMARY KEY,
 		password VARCHAR(32) NOT NULL,
@@ -153,12 +159,6 @@ if (isset($_POST['install'])) {
 		artist VARCHAR(255) REFERENCES Artist(name),
 		album VARCHAR(255),
 		track VARCHAR(255));");
-
-	$res = $mdb2->query("CREATE TABLE Places(
-		location_uri VARCHAR(255),
-		latitude FLOAT,
-		longitude FLOAT,
-		country CHAR(2));");
 
 	$res = $mdb2->query("CREATE TABLE Error(
 		    id int(11) AUTO_INCREMENT KEY,
