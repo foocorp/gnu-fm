@@ -62,7 +62,7 @@ class Server {
 					ON l.artist_name=s.artist
 					AND l.name=s.album
 				WHERE s.rating<>'S'
-					AND s.username ILIKE " . $mdb2->quote($username, "text") . ' 
+					AND lower(s.username) = " . $mdb2->quote(strtolower($username), "text") . ' 
 				ORDER BY
 					s.time DESC 
 				LIMIT ' . $mdb2->quote($number, "integer"));
@@ -160,7 +160,7 @@ class Server {
 		global $mdb2;
 
 		if($username) {
-			$res = $mdb2->query('SELECT username, artist, album, track, client, ClientCodes.name, ClientCodes.url, ClientCodes.free, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE username ILIKE ' . $mdb2->quote($username, "text") . ' ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT username, artist, album, track, client, ClientCodes.name, ClientCodes.url, ClientCodes.free, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE lower(username) = ' . $mdb2->quote(strtolower($username), "text") . ' ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		} else {
 			$res = $mdb2->query('SELECT username, artist, track, album, client, ClientCodes.name, ClientCodes.url, ClientCodes.free, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		}

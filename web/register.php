@@ -65,7 +65,7 @@ if(isset($_POST['register'])) {
 	}
 
 	//Check this username is available
-	$res = $mdb2->query("SELECT username FROM Users WHERE username ILIKE " . $mdb2->quote($username));
+	$res = $mdb2->query("SELECT username FROM Users WHERE lower(username) = " . $mdb2->quote(strtolower($username)));
 	if($res->numRows()) {
 		$errors .= "Sorry, that username is already registered.<br />";
 	}

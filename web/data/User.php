@@ -48,7 +48,7 @@ class User {
 		$base = preg_replace('#/$#', '', $base_url);
 
 		global $mdb2;
-		$res = $mdb2->query('SELECT * FROM Users WHERE ' . 'username ILIKE ' . $mdb2->quote($name, 'text'));
+		$res = $mdb2->query('SELECT * FROM Users WHERE lower(username) = ' . $mdb2->quote(strtolower($name), 'text'));
 
 		if($res->numRows()) {
 
