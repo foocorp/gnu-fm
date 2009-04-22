@@ -49,17 +49,15 @@ if(isset($_GET['auth'])) {
 
 	$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
 
-	$sql = "UPDATE Users SET active = 1 WHERE username = " . $row['username'];
+	$sql = "UPDATE Users SET active = 1 WHERE username = " . $mdb2->quote($row['username'], 'text');
 	$res = $mdb2->exec($sql);
 	if (PEAR::isError($res)) {
-	    $errors = $res->getUserInfo();
+	    $errors = "Error: " . $res->getUserInfo();
 	    $smarty->assign('errors', $errors);
 	    $smarty->display('error.tpl');
 	    die();
 	}
 	$smarty->assign('activated', true);
-	$smarty->display('register.tpl');
-	die();
 }
 
 if(isset($_POST['register'])) {
