@@ -33,7 +33,7 @@ function sendEmail($text, $email) {
 }
 
 if (isset($_GET['code'])) {
-    $res = $mdb2->query("SELECT * FROM Recovery_Request WHERE code=" . $mdb2->quote($_GET['code'], 'text');
+    $res = $mdb2->query("SELECT * FROM Recovery_Request WHERE code=" . $mdb2->quote($_GET['code'], 'text'));
     if ($res->numRows() == 0) {
 	$errors .= "Invalid recovery token.\n";
 	$smarty->assign('errors', $errors);
