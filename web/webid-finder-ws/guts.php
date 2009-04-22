@@ -1,6 +1,6 @@
 <?php
 
-require 'arc/ARC2.php';
+require '../arc/ARC2.php';
 
 if ( !function_exists('json_decode') )
 {
