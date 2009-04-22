@@ -71,8 +71,8 @@
 					class="fn url" href="{$scrobbles[i].artisturl|escape:'html':'UTF-8'}"
 					>{$scrobbles[i].artist|escape:'html':'UTF-8'}</a>
 			</div>
-			<div><a class="fn" property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl}">{$scrobbles[i].track|htmlentities}</a></div>
-			<small about="{$scrobbles[i].id}" property="dc:date" content="{$scrobbles[i].timeiso}" datatype="xsd:dateTime">{$scrobbles[i].timehuman}</small>
+			<div><a class="fn" property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl|escape:'html':'UTF-8'}">{$scrobbles[i].track|escape:'html':'UTF-8'}</a></div>
+			<small about="{$scrobbles[i].id|escape:'html':'UTF-8'}" property="dc:date" content="{$scrobbles[i].timeiso}" datatype="xsd:dateTime">{$scrobbles[i].timehuman}</small>
 		</div>
 	</li>
 {/section}
