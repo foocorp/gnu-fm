@@ -10,17 +10,17 @@
 	<table>
 		<tr>
 			<th align="right" valign="top"><label for="fullname">Full name:</label></th>
-			<td><input name="fullname" id="fullname" value="{$fullname|htmlentities}" /></td>
+			<td><input name="fullname" id="fullname" value="{$fullname|escape:'html':'UTF-8'}" /></td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
 			<th align="right" valign="top" rowspan="2"><label for="location">Location:</label></th>
-			<td><input name="location" id="location" value="{$location|htmlentities}" /></td>
+			<td><input name="location" id="location" value="{$location|escape:'html':'UTF-8'}" /></td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
 			<td id="chooser">
-				<input type="hidden" name="location_uri" id="location_uri" value="{$location_uri|htmlentities}" />
+				<input type="hidden" name="location_uri" id="location_uri" value="{$location_uri|escape:'html':'UTF-8'}" />
 				<input type="button" value="Check ..." onclick="LocationCheck();" />
 				<span id="location_uri_label"></span>
 			</td>
@@ -28,22 +28,22 @@
 		</tr>
 		<tr>
 			<th align="right" valign="top"><label for="homepage">Homepage URL:</label></th>
-			<td><input name="homepage" id="homepage" value="{$homepage|htmlentities}" /></td>
+			<td><input name="homepage" id="homepage" value="{$homepage|escape:'html':'UTF-8'}" /></td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
 			<th align="right" valign="top"><label for="avatar_uri">Avatar URL:</label></th>
-			<td><input name="avatar_uri" id="avatar_uri" value="{$avatar_uri|htmlentities}" /></td>
+			<td><input name="avatar_uri" id="avatar_uri" value="{$avatar_uri|escape:'html':'UTF-8'}" /></td>
 			<td><a href="#dfn_avatar_uri" rel="glossary">What's this?</a></td>
 		</tr>
 		<tr>
 			<th align="right" valign="top"><label for="bio">Mini Biography:</label></th>
-			<td><textarea name="bio" id="bio" rows="6" cols="30" style="width:100%;min-width:20em">{$bio|htmlentities}</textarea></td>
+			<td><textarea name="bio" id="bio" rows="6" cols="30" style="width:100%;min-width:20em">{$bio|escape:'html':'UTF-8'}</textarea></td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
 			<th align="right" valign="top"><label for="id">WebID (FOAF):</label></th>
-			<td><input name="id" id="id" value="{$id|htmlentities}" /></td>
+			<td><input name="id" id="id" value="{$id|escape:'html':'UTF-8'}" /></td>
 			<td><a href="#dfn_id" rel="glossary">What's this?</a></td>
 		</tr>
 		<tr>
