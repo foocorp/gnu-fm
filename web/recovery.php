@@ -71,33 +71,32 @@ if (isset($_POST['user'])) {
     if (PEAR::isError($res) || $res->numRows() == 0) {
 	$errors .= "User not found.\n";
 	$smarty->assign('errors', $errors);
-	$smarty->assign('error.tpl');
 	$smarty->display('error.tpl');
 	die();
-    } else {
-	$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
-	$code = md5($username . $row['email'] . time());
-	$sql = "INSERT INTO Recovery_Request (username, email, code, expires) VALUES("
-	     . $mdb2->quote($username, 'text') . ", " 
-	     . $mdb2->quote($row['email'], 'text') . ", "
-	     . $mdb2->quote($code, 'text') . ", "
-	     . $mdb2->quote(time() + 86400, 'text') . ")";
+    } 
+    $row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+    $code = md5($username . $row['email'] . time());
+    $sql = "INSERT INTO Recovery_Request (username, email, code, expires) VALUES("
+	. $mdb2->quote($username, 'text') . ", " 
+	. $mdb2->quote($row['email'], 'text') . ", "
+	. $mdb2->quote($code, 'text') . ", "
+	. $mdb2->quote(time() + 86400, 'text') . ")";
 
-	$res = $mdb2->exec($sql);
-	if (PEAR::isError($res)) {
-	    $errors .= "Error on: " . $sql;
-	    $smarty->assign('errors', $errors);
-	    $smarty->display('error.tpl');
-	    die();
-	}
-
-	$url = $base_url . "/recovery.php?code=" . $code;
-	$content = "Hi!\n\nSomeone from the IP-address " . $_SERVER['REMOTE_ADDR'] . " entered you username " 
-	    . "in the Password Recovery Form @ libre.fm. To change you password, please visit\n\n"
-	    . $url . "\n\n- The Libre.fm Team";
-	sendEmail($content, $row['email']);
-	$smarty->assign('sent', true);	
+    $res = $mdb2->exec($sql);
+    if (PEAR::isError($res)) {
+	$errors .= "Error on: " . $sql;
+	$smarty->assign('errors', $errors);
+	$smarty->display('error.tpl');
+	die();
     }
+
+    $url = $base_url . "/recovery.php?code=" . $code;
+    $content = "Hi!\n\nSomeone from the IP-address " . $_SERVER['REMOTE_ADDR'] . " entered you username " 
+	. "in the Password Recovery Form @ libre.fm. To change you password, please visit\n\n"
+	. $url . "\n\n- The Libre.fm Team";
+    sendEmail($content, $row['email']);
+    $smarty->assign('sent', true);	
+
 } 
 
 $smarty->display("recovery.tpl");
