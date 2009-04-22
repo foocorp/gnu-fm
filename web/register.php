@@ -47,7 +47,7 @@ if(isset($_POST['register'])) {
 
 	//Basic validation
 	if(!preg_match("/^[a-zA-Z0-9_]{3,16}$/", $username)) {
-		$errors .= "Your username must be atleast 3 characters in length (max 16)  and only consist of <i>a-z, A-Z, 0-9</i> and _ (underscore).<br />";
+		$errors .= "Your username must be atleast 3 characters in length (max 16) and only consist of <i>a-z, A-Z, 0-9</i> and _ (underscore).<br />";
 	}
 	if(empty($password)) {
 		$errors .= "You must enter a password.<br />";
@@ -65,7 +65,7 @@ if(isset($_POST['register'])) {
 	}
 
 	//Check this username is available
-	$res = $mdb2->query("SELECT username FROM Users WHERE username ~* " . $mdb2->quote($username));
+	$res = $mdb2->query("SELECT username FROM Users WHERE username ILIKE " . $mdb2->quote($username));
 	if($res->numRows()) {
 		$errors .= "Sorry, that username is already registered.<br />";
 	}
