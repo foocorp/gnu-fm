@@ -30,6 +30,7 @@ div#footer a {
  */
 
 form input {font-size: 138.5%;}
+form.notcrazy input { font-size: 99%; }
 
 div#invite,
 div#register,
