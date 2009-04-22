@@ -62,7 +62,7 @@ if (isset($_GET['code'])) {
     $smarty->assign('sent', true);
 }
 
-if (isset($_POST['recover']) && isset($_POST['user'])) {
+if (isset($_POST['user'])) {
     $username = $_POST['user'];
 
     $res = $mdb2->query("SELECT * FROM Users WHERE username=" 
