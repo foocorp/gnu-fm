@@ -33,7 +33,7 @@ function sendEmail($text, $email) {
 }
 
 if (isset($_GET['code'])) {
-    $res = $mdb2->query("SELECT * FROM Recovery_Request WHERE code='" . $_GET['code']);
+    $res = $mdb2->query("SELECT * FROM Recovery_Request WHERE code=" . $mdb2->quote($_GET['code'], 'text');
     if ($res->numRows() == 0) {
 	$errors .= "Invalid recovery token.\n";
 	$smarty->assign('errors', $errors);
@@ -65,8 +65,8 @@ if (isset($_GET['code'])) {
 if (isset($_POST['recover']) && isset($_POST['user'])) {
     $username = $_POST['user'];
 
-    $res = $mdb2->query("SELECT * FROM 'Users' WHERE username='" 
-       . $mdb2->quote($username, 'text') . "'");	
+    $res = $mdb2->query("SELECT * FROM Users WHERE username=" 
+       . $mdb2->quote($username, 'text'));	
 
     if (PEAR::isError($res) || $res->numRows() == 0) {
 	$errors .= "User not found.\n";
@@ -83,8 +83,8 @@ if (isset($_POST['recover']) && isset($_POST['user'])) {
 	     . $mdb2->quote($code, 'text') . ", "
 	     . $mdb2->quote(time() + 86400, 'text') . ")";
 
-	$mdb2->exec($sql);
-	if (PEAR::isError()) {
+	$res = $mdb2->exec($sql);
+	if (PEAR::isError($res)) {
 	    $errors .= "Error on: " . $sql;
 	    $smarty->assign('errors', $errors);
 	    $smarty->display('error.tpl');
