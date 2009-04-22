@@ -32,6 +32,29 @@ if(!$res->numRows()) {
 } else {
 	$invalid_authcode = false;
 }*/
+function sendEmail($text, $email) {
+        $headers = 'From: Libre.fm Account Activation <account@libre.fm>';
+	$subject = 'Libre.fm Account Activation - Action needed!';
+	mail($email, $subject, $text, $headers);
+}
+if(isset($_GET['auth'])) {
+	$authcode = $_GET['auth'];
+	$res = $mdb2->query("SELECT * FROM AccountActivation WHERE authcode = " . $mdb2->quote($authcode, 'text'));
+	if (PEAR::isError($res) || !$res->numRows()) {
+		$errors = "Unknown activationcode.";
+		$smarty->assign('errors', $errors);
+		$smarty->display('error.tpl');
+		die();
+	}
+
+	$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+
+	$sql = "UPDATE Users SET active = 1 WHERE username = " . $row['username'];
+	$res = $mdb2->exec($sql);
+	$smarty->assign('activated', true);
+	$smarty->display('register.tpl');
+	die();
+}
 
 if(isset($_POST['register'])) {
 
@@ -72,14 +95,14 @@ if(isset($_POST['register'])) {
 
 	if(empty($errors)) {
 		// Create the user
-		$sql = "INSERT INTO Users (username, password, email, fullname, bio, location, created) VALUES ("
+		$sql = "INSERT INTO Users (username, password, email, fullname, bio, location, created, active) VALUES ("
 			. $mdb2->quote($username, "text") . ", "
 			. $mdb2->quote(md5($password), "text") . ", "
 			. $mdb2->quote($email, "text") . ", "
 			. $mdb2->quote($fullname, "text") . ", "
 			. $mdb2->quote($bio, "text") . ", "
 			. $mdb2->quote($location, "text") . ", "
-			. time() . ")";
+			. time() . ", 0)";
 		$insert = $mdb2->exec($sql);
 		if (PEAR::isError($insert)) {
 		    reportError("Create user, insert, register.php", $sql);
@@ -88,6 +111,27 @@ if(isset($_POST['register'])) {
 		    $smarty->display('error.tpl');
 		    die();
 		}
+
+		$code = md5($username . time());
+		$sql = "INSERT INTO AccountActivation (username, authcode) VALUES("
+			. $mdb2->quote($username, 'text') . ", "
+			. $mdb2->quote($code, 'text') . ")";
+		$res = $mdb2->exec($sql);
+
+		if (PEAR::isError($res)) {
+		    reportError("AccountActivation, insert, register.php", $sql);
+		    $errors .= "An error occurred.";
+		    $smarty->assign('error', $errors);
+		    $smarty->display('error.tpl');
+		    die();
+		}
+
+		$url = $base_url . "/register.php?auth=" . $code;
+		$content = "Hi!\n\nSomeone from the IP-address " . $_SERVER['REMOTE_ADDR'] . " registered an account "
+		    . "@ http://alpha.libre.fm. If this was you, please visit the webpage specified below to activate "
+		    . "your account. If not, please disregard this email.\n\n" . $url . "\n\n- The Libre.fm Team";
+		sendEmail($content, $email);
+
 		// Remove auth code and set their username as the invitee
 		//$mdb2->query("UPDATE Invitations SET code = NULL, invitee = " . $mdb2->quote($username, "text") . " WHERE code = " . $mdb2->quote($authcode, "text"));
 		//$removesql = "DELETE FROM Invitation_Request WHERE email=" . $mdb2->quote($email, 'text');

@@ -46,7 +46,7 @@ if(isset($_POST['login'])) {
 	if(empty($errors)) {
 		$res = $mdb2->query('SELECT username FROM Users WHERE '
 			. ' lower(username) = ' . $mdb2->quote(strtolower($username), 'text')
-			. ' AND password = ' . $mdb2->quote(md5($password), 'text'));
+			. ' AND password = ' . $mdb2->quote(md5($password), 'text') . ' AND active = 1');
 		if(!$res->numRows()) {
 			$errors .= 'Invalid username or password.';
 		} else {
