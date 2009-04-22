@@ -6,6 +6,10 @@
 	<p id='errors'>{$errors}</p>
 {/if}
 
+{if isset($changed)}
+	<p>Your new password has been emailed to you.</p>
+{/if}
+
 {if isset($sent)}
 	<p>An email with further information has been sent to the email address associated with your profile.</p>
 	

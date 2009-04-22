@@ -41,7 +41,7 @@ if (isset($_GET['code'])) {
 	die();
     }
 
-    $row = $res->fetchOne(MDB2_FETCHMODE_ASSOC);
+    $row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
     
     $password = "";
     $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -59,7 +59,7 @@ if (isset($_GET['code'])) {
 
     $content = "Hi!\n\nYour password has been set to " . $password . "\n\n - The Libre.fm Team";
     sendEmail($content, $email);
-    $smarty->assign('sent', true);
+    $smarty->assign('changed', true);
 }
 
 if (isset($_POST['user'])) {
