@@ -51,6 +51,8 @@ class User {
 
 		if($res->numRows()) {
 
+			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+
 			$this->name         = $row['username'];
 			$this->email	    = $row['email'];
 			$this->fullname     = $row['fullname'];
