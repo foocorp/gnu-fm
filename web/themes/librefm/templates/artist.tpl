@@ -11,14 +11,14 @@
 
 	<ul id="albums" rel="foaf:made" rev="foaf:maker">
 		{section name=i loop=$albums}
-		<li about="{$albums[i]->id}" property="dc:title" content="{$albums[i]->name|escape:'html'}" typeof="mo:Record" class="haudio">
+		<li about="{$albums[i]->id}" property="dc:title" content="{$albums[i]->name|escape:'html':'UTF-8'}" typeof="mo:Record" class="haudio">
 			<dl>
 				<dt>
 					<a rel="foaf:page" href="{$albums[i]->getURL()}">
         					<span{if $albums[i]->getAlbumArt() != '/i/qm50.png'} about="{$albums[i]->id}" rel="foaf:depiction"{/if}>
 							<img class="album photo" src="{$albums[i]->getAlbumArt()}"
-							alt="{$albums[i]->name|escape:'html'}"
-							title="{$albums[i]->name|escape:'html'}" width="160" />
+							alt="{$albums[i]->name|escape:'html':'UTF-8'}"
+							title="{$albums[i]->name|escape:'html':'UTF-8'}" width="160" />
 						</span>
 					</a>
 				</dt>
