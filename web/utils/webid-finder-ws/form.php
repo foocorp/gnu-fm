@@ -104,7 +104,7 @@ input.wide
 				print "<script type=\"text/javascript\">\n";
 				print "function UseIt() { window.opener.document.getElementById('"
 					. htmlentities($_REQUEST['javascript'])
-					. "').value = document.getElementById('webid').title; }\n";
+					. "').value = document.getElementById('webid').title; window.close(); }\n";
 				print "</script>\n";
 				print "<p><a href=\"javascript:UseIt();\">Use this WebID</a></p>\n";
 			}
