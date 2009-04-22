@@ -6,7 +6,7 @@
 
 <script type="text/javascript" src="{$base_url}/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="{$base_url}/js/edit_profile.js"></script>
-<form action="{$base_url}/edit_profile.php" method="post">
+<form action="{$base_url}/edit_profile.php" method="post" class="notcrazy">
 	<table>
 		<tr>
 			<th align="right" valign="top"><label for="fullname">Full name:</label></th>
