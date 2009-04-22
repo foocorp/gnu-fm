@@ -61,12 +61,12 @@ if (isset($_GET['code'])) {
 
     $content = "Hi!\n\nYour password has been set to " . $password . "\n\n - The Libre.fm Team";
     sendEmail($content, $email);
-    $sql = "DELETE FROM Recovery_Request WHERE code=" . $mdb2->quote($_GET['code'], 'text');
+    $sql = "DELETE FROM Recovery_Request WHERE code=" . $mdb2->quote($email, 'text');
     $mdb2->exec($sql);
     $smarty->assign('changed', true);
 }
 
-if (isset($_POST['user'])) {
+else if (isset($_POST['user'])) {
     $username = $_POST['user'];
 
     $res = $mdb2->query("SELECT * FROM Users WHERE username=" 
@@ -100,7 +100,6 @@ if (isset($_POST['user'])) {
 	. $url . "\n\n- The Libre.fm Team";
     sendEmail($content, $row['email']);
     $smarty->assign('sent', true);	
-
 } 
 
 $smarty->display("recovery.tpl");

@@ -17,7 +17,7 @@
 
 <div id='invite'>
 
-	<form action='' method='post'>
+	<form action='/recovery.php' method='post'>
 		<fieldset>
 	        <p><a href='http://libre.fm' rel='bookmark' class='vcard fn org url'>libre.fm</a> Password Recovery</p>
 
