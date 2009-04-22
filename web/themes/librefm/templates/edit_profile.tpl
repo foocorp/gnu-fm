@@ -43,7 +43,10 @@
 		</tr>
 		<tr>
 			<th align="right" valign="top"><label for="id">WebID (FOAF):</label></th>
-			<td><input name="id" id="id" value="{$id|escape:'html':'UTF-8'}" /></td>
+			<td>
+				<input name="id" id="id" value="{$id|escape:'html':'UTF-8'}" />
+				<input type="button" onclick="webidLookup();" value="?" />
+			</td>
 			<td><a href="#dfn_id" rel="glossary">What's this?</a></td>
 		</tr>
 		<tr>
