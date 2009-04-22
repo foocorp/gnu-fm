@@ -50,7 +50,7 @@ class User {
 		$res = $mdb2->query('SELECT * FROM Users WHERE ' . 'username = ' . $mdb2->quote($name, 'text'));
 
 		if($res->numRows()) {
-			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
+
 			$this->name         = $row['username'];
 			$this->email	    = $row['email'];
 			$this->fullname     = $row['fullname'];
