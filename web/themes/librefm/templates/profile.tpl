@@ -19,13 +19,13 @@
 				<span about="{$acctid|escape:'html':'UTF-8'}" typeof="sioc:User">
 					(<span class="nickname" property="foaf:accountName">{$user|escape:'html':'UTF-8'}</span>)
 					<span rel="foaf:accountServiceHomepage" resource="{$base_url}"></span>
-					<span rel="foaf:accountHomepage" rev="foaf:topic" resource=""></span>
+					<span rel="foaf:accountProfilePage" rev="foaf:topic" resource=""></span>
 				</span>
 			</span>
 		</dt>
 		{if $homepage}
 		<dd>
-			<a href="{$homepage|escape:'html':'UTF-8'}" rel="me foaf:homepage" rev="foaf:primaryTopic" class="url">{$homepage|escape:'html':'UTF-8'}</a>
+			<a href="{$homepage|escape:'html':'UTF-8'}" rel="me foaf:homepage" class="url">{$homepage|escape:'html':'UTF-8'}</a>
 		</dd>
 		{/if}
 		<dd rel="foaf:based_near">
