@@ -51,6 +51,12 @@ if(isset($_GET['auth'])) {
 
 	$sql = "UPDATE Users SET active = 1 WHERE username = " . $row['username'];
 	$res = $mdb2->exec($sql);
+	if (PEAR::isError($res)) {
+	    $errors = $res->getUserInfo();
+	    $smarty->assign('errors', $errors);
+	    $smarty->display('error.tpl');
+	    die();
+	}
 	$smarty->assign('activated', true);
 	$smarty->display('register.tpl');
 	die();
@@ -105,7 +111,7 @@ if(isset($_POST['register'])) {
 			. time() . ", 0)";
 		$insert = $mdb2->exec($sql);
 		if (PEAR::isError($insert)) {
-		    reportError("Create user, insert, register.php", $sql);
+		    reportError("Create user, insert, register.php", $res->getUserInfo());
 		    $errors .= "An error occurred.";
 		    $smarty->assign('errors', $errors);
 		    $smarty->display('error.tpl');
@@ -119,7 +125,7 @@ if(isset($_POST['register'])) {
 		$res = $mdb2->exec($sql);
 
 		if (PEAR::isError($res)) {
-		    reportError("AccountActivation, insert, register.php", $sql);
+		    reportError("AccountActivation, insert, register.php", $res->getUserInfo());
 		    $errors .= "An error occurred.";
 		    $smarty->assign('errors', $errors);
 		    $smarty->display('error.tpl');
