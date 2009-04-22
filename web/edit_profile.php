@@ -69,6 +69,14 @@ if ($_POST['submit'])
 			$errors[] = "Avatar must be a URI. Valid URIs cannot contain whitespace.";
 	}
 
+	if (!empty($_POST['password_1']))
+	{
+		if ($_POST['password_1'] != $_POST['password_2'])
+			$errors[] = "Passwords do not match.";
+		if (strlen($_POST['password_1']) > 32)
+			$errors[] = "Password is too long. (32 char limit.)";
+	}
+
 	if (!empty($_POST['location_uri']))
 	{
 		# Currently only allow geonames URIs, but there's no reason we can't accept
@@ -88,6 +96,9 @@ if ($_POST['submit'])
 		$user->location     = $_POST['location'];
 		$user->location_uri = $_POST['location_uri'];
 		$user->avatar_uri   = $_POST['avatar_uri'];
+		
+		if (!empty( $_POST['password_1'] ))
+			$user->password = $_POST['password_1'];
 		
 		$user->save();
 

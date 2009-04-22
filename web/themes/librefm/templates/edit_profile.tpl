@@ -50,6 +50,15 @@
 			<td><a href="#dfn_id" rel="glossary">What's this?</a></td>
 		</tr>
 		<tr>
+			<th align="right" valign="top"><label for="password_1">Password:</label></th>
+			<td><input name="password_1" id="password_1" type="password" value="" /></td>
+			<td rowspan="2">Leave this blank if you don't want to change your password.</td>
+		</tr>
+		<tr>
+			<th align="right" valign="top"><label for="password_2">Confirm Password:</label></th>
+			<td><input name="password_2" id="password_2" type="password" value="" /></td>
+		</tr>
+		<tr>
 			<td colspan="3" align="center">
 				<input type="submit" value="Change" />
 				<input name="submit" value="1" type="hidden" />
