@@ -37,4 +37,6 @@ if(isset($logged_in)) {
 	$smarty->assign('u_user', $u_user);
 }
 
+header("Content-Type: text/html; charset=utf-8");
+
 ?>

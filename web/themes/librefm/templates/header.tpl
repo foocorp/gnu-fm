@@ -16,7 +16,6 @@
 	
 <head profile="http://www.w3.org/1999/xhtml/vocab http://purl.org/uF/2008/03/ http://purl.org/uF/hAudio/0.9/">
 	<title>Libre.fm &mdash; discover new music</title>
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/reset-fonts-grids.css" type="text/css" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/base.css" type="text/css" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/librefm.css" type="text/css" />
