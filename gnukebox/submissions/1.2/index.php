@@ -132,7 +132,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 
 		$mdb2->exec("BEGIN");
 
-		for($j = 0; $j <= $actualcount; $j++) {
+		for($j = 0; $j < $actualcount; $j++) {
 
 	// Scrobble!
 		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES " . $rowvalues[$j];
