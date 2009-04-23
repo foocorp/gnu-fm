@@ -6,7 +6,7 @@
 	<h2>Your account has been activated! You may now login!</h2>
 {/if}
 
-{if isset($registered) }
+{elseif isset($registered) }
 	<h2>You're now registered with libre.fm! An email has been sent to the email address you
 	provided. Please follow the link in the email to activate your account!</h2>
 	
