@@ -39,10 +39,10 @@
         {else}
 	{if $welcome}
 	<div class="yui-g" id="banner">     
-	  <a href="{$base_url}/request.php"><img src="{$base_url}/i/topblock.png" alt="" /></a>
+	  <a href="{$base_url}/register.php"><img src="{$base_url}/i/topblock.png" alt="" /></a>
 	{else}
 	<div class="yui-g">     
-	  <a href="{$base_url}/request.php"><img src="{$base_url}/themes/librefm/images/topblocksmall.png" alt="" /></a>
+	  <a href="{$base_url}/register.php"><img src="{$base_url}/themes/librefm/images/topblocksmall.png" alt="" /></a>
 	{/if}
 	</div>{/if}
 <div class="yui-gc">
