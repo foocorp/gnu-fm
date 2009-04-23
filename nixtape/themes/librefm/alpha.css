@@ -116,6 +116,9 @@ ul#recenttracks.listcloud li { height: 3.4em; }
     float: left;
     margin: .3em;
 }
+
+.user .avatar img.photo{ max-width:96px; }
+
 .user .bio {
 }
 .user .fn {
