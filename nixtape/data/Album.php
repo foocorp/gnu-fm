@@ -76,7 +76,7 @@ class Album {
 	  $res = $mdb2->query("SELECT image from Album WHERE name =" . $mdb2->quote($this->name, 'text'));
 	  
 	  if(!$res->numRows()) {
-	    $c = "/i/qm160.png";
+	    $c = $base_url . "/i/qm160.png";
 	  } else {
 	    $row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
 	    $c = $row['image'];
