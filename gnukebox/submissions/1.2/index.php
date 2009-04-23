@@ -114,7 +114,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 
 	if(!$exists) {
 	// Scrobble!
-	$rowvalues .= "("
+	$rowvalues[$actualcount] = "("
 		. $username . ", "
 		. $artist . ", "
 		. $album . ", "
@@ -130,14 +130,30 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 
 	if(($i+1) == count($_POST['a']) && $actualcount>0) {
 
+		$mdb2->exec("BEGIN");
+
+		for($j = 0; $j <= $actualcount; $j++) {
+
 	// Scrobble!
-		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES" . $rowvalues;
+		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES " . $rowvalues[$j];
 		$res =& $mdb2->exec($sql);
 		if(PEAR::isError($res)) {
 		    $msg = $res->getMessage() . " - " . $res->getUserInfo();
+		    $mdb2->exec("ROLLBACK");
 		    reportError($msg, $sql);
-                die("FAILED " . $msg . "\nError has been reported to site administrators.\n");
+                    die("FAILED " . $msg . "\nError has been reported to site administrators.\n");
         	}
+
+		}
+
+		$mdb2->exec("COMMIT");
+
+		if(PEAR::isError($res)) {
+		    $msg = $res->getMessage() . " - " . $res->getUserInfo();
+		    $mdb2->exec("ROLLBACK");
+		    reportError($msg, $sql);
+                    die("FAILED " . $msg . "\nError has been reported to site administrators.\n");
+		}
 
 	        // Destroy now_playing since it is almost certainly obsolescent
 	        $mdb2->exec("DELETE FROM Now_Playing WHERE sessionid = " . $session_id);
