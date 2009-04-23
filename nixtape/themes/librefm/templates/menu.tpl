@@ -1,6 +1,8 @@
     <ul>
 {if ($logged_in)}
         <li><a href="{$u_user->getURL()}">{$u_user->name}</a></li>
+{else}
+	<li><a href="{$base_url}/register.php">Register</a></li>
 {/if}
 
 {if ($logged_in)}
