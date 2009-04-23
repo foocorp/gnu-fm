@@ -215,7 +215,7 @@ if (isset($_POST['install'])) {
 ?>
 <html>
 	<head>
-		<title>Gobbler Installer</title>
+		<title>GNUkebox Installer</title>
 		<script type='text/javascript'>
 			function showSqlite() {
 				document.getElementById("sqlite").style.visibility = "visible";
@@ -230,7 +230,7 @@ if (isset($_POST['install'])) {
 	</head>
 
 	<body onload="showSqlite()">
-		<h1>Gobbler Installer</h1>
+		<h1>GNUkebox Installer</h1>
 		<form method="post">
 			<h2>Database</h2>
 			Database Management System: <br />
