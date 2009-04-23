@@ -100,7 +100,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		$length = 'NULL';
 	}
 
-	if(($timestamp - time()) > 300) {
+	if(($time - time()) > 300) {
             die("FAILED Submitted track has timestamp in the future\n"); // let's try a 5-minute tolerance
 	}
 
