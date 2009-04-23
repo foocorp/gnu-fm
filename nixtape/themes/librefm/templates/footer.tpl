@@ -71,6 +71,7 @@
      <ul>
      <li>A <a href="http://foocorp.org/">FooCorp</a> thing.</li>
      <li><a href="http://autonomo.us/">autonomo.us</a></li>
+     <li><a href="http://svn.savannah.gnu.org/viewvc/branches/stable/nixtape/?root=librefm">Powered by Nixtape</a></li>
      </ul>
 
      <p><a href='http://creativecommons.org/licenses/by-sa/3.0/' rel='license'><img src="{$base_url}/i/cc-by-sa.png" alt="Attribution-ShareAlike 3.0" /></a></p>
