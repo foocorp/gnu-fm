@@ -114,7 +114,7 @@ class Server {
 			$row['id_album']  = identifierAlbum($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 
 			if (! $row['album_image']) 
-				$row['album_image'] = '/i/qm50.png';
+				$row['album_image'] = $base_url . '/i/qm50.png';
 
 			if ($row['artwork_license'] == "amazon")
 			  $row['album_image'] = str_replace("SL160","SL50",$row['album_image']);
@@ -186,7 +186,7 @@ class Server {
 			$row["trackurl"] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
 			
 			// We really want to get an image URI from the database and only fall back to qm50.png if we can't find an image.
-			$row['albumart'] = '/i/qm50.png';
+			$row['albumart'] = $base_url . '/i/qm50.png';
 			
 			$result[] = $row;
 		}
