@@ -56,10 +56,15 @@ if(isset($user->name)) {
 		$smarty->assign('user_tagcloud',$aUserTagCloud);
 	}
 	
-	$smarty->assign('stat_barwidth', 300);
+	$smarty->assign('stat_barwidth', 320);
 	$aUserPlayStat =  PlayStats::GeneratePlayStats('Scrobbles', 'artist', 40, $user->name, 300);
 	if (!PEAR::isError ($aUserPlayStat)) {
 		$smarty->assign('user_playstats',$aUserPlayStat);
+	}
+	
+	$aUserDayStat =  PlayStats::generatePlayByDays('Scrobbles', 40, $user->name, 300);
+	if (!PEAR::isError ($aUserDayStat)) {
+		$smarty->assign('user_daystats',$aUserDayStat);
 	}
 	
 	$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
