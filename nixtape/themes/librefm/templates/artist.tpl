@@ -15,7 +15,7 @@
 			<dl>
 				<dt>
 					<a rel="foaf:page" href="{$albums[i]->getURL()}">
-        					<span{if $albums[i]->getAlbumArt() != '/i/qm50.png'} about="{$albums[i]->id}" rel="foaf:depiction"{/if}>
+        					<span{if $albums[i]->getAlbumArt() != '{$base_url}/i/qm50.png'} about="{$albums[i]->id}" rel="foaf:depiction"{/if}>
 							<img class="album photo" src="{$albums[i]->getAlbumArt()}"
 							alt="{$albums[i]->name|escape:'html':'UTF-8'}"
 							title="{$albums[i]->name|escape:'html':'UTF-8'}" width="160" />
