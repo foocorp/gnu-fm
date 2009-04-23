@@ -8,7 +8,6 @@ try:
 except ImportError:
     import md5
     md5hash = md5.new
-import md5
 from optparse import OptionParser
 import time
 from urllib import urlencode
