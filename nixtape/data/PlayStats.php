@@ -38,8 +38,7 @@ class PlayStats {
         if (!is_string($field))          return false;	
         if (!is_string($table))          return false;
         if (!is_integer($limit))         return false;
-    	$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
-        $query = "SELECT $field, count(*) AS count FROM $table";
+    	$query = "SELECT $field, count(*) AS count FROM $table";
         $query .= (!is_null($constraint) || ($table == "Scrobbles")) ? ' WHERE ' : null;
 	if ($field == "track") {
         $query .= (!is_null($constraint)) ? ' artist = ' . $mdb2->quote($constraint, 'text') : null;
@@ -66,6 +65,40 @@ class PlayStats {
                 }
                 
                 return $data;
+        }
+    }
+    
+	static function generatePlayByDays($table, $limit = 100, $constraint = null, $maxwidth = 100 ) {
+        global $mdb2;
+        if (!is_string($table))          return false;
+        if (!is_integer($limit))         return false;
+    	$query = "SELECT COUNT(*) as count,DATE(FROM_UNIXTIME(time)) as date FROM $table";
+        $query .= (!is_null($constraint) || ($table == "Scrobbles")) ? ' WHERE ' : null;
+		$query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
+        $query .= (!is_null($constraint) && ($table == "Scrobbles")) ? ' AND ' : null;
+        $query .= ($table == "Scrobbles") ? " rating <> 'S' " : null;
+        $query .= " GROUP BY date ORDER BY date DESC LIMIT $limit";
+        $res = $mdb2->query($query);
+		if (PEAR::isError($res)) {
+	        	echo("ERROR" . $res->getMessage());
+		}
+
+        if (!$res->numRows()) {
+        	return false;
+        } else {
+            $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+            
+            $max = 0;
+                
+		    foreach($data as &$i){
+				if( $i['count'] > $max ) $max =  $i['count'];
+            }
+            
+        	foreach($data as &$i){
+				$i['size'] = $i['count'] / $max * $maxwidth;
+            }
+            
+            return $data;
         }
     }
 }
