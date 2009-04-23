@@ -241,3 +241,11 @@ ul#albums dl dd.description {
     /* IE */
     filter: alpha(opacity=85);
 }
+
+/* stats */
+.stats_artists{ width: 100%; font-size: 98%; }
+.stats_artists td{ border: 1px solid #ddd; }
+.stats_artists .artist{ width: 300px; }
+.stats_artists .bar{ width: 300px; }
+.stats_artists .bar div{ background: #970102; height: 1em; }
+.stats_artists .counts{ text-align: right; }
