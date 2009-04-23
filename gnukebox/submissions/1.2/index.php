@@ -35,7 +35,7 @@ if(!is_array($_POST['a']) || !is_array($_POST['t']) || !is_array($_POST['i'])) {
 $session_id = $_POST['s'];
 
 $username = $mdb2->quote(usernameFromSID($session_id), "text");
-$rowvalues = "";
+$rowvalues = array();
 $actualcount = 0;
 
 for($i = 0; $i < count($_POST['a']); $i++) {
