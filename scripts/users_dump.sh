@@ -3,7 +3,7 @@
 cd /home/librefm/turtle/data/ || exit 1
 
 #we rely on lack of whitespace here
-LIST=$(echo "SELECT DISTINCT username FROM Users;" | psql -q)
+LIST=$(echo "SELECT DISTINCT username FROM Users;" | psql -q -t)
 
 for I in $LIST; do
 
