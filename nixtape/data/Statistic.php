@@ -21,7 +21,7 @@
 require_once($install_path . '/database.php');
 require_once($install_path . '/data/Server.php');
 
-class PlayStats {
+class Statistic {
    /*
     * returns an array counting appareances of a given field and his corresponding bargraph size
     * @param string $table table name to be queried
