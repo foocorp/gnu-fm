@@ -32,7 +32,7 @@ function check_standard_auth($username, $token, $timestamp) {
 	// Validates authentication using a standard authentication token
 	global $mdb2;
 
-	$result = $mdb2->query("SELECT password FROM Users WHERE username ILIKE " . $mdb2->quote($username, 'text'));
+	$result = $mdb2->query("SELECT password FROM Users WHERE username =" . $mdb2->quote($username, 'text'));
 	if (PEAR::isError($result) || !$result->numRows()) {
 		// TODO: Log failures somewhere
 		return false;
