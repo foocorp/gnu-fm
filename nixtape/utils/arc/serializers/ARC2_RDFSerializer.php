@@ -12,6 +12,8 @@ ARC2::inc('Class');
 
 class ARC2_RDFSerializer extends ARC2_Class {
 
+  var $__defaultPrefix;
+
   function __construct($a = '', &$caller) {
     parent::__construct($a, $caller);
   }
@@ -35,6 +37,8 @@ class ARC2_RDFSerializer extends ARC2_Class {
   /*  */
   
   function getPrefix($ns) {
+    if ($ns == $this->__defaultPrefix)
+      return false;
     if (!isset($this->nsp[$ns])) {
       $this->ns['ns' . $this->ns_count] = $ns;
       $this->nsp[$ns] = 'ns' . $this->ns_count;
@@ -50,7 +54,9 @@ class ARC2_RDFSerializer extends ARC2_Class {
       return $v;
     }
     if (preg_match('/^(.*[\/\#])([a-z\_][a-z0-9\-\_]*)$/i', $v, $m)) {
-      return $this->getPrefix($m[1]) . ':' . $m[2];
+      $pfx = $this->getPrefix($m[1]);
+      if ($pfx===false) return $m[2];
+      return $pfx . ':' . $m[2];
     }
     return 0;
   }
