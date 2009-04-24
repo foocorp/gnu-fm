@@ -79,7 +79,7 @@ class PlayStats {
          * todo: completly remove this dirty db type check. 
          */
     	$query = "SELECT COUNT(*) as count, DATE(TO_TIMESTAMP(time)) as date FROM $table";
-    	if( strpos($connect_string , "mysql" ) == 0 ) $query = "SELECT COUNT(*) as count,DATE(FROM_UNIXTIME(time)) as date FROM $table";
+    	if( strpos($connect_string , "mysql" ) === 0 ) $query = "SELECT COUNT(*) as count,DATE(FROM_UNIXTIME(time)) as date FROM $table";
     	
         $query .= (!is_null($constraint) || ($table == "Scrobbles")) ? ' WHERE ' : null;
 		$query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
