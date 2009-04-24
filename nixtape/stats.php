@@ -23,7 +23,7 @@ require_once('database.php');
 require_once('templating.php');
 require_once('data/User.php');
 require_once('data/TagCloud.php');
-require_once('data/PlayStats.php');
+require_once('data/Statistic.php');
 
 if(!isset($_GET['user']) && $logged_in == false) {
 	$smarty->assign('error', 'Error!');
@@ -57,12 +57,12 @@ if(isset($user->name)) {
 	}
 	
 	$smarty->assign('stat_barwidth', 320);
-	$aUserPlayStat =  PlayStats::GeneratePlayStats('Scrobbles', 'artist', 40, $user->name, 300);
+	$aUserPlayStat =  Statistic::GeneratePlayStats('Scrobbles', 'artist', 40, $user->name, 300);
 	if (!PEAR::isError ($aUserPlayStat)) {
 		$smarty->assign('user_playstats',$aUserPlayStat);
 	}
 	
-	$aUserDayStat =  PlayStats::generatePlayByDays('Scrobbles', 40, $user->name, 300);
+	$aUserDayStat =  Statistic::generatePlayByDays('Scrobbles', 40, $user->name, 300);
 	if (!PEAR::isError ($aUserDayStat)) {
 		$smarty->assign('user_daystats',$aUserDayStat);
 	}
