@@ -57,6 +57,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
   /*  */
 
   function processNode($n, $ct, $level) {
+    if ($n['tag']=='cdata' || $n['tag']=='comment') return null;
     $ts_added = 0;
     /* step 1 */
     $lct = array();
