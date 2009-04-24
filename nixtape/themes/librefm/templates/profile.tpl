@@ -76,7 +76,7 @@
 			<div><a class="fn" property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl|escape:'html':'UTF-8'}">{$scrobbles[i].track|escape:'html':'UTF-8'}</a></div>
 			<small about="{$scrobbles[i].id|escape:'html':'UTF-8'}" property="dc:date" content="{$scrobbles[i].timeiso}" datatype="xsd:dateTime">{$scrobbles[i].timehuman}</small>
 		</div>
-		<span about="{$scrobbles[i].id|escape:'html':'UTF-8'}" property="rss:title" content="Played {$scrobbles[i].track|escape:'html':'UTF-8'} by {$scrobbles[i].artist|escape:'html':'UTF-8'}" rev="rdf:_{$smarty.section.i.index + 1}" resource="[_:seq1]"></span>
+		<span about="{$scrobbles[i].id|escape:'html':'UTF-8'}" property="rss:title" content="Played {$scrobbles[i].track|escape:'html':'UTF-8'} by {$scrobbles[i].artist|escape:'html':'UTF-8'}" rev="rdf:_{$smarty.section.i.index_next}" resource="[_:seq1]"></span>
 		<span about="{$scrobbles[i].id|escape:'html':'UTF-8'}" property="rss:description" content="{if $scrobbles[i].album}{$scrobbles[i].album}{/if}"></span>
 	</li>
 {/section}
