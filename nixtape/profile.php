@@ -59,6 +59,22 @@ if(isset($user->name)) {
 	}
 	$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
 	$smarty->assign('profile', true);
+	
+	$smarty->assign('extra_head_links', array(
+			array(
+				'rel'=>'alternate',
+				'type' => 'application/rss+xml' ,
+				'title' => 'RSS 1.0 Feed (Recent plays)',
+				'href' => $base_url.'/rdf.php?fmt=rss&page='.$_SERVER['REQUEST_URI'].'/feed.xml'
+				),
+			array(
+				'rel' => 'meta',
+				'type' => 'application/rdf+xml' ,
+				'title' => 'FOAF',
+				'href' => $base_url.'/rdf.php?fmt=xml&page='.$_SERVER['REQUEST_URI'].'/feed.xml'
+				)
+		));
+	
 	$smarty->display('profile.tpl');
 } else {
 	$smarty->assign('error', 'User not found');
