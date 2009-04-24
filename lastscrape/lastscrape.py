@@ -24,7 +24,7 @@ def parse_track(row):
     try:
         track_info = row.find('td', 'subjectCell')
         artist, track = track_info.findAll('a')
-        timestamp = time.strftime("%s",time.strptime(row.find('abbr')['title'],"%Y-%m-%dT%H:%M:%SZ"))
+        timestamp = row.find('abbr')['title']
         artist = artist.contents[0].strip()
         track = track.contents[0].strip()
         return (artist, track, timestamp)
