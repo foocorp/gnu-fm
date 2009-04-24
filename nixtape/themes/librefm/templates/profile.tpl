@@ -78,7 +78,7 @@
 		</div>
 		<span about="{$scrobbles[i].id|escape:'html':'UTF-8'}" property="rss:link" content="{$scrobbles[i].trackurl|escape:'html':'UTF-8'}">
 			<span property="rss:description" content="{if $scrobbles[i].album}{$scrobbles[i].album}{else}Unknown album{/if}">
-				<span property="rss:title" content="Played {$scrobbles[i].track|escape:'html':'UTF-8'} by {$scrobbles[i].artist|escape:'html':'UTF-8'}" rev="rdf:_{$smarty.section.i.index_next}" resource="[_:seq1]"></span>
+				<span property="rss:title" content="{$scrobbles[i].artist|escape:'html':'UTF-8'}: {$scrobbles[i].track|escape:'html':'UTF-8'}" rev="rdf:_{$smarty.section.i.index_next}" resource="[_:seq1]"></span>
 			</span>
 		</span>
 	</li>
