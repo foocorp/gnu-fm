@@ -391,6 +391,10 @@ class ARC2 {
     return ARC2::getSer('RDFJSON', $a);
   }
 
+  function getRSS10Serializer($a = '') {
+    return ARC2::getSer('RSS10', $a);
+  }
+
   function getPOSHRDFSerializer($a = '') {
     return ARC2::getSer('POSHRDF', $a);
   }
