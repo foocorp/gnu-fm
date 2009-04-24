@@ -51,7 +51,7 @@
 {/if}
 
 <div about="[_:seq1]" typeof="rdf:Seq" rev="rss:items">
-	<h3 typeof="rss:channel" property="rss:title" rel="rss:link" resource="#latest_plays" id="latest_plays">Latest {$scrobbles|@count} Plays:</h3>
+	<h3 typeof="rss:channel" property="rss:title" rel="rss:link" resource="#latest_plays" id="latest_plays" content="{$user|escape:'html':'UTF-8'}'{if $user|substr:-1 != 's'}s{/if} Latest Plays">Latest {$scrobbles|@count} Plays:</h3>
 </div>
 
 <ul class="gobbles" about="{$id|escape:'html':'UTF-8'}" rev="gob:user">
@@ -76,8 +76,11 @@
 			<div><a class="fn" property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl|escape:'html':'UTF-8'}">{$scrobbles[i].track|escape:'html':'UTF-8'}</a></div>
 			<small about="{$scrobbles[i].id|escape:'html':'UTF-8'}" property="dc:date" content="{$scrobbles[i].timeiso}" datatype="xsd:dateTime">{$scrobbles[i].timehuman}</small>
 		</div>
-		<span about="{$scrobbles[i].id|escape:'html':'UTF-8'}" property="rss:title" content="Played {$scrobbles[i].track|escape:'html':'UTF-8'} by {$scrobbles[i].artist|escape:'html':'UTF-8'}" rev="rdf:_{$smarty.section.i.index_next}" resource="[_:seq1]"></span>
-		<span about="{$scrobbles[i].id|escape:'html':'UTF-8'}" property="rss:description" content="{if $scrobbles[i].album}{$scrobbles[i].album}{/if}"></span>
+		<span about="{$scrobbles[i].id|escape:'html':'UTF-8'}" property="rss:link" content="{$scrobbles[i].trackurl|escape:'html':'UTF-8'}">
+			<span property="rss:description" content="{if $scrobbles[i].album}{$scrobbles[i].album}{else}Unknown album{/if}">
+				<span property="rss:title" content="Played {$scrobbles[i].track|escape:'html':'UTF-8'} by {$scrobbles[i].artist|escape:'html':'UTF-8'}" rev="rdf:_{$smarty.section.i.index_next}" resource="[_:seq1]"></span>
+			</span>
+		</span>
 	</li>
 {/section}
 </ul>
