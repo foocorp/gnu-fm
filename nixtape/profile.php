@@ -71,7 +71,7 @@ if(isset($user->name)) {
 				'rel' => 'meta',
 				'type' => 'application/rdf+xml' ,
 				'title' => 'FOAF',
-				'href' => $base_url.'/rdf.php?fmt=xml&page='.$_SERVER['REQUEST_URI'].'/feed.xml'
+				'href' => $base_url.'/rdf.php?fmt=xml&page='.$_SERVER['REQUEST_URI'].'/foaf.rdf'
 				)
 		));
 	
