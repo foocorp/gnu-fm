@@ -25,6 +25,9 @@
 	<link rel="icon" href="{$base_url}/favicon.ico" type="image/x-icon" />
 	<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/" />
 	<script type="text/javascript" src="{$base_url}/js/player.js"></script>
+{section name=i loop=$extra_head_links}
+	<link rel="$extra_head_links[i].rel" href="$extra_head_links[i].href" type="$extra_head_links[i].type" title="$extra_head_links[i].title"  />
+{/section}
 </head>
 
 <body typeof="foaf:Document">
