@@ -50,12 +50,14 @@
 </dl>
 {/if}
 
-<h3>Latest {$scrobbles|@count} Plays:</h3>
+<div about="_:seq1" typeof="rdf:Seq" rev="rss:items">
+	<h3 typeof="rss:channel" property="rss:title" rel="rss:link" resource="#latest_plays" id="latest_plays">Latest {$scrobbles|@count} Plays:</h3>
+</div>
 
 <ul class="gobbles" about="{$id|escape:'html':'UTF-8'}" rev="gob:user">
 {section name=i loop=$scrobbles}
 
-	<li about="{$scrobbles[i].id|escape:'html':'UTF-8'}" typeof="gob:ScrobbleEvent" rel="gob:track_played">
+	<li about="{$scrobbles[i].id|escape:'html':'UTF-8'}" typeof="rss:item gob:ScrobbleEvent" rel="gob:track_played">
 		<div about="{$scrobbles[i].id_track|escape:'html':'UTF-8'}" typeof="mo:Track" class="haudio">
 			<div rev="mo:track">
 				<div about="{$scrobbles[i].id_album|escape:'html':'UTF-8'}" typeof="mo:Record"{if $scrobbles[i].album} property="dc:title" content="{$scrobbles[i].album|escape:'html':'UTF-8'}"{/if}>
@@ -74,6 +76,8 @@
 			<div><a class="fn" property="dc:title" rel="foaf:page" href="{$scrobbles[i].trackurl|escape:'html':'UTF-8'}">{$scrobbles[i].track|escape:'html':'UTF-8'}</a></div>
 			<small about="{$scrobbles[i].id|escape:'html':'UTF-8'}" property="dc:date" content="{$scrobbles[i].timeiso}" datatype="xsd:dateTime">{$scrobbles[i].timehuman}</small>
 		</div>
+		<span property="rss:title" content="Played {$scrobbles[i].track|escape:'html':'UTF-8'} by {$scrobbles[i].artist|escape:'html':'UTF-8'}" rev="rdf:_{$smarty.section.i.index}" resource="_:seq1"></span>
+		<span property="rss:description" content="{if $scrobbles[i].album}{$scrobbles[i].album}{/if}"></span>
 	</li>
 {/section}
 </ul>
