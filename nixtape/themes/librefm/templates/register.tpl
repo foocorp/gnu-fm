@@ -4,7 +4,6 @@
 
 {if isset($activated)}
 	<h2>Your account has been activated! You may now login!</h2>
-{/if}
 
 {elseif isset($registered) }
 	<h2>You're now registered with libre.fm! An email has been sent to the email address you
