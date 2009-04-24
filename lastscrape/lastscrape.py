@@ -11,7 +11,7 @@ sys.stdout = codecs.lookup('utf-8')[-1](sys.stdout)
 
 def parse_page(page):
     """Parse a page of recently listened tracks and return a list."""
-    soup = BeautifulSoup(urllib2.urlopen(page))
+    soup = BeautifulSoup(urllib2.urlopen(page), convertEntities=BeautifulSoup.HTML_ENTITIES)
     for row in soup.find('table', 'candyStriped tracklist').findAll('tr'):
         artist, track, timestamp = parse_track(row)
         # Tracks submitted before 2005 have no timestamp
@@ -37,7 +37,7 @@ def parse_track(row):
 def fetch_tracks(user, request_delay=0.5):
     """Fetch all tracks from a profile page and return a list."""
     url = 'http://last.fm/user/%s/tracks' % user
-    soup = BeautifulSoup(urllib2.urlopen(url))
+    soup = BeautifulSoup(urllib2.urlopen(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
     try:
         num_pages = int(soup.find('a', 'lastpage').contents[0])
     except:
