@@ -7,7 +7,7 @@ LIST=$(echo "SELECT DISTINCT username FROM Users;" | psql -q)
 
 for I in $LIST; do
 
-    cat /home/librefm/scripts/license > $I.dump.utf8
+    cat /home/librefm/scripts/license > $I.text.utf8
     
-    echo 'COPY (SELECT * FROM Scrobbles where username='"'$I'"') TO STDOUT WITH CSV HEADER;' | psql -q >> $I.dump.utf8
+    echo 'COPY (SELECT * FROM Scrobbles where username='"'$I'"') TO STDOUT WITH CSV HEADER;' | psql -q >> $I.text.utf8
 done
