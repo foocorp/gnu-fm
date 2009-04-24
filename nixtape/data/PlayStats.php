@@ -70,9 +70,17 @@ class PlayStats {
     
 	static function generatePlayByDays($table, $limit = 100, $constraint = null, $maxwidth = 100 ) {
         global $mdb2;
+        global $connect_string;
+        
         if (!is_string($table))          return false;
         if (!is_integer($limit))         return false;
-    	$query = "SELECT COUNT(*) as count,DATE(FROM_UNIXTIME(time)) as date FROM $table";
+    	
+        /*
+         * todo: completly remove this dirty db type check. 
+         */
+    	$query = "SELECT COUNT(*) as count, DATE(TO_TIMESTAMP(time)) as date FROM $table";
+    	if( strpos($connect_string , "mysql" ) == 0 ) $query = "SELECT COUNT(*) as count,DATE(FROM_UNIXTIME(time)) as date FROM $table";
+    	
         $query .= (!is_null($constraint) || ($table == "Scrobbles")) ? ' WHERE ' : null;
 		$query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
         $query .= (!is_null($constraint) && ($table == "Scrobbles")) ? ' AND ' : null;
