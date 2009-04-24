@@ -20,6 +20,14 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
     $this->__construct($a, $caller);
   }
 
+  function setDefaultNamespace ($ns) {
+    $this->__defaultPrefix = $ns;
+  }
+
+  function getDefaultNamespace () {
+    return $this->__defaultPrefix;
+  }
+
   function __init() {
     parent::__init();
     $this->content_header = 'application/rdf+xml';
@@ -47,6 +55,12 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
         if (!preg_match('/^[a-z0-9]{2,}\:[^\s]+$/is', $v)) return $this->getTerm(array('value' => $v, 'type' => 'literal'), $type);
         return ' rdf:resource="' . htmlspecialchars($v) . '"';
       }
+      if ($type == 'rdftype') {
+	if ($pn = $this->getPName($v)) {
+          return $pn;
+        }
+        return 0;
+      }
       if ($type == 'datatype') {
         $v = $this->expandPName($v);
         return ' rdf:datatype="' . htmlspecialchars($v) . '"';
@@ -56,7 +70,7 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
       }
     }
     if ($v['type'] != 'literal') {
-      return $this->getTerm($v['value'], 'o');
+      return $this->getTerm($v['value'], $type);
     }
     /* literal */
     $dt = isset($v['datatype']) ? $v['datatype'] : '';
@@ -84,6 +98,8 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
       $r .= 'xmlns:' . $this->nsp[$v] . '="' .$v. '"';
       $first_ns = 0;
     }
+    if ($this->__defaultPrefix)
+      $r .= $nl . '  xmlns="' . htmlentities($this->__defaultPrefix) . '"';
     $r .= '>';
     return $r;
   }
@@ -108,27 +124,48 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
         $tag = 'rdf:' . $ctag;
         list($ps, $sub_ps) = $this->splitContainerEntries($ps);
       }
-      $r .= '  <' . $tag . '' .$s . '>';
+      $innards = '';
+      $used_type = false;
       $first_p = 1;
       foreach ($ps as $p => $os) {
         if (!$os) continue;
         if ($p = $this->getTerm($p, 'p')) {
-          $r .= $nl . str_pad('', 4);
+          $innards .= $nl . str_pad('', 4);
           $first_o = 1;
           if (!is_array($os)) {/* single literal o */
             $os = array(array('value' => $os, 'type' => 'literal'));
           }
-          foreach ($os as $o) {
-            $o = $this->getTerm($o, 'o');
-            $r .= $first_o ? '' : $nl . '    ';
-            $r .= '<' . $p;
-            $r .= $o;
-            $r .= preg_match('/\>/', $o) ? '</' . $p . '>' : '/>'; 
+          foreach ($os as $o1) {
+            $o = $this->getTerm($o1, 'o');
+            $innards .= $first_o ? '' : $nl . '    ';
+            $innards .= '<' . $p;
+            $innards .= $o;
+            $innards .= preg_match('/\>/', $o) ? '</' . $p . '>' : '/>'; 
             $first_o = 0;
+	    // This bit creates rdf:type element names instead of using <rdf:Description>.
+            if ($p == 'rdf:type') {
+	      $type = $this->getTerm($o1, 'rdftype');
+	      if (! $type) {
+	        // no-op
+	      }
+	      elseif ($tag=='rdf:Description') {
+	        $tag = $type;
+		$used_type = is_array($o1) ? $o1['value'] : $o1;
+	      }
+	      elseif (strpos($type, ':')===false) {
+	        $tag = $type;
+		$used_type = is_array($o1) ? $o1['value'] : $o1;
+	      }
+	    }
           }
           $first_p = 0;
         }
       }
+      // Prevent duplicated information. A little ugly perhaps.
+      if ($used_type !== false)
+        $innards = str_replace('    <rdf:type rdf:resource="'.$used_type."\"/>\n", '', $innards);
+      $r .= '  <' . $tag . '' .$s . '>';
+      $r .= $innards;
       $r .= $r ? $nl . '  </' . $tag . '>' : '';
       if ($sub_ps) $r .= $nl . $nl . $this->getSerializedIndex(array($raw_s => $sub_ps), 1);
     }
