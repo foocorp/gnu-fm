@@ -25,7 +25,10 @@ require_once 'utils/arc/ARC2.php';
 $page = $_GET['page'];
 $fmt  = $_GET['fmt'];
 
-$parser = ARC2::getSemHTMLParser('sem_html_formats' => 'rdfa');
+if (empty($fmt)) $fmt = 'xml';
+if (empty($page)) die("Required parameter 'page' not provided.");
+
+$parser = ARC2::getSemHTMLParser(array('sem_html_formats' => 'rdfa'));
 $parser->parse($base_url . $page);
 $index = $parser->getSimpleIndex(0);
 
