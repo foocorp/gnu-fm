@@ -29,11 +29,11 @@ function usernameFromSID($session_id) {
 
 	$res = $mdb2->query("SELECT username FROM Scrobble_Sessions WHERE sessionid = " . $mdb2->quote($session_id, "text"));
 	if(PEAR::isError($res)) {
-		die("FAILED " . $res->getMessage());
+		die("FAILED " . $res->getMessage() . "\n");
 	}
 
 	if(!$res->numRows()) {
-		die("BADSESSION");
+		die("BADSESSION\n");
 	}
 
 	return $res->fetchOne(0);
@@ -46,14 +46,14 @@ function createArtistIfNew($artist) {
 
 	$res = $mdb2->query("SELECT name FROM Artist WHERE name = " . ($artist));
 	if(PEAR::isError($res)) {
-		die("FAILED " . $res->getMessage());
+		die("FAILED " . $res->getMessage() . "\n");
 	}
 
 	if(!$res->numRows()) {
 		// Artist doesn't exist, so we create them
 		$res = $mdb2->query("INSERT INTO Artist (name) VALUES (" . ($artist) . ")");
 		if(PEAR::isError($res)) {
-			die("FAILED " . $res->getMessage());
+			die("FAILED " . $res->getMessage() . "\n");
 		}
 	}
 }
@@ -63,7 +63,7 @@ function createAlbumIfNew($artist, $album) {
 
 	$res = $mdb2->query("SELECT name FROM Album WHERE name = " . ($album));
 	if(PEAR::isError($res)) {
-		die("FAILED " . $res->getMessage());
+		die("FAILED " . $res->getMessage() . "\n");
 	}
 
 	if(!$res->numRows()) {
@@ -82,7 +82,7 @@ function createAlbumIfNew($artist, $album) {
 	  }
 
 		if(PEAR::isError($res)) {
-			die("FAILED " . $res->getMessage());
+			die("FAILED " . $res->getMessage() . "\n");
 		}
 	}
 }
@@ -95,7 +95,7 @@ function createTrackIfNew($artist, $album, $track, $mbid) {
 
 	$res = $mdb2->query("SELECT name FROM Track WHERE lower(name) = " . (strtolower($track)) . " AND lower(artist) = " . (strtolower($artist)));
 	if(PEAR::isError($res)) {
-		die("FAILED " . $res->getMessage());
+		die("FAILED " . $res->getMessage() . "\n");
 	}
 
 	if(!$res->numRows()) {
@@ -106,7 +106,7 @@ function createTrackIfNew($artist, $album, $track, $mbid) {
 			. ($album) . ", "
 			. ($mbid) . ")");
 		if(PEAR::isError($res)) {
-			die("FAILED " . $res->getMessage());
+			die("FAILED " . $res->getMessage() . "\n");
 		}
 	}
 }
@@ -116,7 +116,7 @@ function scrobbleExists($username, $artist, $track, $time) {
 
 	$res = $mdb2->query("SELECT time FROM Scrobbles WHERE username = " . ($username) . " AND artist = " . ($artist) . " AND track = " . ($track) . " AND time = " . ($time));
 	if(PEAR::isError($res)) {
-		die("FAILED " . $res->getMessage());
+		die("FAILED " . $res->getMessage() . "\n");
 	}
 
 	if(!$res->numRows()) {
@@ -155,7 +155,7 @@ $request=
 . "&Keywords=" . $Keywords
 . "&ResponseGroup=" . $ResponseGroup;
 
-$aws_xml = simplexml_load_file($request) or die("xml response not loading");
+$aws_xml = simplexml_load_file($request) or die("xml response not loading\n");
 
 $image = $aws_xml->Items->Item->MediumImage->URL;
         $URI = $aws_xml->Items->Item->DetailPageURL;
