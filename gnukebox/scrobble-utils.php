@@ -93,7 +93,7 @@ function createTrackIfNew($artist, $album, $track, $mbid) {
 	$track = NoSpamTracks($track);
 	$artist = NoSpamTracks($artist);
 
-	$res = $mdb2->query("SELECT name FROM Track WHERE name = " . ($track) . " AND artist = " . ($artist));
+	$res = $mdb2->query("SELECT name FROM Track WHERE lower(name) = " . (strtolower($track)) . " AND lower(artist) = " . (strtolower($artist)));
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage());
 	}
