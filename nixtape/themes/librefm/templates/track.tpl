@@ -18,7 +18,7 @@
       Listeners: {$track->getListenerCount()}
   </li>
   <li>
-      Tst: {$otheralbum}
+      Other Albums containing this track: {$otheralbum}
   </li>
 </ul>
 <div class="cleaner">&nbsp;</div>
