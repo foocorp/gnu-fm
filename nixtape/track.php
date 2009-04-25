@@ -40,13 +40,13 @@ if (!PEAR::isError ($aTagCloud)) {
 
 $res = $mdb2->query("SELECT * FROM Track WHERE lower(artist) = " . $mdb2->quote(strtolower($track->artist_name),"text") . " AND lower(name) = " . $mdb2->quote(strtolower($track->name),"text"));
 
-if(!$res->numRows()) {
-         // this shouldn't happen
-                } else {
-                        $row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
-			$smarty->assign('otheralbum', $row["album"]);
+$otheralbums = "";
+
+while (($row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC)))) {
+		$otheralbums .= $row["album"] . ", ";
                 }
 
+$smarty->assign('otheralbum', $otheralbums);
 
 
 $smarty->display("track.tpl");
