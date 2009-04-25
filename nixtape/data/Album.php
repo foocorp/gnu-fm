@@ -56,7 +56,6 @@ class Album {
 			$this->artist_name = $row['artist_name'];
 			$this->releasedate = $row['releasedate'];
 			$this->image = resolve_external_url($row['image']);
-			echo $this->image;
 
 			$this->id = identifierAlbum(null, $this->artist_name, null, $this->name, null, null, null, $this->mbid);
 
