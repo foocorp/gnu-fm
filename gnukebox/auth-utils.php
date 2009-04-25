@@ -25,8 +25,22 @@ function check_web_auth($username, $token, $timestamp, $api_key, $sk) {
 	// Validates authentication using a web services token
 	global $mdb2;
 
-}
+	// Using the valid_api_key function from nixtape/2.0/index.php would be appropriate here
+	if (strlen($api_key) != 32) {
+		return false;
+	}
 
+	$result = $mdb2->query('SELECT username FROM Auth WHERE '
+		//. 'expires > ' . time() . ' AND '   // session keys have an infinite lifetime
+		. 'sk = ' . $mdb2->quote($sk, 'text')
+		);
+	if (PEAR::isError($result) || !$result->numRows()) {
+		// TODO: Log failures somewhere
+		return false;
+	}
+
+	return $result->fetchOne(0) == $username;
+}
 
 function check_standard_auth($username, $token, $timestamp) {
 	// Validates authentication using a standard authentication token
@@ -43,6 +57,3 @@ function check_standard_auth($username, $token, $timestamp) {
 
 	return $check_token == $token;
 }
-
-
-?>
