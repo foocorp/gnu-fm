@@ -59,15 +59,16 @@ $error_text = array(
 $method_map = array(
 	"auth.gettoken"			=> method_auth_gettoken,
 	"auth.getsession"		=> method_auth_getsession,
+	"auth.getmobilesession"		=> method_auth_getmobilesession,
 	"artist.getinfo"		=> method_artist_getinfo,
 	"artist.gettoptracks"		=> method_artist_gettoptracks,
 	"user.getinfo"			=> method_user_getinfo,
 	"user.gettoptracks"		=> method_user_gettoptracks
-	);
+);
 
 function method_user_gettoptracks() {
 	if (!isset($_GET['user'])) {
-	report_failure(LFM_INVALID_SIGNATURE);
+		report_failure(LFM_INVALID_SIGNATURE);
 	}
 
 	header("Content-Type: text/xml");
@@ -76,14 +77,14 @@ function method_user_gettoptracks() {
 
 function method_user_getinfo() {
 	if (!isset($_GET['user'])) {
-	report_failure(LFM_INVALID_SIGNATURE);
+		report_failure(LFM_INVALID_SIGNATURE);
 	}
-	header("Content-Type: text/xml"); 
+	header("Content-Type: text/xml");
 	print(XML::prettyXML(UserXML::getInfo($_GET['user'])));
 }
 
 function method_artist_getinfo() {
-	if(!isset($_GET['artist'])) {
+	if (!isset($_GET['artist'])) {
 		report_failure(LFM_INVALID_SIGNATURE);
 	}
 	header("Content-Type: text/xml");
@@ -94,39 +95,82 @@ function method_artist_gettoptracks() {
 	if (!isset($_GET['artist'])) {
 	report_failure(LFM_INVALID_SIGNATURE);
 	}
-	header("Content-Type: text/xml"); 
+	header("Content-Type: text/xml");
 	print(XML::prettyXML(ArtistXML::getTopTracks($_GET['artist'])));
 
 }
 
 function method_auth_gettoken() {
 	global $mdb2;
-	
+
 	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
 		report_failure(LFM_INVALID_SIGNATURE);
-	
+
 	$key = md5(time() . rand());
-	
+
 	$result = $mdb2->query('INSERT INTO Auth (token, expires) VALUES ('
 		. $mdb2->quote($key, 'text') . ", "
 		. $mdb2->quote(time() + 3600, 'integer')
 		. ")");
 	if (PEAR::isError($result))
 		report_failure(LFM_SERVICE_OFFLINE);
-	
+
 	print("<lfm status=\"ok\">\n");
 	print("	<token>$key</token></lfm>");
 }
 
-function method_auth_getsession() {
+function method_auth_getmobilesession() {
 	global $mdb2;
-	
+
 	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
 		report_failure(LFM_INVALID_SIGNATURE);
-	
+
+	if (!isset($_GET['authToken']))
+		report_failure(LFM_INVALID_TOKEN);
+
+	// Check for a token that (1) is bound to a user, and (2) is not bound to a session
+	$result = $mdb2->query('SELECT username FROM Users WHERE '
+		. 'username = ' . $mdb2->quote($_GET['username'], 'text')
+		. 'AND MD5(CONCAT(username, password)) = '
+		. $mdb2->quote($_GET['authToken'], 'text'));
+	if (PEAR::isError($result))
+		report_failure(LFM_SERVICE_OFFLINE);
+	if (!$result->numRows())
+		report_failure(LFM_INVALID_TOKEN);
+
+	$username = $result->fetchOne(0);
+	$key = md5(time() . rand());
+	$session = md5(time() . rand());
+
+	// Update the Auth record with the new session key
+	$result = $mdb2->query('INSERT INTO Auth (token, sk, expires, username) '
+		. 'VALUES ('
+		. $mdb2->quote($key, 'text') . ', '
+		. $mdb2->quote($session, 'text') . ', '
+		. $mdb2->quote(time() + 3600, 'integer') . ', '
+		. $mdb2->quote($username, 'text')
+		. ')');
+	if (PEAR::isError($result))
+		report_failure(LFM_SERVICE_OFFLINE);
+
+	print("<lfm status=\"ok\">\n");
+	print("	<session>\n");
+	print("		<name>$username</name>\n");
+	print("		<key>$session</key>\n");
+	print("		<subscriber>0</subscriber>\n");
+	print("	</session>\n");
+	print("</lfm>");
+}
+
+function method_auth_getsession() {
+	global $mdb2;
+
+	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
+		report_failure(LFM_INVALID_SIGNATURE);
+
 	if (!isset($_GET['token']))
 		report_failure(LFM_INVALID_TOKEN);
-	
+
 	// Check for a token that (1) is bound to a user, and (2) is not bound to a session
 	$result = $mdb2->query('SELECT username FROM Auth WHERE '
 		. 'token = ' . $mdb2->quote($_GET['token'], 'text') . ' AND '
@@ -135,17 +179,17 @@ function method_auth_getsession() {
 		report_failure(LFM_SERVICE_OFFLINE);
 	if (!$result->numRows())
 		report_failure(LFM_INVALID_TOKEN);
-	
+
 	$username = $result->fetchOne(0);
 	$session = md5(time() . rand());
-	
+
 	// Update the Auth record with the new session key
 	$result = $mdb2->query('UPDATE Auth SET '
 		. 'sk = ' . $mdb2->quote($session, 'text') . ' WHERE '
 		. 'token = ' . $mdb2->quote($_GET['token'], 'text'));
 	if (PEAR::isError($result))
 		report_failure(LFM_SERVICE_OFFLINE);
-	
+
 	print("<lfm status=\"ok\">\n");
 	print("	<session>\n");
 	print("		<name>$username</name>\n");
@@ -165,12 +209,13 @@ function valid_api_sig($sig) {
 
 function report_failure($code) {
 	global $error_text;
-	
+
 	print("<lfm status=\"failed\">\n");
 	print("	<error code=\"$code\">".$error_text[$code]."</error></lfm>");
 	die();
 }
 
+$_GET['method'] = strtolower($_GET['method']);
 if (!isset($_GET['method']) || !isset($method_map[$_GET['method']]))
 	report_failure(LFM_INVALID_METHOD);
 
@@ -179,5 +224,3 @@ if (!isset($_GET['api_key']) || !valid_api_key($_GET['api_key']))
 
 $method = $method_map[$_GET['method']];
 $method();
-
-?>
