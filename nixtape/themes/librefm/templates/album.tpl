@@ -1,6 +1,6 @@
 {include file='header.tpl'}
 
-<h2>{$artist} - {$name}</h2>
+<h2><a href="{$artist->getURL()"}>{$artist->name}</a> - {$name}</h2>
 
 <ul id="tracks">
   {section name=i loop=$tracks}
