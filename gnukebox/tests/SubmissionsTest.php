@@ -1,4 +1,4 @@
-<?
+<?php
 /* Libre.fm -- a free network service for sharing your music listening habits
 
    Copyright (C) 2009 Libre.fm Project
@@ -45,7 +45,7 @@ class SubmissionsTest extends PHPUnit_Framework_TestCase
 
 		$session_id = trim($result[1]);
 		$scrobble_server = trim($result[3]);
-		$result = $this->scrobble($scrobble_server, $session_id, "Richard Stallman", 
+		$result = $this->scrobble($scrobble_server, $session_id, "Richard Stallman",
 		    "The Free Software Song", "b25b9595-54ed-7605-8ac2-20b7b2e0a026");
 		$this->assertEquals("OK", trim($result));
 		sleep(1);
