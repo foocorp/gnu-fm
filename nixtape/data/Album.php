@@ -44,7 +44,7 @@ class Album {
 	 */
 	function __construct($name, $artist) {
 		global $mdb2;
-		$res = $mdb2->query('SELECT name, artist_name, mbid, releasedate FROM Album WHERE '
+		$res = $mdb2->query('SELECT name, artist_name, mbid, image, releasedate FROM Album WHERE '
 			. 'name = ' . $mdb2->quote($name, 'text') . ' AND '
 			. 'artist_name = ' . $mdb2->quote($artist, 'text'));
 		if(!$res->numRows()) {
@@ -56,33 +56,20 @@ class Album {
 			$this->artist_name = $row['artist_name'];
 			$this->releasedate = $row['releasedate'];
 			$this->image = resolve_external_url($row['image']);
+			echo $this->image;
 
 			$this->id = identifierAlbum(null, $this->artist_name, null, $this->name, null, null, null, $this->mbid);
 
 			// this	hack brought to	you by	mattl
-
-                        //if ($row['image'] == ""){
+			//if ($row['image'] == ""){
 			//go_get_album_art($this->artist_name, $this->name);
-                        //}
-
+			//}
 			// mattl hack ovar
 
+			if($this->image == "") {
+				$this->image = false;
+			}
 		}
-
-	}
-
-	function getAlbumArt(){
-	  global $mdb2;
-	  $res = $mdb2->query("SELECT image from Album WHERE name =" . $mdb2->quote($this->name, 'text'));
-	  
-	  if(!$res->numRows()) {
-	    $c = $base_url . "/i/qm160.png";
-	  } else {
-	    $row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
-	    $c = $row['image'];
-	  }
-	
-	  return $c;
 
 	}
 
@@ -128,57 +115,56 @@ class Album {
 
 }
 
-	function go_get_album_art($artist, $album){
-		global $mdb2;
 
-  $Access_Key_ID = "1EST86JB355JBS3DFE82"; // this is mattl's personal key :)
 
-        $SearchIndex='Music';
-$Keywords=urlencode($artist.' '.$album);
-        $Operation = "ItemSearch";
-$Version = "2007-07-16";
-        $ResponseGroup = "ItemAttributes,Images";
-$request=
-        "http://ecs.amazonaws.com/onca/xml"
-                . "?Service=AWSECommerceService"
-. "&AssociateTag=" . $Associate_tag
-. "&AWSAccessKeyId=" . $Access_Key_ID
-. "&Operation=" . $Operation
-. "&Version=" . $Version
-. "&SearchIndex=" . $SearchIndex
-. "&Keywords=" . $Keywords
-. "&ResponseGroup=" . $ResponseGroup;
 
-$aws_xml = simplexml_load_file($request) or die("xml response not loading");
+function go_get_album_art($artist, $album){
+	global $mdb2;
 
-$image = $aws_xml->Items->Item->MediumImage->URL;
-        $URI = $aws_xml->Items->Item->DetailPageURL;
+	$Access_Key_ID = "1EST86JB355JBS3DFE82"; // this is mattl's personal key :)
+
+	$SearchIndex='Music';
+	$Keywords=urlencode($artist.' '.$album);
+	$Operation = "ItemSearch";
+	$Version = "2007-07-16";
+	$ResponseGroup = "ItemAttributes,Images";
+	$request=
+		"http://ecs.amazonaws.com/onca/xml"
+		. "?Service=AWSECommerceService"
+		. "&AssociateTag=" . $Associate_tag
+		. "&AWSAccessKeyId=" . $Access_Key_ID
+		. "&Operation=" . $Operation
+		. "&Version=" . $Version
+		. "&SearchIndex=" . $SearchIndex
+		. "&Keywords=" . $Keywords
+		. "&ResponseGroup=" . $ResponseGroup;
+
+	$aws_xml = simplexml_load_file($request) or die("xml response not loading");
+
+	$image = $aws_xml->Items->Item->MediumImage->URL;
+	$URI = $aws_xml->Items->Item->DetailPageURL;
 
 	if ($image == "") { $image = $base_url . "/i/qm50.png"; $license = "unknown-to-amazon";}
 	
 	if ($image) {
 
-          if ($license == "") { $license = "amazon"; }
+		if ($license == "") { $license = "amazon"; }
 
-	  $license = $mdb2->quote($license);
-	  $image = $mdb2->quote($image);
-	  $album = $mdb2->quote($album);
-	  $artist = $mdb2->quote($artist);
+		$license = $mdb2->quote($license);
+		$image = $mdb2->quote($image);
+		$album = $mdb2->quote($album);
+		$artist = $mdb2->quote($artist);
 
-		  $sql = ("UPDATE Album SET image = " 
+		$sql = ("UPDATE Album SET image = " 
+			. ($image) . ", "
+			. " artwork_license = "
+			. ($license) . " WHERE artist_name = ". ($artist) 
+			. " AND name = "	. ($album));
 
-			  . ($image) . ", "
-
-			  . " artwork_license = "
-
-			. ($license) . " WHERE artist_name = "
-                        . ($artist) . " AND name = "
-				      . ($album));
-
-		  $res = $mdb2->query($sql);
+		$res = $mdb2->query($sql);
 
 		if(PEAR::isError($res)) {
-		  die("FAILED " . $res->getMessage() . " query was :" . $sql);
+			die("FAILED " . $res->getMessage() . " query was :" . $sql);
 		}
 
 	}
