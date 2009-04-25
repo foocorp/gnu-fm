@@ -182,7 +182,7 @@ if (isset($_POST['install'])) {
 // 	$res = $mdb2->exec("CREATE INDEX album_artistname_idx ON Album(artist_name)");
 // 	$res = $mdb2->exec("CREATE INDEX scrobbles_artist_idx ON Scrobbles(artist)");
 //	$res = $mdb2->exec("CREATE INDEX scrobbles_time_idx ON Scrobbles(time)");
-//      $res = $mdb2->exec("CREATE INDEX track_artistalbumpair_idx ON Track(lower(artist),lower(album))");
+//      $res = $mdb2->exec("CREATE INDEX track_artisttrack_idx ON Track(lower(artist),lower(name))");
 
 
 // uncomment these if you're using postgresql and want to run the software as www-data
