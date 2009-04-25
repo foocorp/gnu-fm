@@ -42,9 +42,10 @@ $res = $mdb2->query("SELECT * FROM Track WHERE lower(artist) = " . $mdb2->quote(
 
 $otheralbums = "";
 
-while (($row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC)))) {
-		$otheralbums .= $row["album"] . ", ";
-                }
+while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
+	$trow = sanitize($row);
+	$otheralbums .= $trow["album"] . ", ";
+}
 
 $smarty->assign('otheralbum', $otheralbums);
 
