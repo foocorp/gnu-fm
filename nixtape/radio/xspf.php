@@ -85,7 +85,7 @@ sort($tr);
 	echo "        <id>" . $track->name . "</id>\n";
 	echo "        <album>" . $album->name . "</album>\n";
 	echo "        <creator>" . $artist->name . "</creator>\n";
-	echo "        <duration>" . $track->duration . "</duration>\n";
+	echo "        <duration>" . $duration . "</duration>\n";
 	echo "        <image>".  $album->image . "</image>\n";
 	echo "        <link rel=\"http://www.last.fm/artistpage\">" . htmlentities($artist->getURL()) . "</link>\n";
 	echo "        <link rel=\"http://www.last.fm/albumpage\">" . htmlentities($album->getURL()) . "</link>\n";
