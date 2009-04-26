@@ -54,13 +54,18 @@ class Server {
 					a.mbid AS artist_mbid,
 					l.mbid AS album_mbid,
 					l.image AS album_image,
-                                        l.artwork_license
+                                        l.artwork_license,
+					t.license
 				FROM Scrobbles s 
 				LEFT JOIN Artist a
 					ON s.artist=a.name
 				LEFT JOIN Album l
 					ON l.artist_name=s.artist
 					AND l.name=s.album
+				LEFT JOIN Track t
+					ON lower(s.artist) = lower(t.artist)
+					AND lower(s.album) = lower(t.album)
+					AND lower(s.track) = lower(t.name)
 				WHERE s.rating<>'S'
 					AND lower(s.username) = " . $mdb2->quote(strtolower($username), "text") . ' 
 				ORDER BY
@@ -78,13 +83,18 @@ class Server {
 					a.mbid AS artist_mbid,
 					l.mbid AS album_mbid,
 					l.image AS album_image,
-                                        l.artwork_license
+                                        l.artwork_license,
+					t.license
 				FROM Scrobbles s
 				LEFT JOIN Artist a
 					ON s.artist=a.name
 				LEFT JOIN Album l
 					ON l.artist_name=s.artist
 					AND l.name=s.album
+				LEFT JOIN Track t
+					ON lower(s.artist) = lower(t.artist)
+					AND lower(s.album) = lower(t.album)
+					AND lower(s.track) = lower(t.name)
 				WHERE s.rating<>'S'
 				ORDER BY
 					s.time DESC 
