@@ -22,9 +22,12 @@
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/base.css" type="text/css" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/librefm.css" type="text/css" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/alpha.css" type="text/css" />
+	<link rel="stylesheet" href="{$base_url}/themes/librefm/player.css" type="text/css" />
 	<link rel="icon" href="{$base_url}/favicon.ico" type="image/x-icon" />
 	<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/" />
 	<script type="text/javascript" src="{$base_url}/js/player.js"></script>
+	<script type="text/javascript" src="{$base_url}/js/jquery-1.3.2.min.js"></script>
+	<script tpye="text/javascript" src="{$base_url}/js/jquery-ui-1.7.1.custom.min.js"></script>
 {section name=i loop=$extra_head_links}
 	<link rel="{$extra_head_links[i].rel|escape:'html':'UTF-8'}" href="{$extra_head_links[i].href|escape:'html':'UTF-8'}" type="{$extra_head_links[i].type|escape:'html':'UTF-8'}" title="{$extra_head_links[i].title|escape:'html':'UTF-8'}"  />
 {/section}

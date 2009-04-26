@@ -32,7 +32,6 @@ require_once($install_path . '/data/Server.php');
  */
 class User {
 
-
 	public $name, $email, $fullname, $bio, $location, $homepage, $error, $userlevel;
 	public $id, $acctid, $avatar_uri, $location_uri, $webid_uri;
 	public $password;
@@ -152,7 +151,6 @@ class User {
 		return Server::getUserURL($this->name);
 	}
 
-
 	/**
 	 * Get a user's now-playing tracks
 	 *
@@ -160,6 +158,23 @@ class User {
 	 */
 	function getNowPlaying($number) {
 		return Server::getNowPlaying($number, $this->name);
+	}
+
+	/**
+	 * Log in to the gnukebox server
+	 *
+	 * @return A string containing the session key to be used for scrobbling
+	 */
+	function getScrobbleSession() {
+		global $mdb2;
+		$session_id = md5(mt_rand() . time());
+		$sql = "INSERT INTO Scrobble_Sessions(username, sessionid, client, expires) VALUES ("
+			. $mdb2->quote($this->name, "text") . ","
+			. $mdb2->quote($session_id, "text") . ","
+			. "'lfm',"
+			. $mdb2->quote(time() + 86400) . ")";
+		$mdb2->query($sql);
+		return $session_id;
 	}
 
 }
