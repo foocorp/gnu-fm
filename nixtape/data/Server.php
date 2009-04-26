@@ -248,6 +248,9 @@ class Server {
 			
 			// We really want to get an image URI from the database and only fall back to qm50.png if we can't find an image.
 			$row['albumart'] = $base_url . '/i/qm50.png';
+
+			$row["licenseurl"] = $row["license"];
+			$row["license"] = simplify_license($row["licenseurl"]);
 			
 			$result[] = $row;
 		}
