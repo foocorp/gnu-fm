@@ -9,6 +9,7 @@ define(BYSA2,	7);
 define(BYSA21,	8);
 define(BYSA25,	9);
 define(BYSA3,	10);
+define(LAL,	11);
 
 // Arrays containing regular expressions for each license type 
 // (so we can support multiple URL formats in the future if needed)
@@ -22,9 +23,10 @@ $bysa2 =  array("http://creativecommons.org/licenses/by-sa/2.0/?.*");
 $bysa21 = array("http://creativecommons.org/licenses/by-sa/2.1/?.*");
 $bysa25 = array("http://creativecommons.org/licenses/by-sa/2.5/?.*");
 $bysa3 = array("http://creativecommons.org/licenses/by-sa/3.0/?.*");
+$lal = array("http://artlibre.org/licence.php/lal.html");
 
 // map licenses to ids by array position
-$licenses = array(array(), $by1, $by2, $by21, $by25, $by3, $bysa1, $bysa2, $bysa21, $bysa25, $bysa3);
+$licenses = array(array(), $by1, $by2, $by21, $by25, $by3, $bysa1, $bysa2, $bysa21, $bysa25, $bysa3, $lal);
 
 function simplify_license($license) {
 	global $licenses;
