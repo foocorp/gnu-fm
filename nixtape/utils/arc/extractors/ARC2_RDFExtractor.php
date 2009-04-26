@@ -153,7 +153,7 @@ class ARC2_RDFExtractor extends ARC2_Class {
   
   /*  */
   
-  function getPlainContent($n, $trim = 1) {
+  function getPlainContent($n, $trim = 1, $rdfaStyle = 0) {
     if ($n['tag'] == 'comment') {
       $r = '';
     }
@@ -167,7 +167,7 @@ class ARC2_RDFExtractor extends ARC2_Class {
         $r .= $this->getPlainContent($sub_n, 0);
       }
     }
-    elseif (($n['tag'] == 'img') && isset($n['a']['alt'])) {
+    elseif (($n['tag'] == 'img') && isset($n['a']['alt']) && !$rdfaStyle) {
       $r = $n['a']['alt'];
     }
     else {

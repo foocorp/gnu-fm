@@ -279,19 +279,19 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
 
   function getCurrentObjectLiteral($n, $lct, $ct) {
     $xml_val = $this->getContent($n);
-    $plain_val = $this->getPlainContent($n);
+    $plain_val = html_entity_decode($this->getPlainContent($n, 0, 1), ENT_QUOTES);
     $dt = $this->v('datatype', '', $n['a']);
     list($dt_uri, $sub_v) = $this->xURI($dt, $lct['base'], $lct['ns']);
     $dt = $dt ? $dt_uri : $dt;
     $r = array('value' => '', 'lang' => $lct['lang'], 'datatype' => $dt);
     if (isset($n['a']['content'])) {
-      $r['value'] = $n['a']['content'];
+      $r['value'] = html_entity_decode($n['a']['content'], ENT_QUOTES);
     }
     elseif ($xml_val == $plain_val) {
       $r['value'] = $plain_val;
     }
     elseif (!preg_match('/[\<\>]/', $xml_val)) {
-      $r['value'] = $xml_val;
+      $r['value'] = $plain_val;
     }
     elseif (isset($n['a']['datatype']) && ($dt != 'http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral')) {
       $r['value'] = $plain_val;
