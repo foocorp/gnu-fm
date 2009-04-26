@@ -19,13 +19,14 @@
 */
 
 require_once('../database.php');
+require_once('../templating.php');
 require_once('../data/Track.php');
 require_once("radio-utils.php");
 
 // These deaths should probably just return an empty playlist
 
 if(!isset($_GET['sk']) || !isset($_GET['desktop'])) {
-	die("BADSESSION\n");
+	die("BADSESSION\n"); // this should return a blank dummy playlist instead
 }
 
 $session = $_GET["sk"];
@@ -33,23 +34,18 @@ $session = $_GET["sk"];
 $res = $mdb2->query("SELECT url FROM Radio_Sessions WHERE session = " . $mdb2->quote($session, "text"));
 
 if(!$res->numRows()) {
-	die("BADSESSION\n");
+	die("BADSESSION\n"); // this should return a blank dummy playlist instead
 }
 
 $url = $res->fetchOne(0);
 
 $title = radio_title_from_url($url);
-
-echo "<playlist version=\"1\" xmlns:lastfm=\"http://www.audioscrobbler.net/dtd/xspf-lastfm\">\n";
-echo "<title>$title</title>\n";
-echo "<creator>libre.fm</creator>\n";
-echo "<link rel=\"http://www.last.fm/skipsLeft\">9999</link>\n";
-echo "<trackList>\n";
+$smarty->assign('title', $title);
 
 if(ereg("l(ast|ibre)fm://globaltags/(.*)", $url, $regs)) {
 	$tag = $regs[2];
 } else {
-	die("FAILED\n");
+	die("FAILED\n"); // this should return a blank dummy playlist instead
 }
 
 $res = $mdb2->query("SELECT Track.name, Track.artist, Track.album FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist=Tags.artist AND Track.album=Tags.album WHERE streamurl<>'' AND streamable=1 AND lower(tag) = " . $mdb2->quote(strtolower($tag), "text"));
@@ -63,6 +59,8 @@ $tr[2] = rand(1,$avail);
 $tr[3] = rand(1,$avail);
 $tr[4] = rand(1,$avail);
 sort($tr);
+
+$radiotracks = array();
 
 	for($i=0; $i<5; $i++) {
 
@@ -79,25 +77,22 @@ sort($tr);
 		$duration = $track->duration * 1000;
 	}
 
-	// these should all be xml-encoded instead of htmlentities()
-	echo "    <track>\n";
-	echo "        <location>" . htmlentities($track->streamurl) . "</location>\n";
-	echo "        <title>" . htmlentities($track->name) . "</title>\n";
-	echo "        <id>" . htmlentities($track->name) . "</id>\n";
-	echo "        <album>" . htmlentities($album->name) . "</album>\n";
-	echo "        <creator>" . htmlentities($artist->name) . "</creator>\n";
-	echo "        <duration>" . $duration . "</duration>\n";
-	echo "        <image>".  htmlentities($album->image) . "</image>\n";
-	echo "        <link rel=\"http://www.last.fm/artistpage\">" . htmlentities($artist->getURL()) . "</link>\n";
-	echo "        <link rel=\"http://www.last.fm/albumpage\">" . htmlentities($album->getURL()) . "</link>\n";
-	echo "        <link rel=\"http://www.last.fm/trackpage\">" . htmlentities($track->getURL()) . "</link>\n";
-	echo "        <link rel=\"http://www.last.fm/buyTrackURL\"></link>\n";
-	echo "        <link rel=\"http://www.last.fm/buyAlbumURL\"></link>\n";
-	echo "        <link rel=\"http://www.last.fm/freeTrackURL\">" . htmlentities($track->downloadurl) . "</link>\n";
-	echo "    </track>\n";
+	$radiotracks[$i]["location"] = $track->streamurl;
+	$radiotracks[$i]["title"] = $track->name;
+	$radiotracks[$i]["id"] = "0000";
+	$radiotracks[$i]["album"] = $album->name;
+	$radiotracks[$i]["creator"] = $artist->name;
+	$radiotracks[$i]["duration"] = $duration;
+	$radiotracks[$i]["image"] = $album->image;
+	$radiotracks[$i]["artisturl"] = $artist->getURL();
+	$radiotracks[$i]["albumurl"] = $album->getURL();
+	$radiotracks[$i]["trackurl"] = $track->getURL();
+	$radiotracks[$i]["downloadurl"] = $track->getURL();
 
 	}
 
-echo "</trackList>\n";
-echo "</playlist>\n";
+$smarty->assign('radiotracks', $radiotracks);
+
+$smarty->display('xspf.tpl');
+
 ?>
