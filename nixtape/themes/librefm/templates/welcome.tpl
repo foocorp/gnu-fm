@@ -12,7 +12,7 @@ musical tastes with other people.</p>
     <dt class='artist-name libre'>
 {else}
     <dt class='artist-name'>
-{/fi}
+{/if}
         <a href='{$nowplaying[np].artisturl}'>{$nowplaying[np].artist|stripslashes|htmlspecialchars}</a>
     </dt>
     <dd class='track-name'>
