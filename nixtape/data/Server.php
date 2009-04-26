@@ -188,11 +188,11 @@ class Server {
 						ClientCodes.name,
 						ClientCodes.url,
 						ClientCodes.free,
-						Now_Playing.mbid,
+						n.mbid,
 						t.license
 					FROM Now_Playing n
 					LEFT OUTER JOIN Scrobble_Sessions
-						ON Now_Playing.sessionid=Scrobble_Sessions.sessionid
+						ON n.sessionid=Scrobble_Sessions.sessionid
 					LEFT OUTER JOIN ClientCodes
 						ON Scrobble_Sessions.client=ClientCodes.code
 					LEFT OUTER JOIN Track t
@@ -212,11 +212,11 @@ class Server {
 						ClientCodes.name,
 						ClientCodes.url,
 						ClientCodes.free,
-						Now_Playing.mbid,
+						n.mbid,
 						t.license
 					FROM Now_Playing n
 					LEFT OUTER JOIN Scrobble_Sessions
-						ON Now_Playing.sessionid=Scrobble_Sessions.sessionid
+						ON n.sessionid=Scrobble_Sessions.sessionid
 					LEFT OUTER JOIN ClientCodes
 						ON Scrobble_Sessions.client=ClientCodes.code
 					LEFT OUTER JOIN Track t
