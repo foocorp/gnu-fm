@@ -57,7 +57,11 @@
 <ul class="gobbles" about="{$id|escape:'html':'UTF-8'}" rev="gob:user">
 {section name=i loop=$scrobbles}
 
-	<li about="{$scrobbles[i].id|escape:'html':'UTF-8'}" typeof="rss:item gob:ScrobbleEvent" rel="gob:track_played">
+{if $recenttracks[recent].license > 0}
+	<li class="play libre" about="{$scrobbles[i].id|escape:'html':'UTF-8'}" typeof="rss:item gob:ScrobbleEvent" rel="gob:track_played">
+{else}
+	<li class="play" about="{$scrobbles[i].id|escape:'html':'UTF-8'}" typeof="rss:item gob:ScrobbleEvent" rel="gob:track_played">
+{/if}
 		<div about="{$scrobbles[i].id_track|escape:'html':'UTF-8'}" typeof="mo:Track" class="haudio">
 			<div rev="mo:track">
 				<div about="{$scrobbles[i].id_album|escape:'html':'UTF-8'}" typeof="mo:Record"{if $scrobbles[i].album} property="dc:title" content="{$scrobbles[i].album|escape:'html':'UTF-8'}"{/if}>
