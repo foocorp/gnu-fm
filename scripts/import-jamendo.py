@@ -185,7 +185,7 @@ class JamendoImport:
 
 					for track in album["tracks"]:
 
-						if "http://creativecommons.org/licenses/by-sa" not in track["license"] and not "http://creativecommons.org/licenses/by/" in track["license"]:
+						if "http://creativecommons.org/licenses/by-sa" not in track["license"] and not "http://creativecommons.org/licenses/by/" in track["license"] and not "http://artlibre.org/licence.php/lal.html" in track["license"]:
 							track["streamurl"] = None
 
 						try:
