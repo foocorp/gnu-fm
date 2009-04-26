@@ -79,14 +79,15 @@ sort($tr);
 		$duration = $track->duration * 1000;
 	}
 
+	// these should all be xml-encoded instead of htmlentities()
 	echo "    <track>\n";
 	echo "        <location>" . htmlentities($track->streamurl) . "</location>\n";
-	echo "        <title>" . $track->name . "</title>\n";
-	echo "        <id>" . $track->name . "</id>\n";
-	echo "        <album>" . $album->name . "</album>\n";
-	echo "        <creator>" . $artist->name . "</creator>\n";
+	echo "        <title>" . htmlentities($track->name) . "</title>\n";
+	echo "        <id>" . htmlentities($track->name) . "</id>\n";
+	echo "        <album>" . htmlentities($album->name) . "</album>\n";
+	echo "        <creator>" . htmlentities($artist->name) . "</creator>\n";
 	echo "        <duration>" . $duration . "</duration>\n";
-	echo "        <image>".  $album->image . "</image>\n";
+	echo "        <image>".  htmlentities($album->image) . "</image>\n";
 	echo "        <link rel=\"http://www.last.fm/artistpage\">" . htmlentities($artist->getURL()) . "</link>\n";
 	echo "        <link rel=\"http://www.last.fm/albumpage\">" . htmlentities($album->getURL()) . "</link>\n";
 	echo "        <link rel=\"http://www.last.fm/trackpage\">" . htmlentities($track->getURL()) . "</link>\n";
