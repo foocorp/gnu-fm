@@ -52,7 +52,7 @@ if(ereg("l(ast|ibre)fm://globaltags/(.*)", $url, $regs)) {
 	die("FAILED\n");
 }
 
-$res = $mdb2->query("SELECT Track.name, Track.artist, Track.album FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist=Tags.artist AND Track.album=Tags.album WHERE streamurl<>'' AND lower(tag) = " . $mdb2->quote(strtolower($tag), "text"));
+$res = $mdb2->query("SELECT Track.name, Track.artist, Track.album FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist=Tags.artist AND Track.album=Tags.album WHERE streamurl<>'' AND streamable=1 AND lower(tag) = " . $mdb2->quote(strtolower($tag), "text"));
 
 $avail = $res->numRows();
 
