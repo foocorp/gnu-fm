@@ -211,7 +211,7 @@ class JamendoImport:
 
 						if self.track_exists(artist["name"], album["name"], track["name"]):
 							try:
-								self.cursor.execute("UPDATE Track SET downloadurl = %s, streamurl = %s, mbid = %s, license = %s, duration = %s, otherid = %s AND streamable = %s WHERE name = %s AND artist = %s AND album = %s", (track["downloadurl"], track["streamurl"], track["mbid"], track["license"], duration, otherid, streamable, track["name"], artist["name"], album["name"]))
+								self.cursor.execute("UPDATE Track SET downloadurl = %s, streamurl = %s, mbid = %s, license = %s, duration = %s, otherid = %s, streamable = %s WHERE name = %s AND artist = %s AND album = %s", (track["downloadurl"], track["streamurl"], track["mbid"], track["license"], duration, otherid, streamable, track["name"], artist["name"], album["name"]))
 								self.conn.commit()
 							except Exception,  e:
 								self.conn.rollback()
