@@ -29,13 +29,13 @@ musical tastes with other people.</p>
 
 <dl class='recent-tracks'>
   {section name=recent loop=$recenttracks}
+{if $recenttracks[recent].license > 0}
       <dt><img src="{$base_url}/themes/librefm/images/square.png" alt="[libre]" /></a></dt>
+{/if}
       <dd class='artist-name'><a href='{$recenttracks[recent].artisturl}'>
         {$recenttracks[recent].artist|stripslashes|htmlspecialchars}</a>:
       <span class='track-name'><a href="{$recenttracks[recent].trackurl}">{$recenttracks[recent].track|stripslashes|htmlspecialchars}</a></span> &mdash;
       <span class='username'><a href='{$recenttracks[recent].userurl}'>{$recenttracks[recent].username|stripslashes|htmlspecialchars}</a></span></dd>
-{if $recenttracks[recent].license > 0}
-{/if}
   {/section}
     </dl>
 <div class='cleaner'>&nbsp;</div>
