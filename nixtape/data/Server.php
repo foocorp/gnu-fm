@@ -200,7 +200,7 @@ class Server {
 						AND lower(n.album) = lower(t.album)
 						AND lower(n.track) = lower(t.name)
 					WHERE s.rating<>'S'
-					WHERE lower(username) = " . $mdb2->quote(strtolower($username), "text") . "
+						AND lower(username) = " . $mdb2->quote(strtolower($username), "text") . "
 					ORDER BY n.expires DESC LIMIT " . $mdb2->quote($number, "integer"));
 		} else {
 			$res = $mdb2->query("SELECT
