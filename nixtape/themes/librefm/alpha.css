@@ -254,3 +254,4 @@ ul#albums dl dd.description {
 .stats_artists .counts{ text-align: right; }
 
 dd.libre{background-image: url(/themes/librefm/images/square.png); background-repeat: no-repeat; padding-left: 22px; background-color: #eee;}
+li.libre{background-image: url(/themes/librefm/images/square.png); background-repeat: no-repeat; padding-left: 22px; background-color: #eee;}
