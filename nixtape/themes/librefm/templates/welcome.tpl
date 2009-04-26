@@ -30,7 +30,7 @@ musical tastes with other people.</p>
 <dl class='recent-tracks'>
   {section name=recent loop=$recenttracks}
 {if $recenttracks[recent].license > 0}
-      <dd class='artist-name libre'><a href='{$recenttracks[recent].artisturl}'>
+      <dd class='artist-name libre'><a title="Libre artist" href='{$recenttracks[recent].artisturl}'>
         {$recenttracks[recent].artist|stripslashes|htmlspecialchars}</a>:
 {else}
       <dd class='artist-name'><a href='{$recenttracks[recent].artisturl}'>
