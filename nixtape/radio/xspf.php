@@ -93,6 +93,6 @@ $radiotracks = array();
 
 $smarty->assign('radiotracks', $radiotracks);
 
-$smarty->display('xspf.tpl');
+$smarty->display('radio_xspf.tpl');
 
 ?>
