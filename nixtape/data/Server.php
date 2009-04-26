@@ -25,6 +25,7 @@ require_once($install_path . '/data/Track.php');
 require_once($install_path . '/data/User.php');
 require_once($install_path . "/data/sanitize.php");
 require_once($install_path . '/utils/linkeddata.php');
+require_once($install_path . '/licenses.php'); // why isn't this in a subdir?
 
 /**
  * Provides access to server-wide data
@@ -128,6 +129,9 @@ class Server {
 
 			if ($row['artwork_license'] == "amazon")
 			  $row['album_image'] = str_replace("SL160","SL50",$row['album_image']);
+
+			$row["licenseurl"] = $row["license"];
+			$row["license"] = simplify_license($row["licenseurl"]);
 			
 			$result[] = $row;
 		}
