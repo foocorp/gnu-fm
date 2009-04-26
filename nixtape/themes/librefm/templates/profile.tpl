@@ -57,7 +57,7 @@
 <ul class="gobbles" about="{$id|escape:'html':'UTF-8'}" rev="gob:user">
 {section name=i loop=$scrobbles}
 
-{if $recenttracks[recent].license > 0}
+{if $scrobbles[i].license > 0}
 	<li class="play libre" about="{$scrobbles[i].id|escape:'html':'UTF-8'}" typeof="rss:item gob:ScrobbleEvent" rel="gob:track_played">
 {else}
 	<li class="play" about="{$scrobbles[i].id|escape:'html':'UTF-8'}" typeof="rss:item gob:ScrobbleEvent" rel="gob:track_played">
