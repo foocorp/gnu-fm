@@ -2,7 +2,7 @@
 
 import xml.etree.cElementTree as ElementTree
 import sys, gzip, time
-import MySQLdb as ordbms
+import psycopg2 as ordbms
 
 genremap = {
 	0 : "Blues",
@@ -136,10 +136,7 @@ genremap = {
 class JamendoImport:
 
 	def __init__(self, hostname, username, password, database):
-		self.conn = ordbms.connect (host = hostname,
-			user = username,
-			passwd = password,
-			db = database)
+		self.conn = ordbms.connect ("dbname='librefm' user='librefm'")
 
 		self.cursor = self.conn.cursor ()
 
@@ -152,13 +149,17 @@ class JamendoImport:
 				if self.artist_exists(artist["name"]):
 					try:
 						self.cursor.execute("UPDATE Artist SET image_small = %s, homepage = %s, mbid = %s WHERE name = %s", (artist["image"], artist["url"], artist["mbid"], artist["name"]))
+						self.conn.commit()
 					except Exception,  e:
-						pass
+						self.conn.rollback()
+						print e
 				else:
 					try:
 						self.cursor.execute("INSERT INTO Artist (name, image_small, mbid, homepage)  VALUES (%s, %s, %s, %s)", (artist["name"], artist["image"], artist["url"], artist["mbid"]))
+						self.conn.commit()
 					except Exception,  e:
-						pass
+						self.conn.rollback()
+						print e
 
 				for album in artist["albums"]:
 					if self.album_exists(artist["name"], album["name"]):
@@ -166,27 +167,35 @@ class JamendoImport:
 							self.cursor.execute("UPDATE Album SET albumurl = %s, image = %s, artwork_license = %s, mbid = %s, releasedate = %s, downloadurl = %s WHERE name = %s AND artist_name = %s", 
 									(album["url"], album["image"], album["license_artwork"], album["mbid"], album["releasedate"], album["downloadurl"],
 									album["name"], artist["name"]))
+							self.conn.commit()
 						except Exception,  e:
-							pass
+							self.conn.rollback()
+							print e
 					else:
 						try:
 							self.cursor.execute("INSERT INTO Album (name, artist_name, albumurl, image, artwork_license, mbid, releasedate, downloadurl) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
 									(album["name"], artist["name"], album["url"], album["image"], album["license_artwork"], album["mbid"], album["releasedate"], album["downloadurl"]))
+							self.conn.commit()
 						except Exception,  e:
-							pass
+							self.conn.rollback()
+							print e
 
 					for tag in album["tags"]:
 						if not self.tag_exists(tag, artist["name"], album["name"]):
 							try:
 								self.cursor.execute("INSERT INTO Tags (tag, artist, album) VALUES (%s, %s, %s)",
 										(tag, artist["name"], album["name"]))
+								self.conn.commit()
 							except Exception,  e:
-								pass
+								self.conn.rollback()
+								print e
 
 					for track in album["tracks"]:
 
 						if "http://creativecommons.org/licenses/by-sa" not in track["license"] and not "http://creativecommons.org/licenses/by/" in track["license"] and not "http://artlibre.org/licence.php/lal.html" in track["license"]:
-							track["streamurl"] = None
+							streamable = 0
+						else:
+							streamable = 1
 
 						try:
 							duration = int(track["duration"])
@@ -202,22 +211,28 @@ class JamendoImport:
 
 						if self.track_exists(artist["name"], album["name"], track["name"]):
 							try:
-								self.cursor.execute("UPDATE Track SET downloadurl = %s, streamurl = %s, mbid = %s, license = %s, duration = %s, otherid = %s WHERE name = %s AND artist = %s AND album = %s", (track["downloadurl"], track["streamurl"], track["mbid"], track["license"], duration, otherid, track["name"], artist["name"], album["name"]))
+								self.cursor.execute("UPDATE Track SET downloadurl = %s, streamurl = %s, mbid = %s, license = %s, duration = %s, otherid = %s AND streamable = %s WHERE name = %s AND artist = %s AND album = %s", (track["downloadurl"], track["streamurl"], track["mbid"], track["license"], duration, otherid, streamable, track["name"], artist["name"], album["name"]))
+								self.conn.commit()
 							except Exception,  e:
-								pass
+								self.conn.rollback()
+								print e
 						else:
 							try:
-								self.cursor.execute("INSERT INTO Track (name, artist, album, mbid, downloadurl, streamurl, license, duration, otherid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (track["name"], artist["name"], album["name"], track["mbid"], track["downloadurl"], track["streamurl"], track["license"], duration, otherid))
+								self.cursor.execute("INSERT INTO Track (name, artist, album, mbid, downloadurl, streamurl, license, duration, otherid, streamable) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (track["name"], artist["name"], album["name"], track["mbid"], track["downloadurl"], track["streamurl"], track["license"], duration, otherid, streamable))
+								self.conn.commit()
 							except Exception,  e:
-								pass
+								self.conn.rollback()
+								print e
 
 						for tag in track["tags"]:
 							if not self.tag_exists(tag, artist["name"], album["name"], track["name"]):
 								try:
 									self.cursor.execute("INSERT INTO Tags (tag, artist, album, track) VALUES (%s, %s, %s, %s)",
 											(tag, artist["name"], album["name"], track["name"]))
+									self.conn.commit()
 								except Exception,  e:
-									pass
+									self.conn.rollback()
+									print e
 
 
 
