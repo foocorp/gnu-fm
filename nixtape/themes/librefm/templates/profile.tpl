@@ -43,7 +43,11 @@
 <!-- We should try to make this list work like the gobbles list. -->
 <dl class='now-playing'>
     {section name=i loop=$nowplaying}
+{if $scrobbles[i].license > 0}
+    <dt class='track-name libre'>{$nowplaying[i].track|escape:'html':'UTF-8'}</dt>
+{else}
     <dt class='track-name'>{$nowplaying[i].track|escape:'html':'UTF-8'}</dt>
+{/fi}
     <dd>by <span class='artist-name'><a href='{$nowplaying[i].artisturl|escape:'html':'UTF-8'}'>{$nowplaying[i].artist|escape:'html':'UTF-8'}</a></span></dd>
     <dd>with <span class='gobbler'>{$nowplaying[i].clientstr}</span></dd>
     {/section}

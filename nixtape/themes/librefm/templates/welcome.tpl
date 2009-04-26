@@ -8,7 +8,11 @@ musical tastes with other people.</p>
 
 <dl class='now-playing'>
   {section name=np loop=$nowplaying}
+{if $nowplaying[np].license > 0}
+    <dt class='artist-name libre'>
+{else}
     <dt class='artist-name'>
+{/fi}
         <a href='{$nowplaying[np].artisturl}'>{$nowplaying[np].artist|stripslashes|htmlspecialchars}</a>
     </dt>
     <dd class='track-name'>
@@ -30,10 +34,10 @@ musical tastes with other people.</p>
 <dl class='recent-tracks'>
   {section name=recent loop=$recenttracks}
 {if $recenttracks[recent].license > 0}
-      <dd class='artist-name libre'><a title="Libre artist" href='{$recenttracks[recent].artisturl}'>
+      <dt class='artist-name libre'><a title="Libre artist" href='{$recenttracks[recent].artisturl}'>
         {$recenttracks[recent].artist|stripslashes|htmlspecialchars}</a>:
 {else}
-      <dd class='artist-name'><a href='{$recenttracks[recent].artisturl}'>
+      <dt class='artist-name'><a href='{$recenttracks[recent].artisturl}'>
         {$recenttracks[recent].artist|stripslashes|htmlspecialchars}</a>:
 {/if}
       <span class='track-name'><a href="{$recenttracks[recent].trackurl}">{$recenttracks[recent].track|stripslashes|htmlspecialchars}</a></span> &mdash;
