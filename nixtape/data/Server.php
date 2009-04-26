@@ -214,7 +214,7 @@ class Server {
 						ClientCodes.free,
 						Now_Playing.mbid,
 						t.license
-					FROM Now_Playing
+					FROM Now_Playing n
 					LEFT OUTER JOIN Scrobble_Sessions
 						ON Now_Playing.sessionid=Scrobble_Sessions.sessionid
 					LEFT OUTER JOIN ClientCodes
