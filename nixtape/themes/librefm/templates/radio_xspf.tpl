@@ -1,13 +1,13 @@
 <playlist version="1" xmlns:lastfm="http://www.audioscrobbler.net/dtd/xspf-lastfm">
 <title>{$title}</title>
 <creator>libre.fm</creator>
-<link rel=\"http://www.last.fm/skipsLeft\">9999</link>
+<link rel="http://www.last.fm/skipsLeft">9999</link>
 <trackList>
 
 {section name=rt loop=$radiotracks}
 	<track>
 	    <location>{$radiotracks[rt].location|escape:"html":"UTF-8"}</location>
-	    <title>{$radiotracks[rt].title|escape:"html":"UTF-8"}</title>\n";
+	    <title>{$radiotracks[rt].title|escape:"html":"UTF-8"}</title>
 	    <id>{$radiotracks[rt].id|escape:"html":"UTF-8"}</id>
 	    <album>{$radiotracks[rt].album|escape:"html":"UTF-8"}</album>
 	    <creator>{$radiotracks[rt].creator|escape:"html":"UTF-8"}</creator>
