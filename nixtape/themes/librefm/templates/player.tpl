@@ -1,12 +1,29 @@
-{if $track->streamurl}
 <div id="player">
-	<audio id="audio" src="{$track->streamurl}">
-		<object style="width:200px;height:50px;" type="application/ogg" data="{$track->streamurl}"><a type="application/ogg" rel="enclosure" href="{$track->streamurl}">Listen to this track</a></object>
+	<audio id="audio">
+		{if $track->streamurl}
+			<object id="fallbackembed" style="width:200px;height:50px;" type="application/ogg" data="{$track->streamurl}"><a type="application/ogg" rel="enclosure" href="{$track->streamurl}">Listen to this track</a></object>
+		{/if}
 	</audio>
-	<div id="player-interface">
-		<div id="playbutton">
-			<a href="#" onclick="play()">Listen to this track</a>
+	<div id="interface">
+		<div id="trackinfo">
+			<span id="artistname"></span> - <span id="trackname"></span> <span id="showplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$base_url}/themes/librefm/images/player/show-playlist.png" alt="Show playlist" title="Show playlist" /></a></span><span id="hideplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$base_url}/themes/librefm/images/player/hide-playlist.png" alt="Hide playlist" title="Hide playlist" /></a></span>
+			<div id="playlist">
+				<hr />
+				<strong><u>Playlist</u></strong>
+				<ul id="songs">
+				</ul>
+			</div>
+		</div>
+		<div id="progress">
+			<div id="progressbar"></div>
+			<span id="currenttime"></span>/<span id="duration"></span>
+		</div>
+		<span id="scrobbled">Scrobbled</span>
+		<div id="buttons">
+			<a href="#" onclick="seekBack()" id="seekback"><img src="{$base_url}/themes/librefm/images/player/seek-backward.png" alt="Seek Backwards" /></a>
+			<a href="#" onclick="play()" id="play"><img src="{$base_url}/themes/librefm/images/player/play.png" alt="Play" /></a>
+			<a href="#" onclick="pause()" id="pause"><img src="{$base_url}/themes/librefm/images/player/pause.png" alt="Pause" /></a>
+			<a href="#" onclick="seekForward()" id="seekforward"><img src="{$base_url}/themes/librefm/images/player/seek-forward.png" alt="Seek Forwards" /></a>
 		</div>
 	</div>
 </div>
-{/if}

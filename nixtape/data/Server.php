@@ -25,6 +25,7 @@ require_once($install_path . '/data/Track.php');
 require_once($install_path . '/data/User.php');
 require_once($install_path . "/data/sanitize.php");
 require_once($install_path . '/utils/linkeddata.php');
+require_once($install_path . "/resolve-external.php");
 require_once($install_path . '/licenses.php'); // why isn't this in a subdir?
 
 /**
@@ -124,11 +125,15 @@ class Server {
 			$row['id_track']  = identifierTrack($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 			$row['id_album']  = identifierAlbum($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 
-			if (! $row['album_image']) 
-				$row['album_image'] = $base_url . '/i/qm50.png';
+			if (!$row['album_image']) {
+				$row['album_image'] = false;
+			} else {
+				$row['album_image'] = resolve_external_url($row['album_image']);
+			}
 
-			if ($row['artwork_license'] == "amazon")
-			  $row['album_image'] = str_replace("SL160","SL50",$row['album_image']);
+			if ($row['artwork_license'] == "amazon") {
+				$row['album_image'] = str_replace("SL160","SL50",$row['album_image']);
+			}
 
 			$row["licenseurl"] = $row["license"];
 			$row["license"] = simplify_license($row["licenseurl"]);

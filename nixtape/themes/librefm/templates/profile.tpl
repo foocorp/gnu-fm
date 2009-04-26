@@ -62,8 +62,11 @@
 			<div rev="mo:track">
 				<div about="{$scrobbles[i].id_album|escape:'html':'UTF-8'}" typeof="mo:Record"{if $scrobbles[i].album} property="dc:title" content="{$scrobbles[i].album|escape:'html':'UTF-8'}"{/if}>
 					{if $scrobbles[i].albumurl}<a rel="foaf:page" href="{$scrobbles[i].albumurl|escape:'html':'UTF-8'}">{/if}
-						<span{if $scrobbles[i].album_image != '/i/qm50.png'} rel="foaf:depiction"{/if}{if $scrobbles[i].albumurl} about="{$scrobbles[i].id_album|escape:'html':'UTF-8'}"{/if}>
-							<img height="50" width="50" src="{if $scrobbles[i].album_image != '/i/qm50.png'}{$scrobbles[i].album_image|escape:'html':'UTF-8'}{else}{$base_url}{$scrobbles[i].album_image|escape:'html':'UTF-8'}{/if}" class="albumart{if $scrobbles[i].album_image != '/i/qm50.png'} photo{/if}" {if $scrobbles[i].album}title="{$scrobbles[i].album|escape:'html':'UTF-8'}" alt="Album: {$scrobbles[i].album|escape:'html':'UTF-8'}"{else}alt="Unknown album"{/if}  />
+						<span{if $scrobbles[i].album_image} rel="foaf:depiction"{/if}{if $scrobbles[i].albumurl} about="{$scrobbles[i].id_album|escape:'html':'UTF-8'}"{/if}>
+							<img height="50" width="50" 
+								src="{if !$scrobbles[i].album_image}/i/qm50.png{else}{$scrobbles[i].album_image|escape:'html':'UTF-8'}{/if}" 
+								class="albumart{if !$scrobbles[i].album_image} photo{/if}" 
+								{if $scrobbles[i].album}title="{$scrobbles[i].album|escape:'html':'UTF-8'}" alt="Album: {$scrobbles[i].album|escape:'html':'UTF-8'}"{else}alt="Unknown album"{/if}  />
 						</span>
 					{if $scrobbles[i].albumurl}</a>{/if}
 				</div>
