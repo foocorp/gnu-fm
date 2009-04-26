@@ -179,9 +179,51 @@ class Server {
 		global $mdb2;
 
 		if($username) {
-			$res = $mdb2->query('SELECT username, artist, album, track, client, ClientCodes.name, ClientCodes.url, ClientCodes.free, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code WHERE lower(username) = ' . $mdb2->quote(strtolower($username), "text") . ' ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT
+						username,
+						artist,
+						album,
+						track,
+						client,
+						ClientCodes.name,
+						ClientCodes.url,
+						ClientCodes.free,
+						Now_Playing.mbid,
+						t.license
+					FROM Now_Playing n
+					LEFT OUTER JOIN Scrobble_Sessions
+						ON Now_Playing.sessionid=Scrobble_Sessions.sessionid
+					LEFT OUTER JOIN ClientCodes
+						ON Scrobble_Sessions.client=ClientCodes.code
+					LEFT JOIN Track t
+						ON lower(n.artist) = lower(t.artist)
+						AND lower(n.album) = lower(t.album)
+						AND lower(n.track) = lower(t.name)
+				WHERE s.rating<>'S'
+					WHERE lower(username) = ' . $mdb2->quote(strtolower($username), "text") . '
+					ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		} else {
-			$res = $mdb2->query('SELECT username, artist, track, album, client, ClientCodes.name, ClientCodes.url, ClientCodes.free, Now_Playing.mbid from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
+			$res = $mdb2->query('SELECT
+						username,
+						artist,
+						track,
+						album,
+						client,
+						ClientCodes.name,
+						ClientCodes.url,
+						ClientCodes.free,
+						Now_Playing.mbid,
+						t.license
+					FROM Now_Playing
+					LEFT OUTER JOIN Scrobble_Sessions
+						ON Now_Playing.sessionid=Scrobble_Sessions.sessionid
+					LEFT OUTER JOIN ClientCodes
+						ON Scrobble_Sessions.client=ClientCodes.code
+					LEFT JOIN Track t
+						ON lower(n.artist) = lower(t.artist)
+						AND lower(n.album) = lower(t.album)
+						AND lower(n.track) = lower(t.name)
+					ORDER BY Now_Playing.expires DESC LIMIT ' . $mdb2->quote($number, "integer"));
 		}
 
 		if(PEAR::isError($res)) {
