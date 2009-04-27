@@ -49,7 +49,7 @@ if (isset($_POST['install'])) {
 		location_uri VARCHAR(255) unique,
 		latitude FLOAT,
 		longitude FLOAT,
-		country CHAR(2));");
+		country CHAR(2))");
 
 	$mdb2->query("CREATE TABLE Users (
 		username VARCHAR(64) PRIMARY KEY,
@@ -65,7 +65,7 @@ if (isset($_POST['install'])) {
 		webid_uri VARCHAR(255),
 		avatar_uri VARCHAR(255),
 		active integer DEFAULT 1,
-		location_uri VARCHAR(255) REFERENCES Places(location_uri));");
+		location_uri VARCHAR(255) REFERENCES Places(location_uri))");
 
 	$mdb2->query("CREATE TABLE AccountActivation(
 		username VARCHAR(64),
@@ -87,7 +87,7 @@ if (isset($_POST['install'])) {
 		image_small VARCHAR(255),
 		image_medium VARCHAR(255),
 		image_large VARCHAR(255),
-		homepage VARCHAR(255));");
+		homepage VARCHAR(255))");
 
 	$mdb2->query("CREATE TABLE Album(
 		name VARCHAR(255),
@@ -97,13 +97,13 @@ if (isset($_POST['install'])) {
 		artwork_license VARCHAR(255),
 		releasedate INTEGER,
 		albumurl VARCHAR(255),
-		downloadurl VARCHAR(255));");
+		downloadurl VARCHAR(255))");
 
 	// Table for registering similar artists
 	$mdb2->query("CREATE TABLE Similar_Artist(
 		name_a VARCHAR(255) REFERENCES Artist(name),
 		name_b VARCHAR(255) REFERENCES Artist(name),
-		PRIMARY KEY(name_a, name_b));");
+		PRIMARY KEY(name_a, name_b))");
 
 	$mdb2->query("CREATE TABLE Track(
 		id INTEGER NOT NULL DEFAULT nextval('track_id_seq'::regclass) PRIMARY KEY,
@@ -116,7 +116,7 @@ if (isset($_POST['install'])) {
 		license VARCHAR(255),
 		downloadurl VARCHAR(255),
 		streamurl VARCHAR(255),
-		otherid VARCHAR(16));");
+		otherid VARCHAR(16))");
 
 	$mdb2->query("CREATE TABLE Scrobbles(
 		username VARCHAR(64) REFERENCES Users(username),
@@ -127,13 +127,13 @@ if (isset($_POST['install'])) {
 		mbid VARCHAR(36),
 		source VARCHAR(6),
 		rating CHAR(1),
-		length INTEGER);");
+		length INTEGER)");
 
 	$mdb2->query("CREATE TABLE Scrobble_Sessions(
 		username VARCHAR(64) REFERENCES Users(username),
 		sessionid VARCHAR(32) PRIMARY KEY,
 		client CHAR(3),
-		expires INTEGER);");
+		expires INTEGER)");
 
 	$res = $mdb2->query("CREATE TABLE Now_Playing(
 		sessionid VARCHAR(32) PRIMARY KEY REFERENCES Scrobble_Sessions(sessionid),
@@ -141,43 +141,50 @@ if (isset($_POST['install'])) {
 		artist VARCHAR(255) REFERENCES Artist(name),
 		album VARCHAR(255),
 		mbid VARCHAR(36),
-		expires INTEGER);");
+		expires INTEGER)");
 
 	$res = $mdb2->query("CREATE TABLE Invitation_Request(
 		email VARCHAR(255) PRIMARY KEY,
-		time INTEGER);");
+		time INTEGER)");
 
 	$res = $mdb2->query("CREATE TABLE Invitations(
 		inviter VARCHAR(64) REFERENCES Users(username),
 		invitee VARCHAR(64) REFERENCES Users(username),
 		code VARCHAR(32),
-		PRIMARY KEY(inviter, invitee, code));");
+		PRIMARY KEY(inviter, invitee, code))");
 
 	$res = $mdb2->query("CREATE TABLE ClientCodes(
 		code CHAR(3),
 		name VARCHAR(32),
 		url VARCHAR(256),
 		free CHAR(1),
-		PRIMARY KEY(code));");
+		PRIMARY KEY(code))");
 
 	$res = $mdb2->query("CREATE TABLE Tags(
 		username VARCHAR(64) REFERENCES Users(username),
 		tag VARCHAR(64),
 		artist VARCHAR(255) REFERENCES Artist(name),
 		album VARCHAR(255),
-		track VARCHAR(255));");
+		track VARCHAR(255))");
 
 	$res = $mdb2->query("CREATE TABLE Error(
 		    id int(11) AUTO_INCREMENT KEY,
 		    msg text,
 		    data text,
-		    time int);");
+		    time int)");
 	$res = $mdb2->query("CREATE TABLE Recovery_Request(
 		    username VARCHAR(64),
 		    email VARCHAR(255),
 		    code VARCHAR(32),
 		    expires int, 
-		    PRIMARY KEY(username));");
+		    PRIMARY KEY(username))");
+
+	$res = $mdb2->query("CREATE TABLE Radio_Sessions(
+			username VARCHAR(64),
+			session VARCHAR(32),
+			url VARCHAR(255),
+			expires INTEGER NOT NULL DEFAULT 0,
+			PRIMARY KEY(username,session))");
 
 // uncomment these to solve performance problems with getRecentScrobbles
 // 	$res = $mdb2->exec("CREATE INDEX album_artistname_idx ON Album(artist_name)");
