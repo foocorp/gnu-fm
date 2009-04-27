@@ -19,11 +19,9 @@
 
 */
 
-?>
-
-<?php
 require_once('MDB2.php');
 require_once('version.php');
+require_once('utils/get_absolute_url.php');
 
 if(file_exists("config.php")) {
 	die("A configuration file already exists. Please delete <i>config.php</i> if you wish to reinstall.");
@@ -51,9 +49,10 @@ if (isset($_POST['install'])) {
 
 	$default_theme = $_POST['default_theme'];
 	$base_url = $_POST['base_url'];
+	$submissions_server = $_POST['submissions_server'];
 
 	//Write out the configuration
-	$config = "<?php \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$default_theme = '" . $default_theme . "';\n \$base_url = '" . $base_url . "';\n \$install_path = '" . $install_path . "'; ?>";
+	$config = "<?php\n \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$default_theme = '" . $default_theme . "';\n \$base_url = '" . $base_url . "';\n \$submissions_server = '" . $submissions_server . "';\n \$install_path = '" . $install_path . "'; ?>";
 
 	$conf_file = fopen("config.php", "w");
 	$result = fwrite($conf_file, $config);
@@ -116,7 +115,8 @@ if (isset($_POST['install'])) {
 				}
 			?>
 			</select><br />
-			Base URL: <input type="text" name="base_url" /><br />
+			Base URL: <input type="text" name="base_url" value="<?php echo getAbsoluteURL(); ?>" /><br />
+			Submissions Server: <input type="text" name="submissions_server" /> (URL to your gnukebox install)<br />
 			<br /><br />
 			<input type="submit" value="Install" name="install" />
 		</form>
