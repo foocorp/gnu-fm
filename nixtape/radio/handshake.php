@@ -34,7 +34,9 @@ if (!$res->numRows()) {
 
 $session = md5($passmd5 . time());
 
-$mdb2->query("INSERT INTO Radio_Sessions (username, session) VALUES ( " . $mdb2->quote($username, "text") . ", " . $mdb2->quote($session, "text") . ")");
+$mdb2->exec("DELETE FROM Radio_Sessions WHERE expires < " . $mdb2->quote(time(), "integer"));
+
+$mdb2->query("INSERT INTO Radio_Sessions (username, session, expires) VALUES ( " . $mdb2->quote($username, "text") . ", " . $mdb2->quote($session, "text") . ", " . time() + 259200 . ")");
 
 
 echo "session=" . $session . "\n";
