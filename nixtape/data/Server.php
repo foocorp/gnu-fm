@@ -294,9 +294,9 @@ class Server {
 	static function getTrackURL($artist, $album, $track) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . "/artist/" . urlencode(stripslashes($artist)) . "/album/" . urlencode(stripslashes($album)) . "/track/" . urlencode(stripslashes($track));
+			return $base_url . "/artist/" . ($artist) . "/album/" . ($album) . "/track/" . ($track);
 		} else {
-			return $base_url . "/track.php?artist=" . urlencode(stripslashes($artist)) .   "&album=" . urlencode(stripslashes($album)) . "&track=" . urlencode(stripslashes($track));
+			return $base_url . "/track.php?artist=" . ($artist) .   "&album=" . ($album) . "&track=" . ($track);
 		}
 	}
 
