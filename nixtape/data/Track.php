@@ -48,13 +48,11 @@ class Track {
 		global $mdb2;
 		$res = $mdb2->query("SELECT name, artist, album, duration, streamable, license, downloadurl, streamurl, mbid FROM Track WHERE "
 			. "name = " . $mdb2->quote($name, "text") . " AND "
-			. "artist = " . $mdb2->quote($artist, "text"));
+			. "artist = " . $mdb2->quote($artist, "text") . " AND album IS NOT NULL");
 		if(!$res->numRows()) {
 			$this->name = "No such track: " . $name;
 		} else {
-			print "<!-- TRACK: ".$row["album"]. " -->";
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
-			print "<!-- AFTERTRACK: ".$row["album"]. " -->";
 			$this->name = $row["name"];
 			$this->mbid = $row["mbid"];
 			$this->artist_name = $row["artist"];
