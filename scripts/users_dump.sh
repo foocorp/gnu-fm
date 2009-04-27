@@ -11,5 +11,5 @@ for I in $LIST; do
     
     echo 'COPY (SELECT * FROM Scrobbles where username='"'$I'"') TO STDOUT WITH CSV HEADER;' | psql -q >> $I.text.utf8
 
-    mv -- $I /home/librefm/turtle/data/
+    mv -- $I.text.utf8 /home/librefm/turtle/data/
 done
