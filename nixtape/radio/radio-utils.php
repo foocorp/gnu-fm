@@ -20,12 +20,8 @@
 
 function radio_title_from_url($url) {
 
-	if(substr($url, 0, 20) == "lastfm://globaltags/") {
-		$tag = substr($url, 20);
-		return "Libre.fm " . ucwords($tag) . " Tag Radio";
-	}
-	if(substr($url, 0, 21) == "librefm://globaltags/") {
-		$tag = substr($url, 21);
+	if(ereg("l(ast|ibre)fm://globaltags/(.*)", $url, $regs)) {
+		$tag = $regs[2];
 		return "Libre.fm " . ucwords($tag) . " Tag Radio";
 	}
 	if(ereg("l(ast|ibre)fm://artist/(.*)/similarartists", $url, $regs)) {
@@ -33,9 +29,7 @@ function radio_title_from_url($url) {
 		return "Libre.fm " . $artist . " Artist Radio";
 	}
 
-//	return $url;
 	return "FAILED";
-
 }
 
 ?>
