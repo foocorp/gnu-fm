@@ -1,17 +1,17 @@
 <?php
-define(BY1,	1);
-define(BY2,	2);
-define(BY21,	3);
-define(BY25,	4);
-define(BY3,	5);
-define(BYSA1,	6);
-define(BYSA2,	7);
-define(BYSA21,	8);
-define(BYSA25,	9);
-define(BYSA3,	10);
-define(LAL,	11);
+define('BY1',	1);
+define('BY2',	2);
+define('BY21',	3);
+define('BY25',	4);
+define('BY3',	5);
+define('BYSA1',	6);
+define('BYSA2',	7);
+define('BYSA21',	8);
+define('BYSA25',	9);
+define('BYSA3',	10);
+define('LAL',	11);
 
-// Arrays containing regular expressions for each license type 
+// Arrays containing regular expressions for each license type
 // (so we can support multiple URL formats in the future if needed)
 $by1 = array("http://creativecommons.org/licenses/by/1.0/?.*");
 $by2 = array("http://creativecommons.org/licenses/by/2.0/?.*");
