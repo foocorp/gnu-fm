@@ -24,10 +24,13 @@ function radio_title_from_url($url) {
 		$tag = substr($url, 20);
 		return "Libre.fm " . ucwords($tag) . " Tag Radio";
 	}
-
 	if(substr($url, 0, 21) == "librefm://globaltags/") {
 		$tag = substr($url, 21);
 		return "Libre.fm " . ucwords($tag) . " Tag Radio";
+	}
+	if(ereg("l(ast|ibre)fm://artist/(.*)/similarartists", $url, $regs)) {
+		$artist = $regs[2];
+		return "Libre.fm " . $artist . " Artist Radio";
 	}
 
 	return $url;
