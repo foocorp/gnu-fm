@@ -34,6 +34,10 @@ if(!$res->numRows()) {
         die("BADSESSION\n");
 }
 
+if(ereg("^(globaltags|artist)/[^:]+$", $url, $regs)) {
+	$url = "librefm://" . $url; // compensate for shell-fm sending incomplete urls
+}
+
 $stationname=radio_title_from_url($url);
 if($stationname=="FAILED") {
 	die("FAILED Unavailable station\n");
