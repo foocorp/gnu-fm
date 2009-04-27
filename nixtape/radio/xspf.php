@@ -45,7 +45,7 @@ $smarty->assign('title', $title);
 if(ereg("l(ast|ibre)fm://globaltags/(.*)", $url, $regs)) {
 	$tag = $regs[2];
 	$res = $mdb2->query("SELECT Track.name, Track.artist, Track.album FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist=Tags.artist AND Track.album=Tags.album WHERE streamurl<>'' AND streamable=1 AND lower(tag) = " . $mdb2->quote(strtolower($tag), "text"));
-} elseif("l(ast|ibre)fm://artist/(.*)/similarartists", $url, $regs)) {
+} elseif(ereg("l(ast|ibre)fm://artist/(.*)/similarartists", $url, $regs)) {
 	$artist = $regs[2];
 	$res = $mdb2->query("SELECT name, artist, album FROM Track WHERE streamurl<>'' AND streamable=1 AND lower(artist) = " . $mdb2->quote(strtolower($artist), "text"));
 } else {
