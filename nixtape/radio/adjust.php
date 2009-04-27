@@ -34,10 +34,15 @@ if(!$res->numRows()) {
         die("BADSESSION\n");
 }
 
+$stationname=radio_title_from_url($url);
+if($stationname=="FAILED") {
+	die("FAILED Unavailable station\n");
+}
+
 $mdb2->query("UPDATE Radio_Sessions SET url = " . $mdb2->quote($url, "text") . " WHERE session = " . $mdb2->quote($session, "text"));
 
 echo "response=OK\n";
 echo "url=http://libre.fm\n"; // Need to parse the station request and give a real URL
-echo "stationname=" . radio_title_from_url($url) ."\n";
+echo "stationname=" . ($stationname) ."\n";
 
 ?>
