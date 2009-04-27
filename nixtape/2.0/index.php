@@ -134,8 +134,12 @@ function method_auth_getmobilesession() {
 	if (PEAR::isError($result)) {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
-	if (is_null($result)
-		|| md5($result['username'] . $result['password']) == $_GET['authToken']) {
+	if (is_null($result)) {
+		report_failure(LFM_INVALID_TOKEN);
+	}
+
+	list($username, $password) = $result;
+	if (md5($username . $password) != $_GET['authToken']) {
 		report_failure(LFM_INVALID_TOKEN);
 	}
 
