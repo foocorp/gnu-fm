@@ -20,7 +20,7 @@ function process_jamendo_url($url) {
 
 	if (substr($url, 10, 10) == "album/art/") {
 		$id = substr($url, 20);
-		return "http://api.jamendo.com/get2/image/album/redirect/?id=" . $id . "&imagesize=400";
+		return "http://api.jamendo.com/get2/image/album/redirect/?id=" . $id . "&imagesize=200";
 	}
 
 	// We don't know what this is
