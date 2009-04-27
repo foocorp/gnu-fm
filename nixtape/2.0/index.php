@@ -128,17 +128,17 @@ function method_auth_getmobilesession() {
 	if (!isset($_GET['authToken']))
 		report_failure(LFM_INVALID_TOKEN);
 
-	// Check for a token that (1) is bound to a user, and (2) is not bound to a session
-	$result = $mdb2->query('SELECT username FROM Users WHERE '
-		. 'username = ' . $mdb2->quote($_GET['username'], 'text')
-		. 'AND MD5(CONCAT(username, password)) = '
-		. $mdb2->quote($_GET['authToken'], 'text'));
-	if (PEAR::isError($result))
+	// Check for a token that is bound to a user
+	$result = $mdb2->queryRow('SELECT username, password FROM Users WHERE '
+		. 'username = ' . $mdb2->quote($_GET['username'], 'text'));
+	if (PEAR::isError($result)) {
 		report_failure(LFM_SERVICE_OFFLINE);
-	if (!$result->numRows())
+	}
+	if (is_null($result)
+		|| md5($result['username'] . $result['password']) == $_GET['authToken']) {
 		report_failure(LFM_INVALID_TOKEN);
+	}
 
-	$username = $result->fetchOne(0);
 	$key = md5(time() . rand());
 	$session = md5(time() . rand());
 
