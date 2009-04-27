@@ -52,7 +52,9 @@ class Track {
 		if(!$res->numRows()) {
 			$this->name = "No such track: " . $name;
 		} else {
+			print "<!-- TRACK: ".$row["album"]. " -->";
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
+			print "<!-- AFTERTRACK: ".$row["album"]. " -->";
 			$this->name = $row["name"];
 			$this->mbid = $row["mbid"];
 			$this->artist_name = $row["artist"];
@@ -136,7 +138,6 @@ class Track {
 	}
 
 	function getURL() {
-		echo "<!-- Fetching ".$this->artist_name."/".$this->album_name."/".$this->name." -->";
 		return Server::getTrackURL($this->artist_name, $this->album_name, $this->name);
 	}
 
