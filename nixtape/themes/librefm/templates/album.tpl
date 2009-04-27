@@ -21,7 +21,7 @@
 <ul id="tracks">
 	{section name=i loop=$tracks}
 	<li>
-		<a href="{$tracks[i]->getURL()}">{$tracks[i]->name}</a>
+		<a href="{$tracks[i]->getURL()|escape:'url':'UTF-8'}">{$tracks[i]->name}</a>
 	</li>
 	{/section}
 </ul>
