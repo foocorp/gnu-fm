@@ -33,7 +33,8 @@ function radio_title_from_url($url) {
 		return "Libre.fm " . $artist . " Artist Radio";
 	}
 
-	return $url;
+//	return $url;
+	return "FAILED";
 
 }
 
