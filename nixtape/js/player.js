@@ -108,7 +108,7 @@ function scrobble() {
 		return;
 	}
 	timestamp = Math.round(new Date().getTime() / 1000)
-	$.post("/scrobble-proxy.php", { "a[0]" : artist, "b[0]" : album, "t[0]" : track, "i[0]" : timestamp, "s" : session_key },
+	$.post("/scrobble-proxy.php?method=scrobble", { "a[0]" : artist, "b[0]" : album, "t[0]" : track, "i[0]" : timestamp, "s" : session_key },
 		      	function(data){
 				if(data.substring(0, 2) == "OK") {
 					$("#scrobbled").fadeIn(5000, function() { $("#scrobbled").fadeOut(5000) } );

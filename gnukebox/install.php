@@ -21,6 +21,7 @@
 
 require_once('MDB2.php');
 require_once('version.php');
+require_once('utils/get_absolute_url.php');
 
 if(file_exists("config.php")) {
 	die("A configuration file already exists. Please delete <i>config.php</i> if you wish to reinstall.");
@@ -201,7 +202,7 @@ if (isset($_POST['install'])) {
 	$install_path = dirname(__FILE__) . "/";
 
 	//Write out the configuration
-	$config = "<?php \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$submissions_server = '" . $submissions_server . "';\n\$install_path = '" . $install_path . "'; ?>";
+	$config = "<?php\n \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$submissions_server = '" . $submissions_server . "';\n\$install_path = '" . $install_path . "'; ?>";
 
 	$conf_file = fopen("config.php", "w");
 	$result = fwrite($conf_file, $config);
@@ -253,7 +254,7 @@ if (isset($_POST['install'])) {
 			</div>
 			<br />
 			<h2>Servers</h2>
-			Submissions Server URL: <input type="text" name="submissions" value="http://localhost/" /><br />
+			Submissions Server URL: <input type="text" name="submissions" value="<?php echo getAbsoluteURL(); ?>" /><br />
 			<br />
 			<input type="submit" value="Install" name="install" />
 		</form>

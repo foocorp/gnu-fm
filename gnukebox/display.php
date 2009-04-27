@@ -21,19 +21,20 @@
 header('Content-type: text/html; charset=utf-8');
 require_once('database.php');
 require_once('utils/human-time.php');
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
  "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
    <title>Libre.fm &mdash; discover new music</title>
-   <link rel="stylesheet" href="/reset-fonts-grids.css" type="text/css">
-   <link rel="stylesheet" href="/base.css" type="text/css">
-   <link rel="stylesheet" href="/librefm.css" type="text/css">
+   <link rel="stylesheet" href="<?php echo $submissions_server ?>/reset-fonts-grids.css" type="text/css">
+   <link rel="stylesheet" href="<?php echo $submissions_server ?>/base.css" type="text/css">
+   <link rel="stylesheet" href="<?php echo $submissions_server ?>/librefm.css" type="text/css">
 </head>
 <body>
 <div id="doc2" class="yui-t7">
-   <div id="hd" role="navigation"><h1><a href="/">Header</a></h1>
+  <div id="hd" role="navigation"><h1><a href="<?php echo $submissions_server ?>">Header</a></h1>
 
      <ul>
        <li><a href="https://savannah.nongnu.org/svn/?group=librefm">Code</a></li>
@@ -55,9 +56,9 @@ require_once('utils/human-time.php');
     <div style="padding: 10px;">
 		<?php
 
-$req_user	= urldecode($_GET["u"]);
-$req_artist	= urldecode($_GET["a"]);
-$req_track	= urldecode($_GET["t"]);
+		$req_user	= urldecode($_GET["u"]);
+		$req_artist	= urldecode($_GET["a"]);
+		$req_track	= urldecode($_GET["t"]);
 
 
 if ($req_user) {
@@ -102,7 +103,7 @@ if ($req_user) {
 				echo ($i % 2 == 0) ? "<tr class=\"even\">" : "<tr class=\"odd\">";
 				foreach($row as $field => $value) {
 					if($field == "username"){
-					$value = "<a href=\"/user/" . $value . "\">$value</a>";}
+					$value = "<a href=\"" . $submissions_server . "/user/" . $value . "\">$value</a>";}
 					if($field == "time") {
 						$value = '<abbr title=\'' . strftime('%c', $value) . '\'>' . human_timestamp($value) . '</abbr>';
 					}
@@ -209,7 +210,7 @@ what's happening.
 
      <p><img src="http://libre.fm/i/cc-by-sa.png" alt="Attribution-ShareAlike 3.0" /></p>
 
-<p><a href="/data">Data dumps are here</a></p>
+     <p><a href="<? echo $submissions_server; ?>/data">Data dumps are here</a></p>
 
    </div>
 </div>

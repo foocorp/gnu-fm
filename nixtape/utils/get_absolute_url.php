@@ -19,35 +19,12 @@
 
 */
 
-require_once('config.php');
-
-if ($_GET['method'] == "scrobble") {
-	$url = $submissions_server . "/submissions/1.2/";
-} elseif ($_GET['method'] == "nowplaying") {
-	$url = $submissions_server . "/nowplaying/1.2/";
-} else {
-	die("Invalid proxy method\n");
+function getAbsoluteURL() {
+	$scriptName = $_SERVER['SCRIPT_NAME'];
+   	$path = explode("/", $scriptName);
+   	array_pop($path);
+   	$server = $_SERVER['HTTP_HOST'];
+   	$string = (implode("/", $path).'/');
+   	return "http://".$server.$string;
 }
-
-$session = curl_init($url);
-
-$post_vars = '';
-foreach($_POST as $key => $element) {
-	if (is_array($element)) {
-		$i = 0;
-		foreach($element as $e) {
-			$post_vars .= $key . "[" . $i . "]=" . $e . "&";
-			$i++;
-		}
-	} else {
-		$post_vars .= $key.'='.$element.'&';
-	}
-}
-curl_setopt ($session, CURLOPT_POST, true);
-curl_setopt ($session, CURLOPT_POSTFIELDS, $post_vars);
-
-$response = curl_exec($session);
-echo $response;
-
-curl_close($session);
 ?>
