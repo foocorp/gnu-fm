@@ -136,6 +136,7 @@ class Track {
 	}
 
 	function getURL() {
+		echo "<!-- Fetching ".$this->artist_name."/".$this->album_name."/".$this->name." -->";
 		return Server::getTrackURL($this->artist_name, $this->album_name, $this->name);
 	}
 
