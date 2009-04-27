@@ -1,4 +1,4 @@
-var scrobbled;
+var scrobbled, now_playing;
 var artist, album, track, session_key;
 var playlist, current_song = 0;
 var playable_songs = false;
@@ -25,12 +25,16 @@ function playerInit(list, sk) {
 	$("#play").fadeTo("normal", 1);
 	$("#progressbar").progressbar({ value: 0 });
 	scrobbled = false;
+	now_playing = false;
 	$("#player > #interface").show();
 }
 
 function play() {
 	var audio = document.getElementById("audio");
 	audio.play();
+	if(!now_playing) {
+		nowPlaying();
+	}
 	$("#play").fadeTo("normal", 0.5); 
 	$("#pause").fadeTo("normal", 1);
 	$("#seekforward").fadeTo("normal", 1);
@@ -107,7 +111,7 @@ function scrobble() {
 		//Not authenticated
 		return;
 	}
-	timestamp = Math.round(new Date().getTime() / 1000)
+	timestamp = Math.round(new Date().getTime() / 1000);
 	$.post("/scrobble-proxy.php?method=scrobble", { "a[0]" : artist, "b[0]" : album, "t[0]" : track, "i[0]" : timestamp, "s" : session_key },
 		      	function(data){
 				if(data.substring(0, 2) == "OK") {
@@ -117,6 +121,18 @@ function scrobble() {
 					$("#scrobbled").fadeIn(1000);
 				}
 		      	}, "text");
+}
+
+function nowPlaying() {
+	var timestamp;
+	var audio = document.getElementById("audio");
+	now_playing = true;
+	if(!session_key) {
+		//Not authenticated
+		return;
+	}
+	timestamp = Math.round(new Date().getTime() / 1000);
+	$.post("/scrobble-proxy.php?method=nowplaying", { "a" : artist, "b" : album, "t" : track, "l" : audio.duration, "s" : session_key}, function(data) {}, "text");
 }
 
 function playSong(song) {
@@ -133,6 +149,7 @@ function loadSong(song) {
 	track = playlist[song]["track"];
 	current_song = song;
 	scrobbled = false;
+	now_playing = false;
 	audio.src = url;
 	audio.load();
 
