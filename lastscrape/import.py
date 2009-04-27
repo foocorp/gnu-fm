@@ -47,7 +47,7 @@ post_data = []
 for line in file(data):
     artist,track,timestamp = line.strip().split("\t")
     dt = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
-    timestamp = str(int(time.mktime(dt.timetuple())))
+    timestamp = str(int(time.mktime(dt.utctimetuple())))
     post_data += [('a[%d]' % i, artist), ('t[%d]' % i, track),
                   ('i[%d]' % i, timestamp)]
     print "Adding to post %s playing %s" % (artist, track)
