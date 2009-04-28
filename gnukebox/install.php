@@ -128,20 +128,35 @@ if (isset($_POST['install'])) {
 		name_b VARCHAR(255) REFERENCES Artist(name),
 		PRIMARY KEY(name_a, name_b))");
 
-	$mdb2->query("CREATE SEQUENCE track_id_seq;");
-	$mdb2->query("CREATE TABLE Track(
-		id INTEGER NOT NULL DEFAULT nextval('track_id_seq'::regclass) PRIMARY KEY,
-		name VARCHAR(255),
-		artist VARCHAR(255) REFERENCES Artist(name),
-		album VARCHAR(255),
-		mbid VARCHAR(36),
-		duration INTEGER,
-		streamable INTEGER,
-		license VARCHAR(255),
-		downloadurl VARCHAR(255),
-		streamurl VARCHAR(255),
-		otherid VARCHAR(16))");
-
+	if ( strtolower(substr($mdb2->phptype, 0, 5)) == 'mysql'  ) {
+		$mdb2->query("CREATE TABLE Track(
+			id NOT NULL AUTO_INCREMENT PRIMARY KEY,
+			name VARCHAR(255),
+			artist VARCHAR(255) REFERENCES Artist(name),
+			album VARCHAR(255),
+			mbid VARCHAR(36),
+			duration INTEGER,
+			streamable INTEGER,
+			license VARCHAR(255),
+			downloadurl VARCHAR(255),
+			streamurl VARCHAR(255),
+			otherid VARCHAR(16))");
+	} else {
+		$mdb2->query("CREATE SEQUENCE track_id_seq;");
+		$mdb2->query("CREATE TABLE Track(
+			id INTEGER NOT NULL DEFAULT nextval('track_id_seq'::regclass) PRIMARY KEY,
+			name VARCHAR(255),
+			artist VARCHAR(255) REFERENCES Artist(name),
+			album VARCHAR(255),
+			mbid VARCHAR(36),
+			duration INTEGER,
+			streamable INTEGER,
+			license VARCHAR(255),
+			downloadurl VARCHAR(255),
+			streamurl VARCHAR(255),
+			otherid VARCHAR(16))");
+	}
+	
 	$mdb2->query("CREATE TABLE Scrobbles(
 		username VARCHAR(64) REFERENCES Users(username),
 		track VARCHAR(255),
