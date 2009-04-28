@@ -49,3 +49,6 @@ $longest_link += length('http://en.wikipedia.org/wiki/');
 
 print "-- Longest name: $longest_name\n";
 print "-- Longest link: $longest_link\n";
+print "\n";
+print "-- This needs to be piped into the postgresql command line client.\n";
+print "-- e.g.  ./countrycodes.pl | psql librefm\n";
