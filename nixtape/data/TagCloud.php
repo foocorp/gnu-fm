@@ -32,7 +32,7 @@ class TagCloud {
     * inaccurate @param float $max_font_size maximum font size (px, em, %, etc)
     * @return array tagcloud
     */
-    static function generateTagCloud($table, $field, $limit = 40, $constraint = null, $contrained_field = false) {
+    static function generateTagCloud($table, $field, $limit = 40, $constraint = null, $constrained_field = false) {
         global $mdb2;
         if (!is_string($field))          return false;	
         if (!is_string($table))          return false;
@@ -40,7 +40,7 @@ class TagCloud {
         $sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
         $query = "SELECT $field, count(*) AS count FROM $table";
         $query .= (!is_null($constraint) || ($table == "Scrobbles")) ? ' WHERE ' : null;
-        if ($contrained_field) {
+        if ($constrained_field) {
             $query .= (!is_null($constraint)) ? " $constrained_field  = " . $mdb2->quote($constraint, 'text') : null;
         } elseif ($field == "track") {
             $query .= (!is_null($constraint)) ? ' artist = ' . $mdb2->quote($constraint, 'text') : null;
