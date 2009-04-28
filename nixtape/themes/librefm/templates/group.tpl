@@ -18,7 +18,7 @@
 <!-- Column break -->
 </div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
 
-<h3>{$user}'{if $user|substr:-1 != 's'}s{/if} top artists</h3>
+<h3>Top artists</h3>
 <ul class="tagcloud" about="{$id}">
 	{section name=i loop=$group_tagcloud}
 	<li style="font-size:{$group_tagcloud[i].size}"><a
