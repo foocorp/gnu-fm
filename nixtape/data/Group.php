@@ -143,6 +143,8 @@ class Group {
 					$this->users[] = new User($row['username'], $row);
 				}
 			}
+			
+			$this->count = count($this->users);
 		}
 
 		return $this->users;
