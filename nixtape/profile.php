@@ -23,6 +23,7 @@ require_once('database.php');
 require_once('templating.php');
 require_once('data/User.php');
 require_once('data/TagCloud.php');
+require_once('data/Server.php');
 
 if(!isset($_GET['user']) && $logged_in == false) {
 	$smarty->assign('error', 'Error!');
@@ -43,6 +44,7 @@ if(isset($user->name)) {
 	$smarty->assign('homepage', $user->homepage);
 	$smarty->assign('location', $user->location);
 	$smarty->assign('location_uri', $user->location_uri);
+	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
 	$aUserScrobbles = $user->getScrobbles(20);
 	if (!PEAR::isError ($aUserScrobbles)) {
 		$smarty->assign('scrobbles', $aUserScrobbles);
