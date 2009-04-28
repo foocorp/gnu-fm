@@ -29,12 +29,22 @@
 		</dd>
 		{/if}
 		<dd rel="foaf:based_near">
-			<span{if $location_uri} about="{$location_uri|escape:'html':'UTF-8'}"{/if} class="label" property="rdfs:comment">{$location|escape:'html':'UTF-8'}</span>
-			<!--
-				{$geo.latitude}
-				{$geo.longitude}
-				{$geo.country}
-			-->
+			<span {if $location_uri} about="{$location_uri|escape:'html':'UTF-8'}"{/if}>
+				<span class="label" property="rdfs:comment">{$location|escape:'html':'UTF-8'}</span>
+				{if $geo.latitude}
+				<small class="geo">(
+					<span class="latitude" property="geo:lat">{$geo.latitude|string_format:"%0.3f"}</span>;
+					<span class="longitude" property="geo:long">{$geo.longitude|string_format:"%0.3f"}</span>
+				)</small>
+				{/if}
+				{if $geo.country}
+				<small xmlns:gn="http://www.geonames.org/" rel="gn:ontology#inCountry" resource="[gn:countries/#{$geo.country}]">
+					<a rel="foaf:page" href="{$base_url}/countries/{$geo.country}"><img
+						src="{$base_url}/themes/librefm/flags/{$geo.country|strtolower}.png" alt="{$geo.country}"
+						rev="foaf:depiction" resource="[gn:countries/#{$geo.country}]"></a>
+				</small>
+				{/if}
+			</span>
 		</dd>
 		<dd class="note" property="bio:olb">{$bio|escape:'html':'UTF-8'}</dd>
 	</dl>
