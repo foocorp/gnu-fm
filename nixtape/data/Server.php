@@ -25,7 +25,8 @@ require_once($install_path . '/data/Track.php');
 require_once($install_path . '/data/User.php');
 require_once($install_path . "/data/sanitize.php");
 require_once($install_path . '/utils/linkeddata.php');
-require_once($install_path . "/resolve-external.php");
+require_once($install_path . '/utils/arc/ARC2.php');
+require_once($install_path . "/resolve-external.php"); // why isn't this in a subdir?
 require_once($install_path . '/licenses.php'); // why isn't this in a subdir?
 
 /**
@@ -298,6 +299,58 @@ class Server {
 		} else {
 			return $base_url . "/track.php?artist=" . urlencode(stripslashes($artist)) .   "&album=" . urlencode(stripslashes($album)) . "&track=" . urlencode(stripslashes($track));
 		}
+	}
+
+	static function getLocationDetails($name) {
+		global $mdb2;
+		
+		if (!$name)
+			return array();
+
+		$res = $mdb2->query('SELECT * FROM Places WHERE location_uri=' . $mdb2->quote($name, 'text'));
+		
+		if($res->numRows()) {
+		
+			$rv = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+			
+			if (! ($rv['latitude'] && $rv['longitude'] && $rv['country'])) {
+			
+				$parser = ARC2::getRDFXMLParser();
+				$parser->parse($name);
+				$index = $parser->getSimpleIndex();
+				
+				$rv = array(
+					'latitude'  => $index[$name]['http://www.w3.org/2003/01/geo/wgs84_pos#lat'][0],
+					'longitude' => $index[$name]['http://www.w3.org/2003/01/geo/wgs84_pos#long'][0],
+					'country'   => strtoupper(substr($index[$name]['http://www.geonames.org/ontology#inCountry'][0], -2))
+					);
+
+				$mdb2->query(sprintf('UPDATE Places SET latitude=%f, longitude=%f, country=%s WHERE location_uri=%s',
+					(float)$rv['latitude'],
+					(float)$rv['longitude'],
+					$mdb2->quote($rv['country'], 'text'),
+					$mdb2->quote($name, 'text')));
+			}
+		}
+		else {
+			$parser = ARC2::getRDFXMLParser();
+			$parser->parse($name);
+			$index = $parser->getSimpleIndex();
+			
+			$rv = array(
+				'latitude'  => $index[$name]['http://www.w3.org/2003/01/geo/wgs84_pos#lat'][0],
+				'longitude' => $index[$name]['http://www.w3.org/2003/01/geo/wgs84_pos#long'][0],
+				'country'   => strtoupper(substr($index[$name]['http://www.geonames.org/ontology#inCountry'][0], -2))
+				);
+
+			$mdb2->query(sprintf('INSERT INTO Places VALUES (%s, %f, %f, %s)',
+				$mdb2->quote($name, 'text'),
+				(float)$rv['latitude'],
+				(float)$rv['longitude'],
+				$mdb2->quote($rv['country'], 'text')));
+		}
+			
+		return $rv;
 	}
 
 }

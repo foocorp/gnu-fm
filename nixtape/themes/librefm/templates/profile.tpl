@@ -30,6 +30,11 @@
 		{/if}
 		<dd rel="foaf:based_near">
 			<span{if $location_uri} about="{$location_uri|escape:'html':'UTF-8'}"{/if} class="label" property="rdfs:comment">{$location|escape:'html':'UTF-8'}</span>
+			<!--
+				{$geo.latitude}
+				{$geo.longitude}
+				{$geo.country}
+			-->
 		</dd>
 		<dd class="note" property="bio:olb">{$bio|escape:'html':'UTF-8'}</dd>
 	</dl>
@@ -61,11 +66,7 @@
 <ul class="gobbles" about="{$id|escape:'html':'UTF-8'}" rev="gob:user">
 {section name=i loop=$scrobbles}
 
-{if $scrobbles[i].license > 0}
-	<li class="play libre" about="{$scrobbles[i].id|escape:'html':'UTF-8'}" typeof="rss:item gob:ScrobbleEvent" rel="gob:track_played">
-{else}
-	<li class="play" about="{$scrobbles[i].id|escape:'html':'UTF-8'}" typeof="rss:item gob:ScrobbleEvent" rel="gob:track_played">
-{/if}
+	<li class="play {if $scrobbles[i].license > 0}libre{/if}" about="{$scrobbles[i].id|escape:'html':'UTF-8'}" typeof="rss:item gob:ScrobbleEvent" rel="gob:track_played">
 		<div about="{$scrobbles[i].id_track|escape:'html':'UTF-8'}" typeof="mo:Track" class="haudio">
 			<div rev="mo:track">
 				<div about="{$scrobbles[i].id_album|escape:'html':'UTF-8'}" typeof="mo:Record"{if $scrobbles[i].album} property="dc:title" content="{$scrobbles[i].album|escape:'html':'UTF-8'}"{/if}>
