@@ -46,6 +46,26 @@ if ($_REQUEST['country'])
 		$userlist[] = new User($row['username'], $row);
 	}
 	
-	header("Content-Type: text/plain");
-	print_r($userlist);
+	// We really need $country_name too! TODO: add Countries(code, name, wikilink) table.
+	$smarty->assign('country', $_REQUEST['country']);
+	
+	$smarty->assign('userlist', $userlist);
+	
+	$smarty->assign('extra_head_links', array(
+			array(
+				'rel' => 'meta',
+				'type' => 'application/rdf+xml' ,
+				'title' => 'FOAF',
+				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities($_SERVER['REQUEST_URI'])
+				)
+		);
+		
+	$smarty->display('location-country.tpl');
+}
+
+else
+{
+	$smarty->assign('error', 'Location not found');
+	$smarty->assign('details', 'Shall I call in a missing locations report?');
+	$smarty->display('error.tpl');
 }
