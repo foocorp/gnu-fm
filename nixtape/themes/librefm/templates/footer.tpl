@@ -9,6 +9,8 @@
     {/section}
             </ul>     
 
+	    <div id="adbard">
+
 	    <!--Ad Bard advertisement snippet, begin -->
 
 	    <script type='text/javascript'>
@@ -19,6 +21,8 @@
             <script type='text/javascript' src='http://cdn1.adbard.net/js/ab1.js'></script>
 
 	    <!--Ad Bard, end -->
+	    
+	    </div>
 
 
 	    <h4>Coming soon</h4>

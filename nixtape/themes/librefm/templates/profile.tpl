@@ -118,6 +118,8 @@
 	{/section}
 </ul>
 
+	<div id="adbard">
+
 	    <!--Ad Bard advertisement snippet, begin -->
 
 	    <script type='text/javascript'>
@@ -129,5 +131,6 @@
 
 	    <!--Ad Bard, end -->
 
+	</div>
 
 {include file='footer.tpl'}
