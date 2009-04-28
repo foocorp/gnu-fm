@@ -51,6 +51,12 @@ if (isset($_POST['install'])) {
 		longitude FLOAT,
 		country CHAR(2))");
 
+	$mdb2->query("CREATE TABLE Countries (
+		country varchar(2) PRIMARY KEY,
+		country_name varchar(200),
+		wikipedia_en varchar(120));")
+
+
 	$mdb2->query("CREATE TABLE Users (
 		username VARCHAR(64) PRIMARY KEY,
 		password VARCHAR(32) NOT NULL,
