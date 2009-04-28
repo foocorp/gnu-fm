@@ -29,12 +29,12 @@ $group = new Group($_GET['group']);
 
 if(isset($group->name)) {
 
-	$smarty->assign("id", $user->id);
-	$smarty->assign('group', $user->name);
-	$smarty->assign('fullname', $user->fullname);
-	$smarty->assign('bio', $user->bio);
-	$smarty->assign('homepage', $user->homepage);
-	$smarty->assign('avatar', $user->getAvatar());
+	$smarty->assign("id", $group->id);
+	$smarty->assign('group', $group->name);
+	$smarty->assign('fullname', $group->fullname);
+	$smarty->assign('bio', $group->bio);
+	$smarty->assign('homepage', $group->homepage);
+	$smarty->assign('avatar', $group->getAvatar());
 	$aUserTagCloud = Group::tagCloudData();
 	if (!PEAR::isError ($aUserTagCloud)) {
 		$smarty->assign('group_tagcloud',$aUserTagCloud);
@@ -50,6 +50,7 @@ if(isset($group->name)) {
 				)
 		));
 	
+	$smarty->assign('profile', true);
 	$smarty->display('group.tpl');
 
 } else {
