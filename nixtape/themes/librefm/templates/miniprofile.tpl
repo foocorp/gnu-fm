@@ -16,7 +16,7 @@
 		</dt>
 		{if $me->homepage}
 		<dd>
-			<a href="{$homepage|escape:'html':'UTF-8'}" rel="me foaf:homepage" class="url">{$me->homepage|escape:'html':'UTF-8'}</a>
+			<a href="{$homepage|escape:'html':'UTF-8'}" rel="foaf:homepage" class="url">{$me->homepage|escape:'html':'UTF-8'}</a>
 		</dd>
 		{/if}
 		<dd rel="foaf:based_near">
