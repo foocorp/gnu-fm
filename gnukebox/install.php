@@ -67,6 +67,21 @@ if (isset($_POST['install'])) {
 		active integer DEFAULT 1,
 		location_uri VARCHAR(255) REFERENCES Places(location_uri))");
 
+	$res = $mdb2->query("CREATE TABLE Groups (
+		groupname VARCHAR(64) PRIMARY KEY,
+		owner VARCHAR(64) REFERENCES Users(username),
+		fullname VARCHAR(255),
+		bio TEXT,
+		homepage VARCHAR(255),
+		created int NOT NULL,
+		modified INTEGER,
+		grouptype INTEGER)");
+
+	$res = $mdb2->query("CREATE TABLE Group_Members (
+		group VARCHAR(64) REFERENCES Groups(groupname),
+		member VARCHAR(64) REFERENCES Users(username),
+		joined int NOT NULL");
+
 	$mdb2->query("CREATE TABLE AccountActivation(
 		username VARCHAR(64),
 		authcode VARCHAR(32))");
