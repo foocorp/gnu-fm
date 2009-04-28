@@ -75,6 +75,7 @@ if (isset($_POST['install'])) {
 		homepage VARCHAR(255),
 		created int NOT NULL,
 		modified INTEGER,
+		avatar_uri VARCHAR(255),
 		grouptype INTEGER)");
 
 	$res = $mdb2->query("CREATE TABLE Group_Members (
