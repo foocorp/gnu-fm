@@ -23,6 +23,10 @@ require_once("database.php");
 require_once("templating.php");
 require_once("utils/EmailAddressValidator.php");
 
+if($logged_in == true){
+	header("Location: index.php");
+} else {
+
 // Moving to open alpha
 /*$authcode = $_GET["authcode"];
 
@@ -154,4 +158,5 @@ if(isset($_POST['register'])) {
 //$smarty->assign("authcode", $authcode);
 
 $smarty->display("register.tpl");
+}
 ?>
