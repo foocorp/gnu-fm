@@ -304,8 +304,10 @@ class Server {
 
 	static function getTrackURL($artist, $album, $track) {
 		global $friendly_urls, $base_url;
-		if($friendly_urls) {
+		if ($friendly_urls && $album) {
 			return $base_url . "/artist/" . urlencode(stripslashes($artist)) . "/album/" . urlencode(stripslashes($album)) . "/track/" . urlencode(stripslashes($track));
+		} elseif ($friendly_urls) {
+			return $base_url . "/artist/" . urlencode(stripslashes($artist)) . "/track/" . urlencode(stripslashes($track));
 		} else {
 			return $base_url . "/track.php?artist=" . urlencode(stripslashes($artist)) .   "&album=" . urlencode(stripslashes($album)) . "&track=" . urlencode(stripslashes($track));
 		}
