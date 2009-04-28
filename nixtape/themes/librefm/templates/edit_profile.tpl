@@ -79,7 +79,7 @@
 
 	<dt id="dfn_avatar_uri">Avatar URL</dt>
 	<dd>The web address for a picture to represent you on libre.fm. It should
-	not be more than 80x80 pixels. If you leave this empty, libre.fm will
+	not be more than 80x80 pixels. (64x64 is best.) If you leave this empty, libre.fm will
 	use <a href="http://gravatar.com">Gravatar</a> to find an image for you.</dd>
 
 	<dt id="dfn_id">WebID (FOAF)</dt>

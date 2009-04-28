@@ -5,7 +5,7 @@
 
 	<div class="avatar" rel="foaf:depiction">
 		<!-- Avatar placeholder  -->
-		<img src="{$avatar|escape:'html':'UTF-8'}" alt="avatar" class="photo" />
+		<img src="{$avatar|escape:'html':'UTF-8'}" alt="avatar" class="photo" width="64" height="64" />
 	</div>
 
 	{if $isme}
