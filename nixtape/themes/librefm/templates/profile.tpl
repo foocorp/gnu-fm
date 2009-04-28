@@ -31,16 +31,14 @@
 			<span {if $location_uri} about="{$location_uri|escape:'html':'UTF-8'}"{/if}>
 				<span class="label" property="rdfs:comment">{$location|escape:'html':'UTF-8'}</span>
 				{if $geo.latitude}
-				<small class="geo">(
-					<span class="latitude" property="geo:lat">{$geo.latitude|string_format:"%0.3f"}</span>;
-					<span class="longitude" property="geo:long">{$geo.longitude|string_format:"%0.3f"}</span>
-				)</small>
+				<small class="geo">
+					[<span class="latitude" property="geo:lat">{$geo.latitude|string_format:"%0.3f"}</span>;
+					<span class="longitude" property="geo:long">{$geo.longitude|string_format:"%0.3f"}</span>]
+				</small>
 				{/if}
 				{if $geo.country}
 				<small xmlns:gn="http://www.geonames.org/" rel="gn:ontology#inCountry" resource="[gn:countries/#{$geo.country}]">
-					<a rel="foaf:page" href="{$base_url}/country/{$geo.country}"><img
-						src="{$base_url}/themes/librefm/images/flags/{$geo.country|strtolower}.png" alt="{$geo.country}"
-						rev="foaf:depiction" resource="[gn:countries/#{$geo.country}]"></a>
+					(<a rel="foaf:page" href="{$base_url}/country/{$geo.country}">Find other people in {$geo.country_name|escape:'html':'UTF-8'}</a>)
 				</small>
 				{/if}
 			</span>

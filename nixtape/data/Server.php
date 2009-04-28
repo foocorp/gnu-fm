@@ -319,7 +319,10 @@ class Server {
 		if (!$name)
 			return array();
 
-		$res = $mdb2->query('SELECT * FROM Places WHERE location_uri=' . $mdb2->quote($name, 'text'));
+		$res = $mdb2->query('SELECT p.latitude, p.longitude, p.country, c.country_name, c.wikipedia_en '
+			. 'FROM Places p '
+			. 'LEFT JOIN Countries c ON p.country=c.country '
+			. 'WHERE p.location_uri=' . $mdb2->quote($name, 'text'));
 		
 		if($res->numRows()) {
 		
