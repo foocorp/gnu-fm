@@ -42,8 +42,14 @@ if ($_REQUEST['country'])
 	
 	while ( $row = $res->fetchRow(MDB2_FETCHMODE_ASSOC) )
 	{
-		$row['password'] = 'redacted';
 		$userlist[] = new User($row['username'], $row);
+		
+		/* This is a joke. Someone can remove it later if they like. */
+		if (($_SESSION['user']->name == 'kabniel'||$_SESSION['user']->name == 'tobyink')
+		&& $row['username'] == 'kabniel')
+			for ($i = 0; $i < 99; $i++)
+				$userlist[] = new User($row['username'], $row);
+		/* End of joke. */
 	}
 	
 	// We really need $country_name too! TODO: add Countries(code, name, wikilink) table.
