@@ -30,6 +30,8 @@ $group = new Group($_GET['group']);
 if(isset($group->name)) {
 	header("Content-Type: text/plain");
 	print_r($group);
+	print_r($group->getUsers());
+	print_r($group->tagCloudData());
 } else {
 	$smarty->assign('error', 'Group not found');
 	$smarty->assign('details', 'Shall I call in a missing peoples report?');
