@@ -58,7 +58,7 @@ if ($_REQUEST['country'])
 				'title' => 'FOAF',
 				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities($_SERVER['REQUEST_URI'])
 				)
-		);
+		));
 		
 	$smarty->display('location-country.tpl');
 }
