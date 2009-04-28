@@ -32,41 +32,40 @@ class TagCloud {
     * inaccurate @param float $max_font_size maximum font size (px, em, %, etc)
     * @return array tagcloud
     */
-    static function generateTagCloud($table, $field, $limit = 40, $constraint = null) {
+    static function generateTagCloud($table, $field, $limit = 40, $constraint = null, $contrained_field = false) {
         global $mdb2;
         if (!is_string($field))          return false;	
         if (!is_string($table))          return false;
         if (!is_integer($limit))         return false;
-    	$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
+        $sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
         $query = "SELECT $field, count(*) AS count FROM $table";
         $query .= (!is_null($constraint) || ($table == "Scrobbles")) ? ' WHERE ' : null;
-	if ($field == "track") {
-        $query .= (!is_null($constraint)) ? ' artist = ' . $mdb2->quote($constraint, 'text') : null;
-	} else {
-        $query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
-	}
+        if ($contrained_field) {
+            $query .= (!is_null($constraint)) ? " $constrained_field  = " . $mdb2->quote($constraint, 'text') : null;
+        } elseif ($field == "track") {
+            $query .= (!is_null($constraint)) ? ' artist = ' . $mdb2->quote($constraint, 'text') : null;
+        } else {
+            $query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
+        }
         $query .= (!is_null($constraint) && ($table == "Scrobbles")) ? ' AND ' : null;
         $query .= ($table == "Scrobbles") ? " rating <> 'S' " : null;
         $query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
         $res = $mdb2->query($query);
-	if (PEAR::isError($res)) {
-        	echo("ERROR" . $res->getMessage());
-	}
-
+        if (PEAR::isError($res)) {
+            echo("ERROR" . $res->getMessage());
+        }
         if (!$res->numRows()) {
-        	return false;
+            return false;
         } else {
-                $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-                foreach($data as $count => &$i) {
-                        $i['size'] = $sizes[(int) ($count/(count($data)/7))];
-                }
-
-                foreach($data as &$i){
-			$i['pageurl'] = Server::getArtistURL($i['artist']);
-                }
-
-                sort($data);
-                return $data;
+            $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+            foreach($data as $count => &$i) {
+                $i['size'] = $sizes[(int) ($count/(count($data)/7))];
+            }
+            foreach($data as &$i){
+                $i['pageurl'] = Server::getArtistURL($i['artist']);
+            }
+            sort($data);
+            return $data;
         }
     }
 }

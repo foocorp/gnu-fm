@@ -56,7 +56,6 @@ if (isset($_POST['install'])) {
 		country_name varchar(200),
 		wikipedia_en varchar(120));")
 
-
 	$mdb2->query("CREATE TABLE Users (
 		username VARCHAR(64) PRIMARY KEY,
 		password VARCHAR(32) NOT NULL,
@@ -85,7 +84,7 @@ if (isset($_POST['install'])) {
 		grouptype INTEGER)");
 
 	$res = $mdb2->query("CREATE TABLE Group_Members (
-		group VARCHAR(64) REFERENCES Groups(groupname),
+		groupname VARCHAR(64) REFERENCES Groups(groupname),
 		member VARCHAR(64) REFERENCES Users(username),
 		joined int NOT NULL");
 

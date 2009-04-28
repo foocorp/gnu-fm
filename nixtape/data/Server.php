@@ -21,6 +21,7 @@
 
 require_once($install_path . '/database.php');
 require_once($install_path . '/data/Artist.php');
+require_once($install_path . '/data/Group.php');
 require_once($install_path . '/data/Track.php');
 require_once($install_path . '/data/User.php');
 require_once($install_path . "/data/sanitize.php");
@@ -57,7 +58,7 @@ class Server {
 					a.mbid AS artist_mbid,
 					l.mbid AS album_mbid,
 					l.image AS album_image,
-                                        l.artwork_license,
+					l.artwork_license,
 					t.license
 				FROM Scrobbles s 
 				LEFT JOIN Artist a
@@ -86,7 +87,7 @@ class Server {
 					a.mbid AS artist_mbid,
 					l.mbid AS album_mbid,
 					l.image AS album_image,
-                                        l.artwork_license,
+					l.artwork_license,
 					t.license
 				FROM Scrobbles s
 				LEFT JOIN Artist a
@@ -271,6 +272,15 @@ class Server {
 			return $base_url . "/user/" . urlencode(stripslashes($username));
 		} else {
 			return $base_url . "/profile.php?user=" . urlencode(stripslashes($username));
+		}
+	}
+
+	static function getGroupURL($groupname) {
+		global $friendly_urls, $base_url;
+		if($friendly_urls) {
+			return $base_url . "/group/" . urlencode(stripslashes($groupname));
+		} else {
+			return $base_url . "/group.php?group=" . urlencode(stripslashes($groupname));
 		}
 	}
 

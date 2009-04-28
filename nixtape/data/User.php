@@ -97,7 +97,8 @@ class User {
 				. "userlevel=%d, "
 				. "webid_uri=%s, "
 				. "location_uri=%s, "
-				. "avatar_uri=%s "
+				. "avatar_uri=%s, "
+				. "modified=%d "
 				. "WHERE username=%s"
 				, $mdb2->quote($this->email, 'text')
 				, $mdb2->quote($this->password, 'text')
@@ -109,6 +110,7 @@ class User {
 				, $mdb2->quote($this->id, 'text')
 				, (empty($this->location_uri) ? 'NULL' : $mdb2->quote($this->location_uri, 'text'))
 				, $mdb2->quote($this->avatar_uri, 'text')
+				, time()
 				, $mdb2->quote($this->name, 'text'));
 				
 		$res = $mdb2->query($q);
