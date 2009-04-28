@@ -221,12 +221,13 @@ h3 {
 .userlist {
 	padding: 0;
 	margin: 0;
-	list-style: none;
+    list-style-type: none;
 }
 .userlist li
 {
 	padding: 0;
 	margin: 0 0 1em;	
+    list-style-type: none;
 }
 
 ul#albums * {
