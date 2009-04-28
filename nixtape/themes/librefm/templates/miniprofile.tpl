@@ -1,1 +1,1 @@
-{$me.username}
+{$me->username}
