@@ -28,10 +28,30 @@ require_once('data/Server.php');
 $group = new Group($_GET['group']);
 
 if(isset($group->name)) {
-	header("Content-Type: text/plain");
-	print_r($group);
-	print_r($group->getUsers());
-	print_r($group->tagCloudData());
+
+	$smarty->assign("id", $user->id);
+	$smarty->assign('group', $user->name);
+	$smarty->assign('fullname', $user->fullname);
+	$smarty->assign('bio', $user->bio);
+	$smarty->assign('homepage', $user->homepage);
+	$smarty->assign('avatar', $user->getAvatar());
+	$aUserTagCloud = Group::tagCloudData();
+	if (!PEAR::isError ($aUserTagCloud)) {
+		$smarty->assign('group_tagcloud',$aUserTagCloud);
+	}
+	$smarty->assign('userlist', $group->getUsers());
+	
+	$smarty->assign('extra_head_links', array(
+			array(
+				'rel' => 'meta',
+				'type' => 'application/rdf+xml' ,
+				'title' => 'FOAF',
+				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities($_SERVER['REQUEST_URI'])
+				)
+		));
+	
+	$smarty->display('group.tpl');
+
 } else {
 	$smarty->assign('error', 'Group not found');
 	$smarty->assign('details', 'Shall I call in a missing peoples report?');
