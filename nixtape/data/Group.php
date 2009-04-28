@@ -52,6 +52,13 @@ class Group {
 		else {
 			global $mdb2;
 			$res = $mdb2->query('SELECT * FROM Groups WHERE lower(groupname) = ' . $mdb2->quote(strtolower($name), 'text'));
+			
+			if(PEAR::isError($res)) {
+				header("Content-Type: text/plain");
+				print_r($res);
+				exit;
+			}
+
 			if($res->numRows()) {
 				$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
 			}
@@ -118,6 +125,27 @@ class Group {
 
 	function getURL() {
 		return Server::getGroupURL($this->name);
+	}
+	
+	function getUsers () {
+		global $mdb2;
+
+		if (!isset($this->users[0]))
+		{
+			$res = $mdb2->query("SELECT u.* "
+				. "FROM Users u "
+				. "INNER JOIN Group_Members gm ON u.username=gm.member "
+				. "WHERE gm.groupname=".$mdb2->quote($this->name,'text'));
+			if ($res->numRows())
+			{
+				while ($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))
+				{
+					$this->users[] = new User($row['username'], $row);
+				}
+			}
+		}
+
+		return $this->users;
 	}
 
 
