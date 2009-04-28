@@ -35,7 +35,7 @@ if(isset($group->name)) {
 	$smarty->assign('bio', $group->bio);
 	$smarty->assign('homepage', $group->homepage);
 	$smarty->assign('avatar', $group->getAvatar());
-	$aUserTagCloud = Group::tagCloudData();
+	$aUserTagCloud = $group->tagCloudData();
 	if (!PEAR::isError ($aUserTagCloud)) {
 		$smarty->assign('group_tagcloud',$aUserTagCloud);
 	}
