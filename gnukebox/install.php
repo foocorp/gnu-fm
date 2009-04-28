@@ -129,7 +129,7 @@ if (isset($_POST['install'])) {
 
 	if ( strtolower(substr($mdb2->phptype, 0, 5)) == 'mysql'  ) {
 		$mdb2->query("CREATE TABLE Track(
-			id NOT NULL AUTO_INCREMENT PRIMARY KEY,
+			id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 			name VARCHAR(255),
 			artist VARCHAR(255) REFERENCES Artist(name),
 			album VARCHAR(255),
