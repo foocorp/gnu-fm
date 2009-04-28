@@ -26,6 +26,14 @@ function unrecognised ( msg )
 	return 0;
 }
 
+function UpdateLocationLabel ()
+{
+	if ($('#location_uri')[0].value)
+	{
+		$('#location_uri_label').text($('#location_uri')[0].value);
+	}
+}
+
 function LocationCheck ()
 {
 	if ( !$('#location').val() )
@@ -97,9 +105,7 @@ function LocationCheck ()
 					$('#location_uri')[0].value = geoname;
 					$('#chooser_list').empty();
 					$('#chooser_list').hide();
-					$('#location_uri_label').text( 
-						$(tg).closest('li').attr('data-geoname-name') 
-						+ ' ['	+ $(tg).closest('li').attr('data-geoname-coords') + ']'  );
+					UpdateLocationLabel();
 					$('#location_uri_label').addClass('ok');
 					$('#location_uri_label').removeClass('no');
 				}		
@@ -168,3 +174,5 @@ function webidLookup ()
 		"webid-finder",
 		"status=1,resizable=1,scrollbars=1,width=600,height=500");
 }
+
+UpdateLocationLabel();

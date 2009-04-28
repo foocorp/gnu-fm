@@ -4,8 +4,6 @@
 
 <p><strong>The form below is still <em>very</em> experimental. Using this may wreck your account!</strong></p>
 
-<script type="text/javascript" src="{$base_url}/js/jquery-1.3.2.min.js"></script>
-<script type="text/javascript" src="{$base_url}/js/edit_profile.js"></script>
 <form action="{$base_url}/edit_profile.php" method="post" class="notcrazy">
 	<table>
 		<tr>
@@ -14,14 +12,15 @@
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<th align="right" valign="top" rowspan="2"><label for="location">Location:</label></th>
+			<th align="right" valign="top"><label for="location">Location:</label></th>
 			<td><input name="location" id="location" value="{$location|escape:'html':'UTF-8'}" /></td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
+			<th align="right" valign="top"><label for="location_uri">Geoname:</label></th>
 			<td id="chooser">
 				<input type="hidden" name="location_uri" id="location_uri" value="{$location_uri|escape:'html':'UTF-8'}" />
-				<input type="button" value="Check ..." onclick="LocationCheck();" />
+				<input type="button" value="Find ..." onclick="LocationCheck();" />
 				<span id="location_uri_label"></span>
 			</td>
 			<td><a href="#dfn_location_uri" rel="glossary">What's this?</a></td>
@@ -66,6 +65,9 @@
 		</tr>
 	</table>
 </form>
+
+<script type="text/javascript" src="{$base_url}/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{$base_url}/js/edit_profile.js"></script>
 
 <h3>Help</h3>
 <dl>
