@@ -52,7 +52,7 @@ class TagCloud {
         $query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
         $res = $mdb2->query($query);
         if (PEAR::isError($res)) {
-            echo("ERROR ((($query))) " . $res->getMessage());
+            echo("ERROR - " . $res->getMessage());
         }
         if (!$res->numRows()) {
             return false;
