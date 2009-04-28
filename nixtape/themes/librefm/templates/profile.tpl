@@ -40,7 +40,7 @@
 				{if $geo.country}
 				<small xmlns:gn="http://www.geonames.org/" rel="gn:ontology#inCountry" resource="[gn:countries/#{$geo.country}]">
 					<a rel="foaf:page" href="{$base_url}/countries/{$geo.country}"><img
-						src="{$base_url}/themes/librefm/flags/{$geo.country|strtolower}.png" alt="{$geo.country}"
+						src="{$base_url}/themes/librefm/images/flags/{$geo.country|strtolower}.png" alt="{$geo.country}"
 						rev="foaf:depiction" resource="[gn:countries/#{$geo.country}]"></a>
 				</small>
 				{/if}
