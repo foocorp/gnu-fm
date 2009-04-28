@@ -41,18 +41,23 @@ class User {
 	 *
 	 * @param string $name The name of the user to load
 	 */
-	function __construct($name) {
+	function __construct($name, $data=null) {
 
 		global $base_url;
 		$base = preg_replace('#/$#', '', $base_url);
 
-		global $mdb2;
-		$res = $mdb2->query('SELECT * FROM Users WHERE lower(username) = ' . $mdb2->quote(strtolower($name), 'text'));
-
-		if($res->numRows()) {
-
-			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
-
+		if (is_array($data)) {
+			$row = $data;
+		}
+		else {
+			global $mdb2;
+			$res = $mdb2->query('SELECT * FROM Users WHERE lower(username) = ' . $mdb2->quote(strtolower($name), 'text'));
+			if($res->numRows()) {
+				$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+			}
+		}
+			
+		if (is_array($row)) {
 			$this->name         = $row['username'];
 			$this->password     = $row['password'];
 			$this->email	    = $row['email'];
@@ -66,16 +71,22 @@ class User {
 			$this->webid_uri    = $row["webid_uri"];
 			$this->avatar_uri   = $row["avatar_uri"];
 			$this->acctid       = $base.'/user/' . urlencode($this->name) . '#acct';
-		}
-		
-		if (! preg_match('/\:/', $this->id))
-			$this->id = $base.'/user/' . urlencode($this->name) . '#me';
+			
+			if (! preg_match('/\:/', $this->id))
+				$this->id = $base.'/user/' . urlencode($this->name) . '#me';
+		}		
 	}
 	
 	function save ()
 	{
 		global $mdb2;
-				
+		
+		// It appears we just discard this data, but this is here for a reason!
+		// getLocationDetails will fill in latitude,longitude details into the Places table in the database
+		// if it's not already there. This is important as the location_uri field is a foreign key.
+		if (!empty($this->location_uri))
+			$dummy = Server::getLocationDetails($this->location_uri);
+		
 		$q = sprintf("UPDATE Users SET "
 				. "email=%s, "     # Send a confirmation email first??
 				. "password=%s, "
