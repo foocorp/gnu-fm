@@ -128,7 +128,7 @@ if (isset($_POST['install'])) {
 		name_b VARCHAR(255) REFERENCES Artist(name),
 		PRIMARY KEY(name_a, name_b))");
 
-	$mdb2->query("CREATE SEQUENCE('track_id_seq');");
+	$mdb2->query("CREATE SEQUENCE track_id_seq;");
 	$mdb2->query("CREATE TABLE Track(
 		id INTEGER NOT NULL DEFAULT nextval('track_id_seq'::regclass) PRIMARY KEY,
 		name VARCHAR(255),
