@@ -1,7 +1,6 @@
 <div about="{$me->id|escape:'html':'UTF-8'}" typeof="foaf:Agent" class="user vcard">
 
 	<div class="avatar" rel="foaf:depiction">
-		<!-- Avatar placeholder  -->
 		<img src="{$me->getAvatar()|escape:'html':'UTF-8'}" alt="avatar" class="photo" width="64" height="64" />
 	</div>
 	
