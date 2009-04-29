@@ -39,8 +39,51 @@ $user = new User($_GET['user']);
 if ($user->name == 'tobyink')
 	$rssFeed = 'http://identi.ca/tobyink/rss';
 
-$parser = ARC2::getRDFParser();
-$parser->parse($rssFeed);
+if ($rssFeed)
+{
+	# We have to implement HTTP caching here!
+	$parser = ARC2::getRDFParser();
+	$parser->parse($rssFeed);
 
-header("Content-Type: text/plain");
-print_r( $parser->getSimpleIndex() );
+	$index = $parser->getSimpleIndex();
+	$items = array();
+	foreach ($index as $subject => $data)
+	{
+		if (in_array('http://purl.org/rss/1.0/item', $data['http://www.w3.org/1999/02/22-rdf-syntax-ns#type']))
+		{
+			$items[ $subject ] = array(
+				'title' => $data[ 'http://purl.org/rss/1.0/title' ][0],
+				'link' => $data[ 'http://purl.org/rss/1.0/link' ][0],
+				'date_iso' => $data[ 'http://purl.org/dc/elements/1.1/date' ][0],
+				'date_unix' => strtotime($data[ 'http://purl.org/dc/elements/1.1/date' ][0])
+				);
+		}
+	}
+
+	$smarty->assign("id", $user->id);
+	$smarty->assign("acctid", $user->acctid);
+	$smarty->assign('user', $user->name);
+	$smarty->assign('email', $user->email);
+	$smarty->assign('fullname', $user->fullname);
+	$smarty->assign('bio', $user->bio);
+	$smarty->assign('homepage', $user->homepage);
+	$smarty->assign('location', $user->location);
+	$smarty->assign('location_uri', $user->location_uri);
+	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
+	$smarty->assign('userlevel', $user->userlevel);
+	$smarty->assign('avatar', $user->getAvatar());
+	$aUserTagCloud =  TagCloud::GenerateTagCloud('Scrobbles', 'artist', 40, $user->name);
+	if (!PEAR::isError ($aUserTagCloud)) {
+		$smarty->assign('user_tagcloud',$aUserTagCloud);
+	}
+	$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
+	$smarty->assign('profile', true);
+
+	$smarty->assign('items', $items);
+	$smarty->display('journal.tpl');
+	
+} else {
+	$smarty->assign('error', 'No RSS Feed for this User');
+	$smarty->assign('details', 'Shall I call in a missing feeds report?');
+	$smarty->display('error.tpl');
+}
