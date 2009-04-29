@@ -36,6 +36,11 @@ if (! $_GET['group'])
 				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities($_SERVER['REQUEST_URI'])
 				)
 		));
+	$aTagCloud = TagCloud::GenerateTagCloud('Scrobbles', 'artist');
+	if (!PEAR::isError ($aTagCloud))
+	{
+		$smarty->assign('tagcloud', $aTagCloud);
+	}
 	$smarty->display('group-list.tpl');
 	exit;
 }
