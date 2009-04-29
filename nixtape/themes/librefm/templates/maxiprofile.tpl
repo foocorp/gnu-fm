@@ -15,7 +15,7 @@
 				<span about="{$acctid|escape:'html':'UTF-8'}" typeof="sioc:User">
 					(<span class="nickname" property="foaf:accountName">{$user|escape:'html':'UTF-8'}</span>)
 					<span rel="foaf:accountServiceHomepage" resource="{$base_url}"></span>
-					<span rel="foaf:accountProfilePage" rev="foaf:topic" resource="{base_url}/user/{$name}"></span>
+					<span rel="foaf:accountProfilePage" rev="foaf:topic" resource="{$base_url}/user/{$name}"></span>
 				</span>
 			</span>
 		</dt>
