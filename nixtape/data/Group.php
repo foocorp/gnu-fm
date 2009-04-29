@@ -79,6 +79,63 @@ class Group {
 		}		
 	}
 	
+	static function create ($name, $owner)
+	{
+		global $mdb2;
+		
+		$q = sprintf("INSERT INTO Groups (groupname, owner, modified) VALUES (%s, %s, %d)"
+				, $mdb2->quote($name, 'text')
+				, $mdb2->quote($owner->name, 'text')
+				, time());
+		$res = $mdb2->query($q);
+		
+		if(PEAR::isError($res)) {
+			header("Content-Type: text/plain");
+			print_r($res);
+			exit;
+		}
+
+		$q = sprintf("INSERT INTO Group_Members (groupname, member, joined) VALUES (%s, %s, %d)"
+				, $mdb2->quote($name, 'text')
+				, $mdb2->quote($owner->name, 'text')
+				, time());
+		$res = $mdb2->query($q);
+		
+		if(PEAR::isError($res)) {
+			header("Content-Type: text/plain");
+			print_r($res);
+			exit;
+		}
+
+		return 1;
+	}
+	
+	static function groupList ()
+	{
+		global $mdb2;
+		$res = $mdb2->query("SELECT g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modifed, g.avatar_uri, g.grouptype, COUNT(*) AS gm.member_count "
+			."FROM Groups g "
+			."LEFT JOIN Group_Members gm ON gm.groupname=g.groupname "
+			."GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modifed, g.avatar_uri, g.grouptype");
+		
+		if(PEAR::isError($res))
+		{
+			header("Content-Type: text/plain");
+			print_r($res);
+			exit;
+		}
+
+		$list = array();
+		while ($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))
+		{
+			$g = new Group($row['group_name'], $row);
+			$g->count = $row['member_count'];
+			$list[] = $g;
+		}
+
+		return $list;
+	}
+	
 	function save ()
 	{
 		global $mdb2;

@@ -27,7 +27,9 @@ require_once('data/Server.php');
 
 if (! $_GET['group'])
 {
-	print "Here we should provide a list of existing groups, perhaps largest first.";
+	header('Content-Type: text/plain');
+	print "Here we should provide a list of existing groups, perhaps largest first.\n\n";
+	print_r( Group::groupList() );
 	exit;
 }
 
