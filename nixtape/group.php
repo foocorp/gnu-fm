@@ -25,6 +25,13 @@ require_once('data/Group.php');
 require_once('data/TagCloud.php');
 require_once('data/Server.php');
 
+if (! $_GET['group'])
+{
+	print "Here we should provide a list of existing groups, perhaps largest first.";
+	exit;
+}
+
+
 $group = new Group($_GET['group']);
 
 if(isset($group->name)) {
@@ -35,12 +42,20 @@ if(isset($group->name)) {
 	$smarty->assign('bio', $group->bio);
 	$smarty->assign('homepage', $group->homepage);
 	$smarty->assign('avatar', $group->getAvatar());
+
 	$aUserTagCloud = $group->tagCloudData();
 	if (!PEAR::isError ($aUserTagCloud)) {
 		$smarty->assign('group_tagcloud',$aUserTagCloud);
 	}
-	$smarty->assign('userlist', $group->getUsers());
 	
+	$smarty->assign('userlist', $group->getUsers());
+
+	$smarty->assign('ismember', $group->memberCheck($_SESSION['user']));
+	$smarty->assign('isowner', ($group->owner->name==$_SESSION['user']->name));
+	$smarty->assign('link_join', $group->getURLAction('join'));
+	$smarty->assign('link_leave', $group->getURLAction('leave'));
+	$smarty->assign('link_edit', $base_url.'/edit_group.php?group='.$group->name);
+
 	$smarty->assign('extra_head_links', array(
 			array(
 				'rel' => 'meta',

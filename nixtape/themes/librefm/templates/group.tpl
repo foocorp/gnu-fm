@@ -3,9 +3,20 @@
 <h2 property="dc:title">Group: {$fullname|escape:'html':'UTF-8'}</h2>
 
 <div about="#usergroup" typeof="foaf:Group" property="foaf:nick" content="{$group|escape:'html':'UTF-8'}">
-<span property="foaf:name" content="{$fullname|escape:'html':'UTF-8'}"></span>
-{if $homepage}<a rel="foaf:page" href="{$homepage|escape:'html':'UTF-8'}">{$homepage|escape:'html':'UTF-8'}</a>{/if}
-<p class="note" property="dc:abstract">{$bio|escape:'html':'UTF-8'}</p>
+
+<div class="group vcard">
+	<div class="avatar" rel="foaf:depiction">
+		<img src="{$avatar|escape:'html':'UTF-8'}" alt="avatar" class="photo" width="64" height="64" />
+	</div>
+
+	{if $ismember}
+	<a class="edit" href="{$base_url}/edit_profile.php">[edit]</a>
+	{/if}
+
+	<abbr class="fn org" property="foaf:name" content="{$fullname|escape:'html':'UTF-8'}"  title="{$fullname|escape:'html':'UTF-8'}" style="display:none"></abbr>
+	{if $homepage}<a class="url" rel="foaf:page" href="{$homepage|escape:'html':'UTF-8'}">{$homepage|escape:'html':'UTF-8'}</a>{/if}
+	<p class="note" property="dc:abstract">{$bio|escape:'html':'UTF-8'}</p>
+</div>
 
 <ul rel="foaf:member" class="userlist">
 {foreach from=$userlist item=me}

@@ -127,6 +127,14 @@ class Group {
 		return Server::getGroupURL($this->name);
 	}
 	
+	function getURLAction ($action) {
+		$url = $this->getURL();
+		if (strstr($url, '?'))
+			return $url . '&action=' . urlencode($action);
+		else
+			return $url . '?action=' . urlencode($action);
+	}
+	
 	function getUsers () {
 		global $mdb2;
 
@@ -135,12 +143,13 @@ class Group {
 			$res = $mdb2->query("SELECT u.* "
 				. "FROM Users u "
 				. "INNER JOIN Group_Members gm ON u.username=gm.member "
-				. "WHERE gm.groupname=".$mdb2->quote($this->name,'text'));
+				. "WHERE gm.groupname=".$mdb2->quote($this->name,'text')
+				. " ORDER BY gm.joined");
 			if ($res->numRows())
 			{
 				while ($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))
 				{
-					$this->users[] = new User($row['username'], $row);
+					$this->users[ $row['username'] ] = new User($row['username'], $row);
 				}
 			}
 			
@@ -150,6 +159,51 @@ class Group {
 		return $this->users;
 	}
 
+	function memberCheck ($user) {
+		$users = $this->getUsers();
+		if ($users[ $user->name ]->name == $user->name)
+			return true;
+		return false;
+	}
+	
+	function memberJoin ($user) {
+		if (memberCheck($user))
+			return false;
+		
+		global $mdb2;
+		$res = $mdb2->query(sprintf("INSERT INTO Group_Members (%s, %s, %d)",
+			$mdb->quote($this->name, 'text'),
+			$mdb->quote($user->name, 'text'),
+			time()));
+		
+		if(PEAR::isError($res))
+			return false;
+			
+		$this->users[ $user->name ] = $user;
+		return true;
+	}
+
+	function memberLeave ($user) {
+		if (!memberCheck($user))
+			return false;
+		
+		// Group owner cannot leave, so we need a way to reassign ownership.
+		if ($this->owner->name == $user->name)
+			return false;
+		
+		global $mdb2;
+		$res = $mdb2->query(sprintf("DELETE FROM Group_Members WHERE groupname=%s AND member=%s",
+			$mdb->quote($this->name, 'text'),
+			$mdb->quote($user->name, 'text')));
+		
+		if(PEAR::isError($res))
+			return false;
+			
+		$this->users[ $user->name ] = null;
+		// The array key still exists though. That's annoying. PHP needs an equivalent of Perl's 'delete'.
+		// This shouldn't actually cause us any problems, but people should be aware of the oddness.
+		return true;
+	}
 
 	function tagCloudData () {
 		return TagCloud::generateTagCloud(
