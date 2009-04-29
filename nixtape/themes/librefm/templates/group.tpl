@@ -2,7 +2,7 @@
 
 <h2 property="dc:title">Group: {$fullname|escape:'html':'UTF-8'}</h2>
 
-<div about="#usergroup" typeof="foaf:Group" property="foaf:nick" content="{$group|escape:'html':'UTF-8'}">
+<div about="{$id}" typeof="foaf:Group">
 
 <div class="group vcard">
 	<div class="avatar" rel="foaf:depiction">
@@ -30,7 +30,7 @@
 		<dd class="note" property="dc:abstract">{$bio|escape:'html':'UTF-8'}</dd>
 	</dl>
 
-	<hr style="border: 1px solid transparent; clear: both;" rel="foaf:page" rev="foaf:primaryTopic" resource="" />
+	<hr style="border: 1px solid transparent; clear: both;" rel="foaf:homepage" rev="foaf:primaryTopic" resource="" />
 </div>
 
 <ul rel="foaf:member" class="userlist">
