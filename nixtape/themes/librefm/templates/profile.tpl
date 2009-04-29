@@ -7,16 +7,10 @@
 		<img src="{$avatar|escape:'html':'UTF-8'}" alt="avatar" class="photo" width="64" height="64" />
 	</div>
 
-	{if $ismember}
-		{if $isowner}
-		<a class="edit" href="{$link_edit}">[edit]</a>
-		{else}
-		<a class="edit" href="{$link_leave}">[leave]</a>
-		{/if}
-	{else}
-		<a class="edit" href="{$link_join}">[join]</a>
+	{if $isme}
+	<a class="edit" href="{$base_url}/edit_profile.php">[edit]</a>
 	{/if}
-	
+
 	<dl>
 		<dt>
 			<span class="fn" property="foaf:name">{$fullname|escape:'html':'UTF-8'}</span>

@@ -10,7 +10,13 @@
 	</div>
 
 	{if $ismember}
-	<a class="edit" href="{$base_url}/edit_profile.php">[edit]</a>
+		{if $isowner}
+		<a class="edit" href="{$link_edit}">[edit]</a>
+		{else}
+		<a class="edit" href="{$link_leave}">[leave]</a>
+		{/if}
+	{else}
+		<a class="edit" href="{$link_join}">[join]</a>
 	{/if}
 
 	<abbr class="fn org" property="foaf:name" content="{$fullname|escape:'html':'UTF-8'}"  title="{$fullname|escape:'html':'UTF-8'}" style="display:none"></abbr>
