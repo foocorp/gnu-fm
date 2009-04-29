@@ -171,16 +171,13 @@ class Group {
 			return false;
 		
 		global $mdb2;
-		$res = $mdb2->query(sprintf("INSERT INTO Group_Members (%s, %s, %d)",
+		$res = $mdb2->query(sprintf("INSERT INTO Group_Members VALUES (%s, %s, %d)",
 			$mdb2->quote($this->name, 'text'),
 			$mdb2->quote($user->name, 'text'),
 			time()));
 		
 		if(PEAR::isError($res))
 		{
-			header("Content-Type: text/plain");
-			print_r($res);
-			exit;
 			return false;
 		}
 			
