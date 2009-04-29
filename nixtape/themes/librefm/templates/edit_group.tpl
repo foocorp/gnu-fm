@@ -7,8 +7,8 @@
 <form action="{$base_url}/edit_group.php" method="post">
 
 <p style="display:center">
-<label for="new">Address for the group:</label>
-<b>{$base_url}</b><input id="new" name="new" /></p>
+<label for="new">Address for the group:</label><br />
+<b>{$base_url}/group/</b><input id="new" name="new" size="12" /></p>
 
 <p>
 <input name="group" value="new" type="hidden" />
