@@ -167,7 +167,7 @@ class Group {
 	}
 	
 	function memberJoin ($user) {
-		if (memberCheck($user))
+		if ($this->memberCheck($user))
 			return false;
 		
 		global $mdb2;
@@ -184,7 +184,7 @@ class Group {
 	}
 
 	function memberLeave ($user) {
-		if (!memberCheck($user))
+		if (!$this->memberCheck($user))
 			return false;
 		
 		// Group owner cannot leave, so we need a way to reassign ownership.
