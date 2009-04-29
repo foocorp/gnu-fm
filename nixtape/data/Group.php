@@ -85,9 +85,10 @@ class Group {
 		
 		// Should check to make sure no existing group with same name (case-insensitive).
 		
-		$q = sprintf("INSERT INTO Groups (groupname, owner, modified) VALUES (%s, %s, %d)"
+		$q = sprintf("INSERT INTO Groups (groupname, owner, created, modified) VALUES (%s, %s, %d, %d)"
 				, $mdb2->quote($name, 'text')
 				, $mdb2->quote($owner->name, 'text')
+				, time()
 				, time());
 		$res = $mdb2->query($q);
 		
