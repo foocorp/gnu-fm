@@ -177,7 +177,12 @@ class Group {
 			time()));
 		
 		if(PEAR::isError($res))
+		{
+			header("Content-Type: text/plain");
+			print_r($res);
+			exit;
 			return false;
+		}
 			
 		$this->users[ $user->name ] = $user;
 		return true;
