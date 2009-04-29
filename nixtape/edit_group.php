@@ -33,6 +33,23 @@ if($logged_in == false)
 	die();
 }
 
+if ($_REQUEST['group']=='new')
+{
+	if ($_REQUEST['new'])
+	{
+		$owner = new User($_SESSION['user']->name);
+		Group::create($_REQUEST['new'], $owner);
+		header("Location: {$base_url}/edit_group.php?group=".$_REQUEST['new']);
+		exit;
+	}
+	else
+	{
+		$smarty->assign('newform', true);
+		$smarty->display('edit_group.tpl');
+		exit();
+	}
+}
+
 $group = new Group($_REQUEST['group']);
 
 if ($group->owner->name != $_SESSION['user']->name)
@@ -110,6 +127,7 @@ if(isset($group->name))
 
 	# And display the page.
 	$smarty->assign('errors', $errors);
+	$smarty->assign('newform', false);
 	$smarty->display('edit_group.tpl');
 }
 

@@ -1,5 +1,24 @@
 {include file='header.tpl'}
 
+{if $newform}
+
+<h2 property="dc:title">Create a group</h2>
+
+<form action="{$base_url}/edit_group.php" method="post">
+
+<p style="display:center">
+<label for="new">Address for the group:</label>
+<b>{$base_url}</b><input id="new" name="new" /></p>
+
+<p>
+<input name="group" value="new" type="hidden" />
+<input type="submit" value=" Create " />
+</p>
+
+</form>
+
+{else}
+
 <h2 property="dc:title">Edit your group</h2>
 
 <p><strong>The form below is still <em>very</em> experimental. Using this may wreck your account!</strong></p>
@@ -42,5 +61,8 @@
 	<dd>The web address for a picture to represent your group on libre.fm. It should
 	not be more than 80x80 pixels. (64x64 is best.)</dd>
 </dl>
+
+{/if}
+
 
 {include file='footer.tpl'}

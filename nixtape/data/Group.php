@@ -83,6 +83,8 @@ class Group {
 	{
 		global $mdb2;
 		
+		// Should check to make sure no existing group with same name (case-insensitive).
+		
 		$q = sprintf("INSERT INTO Groups (groupname, owner, modified) VALUES (%s, %s, %d)"
 				, $mdb2->quote($name, 'text')
 				, $mdb2->quote($owner->name, 'text')
