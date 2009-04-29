@@ -19,7 +19,9 @@
 		<a class="edit" href="{$link_join}">[join]</a>
 	{/if}
 
-	<abbr class="fn org" property="foaf:name" content="{$fullname|escape:'html':'UTF-8'}"  title="{$fullname|escape:'html':'UTF-8'}" style="display:none"></abbr>
+	<span class="fn" property="foaf:name">{$fullname|escape:'html':'UTF-8'}</span>
+	(<span class="nickname" property="foaf:nick">{$user|escape:'html':'UTF-8'}</span>)
+	<br />
 	{if $homepage}<a class="url" rel="foaf:page" href="{$homepage|escape:'html':'UTF-8'}">{$homepage|escape:'html':'UTF-8'}</a>{/if}
 	<p class="note" property="dc:abstract">{$bio|escape:'html':'UTF-8'}</p>
 
