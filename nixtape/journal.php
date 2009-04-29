@@ -83,8 +83,15 @@ if ($rssFeed)
 	}
 	$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
 	$smarty->assign('profile', true);
-
 	$smarty->assign('items', $items);
+	$smarty->assign('extra_head_links', array(
+		array(
+			'rel'=>'alternate',
+			'type' => 'application/rss+xml' ,
+			'title' => 'RSS 1.0 Feed (Journal)',
+			'href' => $base_url.'/rdf.php?fmt=rss&page='.htmlentities($_SERVER['REQUEST_URI'])
+			)
+		));
 	$smarty->display('journal.tpl');
 	
 } else {
