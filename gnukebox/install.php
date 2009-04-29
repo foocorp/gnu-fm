@@ -54,7 +54,7 @@ if (isset($_POST['install'])) {
 	$mdb2->query("CREATE TABLE Countries (
 		country varchar(2) PRIMARY KEY,
 		country_name varchar(200),
-		wikipedia_en varchar(120));")
+		wikipedia_en varchar(120));");
 
 	$mdb2->query("CREATE TABLE Users (
 		username VARCHAR(64) PRIMARY KEY,
@@ -64,12 +64,12 @@ if (isset($_POST['install'])) {
 		bio TEXT,
 		homepage VARCHAR(255),
 		location VARCHAR(255),
-		created int NOT NULL,
+		created INTEGER NOT NULL,
 		modified INTEGER,
 		userlevel INTEGER DEFAULT 0,
 		webid_uri VARCHAR(255),
 		avatar_uri VARCHAR(255),
-		active integer DEFAULT 1,
+		active INTEGER DEFAULT 1,
 		location_uri VARCHAR(255) REFERENCES Places(location_uri))");
 
 	$res = $mdb2->query("CREATE TABLE Groups (
@@ -78,7 +78,7 @@ if (isset($_POST['install'])) {
 		fullname VARCHAR(255),
 		bio TEXT,
 		homepage VARCHAR(255),
-		created int NOT NULL,
+		created INTEGER NOT NULL,
 		modified INTEGER,
 		avatar_uri VARCHAR(255),
 		grouptype INTEGER)");
@@ -86,7 +86,7 @@ if (isset($_POST['install'])) {
 	$res = $mdb2->query("CREATE TABLE Group_Members (
 		groupname VARCHAR(64) REFERENCES Groups(groupname),
 		member VARCHAR(64) REFERENCES Users(username),
-		joined int NOT NULL");
+		joined INTEGER NOT NULL");
 
 	$mdb2->query("CREATE TABLE AccountActivation(
 		username VARCHAR(64),
@@ -206,15 +206,15 @@ if (isset($_POST['install'])) {
 		track VARCHAR(255))");
 
 	$res = $mdb2->query("CREATE TABLE Error(
-		    id int(11) AUTO_INCREMENT KEY,
-		    msg text,
-		    data text,
-		    time int)");
+		    id INTEGER(11) AUTO_INCREMENT KEY,
+		    msg TEXT,
+		    data TEXT,
+		    time INTEGER)");
 	$res = $mdb2->query("CREATE TABLE Recovery_Request(
 		    username VARCHAR(64),
 		    email VARCHAR(255),
 		    code VARCHAR(32),
-		    expires int, 
+		    expires INTEGER, 
 		    PRIMARY KEY(username))");
 
 	$res = $mdb2->query("CREATE TABLE Radio_Sessions(
