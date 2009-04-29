@@ -9,21 +9,26 @@
 		<img src="{$avatar|escape:'html':'UTF-8'}" alt="avatar" class="photo" width="64" height="64" />
 	</div>
 
-	{if $ismember}
-		{if $isowner}
-		<a class="edit" href="{$link_edit}">[edit]</a>
+	{if $logged_in}
+		{if $ismember}
+			{if $isowner}
+			<a class="edit" href="{$link_edit}">[edit]</a>
+			{else}
+			<a class="edit" href="{$link_leave}">[leave]</a>
+			{/if}
 		{else}
-		<a class="edit" href="{$link_leave}">[leave]</a>
+			<a class="edit" href="{$link_join}">[join]</a>
 		{/if}
-	{else}
-		<a class="edit" href="{$link_join}">[join]</a>
 	{/if}
 
-	<span class="fn" property="foaf:name">{$fullname|escape:'html':'UTF-8'}</span>
-	(<span class="nickname" property="foaf:nick">{$group|escape:'html':'UTF-8'}</span>)
-	<br />
-	{if $homepage}<a class="url" rel="foaf:page" href="{$homepage|escape:'html':'UTF-8'}">{$homepage|escape:'html':'UTF-8'}</a>{/if}
-	<p class="note" property="dc:abstract">{$bio|escape:'html':'UTF-8'}</p>
+	<dl>
+		<dt>
+			<span class="fn" property="foaf:name">{$fullname|escape:'html':'UTF-8'}</span>
+			(<span class="nickname" property="foaf:nick">{$group|escape:'html':'UTF-8'}</span>)
+		</dt>
+		<dd>{if $homepage}<a class="url" rel="foaf:page" href="{$homepage|escape:'html':'UTF-8'}">{$homepage|escape:'html':'UTF-8'}</a>{/if}</dd>
+		<dd class="note" property="dc:abstract">{$bio|escape:'html':'UTF-8'}</dd>
+	</dl>
 
 	<hr style="border: 1px solid transparent; clear: both;" rel="foaf:page" rev="foaf:primaryTopic" resource="" />
 </div>

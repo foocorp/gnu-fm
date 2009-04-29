@@ -33,9 +33,14 @@ if (! $_GET['group'])
 
 $group = new Group($_GET['group']);
 
-if ($_GET['action'])
+if ($_GET['action'] && $_SESSION['user']->name)
 {
-	print "Need to perform action " . htmlentities($_GET['action']);
+	if ($_GET['action'] == 'join')
+		$group->memberJoin($_SESSION['user']);
+	elseif ($_GET['action'] == 'leave')
+		$group->memberLeave($_SESSION['user']);
+		
+	header("Location: " . $group->getURL());
 	exit;
 }
 
