@@ -27,9 +27,16 @@ require_once('data/Server.php');
 
 if (! $_GET['group'])
 {
-	header('Content-Type: text/plain');
-	print "Here we should provide a list of existing groups, perhaps largest first.\n\n";
-	print_r( Group::groupList() );
+	$smarty->assign('groups', Group::groupList());
+	$smarty->assign('extra_head_links', array(
+			array(
+				'rel' => 'meta',
+				'type' => 'application/rdf+xml' ,
+				'title' => 'FOAF',
+				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities($_SERVER['REQUEST_URI'])
+				)
+		));
+	$smarty->display('group-list.tpl');
 	exit;
 }
 
