@@ -19,7 +19,7 @@
 				</dt>
 				<dd>{if $g->homepage}<a class="url" rel="foaf:page" href="{$g->homepage|escape:'html':'UTF-8'}">{$g->homepage|escape:'html':'UTF-8'}</a>{/if}</dd>
 				<dd class="note" property="dc:abstract">{$g->bio|escape:'html':'UTF-8'}</dd>
-				<dd><a rel="foaf:homepage" rev="foaf:primaryTopic" href="{$g->getURL()|escape:'html':'UTF-8'}">{$g->getURL()|escape:'html':'UTF-8'}</a></dd>
+				<dd><a rel="foaf:homepage" rev="foaf:primaryTopic" property="dc:description" href="{$g->getURL()|escape:'html':'UTF-8'}">{$g->count} users</a></dd>
 			</dl>
 			<hr style="border: 1px solid transparent; clear: both;" />
 		</div>
