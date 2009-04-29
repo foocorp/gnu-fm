@@ -31,8 +31,14 @@ if (! $_GET['group'])
 	exit;
 }
 
-
 $group = new Group($_GET['group']);
+
+if ($_GET['action'])
+{
+	print "Need to perform action " . htmlentities($_GET['action']);
+	exit;
+}
+
 
 if(isset($group->name)) {
 
