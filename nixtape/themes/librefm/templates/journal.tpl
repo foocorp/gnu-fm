@@ -9,7 +9,7 @@
 	<li typeof="sioc:Item rss:item" class="hentry">
 		<b class="entry-title" property="dc:title">{$i.title|escape:'html':'UTF-8'}</b>
 		<a property="rss:item" rel="bookmark sioc:link" href="{$i.link|escape:'html':'UTF-8'}">{$i.link|escape:'html':'UTF-8'}</a>
-		<abbr class="published" property="dc:date" content="{$i.date_iso}" content="{$i.date_iso}">{$i.date_human}</abbr>
+		<abbr class="published" property="dc:date" content="{$i.date_iso}" title="{$i.date_iso}">{$i.date_human}</abbr>
 	</li>
 {/foreach}
 </ul>
