@@ -7,5 +7,6 @@ RewriteRule ^artist/([^/]+)/album/([^/]+)/track/([^/]+)/?$	track.php?artist=$1&a
 RewriteRule ^artist/([^/]+)/album/([^/]+)/?$			album.php?artist=$1&album=$2 		[B,NC]
 RewriteRule ^artist/([^/]+)/?$					artist.php?artist=$1			[B,NC]
 RewriteRule ^group/([^/]+)/?$                                   group.php?group=$1                      [B,NC,QSA]
+RewriteRule ^group/?$                                           group.php                               [B,NC,QSA]
 RewriteRule ^country/([^/]+)/?$					location.php?country=$1			[B,NC]
 RewriteRule ^logout 						login.php?action=logout			[B,NC]
