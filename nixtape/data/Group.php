@@ -172,8 +172,8 @@ class Group {
 		
 		global $mdb2;
 		$res = $mdb2->query(sprintf("INSERT INTO Group_Members (%s, %s, %d)",
-			$mdb->quote($this->name, 'text'),
-			$mdb->quote($user->name, 'text'),
+			$mdb2->quote($this->name, 'text'),
+			$mdb2->quote($user->name, 'text'),
 			time()));
 		
 		if(PEAR::isError($res))
@@ -193,8 +193,8 @@ class Group {
 		
 		global $mdb2;
 		$res = $mdb2->query(sprintf("DELETE FROM Group_Members WHERE groupname=%s AND member=%s",
-			$mdb->quote($this->name, 'text'),
-			$mdb->quote($user->name, 'text')));
+			$mdb2->quote($this->name, 'text'),
+			$mdb2->quote($user->name, 'text')));
 		
 		if(PEAR::isError($res))
 			return false;
