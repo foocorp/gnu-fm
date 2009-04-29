@@ -47,7 +47,7 @@ if ($_REQUEST['country'])
 	
 	$smarty->assign('country', strtoupper($_REQUEST['country']));
 	$res = $mdb2->query(sprintf("SELECT * FROM Countries WHERE country=%s LIMIT 1",
-		$mdb2->quote(strtoupper($_REQUEST['country']), 'text'));
+		$mdb2->quote(strtoupper($_REQUEST['country']), 'text')));
 	if ( $row = $res->fetchRow(MDB2_FETCHMODE_ASSOC) )
 	{
 		$smarty->assign('country_info', $row);
