@@ -105,8 +105,9 @@ ul#nowplaying.listcloud li { float: left; margin-right: 10px; margin-bottom: 10p
 
 ul#recenttracks.listcloud li { height: 3.4em; }
 /* Users */
-.user .fn {
+.user .fn , .group .fn {
     margin-bottom: .3em;
+    font-size: 93%;
 }
 .avatar {
     max-height: 96px;
@@ -117,14 +118,14 @@ ul#recenttracks.listcloud li { height: 3.4em; }
     margin: .3em;
 }
 
-.user .avatar img.photo{ max-width:96px; }
+.user .avatar img.photo, 
+.group .avatar img.photo{ max-width:96px; }
 
-.user .bio {
+.user .bio,
+.group .bio {
 }
-.user .fn {
-    font-size: 93%;
-}
-.user .nickname {
+.user .nickname ,
+.group .nickname {
     color: #666666
 }
   dl.now-playing dt, dl.recent-tracks dt {
@@ -198,13 +199,17 @@ h3 {
     clear: both;
 }
 
-.user {
+.user, .group {
     -moz-border-radius-bottomleft:8px;
     -moz-border-radius-bottomright:8px;
     -moz-border-radius-topleft:8px;
     -moz-border-radius-topright:8px;
     background-color: #EEE;
     padding: .4em .4em 0 .1em;
+}
+
+.group {
+	background-color: #DDF;
 }
 
 .vcard .edit { float:right; }
