@@ -25,6 +25,7 @@ require_once('data/User.php');
 require_once('data/TagCloud.php');
 require_once('data/Server.php');
 require_once('utils/arc/ARC2.php');
+require_once('utils/human-time.php');
 
 if(!isset($_GET['user']) && $logged_in == false) {
         $smarty->assign('error', 'Error!');
@@ -46,16 +47,20 @@ if ($rssFeed)
 	$parser->parse($rssFeed);
 
 	$index = $parser->getSimpleIndex();
+	krsort($index); // Newest last.
 	$items = array();
 	foreach ($index as $subject => $data)
 	{
 		if (in_array('http://purl.org/rss/1.0/item', $data['http://www.w3.org/1999/02/22-rdf-syntax-ns#type']))
 		{
-			$items[ $subject ] = array(
+			$ts = strtotime($data[ 'http://purl.org/dc/elements/1.1/date' ][0]);
+			$items[] = array(
+				'subject_uri' => $subject,
 				'title' => $data[ 'http://purl.org/rss/1.0/title' ][0],
 				'link' => $data[ 'http://purl.org/rss/1.0/link' ][0],
 				'date_iso' => $data[ 'http://purl.org/dc/elements/1.1/date' ][0],
-				'date_unix' => strtotime($data[ 'http://purl.org/dc/elements/1.1/date' ][0])
+				'date_unix' => $ts,
+				'date_human' => human_timestamp($ts)
 				);
 		}
 	}
