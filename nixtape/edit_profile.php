@@ -147,6 +147,11 @@ if(isset($user->name))
 	}
 
 	# And display the page.
+	$aTagCloud = TagCloud::GenerateTagCloud('Scrobbles', 'artist');
+	if (!PEAR::isError ($aTagCloud))
+	{
+		$smarty->assign('tagcloud', $aTagCloud);
+	}
 	$smarty->assign('errors', $errors);
 	$smarty->display('edit_profile.tpl');
 }
