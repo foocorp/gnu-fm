@@ -113,7 +113,7 @@ class Group {
 	static function groupList ()
 	{
 		global $mdb2;
-		$res = $mdb2->query("SELECT g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modifed, g.avatar_uri, g.grouptype, COUNT(*) AS gm.member_count "
+		$res = $mdb2->query("SELECT g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modifed, g.avatar_uri, g.grouptype, COUNT(*) AS member_count "
 			."FROM Groups g "
 			."LEFT JOIN Group_Members gm ON gm.groupname=g.groupname "
 			."GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modifed, g.avatar_uri, g.grouptype");
