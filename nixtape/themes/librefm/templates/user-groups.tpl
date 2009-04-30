@@ -4,7 +4,7 @@
 
 {include file='maxiprofile.tpl'}
 
-<ul about="{$me->id}" rev="foaf:member" class="grouplist">
+<ul about="{$me->id}" rev="foaf:member" class="userlist">
 {foreach from=$groups item=g}
 
 	<li about="{$g->id}" typeof="foaf:Group">
