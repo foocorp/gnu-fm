@@ -266,50 +266,62 @@ class Server {
 	 * @param string $username The username we want a URL for
 	 * @return A string containing URL to the user's profile
 	 */
-	static function getUserURL($username) {
+	static function getUserURL ($username, $component)
+	{
 		global $friendly_urls, $base_url;
-		if($friendly_urls) {
-			return $base_url . "/user/" . urlencode(stripslashes($username));
-		} else {
-			return $base_url . "/profile.php?user=" . urlencode(stripslashes($username));
+		if ($component == 'edit')
+		{
+			return $base_url . "/user-edit.php";
+		}
+		elseif($friendly_urls)
+		{
+			if ($component == 'profile')
+				$component = '';
+			else
+				$component = "/{$component}";
+			return $base_url . "/user/" . urlencode($username) . $component;
+		}
+		else
+		{
+			return $base_url . "/user-{$component}.php?user=" . urlencode($username);
 		}
 	}
 
 	static function getGroupURL($groupname) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . "/group/" . urlencode(stripslashes($groupname));
+			return $base_url . "/group/" . urlencode($groupname);
 		} else {
-			return $base_url . "/group.php?group=" . urlencode(stripslashes($groupname));
+			return $base_url . "/group.php?group=" . urlencode($groupname);
 		}
 	}
 
 	static function getArtistURL($artist) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . "/artist/" . urlencode(stripslashes($artist));
+			return $base_url . "/artist/" . urlencode($artist);
 		} else {
-			return $base_url . "/artist.php?artist=" . urlencode(stripslashes($artist));
+			return $base_url . "/artist.php?artist=" . urlencode($artist);
 		}
 	}
 
 	static function getAlbumURL($artist, $album) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . "/artist/" . urlencode(stripslashes($artist)) . "/album/" . urlencode(stripslashes($album));
+			return $base_url . "/artist/" . urlencode($artist) . "/album/" . urlencode($album);
 		} else {
-			return $base_url . "/album.php?artist=" . urlencode(stripslashes($artist)) . "&album=" . urlencode(stripslashes($album));
+			return $base_url . "/album.php?artist=" . urlencode($artist) . "&album=" . urlencode($album);
 		}
 	}
 
 	static function getTrackURL($artist, $album, $track) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls && $album) {
-			return $base_url . "/artist/" . urlencode(stripslashes($artist)) . "/album/" . urlencode(stripslashes($album)) . "/track/" . urlencode(stripslashes($track));
+			return $base_url . "/artist/" . urlencode($artist) . "/album/" . urlencode($album) . "/track/" . urlencode($track);
 		} elseif ($friendly_urls) {
-			return $base_url . "/artist/" . urlencode(stripslashes($artist)) . "/track/" . urlencode(stripslashes($track));
+			return $base_url . "/artist/" . urlencode($artist) . "/track/" . urlencode($track);
 		} else {
-			return $base_url . "/track.php?artist=" . urlencode(stripslashes($artist)) .   "&album=" . urlencode(stripslashes($album)) . "&track=" . urlencode(stripslashes($track));
+			return $base_url . "/track.php?artist=" . urlencode($artist) .   "&album=" . urlencode($album) . "&track=" . urlencode($track);
 		}
 	}
 
