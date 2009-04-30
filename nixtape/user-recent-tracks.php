@@ -33,11 +33,14 @@ if(!isset($_GET['user']) && $logged_in == false) {
 }
 
 $user = new User($_GET['user']);
+$scrobbleCount = (int)$_GET['count'];
+if (!$scrobbleCount)
+	$scrobbleCount = 100;
 
 if(isset($user->name)) {
 
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
-	$aUserScrobbles = $user->getScrobbles(100);
+	$aUserScrobbles = $user->getScrobbles( $scrobbleCount );
 	if (!PEAR::isError ($aUserScrobbles)) {
 		$smarty->assign('scrobbles', $aUserScrobbles);
 	}
