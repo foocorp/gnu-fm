@@ -53,7 +53,8 @@
 	</dl>
 
 	<div style="text-align:right;clear:right;font-size:80%">
-		<a{if $this_page_absolute != $me->getURL()}rel="rdfs:seeAlso" href="{$me->getURL()|escape:'html':'UTF-8'}"{/if}>profile</a>
+		<a{if $this_page_absolute != $me->getURL()} rel="rdfs:seeAlso" href="{$me->getURL()|escape:'html':'UTF-8'}"{/if}>profile</a>
+		&middot; <a{if $this_page_absolute != $me->getURL('recent-tracks')} rel="rdfs:seeAlso" href="{$me->getURL('recent-tracks')|escape:'html':'UTF-8'}"{/if}>recent tracks</a>
 		{if $me->journal_rss} &middot; <a{if $this_page_absolute != $me->getURL('journal')} rel="rdfs:seeAlso" href="{$me->getURL('journal')|escape:'html':'UTF-8'}"{/if}>journal</a>{/if}
 	</div>
 	<hr style="border: 1px solid transparent; clear: both;" rel="foaf:page" rev="foaf:primaryTopic" resource="" />

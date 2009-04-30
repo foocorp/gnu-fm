@@ -37,16 +37,12 @@ $user = new User($_GET['user']);
 if(isset($user->name)) {
 
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
-	$aUserScrobbles = $user->getScrobbles(10);
+	$aUserScrobbles = $user->getScrobbles(100);
 	if (!PEAR::isError ($aUserScrobbles)) {
 		$smarty->assign('scrobbles', $aUserScrobbles);
 	}
 	$smarty->assign('userlevel', $user->userlevel);
 	$smarty->assign('avatar', $user->getAvatar());
-	$aUserNowPlaying = $user->getNowPlaying(10);
-	if (!PEAR::isError ($aUserNowPlaying)) {
-		$smarty->assign('nowplaying', $aUserNowPlaying);
-	}
 	$aUserTagCloud =  TagCloud::GenerateTagCloud('Scrobbles', 'artist', 40, $user->name);
 	if (!PEAR::isError ($aUserTagCloud)) {
 		$smarty->assign('user_tagcloud',$aUserTagCloud);
@@ -70,8 +66,6 @@ if(isset($user->name)) {
 				)
 		));
 
-	$smarty->assign('toptracks', $user->getTopTracks());
-	
 	$smarty->display('user-profile.tpl');
 } else {
 	$smarty->assign('error', 'User not found');
