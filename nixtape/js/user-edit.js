@@ -190,4 +190,5 @@ function laconicaUpdate ()
 }
 
 UpdateLocationLabel();
-$('#laconica_profile')[0].value = 'http://identi.ca/example';
+if ($('#laconica_profile')[0].value == '')
+	$('#laconica_profile')[0].value = 'http://identi.ca/example';
