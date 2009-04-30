@@ -39,8 +39,6 @@ $user = new User($_GET['user']);
 if(isset($user->name)) {
 
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
-	$smarty->assign('userlevel', $user->userlevel);
-	$smarty->assign('avatar', $user->getAvatar());
 	$aUserTagCloud =  TagCloud::GenerateTagCloud('Scrobbles', 'artist', 40, $user->name);
 	if (!PEAR::isError ($aUserTagCloud)) {
 		$smarty->assign('user_tagcloud',$aUserTagCloud);
@@ -53,12 +51,6 @@ if(isset($user->name)) {
 
 	$smarty->assign('extra_head_links', array(
 			array(
-				'rel'=>'alternate',
-				'type' => 'application/rss+xml' ,
-				'title' => 'RSS 1.0 Feed (Recent plays)',
-				'href' => $base_url.'/rdf.php?fmt=rss&page='.htmlentities(str_replace($base_url, '', $user->getURL('recent-tracks')))
-				),
-			array(
 				'rel' => 'meta',
 				'type' => 'application/rdf+xml' ,
 				'title' => 'FOAF',
@@ -66,10 +58,6 @@ if(isset($user->name)) {
 				)
 		));
 		
-	header('Content-Type: text/plain');
-	print_r(Group::groupList($user));
-	exit;
-	
 	$smarty->display('user-groups.tpl');
 } else {
 	$smarty->assign('error', 'User not found');
