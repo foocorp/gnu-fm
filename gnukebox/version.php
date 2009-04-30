@@ -19,5 +19,5 @@
 
 */
 
-$version = 0.1;
+$version = 0.1;		// set up the version number
 ?>
