@@ -33,7 +33,7 @@ require_once($install_path . '/data/Server.php');
 class User {
 
 	public $name, $email, $fullname, $bio, $location, $homepage, $error, $userlevel;
-	public $id, $acctid, $avatar_uri, $location_uri, $webid_uri;
+	public $id, $acctid, $avatar_uri, $location_uri, $webid_uri, $laconica_profile, $journal_rss;
 	public $password;
 
 	/**
@@ -70,6 +70,8 @@ class User {
 			$this->id           = $row["webid_uri"];
 			$this->webid_uri    = $row["webid_uri"];
 			$this->avatar_uri   = $row["avatar_uri"];
+			$this->laconica_profile = $row["laconica_profile"];
+			$this->journal_rss  = $row["journal_rss"];
 			$this->acctid       = $this->getURL() . '#acct';
 			
 			if (! preg_match('/\:/', $this->id))
@@ -98,6 +100,8 @@ class User {
 				. "webid_uri=%s, "
 				. "location_uri=%s, "
 				. "avatar_uri=%s, "
+				. "laconica_profile=%s, "
+				. "journal_rss=%s, "
 				. "modified=%d "
 				. "WHERE username=%s"
 				, $mdb2->quote($this->email, 'text')
@@ -110,6 +114,8 @@ class User {
 				, $mdb2->quote($this->id, 'text')
 				, (empty($this->location_uri) ? 'NULL' : $mdb2->quote($this->location_uri, 'text'))
 				, $mdb2->quote($this->avatar_uri, 'text')
+				, $mdb2->quote($this->laconica_profile, 'text')
+				, $mdb2->quote($this->journal_rss, 'text')
 				, time()
 				, $mdb2->quote($this->name, 'text'));
 				

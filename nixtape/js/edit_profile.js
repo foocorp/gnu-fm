@@ -175,4 +175,19 @@ function webidLookup ()
 		"status=1,resizable=1,scrollbars=1,width=600,height=500");
 }
 
+function laconicaClick ()
+{
+	if ($('#laconica_profile')[0].value == 'http://identi.ca/example')
+		$('#laconica_profile')[0].value = '';
+}
+
+function laconicaUpdate ()
+{
+	if ($('#laconica_profile')[0].value.match(/^http:\/\/.+\/.+/))
+	{
+		$('#journal_rss')[0].value = $('#laconica_profile')[0].value + '/rss';
+	}
+}
+
 UpdateLocationLabel();
+$('#laconica_profile')[0].value = 'http://identi.ca/example';

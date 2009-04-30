@@ -70,7 +70,9 @@ if (isset($_POST['install'])) {
 		webid_uri VARCHAR(255),
 		avatar_uri VARCHAR(255),
 		active INTEGER DEFAULT 1,
-		location_uri VARCHAR(255) REFERENCES Places(location_uri))");
+		location_uri VARCHAR(255) REFERENCES Places(location_uri),
+		laconica_profile VARCHAR(255),
+		journal_rss VARCHAR(255))");
 
 	$res = $mdb2->query("CREATE TABLE Groups (
 		groupname VARCHAR(64) PRIMARY KEY,
