@@ -1,6 +1,6 @@
 {include file='header.tpl'}
 
-<h2 property="dc:title">{$user|escape:'html':'UTF-8'}'{if $user|substr:-1 != 's'}s{/if} profile</h2>
+<h2 property="dc:title">{$user|escape:'html':'UTF-8'}'s profile</h2>
 
 {include file='maxiprofile.tpl'}
 
@@ -21,7 +21,7 @@
 {/if}
 
 <div about="[_:seq1]" typeof="rdf:Seq" rev="rss:items">
-	<h3 typeof="rss:channel" property="rss:title" rel="rss:link" resource="#latest_plays" id="latest_plays" content="{$user|escape:'html':'UTF-8'}'{if $user|substr:-1 != 's'}s{/if} Latest Plays">Latest {$scrobbles|@count} Plays:</h3>
+	<h3 typeof="rss:channel" property="rss:title" rel="rss:link" resource="#latest_plays" id="latest_plays" content="{$user|escape:'html':'UTF-8'}'s Latest Plays">Latest {$scrobbles|@count} Plays:</h3>
 </div>
 
 <ul class="gobbles" about="{$id|escape:'html':'UTF-8'}" rev="gob:user">
@@ -68,7 +68,7 @@
 <!-- Column break -->
 </div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
 
-<h3>{$user}'{if $user|substr:-1 != 's'}s{/if} top artists</h3>
+<h3>{$user}'s top artists</h3>
 <ul class="tagcloud" about="{$id}">
 	{section name=i loop=$user_tagcloud}
 	<li style="font-size:{$user_tagcloud[i].size}"><a
