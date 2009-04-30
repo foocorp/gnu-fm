@@ -34,7 +34,9 @@ if(!isset($_GET['user']) && $logged_in == false) {
 
 $user = new User($_GET['user']);
 $scrobbleCount = (int)$_GET['count'];
-if (!$scrobbleCount)
+if ($scobbleCount >= 1200)
+	$scrobbleCount = 1200;
+elseif (!$scrobbleCount)
 	$scrobbleCount = 100;
 
 if(isset($user->name)) {
