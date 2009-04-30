@@ -13,7 +13,7 @@
 	{/section}
 </table>
 
-<h3 id="stats_by_track">{$me->name|escape:'html':'UTF-8'}'s Top Tracks</h3>
+<h3 id="stats_by_track">{$me->name|escape:'html':'UTF-8'}'s top tracks</h3>
 <table class="stats_artists" about="{$me->id}">
 {section name=i loop=$toptracks}
 	<tr>
@@ -41,9 +41,10 @@
 <!-- Column break -->
 </div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
 
-<h3>{$user}'s statistics</h3>
+<h3>{$me->name}'s statistics</h3>
 <ul>
 	<li><a href="#stats_by_artist">Most played artists</a></li>
+	<li><a href="#stats_by_track">Top tracks</a></li>
 	<li><a href="#stats_by_day">Scrobbles by day</a></li>
 </ul>
 <p><strong>More coming soon</strong></p>
