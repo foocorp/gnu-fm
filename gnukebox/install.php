@@ -226,12 +226,15 @@ if (isset($_POST['install'])) {
 			expires INTEGER NOT NULL DEFAULT 0,
 			PRIMARY KEY(username,session))");
 
+	$res = $mdb2->exec("CREATE VIEW Free_Scrobbles AS SELECT s.* FROM Scrobbles s INNER JOIN Track t on lower(s.artist)=lower(t.artist) and lower(s.track)=lower(t.name) where t.streamable=1");
+
+
 // uncomment these to solve performance problems with getRecentScrobbles
 // 	$res = $mdb2->exec("CREATE INDEX album_artistname_idx ON Album(artist_name)");
 // 	$res = $mdb2->exec("CREATE INDEX scrobbles_artist_idx ON Scrobbles(artist)");
 //	$res = $mdb2->exec("CREATE INDEX scrobbles_time_idx ON Scrobbles(time)");
 //      $res = $mdb2->exec("CREATE INDEX track_artisttrack_idx ON Track(lower(artist),lower(name))");
-
+//      $res = $mdb2->exec("CREATE INDEX scrobbles_artisttrack_idx on scrobbles(lower(artist),lower(track))");
 
 // uncomment these if you're using postgresql and want to run the software as www-data
 //	$res = $mdb2->exec("GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE Album, Artist, Auth, Clientcodes, Error, Invitation_Request, Invitations, Now_Playing, Places, Radio_Sessions, Scrobble_Sessions, Scrobbles, Similar_artist, Tags, Track, Users to \"www-data\"");
