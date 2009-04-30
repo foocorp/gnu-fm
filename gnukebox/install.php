@@ -238,6 +238,7 @@ if (isset($_POST['install'])) {
 
 // uncomment these if you're using postgresql and want to run the software as www-data
 //	$res = $mdb2->exec("GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE Album, Artist, Auth, Clientcodes, Error, Invitation_Request, Invitations, Now_Playing, Places, Radio_Sessions, Scrobble_Sessions, Scrobbles, Similar_artist, Tags, Track, Users to \"www-data\"");
+//	$res = $mdb2->exec("GRANT SELECT ON Free_Scrobbles to \"www-data\"");
 //	$res = $mdb2->exec("GRANT SELECT, UPDATE ON users_uniqueid_seq to \"www-data\"");
 
 	// Test user configuration
