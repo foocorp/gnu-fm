@@ -89,7 +89,7 @@ if ($rssFeed)
 			'rel'=>'alternate',
 			'type' => 'application/rss+xml' ,
 			'title' => 'RSS 1.0 Feed (Journal)',
-			'href' => $base_url.'/rdf.php?fmt=rss&page='.htmlentities($_SERVER['REQUEST_URI'])
+			'href' => $rssFeed
 			)
 		));
 	$smarty->display('user-journal.tpl');
