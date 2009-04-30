@@ -14,7 +14,7 @@
 			</div>
 			<dl>
 				<dt>
-					<span class="fn" property="foaf:name">{$g->fullname|escape:'html':'UTF-8'}</span>
+					<span class="fn org" property="foaf:name">{$g->fullname|escape:'html':'UTF-8'}</span>
 					(<span class="nickname" property="foaf:nick">{$g->name|escape:'html':'UTF-8'}</span>)
 				</dt>
 				<dd>{if $g->homepage}<a class="url" rel="foaf:page" href="{$g->homepage|escape:'html':'UTF-8'}">{$g->homepage|escape:'html':'UTF-8'}</a>{/if}</dd>
