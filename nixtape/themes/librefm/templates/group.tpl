@@ -14,10 +14,10 @@
 			{if $isowner}
 			<a class="edit" href="{$link_edit}">[edit]</a>
 			{else}
-			<a class="edit" href="{$link_leave}">[leave]</a>
+			<form class="edit" action="{$link_leave}" method="get"><div><input type="submit" value=" leave " /></div></form>
 			{/if}
 		{else}
-			<a class="edit" href="{$link_join}">[join]</a>
+			<form class="edit" action="{$link_join}" method="get"><div><input type="submit" value=" join " /></div></form>
 		{/if}
 	{/if}
 
