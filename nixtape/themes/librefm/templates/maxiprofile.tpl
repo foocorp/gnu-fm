@@ -57,6 +57,7 @@
 		&middot; <a{if $this_page_absolute != $me->getURL('stats')} rel="rdfs:seeAlso" href="{$me->getURL('stats')|escape:'html':'UTF-8'}"{/if}>stats</a>
 		&middot; <a{if $this_page_absolute != $me->getURL('recent-tracks')} rel="rdfs:seeAlso" href="{$me->getURL('recent-tracks')|escape:'html':'UTF-8'}"{/if}>recent tracks</a>
 		{if $me->journal_rss} &middot; <a{if $this_page_absolute != $me->getURL('journal')} rel="rdfs:seeAlso" href="{$me->getURL('journal')|escape:'html':'UTF-8'}"{/if}>journal</a>{/if}
+		&middot; <a{if $this_page_absolute != $me->getURL('groups')} rel="rdfs:seeAlso" href="{$me->getURL('groups')|escape:'html':'UTF-8'}"{/if}>groups</a>
 	</div>
 	<hr style="border: 1px solid transparent; clear: both;" rel="foaf:page" rev="foaf:primaryTopic" resource="" />
 
