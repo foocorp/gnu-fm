@@ -266,7 +266,7 @@ class Server {
 	 * @param string $username The username we want a URL for
 	 * @return A string containing URL to the user's profile
 	 */
-	static function getUserURL ($username, $component)
+	static function getUserURL ($username, $component='profile')
 	{
 		global $friendly_urls, $base_url;
 		if ($component == 'edit')
