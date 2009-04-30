@@ -10,9 +10,9 @@ html{background-color: #ececec;}
 
 #hd ul{ margin: 0; padding: 0; line-height: 70px; position: absolute; top: 0; right: 20px;}
 
-#hd li a{ color: white; text-decoration: none; }
+#hd li a:link, #hd li a:visited { color: white; text-decoration: none; }
 
-#login a{ color: yellow !important; }
+#login a:link, #login a:visited { color: yellow !important; }
 
 #hd li{ display: inline; font-size: 21px; text-transform: lowercase; font-weight: bold; margin-right: 20px;}
 
@@ -41,7 +41,7 @@ html{background-color: #ececec;}
      padding: 0;
      }
 
-#hd h1 a{ 
+#hd h1 a { 
        display: block;
        text-decoration: none;
        overflow: hidden;

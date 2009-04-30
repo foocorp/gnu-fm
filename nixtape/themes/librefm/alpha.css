@@ -2,7 +2,7 @@
  * Alpha specific CSS
  *
  */
-a {
+a:link, a:visited {
     text-decoration: none;
     outline: none;
     color: #3465a4;
@@ -96,7 +96,8 @@ ul.listcloud li dl { margin: 0; padding: 0; }
 ul.listcloud li dt { margin: 0; padding: 0; }
 ul.listcloud li dd { margin: 0; padding: 0; }
 
-ul.listcloud li dt a { color: #630000; text-decoration: none; }
+ul.listcloud li dt a:link,
+ul.listcloud li dt a:visited { color: #630000; text-decoration: none; }
 ul.listcloud li dt a:hover { text-decoration: underline; }
 
 ul#topartists.listcloud dd, ul#albums.listcloud dd { font-size: 77%; line-height: 1.2em; }
@@ -167,7 +168,7 @@ ul.gobbles {
 ul.gobbles * {
     list-style: none;
 }
-    ul.gobbles .contributor a {
+    ul.gobbles .contributor a:link, ul.gobbles .contributor a:visited {
         text-decoration: none;
         color: #2e3436;
         font-weight: bold;
