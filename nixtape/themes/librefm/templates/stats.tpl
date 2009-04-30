@@ -1,6 +1,6 @@
 {include file='header.tpl'}
 
-<h2 property="dc:title">{$user|escape:'html':'UTF-8'}'{if $user|substr:-1 != 's'}s{/if} statistics</h2>
+<h2 property="dc:title">{$user|escape:'html':'UTF-8'}'s statistics</h2>
 <div about="{$id|escape:'html':'UTF-8'}" typeof="foaf:Agent" class="user vcard">
 
 	<div class="avatar" rel="foaf:depiction">
@@ -33,7 +33,7 @@
 	<hr style="border: 1px solid transparent; clear: both;" rel="foaf:page" rev="foaf:primaryTopic" resource="" />
 </div>
 
-<h3 id="stats_by_artist">{$user}'{if $user|substr:-1 != 's'}s{/if} most played artists</h3>
+<h3 id="stats_by_artist">{$user}'s most played artists</h3>
 <table class="stats_artists" about="{$id}">
 	{section name=i loop=$user_playstats}
 	<tr><td class="counts">{$user_playstats[i].count}</td><td class="bar" style="width: {$stat_barwidth}px"><div style="width:{$user_playstats[i].size}px" class="artist"></div></td><td><a
@@ -42,7 +42,7 @@
 	{/section}
 </table>
 
-<h3 id="stats_by_day">{$user}'{if $user|substr:-1 != 's'}s{/if} scrobbles by day</h3>
+<h3 id="stats_by_day">{$user}'s{/if} scrobbles by day</h3>
 <table class="stats_artists" about="{$id}">
 	{section name=i loop=$user_daystats}
 	<tr><td class="counts">{$user_daystats[i].count}</td><td class="bar" style="width: {$stat_barwidth}px"><div style="width:{$user_daystats[i].size}px" class="artist"></div></td><td class="date">{$user_daystats[i].date}</td></tr>
@@ -52,7 +52,7 @@
 <!-- Column break -->
 </div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
 
-<h3>{$user}'{if $user|substr:-1 != 's'}s{/if} statistics</h3>
+<h3>{$user}'s{/if} statistics</h3>
 <ul>
 	<li><a href="#stats_by_artist">Most played artists</a></li>
 	<li><a href="#stats_by_day">Scrobbles by day</a></li>
