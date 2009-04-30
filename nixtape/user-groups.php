@@ -49,7 +49,7 @@ if(isset($user->name)) {
 	$smarty->assign('me', $user);
 	$smarty->assign('profile', true);
 	
-	$smarty->assign('groups', Group::listGroups($user));
+	$smarty->assign('groups', Group::groupList($user));
 
 	$smarty->assign('extra_head_links', array(
 			array(
@@ -67,7 +67,7 @@ if(isset($user->name)) {
 		));
 		
 	header('Content-Type: text/plain');
-	print_r(Group::listGroups($user));
+	print_r(Group::groupList($user));
 	exit;
 	
 	$smarty->display('user-groups.tpl');
