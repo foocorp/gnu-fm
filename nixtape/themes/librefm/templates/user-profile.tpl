@@ -54,13 +54,6 @@
 {/section}
 </ul>
 
-<h3>{$me->name}'s Top Tracks</h3>
-<ul>
-{section name=i loop=$toptracks}
-<li style="width:{$toptracks[i].width}" class="toptrack"><a href="{$toptracks[i].artisturl}">{$toptracks[i].artist}</a> - <a href="{$toptracks[i].trackurl}">{$toptracks[i].track}<a></li>
-{/section}
-</ul>
-
 <!-- Column break -->
 </div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
 

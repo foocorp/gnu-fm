@@ -35,12 +35,7 @@ if(!isset($_GET['user']) && $logged_in == false) {
 $user = new User($_GET['user']);
 
 if(isset($user->name)) {
-	$smarty->assign("id", $user->id);
-	$smarty->assign("acctid", $user->acctid);
-	$smarty->assign('user', $user->name);
-	$smarty->assign('homepage', $user->homepage);
-	$smarty->assign('location', $user->location);
-	$smarty->assign('location_uri', $user->location_uri);
+
 	$aUserScrobbles = $user->getScrobbles(20);
 	if (!PEAR::isError ($aUserScrobbles)) {
 		$smarty->assign('scrobbles', $aUserScrobbles);
@@ -67,6 +62,8 @@ if(isset($user->name)) {
 		$smarty->assign('user_daystats',$aUserDayStat);
 	}
 
+	$smarty->assign('toptracks', $user->getTopTracks());
+	
 	$smarty->assign('me', $user);	
 	$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
 	
