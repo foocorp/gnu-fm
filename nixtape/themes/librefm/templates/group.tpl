@@ -23,7 +23,7 @@
 
 	<dl>
 		<dt>
-			<span class="fn" property="foaf:name">{$fullname|escape:'html':'UTF-8'}</span>
+			<span class="fn org" property="foaf:name">{$fullname|escape:'html':'UTF-8'}</span>
 			(<span class="nickname" property="foaf:nick">{$group|escape:'html':'UTF-8'}</span>)
 		</dt>
 		<dd>{if $homepage}<a class="url" rel="foaf:page" href="{$homepage|escape:'html':'UTF-8'}">{$homepage|escape:'html':'UTF-8'}</a>{/if}</dd>
