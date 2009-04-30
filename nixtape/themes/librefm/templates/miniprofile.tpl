@@ -9,7 +9,7 @@
 			<span class="fn" property="foaf:name">{$me->fullname|escape:'html':'UTF-8'}</span>
 			<span rel="foaf:holdsAccount" rev="sioc:account_of">
 				<span about="{$me->acctid|escape:'html':'UTF-8'}" typeof="sioc:User">
-					(<a class="nickname" property="foaf:accountName" href="{$base_url}/user/{$me->name}" rel="foaf:accountProfilePage" rev="foaf:topic">{$me->name|escape:'html':'UTF-8'}</a>)
+					(<a class="nickname" property="foaf:accountName" href="{$me->getURL()}" rel="foaf:accountProfilePage" rev="foaf:topic">{$me->name|escape:'html':'UTF-8'}</a>)
 					<span rel="foaf:accountServiceHomepage" resource="{$base_url}"></span>
 				</span>
 			</span>
@@ -27,6 +27,6 @@
 		<dd class="note" property="bio:olb">{$me->bio|escape:'html':'UTF-8'}</dd>
 	</dl>
 
-	<hr style="border: 1px solid transparent; clear: both;" rel="foaf:page" rev="foaf:primaryTopic" resource="{$base_url}/user/{$me->name}" />
+	<hr style="border: 1px solid transparent; clear: both;" rel="foaf:page" rev="foaf:primaryTopic" resource="{$me->getURL()}" />
 
 </div>

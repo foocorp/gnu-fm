@@ -149,8 +149,8 @@ class User {
 		return "http://www.gravatar.com/avatar/" . md5($this->email) . "?s=" . $size . "&d=monsterid";
 	}
 
-	function getURL() {
-		return Server::getUserURL($this->name);
+	function getURL($component='profile') {
+		return Server::getUserURL($this->name, $component);
 	}
 
 	/**

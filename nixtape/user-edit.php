@@ -153,7 +153,7 @@ if(isset($user->name))
 		$smarty->assign('tagcloud', $aTagCloud);
 	}
 	$smarty->assign('errors', $errors);
-	$smarty->display('edit_profile.tpl');
+	$smarty->display('user-edit.tpl');
 }
 
 else

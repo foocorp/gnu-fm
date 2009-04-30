@@ -79,7 +79,7 @@ if(isset($user->name)) {
 
 	$smarty->assign('toptracks', $user->getTopTracks());
 	
-	$smarty->display('profile.tpl');
+	$smarty->display('user-profile.tpl');
 } else {
 	$smarty->assign('error', 'User not found');
 	$smarty->assign('details', 'Shall I call in a missing persons report?');

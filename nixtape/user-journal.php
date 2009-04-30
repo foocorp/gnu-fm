@@ -92,7 +92,7 @@ if ($rssFeed)
 			'href' => $base_url.'/rdf.php?fmt=rss&page='.htmlentities($_SERVER['REQUEST_URI'])
 			)
 		));
-	$smarty->display('journal.tpl');
+	$smarty->display('user-journal.tpl');
 	
 } else {
 	$smarty->assign('error', 'No RSS Feed for this User');
