@@ -60,13 +60,19 @@ if(isset($user->name)) {
 				'rel'=>'alternate',
 				'type' => 'application/rss+xml' ,
 				'title' => 'RSS 1.0 Feed (Recent plays)',
-				'href' => $base_url.'/rdf.php?fmt=rss&page='.htmlentities($_SERVER['REQUEST_URI'])
+				'href' => $base_url.'/rdf.php?fmt=rss&page='.htmlentities(str_replace($base_url, '', $user->getURL('recent-tracks')))
+				),
+			array(
+				'rel'=>'alternate',
+				'type' => 'application/rss+xml' ,
+				'title' => 'RSS 1.0 Feed (Journal)',
+				'href' => $user->journal_rss
 				),
 			array(
 				'rel' => 'meta',
 				'type' => 'application/rdf+xml' ,
 				'title' => 'FOAF',
-				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities($_SERVER['REQUEST_URI'])
+				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities(str_replace($base_url, '', $user->getURL()))
 				)
 		));
 
