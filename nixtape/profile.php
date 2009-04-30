@@ -77,7 +77,7 @@ if(isset($user->name)) {
 				)
 		));
 
-	$smarty->assign('toptracks', $user->getTopTracks);
+	$smarty->assign('toptracks', $user->getTopTracks());
 	
 	$smarty->display('profile.tpl');
 } else {
