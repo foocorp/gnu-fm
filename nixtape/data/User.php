@@ -207,7 +207,7 @@ class User {
 	        }
 
 		if ($maxcount > 0) {
-			foreach($data as $i) {
+			foreach($result as &$row) {
 			$row["width"]=(int)(100 * ($row["c"]/$maxcount));
 			}
 		}
