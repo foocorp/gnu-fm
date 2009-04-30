@@ -202,7 +202,7 @@ class Server {
 						AND lower(n.album) = lower(t.album)
 						AND lower(n.track) = lower(t.name)
 					WHERE lower(username) = " . $mdb2->quote(strtolower($username), "text") . "
-					ORDER BY n.expires DESC LIMIT " . $mdb2->quote($number, "integer"));
+					ORDER BY t.streamable DESC, n.expires DESC LIMIT " . $mdb2->quote($number, "integer"));
 		} else {
 			$res = $mdb2->query("SELECT
 						username,
@@ -224,7 +224,7 @@ class Server {
 						ON lower(n.artist) = lower(t.artist)
 						AND lower(n.album) = lower(t.album)
 						AND lower(n.track) = lower(t.name)
-					ORDER BY n.expires DESC LIMIT " . $mdb2->quote($number, "integer"));
+					ORDER BY t.streamable DESC, n.expires DESC LIMIT " . $mdb2->quote($number, "integer"));
 		}
 
 		if(PEAR::isError($res)) {
