@@ -69,6 +69,26 @@ if ($_POST['submit'])
 			$errors[] = "Avatar must be a URI. Valid URIs cannot contain whitespace.";
 	}
 
+	if (!empty($_POST['laconica_profile']))
+	{
+		# Need better URI validation, but this will do for now. I think
+		# PEAR has a suitable module to help out here.
+		if ( !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['laconica_profile']) )
+			$errors[] = "Laconica profile must be a URI.";
+		if ( preg_match('/\s/', $_POST['laconica_profile']) )
+			$errors[] = "Laconica profile must be a URI. Valid URIs cannot contain whitespace.";
+	}
+
+	if (!empty($_POST['journal_rss']))
+	{
+		# Need better URI validation, but this will do for now. I think
+		# PEAR has a suitable module to help out here.
+		if ( !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['journal_rss']) )
+			$errors[] = "Journal RSS must be a URI.";
+		if ( preg_match('/\s/', $_POST['journal_rss']) )
+			$errors[] = "Journal RSS must be a URI. Valid URIs cannot contain whitespace.";
+	}
+
 	if (!empty($_POST['password_1']))
 	{
 		if ($_POST['password_1'] != $_POST['password_2'])
@@ -94,13 +114,15 @@ if ($_POST['submit'])
 		$user->location     = $_POST['location'];
 		$user->location_uri = $_POST['location_uri'];
 		$user->avatar_uri   = $_POST['avatar_uri'];
+		$user->laconica_profile = $_POST['laconica_profile'];
+		$user->journal_rss  = $_POST['journal_rss'];
 		
 		if (!empty( $_POST['password_1'] ))
 			$user->password = md5($_POST['password_1']);
 		
 		$user->save();
 
-		header("Location: " . $base_url . "/user/" . $user->name);
+		header("Location: " . $user->getURL());
 		exit;
 	}
 
@@ -134,6 +156,8 @@ if(isset($user->name))
 		$smarty->assign('location',     $_POST['location']);
 		$smarty->assign('location_uri', $_POST['location_uri']);
 		$smarty->assign('avatar_uri',   $_POST['avatar_uri']);
+		$smarty->assign('laconica_profile', $_POST['laconica_profile']);
+		$smarty->assign('journal_rss',  $_POST['journal_rss']);
 	}
 	else
 	{
@@ -144,6 +168,8 @@ if(isset($user->name))
 		$smarty->assign('location',     ($user->location));
 		$smarty->assign('location_uri', ($user->location_uri));
 		$smarty->assign('avatar_uri',   ($user->avatar_uri));
+		$smarty->assign('laconica_profile', ($user->laconica_profile));
+		$smarty->assign('journal_rss',  ($user->journal_rss));
 	}
 
 	# And display the page.

@@ -49,6 +49,16 @@
 			<td><a href="#dfn_id" rel="glossary">What's this?</a></td>
 		</tr>
 		<tr>
+			<th align="right" valign="top"><label for="laconica_profile">Laconica/identi.ca Profile:</label></th>
+			<td><input onchange="laconicaChange();" onclick="laconicaClick();" name="laconica_profile" id="laconica_profile" value="{$laconica_profile|escape:'html':'UTF-8'}" /></td>
+			<td><a href="#dfn_laconica_profile" rel="glossary">What's this?</a></td>
+		</tr>
+		<tr>
+			<th align="right" valign="top"><label for="journal_rss">Avatar URL:</label></th>
+			<td><input name="journal_rss" id="journal_rss" value="{$journal_rss|escape:'html':'UTF-8'}" /></td>
+			<td><a href="#dfn_journal_rss" rel="glossary">What's this?</a></td>
+		</tr>
+		<tr>
 			<th align="right" valign="top"><label for="password_1">Password:</label></th>
 			<td><input name="password_1" id="password_1" type="password" value="" /></td>
 			<td rowspan="2">Leave this blank if you don't want to change your password.</td>
@@ -66,7 +76,6 @@
 	</table>
 </form>
 
-<script type="text/javascript" src="{$base_url}/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="{$base_url}/js/edit_profile.js"></script>
 
 <h3>Help</h3>
