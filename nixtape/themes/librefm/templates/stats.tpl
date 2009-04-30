@@ -42,7 +42,7 @@
 	{/section}
 </table>
 
-<h3 id="stats_by_day">{$user}'s{/if} scrobbles by day</h3>
+<h3 id="stats_by_day">{$user}'s scrobbles by day</h3>
 <table class="stats_artists" about="{$id}">
 	{section name=i loop=$user_daystats}
 	<tr><td class="counts">{$user_daystats[i].count}</td><td class="bar" style="width: {$stat_barwidth}px"><div style="width:{$user_daystats[i].size}px" class="artist"></div></td><td class="date">{$user_daystats[i].date}</td></tr>
@@ -52,7 +52,7 @@
 <!-- Column break -->
 </div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
 
-<h3>{$user}'s{/if} statistics</h3>
+<h3>{$user}'s statistics</h3>
 <ul>
 	<li><a href="#stats_by_artist">Most played artists</a></li>
 	<li><a href="#stats_by_day">Scrobbles by day</a></li>
