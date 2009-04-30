@@ -4,7 +4,7 @@
 
 <p><strong>The form below is still <em>very</em> experimental. Using this may wreck your account!</strong></p>
 
-<form action="{$base_url}/edit_profile.php" method="post" class="notcrazy">
+<form action="{$base_url}/user-edit.php" method="post" class="notcrazy">
 	<table>
 		<tr>
 			<th align="right" valign="top"><label for="fullname">Full name:</label></th>
@@ -54,7 +54,7 @@
 			<td><a href="#dfn_laconica_profile" rel="glossary">What's this?</a></td>
 		</tr>
 		<tr>
-			<th align="right" valign="top"><label for="journal_rss">Avatar URL:</label></th>
+			<th align="right" valign="top"><label for="journal_rss">RSS Feed:</label></th>
 			<td><input name="journal_rss" id="journal_rss" value="{$journal_rss|escape:'html':'UTF-8'}" /></td>
 			<td><a href="#dfn_journal_rss" rel="glossary">What's this?</a></td>
 		</tr>
@@ -76,7 +76,7 @@
 	</table>
 </form>
 
-<script type="text/javascript" src="{$base_url}/js/edit_profile.js"></script>
+<script type="text/javascript" src="{$base_url}/js/user-edit.js"></script>
 
 <h3>Help</h3>
 <dl>
