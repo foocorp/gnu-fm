@@ -14,9 +14,10 @@
 				</span>
 			</span>
 		</dt>
-		{if $me->homepage}
+		{if $me->homepage || $me->laconica_profile}
 		<dd>
-			<a href="{$me->homepage|escape:'html':'UTF-8'}" rel="foaf:homepage" class="url">{$me->homepage|escape:'html':'UTF-8'}</a>
+			{if $me->homepage}<a href="{$me->homepage|escape:'html':'UTF-8'}" rel="foaf:homepage" class="url">{$me->homepage|escape:'html':'UTF-8'}</a>{/if}
+			{if $me->laconica_profile}{if $me->homepage} // {/if}<a href="{$me->laconica_profile|escape:'html':'UTF-8'}" rel="foaf:homepage" class="url">{$me->laconica_profile|escape:'html':'UTF-8'}</a>{/if}
 		</dd>
 		{/if}
 		<dd rel="foaf:based_near">
