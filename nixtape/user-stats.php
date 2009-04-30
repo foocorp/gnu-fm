@@ -66,11 +66,12 @@ if(isset($user->name)) {
 	if (!PEAR::isError ($aUserDayStat)) {
 		$smarty->assign('user_daystats',$aUserDayStat);
 	}
-	
+
+	$smarty->assign('me', $user);	
 	$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
 	
 	$smarty->assign('stats', true);
-	$smarty->display('stats.tpl');
+	$smarty->display('user-stats.tpl');
 } else {
 	$smarty->assign('error', 'User not found');
 	$smarty->assign('details', 'Shall I call in a missing persons report?');
