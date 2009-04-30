@@ -1,6 +1,6 @@
 {include file='header.tpl'}
 
-<h2 property="dc:title">{$user|escape:'html':'UTF-8'}'s profile</h2>
+<h2 property="dc:title">{$me->user|escape:'html':'UTF-8'}'s profile</h2>
 
 {include file='maxiprofile.tpl'}
 
@@ -17,7 +17,7 @@
 {/if}
 
 <div about="[_:seq1]" typeof="rdf:Seq" rev="rss:items">
-	<h3 typeof="rss:channel" property="rss:title" rel="rss:link" resource="#latest_plays" id="latest_plays" content="{$user|escape:'html':'UTF-8'}'s Latest Plays">Latest {$scrobbles|@count} Plays:</h3>
+	<h3 typeof="rss:channel" property="rss:title" rel="rss:link" resource="#latest_plays" id="latest_plays" content="{$me->user|escape:'html':'UTF-8'}'s Latest Plays">Latest {$scrobbles|@count} Plays:</h3>
 </div>
 
 <ul class="gobbles" about="{$me->id|escape:'html':'UTF-8'}" rev="gob:user">
@@ -54,7 +54,7 @@
 {/section}
 </ul>
 
-<h3>{$user}'s Top Tracks</h3>
+<h3>{$me->user}'s Top Tracks</h3>
 <ul>
 {section name=i loop=$toptracks}
 <li style="width:{$toptracks[i].width}" class="toptrack"><a href="{$toptracks[i].artisturl}">{$toptracks[i].artist}</a> - <a href="{$toptracks[i].trackurl}">{$toptracks[i].track}<a></li>
@@ -64,7 +64,7 @@
 <!-- Column break -->
 </div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
 
-<h3>{$user}'s top artists</h3>
+<h3>{$me->user}'s top artists</h3>
 <ul class="tagcloud" about="{$me->id}">
 	{section name=i loop=$user_tagcloud}
 	<li style="font-size:{$user_tagcloud[i].size}"><a
