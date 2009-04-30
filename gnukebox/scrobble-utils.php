@@ -19,24 +19,34 @@
 
 */
 
-require_once('database.php');
+require_once('database.php');	// include the database connection string
 
-function usernameFromSID($session_id) {
-	global $mdb2;
+function usernameFromSID($session_id) 
+{
+
+//derive the username from a session ID
+
+	global $mdb2; 	       // include the Database connector
 
 	// Delete any expired session ids
 	$mdb2->query("DELETE FROM Scrobble_Sessions WHERE expires < " . time());
 
-	$res = $mdb2->query("SELECT username FROM Scrobble_Sessions WHERE sessionid = " . $mdb2->quote($session_id, "text"));
-	if(PEAR::isError($res)) {
+	$res = $mdb2->query("SELECT username FROM Scrobble_Sessions WHERE sessionid = " . $mdb2->quote($session_id, "text")); // get the username from the table
+
+	if(PEAR::isError($res)) {   
 		die("FAILED " . $res->getMessage() . "\n");
+		// die is there is an error, printing the error
 	}
 
 	if(!$res->numRows()) {
 		die("BADSESSION\n");
+
+		// the user has no session
 	}
 
 	return $res->fetchOne(0);
+
+	       // return the first user
 }
 
 function createArtistIfNew($artist) {
