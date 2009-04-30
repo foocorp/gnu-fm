@@ -5,7 +5,7 @@
 	</div>
 
 	{if $isme}
-	<a class="edit" href="{$base_url}/edit_profile.php">[edit]</a>
+	<a class="edit" href="{$base_url}/user-edit.php">[edit]</a>
 	{/if}
 
 	<dl>
