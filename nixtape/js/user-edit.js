@@ -181,7 +181,7 @@ function laconicaClick ()
 		$('#laconica_profile')[0].value = '';
 }
 
-function laconicaUpdate ()
+function laconicaChange ()
 {
 	if ($('#laconica_profile')[0].value.match(/^http:\/\/.+\/.+/))
 	{
@@ -190,5 +190,6 @@ function laconicaUpdate ()
 }
 
 UpdateLocationLabel();
+
 if ($('#laconica_profile')[0].value == '')
 	$('#laconica_profile')[0].value = 'http://identi.ca/example';
