@@ -66,7 +66,7 @@ if(isset($user->name)) {
 				)
 		));
 
-	$smarty->display('user-profile.tpl');
+	$smarty->display('user-recent-tracks.tpl');
 } else {
 	$smarty->assign('error', 'User not found');
 	$smarty->assign('details', 'Shall I call in a missing persons report?');
