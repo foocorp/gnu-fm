@@ -23,7 +23,7 @@
 <!-- Column break -->
 </div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
 
-<h3>{$user}'s{/if} statistics</h3>
+<h3>{$user}'s statistics</h3>
 <ul>
 	<li><a href="#stats_by_artist">Most played artists</a></li>
 	<li><a href="#stats_by_day">Scrobbles by day</a></li>
