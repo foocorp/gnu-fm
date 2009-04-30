@@ -6,9 +6,9 @@
 <script type="text/javascript">
 	var playlist = [{ldelim}"artist" : "{$track->artist_name}", "album" : "{$track->album_name}", "track" : "{$track->name}", "url" : "{$track->streamurl}"{rdelim}];
 	{if isset($u_user)}
-	playerInit(playlist, "{$u_user->getScrobbleSession()}");
+	playerInit(playlist, "{$u_user->getScrobbleSession()}", false);
 	{else}
-	playerInit(playlist, false);
+	playerInit(playlist, false, false);
 	{/if}
 </script>
 <br />

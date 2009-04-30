@@ -1,5 +1,5 @@
 /*
-   Libre.fm -- a free network service for sharing your music listening habits
+   Libre.fm -- a free network service for sharing your music listening hab""s
 
    Copyright (C) 2009 Libre.fm Project
 
@@ -24,34 +24,55 @@
 */
 
 var scrobbled, now_playing;
-var artist, album, track, session_key;
-var playlist, current_song = 0;
+var artist, album, track, session_key, radio_key;
+var playlist = [], current_song = 0;
+var player_ready = false;
 var playable_songs = false;
+var streaming = false;
 
-function playerInit(list, sk) {
-	//Explicitly call stop() here, since not everything seems to support 'autoplay="false"' yet
+function playerInit(list, sk, rk) {
 	var audio = document.getElementById("audio");
+	if (!list) {
+		// We're playing a stream instead of a playlist
+		streaming = true;
+	}
+
+	session_key = sk;
+	radio_key = rk;
+
 	if(typeof audio.duration == "undefined") {
 		//Browser doesn't support <audio>
+		if(streaming) {
+			audio.replaceWith("<p>Sorry, you need a browser capable of using the HTML 5 &lt;audio&gt; element to enjoy the streaming service via the Javascript player.</p>");
+		}
 		return;
 	}
-	$("#fallbackembed").replaceWith(""); // Get rid of the fallback embed, otherwise html5 browsers will play it in addition to the js player
-	playlist = list;
+	$("#fallbackembed").replaceWith(""); // Get rid of the fallback embed, otherwise some html5 browsers will play it in addition to the js player
+	if (streaming) {
+		// Get playlist from radio service
+		getRadioPlaylist();
+	} else {
+		// Otherwise we have a static playlist
+		playlist = list;
+		playerReady();
+	}
+}
+
+function playerReady() {
+	var audio = document.getElementById("audio");
+	
 	populatePlaylist();
 	if(!playable_songs) {
-		alert("No playable songs");
 		return;
 	}
-	session_key = sk;
 	loadSong(0);
 	audio.pause();
 	audio.addEventListener("ended", songEnded, false);
 	updateProgress();
 	$("#play").fadeTo("normal", 1);
 	$("#progressbar").progressbar({ value: 0 });
-	scrobbled = false;
-	now_playing = false;
 	$("#player > #interface").show();
+	player_ready = true;
 }
 
 function play() {
@@ -111,6 +132,8 @@ function songEnded() {
 
 function populatePlaylist() {
 	var i, url;
+	//Clear the list
+	$("#playlist > #songs").text("");
 	for(i = 0; i < playlist.length; i++) {
 		url = playlist[i]["url"];
 		// Remove non-streamable tracks
@@ -178,8 +201,37 @@ function loadSong(song) {
 	audio.src = url;
 	audio.load();
 
+	if(streaming && current_song > playlist.length - 3) {
+		//Update the playlist before the user reaches the end
+		getRadioPlaylist();
+	}
+
 	$("#trackinfo > #artistname").text(artist);
 	$("#trackinfo > #trackname").text(track);
+}
+
+function getRadioPlaylist() {
+	var tracks, artist, album, title, url, i;
+	$.get("/radio/xspf.php", {'sk' : radio_key, 'desktop' : 0}, function(data) { 
+			parser=new DOMParser();
+		      	xmlDoc=parser.parseFromString(data,"text/xml");
+			tracks = xmlDoc.getElementsByTagName("track")
+			for(i = 0; i < tracks.length; i++) {
+				try {
+					artist = tracks[i].getElementsByTagName("creator")[0].childNodes[0].nodeValue;
+					title = tracks[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
+					album = tracks[i].getElementsByTagName("album")[0].childNodes[0].nodeValue;
+					url = tracks[i].getElementsByTagName("location")[0].childNodes[0].nodeValue;
+					playlist.push({"artist" : artist, "album" : album, "track" : title, "url" : url});
+				} catch(err) {
+				}
+			}
+			if(!player_ready) {
+				playerReady();
+			} else {
+				populatePlaylist();
+			}
+		}, "text");
 }
 
 function friendlyTime(timestamp) {

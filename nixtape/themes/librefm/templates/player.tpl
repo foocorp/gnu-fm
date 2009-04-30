@@ -2,6 +2,8 @@
 	<audio id="audio">
 		{if $track->streamurl}
 			<object id="fallbackembed" style="width:200px;height:50px;" type="application/ogg" data="{$track->streamurl}"><a type="application/ogg" rel="enclosure" href="{$track->streamurl}">Listen to this track</a></object>
+		{elseif isset($station)}
+			<p>Sorry, you need a browser capable of making use of the HTML 5 &lt;audio&gt; tag to enjoy the streaming service via the JavaScript player.</p>
 		{/if}
 	</audio>
 	<div id="interface">

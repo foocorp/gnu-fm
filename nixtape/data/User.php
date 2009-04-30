@@ -188,6 +188,24 @@ class User {
 	}
 
 	/**
+	 * Log in to the radio server
+	 *
+	 * @param string $station The station to be played
+	 * @return A string containing the session key to be used for streaming
+	 */
+	function getRadioSession($station) {
+		global $mdb2;
+		$session_id = md5(mt_rand() . time());
+		$sql = "INSERT INTO Radio_Sessions(username, session, url, expires) VALUES ("
+			. $mdb2->quote($this->name, "text") . ","
+			. $mdb2->quote($session_id, "text") . ","
+			. $mdb2->quote($station, "text") . ","
+			. $mdb2->quote(time() + 86400) . ")";
+		$mdb2->query($sql);
+		return $session_id;
+	}
+
+	/**
 	 * get user's top 20 tracks
 	 *
 	 * @return user's top 20 tracks
