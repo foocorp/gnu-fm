@@ -4,7 +4,7 @@
 
 {include file='maxiprofile.tpl'}
 
-<ul about="{$id}" rel="foaf:made" rev="foaf:maker" class="hfeed">
+<ul about="{$me->id}" rel="foaf:made" rev="foaf:maker" class="hfeed">
 {foreach from=$items item=i}
 	<li {if $i.subject_uri}about="{$i.subject_uri|escape:'html':'UTF-8'}" {/if}typeof="sioc:Item rss:item" class="hentry">
 		<b class="entry-title" property="dc:title">{$i.title|escape:'html':'UTF-8'}</b><br />
@@ -18,7 +18,7 @@
 </div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
 
 <h3>{$user}'{if $user|substr:-1 != 's'}s{/if} top artists</h3>
-<ul class="tagcloud" about="{$id}">
+<ul class="tagcloud" about="{$me->id}">
 	{section name=i loop=$user_tagcloud}
 	<li style="font-size:{$user_tagcloud[i].size}"><a
 	href="{$user_tagcloud[i].pageurl|escape:'html':'UTF-8'}" rel="{if $user_tagcloud[i].size|substr:-5 ==

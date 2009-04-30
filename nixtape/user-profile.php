@@ -35,18 +35,7 @@ if(!isset($_GET['user']) && $logged_in == false) {
 $user = new User($_GET['user']);
 
 if(isset($user->name)) {
-	$smarty->assign("id", $user->id);
-	$smarty->assign("acctid", $user->acctid);
-	$smarty->assign('user', $user->name);
-	$smarty->assign('email', $user->email);
-	$smarty->assign('fullname', $user->fullname);
-	$smarty->assign('bio', $user->bio);
-	$smarty->assign('homepage', $user->homepage);
-	$smarty->assign('journal_rss', $user->journal_rss);
-	$smarty->assign('laconica_profile', $user->laconica_profile);
-	$smarty->assign('has_identica', $user->has_identica);
-	$smarty->assign('location', $user->location);
-	$smarty->assign('location_uri', $user->location_uri);
+
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
 	$aUserScrobbles = $user->getScrobbles(20);
 	if (!PEAR::isError ($aUserScrobbles)) {
@@ -63,6 +52,7 @@ if(isset($user->name)) {
 		$smarty->assign('user_tagcloud',$aUserTagCloud);
 	}
 	$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
+	$smarty->assign('me', $user);
 	$smarty->assign('profile', true);
 	
 	$smarty->assign('extra_head_links', array(
