@@ -80,6 +80,7 @@ if(isset($group->name)) {
 	$smarty->assign('link_join', $group->getURLAction('join'));
 	$smarty->assign('link_leave', $group->getURLAction('leave'));
 	$smarty->assign('link_edit', $base_url.'/edit_group.php?group='.$group->name);
+	$smarty->assign('link', $group->getURL());
 
 	$smarty->assign('extra_head_links', array(
 			array(
