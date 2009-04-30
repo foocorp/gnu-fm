@@ -74,6 +74,7 @@ $smarty->assign('fullname', $user->fullname);
 $smarty->assign('bio', $user->bio);
 $smarty->assign('homepage', $user->homepage);
 $smarty->assign('laconica_profile', $user->laconica_profile);
+$smarty->assign('journal_rss', $user->journal_rss);
 $smarty->assign('has_identica', $user->has_identica);
 $smarty->assign('location', $user->location);
 $smarty->assign('location_uri', $user->location_uri);
