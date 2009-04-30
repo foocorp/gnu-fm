@@ -20,7 +20,7 @@
 	<h3 typeof="rss:channel" property="rss:title" rel="rss:link" resource="#latest_plays" id="latest_plays" content="{$user|escape:'html':'UTF-8'}'s Latest Plays">Latest {$scrobbles|@count} Plays:</h3>
 </div>
 
-<ul class="gobbles" about="{$id|escape:'html':'UTF-8'}" rev="gob:user">
+<ul class="gobbles" about="{$me->id|escape:'html':'UTF-8'}" rev="gob:user">
 {section name=i loop=$scrobbles}
 
 	<li class="play {if $scrobbles[i].license > 0}libre{/if}" about="{$scrobbles[i].id|escape:'html':'UTF-8'}" typeof="rss:item gob:ScrobbleEvent" rel="gob:track_played">
@@ -65,7 +65,7 @@
 </div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
 
 <h3>{$user}'s top artists</h3>
-<ul class="tagcloud" about="{$id}">
+<ul class="tagcloud" about="{$me->id}">
 	{section name=i loop=$user_tagcloud}
 	<li style="font-size:{$user_tagcloud[i].size}"><a
 	href="{$user_tagcloud[i].pageurl|escape:'html':'UTF-8'}" rel="{if $user_tagcloud[i].size|substr:-5 ==

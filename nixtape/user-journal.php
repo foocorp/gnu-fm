@@ -66,26 +66,13 @@ foreach ($index as $subject => $data)
 	}
 }
 
-$smarty->assign("id", $user->id);
-$smarty->assign("acctid", $user->acctid);
-$smarty->assign('user', $user->name);
-$smarty->assign('email', $user->email);
-$smarty->assign('fullname', $user->fullname);
-$smarty->assign('bio', $user->bio);
-$smarty->assign('homepage', $user->homepage);
-$smarty->assign('laconica_profile', $user->laconica_profile);
-$smarty->assign('journal_rss', $user->journal_rss);
-$smarty->assign('has_identica', $user->has_identica);
-$smarty->assign('location', $user->location);
-$smarty->assign('location_uri', $user->location_uri);
-$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
-$smarty->assign('userlevel', $user->userlevel);
-$smarty->assign('avatar', $user->getAvatar());
 $aUserTagCloud =  TagCloud::GenerateTagCloud('Scrobbles', 'artist', 40, $user->name);
 if (!PEAR::isError ($aUserTagCloud)) {
 	$smarty->assign('user_tagcloud',$aUserTagCloud);
 }
 $smarty->assign('isme', ($_SESSION['user']->name == $user->name));
+$smarty->assign('me', $user);
+$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
 $smarty->assign('profile', true);
 $smarty->assign('items', $items);
 $smarty->assign('extra_head_links', array(

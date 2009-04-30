@@ -1,37 +1,38 @@
-<div about="{$id|escape:'html':'UTF-8'}" typeof="foaf:Agent" class="user vcard">
+<div about="{$me->id|escape:'html':'UTF-8'}" typeof="foaf:Agent" class="user vcard">
 
 	<div class="avatar" rel="foaf:depiction">
-		<img src="{$avatar|escape:'html':'UTF-8'}" alt="avatar" class="photo" width="64" height="64" />
+		<img src="{$me->getAvatar()|escape:'html':'UTF-8'}" alt="avatar" class="photo" width="64" height="64" />
 	</div>
 
 	{if $isme}
-	<a class="edit" href="{$base_url}/user-edit.php">[edit]</a>
+	<a class="edit" href="{$me->getURL('edit')|escape:'html':'UTF-8'}">[edit]</a>
 	{/if}
 
 	<dl>
 		<dt>
-			<span class="fn" property="foaf:name">{$fullname|escape:'html':'UTF-8'}</span>
-			<span rel="foaf:holdsAccount" rev="sioc:account_of">
-				<span about="{$acctid|escape:'html':'UTF-8'}" typeof="sioc:User">
-					(<span class="nickname" property="foaf:accountName">{$user|escape:'html':'UTF-8'}</span>)
+			<span class="fn" property="foaf:name">{$me->fullname|escape:'html':'UTF-8'}</span>
+			<span property="foaf:nick" content="{$me->name|escape:'html':'UTF-8'}" rel="foaf:holdsAccount" rev="sioc:account_of">
+				<span about="{$me->acctid|escape:'html':'UTF-8'}" typeof="sioc:User">
+					(<span class="nickname" property="foaf:accountName">{$me->name|escape:'html':'UTF-8'}</span>)
 					<span rel="foaf:accountServiceHomepage" resource="{$base_url}"></span>
-					<span rel="foaf:accountProfilePage" rev="foaf:topic" resource="{$base_url}/user/{$name}"></span>
+					<span rel="foaf:accountProfilePage" rev="foaf:topic" resource="{$me->getURL()|escape:'html':'UTF-8'}"></span>
 				</span>
 			</span>
 		</dt>
-		{if $homepage}
+		{if $me->homepage}
 		<dd>
-			<a href="{$homepage|escape:'html':'UTF-8'}" rel="me foaf:homepage" class="url">{$homepage|escape:'html':'UTF-8'}</a>
+			<a href="{$me->homepage|escape:'html':'UTF-8'}" rel="me foaf:homepage" class="url">{$me->homepage|escape:'html':'UTF-8'}</a>
 		</dd>
 		{/if}
-		{if $laconica_profile}
+		{if $me->laconica_profile}
 		<dd>
-			<a href="{$laconica_profile|escape:'html':'UTF-8'}" rel="foaf:homepage" class="url">{$laconica_profile|escape:'html':'UTF-8'} (microblog)</a>
+			<a href="{$me->laconica_profile|escape:'html':'UTF-8'}" rel="foaf:homepage" class="url">{$me->laconica_profile|escape:'html':'UTF-8'} (microblog)</a>
 		</dd>
 		{/if}
+		{if $me->location}
 		<dd rel="foaf:based_near">
-			<span {if $location_uri} about="{$location_uri|escape:'html':'UTF-8'}"{/if}>
-				<span class="label" property="rdfs:comment">{$location|escape:'html':'UTF-8'}</span>
+			<span {if $me->location_uri} about="{$me->location_uri|escape:'html':'UTF-8'}"{/if}>
+				<span class="label" property="rdfs:comment">{$me->location|escape:'html':'UTF-8'}</span>
 				{if $geo.latitude}
 				<small class="geo">
 					[<span class="latitude" property="geo:lat">{$geo.latitude|string_format:"%0.3f"}</span>;
@@ -45,13 +46,16 @@
 				{/if}
 			</span>
 		</dd>
-		<dd class="note" property="bio:olb">{$bio|escape:'html':'UTF-8'}</dd>
+		{/if}
+		{if $me->bio}
+		<dd class="note" property="bio:olb">{$me->bio|escape:'html':'UTF-8'}</dd>
+		{/if}
 	</dl>
 
 	<div style="text-align:right;clear:right;font-size:80%">
 		<!-- These shouldn't be hard-coded. Will fix soon. -->
 		<a rel="rdfs:seeAlso" href="{$base_url}/user/{$user}">profile</a>
-		{if $journal_rss} &middot; <a rel="rdfs:seeAlso" href="{$base_url}/user/{$user}/journal">journal</a>{/if}
+		{if $me->journal_rss} &middot; <a rel="rdfs:seeAlso" href="{$me->getURL('journal')|escape:'html':'UTF-8'}">journal</a>{/if}
 	</div>
 	<hr style="border: 1px solid transparent; clear: both;" rel="foaf:page" rev="foaf:primaryTopic" resource="" />
 
