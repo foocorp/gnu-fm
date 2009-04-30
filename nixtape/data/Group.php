@@ -113,13 +113,28 @@ class Group {
 		return 1;
 	}
 	
-	static function groupList ()
+	static function groupList ($user=false)
 	{
 		global $mdb2;
-		$res = $mdb2->query("SELECT g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count "
-			."FROM Groups g "
-			."LEFT JOIN Group_Members gm ON gm.groupname=g.groupname "
-			."GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype");
+
+		if ($user)
+		{
+			$res = $mdb2->query("SELECT gc.* FROM "
+				. "Group_Members m "
+				."INNER JOIN (SELECT g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count "
+				."FROM Groups g "
+				."LEFT JOIN Group_Members gm ON gm.groupname=g.groupname "
+				."GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype) gc "
+				."ON m.groupname=gc.groupname "
+				."WHERE m.member=".$mdb2->quote($user->name, 'text'));
+		}
+		else
+		{
+			$res = $mdb2->query("SELECT g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count "
+				."FROM Groups g "
+				."LEFT JOIN Group_Members gm ON gm.groupname=g.groupname "
+				."GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype");
+		}
 		
 		if(PEAR::isError($res))
 		{
