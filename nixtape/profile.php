@@ -76,6 +76,8 @@ if(isset($user->name)) {
 				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities($_SERVER['REQUEST_URI'])
 				)
 		));
+
+	$smarty->assign('toptracks', $user->getTopTracks);
 	
 	$smarty->display('profile.tpl');
 } else {

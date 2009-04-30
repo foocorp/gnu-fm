@@ -58,6 +58,12 @@
 {/section}
 </ul>
 
+<ul>
+{section name=i loop=$toptracks}
+<li class="toptrack"><a href="{$toptracks[i].artisturl}">{$toptracks[i].artist}</a> - <a href="{$toptracks[i].trackurl}">>{$toptracks[i].track}<a></li>
+{/section}
+</ul>
+
 <!-- Column break -->
 </div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
 

@@ -179,5 +179,31 @@ class User {
 		return $session_id;
 	}
 
+	/**
+	 * get user's top 20 tracks
+	 *
+	 * @return user's top 20 tracks
+	 */
+	function getTopTracks($number=20) {
+		global $mdb2;
+
+		$res = $mdb2->query("SELECT COUNT(track) as c, artist, track FROM Scrobbles WHERE rating<>'S' GROUP BY track ORDER BY c DESC LIMIT 20");
+
+	        if(PEAR::isError($res)) {
+	            return $res;
+	        }
+
+	        $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+	        foreach($data as $i) {
+	            $row = sanitize($i);
+	            $row["artisturl"] = Server::getArtistURL($row["artist"]);
+	            $row["trackurl"] = Server::getTrackURL($row["track"]);
+	            $result[] = $row;
+	        }
+
+	        return $result;
+	}
+
+
 }
 
