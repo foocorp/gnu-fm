@@ -187,7 +187,7 @@ class User {
 	function getTopTracks($number=20) {
 		global $mdb2;
 
-		$res = $mdb2->query("SELECT COUNT(track) as c, artist, track FROM Scrobbles WHERE rating<>'S' GROUP BY track ORDER BY c DESC LIMIT 20");
+		$res = $mdb2->query("SELECT COUNT(track) as c, artist, track FROM Scrobbles WHERE rating<>'S' AND username=".$mdb2->quote($this->name,"text")." GROUP BY artist,track ORDER BY c DESC LIMIT 20");
 
 	        if(PEAR::isError($res)) {
 	            return $res;
