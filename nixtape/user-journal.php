@@ -76,12 +76,18 @@ $smarty->assign('geo', Server::getLocationDetails($user->location_uri));
 $smarty->assign('profile', true);
 $smarty->assign('items', $items);
 $smarty->assign('extra_head_links', array(
-	array(
-		'rel'=>'alternate',
-		'type' => 'application/rss+xml' ,
-		'title' => 'RSS 1.0 Feed (Journal)',
-		'href' => $user->journal_rss
-		)
+		array(
+			'rel'=>'alternate',
+			'type' => 'application/rss+xml' ,
+			'title' => 'RSS 1.0 Feed (Journal)',
+			'href' => $user->journal_rss
+			),
+		array(
+			'rel' => 'meta',
+			'type' => 'application/rdf+xml' ,
+			'title' => 'FOAF',
+			'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities(str_replace($base_url, '', $user->getURL()))
+			)
 	));
 $smarty->display('user-journal.tpl');
 	
