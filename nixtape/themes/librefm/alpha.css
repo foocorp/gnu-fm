@@ -1,7 +1,17 @@
-/*
- * Alpha specific CSS
- *
- */
+/* 
+
+   Libre.fm -- a free network service for sharing your music listening
+   habits
+
+   Copyright (C) 2009 Libre.fm Project
+
+   Copying and distribution of this file, with or without modification,
+   are permitted in any medium without royalty provided the copyright
+   notice and this notice are preserved.  This file is offered as-is,
+   without warranty of any kind.
+
+*/
+
 a:link, a:visited {
     text-decoration: none;
     outline: none;
@@ -28,9 +38,6 @@ div#footer a {
 /*
  * We should use a class down here ¬¬ (fauno)
  */
-
-form input {font-size: 138.5%;}
-form.notcrazy input { font-size: 99%; }
 
 div#invite,
 div#register,
