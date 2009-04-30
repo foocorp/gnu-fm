@@ -10,6 +10,7 @@
         <li><a href="/admin.php">admin</a></li>
     {/if}
 	<li><a href="{$base_url}/login.php?action=logout">Logout</a></li>
+	<li><a href="{$base_url}/listen.php">Listen</a></li>
 {else}
         <li><a href="{$base_url}/login.php?return={$this_page|urlencode|htmlentities}">Login</a></li>
 {/if}
