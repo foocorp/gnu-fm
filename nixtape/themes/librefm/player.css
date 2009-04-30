@@ -1,3 +1,17 @@
+/* 
+
+   Libre.fm -- a free network service for sharing your music listening
+   habits
+
+   Copyright (C) 2009 Libre.fm Project
+
+   Copying and distribution of this file, with or without modification,
+   are permitted in any medium without royalty provided the copyright
+   notice and this notice are preserved.  This file is offered as-is,
+   without warranty of any kind.
+
+*/
+
 #player > #interface {
 	background: #980101 url("images/player/background.jpg") repeat-x;
 	width: 300px;
