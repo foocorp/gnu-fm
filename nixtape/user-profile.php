@@ -76,8 +76,6 @@ if(isset($user->name)) {
 				)
 		));
 
-	$smarty->assign('toptracks', $user->getTopTracks());
-	
 	$smarty->display('user-profile.tpl');
 } else {
 	$smarty->assign('error', 'User not found');
