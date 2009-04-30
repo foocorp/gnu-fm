@@ -193,13 +193,24 @@ class User {
 	            return $res;
 	        }
 
+		$maxcount = 0;
+
 	        $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 	        foreach($data as $i) {
 	            $row = sanitize($i);
 	            $row["artisturl"] = Server::getArtistURL($row["artist"]);
 	            $row["trackurl"] = Server::getTrackURL($row["artist"],$row["album"],$row["track"]);
+		    if ((int)$row["c"] > $maxcount) {
+			$maxcount = (int)$row["c"];
+		    }
 	            $result[] = $row;
 	        }
+
+		if ($maxcount > 0) {
+			foreach($data as $i) {
+			$row["width"]=(int)(100 * ($row["c"]/$maxcount));
+			}
+		}
 
 	        return $result;
 	}
