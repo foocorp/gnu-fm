@@ -42,6 +42,8 @@ if(isset($user->name)) {
 	$smarty->assign('fullname', $user->fullname);
 	$smarty->assign('bio', $user->bio);
 	$smarty->assign('homepage', $user->homepage);
+	$smarty->assign('laconica_profile', $user->laconica_profile);
+	$smarty->assign('has_identica', $user->has_identica);
 	$smarty->assign('location', $user->location);
 	$smarty->assign('location_uri', $user->location_uri);
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));

@@ -24,6 +24,11 @@
 			<a href="{$homepage|escape:'html':'UTF-8'}" rel="me foaf:homepage" class="url">{$homepage|escape:'html':'UTF-8'}</a>
 		</dd>
 		{/if}
+		{if $laconica_profile}
+		<dd>
+			<a href="{$laconica_profile|escape:'html':'UTF-8'}" rel="foaf:homepage" class="url">{$laconica_profile|escape:'html':'UTF-8'} (microblog)</a>
+		</dd>
+		{/if}
 		<dd rel="foaf:based_near">
 			<span {if $location_uri} about="{$location_uri|escape:'html':'UTF-8'}"{/if}>
 				<span class="label" property="rdfs:comment">{$location|escape:'html':'UTF-8'}</span>
@@ -43,6 +48,11 @@
 		<dd class="note" property="bio:olb">{$bio|escape:'html':'UTF-8'}</dd>
 	</dl>
 
+	<div style="text-align:right;clear:right;font-size:80%">
+		<!-- These shouldn't be hard-coded. Will fix soon. -->
+		<a rel="rdfs:seeAlso" href="{$base_url}/user/{$user}">profile</a>
+		{if $journal_rss} &middot; <a rel="rdfs:seeAlso" href="{$base_url}/user/{$user}/journal">journal</a>{/if}
+	</div>
 	<hr style="border: 1px solid transparent; clear: both;" rel="foaf:page" rev="foaf:primaryTopic" resource="" />
 
 </div>

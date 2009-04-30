@@ -34,7 +34,7 @@ class User {
 
 	public $name, $email, $fullname, $bio, $location, $homepage, $error, $userlevel;
 	public $id, $acctid, $avatar_uri, $location_uri, $webid_uri, $laconica_profile, $journal_rss;
-	public $password;
+	public $password, $has_identica;
 
 	/**
 	 * User constructor
@@ -73,6 +73,8 @@ class User {
 			$this->laconica_profile = $row["laconica_profile"];
 			$this->journal_rss  = $row["journal_rss"];
 			$this->acctid       = $this->getURL() . '#acct';
+			
+			$this->has_identica = preg_match('#^http://identi\.ca/#i', $this->laconica_profile);
 			
 			if (! preg_match('/\:/', $this->id))
 				$this->id = $this->getURL() . '#me';
