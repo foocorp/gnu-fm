@@ -70,10 +70,10 @@ class User {
 			$this->id           = $row["webid_uri"];
 			$this->webid_uri    = $row["webid_uri"];
 			$this->avatar_uri   = $row["avatar_uri"];
-			$this->acctid       = $base.'/user/' . urlencode($this->name) . '#acct';
+			$this->acctid       = $this->getURL() . '#acct';
 			
 			if (! preg_match('/\:/', $this->id))
-				$this->id = $base.'/user/' . urlencode($this->name) . '#me';
+				$this->id = $this->getURL() . '#me';
 		}		
 	}
 	
