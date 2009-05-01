@@ -88,7 +88,7 @@ if (isset($_POST['install'])) {
 	$res = $mdb2->query("CREATE TABLE Group_Members (
 		groupname VARCHAR(64) REFERENCES Groups(groupname),
 		member VARCHAR(64) REFERENCES Users(username),
-		joined INTEGER NOT NULL");
+		joined INTEGER NOT NULL)");
 
 	$mdb2->query("CREATE TABLE AccountActivation(
 		username VARCHAR(64),
