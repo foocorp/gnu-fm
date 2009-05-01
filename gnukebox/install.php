@@ -233,8 +233,10 @@ if (isset($_POST['install'])) {
 // 	$res = $mdb2->exec("CREATE INDEX album_artistname_idx ON Album(artist_name)");
 // 	$res = $mdb2->exec("CREATE INDEX scrobbles_artist_idx ON Scrobbles(artist)");
 //	$res = $mdb2->exec("CREATE INDEX scrobbles_time_idx ON Scrobbles(time)");
-//      $res = $mdb2->exec("CREATE INDEX track_artisttrack_idx ON Track(lower(artist),lower(name))");
-//      $res = $mdb2->exec("CREATE INDEX scrobbles_artisttrack_idx on scrobbles(lower(artist),lower(track))");
+//      $res = $mdb2->exec("CREATE INDEX track_artist_idx ON Track(lower(artist))");
+//      $res = $mdb2->exec("CREATE INDEX track_name_idx ON Track(lower(name))");
+//      $res = $mdb2->exec("CREATE INDEX scrobbles_artist_idx on Scrobbles(lower(artist))");
+//      $res = $mdb2->exec("CREATE INDEX scrobbles_track_idx on Scrobbles(lower(track))");
 
 // uncomment these if you're using postgresql and want to run the software as www-data
 //	$res = $mdb2->exec("GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE Album, Artist, Auth, Clientcodes, Error, Invitation_Request, Invitations, Now_Playing, Places, Radio_Sessions, Scrobble_Sessions, Scrobbles, Similar_artist, Tags, Track, Users to \"www-data\"");
