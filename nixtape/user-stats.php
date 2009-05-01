@@ -36,18 +36,10 @@ $user = new User($_GET['user']);
 
 if(isset($user->name)) {
 
-	$aUserScrobbles = $user->getScrobbles(20);
-	if (!PEAR::isError ($aUserScrobbles)) {
-		$smarty->assign('scrobbles', $aUserScrobbles);
-	}
-	$aUserNowPlaying = $user->getNowPlaying(10);
-	if (!PEAR::isError ($aUserNowPlaying)) {
-		$smarty->assign('nowplaying', $aUserNowPlaying);
-	}
-	$aUserTagCloud =  TagCloud::GenerateTagCloud('Scrobbles', 'artist', 40, $user->name);
-	if (!PEAR::isError ($aUserTagCloud)) {
-		$smarty->assign('user_tagcloud',$aUserTagCloud);
-	}
+#	$aUserTagCloud =  TagCloud::GenerateTagCloud('Scrobbles', 'artist', 40, $user->name);
+#	if (!PEAR::isError ($aUserTagCloud)) {
+#		$smarty->assign('user_tagcloud',$aUserTagCloud);
+#	}
 	
 	$smarty->assign('stat_barwidth', 320);
 	$aUserPlayStat =  Statistic::GeneratePlayStats('Scrobbles', 'artist', 40, $user->name, 300);
@@ -60,7 +52,7 @@ if(isset($user->name)) {
 		$smarty->assign('user_daystats',$aUserDayStat);
 	}
 
-	$smarty->assign('toptracks', $user->getTopTracks());
+	$smarty->assign('toptracks', $user->getTopTracks(40));
 	
 	$smarty->assign('me', $user);
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
