@@ -235,6 +235,7 @@ if (isset($_POST['install'])) {
 //	$res = $mdb2->exec("CREATE INDEX scrobbles_time_idx ON Scrobbles(time)");
 //      $res = $mdb2->exec("CREATE INDEX track_artist_idx ON Track(lower(artist))");
 //      $res = $mdb2->exec("CREATE INDEX track_name_idx ON Track(lower(name))");
+//      $res = $mdb2->exec("CREATE INDEX track_streamable_idx on Track(streamable);");
 //      $res = $mdb2->exec("CREATE INDEX scrobbles_artist_idx on Scrobbles(lower(artist))");
 //      $res = $mdb2->exec("CREATE INDEX scrobbles_track_idx on Scrobbles(lower(track))");
 
