@@ -37,8 +37,7 @@ if ($_REQUEST['group']=='new')
 {
 	if ($_REQUEST['new'])
 	{
-		$owner = new User($_SESSION['user']->name);
-		Group::create($_REQUEST['new'], $owner);
+		Group::create($_REQUEST['new'], $this_user);
 		header("Location: {$base_url}/edit_group.php?group=".$_REQUEST['new']);
 		exit;
 	}
@@ -57,7 +56,7 @@ if ($_REQUEST['group']=='new')
 
 $group = new Group($_REQUEST['group']);
 
-if ($group->owner->name != $_SESSION['user']->name)
+if ($group->owner->name != $this_user->name)
 {
 	$smarty->assign('error', 'Error!');
 	$smarty->assign('details', 'You don\'t own this group!');

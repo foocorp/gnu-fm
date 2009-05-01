@@ -11,8 +11,8 @@
 	{/section}
 	];
 
-	{if isset($u_user)}
-	playerInit(playlist, "{$u_user->getScrobbleSession()}", false);
+	{if isset($this_user)}
+	playerInit(playlist, "{$this_user->getScrobbleSession()}", false);
 	{else}
 	playerInit(playlist, false, false);
 	{/if}

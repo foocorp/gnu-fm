@@ -56,7 +56,7 @@ if(isset($user->name)) {
 	
 	$smarty->assign('me', $user);
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
-	$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
+	$smarty->assign('isme', ($this_user->name == $user->name));
 	
 	$smarty->assign('stats', true);
 	$smarty->display('user-stats.tpl');

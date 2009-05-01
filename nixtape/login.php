@@ -24,10 +24,9 @@ require_once('database.php');
 require_once('templating.php');
 require_once($install_path . '/data/User.php');
 
-if(isset($_SESSION['session_id']) && $_GET['action'] == 'logout') {
-    session_unset();
-    session_destroy();
-    header('Location: index.php');
+if(isset($_COOKIE['session_id']) && $_GET['action'] == 'logout') {
+	setcookie('session_id', '', time() - 3600);
+	header('Location: index.php');
 }
 
 if(isset($_POST['login'])) {
@@ -35,6 +34,7 @@ if(isset($_POST['login'])) {
 	$errors = '';
 	$username = $_POST['username'];
 	$password = $_POST['password'];
+	$remember = $_POST['remember'];
 
 	if(empty($username)) {
 		$errors .= 'You must enter a username.<br />';
@@ -52,25 +52,23 @@ if(isset($_POST['login'])) {
 		} else {
 			// Give the user a session id, like any other client
 			$session_id = md5(md5($password) . time());
+			if(isset($remember)){
+				$session_time = time() + 31536000; // 1 year
+			} else {
+				$session_time = time() + 86400; // 1 day
+			}
 			$mdb2->query('INSERT INTO Scrobble_Sessions (username, sessionid, expires) VALUES ('
 				. $mdb2->quote($username, 'text') . ', '
 				. $mdb2->quote($session_id, 'text') . ', '
-				. $mdb2->quote( time() + 604800, 'integer') . ')');
+				. $mdb2->quote($session_time, 'integer') . ')');
 
+			setcookie('session_id', $session_id, $session_time);
 			$logged_in = true;
-			$smarty->assign('logged_in', true);
-
-            $_SESSION['user'] = new User($username);
-            $_SESSION['session_id'] = $session_id;
-            $smarty->assign('user', $_SESSION['user']);
 		}
 	}
 }
 
 if(isset($logged_in) && $logged_in) {
-	// Send the user to the welcome page when they've logged in
-	//$smarty->display('welcome.tpl');
-
 	// Check that return URI is on this server. Prevents possible phishing uses.
 	if ( substr($_POST['return'], 0, 1) == '/' )
 		{ header(sprintf('Location: http://%s%s', $_SERVER['SERVER_NAME'], $_POST['return'])); }

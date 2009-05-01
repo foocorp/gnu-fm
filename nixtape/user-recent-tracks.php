@@ -50,7 +50,7 @@ if(isset($user->name)) {
 	if (!PEAR::isError ($aUserTagCloud)) {
 		$smarty->assign('user_tagcloud',$aUserTagCloud);
 	}
-	$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
+	$smarty->assign('isme', ($this_user->name == $user->name));
 	$smarty->assign('me', $user);
 	$smarty->assign('profile', true);
 	

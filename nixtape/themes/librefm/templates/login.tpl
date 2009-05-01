@@ -14,9 +14,13 @@
 
 			<label for='password'>Password<span>&nbsp;</span></label>
 			<input id='password' name='password' type='password' value=''/>
-
+			
+			<label for='remember'>Remember me<span>&nbsp;</span></label>
+			<input id='remember' name='remember' type='checkbox' value='1'/>
+			
 			<input type='submit' name='login' value='Let me in!' />
 			<input name="return" type="hidden" value="{$return|htmlentities}" />
+			
 		</fieldset>
 
 	</form>

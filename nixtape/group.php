@@ -47,12 +47,12 @@ if (! $_GET['group'])
 
 $group = new Group($_GET['group']);
 
-if ($_GET['action'] && $_SESSION['user']->name)
+if ($_GET['action'] && isset($this_user))
 {
 	if ($_GET['action'] == 'join')
-		$group->memberJoin($_SESSION['user']);
+		$group->memberJoin($this_user);
 	elseif ($_GET['action'] == 'leave')
-		$group->memberLeave($_SESSION['user']);
+		$group->memberLeave($this_user);
 		
 	header("Location: " . $group->getURL());
 	exit;
@@ -75,8 +75,8 @@ if(isset($group->name)) {
 	
 	$smarty->assign('userlist', $group->getUsers());
 
-	$smarty->assign('ismember', $group->memberCheck($_SESSION['user']));
-	$smarty->assign('isowner', ($group->owner->name==$_SESSION['user']->name));
+	$smarty->assign('ismember', $group->memberCheck($this_user));
+	$smarty->assign('isowner', ($group->owner->name==$this_user->name));
 	$smarty->assign('link_join', $group->getURLAction('join'));
 	$smarty->assign('link_leave', $group->getURLAction('leave'));
 	$smarty->assign('link_edit', $base_url.'/edit_group.php?group='.$group->name);
