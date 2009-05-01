@@ -74,6 +74,8 @@
             break;
         case ($diff < 604800):
             # less than a week
+            if (round($diff / 86400) == 7)
+                return 'about a week ago';
             return round($diff / 86400) . ' days ago';
             break;
         case ($diff < 691200):
@@ -82,6 +84,8 @@
             break;
         case ($diff < 2764800):
             # less than a month
+            if (round($diff / 691200) == 1)
+                return 'about a week ago';
             return round($diff / 691200) . ' weeks ago';
             break;
         case ($diff < 4579200):
