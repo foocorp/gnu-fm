@@ -70,7 +70,7 @@ $aUserTagCloud =  TagCloud::GenerateTagCloud('Scrobbles', 'artist', 40, $user->n
 if (!PEAR::isError ($aUserTagCloud)) {
 	$smarty->assign('user_tagcloud',$aUserTagCloud);
 }
-$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
+$smarty->assign('isme', ($this_user->name == $user->name));
 $smarty->assign('me', $user);
 $smarty->assign('geo', Server::getLocationDetails($user->location_uri));
 $smarty->assign('profile', true);

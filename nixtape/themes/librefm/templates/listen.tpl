@@ -3,12 +3,12 @@
 <h2>Listen</h2><br />
 
 {if isset($station)}
-	{if isset($u_user)}
+	{if isset($this_user)}
 		{include file='player.tpl'}
 <div id='error'></div>
 <script type="text/javascript">
-	{if isset($u_user)}
-	playerInit(false, "{$u_user->getScrobbleSession()}", "{$u_user->getRadioSession($station)}");
+	{if isset($this_user)}
+	playerInit(false, "{$this_user->getScrobbleSession()}", "{$this_user->getRadioSession($station)}");
 	{/if}
 </script>
 	{else}

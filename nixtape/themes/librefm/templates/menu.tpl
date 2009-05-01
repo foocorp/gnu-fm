@@ -1,12 +1,12 @@
     <ul>
 {if ($logged_in)}
-        <li><a href="{$u_user->getURL()}">{$u_user->name}</a></li>
+        <li><a href="{$this_user->getURL()}">{$this_user->name}</a></li>
 {else}
 	<li><a href="{$base_url}/register.php">Register</a></li>
 {/if}
 
 {if ($logged_in)}
-    {if $u_user->userlevel > 0}
+    {if $this_user->userlevel > 0}
         <li><a href="/admin.php">admin</a></li>
     {/if}
 	<li><a href="{$base_url}/login.php?action=logout">Logout</a></li>

@@ -32,9 +32,6 @@ if($logged_in == false)
 	die();
 }
 
-# Doesn't seem to work - $user = $_SESSION['user'];
-$user = new User($_SESSION['user']->name);
-
 $errors = array();
 
 if ($_POST['submit'])
@@ -107,22 +104,22 @@ if ($_POST['submit'])
 	{
 		# Currently we don't allow them to change e-mail as we probably should
 		# have some kind of confirmation login to do so.
-		$user->id           = $_POST['id'];
-		$user->fullname     = $_POST['fullname'];
-		$user->homepage     = $_POST['homepage'];
-		$user->bio          = $_POST['bio'];
-		$user->location     = $_POST['location'];
-		$user->location_uri = $_POST['location_uri'];
-		$user->avatar_uri   = $_POST['avatar_uri'];
-		$user->laconica_profile = $_POST['laconica_profile'];
-		$user->journal_rss  = $_POST['journal_rss'];
+		$this_user->id           = $_POST['id'];
+		$this_user->fullname     = $_POST['fullname'];
+		$this_user->homepage     = $_POST['homepage'];
+		$this_user->bio          = $_POST['bio'];
+		$this_user->location     = $_POST['location'];
+		$this_user->location_uri = $_POST['location_uri'];
+		$this_user->avatar_uri   = $_POST['avatar_uri'];
+		$this_user->laconica_profile = $_POST['laconica_profile'];
+		$this_user->journal_rss  = $_POST['journal_rss'];
 		
 		if (!empty( $_POST['password_1'] ))
 			$user->password = md5($_POST['password_1']);
 		
-		$user->save();
+		$this_user->save();
 
-		header("Location: " . $user->getURL());
+		header("Location: " . $this_user->getURL());
 		exit;
 	}
 
@@ -134,18 +131,18 @@ if ($_POST['submit'])
 	}
 }
 
-if(isset($user->name))
+if(isset($this_user->name))
 {
 	# Stuff which cannot be changed.
-	$smarty->assign("acctid", $user->acctid);
-	$smarty->assign('avatar', $user->getAvatar());
-	$smarty->assign('user',   $user->name);
+	$smarty->assign("acctid", $this_user->acctid);
+	$smarty->assign('avatar', $this_user->getAvatar());
+	$smarty->assign('user',   $this_user->name);
 
 	# Stuff which cannot be changed *here*
-	$smarty->assign('userlevel', $user->userlevel);
+	$smarty->assign('userlevel', $this_user->userlevel);
 	
 	# Stuff which cannot be changed *yet*
-	$smarty->assign('email', $user->email);
+	$smarty->assign('email', $this_user->email);
 	
 	if ($_POST['submit'])
 	{
@@ -161,15 +158,15 @@ if(isset($user->name))
 	}
 	else
 	{
-		$smarty->assign("id",           ($user->webid_uri));
-		$smarty->assign('fullname',     ($user->fullname));
-		$smarty->assign('bio',          ($user->bio));
-		$smarty->assign('homepage',     ($user->homepage));
-		$smarty->assign('location',     ($user->location));
-		$smarty->assign('location_uri', ($user->location_uri));
-		$smarty->assign('avatar_uri',   ($user->avatar_uri));
-		$smarty->assign('laconica_profile', ($user->laconica_profile));
-		$smarty->assign('journal_rss',  ($user->journal_rss));
+		$smarty->assign("id",           ($this_user->webid_uri));
+		$smarty->assign('fullname',     ($this_user->fullname));
+		$smarty->assign('bio',          ($this_user->bio));
+		$smarty->assign('homepage',     ($this_user->homepage));
+		$smarty->assign('location',     ($this_user->location));
+		$smarty->assign('location_uri', ($this_user->location_uri));
+		$smarty->assign('avatar_uri',   ($this_user->avatar_uri));
+		$smarty->assign('laconica_profile', ($this_user->laconica_profile));
+		$smarty->assign('journal_rss',  ($this_user->journal_rss));
 	}
 
 	# And display the page.

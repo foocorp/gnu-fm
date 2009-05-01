@@ -38,8 +38,8 @@ $smarty->assign('this_page_absolute',
 
 if(isset($logged_in)) {
 	$smarty->assign('logged_in', true);
-	// Pre-fix this user's details with u to avoid confusion with other users
-	$smarty->assign('u_user', $u_user);
+	// Pre-fix this user's details with 'this_' to avoid confusion with other users
+	$smarty->assign('this_user', $this_user);
 }
 
 header("Content-Type: text/html; charset=utf-8");
