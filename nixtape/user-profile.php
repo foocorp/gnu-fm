@@ -41,8 +41,6 @@ if(isset($user->name)) {
 	if (!PEAR::isError ($aUserScrobbles)) {
 		$smarty->assign('scrobbles', $aUserScrobbles);
 	}
-	$smarty->assign('userlevel', $user->userlevel);
-	$smarty->assign('avatar', $user->getAvatar());
 	$aUserNowPlaying = $user->getNowPlaying(10);
 	if (!PEAR::isError ($aUserNowPlaying)) {
 		$smarty->assign('nowplaying', $aUserNowPlaying);

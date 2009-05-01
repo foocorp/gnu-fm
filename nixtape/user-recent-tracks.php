@@ -46,8 +46,6 @@ if(isset($user->name)) {
 	if (!PEAR::isError ($aUserScrobbles)) {
 		$smarty->assign('scrobbles', $aUserScrobbles);
 	}
-	$smarty->assign('userlevel', $user->userlevel);
-	$smarty->assign('avatar', $user->getAvatar());
 	$aUserTagCloud =  TagCloud::GenerateTagCloud('Scrobbles', 'artist', 40, $user->name);
 	if (!PEAR::isError ($aUserTagCloud)) {
 		$smarty->assign('user_tagcloud',$aUserTagCloud);
