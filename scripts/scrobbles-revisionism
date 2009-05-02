@@ -41,6 +41,9 @@ class CleanUp:
 			if "&gt;" in oldname:
 				newname = newname.replace("&gt;",">")
 
+			if " (PREVIEW: buy it at www.magnatune.com)" in oldname:
+				newname = newname.replace(" (PREVIEW: buy it at www.magnatune.com)","")
+
 			if oldname <> newname:
 				print "%s >>>INTO>>> %s" % (oldname, newname)
 				try:
