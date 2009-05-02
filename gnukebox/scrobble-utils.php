@@ -106,7 +106,7 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	if($album != 'NULL') {
 	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = " . (strtolower($track)) . " AND lower(artist) = " . (strtolower($artist)) . " AND lower(album) = " . strtolower($album));
 	} else {
-	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = " . (strtolower($track)) . " AND lower(artist) = " . (strtolower($artist)) . "AND album IS NULL");
+	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = " . (strtolower($track)) . " AND lower(artist) = " . (strtolower($artist)) . " AND album IS NULL");
 	}
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage() . "\n");
