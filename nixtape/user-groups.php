@@ -54,7 +54,7 @@ if(isset($user->name)) {
 				'rel' => 'meta',
 				'type' => 'application/rdf+xml' ,
 				'title' => 'FOAF',
-				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities(str_replace($base_url, '', $user->getURL()))
+				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities(str_replace($base_url, '', $user->getURL('groups')))
 				)
 		));
 		
