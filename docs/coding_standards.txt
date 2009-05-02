@@ -19,16 +19,16 @@ want your patches accepted and modules included in supported releases.
 
 5)	All functions and methods are to be documented using PhpDocumentor - http://phpdoc.org
 
-6)	Do not document every bit of code in comments.  PHP is an interpreted language and it will be
-	nasty on performance.  Provide enough information for someone else to understand your code.
+6)	Use switch statements where many else if's are going to be used.  Switch/case is faster
 
-7)	Use switch statements where many else if's are going to be used.  Switch/case is faster
+7)	'If' statements need to use the following format:
 
-8)	'If' statements need to use the following format:
-
-	if ($var == 'example') {
+	if ($var == 'example')
+	{
 		echo 'This is only an example';
-	} else {
+	} 
+	else
+	{
 		echo 'This is not a test.  This is the real thing';
 	}
 
@@ -41,7 +41,7 @@ want your patches accepted and modules included in supported releases.
 	if($var = 'example')
 		echo "An {$var}";
 
-9)	class/function format:
+8)	class/function format:
 
 	/**
 	 * This class is for testing
@@ -49,7 +49,7 @@ want your patches accepted and modules included in supported releases.
 	class ModuleTesting 
 	{
 		/**
-		 * Output the value of $var the user
+		 * Output the value of $my_var the user
 		 */
 		public function printToScreen()
 		{
@@ -67,12 +67,13 @@ want your patches accepted and modules included in supported releases.
 
 10)	Associative arrays must be written in the following manner:
 
-	$array = array (
-		'var'	=> 'value',
-		'var2'	=> 'value2'
+	$array = array 
+	(
+		'var'   => 'value',
+		'var2'  => 'value2'
 	);
 
-	Note that tabs are preferred around the '=>'.
+	Note that spaces are preferred around the '=>'.
 
 11)	Use the long format for <?php.  Do NOT use <?.
 
@@ -91,4 +92,10 @@ want your patches accepted and modules included in supported releases.
 	Bad english is easier to work with than having to babelfish code to work out
 	how it works.
 
-16)	If you see code which doesn't comply with the above, please fix it :)
+16)	Files should be in either ASCII or UTF-8 encoding with UNIX line endings.
+
+17)	Files should not end with an ending php tag "?>".  Any whitespace after 
+	the closing tag is sent to the browser and cause errors, so don't include
+	them.
+
+18)	If you see code which doesn't comply with the above, please fix it :)
