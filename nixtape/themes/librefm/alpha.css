@@ -210,10 +210,12 @@ h3 {
     padding: .5em;
     position: relative;
     margin-bottom: .5em;
+    border: 1px solid #666;
 }
 
 .group {
 	background-color: #DDF;
+	border: 1px solid #339;
 }
 
 .user dl, .group dl
