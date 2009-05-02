@@ -61,7 +61,11 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	}
 
 	if (!isset($_POST['t'][$i]) || !isset($_POST['a'][$i]) || !isset($_POST['i'][$i])) {
-	    die("FAILED Track $i was submitted with empty mandatory field(s).\n");
+	    $f = isset($_POST['t'][$i]) ? 't' : '';
+	    $f .= isset($_POST['a'][$i]) ? 'a' : '';
+	    $f .= isset($_POST['i'][$i]) ? 'i' : '';
+
+	    die("FAILED Track $i was submitted with empty mandatory field(s): {$f}\n");
 	}
 
 	switch (mb_detect_encoding($_POST['t'][$i])) {
