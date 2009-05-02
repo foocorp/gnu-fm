@@ -57,6 +57,15 @@ if(isset($user->name)) {
 	$smarty->assign('me', $user);
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
 	$smarty->assign('isme', ($this_user->name == $user->name));
+
+	$smarty->assign('extra_head_links', array(
+			array(
+				'rel' => 'meta',
+				'type' => 'application/rdf+xml' ,
+				'title' => 'FOAF',
+				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities(str_replace($base_url, '', $user->getURL()))
+				)
+		));
 	
 	$smarty->assign('stats', true);
 	$smarty->display('user-stats.tpl');
