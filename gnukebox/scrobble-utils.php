@@ -103,7 +103,7 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	$track = NoSpamTracks($track);
 	$artist = NoSpamTracks($artist);
 
-	if($album) {
+	if($album != 'NULL') {
 	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = " . (strtolower($track)) . " AND lower(artist) = " . (strtolower($artist)) . " AND lower(album) = " . strtolower($album));
 	} else {
 	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = " . (strtolower($track)) . " AND lower(artist) = " . (strtolower($artist)) . "AND album IS NULL");
