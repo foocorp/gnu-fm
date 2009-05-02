@@ -124,7 +124,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		. $mbid . ", "
 		. $source . ","
 		. $rating . ","
-		. $length . ",";
+		. $length . ","
 		. $stid . ")";
 
 	$actualcount++;
