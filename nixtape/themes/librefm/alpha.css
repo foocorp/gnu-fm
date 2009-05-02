@@ -213,23 +213,31 @@ h3 {
     -moz-border-radius-topleft:8px;
     -moz-border-radius-topright:8px;
     background-color: #EEE;
-    padding: .4em .4em 0 .1em;
+    padding: .5em;
+    position: relative;
 }
 
 .group {
 	background-color: #DDF;
 }
 
-.user dl ,
-.group dl
+.user dl, .group dl
 {
-	float:left;
+	margin: 0 0 0 72px;
+	min-height: 64px;
 }
 
 .user dt, .group dt,
 .user dd, .group dd
 {
-	margin: 0 0 0.25em 0.5em;
+	margin: 0 0 0.1em 0;	
+}
+
+.user .avatar, .group .avatar
+{
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 .vcard .edit { float:right; }
