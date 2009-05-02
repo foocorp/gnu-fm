@@ -71,7 +71,7 @@ function createArtistIfNew($artist) {
 function createAlbumIfNew($artist, $album) {
 	global $mdb2;
 
-	$res = $mdb2->query("SELECT name FROM Album WHERE name = " . ($album));
+	$res = $mdb2->query("SELECT name FROM Album WHERE name = " . ($album) . " AND artist_name = " . ($artist));
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage() . "\n");
 	}
