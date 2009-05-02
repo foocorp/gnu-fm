@@ -116,15 +116,12 @@ ul#recenttracks.listcloud li { height: 3.4em; }
 .user .fn , .group .fn {
     font-size: 93%;
 }
-.avatar {
+.avatar img {
     max-height: 96px;
     max-width: 96px;
     min-height: 32px;
     min-width: 32px;
 }
-
-.user .avatar img.photo, 
-.group .avatar img.photo{ max-width:96px; }
 
 .user .bio,
 .group .bio {
@@ -235,7 +232,7 @@ h3 {
 	margin: 0;	
 }
 
-.user .avatar, .group .avatar
+.user .avatar img, .group .avatar img
 {
 	position: absolute;
 	top: 8px;
