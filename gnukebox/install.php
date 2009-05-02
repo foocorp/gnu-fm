@@ -167,7 +167,8 @@ if (isset($_POST['install'])) {
 		mbid VARCHAR(36),
 		source VARCHAR(6),
 		rating CHAR(1),
-		length INTEGER)");
+		length INTEGER,
+		stid INTEGER)");
 
 	$mdb2->query("CREATE TABLE Scrobble_Sessions(
 		username VARCHAR(64) REFERENCES Users(username),
@@ -225,6 +226,14 @@ if (isset($_POST['install'])) {
 			url VARCHAR(255),
 			expires INTEGER NOT NULL DEFAULT 0,
 			PRIMARY KEY(username,session))");
+
+	$res = $mdb2->exec("CREATE TABLE Scrobble_Track(
+			id SERIAL PRIMARY KEY,
+			artist VARCHAR(255) NOT NULL,
+			album VARCHAR(255),
+			name VARCHAR(255) NOT NULL,
+			mbid VARCHAR(36),
+			track INTEGER NOT NULL)");
 
 	$res = $mdb2->exec("CREATE VIEW Free_Scrobbles AS SELECT s.* FROM Scrobbles s INNER JOIN Track t on lower(s.artist)=lower(t.artist) and lower(s.track)=lower(t.name) where t.streamable=1");
 

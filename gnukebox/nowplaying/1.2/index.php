@@ -56,7 +56,7 @@ createArtistIfNew($artist);
 if($album != 'NULL') {
 	createAlbumIfNew($artist, $album);
 }
-createTrackIfNew($artist, $album, $track, $mbid);
+getTrackCreateIfNew($artist, $album, $track, $mbid);
 
 //Expire old tracks
 $mdb2->query("DELETE FROM Now_Playing WHERE expires < " . time());
