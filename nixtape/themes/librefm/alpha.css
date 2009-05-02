@@ -221,21 +221,25 @@ h3 {
 
 .user dl, .group dl
 {
-	margin: 0 0 0 72px;
+	margin: 0 0 0 76px;
 	min-height: 64px;
 }
 
-.user dt, .group dt,
+.user dt, .group dt
+{
+	margin: 0 0 0.1em 0;
+}
+
 .user dd, .group dd
 {
-	margin: 0 0 0.1em 0;	
+	margin: 0;	
 }
 
 .user .avatar, .group .avatar
 {
 	position: absolute;
-	top: 0;
-	left: 0;
+	top: 8px;
+	left: 8px;
 }
 
 .vcard .edit { float:right; }
