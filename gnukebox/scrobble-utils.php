@@ -104,9 +104,9 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	$artist = NoSpamTracks($artist);
 
 	if($album != 'NULL') {
-	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = " . (strtolower($track)) . " AND lower(artist) = " . (strtolower($artist)) . " AND lower(album) = lower(" . ($album) . ")");
+	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = lower(" . ($track) . ") AND lower(artist) = lower(" . ($artist) . ") AND lower(album) = lower(" . ($album) . ")");
 	} else {
-	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = " . (strtolower($track)) . " AND lower(artist) = " . (strtolower($artist)) . " AND album IS NULL");
+	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = lower(" . ($track) . ") AND lower(artist) = lower(" . ($artist) . ") AND album IS NULL");
 	}
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage() . "\n");
