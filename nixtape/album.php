@@ -29,6 +29,7 @@ $artist = new Artist($album->artist_name);
 
 $smarty->assign("name", $album->name);
 $smarty->assign("artist", $artist);
+$smarty->assign("album", $album);
 $aAlbumTracks = $album->getTracks();
 if (!PEAR::isError($aAlbumTracks )) {
 	$smarty->assign("tracks", $aAlbumTracks);
