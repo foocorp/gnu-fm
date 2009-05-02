@@ -135,6 +135,10 @@ class Track {
 		return new Artist($this->artist_name);
 	}
 
+	function getAlbum() {
+		return new Album($this->album_name, $this->artist_name);
+	}
+
 	function getURL() {
 		return Server::getTrackURL($this->artist_name, $this->album_name, $this->name);
 	}

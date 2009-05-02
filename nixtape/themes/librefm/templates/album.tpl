@@ -2,6 +2,13 @@
 
 <h2><a href="{$artist->getURL()}">{$artist->name}</a> - {$name}</h2>
 
+<a rel="foaf:page" href="{$album->getURL()}">
+<span{if $album->image != false} about="{$album->id}" rel="foaf:depiction"{/if}>
+<img class="album photo" {if $album->image == false} src="{$base_url}/i/qm160.png"{else}src="{$album->image}"{/if}
+ alt="{$album->name|escape:'html':'UTF-8'}"title="{$album->name|escape:'html':'UTF-8'}" width="160" />
+</span>
+</a>
+
 {include file='player.tpl'}
 
 <script type="text/javascript">
