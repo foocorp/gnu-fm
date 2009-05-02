@@ -1,0 +1,94 @@
+Libre.fm Coding Standards (Adapted from phpGroupWare standards)
+
+Please comply with the following standard when working on Libre.fm if you 
+want your patches accepted and modules included in supported releases.
+
+1)	Format your code so that we can read it, please!
+
+2)	Use tabs for formatting, NOT SPACES.  Tabs create smaller files and editors allow
+	developers to view a tab as however many spaces as they prefer - we use 4 spaces.
+	Spaces do not allow this.
+
+3)	Use ' instead of " for strings, where substitutions aren't required.  This is a 
+	performance issue, and prevents	a lot of inconsistent coding styles.  When using 
+	substitutions, use curly braces around your variables - like so:
+	$var = "my_var: {$my_var}";
+
+4)	Comments go on the line ABOVE the code, NOT to the right of the code, unless it 
+	is very short.
+
+5)	All functions and methods are to be documented using PhpDocumentor - http://phpdoc.org
+
+6)	Do not document every bit of code in comments.  PHP is an interpreted language and it will be
+	nasty on performance.  Provide enough information for someone else to understand your code.
+
+7)	Use switch statements where many else if's are going to be used.  Switch/case is faster
+
+8)	'If' statements need to use the following format:
+
+	if ($var == 'example') {
+		echo 'This is only an example';
+	} else {
+		echo 'This is not a test.  This is the real thing';
+	}
+
+	Do NOT make if statements like this:
+
+	if ($var == 'example'){ echo 'An example'; }
+
+	OR this
+
+	if($var = 'example')
+		echo "An {$var}";
+
+9)	class/function format:
+
+	/**
+	 * This class is for testing
+	 */
+	class ModuleTesting 
+	{
+		/**
+		 * Output the value of $var the user
+		 */
+		public function printToScreen()
+		{
+			$my_var = new Monkey();
+			if ($my_var->name == 'example')
+			{
+				echo 'This is only an example';
+			}
+			else
+			{
+				echo 'This is not a test.  This is the real thing';
+			}
+		}
+	}
+
+10)	Associative arrays must be written in the following manner:
+
+	$array = array (
+		'var'	=> 'value',
+		'var2'	=> 'value2'
+	);
+
+	Note that tabs are preferred around the '=>'.
+
+11)	Use the long format for <?php.  Do NOT use <?.
+
+12)	a) Classes begin with a capital letter and use CamelCase for separating words (e.g. MyClass).
+	b) Functions/Methods start with a lower case letter and use CamelCase for separating words (e.g. myFunction).
+	c) Variables are all lower case and use _ for separating words (e.g. my_variable).
+
+13)	Always use symbol based comparison operators (&&, ||) instead of text based
+	operators (AND, OR) as they are evaluated in different orders and at different
+	speeds.  This is will prevent any confusion or strange results.
+
+14)	You code must run with E_ALL error reporting turned on, E_NOTICES are ERRORS!
+	Where possible your code should run with E_STRICT error reporting.
+
+15)	All variables, classes, methods, functions and comments must be in English.
+	Bad english is easier to work with than having to babelfish code to work out
+	how it works.
+
+16)	If you see code which doesn't comply with the above, please fix it :)
