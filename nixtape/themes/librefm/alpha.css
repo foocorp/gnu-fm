@@ -114,7 +114,6 @@ ul#nowplaying.listcloud li { float: left; margin-right: 10px; margin-bottom: 10p
 ul#recenttracks.listcloud li { height: 3.4em; }
 /* Users */
 .user .fn , .group .fn {
-    margin-bottom: .3em;
     font-size: 93%;
 }
 .avatar {
@@ -122,8 +121,6 @@ ul#recenttracks.listcloud li { height: 3.4em; }
     max-width: 96px;
     min-height: 32px;
     min-width: 32px;
-    float: left;
-    margin: .3em;
 }
 
 .user .avatar img.photo, 
@@ -215,6 +212,7 @@ h3 {
     background-color: #EEE;
     padding: .5em;
     position: relative;
+    margin-bottom: .5em;
 }
 
 .group {
