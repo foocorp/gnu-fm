@@ -171,7 +171,7 @@ function NoSpamTracks ($track) {
 
   // This function exists to remove things like '(PREVIEW: buy it at www.magnatune.com)' from track names.
 
-  $track = str_replace("(PREVIEW: buy it at www.magnatune.com)", "", $track);
+  $track = str_replace(" (PREVIEW: buy it at www.magnatune.com)", "", $track);
 
   return $track;
   
