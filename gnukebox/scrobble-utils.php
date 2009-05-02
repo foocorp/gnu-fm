@@ -97,16 +97,16 @@ function createAlbumIfNew($artist, $album) {
 	}
 }
 
-function createTrackIfNew($artist, $album, $track, $mbid) {
+function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	global $mdb2;
 
 	$track = NoSpamTracks($track);
 	$artist = NoSpamTracks($artist);
 
 	if($album) {
-	$res = $mdb2->query("SELECT name FROM Track WHERE lower(name) = " . (strtolower($track)) . " AND lower(artist) = " . (strtolower($artist)) . " AND lower(album) = " . strtolower($album));
+	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = " . (strtolower($track)) . " AND lower(artist) = " . (strtolower($artist)) . " AND lower(album) = " . strtolower($album));
 	} else {
-	$res = $mdb2->query("SELECT name FROM Track WHERE lower(name) = " . (strtolower($track)) . " AND lower(artist) = " . (strtolower($artist)) . "AND album IS NULL");
+	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = " . (strtolower($track)) . " AND lower(artist) = " . (strtolower($artist)) . "AND album IS NULL");
 	}
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage() . "\n");
@@ -122,6 +122,34 @@ function createTrackIfNew($artist, $album, $track, $mbid) {
 		if(PEAR::isError($res)) {
 			die("FAILED " . $res->getMessage() . "\n");
 		}
+		return getTrackCreateIfNew($artist, $album, $track, $mbid);
+	} else {
+		return $res->fetchOne(0);
+	}
+}
+
+function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
+	global $mdb2;
+
+	$res = $mdb2->query("SELECT id FROM Scrobbles_Track WHERE name = " . (strtolower($track)) . " AND artist = " . (strtolower($artist)) . " AND album = " . strtolower($album) . " AND mbid = " . strtolower($mbid));
+	if(PEAR::isError($res)) {
+		die("FAILED " . $res->getMessage() . "\n");
+	}
+
+	if(!$res->numRows()) {
+		// Create new track
+		$res = $mdb2->exec("INSERT INTO Scrobbles_Track (name, artist, album, mbid, track) VALUES ("
+			. strtolower($track) . ", "
+			. strtolower($artist) . ", "
+			. strtolower($album) . ", "
+			. strtolower($mbid) . ","
+			. strtolower($tid) . ")");
+		if(PEAR::isError($res)) {
+			die("FAILED " . $res->getMessage() . "\n");
+		}
+		return getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid);
+	} else {
+		return $res->fetchOne(0);
 	}
 }
 

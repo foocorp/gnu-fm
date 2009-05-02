@@ -108,7 +108,8 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	if($album != 'NULL') {
 		createAlbumIfNew($artist, $album);
 	}
-	createTrackIfNew($artist, $album, $track, $mbid);
+	$tid = getTrackCreateIfNew($artist, $album, $track, $mbid);
+	$stid = getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid);
 
 	$exists = scrobbleExists($username, $artist, $track, $time);
 
@@ -123,7 +124,8 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		. $mbid . ", "
 		. $source . ","
 		. $rating . ","
-		. $length . ")";
+		. $length . ",";
+		. $stid . ")";
 
 	$actualcount++;
 	}
@@ -135,7 +137,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		for($j = 0; $j < $actualcount; $j++) {
 
 	// Scrobble!
-		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length) VALUES " . $rowvalues[$j];
+		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length, stid) VALUES " . $rowvalues[$j];
 		$res =& $mdb2->exec($sql);
 		if(PEAR::isError($res)) {
 		    $msg = $res->getMessage() . " - " . $res->getUserInfo();
