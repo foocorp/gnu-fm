@@ -34,7 +34,7 @@ function usernameFromSID($session_id)
 	$res = $mdb2->query("SELECT username FROM Scrobble_Sessions WHERE sessionid = " . $mdb2->quote($session_id, "text")); // get the username from the table
 
 	if(PEAR::isError($res)) {   
-		die("FAILED " . $res->getMessage() . "\n");
+		die("FAILED ufs " . $res->getMessage() . "\n");
 		// die is there is an error, printing the error
 	}
 
@@ -56,14 +56,14 @@ function createArtistIfNew($artist) {
 
 	$res = $mdb2->query("SELECT name FROM Artist WHERE name = " . ($artist));
 	if(PEAR::isError($res)) {
-		die("FAILED " . $res->getMessage() . "\n");
+		die("FAILED art " . $res->getMessage() . "\n");
 	}
 
 	if(!$res->numRows()) {
 		// Artist doesn't exist, so we create them
 		$res = $mdb2->query("INSERT INTO Artist (name) VALUES (" . ($artist) . ")");
 		if(PEAR::isError($res)) {
-			die("FAILED " . $res->getMessage() . "\n");
+			die("FAILED artc " . $res->getMessage() . "\n");
 		}
 	}
 }
@@ -73,7 +73,7 @@ function createAlbumIfNew($artist, $album) {
 
 	$res = $mdb2->query("SELECT name FROM Album WHERE name = " . ($album) . " AND artist_name = " . ($artist));
 	if(PEAR::isError($res)) {
-		die("FAILED " . $res->getMessage() . "\n");
+		die("FAILED alb " . $res->getMessage() . "\n");
 	}
 
 	if(!$res->numRows()) {
@@ -92,7 +92,7 @@ function createAlbumIfNew($artist, $album) {
 	  }
 
 		if(PEAR::isError($res)) {
-			die("FAILED " . $res->getMessage() . "\n");
+			die("FAILED albc " . $res->getMessage() . "\n");
 		}
 	}
 }
@@ -109,7 +109,7 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = lower(" . ($track) . ") AND lower(artist) = lower(" . ($artist) . ") AND album IS NULL");
 	}
 	if(PEAR::isError($res)) {
-		die("FAILED " . $res->getMessage() . "\n");
+		die("FAILED trk " . $res->getMessage() . "\n");
 	}
 
 	if(!$res->numRows()) {
@@ -120,7 +120,7 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 			. ($album) . ", "
 			. ($mbid) . ")");
 		if(PEAR::isError($res)) {
-			die("FAILED " . $res->getMessage() . "\n");
+			die("FAILED trkc " . $res->getMessage() . "\n");
 		}
 		return getTrackCreateIfNew($artist, $album, $track, $mbid);
 	} else {
@@ -136,7 +136,7 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 		. (($album == 'NULL') ? "IS NULL" : ("= lower(" . ($album) . ")")) . " AND mbid "
 		. (($mbid == 'NULL') ? "IS NULL" : ("= lower(" . ($mbid) . ")")));
 	if(PEAR::isError($res)) {
-		die("FAILED " . $res->getMessage() . "\n");
+		die("FAILED st " . $res->getMessage() . "\n");
 	}
 
 	if(!$res->numRows()) {
@@ -148,7 +148,7 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 			. "lower(" . ($mbid) . "),"
 			. ($tid) . ")");
 		if(PEAR::isError($res)) {
-			die("FAILED " . $res->getMessage() . "\n");
+			die("FAILED stc " . $res->getMessage() . "\n");
 		}
 		return getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid);
 	} else {
@@ -161,7 +161,7 @@ function scrobbleExists($username, $artist, $track, $time) {
 
 	$res = $mdb2->query("SELECT time FROM Scrobbles WHERE username = " . ($username) . " AND artist = " . ($artist) . " AND track = " . ($track) . " AND time = " . ($time));
 	if(PEAR::isError($res)) {
-		die("FAILED " . $res->getMessage() . "\n");
+		die("FAILED se " . $res->getMessage() . "\n");
 	}
 
 	if(!$res->numRows()) {
