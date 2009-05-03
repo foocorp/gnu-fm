@@ -226,6 +226,13 @@ if (isset($_POST['install'])) {
 			url VARCHAR(255),
 			expires INTEGER NOT NULL DEFAULT 0,
 			PRIMARY KEY(username,session))");
+	
+	//Table for delete profile requests		
+	$res = $mdb2->query("CREATE TABLE Delete_Request (
+			code VARCHAR(300), 
+			expire INT, 
+			username VARCHAR(100) REFERENCES Users(username),
+			PRIMARY KEY(code)");
 
 	$res = $mdb2->exec("CREATE TABLE Scrobble_Track(
 			id SERIAL PRIMARY KEY,
