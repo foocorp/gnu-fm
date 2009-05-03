@@ -66,10 +66,10 @@ class Server {
 				LEFT JOIN Album l
 					ON l.artist_name=s.artist
 					AND l.name=s.album
+				LEFT JOIN Scrobble_Track st
+					ON s.stid = st.id
 				LEFT JOIN Track t
-					ON lower(s.artist) = lower(t.artist)
-					AND lower(s.album) = lower(t.album)
-					AND lower(s.track) = lower(t.name)
+					ON st.track = t.id
 				WHERE lower(s.username) = " . $mdb2->quote(strtolower($username), "text") . ' 
 				ORDER BY
 					s.time DESC 
@@ -94,10 +94,10 @@ class Server {
 				LEFT JOIN Album l
 					ON l.artist_name=s.artist
 					AND l.name=s.album
+				LEFT JOIN Scrobble_Track st
+					ON s.stid = st.id
 				LEFT JOIN Track t
-					ON lower(s.artist) = lower(t.artist)
-					AND lower(s.album) = lower(t.album)
-					AND lower(s.track) = lower(t.name)
+					ON st.track = t.id
 				ORDER BY
 					s.time DESC 
 				LIMIT " . $mdb2->quote($number, "integer"));
