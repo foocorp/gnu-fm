@@ -62,7 +62,7 @@ div#login form fieldset label {
 	float:left;
 	font-weight:bold;
 	text-align:right;
-    width: 10em;
+    width: 11em;
 }
 div#invite form fieldset label span,
 div#register form fieldset label span,
@@ -71,7 +71,7 @@ div#login form fieldset label span {
 	display:block;
 	font-weight:normal;
 	text-align:right;
-	font-size: 77%;
+	font-size: 60%;
 }
 div#invite form fieldset input,
 div#register form fieldset input,
