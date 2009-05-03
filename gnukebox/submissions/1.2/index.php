@@ -117,7 +117,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 
 	$exists = scrobbleExists($username, $artist, $track, $time);
 
-	if(!$exists) {
+	if((!$exists) && $rating<>'S') {
 	// Scrobble!
 	$rowvalues[$actualcount] = "("
 		. $username . ", "
