@@ -36,7 +36,7 @@ class CleanUp:
 			self.cursor.MoveNext()
 
 	def lookupStid(self, artist, album, track, mbid):
-		self.lucursor = self.conn.Execute('SELECT * from Scrobble_Track WHERE lower(artist) = lower(%(artist)s) AND lower(album) = lower(%(album)s) AND lower(name) = lower(%(track)s) AND lower(mbid) = lower(%(mbid)s)', {'artist': artist, 'album': album, 'track': track, 'mbid': mbid});
+		self.lucursor = self.conn.Execute('SELECT * from Scrobble_Track WHERE lower(artist) = lower(%%(artist)s) AND %s AND lower(name) = lower(%%(track)s) AND %s' % (('lower(album) = lower(%(album)s)' if album else 'album IS NULL'), ('lower(mbid) = lower(%(mbid)s)' if mbid else 'mbid IS NULL')), {'artist': artist, 'album': album, 'track': track, 'mbid': mbid});
 		if not self.lucursor.EOF:
 			lrow = self.lucursor.GetRowAssoc(0)
 			return lrow['id']
@@ -44,7 +44,7 @@ class CleanUp:
 			return None
 
 	def lookupTrack(self, artist, album, track, mbid):
-		self.tucursor = self.conn.Execute('SELECT * from Track WHERE lower(artist) = lower(%(artist)s) AND lower(album) = lower(%(album)s) AND lower(name) = lower(%(track)s) AND lower(mbid) = lower(%(mbid)s)', {'artist': artist, 'album': album, 'track': track, 'mbid': mbid});
+		self.tucursor = self.conn.Execute('SELECT * from Track WHERE lower(artist) = lower(%%(artist)s) AND %s AND lower(name) = lower(%%(track)s) AND %s' % (('lower(album) = lower(%(album)s)' if album else 'album IS NULL'), ('lower(mbid) = lower(%(mbid)s)' if mbid else 'mbid IS NULL')), {'artist': artist, 'album': album, 'track': track, 'mbid': mbid});
 		if not self.tucursor.EOF:
 			trow = self.tucursor.GetRowAssoc(0)
 			return trow['id']
