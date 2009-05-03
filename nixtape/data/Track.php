@@ -48,7 +48,7 @@ class Track {
 		global $mdb2;
 		$res = $mdb2->query("SELECT name, artist, album, duration, streamable, license, downloadurl, streamurl, mbid FROM Track WHERE "
 			. "name = " . $mdb2->quote($name, "text") . " AND "
-			. "artist = " . $mdb2->quote($artist, "text") . " AND album IS NOT NULL");
+			. "artist = " . $mdb2->quote($artist, "text"));
 		if(!$res->numRows()) {
 			$this->name = "No such track: " . $name;
 		} else {
@@ -133,10 +133,6 @@ class Track {
 	 */
 	function getArtist() {
 		return new Artist($this->artist_name);
-	}
-
-	function getAlbum() {
-		return new Album($this->album_name, $this->artist_name);
 	}
 
 	function getURL() {
