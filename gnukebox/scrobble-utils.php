@@ -131,7 +131,7 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 	global $mdb2;
 
-	$res = $mdb2->query("SELECT id FROM Scrobble_Track WHERE name = " . (strtolower($track)) . " AND artist = " . (strtolower($artist)) . " AND album " . (($album == 'NULL') ? "IS NULL" : ("= " . (strtolower($album)))) . " AND mbid " . (($mbid == 'NULL') ? "IS NULL" : ("= " . (strtolower($mbid)))));
+	$res = $mdb2->query("SELECT id FROM Scrobble_Track WHERE name = lower(" . ($track) . ") AND artist = lower(" . ($artist) . ") AND album " . (($album == 'NULL') ? "IS NULL" : ("= lower(" . ($album) . ")")) . " AND mbid " . (($mbid == 'NULL') ? "IS NULL" : ("= lower(" . ($mbid) . ")")));
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage() . "\n");
 	}
@@ -139,11 +139,11 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 	if(!$res->numRows()) {
 		// Create new track
 		$res = $mdb2->exec("INSERT INTO Scrobble_Track (name, artist, album, mbid, track) VALUES ("
-			. strtolower($track) . ", "
-			. strtolower($artist) . ", "
-			. strtolower($album) . ", "
-			. strtolower($mbid) . ","
-			. strtolower($tid) . ")");
+			. "lower(" . ($track) . "), "
+			. "lower(" . ($artist) . "), "
+			. "lower(" . ($album) . "), "
+			. "lower(" . ($mbid) . "),"
+			. "lower(" . ($tid) . "))");
 		if(PEAR::isError($res)) {
 			die("FAILED " . $res->getMessage() . "\n");
 		}
