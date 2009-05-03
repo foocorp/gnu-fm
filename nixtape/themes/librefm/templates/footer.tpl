@@ -66,7 +66,7 @@
     <p>Get started with Libre.fm -- <a href="http://ideas.libre.fm/index.php/Using_turtle">We have help</a></p>
     </div>
     <div class="yui-u" id="moarlinks">
-<p>$Id:</p>
+<p></p>
     </div>
 </div>
 
