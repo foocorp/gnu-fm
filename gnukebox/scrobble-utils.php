@@ -140,14 +140,17 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 	}
 
 	if(!$res->numRows()) {
-		// Create new track
-		$res = $mdb2->exec("INSERT INTO Scrobble_Track (name, artist, album, mbid, track) VALUES ("
+		$sql = "INSERT INTO Scrobble_Track (name, artist, album, mbid, track) VALUES ("
 			. "lower(" . ($track) . "), "
 			. "lower(" . ($artist) . "), "
 			. (($album == 'NULL') ? "NULL" : "lower(" . ($album)) . "), "
 			. (($mbid == 'NULL') ? "NULL" : "lower(" . ($mbid)) . "), "
-			. ($tid) . ")");
+			. ($tid) . ")";
+		$res = $mdb2->exec($sql);
 		if(PEAR::isError($res)) {
+			$msg = $res->getMessage() . " - " . $res->getUserInfo();
+			reportError($msg, $sql);
+
 			die("FAILED stc " . $res->getMessage() . "\n");
 		}
 		return getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid);
