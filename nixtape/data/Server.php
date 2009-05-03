@@ -201,6 +201,7 @@ class Server {
 						ON lower(n.artist) = lower(t.artist)
 						AND lower(n.album) = lower(t.album)
 						AND lower(n.track) = lower(t.name)
+						AND lower(n.mbid) = lower(t.mbid)
 					WHERE lower(username) = " . $mdb2->quote(strtolower($username), "text") . "
 					ORDER BY t.streamable DESC, n.expires DESC LIMIT " . $mdb2->quote($number, "integer"));
 		} else {
@@ -224,6 +225,7 @@ class Server {
 						ON lower(n.artist) = lower(t.artist)
 						AND lower(n.album) = lower(t.album)
 						AND lower(n.track) = lower(t.name)
+						AND lower(n.mbid) = lower(t.mbid)
 					ORDER BY t.streamable DESC, n.expires DESC LIMIT " . $mdb2->quote($number, "integer"));
 		}
 
