@@ -131,7 +131,10 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 	global $mdb2;
 
-	$res = $mdb2->query("SELECT id FROM Scrobble_Track WHERE name = lower(" . ($track) . ") AND artist = lower(" . ($artist) . ") AND album " . (($album == 'NULL') ? "IS NULL" : ("= lower(" . ($album) . ")")) . " AND mbid " . (($mbid == 'NULL') ? "IS NULL" : ("= lower(" . ($mbid) . ")")));
+	$res = $mdb2->query("SELECT id FROM Scrobble_Track WHERE name = lower("
+		. ($track) . ") AND artist = lower(" . ($artist) . ") AND album "
+		. (($album == 'NULL') ? "IS NULL" : ("= lower(" . ($album) . ")")) . " AND mbid "
+		. (($mbid == 'NULL') ? "IS NULL" : ("= lower(" . ($mbid) . ")")));
 	if(PEAR::isError($res)) {
 		die("FAILED " . $res->getMessage() . "\n");
 	}
