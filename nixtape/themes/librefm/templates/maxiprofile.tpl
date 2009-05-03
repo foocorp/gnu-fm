@@ -6,6 +6,7 @@
 
 	{if $isme}
 	<a class="edit" href="{$me->getURL('edit')|escape:'html':'UTF-8'}">[edit]</a>
+	<a class="delete" href="{$me->getURL('edit')|escape:'html':'UTF-8'}">[delete]</a>
 	{/if}
 
 	<dl>

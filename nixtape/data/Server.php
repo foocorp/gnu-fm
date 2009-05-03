@@ -272,6 +272,8 @@ class Server {
 		if ($component == 'edit')
 		{
 			return $base_url . "/user-edit.php";
+		} elseif ($component == 'delete') {
+			return $base_url . "/delete-profile.php";
 		}
 		elseif($friendly_urls)
 		{
