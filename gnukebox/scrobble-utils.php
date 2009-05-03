@@ -114,7 +114,7 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 
 	if(!$res->numRows()) {
 		// Create new track
-		$res = $mdb2->query("INSERT INTO Track (name, artist, album, mbid) VALUES ("
+		$res = $mdb2->exec("INSERT INTO Track (name, artist, album, mbid) VALUES ("
 			. ($track) . ", "
 			. ($artist) . ", "
 			. ($album) . ", "
@@ -144,8 +144,8 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 		$res = $mdb2->exec("INSERT INTO Scrobble_Track (name, artist, album, mbid, track) VALUES ("
 			. "lower(" . ($track) . "), "
 			. "lower(" . ($artist) . "), "
-			. "lower(" . ($album) . "), "
-			. "lower(" . ($mbid) . "),"
+			. (($album == 'NULL') ? "NULL" : "lower(" . ($album)) . "), "
+			. (($mbid == 'NULL') ? "NULL" : "lower(" . ($mbid)) . "), "
 			. ($tid) . ")");
 		if(PEAR::isError($res)) {
 			die("FAILED stc " . $res->getMessage() . "\n");
