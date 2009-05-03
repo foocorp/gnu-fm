@@ -146,7 +146,7 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 			. "lower(" . ($artist) . "), "
 			. "lower(" . ($album) . "), "
 			. "lower(" . ($mbid) . "),"
-			. "lower(" . ($tid) . "))");
+			. ($tid) . ")");
 		if(PEAR::isError($res)) {
 			die("FAILED " . $res->getMessage() . "\n");
 		}
