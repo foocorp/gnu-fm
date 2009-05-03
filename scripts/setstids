@@ -11,7 +11,7 @@ class CleanUp:
 
 	def doit(self):
 
-		self.cursor = self.conn.Execute('SELECT * from Scrobbles WHERE stid is NULL');
+		self.cursor = self.conn.Execute('SELECT DISTINCT artist, album, track, mbid from Scrobbles WHERE stid is NULL');
 
 		while not self.cursor.EOF:
 			row = self.cursor.GetRowAssoc(0)
@@ -19,8 +19,6 @@ class CleanUp:
 			album = row['album']
 			track = row['track']
 			mbid = row['mbid']
-			username = row['username']
-			time = row['time']
 			stid = self.lookupStid(artist,album,track,mbid)
 			if not stid:
 				tid = self.lookupTrack(artist, album, track, mbid)
@@ -32,7 +30,7 @@ class CleanUp:
 					self.acursor = self.conn.Execute("INSERT INTO Track (artist,album,name,mbid) VALUES(%(artist)s,%(album)s,%(name)s,%(mbid)s)", {'artist': artist, 'album': album, 'name': track, 'mbid': mbid})
 			else:
 				print "Setting %d to match %s/%s/%s/%s" % (stid,artist,album,track,mbid)
-				self.scursor = self.conn.Execute("UPDATE Scrobbles SET stid = %(stid)s WHERE username = %(username)s AND track = %(track)s AND artist = %(artist)s AND time = %(time)s AND stid IS NULL", {'stid': stid, 'username': username, 'track': track, 'artist': artist, 'time': time})
+				self.scursor = self.conn.Execute("UPDATE Scrobbles SET stid = %%(stid)s WHERE track = %%(track)s AND artist = %%(artist)s AND %s AND %s AND stid IS NULL" % (('lower(album) = lower(%(album)s)' if album else 'album IS NULL'), ('lower(mbid) = lower(%(mbid)s)' if mbid else 'mbid IS NULL')), {'stid': stid, 'track': track, 'artist': artist, 'album': album, 'mbid': mbid})
 			self.cursor.MoveNext()
 
 	def lookupStid(self, artist, album, track, mbid):
