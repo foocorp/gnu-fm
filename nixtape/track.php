@@ -38,7 +38,7 @@ if (!PEAR::isError ($aTagCloud)) {
         $smarty->assign('tagcloud', $aTagCloud);
 }
 
-$res = $mdb2->query("SELECT * FROM Track WHERE lower(artist) = " . $mdb2->quote(strtolower($track->artist_name),"text") . " AND lower(name) = " . $mdb2->quote(strtolower($track->name),"text"));
+$res = $mdb2->query("SELECT * FROM Track WHERE lower(artist) = " . $mdb2->quote(mb_strtolower($track->artist_name, "UTF-8"),"text") . " AND lower(name) = " . $mdb2->quote(mb_strtolower($track->name, "UTF-8"),"text"));
 
 $aOtheralbums = array();
 $i = 0;

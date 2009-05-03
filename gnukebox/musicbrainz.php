@@ -88,7 +88,7 @@ function BrainzLookup($artist, $track){
 
 	 	     global $mdb2;
 
-			$sql = "select a.name as artist,l.name as album, t.name as track,t.gid as mbid from brainz.track t left join brainz.artist a on t.artist=a.id left join brainz.albumjoin j on j.track=t.id left join brainz.album l on l.id=j.album  where lower(t.name)=" . $mdb2->quote(strtolower($track)) . " and lower(a.name)=" . $mdb2->quote(strtolower($artist)) . " LIMIT 1;";
+			$sql = "select a.name as artist,l.name as album, t.name as track,t.gid as mbid from brainz.track t left join brainz.artist a on t.artist=a.id left join brainz.albumjoin j on j.track=t.id left join brainz.album l on l.id=j.album  where lower(t.name)=" . $mdb2->quote(mb_strtolower($track, "UTF-8")) . " and lower(a.name)=" . $mdb2->quote(mb_strtolower($artist, "UTF-8")) . " LIMIT 1;";
 			
 			$resBrainz = $mdb2->query($sql);
 
