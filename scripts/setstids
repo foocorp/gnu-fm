@@ -23,7 +23,7 @@ class CleanUp:
 			if not stid:
 				tid = self.lookupTrack(artist, album, track, mbid)
 				if tid:
-					print "Adding stid for %s/%s/%s/%s/%s" % (stid,artist,album,track,mbid)
+					print "Adding stid for %s/%s/%s/%s/%s" % (tid,artist,album,track,mbid)
 					self.acursor = self.conn.Execute("INSERT INTO Scrobble_Track (artist,album,name,mbid,track) VALUES(%(artist)s,%(album)s,%(name)s,%(mbid)s,%(track)s)", {'artist': artist, 'album': album, 'name': track, 'mbid': mbid, 'track': tid})
 				else:
 					print "Adding tid for %s/%s/%s/%s" % (artist,album,track,mbid)
