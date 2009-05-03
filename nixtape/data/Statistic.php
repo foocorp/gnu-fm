@@ -45,8 +45,6 @@ class Statistic {
 	} else {
         $query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
 	}
-        $query .= (!is_null($constraint) && ($table == "Scrobbles")) ? ' AND ' : null;
-        $query .= ($table == "Scrobbles") ? " rating <> 'S' " : null;
         $query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
         $res = $mdb2->query($query);
 	if (PEAR::isError($res)) {
@@ -83,8 +81,6 @@ class Statistic {
     	
         $query .= (!is_null($constraint) || ($table == "Scrobbles")) ? ' WHERE ' : null;
 		$query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
-        $query .= (!is_null($constraint) && ($table == "Scrobbles")) ? ' AND ' : null;
-        $query .= ($table == "Scrobbles") ? " rating <> 'S' " : null;
         $query .= " GROUP BY date ORDER BY date DESC LIMIT $limit";
         $res = $mdb2->query($query);
 		if (PEAR::isError($res)) {

@@ -47,8 +47,6 @@ class TagCloud {
         } else {
             $query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
         }
-        $query .= (!is_null($constraint) && (($table == "Scrobbles") || ($table == "Free_Scrobbles"))) ? ' AND ' : null;
-        $query .= (($table == "Scrobbles") || ($table == "Free_Scrobbles")) ? " rating <> 'S' " : null;
         $query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
         $res = $mdb2->query($query);
         if (PEAR::isError($res)) {
