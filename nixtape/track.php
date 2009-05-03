@@ -40,7 +40,7 @@ if (!PEAR::isError ($aTagCloud)) {
 
 $res = $mdb2->query("SELECT * FROM Track WHERE lower(artist) = " . $mdb2->quote(strtolower($track->artist_name),"text") . " AND lower(name) = " . $mdb2->quote(strtolower($track->name),"text"));
 
-$aOtheralbums = {};
+$aOtheralbums = array();
 $i = 0;
 
 while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
