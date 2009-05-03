@@ -39,7 +39,7 @@ class TagCloud {
         if (!is_integer($limit))         return false;
         $sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
         $query = "SELECT $field, count(*) AS count FROM $table";
-        $query .= (!is_null($constraint) || (($table == "Scrobbles") || ($table == "Free_Scrobbles"))) ? ' WHERE ' : null;
+        $query .= (!is_null($constraint)) ? ' WHERE ' : null;
         if ($constrained_field) {
             $query .= (!is_null($constraint)) ? " $constrained_field  = " . $mdb2->quote($constraint, 'text') : null;
         } elseif ($field == "track") {
