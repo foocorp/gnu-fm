@@ -143,8 +143,8 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 		$sql = "INSERT INTO Scrobble_Track (name, artist, album, mbid, track) VALUES ("
 			. "lower(" . ($track) . "), "
 			. "lower(" . ($artist) . "), "
-			. (($album == 'NULL') ? "NULL" : "lower(" . ($album)) . "), "
-			. (($mbid == 'NULL') ? "NULL" : "lower(" . ($mbid)) . "), "
+			. (($album == 'NULL') ? "NULL" : "lower(" . ($album) . ")") . ", "
+			. (($mbid == 'NULL') ? "NULL" : "lower(" . ($mbid) . ")") . ", "
 			. ($tid) . ")";
 		$res = $mdb2->exec($sql);
 		if(PEAR::isError($res)) {
