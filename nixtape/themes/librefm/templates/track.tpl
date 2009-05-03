@@ -28,7 +28,15 @@
       Listeners: {$track->getListenerCount()}
   </li>
   <li>
-      Other Albums containing this track: {$otheralbum}
+
+      Albums containing this track:
+{section name=i loop=$albums}
+<span{if $albums[i]->image != false} about="{$albums[i]->id}"{/if}>
+<img class="album photo" {if $albums[i]->image == false} src="{$base_url}/i/qm160.png"{else}src="{$albums[i]->image}"{/if}
+ alt="{$albums[i]->name|escape:'html':'UTF-8'}"title="{$albums[i]->name|escape:'html':'UTF-8'}" width="160" />
+</span>
+{/section}
+
   </li>
 </ul>
 <div class="cleaner">&nbsp;</div>
