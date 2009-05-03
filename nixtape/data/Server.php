@@ -70,8 +70,7 @@ class Server {
 					ON lower(s.artist) = lower(t.artist)
 					AND lower(s.album) = lower(t.album)
 					AND lower(s.track) = lower(t.name)
-				WHERE s.rating<>'S'
-					AND lower(s.username) = " . $mdb2->quote(strtolower($username), "text") . ' 
+				WHERE lower(s.username) = " . $mdb2->quote(strtolower($username), "text") . ' 
 				ORDER BY
 					s.time DESC 
 				LIMIT ' . $mdb2->quote($number, "integer"));
@@ -99,7 +98,6 @@ class Server {
 					ON lower(s.artist) = lower(t.artist)
 					AND lower(s.album) = lower(t.album)
 					AND lower(s.track) = lower(t.name)
-				WHERE s.rating<>'S'
 				ORDER BY
 					s.time DESC 
 				LIMIT " . $mdb2->quote($number, "integer"));
@@ -155,7 +153,7 @@ class Server {
     static function getTopArtists($number=20) {
         global $mdb2;
 
-        $res = $mdb2->query("SELECT COUNT(artist) as c, artist FROM Scrobbles WHERE rating<>'S' GROUP BY artist ORDER BY c DESC LIMIT 20");
+        $res = $mdb2->query("SELECT COUNT(artist) as c, artist FROM Scrobbles GROUP BY artist ORDER BY c DESC LIMIT 20");
 
         if(PEAR::isError($res)) {
             return $res;

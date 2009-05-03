@@ -109,7 +109,7 @@ class Artist {
 	 */
 	function getTopTracks($number) {
 		global $mdb2;
-		$res = $mdb2->query("SELECT track, COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE rating<>'S' AND "
+		$res = $mdb2->query("SELECT track, COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE"
 			. " artist = " . $mdb2->quote($this->name, 'text')
 			. " GROUP BY track ORDER BY freq DESC LIMIT " . $mdb2->quote($number, "integer"));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
