@@ -22,7 +22,8 @@ if ($logged_in == false) {
 	$smarty->display('error.tpl');
 	die ();
 } elseif ( isset ($_GET['code'])) {
-	//TODO: Implement expiration
+	$mdb2->exec("DELETE FROM Delete_Request WHERE expires < " . $mdb2->quote(time(), "integer"));
+
 	$user = new User($_SESSION['user']->name);
 	$username = $user->name;
 	$code = $_GET['code'];
@@ -38,14 +39,14 @@ if ($logged_in == false) {
 		$smarty->display('error.tpl');
 		die ();
 	} else {
-		$mdb2->query("DELETE FROM Users WHERE lower(username) = ".$mdb2->quote(strtolower($username), 'text'));
-		$mdb2->query("DELETE FROM Scrobble_Sessions WHERE username = ".$mdb2->quote($username, 'text'));
-		$mdb2->query("DELETE FROM Delete_Request WHERE username = ".$mdb2->quote($username, 'text'));
-		$mdb2->query("DELETE FROM Auth WHERE username = ".$mdb2->quote($username, 'text'));
-		$mdb2->query("DELETE FROM Group_Members WHERE member = ".$mdb2->quote($username, 'text'));
-		$mdb2->query("DELETE FROM Radio_Sessions WHERE username = ".$mdb2->quote($username, 'text'));
-		$mdb2->query("DELETE FROM Recovery_Request WHERE username = ".$mdb2->quote($username, 'text'));
-		$mdb2->query("DELETE FROM Scrobbles WHERE username = ".$mdb2->quote($username, 'text'));
+		$mdb2->exec("DELETE FROM Users WHERE lower(username) = ".$mdb2->quote(strtolower($username), 'text'));
+		$mdb2->exec("DELETE FROM Scrobble_Sessions WHERE username = ".$mdb2->quote($username, 'text'));
+		$mdb2->exec("DELETE FROM Delete_Request WHERE username = ".$mdb2->quote($username, 'text'));
+		$mdb2->exec("DELETE FROM Auth WHERE username = ".$mdb2->quote($username, 'text'));
+		$mdb2->exec("DELETE FROM Group_Members WHERE member = ".$mdb2->quote($username, 'text'));
+		$mdb2->exec("DELETE FROM Radio_Sessions WHERE username = ".$mdb2->quote($username, 'text'));
+		$mdb2->exec("DELETE FROM Recovery_Request WHERE username = ".$mdb2->quote($username, 'text'));
+		$mdb2->exec("DELETE FROM Scrobbles WHERE username = ".$mdb2->quote($username, 'text'));
 		session_destroy();
 		header("Location: index.php");
 	}
@@ -55,9 +56,9 @@ if ($logged_in == false) {
 	$username = $user->name;
 	$email = $user->email;
 	$expire = time()+86400;
-	$mdb2->query("INSERT INTO Delete_Request VALUES (".$mdb2->quote($code, 'text').', '.$mdb2->quote($expire, 'text').",".$mdb2->quote($username, 'text').')');
+	$mdb2->exec("INSERT INTO Delete_Request (code, expires, username) VALUES (".$mdb2->quote($code, 'text').', '.$mdb2->quote($expire, 'text').",".$mdb2->quote($username, 'text').')');
 	$url = $base_url."/delete_profile.php?code=".$code;
-	$content = "Hi!\n\nSomeone from the IP-address ".$_SERVER['REMOTE_ADDR']." requested "."account delete @ libre.fm. To remove acount click: \n\n".$url."\n\n- The Libre.fm Team";
+	$content = "Hi!\n\nSomeone from the IP address ".$_SERVER['REMOTE_ADDR']." requested account deletion @ libre.fm.  To remove this account click: \n\n".$url."\n\n- The Libre.fm Team";
 	$headers = 'From: Libre.fm <account@libre.fm>';
 	$subject = 'Libre.fm Account Delete Request - Action needed!';
 	mail($email, $subject, $text, $headers);
