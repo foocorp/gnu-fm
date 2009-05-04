@@ -130,9 +130,9 @@ class Artist {
 	function getURL() {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . "/artist/" . urlencode(stripslashes($this->name));
+			return $base_url . "/artist/" . rawurlencode(stripslashes($this->name));
 		} else {
-			return $base_url . "/artist.php?artist=" . urlencode(stripslashes($this->name));
+			return $base_url . "/artist.php?artist=" . rawurlencode(stripslashes($this->name));
 		}
 	}
 
