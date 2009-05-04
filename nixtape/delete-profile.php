@@ -62,6 +62,6 @@ if ($logged_in == false) {
 	$headers = 'From: Libre.fm <account@libre.fm>';
 	$subject = 'Libre.fm Account Delete Request - Action needed!';
 	mail($email, $subject, $text, $headers);
-	$smarty->display('delete_profile.tpl');
+	$smarty->display('delete-profile.tpl');
 }
 ?>
