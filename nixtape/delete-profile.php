@@ -52,11 +52,12 @@ if ($logged_in == false) {
 	}
 } else {
 	$user = new User($_SESSION['user']->name);
+	$username = $user->name;
 	$code = generateCode();
 	$username = $user->name;
 	$email = $user->email;
 	$expire = time()+86400;
-	$mdb2->exec("INSERT INTO Delete_Request (code, expires, username) VALUES (".$mdb2->quote($code, 'text').', '.$mdb2->quote($expire, 'text').",".$mdb2->quote($user->name, 'text').')');
+	$mdb2->exec("INSERT INTO Delete_Request (code, expires, username) VALUES (".$mdb2->quote($code, 'text').', '.$mdb2->quote($expire, 'text').",".$mdb2->quote($username, 'text').')');
 	$url = $base_url."/delete-profile.php?code=".$code;
 	$content = "Hi!\n\nSomeone from the IP address ".$_SERVER['REMOTE_ADDR']." requested account deletion @ libre.fm.  To remove this account click: \n\n".$url."\n\n- The Libre.fm Team";
 	$headers = 'From: Libre.fm <account@libre.fm>';
