@@ -19,9 +19,9 @@
 
 */
 
-require_once('database.php');
-require_once('templating.php');
-require_once('data/sanitize.php');
+require_once('../../database.php');
+require_once('../../templating.php');
+require_once('../../data/sanitize.php');
 
 $res = $mdb2->query("SELECT t.id, t.artist, t.album, t.name, t.mbid as tmbid, st.mbid as stmbid FROM Scrobble_Track st JOIN Track t ON lower(t.name)=st.name AND lower(t.album)=st.album AND lower(t.artist)=st.artist AND t.mbid<>st.mbid");
 
