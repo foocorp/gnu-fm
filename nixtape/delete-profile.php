@@ -59,7 +59,7 @@ if ($logged_in == false) {
 	$content = "Hi!\n\nSomeone from the IP address ".$_SERVER['REMOTE_ADDR']." requested account deletion @ libre.fm.  To remove this account click: \n\n".$url."\n\n- The Libre.fm Team";
 	$headers = 'From: Libre.fm <account@libre.fm>';
 	$subject = 'Libre.fm Account Delete Request - Action needed!';
-	mail($email, $subject, $text, $headers);
+	mail($email, $subject, $content, $headers);
 	$smarty->display('delete-profile.tpl');
 }
 ?>
