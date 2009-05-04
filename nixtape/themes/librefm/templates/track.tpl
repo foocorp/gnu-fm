@@ -16,6 +16,9 @@
 
 <b>Artist: <a href="{$artisturl}">{$track->artist_name}</a></b><br />
 <b>Album: <a href="{$albumurl}">{$track->album_name}</a></b><br />
+{if $track->mbid != ""}
+<b>MusicBrainz ID: <a href="http://musicbrainz.org/track/{$track->mbid}.html">{$track->mbid}</a></b><br />
+{/if}
 <br />
 <a href="{$track->licenseurl}"><img src="{$base_url}/themes/librefm/images/licenses/{$track->license}.png" /></a>
 
