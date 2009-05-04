@@ -8,7 +8,7 @@ function identifierScrobbleEvent ($username, $artist, $track, $album, $time, $mb
 		return null;
 
 	$microhash = substr(md5($artist . '//' . $track), 0, 4);
-	return $base_url . sprintf('/user/%s#%s.%s', urlencode($username), urlencode($time), urlencode($microhash));
+	return $base_url . sprintf('/user/%s#%s.%s', rawurlencode($username), rawurlencode($time), rawurlencode($microhash));
 }
 
 function identifierTrack ($username, $artist, $track, $album, $time, $mbid=NULL, $ambid=NULL, $lmbid=NULL)
@@ -35,7 +35,7 @@ function identifierArtist ($username, $artist, $track, $album, $time, $mbid=NULL
 	if ($u != '.artist') return $u;
 
 	global $base_url;
-	return $base_url . sprintf('/artist/%s#artist', urlencode($artist));
+	return $base_url . sprintf('/artist/%s#artist', rawurlencode($artist));
 }
 
 function identifierAlbum ($username, $artist, $track, $album, $time, $mbid=NULL, $ambid=NULL, $lmbid=NULL)
@@ -50,6 +50,6 @@ function identifierAlbum ($username, $artist, $track, $album, $time, $mbid=NULL,
 	if ($u != '.album') return $u;
 
 	global $base_url;
-	return $base_url . sprintf('/artist/%s/album/%s#this', urlencode($artist), urlencode($album));
+	return $base_url . sprintf('/artist/%s/album/%s#this', rawurlencode($artist), rawurlencode($album));
 }
 

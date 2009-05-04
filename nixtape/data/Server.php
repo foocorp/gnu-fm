@@ -281,49 +281,49 @@ class Server {
 				$component = '';
 			else
 				$component = "/{$component}";
-			return $base_url . "/user/" . urlencode($username) . $component;
+			return $base_url . "/user/" . rawurlencode($username) . $component;
 		}
 		else
 		{
-			return $base_url . "/user-{$component}.php?user=" . urlencode($username);
+			return $base_url . "/user-{$component}.php?user=" . rawurlencode($username);
 		}
 	}
 
 	static function getGroupURL($groupname) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . "/group/" . urlencode($groupname);
+			return $base_url . "/group/" . rawurlencode($groupname);
 		} else {
-			return $base_url . "/group.php?group=" . urlencode($groupname);
+			return $base_url . "/group.php?group=" . rawurlencode($groupname);
 		}
 	}
 
 	static function getArtistURL($artist) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . "/artist/" . urlencode($artist);
+			return $base_url . "/artist/" . rawurlencode($artist);
 		} else {
-			return $base_url . "/artist.php?artist=" . urlencode($artist);
+			return $base_url . "/artist.php?artist=" . rawurlencode($artist);
 		}
 	}
 
 	static function getAlbumURL($artist, $album) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . "/artist/" . urlencode($artist) . "/album/" . urlencode($album);
+			return $base_url . "/artist/" . rawurlencode($artist) . "/album/" . rawurlencode($album);
 		} else {
-			return $base_url . "/album.php?artist=" . urlencode($artist) . "&album=" . urlencode($album);
+			return $base_url . "/album.php?artist=" . rawurlencode($artist) . "&album=" . rawurlencode($album);
 		}
 	}
 
 	static function getTrackURL($artist, $album, $track) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls && $album) {
-			return $base_url . "/artist/" . urlencode($artist) . "/album/" . urlencode($album) . "/track/" . urlencode($track);
+			return $base_url . "/artist/" . rawurlencode($artist) . "/album/" . rawurlencode($album) . "/track/" . rawurlencode($track);
 		} elseif ($friendly_urls) {
-			return $base_url . "/artist/" . urlencode($artist) . "/track/" . urlencode($track);
+			return $base_url . "/artist/" . rawurlencode($artist) . "/track/" . rawurlencode($track);
 		} else {
-			return $base_url . "/track.php?artist=" . urlencode($artist) .   "&album=" . urlencode($album) . "&track=" . urlencode($track);
+			return $base_url . "/track.php?artist=" . rawurlencode($artist) .   "&album=" . rawurlencode($album) . "&track=" . rawurlencode($track);
 		}
 	}
 

@@ -75,7 +75,7 @@ class Group {
 			$this->users        = array();
 
 			if (! preg_match('/\:/', $this->id))
-				$this->id = $base.'/group/' . urlencode($this->name) . '#group';
+				$this->id = $base.'/group/' . rawurlencode($this->name) . '#group';
 		}		
 	}
 	
@@ -205,9 +205,9 @@ class Group {
 	function getURLAction ($action) {
 		$url = $this->getURL();
 		if (strstr($url, '?'))
-			return $url . '&action=' . urlencode($action);
+			return $url . '&action=' . rawurlencode($action);
 		else
-			return $url . '?action=' . urlencode($action);
+			return $url . '?action=' . rawurlencode($action);
 	}
 	
 	function getUsers () {
