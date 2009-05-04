@@ -30,7 +30,7 @@ $i = 0;
 
 while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
 	$trow = sanitize($row);
-	$aEntries[$i++] = $row;
+	$aEntries[$i++] = $trow;
 }
 
 $smarty->assign("entries", $aEntries);
