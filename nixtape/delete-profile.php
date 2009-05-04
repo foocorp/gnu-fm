@@ -24,8 +24,7 @@ if ($logged_in == false) {
 } elseif ( isset ($_GET['code'])) {
 	$mdb2->exec("DELETE FROM Delete_Request WHERE expires < " . $mdb2->quote(time(), "integer"));
 
-	$user = new User($_SESSION['user']->name);
-	$username = $user->name;
+	$username = $this_user->name;
 	$code = $_GET['code'];
 	$res = $mdb2->query("SELECT * FROM Delete_Request WHERE username = ".$mdb2->quote($username, 'text').' AND code = '.$mdb2->quote($code, 'text'));
 	if (PEAR::isError($res)) {
@@ -51,11 +50,9 @@ if ($logged_in == false) {
 		header("Location: index.php");
 	}
 } else {
-	$user = new User($_SESSION['user']->name);
-	$username = $user->name;
 	$code = generateCode();
-	$username = $user->name;
-	$email = $user->email;
+	$username = $this_user->name;
+	$email = $this_user->email;
 	$expire = time()+86400;
 	$mdb2->exec("INSERT INTO Delete_Request (code, expires, username) VALUES (".$mdb2->quote($code, 'text').', '.$mdb2->quote($expire, 'text').",".$mdb2->quote($username, 'text').')');
 	$url = $base_url."/delete-profile.php?code=".$code;
