@@ -83,11 +83,9 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		date_default_timezone_set("UTC");
 		$time = strtotime($_POST['i'][$i]);
 	}
-	if(isset($_POST['m'][$i])) {
-		$mbid = $mdb2->quote(rtrim($_POST['m'][$i]), "text");
-	} else {
-		$mbid = 'NULL';
-	}
+
+	$mbid = validateMBID($_POST['m']);
+
 	if(isset($_POST['o'][$i])) {
 		$source = $mdb2->quote($_POST['o'][$i], "text");
 	} else {
