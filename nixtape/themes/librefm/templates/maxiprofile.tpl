@@ -5,8 +5,10 @@
 	</div>
 
 	{if $isme}
-	<a class="edit" href="{$me->getURL('edit')|escape:'html':'UTF-8'}">[edit]</a>
-	<a class="delete" href="{$me->getURL('edit')|escape:'html':'UTF-8'}">[delete]</a>
+	<span class="edit">
+	<a href="{$me->getURL('edit')|escape:'html':'UTF-8'}">[delete]</a>
+	<a href="{$me->getURL('edit')|escape:'html':'UTF-8'}">[edit]</a>
+	</span>
 	{/if}
 
 	<dl>
