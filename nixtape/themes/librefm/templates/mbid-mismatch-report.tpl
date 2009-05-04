@@ -16,12 +16,12 @@
   <tbody>
 {section name=i loop=$entries}
 <tr>
-<td>{$entries[$i]->id}</td>
-<td>{$entries[$i]->artist}</td>
-<td>{$entries[$i]->album}</td>
-<td>{$entries[$i]->name}</td>
-<td>{$entries[$i]->tmbid}</td>
-<td>{$entries[$i]->stmbid}</td>
+<td>{$entries[i].id}</td>
+<td>{$entries[i].artist}</td>
+<td>{$entries[i].album}</td>
+<td>{$entries[i].name}</td>
+<td>{$entries[i].tmbid}</td>
+<td>{$entries[i].stmbid}</td>
 </tr>
 {/section}
   </tbody>
