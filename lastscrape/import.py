@@ -6,7 +6,7 @@ sys.path.append(os.path.join(sys.path[0], '../scripts'))
 
 from datetime import datetime
 import getpass
-from gobble import GobbleServer
+from gobble import GobbleServer, GobbleTrack
 from optparse import OptionParser
 import time
 from urllib import urlencode
@@ -27,6 +27,6 @@ if __name__ == '__main__':
     for line in file(data):
         artist,track,timestamp = line.strip().split("\t")
         dt = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
-        gobbler.add_track(artist, track, dt)
+        gobbler.add_track(GobbleTrack(artist, track, dt))
         print "Adding to post %s playing %s" % (artist, track)
     gobbler.submit()
