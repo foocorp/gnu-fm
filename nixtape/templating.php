@@ -27,6 +27,7 @@ $smarty = new Smarty();
 
 $smarty->template_dir = $install_path . '/themes/'. $default_theme . '/templates/';
 $smarty->compile_dir = $install_path. '/themes/' . $default_theme . '/templates_c/';
+$smarty->cache_dir = $install_path. '/cache/';
 
 $smarty->assign('base_url', $base_url);
 $smarty->assign('this_page', $_SERVER['REQUEST_URI']);
