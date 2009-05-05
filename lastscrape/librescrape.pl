@@ -12,6 +12,16 @@ use RDF::RDFa::Parser::Redland '0.02';
 my $uri = shift @ARGV
 	or die "Usage: librescrape.pl 'http://alpha.libre.fm/user/somebody'\n";
 
+if ($uri =~ /user-profile\.php/)
+{
+	$uri =~ s/user-profile.php/user-recent-tracks.php/;
+	$uri .= '&count=1000';
+}
+else
+{
+	$uri .= '/recent-tracks?count=1000';
+}
+
 my $parser = RDF::RDFa::Parser::Redland->new(get($uri), $uri);
 $parser->consume;
 my $model = $parser->redland;
