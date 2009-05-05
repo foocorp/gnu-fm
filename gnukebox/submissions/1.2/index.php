@@ -84,7 +84,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		$time = strtotime($_POST['i'][$i]);
 	}
 
-	$mb = validateMBID($_POST['m']);
+	$mb = validateMBID($_POST['m'][$i]);
 
 	if($mb) {
 		$mbid = $mdb2->quote($mb, "text");
