@@ -45,21 +45,49 @@ class GobbleServer(object):
     def submit(self):
         if len(self.post_data) == 0:
             return
-        self.post_data.append(('s', self.session_id))
-        response = urlopen(self.submit_url,
-                           urlencode(self.post_data)).read()
+        i = 0
+        data = []
+        for track in self.post_data:
+            data += track.get_tuples(i)
+            i += 1
+        data += [('s', self.session_id)]
+        response = urlopen(self.submit_url, urlencode(data)).read()
         if response != "OK\n":
             raise GobbleException("Server returned: %s" % (response,))
         self.post_data = []
         time.sleep(1)
 
-    def add_track(self, artist, track, dt):
-        timestamp = str(int(time.mktime(dt.utctimetuple())))
-        i = len(self.post_data) / 3
+    def add_track(self, gobble_track):
+        i = len(self.post_data)
         if i > 49:
             self.submit()
             i = 0
-        self.post_data += [('a[%d]' % i, artist), ('t[%d]' % i, track),
-                           ('i[%d]' % i, timestamp)]
+        self.post_data.append(gobble_track)
 
 
+class GobbleTrack(object):
+
+    def __init__(self, artist, track, timestamp, album=None, length=None,
+                 tracknumber=None, mbid=None):
+        self.artist = artist
+        self.track = track
+        self.timestamp = timestamp
+        self.album = album
+        self.length = length
+        self.tracknumber = tracknumber
+        self.mbid = mbid
+
+    def get_tuples(self, i):
+        timestamp = str(int(time.mktime(self.timestamp.utctimetuple())))
+        data = []
+        data += [('a[%d]' % i, self.artist), ('t[%d]' % i, self.track),
+                 ('i[%d]' % i, timestamp)]
+        if self.album is not None:
+            data.append(('b[%d]' % i, self.album))
+        if self.length is not None:
+            data.append(('l[%d]' % i, self.length))
+        if self.tracknumber is not None:
+            data.append(('n[%d]' % i, self.tracknumber))
+        if self.mbid is not None:
+            data.append(('m[%d]' % i, self.mbid))
+        return data
