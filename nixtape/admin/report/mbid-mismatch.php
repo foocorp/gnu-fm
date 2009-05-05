@@ -19,23 +19,25 @@
 
 */
 
-require_once('../../database.php');
-require_once('../../templating.php');
-require_once('../../data/sanitize.php');
-
-$res = $mdb2->query("SELECT t.id, t.artist, t.album, t.name, t.mbid as tmbid, st.mbid as stmbid FROM Scrobble_Track st JOIN Track t ON lower(t.name)=st.name AND lower(t.album)=st.album AND lower(t.artist)=st.artist AND t.mbid<>st.mbid");
-
-$aEntries = array();
-$i = 0;
-
-while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
-	$trow = sanitize($row);
-	$aEntries[$i++] = $trow;
-}
-
-$smarty->assign("entries", $aEntries);
+require_once($install_path . '/database.php');
+require_once($install_path . '/templating.php');
+require_once($install_path . '/data/sanitize.php');
 
 $smarty->caching = 2;
 $smarty->cache_lifetime = 43200;
+
+if(!$smarty->is_cached('mbid-mismatch-report.tpl')) {
+	$res = $mdb2->query("SELECT t.id, t.artist, t.album, t.name, t.mbid as tmbid, st.mbid as stmbid FROM Scrobble_Track st JOIN Track t ON lower(t.name)=st.name AND lower(t.album)=st.album AND lower(t.artist)=st.artist AND t.mbid<>st.mbid");
+
+	$aEntries = array();
+	$i = 0;
+
+	while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
+		$trow = sanitize($row);
+		$aEntries[$i++] = $trow;
+	}
+	$smarty->assign("entries", $aEntries);
+}
+
 $smarty->display("mbid-mismatch-report.tpl");
 ?>
