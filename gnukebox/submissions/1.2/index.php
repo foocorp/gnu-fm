@@ -84,7 +84,13 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		$time = strtotime($_POST['i'][$i]);
 	}
 
-	$mbid = validateMBID($_POST['m']);
+	$mb = validateMBID($_POST['m']);
+
+	if($mb) {
+		$mbid = $mdb2->quote($mb, "text");
+	} else {
+		$mbid = 'NULL';
+	}
 
 	if(isset($_POST['o'][$i])) {
 		$source = $mdb2->quote($_POST['o'][$i], "text");

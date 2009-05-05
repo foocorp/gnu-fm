@@ -211,16 +211,15 @@ $image = $aws_xml->Items->Item->MediumImage->URL;
 }
 
 function validateMBID ($input) {
-
 if(isset($input)) {
 	$input = strtolower(rtrim($input));
 	if(preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $input)) {
-		return $mdb2->quote($input, "text");
+		return $input;
 	} else {
-		return 'NULL';
+		return null;
 	}
 } else {
-	return 'NULL';
+	return null;
 }
 
 }
