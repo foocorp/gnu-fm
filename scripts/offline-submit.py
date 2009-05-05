@@ -8,7 +8,7 @@ import subprocess
 import mutagen
 from mutagen import easyid3
 
-from gobble import GobbleServer
+from gobble import GobbleServer, GobbleTrack
 
 
 def _parse_date(string):
@@ -41,6 +41,10 @@ if __name__ == '__main__':
         title = f['title'][0]
         artist = f['artist'][0]
         length = f.info.length
-        server.add_track(artist, title, dt)
+        album = f['album'][0]
+        tracknumber = f['tracknumber'][0]
+        t = GobbleTrack(artist, title, dt, album=album, length=length,
+                        tracknumber=tracknumber)
+        server.add_track(t)
         dt += datetime.timedelta(seconds=length)
     server.submit()
