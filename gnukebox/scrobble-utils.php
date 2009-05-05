@@ -217,7 +217,7 @@ if(isset($input)) {
 	if(preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $input)) {
 		return $mdb2->quote($input, "text");
 	} else {
-		return 'NULL'
+		return 'NULL';
 	}
 } else {
 	return 'NULL';
