@@ -35,5 +35,7 @@ while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
 
 $smarty->assign("entries", $aEntries);
 
+$smarty->caching = 2;
+$smarty->cache_lifetime = 43200;
 $smarty->display("mbid-mismatch-report.tpl");
 ?>
