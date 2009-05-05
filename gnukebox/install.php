@@ -88,7 +88,8 @@ if (isset($_POST['install'])) {
 	$res = $mdb2->query("CREATE TABLE Group_Members (
 		groupname VARCHAR(64) REFERENCES Groups(groupname),
 		member VARCHAR(64) REFERENCES Users(username),
-		joined INTEGER NOT NULL)");
+		joined INTEGER NOT NULL,
+		PRIMARY KEY (groupname, member))");
 
 	$mdb2->query("CREATE TABLE AccountActivation(
 		username VARCHAR(64),
@@ -244,6 +245,39 @@ if (isset($_POST['install'])) {
 
 	$res = $mdb2->exec("CREATE VIEW Free_Scrobbles AS SELECT s.* FROM Scrobbles s INNER JOIN Track t on lower(s.artist)=lower(t.artist) and lower(s.track)=lower(t.name) where t.streamable=1");
 
+	$res = $mdb2->query("CREATE TABLE User_Relationships (
+		username VARCHAR(64) REFERENCES Users(username),
+		related VARCHAR(64) REFERENCES Users(username),
+		established INTEGER NOT NULL,
+		PRIMARY KEY (username, related))");
+
+	$res = $mdb2->query("CREATE TABLE User_Relationship_Flags (
+		username VARCHAR(64) REFERENCES Users(username),
+		related VARCHAR(64) REFERENCES Users(username),
+		flag VARCHAR(12) REFERENCES Relationship_Flags(flag),
+		PRIMARY KEY (username, related, flag))");
+
+	$res = $mdb2->query("CREATE TABLE Relationship_Flags (
+		flag VARCHAR(12),
+		PRIMARY KEY (flag)");
+
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('contact')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('acquaintance')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('friend')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('met')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('co-worker')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('colleague')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('co-resident')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('neighbor')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('child')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('parent')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('sibling')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('spouse')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('kin')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('muse')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('crush')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('date')");
+	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('sweetheart')");
 
 // uncomment these to solve performance problems with getRecentScrobbles
 // 	$res = $mdb2->exec("CREATE INDEX album_artistname_idx ON Album(artist_name)");
