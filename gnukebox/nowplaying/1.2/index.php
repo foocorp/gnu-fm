@@ -46,7 +46,13 @@ if(isset($_POST['l']) && is_numeric($_POST['l'])) {
 	$expires = time() + 250; //Expire in 5 minutes if we don't know the track length
 }
 
-$mbid = validateMBID($_POST['m']);
+$mb = validateMBID($_POST['m']);
+
+if($mb) {
+	$mbid = $mdb2->quote($mb, "text");
+} else {
+	$mbid = 'NULL';
+}
 
 createArtistIfNew($artist);
 if($album != 'NULL') {
