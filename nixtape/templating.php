@@ -45,4 +45,8 @@ if(isset($logged_in)) {
 
 header("Content-Type: text/html; charset=utf-8");
 
+function getMenu() {
+	$smarty->display('menu.tpl');
+}
+
 ?>
