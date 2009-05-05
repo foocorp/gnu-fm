@@ -19,6 +19,7 @@
 
 */
 
+require("../../config.php");
 require_once($install_path . '/database.php');
 require_once($install_path . '/templating.php');
 require_once($install_path . '/data/sanitize.php');
