@@ -304,3 +304,7 @@ dt.libre{background-image: url(/themes/librefm/images/square.png); background-re
 li.libre{background-image: url(/themes/librefm/images/square.png); background-repeat: no-repeat; padding-left: 22px; background-color: #eee;}
 
 #adbard{width: 150px; margin: 10px auto 5px auto;}
+
+.cc-license {font-size: 73%; color: red;}
+
+.disclaimer {padding: 8px; background-color: yellow; text-align: center; margin-top: 1em;}
