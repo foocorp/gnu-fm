@@ -35,7 +35,7 @@ if(!$smarty->is_cached('mbid-mismatch-report.tpl')) {
 	$i = 0;
 
 	while (!$recordSet->EOF) {
-		$trow = sanitize($recordSet);
+		$trow = sanitize($recordSet->fields);
 		$aEntries[$i++] = $trow;
 		$recordSet->MoveNext();
 	}
