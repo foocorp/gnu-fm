@@ -206,6 +206,18 @@ function loadSong(song) {
 		getRadioPlaylist();
 	}
 
+	if(current_song > 0) {
+		$("#skipback").fadeTo("normal", 1.0);
+	} else {
+		$("#skipback").fadeTo("normal", 0.5);
+	}
+
+	if(current_song < playlist.length - 1) {
+		$("#skipforward").fadeTo("normal", 1.0);
+	} else {
+		$("#skipforward").fadeTo("normal", 0.5);
+	}
+
 	$("#trackinfo > #artistname").text(artist);
 	$("#trackinfo > #trackname").text(track);
 }
@@ -232,6 +244,14 @@ function getRadioPlaylist() {
 				populatePlaylist();
 			}
 		}, "text");
+}
+
+function skipBack() {
+	playSong(current_song - 1);
+}
+
+function skipForward() {
+	playSong(current_song + 1);
 }
 
 function friendlyTime(timestamp) {
