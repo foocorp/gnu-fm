@@ -54,13 +54,13 @@ class TagCloud {
             echo("ERROR");
         } else {
             foreach($res as $count => &$i) {
-                $i['size'] = $sizes[(int) ($count/(count($data)/7))];
+                $i['size'] = $sizes[(int) ($count/(count($res)/7))];
             }
             foreach($res as &$i){
                 $i['pageurl'] = Server::getArtistURL($i['artist']);
             }
-            sort($data);
-            return $data;
+            sort($res);
+            return $res;
         }
     }
 }
