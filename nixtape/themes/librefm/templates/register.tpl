@@ -40,20 +40,7 @@
 			<label for='email'>Your e-mail:<span>(must be valid!)</span></label>
 			<input id='email' name='email' type='text' value='{$email}' maxlength='64' />
 
-			</fieldset>
-
-			<fieldset class="optional"><legend>Optional profile information</legend>
-
-			<label for='fullname'>Name:</label>
-			<input id='fullname' name='fullname' type='text' value='{$fullname}' maxlength='255'/>
-	
-			<label for='location'>Location:<span>(like 'CABA, Buenos Aires, Argentina')</span></label>
-			<input id='location' name='location' type='text' value='{$location}' maxlength='255' />
-			
-			<label for='bio'>About yourself:<span>(we want to know you! in 140 chars.)</span></label>
-			<input id='bio' name='bio' type='text' value='{$bio}' maxlength='140'/>
-
-			<input type='submit' name='register' value="OK, I'm in" />
+			<input type='submit' name='register' value="Sign up!" />
 		</fieldset>
 
 	</form>
