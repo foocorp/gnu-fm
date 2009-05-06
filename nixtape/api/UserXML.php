@@ -70,7 +70,7 @@ class UserXML {
 	    FROM Track, Scrobbles,Artist 
 	    WHERE Scrobbles.username =" . $mdb2->quote($username, 'text') . "
 	    AND Scrobbles.track = Track.name AND Scrobbles.time > " . $timestamp . " AND Track.artist = Artist.name 
-	    GROUP BY Track.name ORDER BY freq DESC");
+	    GROUP BY Track.name ORDER BY freq DESC LIMIT 20");
 
 	if (PEAR::isError($res) || !$res->numRows()) {
 	    return(XML::error("failed", "7", "Invalid resource specified"));
