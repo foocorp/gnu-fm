@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from datetime import datetime
 from optparse import OptionParser
 from urllib2 import urlopen
