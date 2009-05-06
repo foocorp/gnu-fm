@@ -51,7 +51,7 @@
 
 	</form>
 
-	<p>We won't sell, swap or give away your email address. You can optionally 
+	<p class="disclaimer">We won't sell, swap or give away your email address. You can optionally include personal data on your profile, which is displayed publically.</p>
 	
 </div>
 
