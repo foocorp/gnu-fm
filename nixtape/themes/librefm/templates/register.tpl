@@ -44,9 +44,9 @@
 
 		<hr />
 
-			<p class="cc-license">Please note: we plan make your <a href="http://turtle.libre.fm/data/">listening data available</a>, under the <a href="http://wiki.openstreetmap.org/wiki/Open_Database_License">the Open Database License</a>.</p>
+			<!-- <p class="cc-license">Please note: we plan make your <a href="http://turtle.libre.fm/data/">listening data available</a>, under the <a href="http://wiki.openstreetmap.org/wiki/Open_Database_License">the Open Database License</a>.</p> -->
 
-			<input type='submit' name='register' value="Sign up and I agree to license my listening data as specified above" />
+			<input type='submit' name='register' value="Sign up" />
 
 
 	</form>
