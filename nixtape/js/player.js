@@ -124,8 +124,7 @@ function songEnded() {
 	if(current_song == playlist.length - 1) {
 		pause();
 	} else {
-		current_song++;
-		loadSong(current_song);
+		loadSong(current_song+1);
 		play();
 	}
 }
