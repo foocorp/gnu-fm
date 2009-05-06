@@ -27,16 +27,8 @@
 <div id='register'>
 	<form action='' method='post'>
 		<fieldset>
-			<label for='fullname'>You:<span>(that's your real name.)</span></label>
-			<input id='fullname' name='fullname' type='text' value='{$fullname}' maxlength='255'/>
 
-			<label for='email'>Your e-mail:<span>(must be valid!)</span></label>
-			<input id='email' name='email' type='text' value='{$email}' maxlength='64' />
-	
-			<label for='location'>Location:<span>(like 'CABA, Buenos Aires, Argentina')</span></label>
-			<input id='location' name='location' type='text' value='{$location}' maxlength='255' />
-			
-			<label for='username'>Your nickname:<span>(no more than 16 chars.)</span></label>
+			<label for='username'>Your username:<span>(no more than	16 chars.)</span></label>
 			<input id='username' name='username' type='text' value='{$username}' maxlength='16' />
 
 			<label for='password'>Your password:<span>(make it hard to guess)</span></label>
@@ -45,6 +37,19 @@
 			<label for='password-repeat'>Your password again<span>(you should repeat it.)</span></label>
 			<input id='password-repeat' name='password-repeat' type='password' value=''/>
 
+			<label for='email'>Your e-mail:<span>(must be valid!)</span></label>
+			<input id='email' name='email' type='text' value='{$email}' maxlength='64' />
+
+			</fieldset>
+
+			<fieldset class="optional"><legend>Optional profile information</legend>
+
+			<label for='fullname'>Name:</label>
+			<input id='fullname' name='fullname' type='text' value='{$fullname}' maxlength='255'/>
+	
+			<label for='location'>Location:<span>(like 'CABA, Buenos Aires, Argentina')</span></label>
+			<input id='location' name='location' type='text' value='{$location}' maxlength='255' />
+			
 			<label for='bio'>About yourself:<span>(we want to know you! in 140 chars.)</span></label>
 			<input id='bio' name='bio' type='text' value='{$bio}' maxlength='140'/>
 
