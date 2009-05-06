@@ -77,7 +77,7 @@ class Album {
 		$res = $mdb2->query("SELECT COUNT(*) AS scrobbles FROM Scrobbles JOIN Track ON Scrobbles.track = Track.name WHERE Scrobbles.artist = "
 			. $mdb2->quote($this->artist_name, 'text') . 'AND Track.album ='
 			. $mdb2->quote($this->name, 'text'));
-		if(!$res->numRows()) {
+		if(PEAR::isError($res) || !$res->numRows()) {
 			$c = 0;
 		} else {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
