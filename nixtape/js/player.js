@@ -248,6 +248,8 @@ function getRadioPlaylist() {
 				playerReady();
 			} else {
 				populatePlaylist();
+				// Re-enable the skip forward button now that we have more tracks
+				$("#skipforward").fadeTo("normal", 1.0);
 			}
 		}, "text");
 }
