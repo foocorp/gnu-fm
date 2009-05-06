@@ -142,8 +142,9 @@ function populatePlaylist() {
 		} else {
 			playable_songs = true;
 		}
-		$("#playlist > #songs").append("<li><a href='#' onclick='playSong(" + i + ")'>" + playlist[i]["artist"] + " - " + playlist[i]["track"] + "</li>");
+		$("#playlist > #songs").append("<li id='song-" + i + "'><a href='#' onclick='playSong(" + i + ")'>" + playlist[i]["artist"] + " - " + playlist[i]["track"] + "</li>");
 	}
+	$("#song-" + current_song).css({fontWeight : "bold"});
 }
 
 function togglePlaylist() {
@@ -195,6 +196,11 @@ function loadSong(song) {
 	artist = playlist[song]["artist"];
 	album = playlist[song]["album"];
 	track = playlist[song]["track"];
+
+	// Highlight current song in the playlist
+	$("#song-" + current_song).css({fontWeight : "normal"});
+	$("#song-" + song).css({fontWeight : "bold"});
+
 	current_song = song;
 	scrobbled = false;
 	now_playing = false;
