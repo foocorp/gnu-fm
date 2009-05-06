@@ -304,3 +304,7 @@ dt.libre{background-image: url(/themes/librefm/images/square.png); background-re
 li.libre{background-image: url(/themes/librefm/images/square.png); background-repeat: no-repeat; padding-left: 22px; background-color: #eee;}
 
 #adbard{width: 150px; margin: 10px auto 5px auto;}
+
+legend {font-size: 73%;}
+
+fieldset .optional{color: #eee; font-size: 73%;}
