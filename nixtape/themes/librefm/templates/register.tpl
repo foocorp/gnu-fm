@@ -40,10 +40,14 @@
 			<label for='email'>Your e-mail:<span>(must be valid!)</span></label>
 			<input id='email' name='email' type='text' value='{$email}' maxlength='64' />
 
+		</fieldset>
+
+		<hr />
+
 			<p class="cc-license">Please note: we make your listening data available, under a Creative Commons Attribution-ShareAlike license.</p>
 
 			<input type='submit' name='register' value="Sign up and I agree to license my listening data as specified above" />
-		</fieldset>
+
 
 	</form>
 
