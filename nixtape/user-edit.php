@@ -170,7 +170,7 @@ if(isset($this_user->name))
 	}
 
 	# And display the page.
-	$aTagCloud = TagCloud::GenerateTagCloud('Scrobbles', 'artist');
+	$aTagCloud = TagCloud::GenerateTagCloud('Free_Scrobbles', 'artist');
 	if (!PEAR::isError ($aTagCloud))
 	{
 		$smarty->assign('tagcloud', $aTagCloud);
