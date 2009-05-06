@@ -24,24 +24,19 @@ require_once($install_path . '/database2.php');
 require_once($install_path . '/templating.php');
 require_once($install_path . '/data/sanitize.php');
 
-$smarty->caching = 2;
-$smarty->cache_lifetime = 43200;
+$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+$recordSet = &$adodb->CacheExecute(7200, 'SELECT t.id, t.artist, t.album, t.name, t.mbid as tmbid, st.mbid as stmbid FROM Scrobble_Track st JOIN Track t ON lower(t.name)=st.name AND lower(t.album)=st.album AND lower(t.artist)=st.artist AND t.mbid<>st.mbid');
 
-if(!$smarty->is_cached('mbid-mismatch-report.tpl')) {
-	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-	$recordSet = &$adodb->Execute('SELECT t.id, t.artist, t.album, t.name, t.mbid as tmbid, st.mbid as stmbid FROM Scrobble_Track st JOIN Track t ON lower(t.name)=st.name AND lower(t.album)=st.album AND lower(t.artist)=st.artist AND t.mbid<>st.mbid');
+$aEntries = array();
+$i = 0;
 
-	$aEntries = array();
-	$i = 0;
-
-	while (!$recordSet->EOF) {
-		$trow = sanitize($recordSet->fields);
-		$aEntries[$i++] = $trow;
-		$recordSet->MoveNext();
-	}
-
-	$smarty->assign("entries", $aEntries);
+while (!$recordSet->EOF) {
+	$trow = sanitize($recordSet->fields);
+	$aEntries[$i++] = $trow;
+	$recordSet->MoveNext();
 }
+
+$smarty->assign("entries", $aEntries);
 
 $smarty->display("mbid-mismatch-report.tpl");
 ?>
