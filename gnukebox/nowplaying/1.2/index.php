@@ -31,7 +31,7 @@ if(empty($_POST['s']) || empty($_POST['a']) || empty($_POST['t'])) {
 $session_id = $_POST['s'];
 
 $username = $mdb2->quote(usernameFromSID($session_id), "text");
-$sess = $mdb2->quote($session_id, "text");
+$MQsess = $mdb2->quote($session_id, "text");
 
 $artist = $mdb2->quote($_POST['a'], "text");
 if(isset($_POST['b'])) {
@@ -64,10 +64,10 @@ getTrackCreateIfNew($artist, $album, $track, $mbid);
 $mdb2->exec("DELETE FROM Now_Playing WHERE expires < " . time());
 
 //Delete this user's last playing song (if any)
-$mdb2->exec("DELETE FROM Now_Playing WHERE sessionid = " . $mdb2->quote($sess, "text"));
+$mdb2->exec("DELETE FROM Now_Playing WHERE sessionid = " . ($MQsess));
 
 $mdb2->exec("INSERT INTO Now_Playing (sessionid, artist, album, track, expires, mbid) VALUES ("
-	. $sess . ", "
+	. $MQsess . ", "
 	. $artist . ", "
 	. $album . ", "
 	. $track . ", "
