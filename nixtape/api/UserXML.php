@@ -39,7 +39,7 @@ class UserXML {
 	$user_node->addChild("location", $user->location);
 	$user_node->addChild("bio", $user->bio);
 	$user_node->addChild("profile_created", strftime("%c", $user->created));
-	if (isset($user->modified)
+	if (isset($user->modified))
 	    $user_node->addChild("profile_updated", strftime("%c", $user->modified));
 
 	return($xml);
