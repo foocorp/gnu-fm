@@ -307,4 +307,4 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
 
 legend {font-size: 73%;}
 
-fieldset .optional{color: #eee; font-size: 73%;}
+fieldset .optional *{color: #eee !important; font-size: 73% !important;}
