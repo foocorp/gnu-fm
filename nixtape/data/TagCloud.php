@@ -18,7 +18,7 @@
 
 */
 
-require_once($install_path . '/database.php');
+require_once($install_path . '/database2.php');
 require_once($install_path . '/data/Server.php');
 
 class TagCloud {
@@ -33,7 +33,7 @@ class TagCloud {
     * @return array tagcloud
     */
     static function generateTagCloud($table, $field, $limit = 40, $constraint = null, $constrained_field = false) {
-        global $mdb2;
+        global $adodb;
         if (!is_string($field))          return false;	
         if (!is_string($table))          return false;
         if (!is_integer($limit))         return false;
@@ -48,18 +48,16 @@ class TagCloud {
             $query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
         }
         $query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
-        $res = $mdb2->query($query);
-        if (PEAR::isError($res)) {
-            echo("ERROR - " . $res->getMessage());
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+        $res = $adodb->CacheGetAll(7200,$query);
+        if (!$res) {
+            echo("ERROR");
         }
-        if (!$res->numRows()) {
-            return false;
         } else {
-            $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-            foreach($data as $count => &$i) {
+            foreach($res as $count => &$i) {
                 $i['size'] = $sizes[(int) ($count/(count($data)/7))];
             }
-            foreach($data as &$i){
+            foreach($res as &$i){
                 $i['pageurl'] = Server::getArtistURL($i['artist']);
             }
             sort($data);
