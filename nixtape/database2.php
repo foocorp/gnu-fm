@@ -25,8 +25,8 @@ if(!file_exists(dirname(__FILE__) . "/config.php")) {
 }
 
 require_once('config.php');
-require_once('adodb-exceptions.inc.php');
-require_once('adodb.inc.php');
+require_once('adodb/adodb-exceptions.inc.php');
+require_once('adodb/adodb.inc.php');
 
 try { 
 	$adodb =& NewADOConnection($adodb_connect_string);
