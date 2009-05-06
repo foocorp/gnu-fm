@@ -52,7 +52,6 @@ class TagCloud {
         $res = $adodb->CacheGetAll(7200,$query);
         if (!$res) {
             echo("ERROR");
-        }
         } else {
             foreach($res as $count => &$i) {
                 $i['size'] = $sizes[(int) ($count/(count($data)/7))];
