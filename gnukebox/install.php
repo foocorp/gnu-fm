@@ -243,7 +243,12 @@ if (isset($_POST['install'])) {
 			mbid VARCHAR(36),
 			track INTEGER NOT NULL)");
 
-	$res = $mdb2->exec("CREATE VIEW Free_Scrobbles AS SELECT s.* FROM Scrobbles s INNER JOIN Track t on lower(s.artist)=lower(t.artist) and lower(s.track)=lower(t.name) where t.streamable=1");
+	$res = $mdb2->exec("CREATE VIEW Free_Scrobbles AS
+			SELECT s.username, s.track, s.artist, s.time, s.mbid, s.album, s.source, s.rating, s.length
+				FROM Scrobbles s
+				JOIN Scrobble_Track st ON s.stid = st.id
+				JOIN Track t ON st.track = t.id
+				WHERE t.streamable = 1");
 
 	$res = $mdb2->query("CREATE TABLE User_Relationships (
 		username VARCHAR(64) REFERENCES Users(username),
