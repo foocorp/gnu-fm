@@ -41,11 +41,11 @@ class TagCloud {
         $query = "SELECT $field, count(*) AS count FROM $table";
         $query .= (!is_null($constraint)) ? ' WHERE ' : null;
         if ($constrained_field) {
-            $query .= (!is_null($constraint)) ? " $constrained_field  = " . $mdb2->quote($constraint, 'text') : null;
+            $query .= (!is_null($constraint)) ? " $constrained_field  = " . $adodb->qstr($constraint) : null;
         } elseif ($field == "track") {
-            $query .= (!is_null($constraint)) ? ' artist = ' . $mdb2->quote($constraint, 'text') : null;
+            $query .= (!is_null($constraint)) ? ' artist = ' . $adodb->qstr($constraint) : null;
         } else {
-            $query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
+            $query .= (!is_null($constraint)) ? ' username = ' . $adodb->qstr($constraint) : null;
         }
         $query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
