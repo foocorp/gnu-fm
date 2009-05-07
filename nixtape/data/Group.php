@@ -73,10 +73,49 @@ class Group {
 			$this->owner        = new User($row['owner']);
 			$this->count        = -1;
 			$this->users        = array();
-
 			if (! preg_match('/\:/', $this->id))
 				$this->id = $base.'/group/' . rawurlencode($this->name) . '#group';
 		}		
+	}
+	
+	/**
+	 * Selects a random nixtape group.
+	 *
+	 * @return object a Group object on success, a PEAR_Error object on error, or FALSE if there are no groups existing.
+	 * @author tobyink
+	 */
+	static function random ()
+	{
+		global $mdb2;
+		
+		if ( strtolower(substr($mdb2->phptype, 0, 5)) == 'mysql'  )
+		{
+			$random = 'RAND';
+		}
+		elseif ( strtolower(substr($mdb2->phptype, 0, 5)) == 'mssql'  )
+		{
+			$random = 'NEWID';  // I don't think we try to support MSSQL, but here's how it's done theoretically anyway
+		}
+		else
+		{
+			$random = 'RANDOM';  // postgresql, sqlite, possibly others
+		}
+
+		$res = $mdb2->query("SELECT * FROM Groups ORDER BY {$random}() LIMIT 1");
+		if (PEAR::isError($res))
+		{
+			return $res;
+		}
+		elseif ($res->numRows())
+		{
+			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+			return (new Group($row['groupname'], $row));
+		}
+		else
+		{
+			// No groups found.
+			return false;
+		}
 	}
 
 	/**
