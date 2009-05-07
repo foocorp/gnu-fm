@@ -75,6 +75,7 @@ class User {
 			$this->acctid       = $this->getURL() . '#acct';
 			$this->created	    = $row["created"];
 			$this->modified     = $row["modified"];
+			$this->uniqueid     = $row["uniqueid"];
 			
 			$this->has_identica = preg_match('#^http://identi\.ca/#i', $this->laconica_profile);
 			
