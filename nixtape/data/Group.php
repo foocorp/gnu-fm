@@ -91,9 +91,9 @@ class Group {
 	{
 		global $mdb2;
 
-		if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9_\.-]+$/', $name))
+		if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9_\.-]*[A-Za-z0-9]$/', $name))
 		{
-			return (new PEAR_Error('Group names should only contain letters, numbers, hyphens, underscores and full stops (a.k.a. dots/periods), must be at least two characters long, and can\'t start with punctuation.'));
+			return (new PEAR_Error('Group names should only contain letters, numbers, hyphens, underscores and full stops (a.k.a. dots/periods), must be at least two characters long, and can\'t start or end with punctuation.'));
 		}
 
 		if (in_array(strtolower($name), array('new', 'search')))
