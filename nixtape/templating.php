@@ -43,11 +43,11 @@ if(isset($logged_in)) {
 	$smarty->assign('this_user', $this_user);
 }
 
-$random_group = Group::random();
+/* $random_group = Group::random();
 if ($random_group!==false && !PEAR::isError($random_group))
 {
-	$smarty->assign('random_group', $random_group);
-}
+	$smarty-assign('random_group', $random_group);
+	} */
 
 header("Content-Type: text/html; charset=utf-8");
 
