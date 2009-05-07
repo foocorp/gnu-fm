@@ -17,19 +17,6 @@
 	    <!--Ad Bard, end -->
 	    
 	    </div>
-
-	    {if $blah_blah_blah_random_group_disabled_by_mattl}
-	    <h4>Featured group</h4>
-	    <p style="margin:1em auto" about="{$random_group->id}" typeof="foaf:Group">
-		<a rel="foaf:homepage" href="{$random_group->getURL()|escape:'html':'UTF-8'}">
-			<img src="{$random_group->getAvatar()}" rev="foaf:depiction" resource="{$random_group->id}"
-			alt="" height="32" width="32" style="margin: 0 0.67em 0.33em 0;float:left;border:0" />
-			<b about="{$random_group->id}" property="foaf:name">{if $random_group->fullname}{$random_group->fullname|escape:'html':'UTF-8'}{else}{$random_group->name|escape:'html':'UTF-8'}{/if}</b></a>
-		<br />
-		<small property="olb:bio">{$random_group->bio|escape:'html':'UTF-8'}</small>
-		<br style="clear:left" />
-	    </p>
-	{/if}
 	
 	    <h4>Coming soon</h4>
 
