@@ -34,7 +34,7 @@ require_once($install_path . '/data/User.php');
  */
 class Group {
 
-	public $id, $gid $name, $owner, $fullname, $bio, $homepage, $count, $grouptype, $id, $avatar_uri, $users;
+	public $id, $gid, $name, $owner, $fullname, $bio, $homepage, $count, $grouptype, $id, $avatar_uri, $users;
 
 	/**
 	 * User constructor
