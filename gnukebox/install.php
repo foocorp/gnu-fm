@@ -79,7 +79,8 @@ if (isset($_POST['install'])) {
 		journal_rss VARCHAR(255))");
 
 	$adodb->Execute("CREATE TABLE Groups (
-		groupname VARCHAR(64) PRIMARY KEY,
+		id SERIAL PRIMARY KEY,
+		groupname VARCHAR(64),
 		owner VARCHAR(64) REFERENCES Users(username),
 		fullname VARCHAR(255),
 		bio TEXT,
@@ -297,11 +298,12 @@ if (isset($_POST['install'])) {
 //      $adodb->Execute("CREATE INDEX track_streamable_idx on Track(streamable);");
 //      $adodb->Execute("CREATE INDEX scrobbles_artist_idx on Scrobbles(lower(artist))");
 //      $adodb->Execute("CREATE INDEX scrobbles_track_idx on Scrobbles(lower(track))");
+//      $adodb->Execute("CREATE UNIQE INDEX groups_groupname_idx ON Groups(lower(groupname))");
 
 // uncomment these if you're using postgresql and want to run the software as www-data
 //	$adodb->Execute("GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE Album, Artist, Auth, Clientcodes, Delete_Request Error, Invitation_Request, Invitations, Now_Playing, Places, Radio_Sessions, Scrobble_Sessions, Scrobbles, Scrobble_Track, Similar_Artist, Tags, Track, Users, User_Relationships, User_Relationship_Flags to \"www-data\"");
 //	$adodb->Execute("GRANT SELECT ON Free_Scrobbles, Relationship_Flags to \"www-data\"");
-//	$adodb->Execute("GRANT SELECT, UPDATE ON users_uniqueid_seq, scrobble_track_id_seq to \"www-data\"");
+//	$adodb->Execute("GRANT SELECT, UPDATE ON users_uniqueid_seq, scrobble_track_id_seq, groups_id_seq to \"www-data\"");
 
 	// Test user configuration
 	$adodb->Execute("INSERT INTO Users
