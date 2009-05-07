@@ -78,39 +78,73 @@ class Group {
 				$this->id = $base.'/group/' . rawurlencode($this->name) . '#group';
 		}		
 	}
-	
+
+	/**
+	 * Create a new nixtape group.
+	 *
+	 * @param string $name the name of the group (used to generate its URL).
+	 * @param object $owner a User object representing the person who owns this group.
+	 * @return object a Group object on success, a PEAR_Error object otherwise.
+	 * @author tobyink
+	 */
 	static function create ($name, $owner)
 	{
 		global $mdb2;
+
+		if (!preg_match('/^[^A-Za-z0-9_\.-]{2,}$/', $name))
+		{
+			return (new PEAR_Error('Group names should only contain letters, numbers, hyphens, underscores and full stops (a.k.a. dots/periods), and must be at least two characters long.'));
+		}
+
+		if (!preg_match('/[A-Za-z0-9]/', $name))
+		{
+			return (new PEAR_Error('Group names must contain at least one non-punctuation character.'));
+		}
 		
-		// Should check to make sure no existing group with same name (case-insensitive).
+		// Check to make sure no existing group with same name (case-insensitive).
+		$q = sprintf('SELECT groupname FROM Groups WHERE LOWER(groupname)=LOWER(%s)'
+				, $mdb2->quote($name, 'text'));
+		$res = $mdb2->query($q);
+		if (PEAR::isError($res))
+		{
+			return $res;
+		}
+		elseif ($res->numRows())
+		{
+			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+			$existing = $row['groupname'];
+			return (new PEAR_Error(
+					($existing == $name) ?
+					"There is already a group called '$existing'." :
+					"The name '$name' it too similar to existing group '$existing'"
+				));
+		}
 		
-		$q = sprintf("INSERT INTO Groups (groupname, owner, created, modified) VALUES (%s, %s, %d, %d)"
+		// Create new group
+		$q = sprintf('INSERT INTO Groups (groupname, owner, created, modified) VALUES (%s, %s, %d, %d)'
 				, $mdb2->quote($name, 'text')
 				, $mdb2->quote($owner->name, 'text')
 				, time()
 				, time());
 		$res = $mdb2->query($q);
-		
-		if(PEAR::isError($res)) {
-			header("Content-Type: text/plain");
-			print_r($res);
-			exit;
+		if (PEAR::isError($res))
+		{
+			return $res;
 		}
 
-		$q = sprintf("INSERT INTO Group_Members (groupname, member, joined) VALUES (%s, %s, %d)"
+		// Group owner must be a member of the group
+		$q = sprintf('INSERT INTO Group_Members (groupname, member, joined) VALUES (%s, %s, %d)'
 				, $mdb2->quote($name, 'text')
 				, $mdb2->quote($owner->name, 'text')
 				, time());
 		$res = $mdb2->query($q);
-		
-		if(PEAR::isError($res)) {
-			header("Content-Type: text/plain");
-			print_r($res);
-			exit;
+		if (PEAR::isError($res))
+		{
+			return $res;
 		}
 
-		return 1;
+		// Return the newly created group. Callers should check the return value.
+		return (new Group($name));
 	}
 	
 	static function groupList ($user=false)
