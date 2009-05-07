@@ -126,8 +126,13 @@ class Track {
 			. " GROUP BY track ORDER BY freq DESC");
 
 		$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
-		$this->_playcount = $row['freq'];
-		$this->_listenercount = $row['listeners'];
+		if (!isset($row)) {
+		        $this->setPlaycount(0);
+			$this->setListenerCount(0);
+		} else {
+			$this->setPlaycount($row['freq']);
+			$this->setListenerCount($row['listeners']);
+		}
 	}
 
 	/**
