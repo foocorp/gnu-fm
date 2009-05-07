@@ -91,7 +91,7 @@ if (isset($_POST['install'])) {
 		grouptype INTEGER)");
 
 	$adodb->Execute("CREATE TABLE Group_Members (
-		groupname VARCHAR(64) REFERENCES Groups(groupname),
+		grp INTEGER REFERENCES Groups(id),
 		member VARCHAR(64) REFERENCES Users(username),
 		joined INTEGER NOT NULL,
 		PRIMARY KEY (groupname, member))");
