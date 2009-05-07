@@ -22,7 +22,6 @@
 require_once('config.php');
 require_once('auth.php');
 require_once('smarty/Smarty.class.php');
-require_once('data/Group.php');
 
 $smarty = new Smarty();
 
