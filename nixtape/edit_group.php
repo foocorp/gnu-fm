@@ -37,7 +37,7 @@ if ($_REQUEST['group']=='new')
 {
 	if ($_REQUEST['new'])
 	{
-		$result = Group::create($_REQUEST['new'], $this_user);
+	  $result = Group::create(strtolower($_REQUEST['new']), $this_user);
 
 		if ($result instanceof Group)
 		{

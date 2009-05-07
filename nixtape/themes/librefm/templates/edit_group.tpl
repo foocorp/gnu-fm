@@ -10,6 +10,11 @@
 <label for="new">Address for the group:</label><br />
 <b>{$base_url}/group/</b><input id="new" name="new" size="12" /></p>
 
+<p>Please remember that Libre.fm is focused on freedom, so try to
+create groups that can help that goal. Also be mindful of the power of
+words and the importance of framing the issues we discuss and work on
+in the best possible terms.</p>
+
 <p>
 <input name="group" value="new" type="hidden" />
 <input type="submit" value=" Create " />
