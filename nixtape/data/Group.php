@@ -34,7 +34,7 @@ require_once($install_path . '/data/User.php');
  */
 class Group {
 
-	public $name, $owner, $fullname, $bio, $homepage, $count, $grouptype, $id, $avatar_uri, $users;
+	public $id, $name, $owner, $fullname, $bio, $homepage, $count, $grouptype, $id, $avatar_uri, $users;
 
 	/**
 	 * User constructor
@@ -65,6 +65,7 @@ class Group {
 		}
 			
 		if (is_array($row)) {
+			$this->id         = $row['id'];
 			$this->name         = $row['groupname'];
 			$this->fullname     = $row['fullname'];
 			$this->homepage     = $row['homepage'];
@@ -171,9 +172,17 @@ class Group {
 			return $res;
 		}
 
+		$q = sprintf('SELECT id FROM Groups WHERE lower(groupname) = lower(%s)', $mdb2->quote($name, 'text'));
+		$res = $mdb2->query($q);
+		if (PEAR::isError($res))
+		{
+			return $res;
+		}
+		$grp = $result->fetchOne(0);
+
 		// Group owner must be a member of the group
-		$q = sprintf('INSERT INTO Group_Members (groupname, member, joined) VALUES (%s, %s, %d)'
-				, $mdb2->quote($name, 'text')
+		$q = sprintf('INSERT INTO Group_Members (grp, member, joined) VALUES (%s, %s, %d)'
+				, $mdb2->quote($grp, 'integer')
 				, $mdb2->quote($owner->name, 'text')
 				, time());
 		$res = $mdb2->query($q);
@@ -196,16 +205,16 @@ class Group {
 				. "Group_Members m "
 				."INNER JOIN (SELECT g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count "
 				."FROM Groups g "
-				."LEFT JOIN Group_Members gm ON gm.groupname=g.groupname "
-				."GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype) gc "
-				."ON m.groupname=gc.groupname "
+				."LEFT JOIN Group_Members gm ON gm.grp=g.id "
+				."GROUP BY g.id, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype) gc "
+				."ON m.grp=gc.id "
 				."WHERE m.member=".$mdb2->quote($user->name, 'text'));
 		}
 		else
 		{
 			$res = $mdb2->query("SELECT g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count "
 				."FROM Groups g "
-				."LEFT JOIN Group_Members gm ON gm.groupname=g.groupname "
+				."LEFT JOIN Group_Members gm ON gm.grp=g.id "
 				."GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype");
 		}
 		
@@ -319,8 +328,8 @@ class Group {
 			return false;
 		
 		global $mdb2;
-		$res = $mdb2->query(sprintf("INSERT INTO Group_Members VALUES (%s, %s, %d)",
-			$mdb2->quote($this->name, 'text'),
+		$res = $mdb2->query(sprintf("INSERT INTO Group_Members (grp, member, joined) VALUES (%s, %s, %d)",
+			$mdb2->quote($this->id, 'integer'),
 			$mdb2->quote($user->name, 'text'),
 			time()));
 		
@@ -342,8 +351,8 @@ class Group {
 			return false;
 		
 		global $mdb2;
-		$res = $mdb2->query(sprintf("DELETE FROM Group_Members WHERE groupname=%s AND member=%s",
-			$mdb2->quote($this->name, 'text'),
+		$res = $mdb2->query(sprintf("DELETE FROM Group_Members WHERE grp=%s AND member=%s",
+			$mdb2->quote($this->id, 'integer'),
 			$mdb2->quote($user->name, 'text')));
 		
 		if(PEAR::isError($res))
