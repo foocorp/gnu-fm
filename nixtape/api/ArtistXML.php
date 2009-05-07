@@ -51,6 +51,7 @@ class ArtistXML {
 		$artistXml = $xml->addChild("artist", null);
 		$artistXml->addChild("name", $artist->name);
 		$artistXml->addChild("mbid", $artist->mbid);
+		$artistXml->addChild("url", $artist->getURL());
 		$artistXml->addChild("streamable", $artist->streamable);
 
 		$bio = $artistXml->addChild("bio", null);
