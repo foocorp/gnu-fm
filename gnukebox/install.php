@@ -19,7 +19,8 @@
 
 */
 
-require_once('MDB2.php');
+require_once('adodb/adodb-exceptions.inc.php');
+require_once('adodb/adodb.inc.php');
 require_once('version.php');
 require_once('utils/get_absolute_url.php');
 
@@ -38,25 +39,28 @@ if (isset($_POST['install'])) {
 		$connect_string = $dbms . "://" . $_POST['username'] . ":" . $_POST['password'] . "@" . $_POST['hostname'] . ":" . $_POST['port'] . "/" . $_POST['dbname'];
 	}
 
-	$mdb2 =& MDB2::connect($connect_string);
-	if (PEAR::isError($mdb2)) {
-		die($mdb2->getMessage());
+	try {
+		$adodb =& NewADOConnection($adodb_connect_string);
+	} catch (exception $e) {
+		var_dump($e);
+		adodb_backtrace($e->gettrace());
+		die("Database connection failure\n");
 	}
 
 	//Create tables
 
-	$res = $mdb2->query("CREATE TABLE Places(
+	$adodb->Execute("CREATE TABLE Places(
 		location_uri VARCHAR(255) unique,
 		latitude FLOAT,
 		longitude FLOAT,
 		country CHAR(2))");
 
-	$mdb2->query("CREATE TABLE Countries (
+	$adodb->Execute("CREATE TABLE Countries (
 		country varchar(2) PRIMARY KEY,
 		country_name varchar(200),
 		wikipedia_en varchar(120));");
 
-	$mdb2->query("CREATE TABLE Users (
+	$adodb->Execute("CREATE TABLE Users (
 		username VARCHAR(64) PRIMARY KEY,
 		password VARCHAR(32) NOT NULL,
 		email VARCHAR(255),
@@ -74,7 +78,7 @@ if (isset($_POST['install'])) {
 		laconica_profile VARCHAR(255),
 		journal_rss VARCHAR(255))");
 
-	$res = $mdb2->query("CREATE TABLE Groups (
+	$adodb->Execute("CREATE TABLE Groups (
 		groupname VARCHAR(64) PRIMARY KEY,
 		owner VARCHAR(64) REFERENCES Users(username),
 		fullname VARCHAR(255),
@@ -85,23 +89,23 @@ if (isset($_POST['install'])) {
 		avatar_uri VARCHAR(255),
 		grouptype INTEGER)");
 
-	$res = $mdb2->query("CREATE TABLE Group_Members (
+	$adodb->Execute("CREATE TABLE Group_Members (
 		groupname VARCHAR(64) REFERENCES Groups(groupname),
 		member VARCHAR(64) REFERENCES Users(username),
 		joined INTEGER NOT NULL,
 		PRIMARY KEY (groupname, member))");
 
-	$mdb2->query("CREATE TABLE AccountActivation(
+	$adodb->Execute("CREATE TABLE AccountActivation(
 		username VARCHAR(64),
 		authcode VARCHAR(32))");
 
-	$res = $mdb2->query("CREATE TABLE Auth (
+	$adodb->Execute("CREATE TABLE Auth (
 		token VARCHAR(32) PRIMARY KEY,
 		sk VARCHAR(32),
 		expires INTEGER,
 		username VARCHAR(64) REFERENCES Users(username))");
 
-	$mdb2->query("CREATE TABLE Artist(
+	$adodb->Execute("CREATE TABLE Artist(
 		name VARCHAR(255) PRIMARY KEY,
 		mbid VARCHAR(36),
 		streamable INTEGER,
@@ -114,7 +118,7 @@ if (isset($_POST['install'])) {
 		homepage VARCHAR(255),
 		origin VARCHAR(255) REFERENCES Places(location_uri))");
 
-	$mdb2->query("CREATE TABLE Album(
+	$adodb->Execute("CREATE TABLE Album(
 		name VARCHAR(255),
 		artist_name VARCHAR(255) REFERENCES Artist(name),
 		mbid VARCHAR(36),
@@ -125,13 +129,13 @@ if (isset($_POST['install'])) {
 		downloadurl VARCHAR(255))");
 
 	// Table for registering similar artists
-	$mdb2->query("CREATE TABLE Similar_Artist(
+	$adodb->Execute("CREATE TABLE Similar_Artist(
 		name_a VARCHAR(255) REFERENCES Artist(name),
 		name_b VARCHAR(255) REFERENCES Artist(name),
 		PRIMARY KEY(name_a, name_b))");
 
-	if ( strtolower(substr($mdb2->phptype, 0, 5)) == 'mysql'  ) {
-		$mdb2->query("CREATE TABLE Track(
+	if ( strtolower(substr($dbms,0,5)) == 'mysql'  ) {
+		$adodb->Execute("CREATE TABLE Track(
 			id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 			name VARCHAR(255),
 			artist VARCHAR(255) REFERENCES Artist(name),
@@ -144,8 +148,8 @@ if (isset($_POST['install'])) {
 			streamurl VARCHAR(255),
 			otherid VARCHAR(16))");
 	} else {
-		$mdb2->query("CREATE SEQUENCE track_id_seq;");
-		$mdb2->query("CREATE TABLE Track(
+		$adodb->Execute("CREATE SEQUENCE track_id_seq;");
+		$adodb->Execute("CREATE TABLE Track(
 			id INTEGER NOT NULL DEFAULT nextval('track_id_seq'::regclass) PRIMARY KEY,
 			name VARCHAR(255),
 			artist VARCHAR(255) REFERENCES Artist(name),
@@ -159,7 +163,7 @@ if (isset($_POST['install'])) {
 			otherid VARCHAR(16))");
 	}
 	
-	$mdb2->query("CREATE TABLE Scrobbles(
+	$adodb->Execute("CREATE TABLE Scrobbles(
 		username VARCHAR(64) REFERENCES Users(username),
 		track VARCHAR(255),
 		album VARCHAR(255),
@@ -171,13 +175,13 @@ if (isset($_POST['install'])) {
 		length INTEGER,
 		stid INTEGER)");
 
-	$mdb2->query("CREATE TABLE Scrobble_Sessions(
+	$adodb->Execute("CREATE TABLE Scrobble_Sessions(
 		username VARCHAR(64) REFERENCES Users(username),
 		sessionid VARCHAR(32) PRIMARY KEY,
 		client CHAR(3),
 		expires INTEGER)");
 
-	$res = $mdb2->query("CREATE TABLE Now_Playing(
+	$adodb->Execute("CREATE TABLE Now_Playing(
 		sessionid VARCHAR(32) PRIMARY KEY REFERENCES Scrobble_Sessions(sessionid),
 		track VARCHAR(255),
 		artist VARCHAR(255) REFERENCES Artist(name),
@@ -185,43 +189,43 @@ if (isset($_POST['install'])) {
 		mbid VARCHAR(36),
 		expires INTEGER)");
 
-	$res = $mdb2->query("CREATE TABLE Invitation_Request(
+	$adodb->Execute("CREATE TABLE Invitation_Request(
 		email VARCHAR(255) PRIMARY KEY,
 		time INTEGER)");
 
-	$res = $mdb2->query("CREATE TABLE Invitations(
+	$adodb->Execute("CREATE TABLE Invitations(
 		inviter VARCHAR(64) REFERENCES Users(username),
 		invitee VARCHAR(64) REFERENCES Users(username),
 		code VARCHAR(32),
 		PRIMARY KEY(inviter, invitee, code))");
 
-	$res = $mdb2->query("CREATE TABLE ClientCodes(
+	$adodb->Execute("CREATE TABLE ClientCodes(
 		code CHAR(3),
 		name VARCHAR(32),
 		url VARCHAR(256),
 		free CHAR(1),
 		PRIMARY KEY(code))");
 
-	$res = $mdb2->query("CREATE TABLE Tags(
+	$adodb->Execute("CREATE TABLE Tags(
 		username VARCHAR(64) REFERENCES Users(username),
 		tag VARCHAR(64),
 		artist VARCHAR(255) REFERENCES Artist(name),
 		album VARCHAR(255),
 		track VARCHAR(255))");
 
-	$res = $mdb2->query("CREATE TABLE Error(
+	$adodb->Execute("CREATE TABLE Error(
 		    id INTEGER(11) AUTO_INCREMENT KEY,
 		    msg TEXT,
 		    data TEXT,
 		    time INTEGER)");
-	$res = $mdb2->query("CREATE TABLE Recovery_Request(
+	$adodb->Execute("CREATE TABLE Recovery_Request(
 		    username VARCHAR(64),
 		    email VARCHAR(255),
 		    code VARCHAR(32),
 		    expires INTEGER, 
 		    PRIMARY KEY(username))");
 
-	$res = $mdb2->query("CREATE TABLE Radio_Sessions(
+	$adodb->Execute("CREATE TABLE Radio_Sessions(
 			username VARCHAR(64),
 			session VARCHAR(32),
 			url VARCHAR(255),
@@ -229,13 +233,13 @@ if (isset($_POST['install'])) {
 			PRIMARY KEY(username,session))");
 	
 	//Table for delete profile requests		
-	$res = $mdb2->query("CREATE TABLE Delete_Request (
+	$adodb->Execute("CREATE TABLE Delete_Request (
 			code VARCHAR(300), 
 			expires INTEGER, 
 			username VARCHAR(64) REFERENCES Users(username),
 			PRIMARY KEY(code)");
 
-	$res = $mdb2->exec("CREATE TABLE Scrobble_Track(
+	$adodb->Execute("CREATE TABLE Scrobble_Track(
 			id SERIAL PRIMARY KEY,
 			artist VARCHAR(255) NOT NULL,
 			album VARCHAR(255),
@@ -243,69 +247,69 @@ if (isset($_POST['install'])) {
 			mbid VARCHAR(36),
 			track INTEGER NOT NULL)");
 
-	$res = $mdb2->exec("CREATE VIEW Free_Scrobbles AS
+	$adodb->Execute("CREATE VIEW Free_Scrobbles AS
 			SELECT s.username, s.track, s.artist, s.time, s.mbid, s.album, s.source, s.rating, s.length
 				FROM Scrobbles s
 				JOIN Scrobble_Track st ON s.stid = st.id
 				JOIN Track t ON st.track = t.id
 				WHERE t.streamable = 1");
 
-	$res = $mdb2->query("CREATE TABLE User_Relationships (
+	$adodb->Execute("CREATE TABLE User_Relationships (
 		username VARCHAR(64) REFERENCES Users(username),
 		related VARCHAR(64) REFERENCES Users(username),
 		established INTEGER NOT NULL,
 		PRIMARY KEY (username, related))");
 
-	$res = $mdb2->query("CREATE TABLE User_Relationship_Flags (
+	$adodb->Execute("CREATE TABLE User_Relationship_Flags (
 		username VARCHAR(64) REFERENCES Users(username),
 		related VARCHAR(64) REFERENCES Users(username),
 		flag VARCHAR(12) REFERENCES Relationship_Flags(flag),
 		PRIMARY KEY (username, related, flag))");
 
-	$res = $mdb2->query("CREATE TABLE Relationship_Flags (
+	$adodb->Execute("CREATE TABLE Relationship_Flags (
 		flag VARCHAR(12),
 		PRIMARY KEY (flag)");
 
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('contact')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('acquaintance')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('friend')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('met')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('co-worker')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('colleague')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('co-resident')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('neighbor')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('child')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('parent')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('sibling')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('spouse')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('kin')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('muse')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('crush')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('date')");
-	$res = $mdb2->query("INSERT INTO Relationship_Flags VALUES ('sweetheart')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('contact')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('acquaintance')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('friend')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('met')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('co-worker')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('colleague')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('co-resident')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('neighbor')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('child')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('parent')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('sibling')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('spouse')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('kin')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('muse')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('crush')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('date')");
+	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('sweetheart')");
 
 // uncomment these to solve performance problems with getRecentScrobbles
-// 	$res = $mdb2->exec("CREATE INDEX album_artistname_idx ON Album(artist_name)");
-// 	$res = $mdb2->exec("CREATE INDEX scrobbles_artist_idx ON Scrobbles(artist)");
-//	$res = $mdb2->exec("CREATE INDEX scrobbles_time_idx ON Scrobbles(time)");
-//      $res = $mdb2->exec("CREATE INDEX track_artist_idx ON Track(lower(artist))");
-//      $res = $mdb2->exec("CREATE INDEX track_name_idx ON Track(lower(name))");
-//      $res = $mdb2->exec("CREATE INDEX track_streamable_idx on Track(streamable);");
-//      $res = $mdb2->exec("CREATE INDEX scrobbles_artist_idx on Scrobbles(lower(artist))");
-//      $res = $mdb2->exec("CREATE INDEX scrobbles_track_idx on Scrobbles(lower(track))");
+// 	$adodb->Execute("CREATE INDEX album_artistname_idx ON Album(artist_name)");
+// 	$adodb->Execute("CREATE INDEX scrobbles_artist_idx ON Scrobbles(artist)");
+//	$adodb->Execute("CREATE INDEX scrobbles_time_idx ON Scrobbles(time)");
+//      $adodb->Execute("CREATE INDEX track_artist_idx ON Track(lower(artist))");
+//      $adodb->Execute("CREATE INDEX track_name_idx ON Track(lower(name))");
+//      $adodb->Execute("CREATE INDEX track_streamable_idx on Track(streamable);");
+//      $adodb->Execute("CREATE INDEX scrobbles_artist_idx on Scrobbles(lower(artist))");
+//      $adodb->Execute("CREATE INDEX scrobbles_track_idx on Scrobbles(lower(track))");
 
 // uncomment these if you're using postgresql and want to run the software as www-data
-//	$res = $mdb2->exec("GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE Album, Artist, Auth, Clientcodes, Delete_Request Error, Invitation_Request, Invitations, Now_Playing, Places, Radio_Sessions, Scrobble_Sessions, Scrobbles, Scrobble_Track, Similar_Artist, Tags, Track, Users, User_Relationships, User_Relationship_Flags to \"www-data\"");
-//	$res = $mdb2->exec("GRANT SELECT ON Free_Scrobbles, Relationship_Flags to \"www-data\"");
-//	$res = $mdb2->exec("GRANT SELECT, UPDATE ON users_uniqueid_seq, scrobble_track_id_seq to \"www-data\"");
+//	$adodb->Execute("GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE Album, Artist, Auth, Clientcodes, Delete_Request Error, Invitation_Request, Invitations, Now_Playing, Places, Radio_Sessions, Scrobble_Sessions, Scrobbles, Scrobble_Track, Similar_Artist, Tags, Track, Users, User_Relationships, User_Relationship_Flags to \"www-data\"");
+//	$adodb->Execute("GRANT SELECT ON Free_Scrobbles, Relationship_Flags to \"www-data\"");
+//	$adodb->Execute("GRANT SELECT, UPDATE ON users_uniqueid_seq, scrobble_track_id_seq to \"www-data\"");
 
 	// Test user configuration
-	$res = $mdb2->query("INSERT INTO Users
+	$adodb->Execute("INSERT INTO Users
 		(username, password, created)
 		VALUES
 		('testuser', '" . md5('password') . "', " . time() . ");");
 
-	$mdb2->disconnect();
+	$adodb->Close();
 
 	$submissions_server = $_POST['submissions'];
 	$install_path = dirname(__FILE__) . "/";
