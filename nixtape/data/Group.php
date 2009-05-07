@@ -34,7 +34,7 @@ require_once($install_path . '/data/User.php');
  */
 class Group {
 
-	public $id, $name, $owner, $fullname, $bio, $homepage, $count, $grouptype, $avatar_uri, $users;
+	public $id, $gid $name, $owner, $fullname, $bio, $homepage, $count, $grouptype, $id, $avatar_uri, $users;
 
 	/**
 	 * User constructor
@@ -65,7 +65,7 @@ class Group {
 		}
 			
 		if (is_array($row)) {
-			$this->id         = $row['id'];
+			$this->gid          = $row['id'];
 			$this->name         = $row['groupname'];
 			$this->fullname     = $row['fullname'];
 			$this->homepage     = $row['homepage'];
@@ -329,7 +329,7 @@ class Group {
 		
 		global $mdb2;
 		$res = $mdb2->query(sprintf("INSERT INTO Group_Members (grp, member, joined) VALUES (%s, %s, %d)",
-			$mdb2->quote($this->id, 'integer'),
+			$mdb2->quote($this->gid, 'integer'),
 			$mdb2->quote($user->name, 'text'),
 			time()));
 		
@@ -352,7 +352,7 @@ class Group {
 		
 		global $mdb2;
 		$res = $mdb2->query(sprintf("DELETE FROM Group_Members WHERE grp=%s AND member=%s",
-			$mdb2->quote($this->id, 'integer'),
+			$mdb2->quote($this->gid, 'integer'),
 			$mdb2->quote($user->name, 'text')));
 		
 		if(PEAR::isError($res))
