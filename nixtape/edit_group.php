@@ -37,9 +37,20 @@ if ($_REQUEST['group']=='new')
 {
 	if ($_REQUEST['new'])
 	{
-		Group::create($_REQUEST['new'], $this_user);
-		header("Location: {$base_url}/edit_group.php?group=".$_REQUEST['new']);
-		exit;
+		$result = Group::create($_REQUEST['new'], $this_user);
+
+		if ($result instanceof Group)
+		{
+			header("Location: {$base_url}/edit_group.php?group=".$_REQUEST['new']);
+			exit();
+		}
+		elseif (PEAR::isError($result))
+		{
+			$smarty->assign('error', 'Error!');
+			$smarty->assign('details', $result->toString);
+			$smarty->display('error.tpl');
+			die();
+		}
 	}
 	else
 	{
