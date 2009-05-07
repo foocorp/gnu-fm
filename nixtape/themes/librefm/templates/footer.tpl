@@ -87,7 +87,7 @@
        <li class="copy">&copy; 2009 <a href="http://libre.fm/">Libre.fm</a> Project</li>
        <li><a href="http://libre.fm/contributors/">Contributors</a></li>
        <li><a href="http://libre.fm/licensing/">Licensing information</a></li>
-       <li><a href="http://libre.fm/developer/">Developers</a></li>
+       <li><a href="http://libre.fm/developers/">Developers</a></li>
        <li><a href="http://libre.fm/api/">API</a></li>
        <li><a href="http://libre.fm/download/">Download</a></li>
        <li><a href="http://libre.fm/translations/">Help translate Libre.fm</a></li>
