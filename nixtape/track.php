@@ -33,7 +33,7 @@ $smarty->assign("albumurl", Server::getAlbumURL($track->artist_name, $track->alb
 $smarty->assign("artisturl", Server::getArtistURL($track->artist_name));
 
 // no idea how this would be track-relevant
-$aTagCloud = TagCloud::GenerateTagCloud('Free_Scrobbles', 'artist');
+$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
 if (!PEAR::isError ($aTagCloud)) {
         $smarty->assign('tagcloud', $aTagCloud);
 }

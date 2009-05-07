@@ -32,7 +32,7 @@ $smarty->assign("name", $artist->name);
 $smarty->assign("id", $artist->id);
 $smarty->assign("bio_summary", $artist->bio_summary);
 
-$aTagCloud = TagCloud::GenerateTagCloud('Free_Scrobbles', 'artist');
+$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
 if (!PEAR::isError ($aTagCloud)) {
         $smarty->assign('tagcloud', $aTagCloud);
 }

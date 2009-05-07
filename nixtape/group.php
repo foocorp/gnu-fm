@@ -36,7 +36,7 @@ if (! $_GET['group'])
 				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities($_SERVER['REQUEST_URI'])
 				)
 		));
-	$aTagCloud = TagCloud::GenerateTagCloud('Free_Scrobbles', 'artist');
+	$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
 	if (!PEAR::isError ($aTagCloud))
 	{
 		$smarty->assign('tagcloud', $aTagCloud);

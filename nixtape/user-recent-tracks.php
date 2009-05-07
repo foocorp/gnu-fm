@@ -46,7 +46,7 @@ if(isset($user->name)) {
 	if (!PEAR::isError ($aUserScrobbles)) {
 		$smarty->assign('scrobbles', $aUserScrobbles);
 	}
-	$aUserTagCloud =  TagCloud::GenerateTagCloud('Scrobbles', 'artist', 40, $user->name);
+	$aUserTagCloud =  TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->name);
 	if (!PEAR::isError ($aUserTagCloud)) {
 		$smarty->assign('user_tagcloud',$aUserTagCloud);
 	}

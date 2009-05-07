@@ -39,7 +39,7 @@ $user = new User($_GET['user']);
 if(isset($user->name)) {
 
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
-	$aUserTagCloud =  TagCloud::GenerateTagCloud('Scrobbles', 'artist', 40, $user->name);
+	$aUserTagCloud =  TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->name);
 	if (!PEAR::isError ($aUserTagCloud)) {
 		$smarty->assign('user_tagcloud',$aUserTagCloud);
 	}

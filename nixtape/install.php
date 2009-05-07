@@ -52,7 +52,7 @@ if (isset($_POST['install'])) {
 	$submissions_server = $_POST['submissions_server'];
 
 	//Write out the configuration
-	$config = "<?php\n \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$default_theme = '" . $default_theme . "';\n \$base_url = '" . $base_url . "';\n \$submissions_server = '" . $submissions_server . "';\n \$install_path = '" . $install_path . "'; ?>";
+	$config = "<?php\n \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$default_theme = '" . $default_theme . "';\n \$base_url = '" . $base_url . "';\n \$submissions_server = '" . $submissions_server . "';\n \$install_path = '" . $install_path . "'; ";
 
 	$conf_file = fopen("config.php", "w");
 	$result = fwrite($conf_file, $config);
