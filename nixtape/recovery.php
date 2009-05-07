@@ -95,7 +95,7 @@ else if (isset($_POST['user'])) {
     }
 
     $url = $base_url . "/recovery.php?code=" . $code;
-    $content = "Hi!\n\nSomeone from the IP-address " . $_SERVER['REMOTE_ADDR'] . " entered you username " 
+    $content = "Hi!\n\nSomeone from the IP-address " . $_SERVER['REMOTE_ADDR'] . " entered your username " 
 	. "in the Password Recovery Form @ libre.fm. To change you password, please visit\n\n"
 	. $url . "\n\n- The Libre.fm Team";
     sendEmail($content, $row['email']);
