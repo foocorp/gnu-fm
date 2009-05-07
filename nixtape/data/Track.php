@@ -26,6 +26,7 @@ require_once($install_path . "/data/Album.php");
 require_once($install_path . "/data/Server.php");
 require_once($install_path . "/resolve-external.php");
 require_once($install_path . "/licenses.php");
+require_once($install_path . '/utils/linkeddata.php');
 
 /**
  * Represents track data
@@ -35,6 +36,7 @@ require_once($install_path . "/licenses.php");
 class Track {
 
 	public $name, $artist_name, $album_name, $mbid, $duration, $streamable, $license, $downloadurl, $streamurl;
+	public $id;
 
 	private $_playcount = false, $_listenercount = false;
 
@@ -63,6 +65,8 @@ class Track {
 			$this->licenseurl = $row["license"];
 			$this->downloadurl = resolve_external_url($row["downloadurl"]);
 			$this->streamurl = resolve_external_url($row["streamurl"]);
+			
+			$this->id = identifierTrack(null, $this->artist_name, $this->name, $this->album_name, null, $this->mbid, null, null);
 		}
 
 	}

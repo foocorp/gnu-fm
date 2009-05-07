@@ -28,6 +28,7 @@ $album = new Album(urldecode($_GET['album']), urldecode($_GET['artist']));
 $artist = new Artist($album->artist_name);
 
 $smarty->assign("name", $album->name);
+$smarty->assign("id", $album->id);
 $smarty->assign("artist", $artist);
 $smarty->assign("album", $album);
 $aAlbumTracks = $album->getTracks();
