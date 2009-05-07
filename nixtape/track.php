@@ -26,11 +26,13 @@ require_once('data/Server.php');
 require_once('data/TagCloud.php');
 
 $track = new Track(urldecode($_GET['track']), urldecode($_GET['artist']));
-
-
 $smarty->assign("track", $track);
-$smarty->assign("albumurl", Server::getAlbumURL($track->artist_name, $track->album_name));
-$smarty->assign("artisturl", Server::getArtistURL($track->artist_name));
+
+$album = new Album($track->album_name, $track->artist_name);
+$smarty->assign("album", $album);
+
+$artist = new Artist($track->artist_name);
+$smarty->assign("artist", $artist);
 
 // no idea how this would be track-relevant
 $aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');

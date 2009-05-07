@@ -1,13 +1,20 @@
 {include file='header.tpl'}
 
-<h2><a href="{$artist->getURL()}">{$artist->name}</a> - {$name}</h2>
+<div about="{$id}" typeof="mo:Record" class="haudio">
 
-<a rel="foaf:page" href="{$album->getURL()}">
-<span{if $album->image != false} about="{$album->id}" rel="foaf:depiction"{/if}>
-<img class="album photo" {if $album->image == false} src="{$base_url}/i/qm160.png"{else}src="{$album->image}"{/if}
- alt="{$album->name|escape:'html':'UTF-8'}"title="{$album->name|escape:'html':'UTF-8'}" width="160" />
-</span>
-</a>
+	<h2>
+		<span rel="foaf:maker" rev="foaf:made" class="contributor">
+			<a about="{$artist->id}" typeof="mo:MusicArtist" property="foaf:name" class="url fn org"
+				rel="foaf:page" rev="foaf:primaryTopic" href="{$artist->getURL()}">{$artist->name}</a>
+			</span>
+			&#8212; 
+			<span class="album" property="dc:title" rel="foaf:page" rev="foaf:primaryTopic" resource="">{$name}</span>
+	</h2>
+
+	<div{if $album->image != false} rel="foaf:depiction"{/if}>
+		<img {if $album->image == false} src="{$base_url}/i/qm160.png"{else} class="photo" src="{$album->image}"{/if}
+			alt="{$album->name|escape:'html':'UTF-8'}" title="{$album->name|escape:'html':'UTF-8'}" width="160" />
+	</div>
 
 {include file='player.tpl'}
 
@@ -25,13 +32,15 @@
 	{/if}
 </script>
 
-<ul id="tracks">
+<ul id="tracks" rel="mo:track">
 	{section name=i loop=$tracks}
-	<li>
-		<a href="{$tracks[i]->getURL()}">{$tracks[i]->name}</a>
+	<li about="{$tracks[i]->id}" typeof="mo:Track" class="item">
+		<a class="fn url" href="{$tracks[i]->getURL()}" rel="foaf:page" property="dc:title">{$tracks[i]->name}</a>
 	</li>
 	{/section}
 </ul>
+
+</div>
 
 <div class="cleaner">&nbsp;</div>
 {include file='footer.tpl'}
