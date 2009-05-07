@@ -55,7 +55,7 @@ if ($_REQUEST['group']=='new')
 	else
 	{
 		$smarty->assign('newform', true);
-		$aTagCloud = TagCloud::GenerateTagCloud('Free_Scrobbles', 'artist');
+		$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
 		if (!PEAR::isError ($aTagCloud))
 		{
 			$smarty->assign('tagcloud', $aTagCloud);
@@ -143,7 +143,7 @@ if(isset($group->name))
 	# And display the page.
 	$smarty->assign('errors', $errors);
 	$smarty->assign('newform', false);
-	$aTagCloud = TagCloud::GenerateTagCloud('Free_Scrobbles', 'artist');
+	$aUserTagCloud = $group->tagCloudData();
 	if (!PEAR::isError ($aTagCloud))
 	{
 		$smarty->assign('tagcloud', $aTagCloud);

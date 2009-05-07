@@ -20,6 +20,7 @@
 
 require_once($install_path . '/database2.php');
 require_once($install_path . '/data/Server.php');
+require_once($install_path . '/config.php'); // Should already be required though.
 
 class TagCloud {
    /*
@@ -51,7 +52,7 @@ class TagCloud {
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
         $res = $adodb->CacheGetAll(7200,$query);
         if (!$res) {
-            echo("ERROR");
+            echo("ERROR $query");
         } else {
             foreach($res as $count => &$i) {
                 $i['size'] = $sizes[(int) ($count/(count($res)/7))];
@@ -63,5 +64,30 @@ class TagCloud {
             return $res;
         }
     }
+    
+	/**
+	 * Returns the preferred table to generate scrobble data from.
+	 *
+	 * @param string $area The are where we're displaying scrobble data; one of 'main', 'user', 'group'. Optional: defaults to 'main'.
+	 * @return string Usually 'Scrobbles' or 'Free_Scrobbles'.
+	 * @author tobyink
+	 */
+	static function scrobblesTable ($area = 'main')
+	{
+		// This array can be set up in config.php
+		global  $scrobblecloud_table;
+		
+		if (!empty($scrobblecloud_table[$area]))
+		{
+			return $scrobblecloud_table[$area];
+		}
+		
+		if ($area == 'main')
+		{
+			return 'Free_Scrobbles';
+		}
+		
+		return 'Scrobbles';
+	}
 }
 ?>

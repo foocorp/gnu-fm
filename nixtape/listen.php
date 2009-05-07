@@ -23,7 +23,7 @@ require_once('database.php');
 require_once('templating.php');
 require_once('data/TagCloud.php');
 
-$aTagCloud = TagCloud::GenerateTagCloud('Scrobbles', 'artist');
+$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
 if (!PEAR::isError ($aTagCloud)) {
         $smarty->assign('tagcloud', $aTagCloud);
 }

@@ -318,7 +318,7 @@ class Group {
 
 	function tagCloudData () {
 		return TagCloud::generateTagCloud(
-			'Scrobbles INNER JOIN Group_Members ON Scrobbles.username=Group_Members.member',
+			TagCloud::scrobblesTable('group').' s INNER JOIN Group_Members gm ON s.username=gm.member',
 			'artist',
 			40,
 			$this->name,
