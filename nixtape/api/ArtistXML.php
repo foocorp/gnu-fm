@@ -49,7 +49,7 @@ class ArtistXML {
 		$xml = new SimpleXMLElement("<lfm status=\"ok\"></lfm>");
 
 		$artistXml = $xml->addChild("artist", null);
-		$artistXml->addChild("name", utf8_encode($artist->name));
+		$artistXml->addChild("name", $artist->name);
 		$artistXml->addChild("mbid", $artist->mbid);
 		$artistXml->addChild("streamable", $artist->streamable);
 
