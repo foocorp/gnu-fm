@@ -47,7 +47,7 @@ $i = 0;
 
 while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
 	$trow = sanitize($row);
-	if ($trow["album"] && ($trow["album"] != $track->album_name)) {
+	if ($trow["album"]) {
 		$aOtherAlbums[$i++] = new Album($trow["album"], $trow["artist"]);
 	}
 }
