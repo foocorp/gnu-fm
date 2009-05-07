@@ -24,11 +24,22 @@
 	    
 	    </div>
 
-
+	{if $random_group}
+	    <h4>Featured group</h4>
+	    <p>
+		<img src="{$random_group->getAvatar()}" alt=""
+		height="32" width="32" style="margin: 0 0.67em 0.33em 0;float:left" />
+		<a href="{$random_group->getURL()|escape:'html':'UTF-8'}"
+			><b>{$random_group->fullname|escape:'html':'UTF-8'}</b></a>
+		<br />
+		<small>{$random_group->bio|escape:'html':'UTF-8'}</small>
+		<br style="clear:left" />
+	    </p>
+	{/if}
+	
 	    <h4>Coming soon</h4>
 
 	    <ul>
-	    <li>Groups</li>
 	    <li>Improved streaming support</li>
 	    <li>Events</li>
 	    <li>Improved artist pages</li>
