@@ -100,6 +100,11 @@ class Group {
 		{
 			return (new PEAR_Error('Group names must contain at least one non-punctuation character.'));
 		}
+
+		if (strtolower($name) == 'new')
+		{
+			return (new PEAR_Error('Not allowed to create a group called \'new\'!'));
+		}
 		
 		// Check to make sure no existing group with same name (case-insensitive).
 		$q = sprintf('SELECT groupname FROM Groups WHERE LOWER(groupname)=LOWER(%s)'
