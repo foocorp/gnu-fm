@@ -47,7 +47,7 @@ if ($_REQUEST['group']=='new')
 		elseif (PEAR::isError($result))
 		{
 			$smarty->assign('error', 'Error!');
-			$smarty->assign('details', $result->toString());
+			$smarty->assign('details', $result->getMessage());
 			$smarty->display('error.tpl');
 			die();
 		}
