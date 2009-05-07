@@ -91,19 +91,14 @@ class Group {
 	{
 		global $mdb2;
 
-		if (!preg_match('/^[^A-Za-z0-9_\.-]{2,}$/', $name))
+		if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9_\.-]+$/', $name))
 		{
-			return (new PEAR_Error('Group names should only contain letters, numbers, hyphens, underscores and full stops (a.k.a. dots/periods), and must be at least two characters long.'));
+			return (new PEAR_Error('Group names should only contain letters, numbers, hyphens, underscores and full stops (a.k.a. dots/periods), must be at least two characters long, and can\'t start with punctuation.'));
 		}
 
-		if (!preg_match('/[A-Za-z0-9]/', $name))
+		if (in_array(strtolower($name), array('new', 'search')))
 		{
-			return (new PEAR_Error('Group names must contain at least one non-punctuation character.'));
-		}
-
-		if (strtolower($name) == 'new')
-		{
-			return (new PEAR_Error('Not allowed to create a group called \'new\'!'));
+			return (new PEAR_Error("Not allowed to create a group called '$name' (reserved word)!"));
 		}
 		
 		// Check to make sure no existing group with same name (case-insensitive).
