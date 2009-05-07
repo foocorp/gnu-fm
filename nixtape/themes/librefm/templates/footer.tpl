@@ -24,7 +24,7 @@
 	    
 	    </div>
 
-	{if $random_group}
+	    {if $blah_blah_blah_random_group_disabled_by_mattl}
 	    <h4>Featured group</h4>
 	    <p style="margin:1em auto" about="{$random_group->id}" typeof="foaf:Group">
 		<a rel="foaf:homepage" href="{$random_group->getURL()|escape:'html':'UTF-8'}">
