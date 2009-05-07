@@ -295,8 +295,8 @@ if (isset($_POST['install'])) {
 //      $res = $mdb2->exec("CREATE INDEX scrobbles_track_idx on Scrobbles(lower(track))");
 
 // uncomment these if you're using postgresql and want to run the software as www-data
-//	$res = $mdb2->exec("GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE Album, Artist, Auth, Clientcodes, Delete_Request Error, Invitation_Request, Invitations, Now_Playing, Places, Radio_Sessions, Scrobble_Sessions, Scrobbles, Scrobble_Track, Similar_Artist, Tags, Track, Users to \"www-data\"");
-//	$res = $mdb2->exec("GRANT SELECT ON Free_Scrobbles to \"www-data\"");
+//	$res = $mdb2->exec("GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE Album, Artist, Auth, Clientcodes, Delete_Request Error, Invitation_Request, Invitations, Now_Playing, Places, Radio_Sessions, Scrobble_Sessions, Scrobbles, Scrobble_Track, Similar_Artist, Tags, Track, Users, User_Relationships, User_Relationship_Flags to \"www-data\"");
+//	$res = $mdb2->exec("GRANT SELECT ON Free_Scrobbles, Relationship_Flags to \"www-data\"");
 //	$res = $mdb2->exec("GRANT SELECT, UPDATE ON users_uniqueid_seq, scrobble_track_id_seq to \"www-data\"");
 
 	// Test user configuration
