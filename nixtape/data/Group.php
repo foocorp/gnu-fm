@@ -55,7 +55,8 @@ class Group {
 			
 			if(PEAR::isError($res)) {
 				header("Content-Type: text/plain");
-				print_r($res);
+				//print_r($res);
+				
 				exit;
 			}
 
@@ -226,7 +227,7 @@ class Group {
 		if(PEAR::isError($res))
 		{
 			header("Content-Type: text/plain");
-			print_r($res);
+			//print_r($res);
 			exit;
 		}
 
@@ -265,7 +266,7 @@ class Group {
 		
 		if(PEAR::isError($res)) {
 			header("Content-Type: text/plain");
-			print_r($res);
+			//print_r($res);
 			exit;
 		}
 
