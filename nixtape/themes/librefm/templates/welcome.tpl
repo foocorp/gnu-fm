@@ -1,7 +1,7 @@
 {include file='header.tpl'}
 
 	<div class="yui-gc" style="width: 100%;">
-    <div class="yui-u first">
+    <div class="yui-u first" id="new-libre-fm">
     
     <h2>New on Libre.fm...</h2>
 
@@ -25,22 +25,32 @@
 </div>
     <div class="yui-u">
 
+    <div id="radio">
+
     Streaming radio...
 
-    <hr />
+    </div>
+
+    <div id="downloads">
+
+    {include file='adbard.tpl'}
 
     Download music...
+
+    </div>
 
 </div>
 </div>
     <div class="yui-gb" style="width: 100%;">
-        <div class="yui-u first">
-Featured artist image
+        <div class="yui-u first" id="featured-artist">
+
+	<a href="/artist/Brad+Sucks"><img src="/i/fa-bs.png" alt="Brad Sucks" /></a>
+
 </div>
-        <div class="yui-u">
+        <div class="yui-u" id="featured-group">
 Featured group
 </div>
-        <div class="yui-u">
+        <div class="yui-u" id="featured-user">
 Featured user
 </div>
     </div>
