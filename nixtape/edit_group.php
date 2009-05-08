@@ -101,6 +101,23 @@ if ($_POST['submit'])
 
 	if (!isset($errors[0]))
 	{
+		if ($_POST['owner'] != $group->owner->username)
+		{
+			$new_owner = new User($_POST['owner']);
+			
+			if (! $group->memberCheck($new_owner))
+			{
+				$smarty->assign('error', 'Error!');
+				$smarty->assign('details', 'Cannot assign group ownership to someone who is not a member!');
+				$smarty->display('error.tpl');
+				die();				
+			}
+			else
+			{
+				$group->owner = $new_owner;
+			}
+		}
+		
 		$group->fullname    = $_POST['fullname'];
 		$group->homepage    = $_POST['homepage'];
 		$group->bio         = $_POST['bio'];
@@ -134,11 +151,14 @@ if(isset($group->name))
 	}
 	else
 	{
-		$smarty->assign('fullname',     ($group->fullname));
-		$smarty->assign('bio',          ($group->bio));
-		$smarty->assign('homepage',     ($group->homepage));
-		$smarty->assign('avatar_uri',   ($group->avatar_uri));
+		$smarty->assign('fullname',     $group->fullname);
+		$smarty->assign('bio',          $group->bio);
+		$smarty->assign('homepage',     $group->homepage);
+		$smarty->assign('avatar_uri',   $group->avatar_uri);
 	}
+
+	$smarty->assign('members', $group->getUsers());
+	$smarty->assign('owner',   $group->owner);
 
 	# And display the page.
 	$smarty->assign('errors', $errors);
