@@ -1,6 +1,6 @@
 {include file='header.tpl'}
 
-<div about="{$track->id|escape:'html':'UTF-8'}" typeof="mo:Track" typeof="haudio">
+<div about="{$track->id|escape:'html':'UTF-8'}" typeof="mo:Track" class="haudio">
 
 	<h2 property="dc:title" class="fn" rel="foaf:page" rev="foaf:primaryTopic" resource="">{$track->name|escape:'html':'UTF-8'}</h2>
 
