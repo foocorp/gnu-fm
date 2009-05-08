@@ -5,7 +5,7 @@
 
 <!-- sidebar -->
 
-</div>
+</div></div>
 
 {else}
 </div>
