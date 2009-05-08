@@ -51,7 +51,7 @@
 Featured group
 </div>
         <div class="yui-u" id="featured-user">
-Featured user
+	<a href="/user/mattl"><img src="/i/fu-mattl.png" alt="Matt Lee (mattl) from Boston, MA" /></a>
 </div>
     </div>
 
