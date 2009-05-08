@@ -31,6 +31,11 @@ if($logged_in == false)
 	$smarty->assign('details', 'Not logged in! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
 	die();
+} else {
+	$smarty->assign('error', 'Error!');
+	$smarty->assign('details', 'Group modifications are temporarily disabled.');
+	$smarty->display('error.tpl');
+	die();
 }
 
 if ($_REQUEST['group']=='new')
