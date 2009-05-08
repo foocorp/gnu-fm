@@ -42,6 +42,4 @@
 	</div>
 
    <div id="bd" role="main">
-<div class="yui-gc">
-    <div class="yui-u first" id="content">
-    <div style="padding: 10px;">
+
