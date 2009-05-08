@@ -59,7 +59,7 @@ $smarty->assign('extra_head_links', array(
 			'rel' => 'meta',
 			'type' => 'application/rdf+xml' ,
 			'title' => 'Track Metadata',
-			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $track>getURL()))
+			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $track->getURL()))
 			)
 	));
 
