@@ -321,6 +321,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
   /*  */
   
   function xURI($v, $base, $ns, $attr_type = '') {
+  
     if ((list($sub_r, $sub_v) = $this->xBlankCURIE($v, $base, $ns)) && $sub_r) {
       return array($sub_r, $sub_v);
     }
@@ -330,8 +331,8 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
     if ((list($sub_r, $sub_v) = $this->xCURIE($v, $base, $ns)) && $sub_r) {
       return array($sub_r, $sub_v);
     }
-    if (preg_match('/^(rel|rev)$/', $attr_type) && preg_match('/^\s*(alternate|appendix|bookmark|cite|chapter|contents|copyright|glossary|help|icon|index|last|license|meta|next|p3pv1|prev|role|section|stylesheet|subsection|start|up)(\s|$)/s', $v, $m)) {
-      return array('http://www.w3.org/1999/xhtml/vocab#' . $m[1], preg_replace('/^\s*' . $m[1]. '/s', '', $v));
+    if (preg_match('/^(rel|rev)$/', $attr_type) && preg_match('/^\s*(alternate|appendix|bookmark|cite|chapter|contents|copyright|glossary|help|icon|index|last|license|meta|next|p3pv1|prev|role|section|stylesheet|subsection|start|up)(\s|$)/is', $v, $m)) {
+      return array('http://www.w3.org/1999/xhtml/vocab#' . substr($m[1], preg_replace('/^\s*' . strtolower($m[1]). '/s', '', $v)));
     }
     if (preg_match('/^(rel|rev)$/', $attr_type) && preg_match('/^[a-z0-9\.]+$/i', $v)) {
       return array(0, $v);
@@ -361,7 +362,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
   }
   
   function xCURIE($v, $base, $ns) {
-    if ($sub_r = $this->x('([a-z0-9\-\_]*)\:([a-z0-9\-\_]+)', $v)) {
+    if ($sub_r = $this->x('([a-z0-9\-\_]*)\:(.+)', $v)) {
       if (!$sub_r[1]) return array('http://www.w3.org/1999/xhtml/vocab#' . $sub_r[2], '');
       if (isset($ns[$sub_r[1]])) {
         return array($ns[$sub_r[1]] . $sub_r[2], '');
