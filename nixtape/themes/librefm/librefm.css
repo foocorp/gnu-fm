@@ -12,7 +12,9 @@ html{background-color: #ececec;}
 
 #hd li a:link, #hd li a:visited { color: black; text-decoration: none; padding: 5px }
 
-#login a:link, #login a:visited { background-color: maroon; color: yellow !important; text-decoration: underline !important; }
+#hd li a:hover{background-color: maroon; text-decoration: underline; color: white;}
+
+#login a:link, #login a:visited { color: yellow !important; text-decoration: underline !important; }
 
 #hd li{ display: inline; font-size: 21px; text-transform: lowercase; font-weight: bold; margin-right: 20px;}
 
