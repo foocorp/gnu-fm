@@ -1,4 +1,4 @@
-	    <div id="adbard" style="height: 248px; width: 182px; position: relative; background: transparent url(/i/adbard.png) no-repeat;">
+	    <div id="adbard" style="height: 248px; width: 182px; position: relative; background: transparent url(/i/adbard.png) no-repeat; margin-top: 1em; margin-bottom: 1em;">
 
 	    <!--Ad Bard advertisement snippet, begin -->
 
