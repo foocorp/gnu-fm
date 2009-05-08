@@ -10,7 +10,7 @@
 	</span>
 	{/if}
 
-	<h2 property="dc:title">{$me->name|escape:'html':'UTF-8'}'s profile</h2>
+	<h2 about="" property="dc:title">{$me->name|escape:'html':'UTF-8'}'s profile</h2>
 
 	<dl>
 		<dt>
