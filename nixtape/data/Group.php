@@ -163,7 +163,7 @@ class Group {
 		// Create new group
 		$q = sprintf('INSERT INTO Groups (groupname, owner, created, modified) VALUES (%s, %s, %d, %d)'
 				, $mdb2->quote($name, 'text')
-				, $mdb2->quote($owner->name, 'text')
+				, $mdb2->quote($owner->uniqueid, 'integer')
 				, time()
 				, time());
 		$res = $mdb2->query($q);
@@ -248,7 +248,7 @@ class Group {
 				. "avatar_uri=%s, "
 				. "modified=%d "
 				. "WHERE groupname=%s"
-				, $mdb2->quote($this->owner->name, 'text')
+				, $mdb2->quote($this->owner->uniqueid, 'integer')
 				, $mdb2->quote($this->fullname, 'text')
 				, $mdb2->quote($this->homepage, 'text')
 				, $mdb2->quote($this->bio, 'text')
