@@ -202,20 +202,10 @@ h3 {
 }
 
 .user, .group {
-    -moz-border-radius-bottomleft:8px;
-    -moz-border-radius-bottomright:8px;
-    -moz-border-radius-topleft:8px;
-    -moz-border-radius-topright:8px;
-    background: #ececec url(/i/bg.png) repeat-x ;
+    background: #fff url(/i/bg.png) repeat-x ;
     padding: .5em;
     position: relative;
     margin-bottom: .5em;
-    border: 1px solid #666;
-}
-
-.group {
-	background-color: #DDF;
-	border: 1px solid #339;
 }
 
 .user dl, .group dl
