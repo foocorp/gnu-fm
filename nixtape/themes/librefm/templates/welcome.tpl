@@ -10,7 +10,7 @@
     </tr>
 
     <tr valign="top">
-      <td rowspan="2" colspan="2" width="66%">
+      <td rowspan="2" width="66%">
         <p class="c1"><br /></p>
 
         <p class="c1">New on Libre.fm....</p>
@@ -54,7 +54,7 @@
         <p class="c2"><br /></p>
       </td>
 
-      <td colspan="2" width="33%">
+      <td width="33%">
         <p class="c1">Play Libre.fm streaming radio</p>
 
         <p class="c1"><br /></p>
@@ -68,7 +68,7 @@
     </tr>
 
     <tr valign="top">
-      <td colspan="2" width="33%">
+      <td width="33%">
         <p class="c1">Download libre music...</p>
 
         <p class="c1"><br /></p>
@@ -96,7 +96,7 @@
     </tr>
 
     <tr valign="top" border="0">
-      <td width="*" colspan="4">
+      <td width="*" colspan="3">
         <p class="c1"><br /></p>
       </td>
     </tr>
@@ -106,7 +106,7 @@
         <p class="c1">Featured artist image</p>
       </td>
 
-      <td colspan="2" width="33%">
+      <td width="33%">
         <p class="c1">Featured group info</p>
       </td>
 
