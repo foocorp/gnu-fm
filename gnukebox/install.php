@@ -92,9 +92,9 @@ if (isset($_POST['install'])) {
 
 	$adodb->Execute("CREATE TABLE Group_Members (
 		grp INTEGER REFERENCES Groups(id),
-		member VARCHAR(64) REFERENCES Users(username),
+		member INTEGER REFERENCES Users(uniqueid),
 		joined INTEGER NOT NULL,
-		PRIMARY KEY (groupname, member))");
+		PRIMARY KEY (grp, member))");
 
 	$adodb->Execute("CREATE TABLE AccountActivation(
 		username VARCHAR(64),
