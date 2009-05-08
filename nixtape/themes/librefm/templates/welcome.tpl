@@ -1,48 +1,23 @@
 {include file='header.tpl'}
-
-<h2>Welcome</h2>
-<p><strong><span class='vcard fn org'>libre.fm</span></strong> is a free network service that will allow users to share their
-musical tastes with other people.</p>
-
-<h3>Now playing</h3>
-
-<dl class='now-playing'>
-  {section name=np loop=$nowplaying}
-{if $nowplaying[np].license > 0}
-    <dt class='artist-name libre'>
-{else}
-    <dt class='artist-name'>
-{/if}
-        <a href='{$nowplaying[np].artisturl}'>{$nowplaying[np].artist|stripslashes|htmlspecialchars}</a>
-    </dt>
-    <dd class='track-name'>
-        {if $nowplaying[np].mbid <> ''}
-        <a href='http://musicbrainz.org/track/{$nowplaying[np].mbid}.html'>
+	{if ($logged_in)}
+	<!-- put something here -->
         {else}
-        <a href="{$nowplaying[np].trackurl}">
-        {/if}
-        {$nowplaying[np].track|stripslashes|htmlspecialchars}
-        </a>
-    </dd>
-    <dd class='username'><a href='{$nowplaying[np].userurl}'>{$nowplaying[np].username|stripslashes|htmlspecialchars}</a></dd>
-    <dd>using <span class='gobbler'>{$nowplaying[np].clientstr}</span></dd>
-  {/section}
-</dl>
+	{if $welcome}
+	<div class="yui-g" id="banner">     
+	  <a href="{$base_url}/register.php"><img src="{$base_url}/i/intro1.png" alt="" /></a>
+	{else}
+	<div class="yui-g">     
+	  <a href="{$base_url}/register.php"><img src="{$base_url}/themes/librefm/images/topblocksmall.png" alt="" /></a>
+	{/if}
+	</div>{/if}
 
-<h3>What's hot? Recently played.</h3>
+<div class="yui-g">
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat.</div>
+<div class="yui-gc">
+    <div class="yui-u first">
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat.    </div>
+    <div class="yui-u">
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat.    </div>
+</div>
 
-<dl class='recent-tracks'>
-  {section name=recent loop=$recenttracks}
-{if $recenttracks[recent].license > 0}
-      <dt class='artist-name libre'><a title="Libre artist" href='{$recenttracks[recent].artisturl}'>
-        {$recenttracks[recent].artist|stripslashes|htmlspecialchars}</a>:
-{else}
-      <dt class='artist-name'><a href='{$recenttracks[recent].artisturl}'>
-        {$recenttracks[recent].artist|stripslashes|htmlspecialchars}</a>:
-{/if}
-      <span class='track-name'><a href="{$recenttracks[recent].trackurl}">{$recenttracks[recent].track|stripslashes|htmlspecialchars}</a></span> &mdash;
-      <span class='username'><a href='{$recenttracks[recent].userurl}'>{$recenttracks[recent].username|stripslashes|htmlspecialchars}</a></span></dd>
-  {/section}
-    </dl>
-<div class='cleaner'>&nbsp;</div>
 {include file='footer.tpl'}
