@@ -1,6 +1,6 @@
 {include file='header.tpl'}
 
-	<div class="yui-gc">
+	<div class="yui-gc" style="width: 100%; clear: both;">
     <div class="yui-u first">
     
     <h2>New on Libre.fm...</h2>
@@ -33,7 +33,7 @@
 
 </div>
 </div>
-    <div class="yui-gb">
+    <div class="yui-gb" style="width: 100%; clear: both;">
         <div class="yui-u first">
 Featured artist image
 </div>
