@@ -36,7 +36,7 @@
 
 <body typeof="foaf:Document">
 
-<div id="try-the-alpha"><a href="http://alpha.libre.fm/">This is the current, live, in-development beta version of the site</a></div>
+<div id="try-the-alpha"><a href="http://alpha.libre.fm{$this_page}">This is the current, live, in-development beta version of the site</a></div>
 
 {if ($sidebar)}<div id="doc2" class="yui-t5">{else}<div id="doc2" class="yui-t7"> {/if}
 	<div id="hd" role="navigation">
