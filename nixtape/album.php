@@ -41,7 +41,7 @@ $smarty->assign('extra_head_links', array(
 			'rel' => 'meta',
 			'type' => 'application/rdf+xml' ,
 			'title' => 'Album Metadata',
-			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(htmlentities(str_replace($base_url, '', $album>getURL())))
+			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(htmlentities(str_replace($base_url, '', $album->getURL())))
 			)
 	));
 	
