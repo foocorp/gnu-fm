@@ -71,7 +71,7 @@ class Group {
 			$this->homepage     = $row['homepage'];
 			$this->bio          = $row['bio'];
 			$this->avatar_uri   = $row["avatar_uri"];
-			$this->owner        = new User($row['owner']);
+			$this->owner        = User::new_from_uniqueid_number($row['owner']);
 			$this->count        = -1;
 			$this->users        = array();
 			if (! preg_match('/\:/', $this->id))
@@ -172,13 +172,18 @@ class Group {
 			return $res;
 		}
 
+		// Get ID number for group
 		$q = sprintf('SELECT id FROM Groups WHERE lower(groupname) = lower(%s)', $mdb2->quote($name, 'text'));
 		$res = $mdb2->query($q);
 		if (PEAR::isError($res))
 		{
 			return $res;
 		}
-		$grp = $result->fetchOne(0);
+		elseif (!$res->numRows())
+		{
+			return (new PEAR_Error("Something has gone horribly, horribly wrong!"));
+		}
+		$grp = $res->fetchOne(0);
 
 		// Group owner must be a member of the group
 		$q = sprintf('INSERT INTO Group_Members (grp, member, joined) VALUES (%s, %s, %d)'

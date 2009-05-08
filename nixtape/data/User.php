@@ -34,7 +34,7 @@ class User {
 
 	public $name, $email, $fullname, $bio, $location, $homepage, $error, $userlevel;
 	public $id, $acctid, $avatar_uri, $location_uri, $webid_uri, $laconica_profile, $journal_rss;
-	public $password, $has_identica, $created, $modified;
+	public $password, $has_identica, $created, $modified, $uniqueid;
 
 	/**
 	 * User constructor
@@ -82,6 +82,17 @@ class User {
 			if (! preg_match('/\:/', $this->id))
 				$this->id = $this->getURL() . '#me';
 		}		
+	}
+	
+	
+	public static function new_from_uniqueid_number ($uid)
+	{
+		global $mdb2;
+		$res = $mdb2->query(sprintf('SELECT * FROM Users WHERE uniqueid = %d', (int)$uid));
+		if($res->numRows()) {
+			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+			return new User($row['username'], $row);
+		}
 	}
 	
 	function save ()
