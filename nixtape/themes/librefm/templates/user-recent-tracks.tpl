@@ -45,15 +45,6 @@
 <!-- Column break -->
 </div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
 
-<h3>{$me->name}'s top artists</h3>
-<ul class="tagcloud" about="{$me->id}">
-	{section name=i loop=$user_tagcloud}
-	<li style="font-size:{$user_tagcloud[i].size}"><a
-	href="{$user_tagcloud[i].pageurl|escape:'html':'UTF-8'}" rel="{if $user_tagcloud[i].size|substr:-5 ==
-	'large'}foaf:interest {/if}tag">{$user_tagcloud[i].artist|escape:"html":"UTF-8"}</a></li>
-	{/section}
-</ul>
-
 	<div id="adbard">
 
 	    <!--Ad Bard advertisement snippet, begin -->
