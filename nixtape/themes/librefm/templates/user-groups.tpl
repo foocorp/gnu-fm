@@ -27,33 +27,5 @@
 	
 {/foreach}
 </ul>
-
-<!-- Column break -->
-</div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
-
-<h3>{$me->name}'s top artists</h3>
-<ul class="tagcloud" about="{$me->id}">
-	{section name=i loop=$user_tagcloud}
-	<li style="font-size:{$user_tagcloud[i].size}"><a
-	href="{$user_tagcloud[i].pageurl|escape:'html':'UTF-8'}" rel="{if $user_tagcloud[i].size|substr:-5 ==
-	'large'}foaf:interest {/if}tag">{$user_tagcloud[i].artist|escape:"html":"UTF-8"}</a></li>
-	{/section}
-</ul>
-
-	<div id="adbard">
-
-	    <!--Ad Bard advertisement snippet, begin -->
-
-	    <script type='text/javascript'>
-	     var ab_h = '4bcaab930d3bdfded68fd7be730d7db4';
-     	     var ab_s = '55fd9cde6d855a75f9ca43d854272f6b';
-     	    </script>
-   	    
-            <script type='text/javascript' src='http://cdn1.adbard.net/js/ab1.js'></script>
-
-	    <!--Ad Bard, end -->
-
-	</div>
-
 {include file='footer.tpl'}
 
