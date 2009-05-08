@@ -81,7 +81,7 @@ if (isset($_POST['install'])) {
 	$adodb->Execute("CREATE TABLE Groups (
 		id SERIAL PRIMARY KEY,
 		groupname VARCHAR(64),
-		owner VARCHAR(64) REFERENCES Users(username),
+		owner INTEGER REFERENCES Users(uniqueid),
 		fullname VARCHAR(255),
 		bio TEXT,
 		homepage VARCHAR(255),
