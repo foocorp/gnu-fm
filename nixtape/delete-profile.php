@@ -38,7 +38,6 @@ if ($logged_in == false) {
 		$smarty->display('error.tpl');
 		die ();
 	} else {
-		$mdb2->exec("DELETE FROM Users WHERE lower(username) = ".$mdb2->quote(strtolower($username), 'text'));
 		$mdb2->exec("DELETE FROM Scrobble_Sessions WHERE username = ".$mdb2->quote($username, 'text'));
 		$mdb2->exec("DELETE FROM Delete_Request WHERE username = ".$mdb2->quote($username, 'text'));
 		$mdb2->exec("DELETE FROM Auth WHERE username = ".$mdb2->quote($username, 'text'));
@@ -46,6 +45,11 @@ if ($logged_in == false) {
 		$mdb2->exec("DELETE FROM Radio_Sessions WHERE username = ".$mdb2->quote($username, 'text'));
 		$mdb2->exec("DELETE FROM Recovery_Request WHERE username = ".$mdb2->quote($username, 'text'));
 		$mdb2->exec("DELETE FROM Scrobbles WHERE username = ".$mdb2->quote($username, 'text'));
+		$mdb2->exec("DELETE FROM User_Relationship_Flags WHERE uid1 = ".$mdb2->quote($this_user->uniqueid, 'integer'));
+		$mdb2->exec("DELETE FROM User_Relationship_Flags WHERE uid2 = ".$mdb2->quote($this_user->uniqueid, 'integer'));
+		$mdb2->exec("DELETE FROM User_Relationships WHERE uid1 = ".$mdb2->quote($this_user->uniqueid, 'integer'));
+		$mdb2->exec("DELETE FROM User_Relationships WHERE uid2 = ".$mdb2->quote($this_user->uniqueid, 'integer'));
+		$mdb2->exec("DELETE FROM Users WHERE lower(username) = ".$mdb2->quote(strtolower($username), 'text'));
 		session_destroy();
 		header("Location: index.php");
 	}
