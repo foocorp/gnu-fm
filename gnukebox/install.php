@@ -256,16 +256,16 @@ if (isset($_POST['install'])) {
 				WHERE t.streamable = 1");
 
 	$adodb->Execute("CREATE TABLE User_Relationships (
-		username VARCHAR(64) REFERENCES Users(username),
-		related VARCHAR(64) REFERENCES Users(username),
+		uid1 INTEGER REFERENCES Users(uniqueid),
+		uid2 INTEGER REFERENCES Users(uniqueid),
 		established INTEGER NOT NULL,
-		PRIMARY KEY (username, related))");
+		PRIMARY KEY (uid1, uid2))");
 
 	$adodb->Execute("CREATE TABLE User_Relationship_Flags (
-		username VARCHAR(64) REFERENCES Users(username),
-		related VARCHAR(64) REFERENCES Users(username),
+		uid1 INTEGER REFERENCES Users(uniqueid),
+		uid2 INTEGER REFERENCES Users(uniqueid),
 		flag VARCHAR(12) REFERENCES Relationship_Flags(flag),
-		PRIMARY KEY (username, related, flag))");
+		PRIMARY KEY (uid1, uid2, flag))");
 
 	$adodb->Execute("CREATE TABLE Relationship_Flags (
 		flag VARCHAR(12),
