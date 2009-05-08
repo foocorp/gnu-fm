@@ -14,7 +14,7 @@
 		<li about="{$albums[i]->id}" property="dc:title" content="{$albums[i]->name|escape:'html':'UTF-8'}" typeof="mo:Record" class="haudio">
 					<a rel="foaf:page" href="{$albums[i]->getURL()}">
 						<span{if $albums[i]->image != false} about="{$albums[i]->id}" rel="foaf:depiction"{/if}>
-							<img class="album photo" {if $albums[i]->image == false} src="{$base_url}/i/qm160.png"{else}src="{$albums[i]->image}"{/if}
+							<img class="album photo" {if $albums[i]->image == false} src="{$base_url}/themes/librefm/images/qm160.png"{else}src="{$albums[i]->image}"{/if}
 							alt="{$albums[i]->name|escape:'html':'UTF-8'}"
 							title="{$albums[i]->name|escape:'html':'UTF-8'}" width="160" />
 						</span>

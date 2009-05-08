@@ -144,8 +144,6 @@ function go_get_album_art($artist, $album){
 
 	$image = $aws_xml->Items->Item->MediumImage->URL;
 	$URI = $aws_xml->Items->Item->DetailPageURL;
-
-	if ($image == "") { $image = $base_url . "/i/qm50.png"; $license = "unknown-to-amazon";}
 	
 	if ($image) {
 

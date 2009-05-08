@@ -248,7 +248,7 @@ class Server {
 			$row["trackurl"] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
 			
 			// We really want to get an image URI from the database and only fall back to qm50.png if we can't find an image.
-			$row['albumart'] = $base_url . '/i/qm50.png';
+			$row['albumart'] = $base_url . 'themes/' . $default_theme . '/images/qm50.png';
 
 			$row["licenseurl"] = $row["license"];
 			$row["license"] = simplify_license($row["licenseurl"]);
