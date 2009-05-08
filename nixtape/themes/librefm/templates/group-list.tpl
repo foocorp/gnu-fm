@@ -1,6 +1,6 @@
 {include file='header.tpl'}
 
-<h2 property="dc:title">All Groups</h2>
+<h2 property="dc:title">{t}All Groups{/t}</h2>
 
 <div about="#groups" typeof="foaf:Group" property="foaf:name" content="All Groups">
 
@@ -19,7 +19,7 @@
 				</dt>
 				<dd>{if $g->homepage}<a class="url" rel="foaf:page" href="{$g->homepage|escape:'html':'UTF-8'}">{$g->homepage|escape:'html':'UTF-8'}</a>{/if}</dd>
 				<dd class="note" property="dc:abstract">{$g->bio|escape:'html':'UTF-8'}</dd>
-				<dd><a rel="foaf:homepage" rev="foaf:primaryTopic" property="dc:description" href="{$g->getURL()|escape:'html':'UTF-8'}">{$g->count} members</a></dd>
+				<dd><a rel="foaf:homepage" rev="foaf:primaryTopic" property="dc:description" href="{$g->getURL()|escape:'html':'UTF-8'}">{t members='$g->count}%1 members{/t}</a></dd>
 			</dl>
 			<hr style="border: 1px solid transparent; clear: both;" />
 		</div>

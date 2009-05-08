@@ -15,12 +15,12 @@
 	</script>
 
 	<dl>
-		<dt>Artist:</dt>
+		<dt>{t}Artist:{/t}</dt>
 		<dd rel="foaf:maker" rev="foaf:made" class="contributor vcard">
 			<a about="{$artist->id|escape:'html':'UTF-8'}" typeof="mo:MusicArtist" property="foaf:name" class="url fn org"
 				rel="foaf:page" rev="foaf:primaryTopic" href="{$artist->getURL()|escape:'html':'UTF-8'}">{$artist->name|escape:'html':'UTF-8'}</a>
 		</dd>
-		<dt>Album:</dt>
+		<dt>{t}Album:{/t}</dt>
 		<dd rev="mo:track">
 			<a about="{$album->id|escape:'html':'UTF-8'}" typeof="mo:Record" property="dc:title" class="album"
 				rel="foaf:page" rev="foaf:primaryTopic" href="{$album->getURL()|escape:'html':'UTF-8'}">{$album->name|escape:'html':'UTF-8'}</a>
@@ -40,11 +40,11 @@
 
 	<ul>
 		{if !empty($track->duration)}<li property="mo:durationXSD" datatype="xsd:duration" content="PT{$track->duration}S">Duration: {$track->duration}</li>{/if}
-		<li property="rdfs:comment">Playcount: {$track->getPlayCount()}</li>
-		<li property="rdfs:comment">Listeners: {$track->getListenerCount()}</li>
+		<li property="rdfs:comment">{t}Playcount:{/t} {$track->getPlayCount()}</li>
+		<li property="rdfs:comment">{t}Listeners:{/t} {$track->getListenerCount()}</li>
 	</ul>
   
-	<h3>Albums containing this track:</h3>
+	<h3>{t}Albums containing this track:{/t}</h3>
 	<div rev="mo:track">
 	{section name=i loop=$albums}
 	

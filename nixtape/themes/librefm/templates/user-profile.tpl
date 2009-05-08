@@ -3,7 +3,7 @@
 {include file='maxiprofile.tpl'}
 
 {if $nowplaying|@count > 0}
-<h3>Now Playing:</h3>
+<h3>{t}Now Playing:{/t}</h3>
 <!-- We should try to make this list work like the gobbles list. -->
 <dl class='now-playing'>
     {section name=i loop=$nowplaying}
@@ -15,7 +15,7 @@
 {/if}
 
 <div about="[_:seq1]" typeof="rdf:Seq" rev="rss:items">
-	<h3 typeof="rss:channel" property="rss:title" rel="rss:link" resource="#latest_plays" id="latest_plays" content="{$me->name|escape:'html':'UTF-8'}'s Latest Plays">Latest {$scrobbles|@count} Plays:</h3>
+	<h3 typeof="rss:channel" property="rss:title" rel="rss:link" resource="#latest_plays" id="latest_plays" content="{$me->name|escape:'html':'UTF-8'}'s Latest Plays">{t plays=$scrobbles|@count}Latest %1 Plays:{/t}</h3>
 </div>
 
 <ul class="gobbles" about="{$me->id|escape:'html':'UTF-8'}" rev="gob:user">

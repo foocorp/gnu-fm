@@ -1,0 +1,525 @@
+# German translations for PACKAGE package.
+# Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Michael Sheldon <mike@mikeasoft.com>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-05-08 11:48+0100\n"
+"PO-Revision-Date: 2009-05-07 12:22+0100\n"
+"Last-Translator: Michael Sheldon <mike@mikeasoft.com>\n"
+"Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: translatable_strings.c:2
+msgid "Email was sent successfully!"
+msgstr ""
+
+#: translatable_strings.c:5
+msgid "Requests for invites"
+msgstr ""
+
+#: translatable_strings.c:8
+msgid "Invited people"
+msgstr ""
+
+#: translatable_strings.c:11
+msgid "Remove your profile"
+msgstr ""
+
+#: translatable_strings.c:14
+msgid "Confirmation mail has been sent to email on file for %1. Thank you"
+msgstr ""
+
+#: translatable_strings.c:17
+msgid "Create a group"
+msgstr ""
+
+#: translatable_strings.c:20
+msgid "Address for the group:"
+msgstr ""
+
+#: translatable_strings.c:23
+msgid "Create"
+msgstr ""
+
+#: translatable_strings.c:26
+msgid "Edit your group"
+msgstr ""
+
+#: translatable_strings.c:29 translatable_strings.c:269
+msgid ""
+"The form below is still very experimental. Using this may wreck your account!"
+msgstr ""
+
+#: translatable_strings.c:32 translatable_strings.c:272
+msgid "Full name:"
+msgstr ""
+
+#: translatable_strings.c:35 translatable_strings.c:287
+msgid "Homepage URL:"
+msgstr ""
+
+#: translatable_strings.c:38
+msgid "Logo URL:"
+msgstr ""
+
+#: translatable_strings.c:41 translatable_strings.c:284
+#: translatable_strings.c:293 translatable_strings.c:299
+#: translatable_strings.c:305 translatable_strings.c:311
+msgid "What's this?"
+msgstr ""
+
+#: translatable_strings.c:44
+msgid "Description:"
+msgstr ""
+
+#: translatable_strings.c:47
+msgid ""
+"The web address for a picture to represent your group on libre.fm. It "
+"should\n"
+"\tnot be more than 80x80 pixels. (64x64 is best.)"
+msgstr ""
+
+#: translatable_strings.c:50
+msgid "Explore popular artists"
+msgstr ""
+
+#: translatable_strings.c:53
+msgid "Contributors"
+msgstr ""
+
+#: translatable_strings.c:56
+msgid "Licensing information"
+msgstr ""
+
+#: translatable_strings.c:59
+msgid "Developers"
+msgstr ""
+
+#: translatable_strings.c:62
+msgid "Download"
+msgstr ""
+
+#: translatable_strings.c:65
+msgid "Help translate Libre.fm"
+msgstr ""
+
+#: translatable_strings.c:68
+msgid "A <a href=\"http://foocorp.org/\">FooCorp</a> thing."
+msgstr ""
+
+#: translatable_strings.c:71
+msgid "Powered by Nixtape"
+msgstr ""
+
+#: translatable_strings.c:74
+msgid "All Groups"
+msgstr ""
+
+#: translatable_strings.c:77
+msgid "%1 members"
+msgstr ""
+
+#: translatable_strings.c:80
+msgid "Group:"
+msgstr ""
+
+#: translatable_strings.c:83
+msgid "edit"
+msgstr ""
+
+#: translatable_strings.c:86
+msgid "leave"
+msgstr ""
+
+#: translatable_strings.c:89
+msgid "join"
+msgstr ""
+
+#: translatable_strings.c:92
+msgid "Top artists"
+msgstr ""
+
+#: translatable_strings.c:95
+msgid "discover new music"
+msgstr ""
+
+#: translatable_strings.c:98
+msgid ""
+"Your invitation has been sent, pretty soon your friend should be thanking "
+"you profusely."
+msgstr ""
+
+#: translatable_strings.c:101
+msgid ""
+"Do you have an awesome friend you'd like to share <a href='http://libre.fm' "
+"rel='bookmark' class='vcard fn org url'>libre.fm</a> with? Just enter his/"
+"her email address and we'll sort them out with an invitation code."
+msgstr ""
+
+#: translatable_strings.c:104
+msgid "Invitee's E-mail:"
+msgstr ""
+
+#: translatable_strings.c:107 translatable_strings.c:179
+#: translatable_strings.c:248
+msgid "must be valid!"
+msgstr ""
+
+#: translatable_strings.c:110
+msgid "Let them in!"
+msgstr ""
+
+#: translatable_strings.c:113
+#, c-format
+msgid ""
+"To listen to 100% free (libre) music simply enter the type of music you'd "
+"like to hear or select one of the common tags below:"
+msgstr ""
+
+#: translatable_strings.c:116
+msgid "Custom tag:"
+msgstr ""
+
+#: translatable_strings.c:119
+msgid "Country:"
+msgstr ""
+
+#: translatable_strings.c:122
+msgid "Users in %1"
+msgstr ""
+
+#: translatable_strings.c:125 translatable_strings.c:176
+msgid "Username"
+msgstr ""
+
+#: translatable_strings.c:128
+msgid "Password"
+msgstr ""
+
+#: translatable_strings.c:131
+msgid "Remember me"
+msgstr ""
+
+#: translatable_strings.c:134
+msgid "Let me in!"
+msgstr ""
+
+#: translatable_strings.c:137
+msgid "Register"
+msgstr "Register"
+
+#: translatable_strings.c:140
+msgid "Admin"
+msgstr "Administration"
+
+#: translatable_strings.c:143
+msgid "Logout"
+msgstr "Abmeldung"
+
+#: translatable_strings.c:146
+msgid "Listen"
+msgstr "Mithoeren"
+
+#: translatable_strings.c:149
+msgid "Login"
+msgstr "Anmeldung"
+
+#: translatable_strings.c:152
+msgid "Bugs"
+msgstr ""
+
+#: translatable_strings.c:155
+msgid "Help"
+msgstr "Hilfe"
+
+#: translatable_strings.c:158
+msgid ""
+"Sorry, you need a browser capable of making use of the HTML 5 &lt;audio&gt; "
+"tag to enjoy the streaming service via the JavaScript player."
+msgstr ""
+
+#: translatable_strings.c:161
+msgid "Playlist"
+msgstr ""
+
+#: translatable_strings.c:164
+msgid "Password recovery"
+msgstr ""
+
+#: translatable_strings.c:167
+msgid "Your new password has been emailed to you."
+msgstr ""
+
+#: translatable_strings.c:170
+msgid ""
+"An email with further information has been sent to the email address "
+"associated with your profile."
+msgstr ""
+
+#: translatable_strings.c:173
+msgid "Password Recovery"
+msgstr ""
+
+#: translatable_strings.c:182
+msgid "Recover my password!"
+msgstr ""
+
+#: translatable_strings.c:185
+msgid "Your account has been activated! You may now login!"
+msgstr ""
+
+#: translatable_strings.c:188
+msgid ""
+"You're now registered with libre.fm! An email has been sent to the email "
+"address you provided. Please follow the link in the email to activate your "
+"account!"
+msgstr ""
+
+#: translatable_strings.c:191
+msgid "Find out how to start sending us your listening habits"
+msgstr ""
+
+#: translatable_strings.c:194
+msgid "Join our mailing list"
+msgstr ""
+
+#: translatable_strings.c:197
+msgid "Read our blog"
+msgstr ""
+
+#: translatable_strings.c:200
+msgid "and"
+msgstr ""
+
+#: translatable_strings.c:203
+msgid "subscribe to Matt (our founder) on identi.ca"
+msgstr ""
+
+#: translatable_strings.c:206
+msgid "Your username:"
+msgstr ""
+
+#: translatable_strings.c:209
+msgid "(no more than 16 chars.)"
+msgstr ""
+
+#: translatable_strings.c:212
+msgid "Your password:"
+msgstr ""
+
+#: translatable_strings.c:215
+msgid "(make it hard to guess)"
+msgstr ""
+
+#: translatable_strings.c:218
+msgid "Your password again"
+msgstr ""
+
+#: translatable_strings.c:221
+msgid "(you should repeat it.)"
+msgstr ""
+
+#: translatable_strings.c:224
+msgid "Your e-mail:"
+msgstr ""
+
+#: translatable_strings.c:227
+msgid "(must be valid!)"
+msgstr ""
+
+#: translatable_strings.c:230
+msgid ""
+"Please note: we plan make your <a href=\"http://turtle.libre.fm/data/"
+"\">listening data available</a>, under the <a href=\"http://wiki."
+"openstreetmap.org/wiki/Open_Database_License\">the Open Database License</a>."
+msgstr ""
+
+#: translatable_strings.c:233
+msgid "Sign up"
+msgstr ""
+
+#: translatable_strings.c:236
+msgid ""
+"We won't sell, swap or give away your email address. You can optionally "
+"include personal data on your profile, which is displayed publicly."
+msgstr ""
+
+#: translatable_strings.c:239
+msgid ""
+"Your request for an invitation has been registered. Thank you for your "
+"interest in libre.fm!"
+msgstr ""
+
+#: translatable_strings.c:242
+msgid ""
+"<a href='http://libre.fm' rel='bookmark' class='vcard fn org url'>libre.fm</"
+"a> is now in alpha. We're slowly adding new users, so if you're interested, "
+"type in your email address and you'll receive an invitation in a few days "
+"time."
+msgstr ""
+
+#: translatable_strings.c:245
+msgid "Email"
+msgstr ""
+
+#: translatable_strings.c:251
+msgid "Request invite!"
+msgstr ""
+
+#: translatable_strings.c:254
+msgid "Artist:"
+msgstr ""
+
+#: translatable_strings.c:257
+msgid "Album:"
+msgstr ""
+
+#: translatable_strings.c:260
+msgid "Playcount:"
+msgstr ""
+
+#: translatable_strings.c:263
+msgid "Listeners:"
+msgstr ""
+
+#: translatable_strings.c:266
+msgid "Albums containing this track:"
+msgstr ""
+
+#: translatable_strings.c:275
+msgid "Location:"
+msgstr ""
+
+#: translatable_strings.c:278
+msgid "Geoname:"
+msgstr ""
+
+#: translatable_strings.c:281
+msgid "Find ..."
+msgstr ""
+
+#: translatable_strings.c:290
+msgid "Avatar URL:"
+msgstr ""
+
+#: translatable_strings.c:296
+msgid "Mini Biography:"
+msgstr ""
+
+#: translatable_strings.c:302
+msgid "Laconica/identi.ca Profile:"
+msgstr ""
+
+#: translatable_strings.c:308
+msgid "RSS Feed:"
+msgstr ""
+
+#: translatable_strings.c:314
+msgid "Password:"
+msgstr ""
+
+#: translatable_strings.c:317
+msgid "Leave this blank if you don't want to change your password."
+msgstr ""
+
+#: translatable_strings.c:320
+msgid "Confirm Password:"
+msgstr ""
+
+#: translatable_strings.c:323
+msgid "Location check"
+msgstr ""
+
+#: translatable_strings.c:326
+msgid ""
+"This feature looks up your location on <a href=\"http://www.geonames.org"
+"\">geonames</a>. You don't need to do it, but it will help us find your "
+"latitude and longitude, which will help us add some great location-based "
+"features in the future."
+msgstr ""
+
+#: translatable_strings.c:329
+msgid "Avatar URL"
+msgstr ""
+
+#: translatable_strings.c:332
+msgid ""
+"The web address for a picture to represent you on libre.fm. It should not be "
+"more than 80x80 pixels. (64x64 is best.) If you leave this empty, libre.fm "
+"will use <a href=\"http://gravatar.com\">Gravatar</a> to find an image for "
+"you."
+msgstr ""
+
+#: translatable_strings.c:335
+msgid ""
+"A URI that represents you in RDF. See <a href=\"http://esw.w3.org/topic/WebID"
+"\">WebID</a> for details. If you don't know what this is, it's best to leave "
+"it blank."
+msgstr ""
+
+#: translatable_strings.c:338
+msgid "Now Playing:"
+msgstr ""
+
+#: translatable_strings.c:341
+msgid "Latest %1 Plays:"
+msgstr ""
+
+#: translatable_strings.c:344
+msgid "%1's statistics"
+msgstr ""
+
+#: translatable_strings.c:347
+msgid "%1's most played artists"
+msgstr ""
+
+#: translatable_strings.c:350
+msgid "%1's top tracks"
+msgstr ""
+
+#: translatable_strings.c:353
+msgid "%1's scrobbles by day"
+msgstr ""
+
+#: translatable_strings.c:356
+msgid "Most played artists"
+msgstr ""
+
+#: translatable_strings.c:359
+msgid "Top tracks"
+msgstr ""
+
+#: translatable_strings.c:362
+msgid "Scrobbles by day"
+msgstr ""
+
+#: translatable_strings.c:365
+msgid "New on Libre.fm..."
+msgstr ""
+
+#: translatable_strings.c:368
+msgid "Upcoming events..."
+msgstr ""
+
+#: translatable_strings.c:371
+msgid "Libre music downloads..."
+msgstr ""
+
+#: translatable_strings.c:374
+msgid "More Libre music downloads..."
+msgstr ""
+
+#: translatable_strings.c:377
+msgid "License"
+msgstr ""
+
+#: translatable_strings.c:380
+msgid "Featured group"
+msgstr ""

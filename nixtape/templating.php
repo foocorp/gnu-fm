@@ -23,6 +23,16 @@ require_once('config.php');
 require_once('auth.php');
 require_once('smarty/Smarty.class.php');
 
+if($_GET['lang']) {
+	$languages = array($_GET['lang'] . ".UTF-8");
+} else {
+	//TODO: Convert HTTP_ACCEPT_LANGUAGE to a gettext locale
+	$languages = preg_split("/,/", $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+}
+setlocale(LC_ALL, $languages);
+bindtextdomain("nixtape", $install_path . '/themes/' . $default_theme . '/locale/');
+textdomain("nixtape");
+
 $smarty = new Smarty();
 
 $smarty->template_dir = $install_path . '/themes/'. $default_theme . '/templates/';

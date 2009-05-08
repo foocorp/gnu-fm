@@ -3,16 +3,15 @@
 <h2>Register</h2>
 
 {if isset($activated)}
-	<h2>Your account has been activated! You may now login!</h2>
+	<h2>{t}Your account has been activated! You may now login!{/t}</h2>
 
 {elseif isset($registered) }
-	<h2>You're now registered with libre.fm! An email has been sent to the email address you
-	provided. Please follow the link in the email to activate your account!</h2>
+	<h2>{t}You're now registered with libre.fm! An email has been sent to the email address you provided. Please follow the link in the email to activate your account!{/t}</h2>
 	
 	<ul>
-	<li><a href="http://ideas.libre.fm/index.php/Using_turtle">Find out how to start sending us your listening habits</a></li>
-	<li><a href="http://lists.autonomo.us/mailman/listinfo/libre-fm">Join our mailing list</a></li>
-	<li><a href="http://blog.libre.fm/">Read our blog</a> and <a href="http://identi.ca/mattl">subscribe to Matt (our founder) on identi.ca</a></li>
+	<li><a href="http://ideas.libre.fm/index.php/Using_turtle">{t}Find out how to start sending us your listening habits{/t}</a></li>
+	<li><a href="http://lists.autonomo.us/mailman/listinfo/libre-fm">{t}Join our mailing list{/t}</a></li>
+	<li><a href="http://blog.libre.fm/">{t}Read our blog{/t}</a> {t}and{/t} <a href="http://identi.ca/mattl">{t}subscribe to Matt (our founder) on identi.ca{/t}</a></li>
 	</ul>
 
 
@@ -28,30 +27,30 @@
 	<form action='' method='post'>
 		<fieldset>
 
-			<label for='username'>Your username:<span>(no more than	16 chars.)</span></label>
+			<label for='username'>{t}Your username:{/t}<span>{t}(no more than 16 chars.){/t}</span></label>
 			<input id='username' name='username' type='text' value='{$username}' maxlength='16' />
 
-			<label for='password'>Your password:<span>(make it hard to guess)</span></label>
+			<label for='password'>{t}Your password:{/t}<span>{t}(make it hard to guess){/t}</span></label>
 			<input id='password' name='password' type='password' value=''/>
 
-			<label for='password-repeat'>Your password again<span>(you should repeat it.)</span></label>
+			<label for='password-repeat'>{t}Your password again{/t}<span>{t}(you should repeat it.){/t}</span></label>
 			<input id='password-repeat' name='password-repeat' type='password' value=''/>
 
-			<label for='email'>Your e-mail:<span>(must be valid!)</span></label>
+			<label for='email'>{t}Your e-mail:{/t}<span>{t}(must be valid!){/t}</span></label>
 			<input id='email' name='email' type='text' value='{$email}' maxlength='64' />
 
 		</fieldset>
 
 		<hr />
 
-			<!-- <p class="cc-license">Please note: we plan make your <a href="http://turtle.libre.fm/data/">listening data available</a>, under the <a href="http://wiki.openstreetmap.org/wiki/Open_Database_License">the Open Database License</a>.</p> -->
+			<!-- <p class="cc-license">{t escape=no}Please note: we plan make your <a href="http://turtle.libre.fm/data/">listening data available</a>, under the <a href="http://wiki.openstreetmap.org/wiki/Open_Database_License">the Open Database License</a>.{/t}</p> -->
 
-			<input type='submit' name='register' value="Sign up" />
+			<input type='submit' name='register' value="{t}Sign up{/t}" />
 
 
 	</form>
 
-	<p class="disclaimer">We won't sell, swap or give away your email address. You can optionally include personal data on your profile, which is displayed publically.</p>
+	<p class="disclaimer">{t}We won't sell, swap or give away your email address. You can optionally include personal data on your profile, which is displayed publicly.{/t}</p>
 	
 </div>
 

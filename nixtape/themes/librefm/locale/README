@@ -1,0 +1,7 @@
+You'll need the smarty-gettext package installed (apt-get install smarty-gettext on Debian/Ubuntu)
+
+After changing the translatable strings in the templates run "./update.sh"
+
+After changing translations in the relevant .po files run "./update.sh"
+
+To create a new set of translations for a new locale run "msginit -l en_GB" Where en_GB is replaced by the locale you wish to create.

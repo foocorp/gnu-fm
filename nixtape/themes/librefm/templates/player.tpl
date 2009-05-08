@@ -3,7 +3,7 @@
 		{if $track->streamurl}
 			<object id="fallbackembed" style="width:200px;height:50px;" type="application/ogg" data="{$track->streamurl}"><a type="application/ogg" rel="enclosure" href="{$track->streamurl}">Listen to this track</a></object>
 		{elseif isset($station)}
-			<p>Sorry, you need a browser capable of making use of the HTML 5 &lt;audio&gt; tag to enjoy the streaming service via the JavaScript player.</p>
+			<p>P{t}Sorry, you need a browser capable of making use of the HTML 5 &lt;audio&gt; tag to enjoy the streaming service via the JavaScript player.{/t}</p>
 		{/if}
 	</audio>
 	<div id="interface">
@@ -11,7 +11,7 @@
 			<span id="artistname"></span> - <span id="trackname"></span> <span id="showplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$base_url}/themes/librefm/images/player/show-playlist.png" alt="Show playlist" title="Show playlist" /></a></span><span id="hideplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$base_url}/themes/librefm/images/player/hide-playlist.png" alt="Hide playlist" title="Hide playlist" /></a></span>
 			<div id="playlist">
 				<hr />
-				<strong><u>Playlist</u></strong>
+				<strong><u>{t}Playlist{/t}</u></strong>
 				<ul id="songs">
 				</ul>
 			</div>

@@ -1,10 +1,10 @@
 {include file='header.tpl'}
 
-<h2 property="dc:title">{$me->name|escape:'html':'UTF-8'}'s statistics</h2>
+<h2 property="dc:title">{t name=$me->name|escape:'html':'UTF-8'}%1's statistics{/t}</h2>
 
 {include file='maxiprofile.tpl'}
 
-<h3 id="stats_by_artist">{$me->name|escape:'html':'UTF-8'}'s most played artists</h3>
+<h3 id="stats_by_artist">{t name=$me->name|escape:'html':'UTF-8'}%1's most played artists{/t}</h3>
 <table class="stats_artists" about="{$me->id}">
 	{section name=i loop=$user_playstats}
 	<tr><td class="counts">{$user_playstats[i].count}</td><td class="bar" style="width: {$stat_barwidth}px"><div style="width:{$user_playstats[i].size}px" class="artist"></div></td><td><a
@@ -13,7 +13,7 @@
 	{/section}
 </table>
 
-<h3 id="stats_by_track">{$me->name|escape:'html':'UTF-8'}'s top tracks</h3>
+<h3 id="stats_by_track">{t name=$me->name|escape:'html':'UTF-8'}%1's top tracks{/t}</h3>
 <table class="stats_artists" about="{$me->id}">
 {section name=i loop=$toptracks}
 	<tr>
@@ -31,7 +31,7 @@
 {/section}
 </table>
 
-<h3 id="stats_by_day">{$me->name|escape:'html':'UTF-8'}'s scrobbles by day</h3>
+<h3 id="stats_by_day">{t name=$me->name|escape:'html':'UTF-8'}%1's scrobbles by day{/t}</h3>
 <table class="stats_artists" about="{$me->id}">
 	{section name=i loop=$user_daystats}
 	<tr><td class="counts">{$user_daystats[i].count}</td><td class="bar" style="width: {$stat_barwidth}px"><div style="width:{$user_daystats[i].size}px" class="artist"></div></td><td class="date">{$user_daystats[i].date}</td></tr>
@@ -39,9 +39,9 @@
 </table>
 
 <ul>
-	<li><a href="#stats_by_artist">Most played artists</a></li>
-	<li><a href="#stats_by_track">Top tracks</a></li>
-	<li><a href="#stats_by_day">Scrobbles by day</a></li>
+	<li><a href="#stats_by_artist">{t}Most played artists{/t}</a></li>
+	<li><a href="#stats_by_track">{t}Top tracks{/t}</a></li>
+	<li><a href="#stats_by_day">{t}Scrobbles by day{/t}</a></li>
 </ul>
 
 {include file='footer.tpl'}
