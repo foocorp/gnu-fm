@@ -10,9 +10,9 @@ html{background-color: #ececec;}
 
 #hd ul{ margin: 0; padding: 0; line-height: 70px; position: absolute; top: 0; right: 20px;}
 
-#hd li a:link, #hd li a:visited { color: white; text-decoration: none; }
+#hd li a:link, #hd li a:visited { color: black; text-decoration: none; padding: 5px }
 
-#login a:link, #login a:visited { color: yellow !important; }
+#login a:link, #login a:visited { background-color: maroon; color: yellow !important; text-decoration: underline !important; }
 
 #hd li{ display: inline; font-size: 21px; text-transform: lowercase; font-weight: bold; margin-right: 20px;}
 
