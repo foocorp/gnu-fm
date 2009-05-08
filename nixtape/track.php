@@ -54,5 +54,14 @@ while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
 
 $smarty->assign("albums", $aOtherAlbums);
 
+$smarty->assign('extra_head_links', array(
+		array(
+			'rel' => 'meta',
+			'type' => 'application/rdf+xml' ,
+			'title' => 'Track Metadata',
+			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $track>getURL()))
+			)
+	));
+
 $smarty->display("track.tpl");
 ?>

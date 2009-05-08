@@ -36,6 +36,15 @@ if (!PEAR::isError($aAlbumTracks )) {
 	$smarty->assign("tracks", $aAlbumTracks);
 }
 
+$smarty->assign('extra_head_links', array(
+		array(
+			'rel' => 'meta',
+			'type' => 'application/rdf+xml' ,
+			'title' => 'Album Metadata',
+			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(htmlentities(str_replace($base_url, '', $album>getURL())))
+			)
+	));
+	
 $smarty->display("album.tpl");
 
 
