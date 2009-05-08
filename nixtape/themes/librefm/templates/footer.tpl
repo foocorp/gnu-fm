@@ -12,10 +12,10 @@
 </div></div>
 
 {else}
-</div></div>
+</div>
 {/if}
 
-   <div id="ft" role="navigation">
+   <div id="ft" role="navigation" style="clear:both;">
 
      <ul>
        <li class="copy">&copy; 2009 <a href="http://libre.fm/">Libre.fm</a> Project</li>
