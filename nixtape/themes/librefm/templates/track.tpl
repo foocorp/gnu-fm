@@ -50,7 +50,7 @@
 	
 		<span about="{$albums[i]->id|escape:'html':'UTF-8'}" typeof="mo:Record" property="dc:title" content="{$albums[i]->name|escape:'html':'UTF-8'}">
 			<a rel="foaf:page" rev="foaf:primaryTopic" href="{$albums[i]->getURL()|escape:'html':'UTF-8'}">
-				<img {if $albums[i]->image == false} src="{$base_url}/i/qm160.png"{else}src="{$albums[i]->image|escape:'html':'UTF-8'}" rev="foaf:depiction" resource="{$albums[i]->id|escape:'html':'UTF-8'}"{/if}
+				<img {if $albums[i]->image == false} src="{$base_url}/themes/librefm/images/qm160.png"{else}src="{$albums[i]->image|escape:'html':'UTF-8'}" rev="foaf:depiction" resource="{$albums[i]->id|escape:'html':'UTF-8'}"{/if}
 					alt="{$albums[i]->name|escape:'html':'UTF-8'}" title="{$albums[i]->name|escape:'html':'UTF-8'}" width="160" />
 			</a>
 		</span>
