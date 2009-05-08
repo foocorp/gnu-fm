@@ -1,8 +1,8 @@
 {include file='header.tpl'}
 
 	<div class="yui-gc" style="width: 100%;">
-    <div class="yui-u first" id="new-libre-fm" style="background-color: black;">
-    
+    <div class="yui-u first" id="new-libre-fm" style="background-color: black; color: white;">
+    <div class="inner">
     <h2>New on Libre.fm...</h2>
 
     	   <ul>
@@ -21,7 +21,7 @@
 	   <li>Artist</li>
 	   </ul>
 
-
+   </div>
 </div>
     <div class="yui-u">
 
@@ -35,7 +35,23 @@
 
     {include file='adbard.tpl'}
 
-    Download music...
+    <h2>Libre music downloads...</h2>
+
+    <ul>
+    <li><a href="#">Foo &mdash; Bar</a></li>
+    <li><a href="#">Foo &mdash; Bar</a></li>
+    <li><a href="#">Foo &mdash; Bar</a></li>
+    <li><a href="#">Foo &mdash; Bar</a></li>
+    <li><a href="#">Foo &mdash; Bar</a></li>
+    <li><a href="#">Foo &mdash; Bar</a></li>
+    <li><a href="#">Foo &mdash; Bar</a></li>
+    <li><a href="#">Foo &mdash; Bar</a></li>
+    <li><a href="#">Foo &mdash; Bar</a></li>
+    </ul>
+
+    <p><a href="#">More Libre music downloads...</a></p>
+
+    <p><small><a href="http://creativecommons.org/licenses/by-sa/3.0/">License</a></small></p>
 
     </div>
 
