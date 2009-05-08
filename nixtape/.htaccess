@@ -1,4 +1,4 @@
-Options +FollowSymLinks
+Options +FollowSymLinks -MultiViews
 RewriteEngine on
 
 RewriteRule ^user/([^/]+)/?$					user-profile.php?user=$1                [B,NC]
