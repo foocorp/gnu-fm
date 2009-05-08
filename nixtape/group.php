@@ -49,11 +49,11 @@ $group = new Group($_GET['group']);
 
 if ($_GET['action'] && isset($this_user))
 {
-//	if ($_GET['action'] == 'join')
-//		$group->memberJoin($this_user);
-//	elseif ($_GET['action'] == 'leave')
-//		$group->memberLeave($this_user);
-//
+	if ($_GET['action'] == 'join')
+		$group->memberJoin($this_user);
+	elseif ($_GET['action'] == 'leave')
+		$group->memberLeave($this_user);
+
 	header("Location: " . $group->getURL());
 	exit;
 }
