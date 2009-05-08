@@ -5,6 +5,10 @@
 
 <!-- sidebar -->
 
+       {include file='adbard.tpl'}
+
+       {include file=$sidebar-template}
+
 </div></div>
 
 {else}
