@@ -76,3 +76,5 @@ a:visited{ color: #07c;}
 
 th{background-color: black; color: white;}
 tr.odd{background-color: #edf3fe;}
+
+#try-the-alpha{font-size: 14px; padding: 4px; background-color: #fdca01; text-align: center;}
