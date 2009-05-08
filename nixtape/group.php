@@ -33,7 +33,7 @@ if (! $_GET['group'])
 				'rel' => 'meta',
 				'type' => 'application/rdf+xml' ,
 				'title' => 'FOAF',
-				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities($_SERVER['REQUEST_URI'])
+				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $_SERVER['REQUEST_URI']))
 				)
 		));
 	$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
@@ -87,7 +87,7 @@ if(isset($group->name)) {
 				'rel' => 'meta',
 				'type' => 'application/rdf+xml' ,
 				'title' => 'FOAF',
-				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities($_SERVER['REQUEST_URI'])
+				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $_SERVER['REQUEST_URI']))
 				)
 		));
 	
