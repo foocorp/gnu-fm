@@ -4,7 +4,7 @@
   cellspacing="0" rules="COLS">
 
     <tr>
-      <td colspan="4" width="*" valign="top">
+      <td colspan="3" width="*" valign="top">
         <p class="c1">Banner goes here</p>
       </td>
     </tr>
