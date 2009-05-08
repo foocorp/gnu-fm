@@ -1,7 +1,7 @@
 {include file='header.tpl'}
 
 	<div class="yui-gc" style="width: 100%;">
-    <div class="yui-u first" id="new-libre-fm">
+    <div class="yui-u first" id="new-libre-fm" style="background-color: black;">
     
     <h2>New on Libre.fm...</h2>
 
