@@ -23,22 +23,6 @@ require_once('database.php');
 require_once('templating.php');
 require_once('data/sanitize.php');
 require_once('data/Server.php');
-require_once('data/TagCloud.php');
-
-$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
-if (!PEAR::isError ($aTagCloud)) {
-	$smarty->assign('tagcloud', $aTagCloud);
-}
-
-$aLastScrobbles = Server::getRecentScrobbles(20);
-if (!PEAR::isError ($aLastScrobbles)) {
-	$smarty->assign('recenttracks', $aLastScrobbles);
-}
-
-$aNowPlaying = Server::getNowPlaying(10);
-if (!PEAR::isError ($aNowPlaying)) {
-	$smarty->assign('nowplaying', $aNowPlaying);
-}
 
 $smarty->assign('welcome', true);
 $smarty->display('welcome.tpl');
