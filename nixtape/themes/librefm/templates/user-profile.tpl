@@ -1,7 +1,5 @@
 {include file='header.tpl'}
 
-<h2 property="dc:title">{$me->name|escape:'html':'UTF-8'}'s profile</h2>
-
 {include file='maxiprofile.tpl'}
 
 {if $nowplaying|@count > 0}

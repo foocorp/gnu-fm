@@ -10,6 +10,8 @@
 	</span>
 	{/if}
 
+	<h2 property="dc:title">{$me->name|escape:'html':'UTF-8'}'s profile</h2>
+
 	<dl>
 		<dt>
 			<span class="fn" property="foaf:name">{$me->fullname|escape:'html':'UTF-8'}</span>
