@@ -300,7 +300,7 @@ class Group {
 			$res = $mdb2->query("SELECT u.* "
 				. "FROM Users u "
 				. "INNER JOIN Group_Members gm ON u.username=gm.member "
-				. "WHERE gm.groupname=".$mdb2->quote($this->name,'text')
+				. "WHERE gm.grp=".$mdb2->quote($this->gid,'integer')
 				. " ORDER BY gm.joined");
 			if ($res->numRows())
 			{
