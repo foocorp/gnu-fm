@@ -7,6 +7,7 @@
         </div>
     </div>
 </div>
+</div>
 <div class="yui-g" id="artists">
 
   <strong><a href="http://libre.fm/contact/">Talk to us</a></strong> if you're in a band, represent a
