@@ -227,7 +227,7 @@ h3 {
 .user .avatar img, .group .avatar img
 {
 	position: absolute;
-	top: 8px;
+	top: 3em;
 	left: 8px;
 	border: 1px solid black;
 }
