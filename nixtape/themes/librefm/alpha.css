@@ -206,7 +206,7 @@ h3 {
     -moz-border-radius-bottomright:8px;
     -moz-border-radius-topleft:8px;
     -moz-border-radius-topright:8px;
-    background-color: #EEE;
+    background: #ececec url(/i/bg.png) repeat-x ;
     padding: .5em;
     position: relative;
     margin-bottom: .5em;
