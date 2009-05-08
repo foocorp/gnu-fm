@@ -183,7 +183,7 @@ class Group {
 		// Group owner must be a member of the group
 		$q = sprintf('INSERT INTO Group_Members (grp, member, joined) VALUES (%s, %s, %d)'
 				, $mdb2->quote($grp, 'integer')
-				, $mdb2->quote($owner->name, 'text')
+				, $mdb2->quote($owner->uniqueid, 'integer')
 				, time());
 		$res = $mdb2->query($q);
 		if (PEAR::isError($res))
@@ -208,7 +208,7 @@ class Group {
 				."LEFT JOIN Group_Members gm ON gm.grp=g.id "
 				."GROUP BY g.id, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype) gc "
 				."ON m.grp=gc.id "
-				."WHERE m.member=".$mdb2->quote($user->name, 'text'));
+				."WHERE m.member=".$mdb2->quote($user->uniqueid, 'integer'));
 		}
 		else
 		{
@@ -299,7 +299,7 @@ class Group {
 		{
 			$res = $mdb2->query("SELECT u.* "
 				. "FROM Users u "
-				. "INNER JOIN Group_Members gm ON u.username=gm.member "
+				. "INNER JOIN Group_Members gm ON u.uniqueid=gm.member "
 				. "WHERE gm.grp=".$mdb2->quote($this->gid,'integer')
 				. " ORDER BY gm.joined");
 			if ($res->numRows())
@@ -353,7 +353,7 @@ class Group {
 		global $mdb2;
 		$res = $mdb2->query(sprintf("DELETE FROM Group_Members WHERE grp=%s AND member=%s",
 			$mdb2->quote($this->gid, 'integer'),
-			$mdb2->quote($user->name, 'text')));
+			$mdb2->quote($user->uniqueid, 'integer')));
 		
 		if(PEAR::isError($res))
 			return false;
