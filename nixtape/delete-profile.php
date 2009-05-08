@@ -42,7 +42,7 @@ if ($logged_in == false) {
 		$mdb2->exec("DELETE FROM Scrobble_Sessions WHERE username = ".$mdb2->quote($username, 'text'));
 		$mdb2->exec("DELETE FROM Delete_Request WHERE username = ".$mdb2->quote($username, 'text'));
 		$mdb2->exec("DELETE FROM Auth WHERE username = ".$mdb2->quote($username, 'text'));
-		$mdb2->exec("DELETE FROM Group_Members WHERE member = ".$mdb2->quote($username, 'text'));
+		$mdb2->exec("DELETE FROM Group_Members WHERE member = ".$mdb2->quote($this_user->uniqueid, 'integer'));
 		$mdb2->exec("DELETE FROM Radio_Sessions WHERE username = ".$mdb2->quote($username, 'text'));
 		$mdb2->exec("DELETE FROM Recovery_Request WHERE username = ".$mdb2->quote($username, 'text'));
 		$mdb2->exec("DELETE FROM Scrobbles WHERE username = ".$mdb2->quote($username, 'text'));
