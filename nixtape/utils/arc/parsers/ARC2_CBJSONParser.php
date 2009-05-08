@@ -43,7 +43,7 @@ class ARC2_CBJSONParser extends ARC2_JSONParser {
       /* explicit triples */
       $this->extractResourceRDF($struct, $s);
     }
-    //print_r($struct);
+    ////($struct);
   }
   
   function getStructType($struct, $rel = '') {

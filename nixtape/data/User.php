@@ -139,7 +139,7 @@ class User {
 		
 		if(PEAR::isError($res)) {
 			header("Content-Type: text/plain");
-			print_r($res);
+			//($res);
 			exit;
 		}
 

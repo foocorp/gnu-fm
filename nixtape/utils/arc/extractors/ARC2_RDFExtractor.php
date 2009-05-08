@@ -183,7 +183,7 @@ class ARC2_RDFExtractor extends ARC2_Class {
   }
   
   function getContent($n, $outer = 0, $trim = 1) {
-    //echo '<pre>' . htmlspecialchars(print_r($n, 1)) . '</pre>';
+    //echo '<pre>' . htmlspecialchars(//($n, 1)) . '</pre>';
     if ($n['tag'] == 'comment') {
       $r = '<!-- ' . $n['a']['value'] . ' -->';
     }
