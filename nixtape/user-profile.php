@@ -51,7 +51,7 @@ if(isset($user->name)) {
 	}
 	$smarty->assign('isme', ($this_user->name == $user->name));
 	$smarty->assign('me', $user);
-	$smarty->assign('profile', true);
+	$smarty->assign('sidebar', true);
 	
 	$smarty->assign('extra_head_links', array(
 			array(
@@ -73,7 +73,7 @@ if(isset($user->name)) {
 				'href' => $base_url.'/rdf.php?fmt=xml&page='.htmlentities(str_replace($base_url, '', $user->getURL()))
 				)
 		));
-
+	
 	$smarty->display('user-profile.tpl');
 } else {
 	$smarty->assign('error', 'User not found');
