@@ -27,7 +27,7 @@
 
     <div id="radio">
 
-    <a href="/listen.php"><img src="/i/player.png" title="This is just an example image" /></a>
+    <a href="/listen.php"><img src="/i/player.png" title="This is just an example image" width="300" /></a>
 
     </div>
 
