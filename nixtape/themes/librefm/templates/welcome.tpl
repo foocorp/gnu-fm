@@ -33,7 +33,7 @@
 
 </div>
 </div>
-    <div class="yui-gb" style="width: 100%; clear: both;">
+    <div class="yui-gb" style="width: 100%;">
         <div class="yui-u first">
 Featured artist image
 </div>
