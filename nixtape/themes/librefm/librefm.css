@@ -10,9 +10,9 @@ html{background-color: #ececec;}
 
 #hd ul{ margin: 0; padding: 0; line-height: 70px; position: absolute; top: 0; right: 20px;}
 
-#hd li a:link, #hd li a:visited { color: black; text-decoration: none; padding: 5px }
+#hd li a:link, #hd li a:visited { color: black; text-decoration: none; padding: 7px }
 
-#hd li a:hover{background-color: maroon; text-decoration: underline; color: white;}
+#hd li a:hover{background-color: maroon; color: yellow;}
 
 #login a:link, #login a:visited { color: yellow !important; text-decoration: underline !important; }
 
@@ -71,7 +71,7 @@ li{ line-height: 1.6em; }
 .tagcloud .t5 { font-size: 120%; }
 .tagcloud .t6 { font-size: 100%; }
 
-a:hover { color: red !important; }
+a:hover { color: red; }
 a:visited{ color: #07c;}
 
 .highlight{ background-color: #ffb;}
