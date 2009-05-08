@@ -38,15 +38,10 @@
 	{/section}
 </table>
 
-<!-- Column break -->
-</div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
-
-<h3>{$me->name}'s statistics</h3>
 <ul>
 	<li><a href="#stats_by_artist">Most played artists</a></li>
 	<li><a href="#stats_by_track">Top tracks</a></li>
 	<li><a href="#stats_by_day">Scrobbles by day</a></li>
 </ul>
-<p><strong>More coming soon</strong></p>
 
 {include file='footer.tpl'}
