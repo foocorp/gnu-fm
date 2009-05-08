@@ -61,7 +61,8 @@ if (isset($_POST['install'])) {
 		wikipedia_en varchar(120));");
 
 	$adodb->Execute("CREATE TABLE Users (
-		username VARCHAR(64) PRIMARY KEY,
+		uniqueid SERIAL PRIMARY KEY,
+		username VARCHAR(64),
 		password VARCHAR(32) NOT NULL,
 		email VARCHAR(255),
 		fullname VARCHAR(255),
