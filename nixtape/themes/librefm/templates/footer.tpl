@@ -1,4 +1,3 @@
-    </div></div>
 </div>
 </div>
 <div class="yui-g" id="artists">
