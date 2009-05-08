@@ -12,7 +12,7 @@
 </div></div>
 
 {else}
-</div></div>
+</div>
 {/if}
 
    <div id="ft" role="navigation" style="clear:both;">
