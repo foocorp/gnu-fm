@@ -7,7 +7,7 @@
 
        {include file='adbard.tpl'}     
 
-       {include file=($sidebar-template)}
+       {include file=($sidebartemplate)}
 
 </div></div>
 
