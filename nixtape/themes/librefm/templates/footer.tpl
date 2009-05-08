@@ -5,9 +5,9 @@
 
 <!-- sidebar -->
 
-       {include file='adbard.tpl'}
+       {include file='adbard.tpl'}     
 
-       {include file=$sidebar-template}
+       {include file=($sidebar-template)}
 
 </div></div>
 
