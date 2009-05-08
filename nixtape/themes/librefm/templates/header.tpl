@@ -43,6 +43,17 @@
 
    <div id="bd" role="main">
    <div id="coolio">
+	{if ($logged_in)}
+	<!-- put something here -->
+        {else}
+	{if $welcome}
+	<div class="yui-g" id="banner">     
+	  <a href="{$base_url}/register.php"><img src="{$base_url}/i/intro1.png" alt="" /></a>
+	{else}
+	<div class="yui-g">     
+	  <a href="{$base_url}/register.php"><img src="{$base_url}/themes/librefm/images/topblocksmall.png" alt="" /></a>
+	{/if}
+	</div>{/if}
 <div class="yui-gc">
     <div class="yui-u first" id="content">
     <div style="padding: 10px;">
