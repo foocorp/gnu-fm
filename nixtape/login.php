@@ -47,7 +47,9 @@ if(isset($_POST['login'])) {
 		$res = $mdb2->query('SELECT username FROM Users WHERE '
 			. ' lower(username) = ' . $mdb2->quote(strtolower($username), 'text')
 			. ' AND password = ' . $mdb2->quote(md5($password), 'text') . ' AND active = 1');
-		if(!$res->numRows()) {
+		if(PEAR::isError($res)) {
+			$errors .= 'A database error happened.';
+		} elseif(!$res->numRows()) {
 			$errors .= 'Invalid username or password.';
 		} else {
 			// Give the user a session id, like any other client
@@ -80,7 +82,8 @@ if(isset($logged_in) && $logged_in) {
 		{ $smarty->assign('return', $_REQUEST['return']); }
 	else
 		{ $smarty->assign('return', ''); }
-	
+
+	$smarty->assign('username', $username);
+	$smarty->assign('errors', $errors);
 	$smarty->display('login.tpl');
 }
-?>
