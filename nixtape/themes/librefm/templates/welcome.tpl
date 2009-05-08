@@ -1,7 +1,7 @@
 {include file='header.tpl'}
 
   <table width="*" border="1" bordercolor="#000000" cellpadding="4"
-  cellspacing="0" rules="COLS">
+  cellspacing="0">
 
     <tr>
       <td colspan="3" width="*" valign="top">
@@ -10,7 +10,7 @@
     </tr>
 
     <tr valign="top">
-      <td rowspan="2" width="66%">
+      <td width="66%">
         <p class="c1"><br /></p>
 
         <p class="c1">New on Libre.fm....</p>
