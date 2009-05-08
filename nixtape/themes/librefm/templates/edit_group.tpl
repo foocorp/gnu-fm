@@ -26,7 +26,7 @@ in the best possible terms.</p>
 
 <h2 property="dc:title">{t}Edit your group{/t}</h2>
 
-<p><strong>{t}The form below is still very experimental. Using this may wreck your account!{/t}</strong></p>
+<p><strong>{t}The form below is still very experimental. Using this may wreck your group!{/t}</strong></p>
 
 <form action="{$base_url}/edit_group.php" method="post" class="notcrazy">
 	<table>
@@ -51,6 +51,21 @@ in the best possible terms.</p>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
+			<th align="right" valign="top"><label for="owner">Leader:</label></th>
+			<td>
+				<select name="owner" id="owner">
+				{foreach from=$members item=me}
+				
+					<option {if $me->name==$owner->name}selected="selected"{/if} 
+						value="{$me->name|escape:'html':'UTF-8'}" 
+						>{$me->fullname|escape:'html':'UTF-8'} ({$me->name|escape:'html':'UTF-8'})</option>
+				{/foreach}
+				
+				</select>
+			</td>
+			<td><a href="#dfn_owner" rel="glossary">What's this?</a> <strong>Important!</strong></td>
+		</tr>
+		<tr>
 			<td colspan="3" align="center">
 				<input type="submit" value="Change" />
 				<input name="submit" value="1" type="hidden" />
@@ -65,6 +80,11 @@ in the best possible terms.</p>
 	<dt id="dfn_avatar_uri">Logo URL</dt>
 	<dd>{t}The web address for a picture to represent your group on libre.fm. It should
 	not be more than 80x80 pixels. (64x64 is best.){/t}</dd>
+
+	<dt id="dfn_owner">Leader</dt>
+	<dd>{t}The group leader 'owns' the group and is able to make changes to the group.
+	A group can only have one leader, so if you make someone else the leader, you will
+	no longer be able to edit this group. You will not be able to undo this change!{/t}</dd>
 </dl>
 
 {/if}
