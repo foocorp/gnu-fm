@@ -14,7 +14,7 @@
 
 #player > #interface {
 	background: #980101 url("images/player/background.jpg") repeat-x;
-	width: 300px;
+	width: 280px;
 	border: 1px solid black;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
