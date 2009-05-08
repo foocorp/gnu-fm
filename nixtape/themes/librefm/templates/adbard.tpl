@@ -2,7 +2,7 @@
 
 	    <!--Ad Bard advertisement snippet, begin -->
 
-	    <div style="background-color: yellow; position: absolute; width: 140px; height: 205px; top: 12px"><script type='text/javascript'>
+	    <div style="background-color: yellow; position: absolute; width: 140px; height: 205px; top: 20px"><script type='text/javascript'>
 	     var ab_h = '4bcaab930d3bdfded68fd7be730d7db4';
      	     var ab_s = '55fd9cde6d855a75f9ca43d854272f6b';
      	    </script>
