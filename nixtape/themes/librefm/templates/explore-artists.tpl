@@ -1,6 +1,6 @@
 {include file='header.tpl'}
 
-<h2>Explore popular artists</h2>
+<h2>{t}Explore popular artists{/t}</h2>
 
 <ul id="topartists" class="listcloud">
   {section name=popular loop=$topartists}

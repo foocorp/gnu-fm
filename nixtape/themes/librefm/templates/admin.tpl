@@ -4,9 +4,9 @@
 <hr>
 
 {if isset($sent)}
-<b>Email was sent successfully!</b><br/ >
+<b>{t}Email was sent successfully!{/t}</b><br/ >
 {/if}
-<b>Requests for invites</b>
+<b>{t}Requests for invites{/t}</b>
 <ul id="invites">
 {section name=i loop=$emails}
 {if ($emails[i].status == '0')}
@@ -19,7 +19,7 @@
 {/if}
 {/section}
 </ul><br />
-<b>Invited people</b>
+<b>{t}Invited people{/t}</b>
 <ul id="invitees">
 {section name=i loop=$emails}
 {if ($emails[i].status == '1')}

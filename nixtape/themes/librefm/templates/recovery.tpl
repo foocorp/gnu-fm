@@ -1,17 +1,17 @@
 {include file='header.tpl'}
 
-<h2>Password recovery</h2>
+<h2>{t}Password recovery{/t}</h2>
 
 {if isset($errors)}
 	<p id='errors'>{$errors}</p>
 {/if}
 
 {if isset($changed)}
-	<p>Your new password has been emailed to you.</p>
+	<p>{t}Your new password has been emailed to you.{/t}</p>
 {/if}
 
 {if isset($sent)}
-	<p>An email with further information has been sent to the email address associated with your profile.</p>
+	<p>{t}An email with further information has been sent to the email address associated with your profile.{/t}</p>
 	
 {else}
 
@@ -19,12 +19,12 @@
 
 	<form action='/recovery.php' method='post'>
 		<fieldset>
-	        <p><a href='http://libre.fm' rel='bookmark' class='vcard fn org url'>libre.fm</a> Password Recovery</p>
+	        <p><a href='http://libre.fm' rel='bookmark' class='vcard fn org url'>libre.fm</a> {t}Password Recovery{/t}</p>
 
-			<label for='username'>Username <span>must be valid!</span></label>
+			<label for='username'>{t}Username{/t} <span>{t}must be valid!{/t}</span></label>
 			<input id='username' name='user' type='text' value='' />
 
-			<input type='submit' name='recover' value='Recover my password!'/>
+			<input type='submit' name='recover' value='{t}Recover my password!{/t}'/>
 		</fieldset>
 
 	</form>

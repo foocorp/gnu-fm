@@ -1,6 +1,6 @@
 {include file='header.tpl'}
 
-<h2 property="dc:title">Group: {$fullname|escape:'html':'UTF-8'}</h2>
+<h2 property="dc:title">{t}Group:{/t} {$fullname|escape:'html':'UTF-8'}</h2>
 
 <div about="{$id}" typeof="foaf:Group">
 
@@ -12,12 +12,12 @@
 	{if $logged_in}
 		{if $ismember}
 			{if $isowner}
-			<a class="edit" href="{$link_edit}">[edit]</a>
+			<a class="edit" href="{$link_edit}">[{t}edit{/t}]</a>
 			{else}
-			<form class="edit" action="{$link}" method="get"><div><input type="hidden" name="action" value="leave" /><input type="submit" value=" leave " /></div></form>
+			<form class="edit" action="{$link}" method="get"><div><input type="hidden" name="action" value="leave" /><input type="submit" value=" {t}leave{/t} " /></div></form>
 			{/if}
 		{else}
-			<form class="edit" action="{$link}" method="get"><div><input type="hidden" name="action" value="join" /><input type="submit" value=" join " /></div></form>
+			<form class="edit" action="{$link}" method="get"><div><input type="hidden" name="action" value="join" /><input type="submit" value=" {t}join{/t} " /></div></form>
 		{/if}
 	{/if}
 
@@ -47,7 +47,7 @@
 <!-- Column break -->
 </div></div><div class="yui-u" id="sidebar"><div style="padding: 10px;">
 
-<h3>Top artists</h3>
+<h3>{t}Top artists{/t}</h3>
 <ul class="tagcloud" about="{$id}">
 	{section name=i loop=$group_tagcloud}
 	<li style="font-size:{$group_tagcloud[i].size}"><a

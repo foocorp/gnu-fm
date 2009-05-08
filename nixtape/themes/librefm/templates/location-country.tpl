@@ -1,13 +1,13 @@
 {include file='header.tpl'}
 
-<h2 property="dc:title">Country: {$country_info.country_name|escape:'html':'UTF-8'}</h2>
+<h2 property="dc:title">{t}Country:{/t} {$country_info.country_name|escape:'html':'UTF-8'}</h2>
 
 <div about="#usergroup" typeof="foaf:Group">
 
 <div class="group vcard">
 	<dl>
 		<dt>
-			<span property="foaf:name">Users in {$country_info.country_name|escape:'html':'UTF-8'}</span>
+			<span property="foaf:name">{t country="$country_info.country_name|escape:'html':'UTF-8'"}Users in %1{/t}</span>
 			(<span class="nickname" property="foaf:nick">{$country_info.country|escape:'html':'UTF-8'}</span>)
 		</dt>
 		<dd>{if $country_info.wikipedia_en}<a class="url" rel="foaf:page" href="{$country_info.wikipedia_en|escape:'html':'UTF-8'}">{$country_info.wikipedia_en|escape:'html':'UTF-8'}</a>{/if}</dd>
