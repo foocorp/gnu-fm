@@ -126,7 +126,7 @@ if ($_POST['submit'])
 	if (isset($errors[0]))
 	{
 		header("Content-Type: text/plain");
-		print_r($errors);
+		//($errors);
 		exit;
 	}
 }

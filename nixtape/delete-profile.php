@@ -28,7 +28,7 @@ if ($logged_in == false) {
 	$code = $_GET['code'];
 	$res = $mdb2->query("SELECT * FROM Delete_Request WHERE username = ".$mdb2->quote($username, 'text').' AND code = '.$mdb2->quote($code, 'text'));
 	if (PEAR::isError($res)) {
-		print_r($res);
+		//($res);
 		exit ;
 	}
 	if (!$res->numRows()) {

@@ -649,7 +649,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
       return 1;
     }
     $d_tbls = $this->getDependentJoins($id2);
-    //echo $id . ' :: ' . $id2 . '=>' . print_r($d_tbls, 1);
+    //echo $id . ' :: ' . $id2 . '=>' . //($d_tbls, 1);
     foreach ($d_tbls as $d_tbl) {
       if (preg_match('/^T_' .$id. '\./', $d_tbl)) {
         return 1;
@@ -768,7 +768,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
       $d_joins = $this->getDependentJoins($id);
       $added = array();
       $d_aliases = array();
-      //echo $id . ' =>' . print_r($d_joins, 1);
+      //echo $id . ' =>' . //($d_joins, 1);
       $id_alias = 'T_' . $id . '.s';
       foreach ($d_joins as $alias) {
         if (preg_match('/^(T|V|G)_([0-9\_]+)(_[spo])?\.([a-z\_]+)/', $alias, $m)) {
