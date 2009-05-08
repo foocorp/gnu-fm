@@ -1,11 +1,4 @@
     </div></div>
-    <div class="yui-u" id="sidebar">
-        <div style="padding: 10px;">
-
-	{include file='adbard.tpl'}
-	
-        </div>
-    </div>
 </div>
 </div>
 <div class="yui-g" id="artists">
