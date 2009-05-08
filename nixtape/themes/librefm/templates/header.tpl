@@ -44,8 +44,8 @@
 		{include file='menu.tpl'}
 	</div>
 
-   <div id="bd" role="main">
-  {if ($sidebar)} <div id="yui-main"> 
+
+  {if ($sidebar)}   <div id="bd" role="main"><div id="yui-main"> 
   <div class="yui-b"><div class="yui-g">{else}
    <div id="bd" role="main"> 
     <div class="yui-g">{/if}
