@@ -96,7 +96,7 @@
     </tr>
 
     <tr valign="top" border="0">
-      <td width="*" colspan="3">
+      <td width="*" colspan="4">
         <p class="c1"><br /></p>
       </td>
     </tr>
