@@ -262,14 +262,15 @@ if (isset($_POST['install'])) {
 		PRIMARY KEY (uid1, uid2))");
 
 	$adodb->Execute("CREATE TABLE User_Relationship_Flags (
-		uid1 INTEGER REFERENCES Users(uniqueid),
-		uid2 INTEGER REFERENCES Users(uniqueid),
+		uid1 INTEGER,
+		uid2 INTEGER,
 		flag VARCHAR(12) REFERENCES Relationship_Flags(flag),
-		PRIMARY KEY (uid1, uid2, flag))");
+		PRIMARY KEY (uid1, uid2, flag),
+		FOREIGN KEY (uid1, uid2) REFERENCES User_Relationships (uid1, uid2))");
 
 	$adodb->Execute("CREATE TABLE Relationship_Flags (
 		flag VARCHAR(12),
-		PRIMARY KEY (flag)");
+		PRIMARY KEY (flag))");
 
 	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('contact')");
 	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('acquaintance')");
