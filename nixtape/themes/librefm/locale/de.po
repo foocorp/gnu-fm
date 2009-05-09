@@ -246,7 +246,7 @@ msgstr "Abmeldung"
 
 #: translatable_strings.c:161
 msgid "Listen"
-msgstr "Mithren"
+msgstr "Mithoeren"
 
 #: translatable_strings.c:164
 msgid "Login"
@@ -492,7 +492,7 @@ msgstr ""
 
 #: translatable_strings.c:353
 msgid "Now Playing:"
-msgstr "Jetzt Hrend"
+msgstr "Jetzt Hoerend"
 
 #: translatable_strings.c:356
 msgid "Latest %1 Plays:"
