@@ -16,9 +16,10 @@ class GobbleException(Exception):
 
 class GobbleServer(object):
 
-    def __init__(self, server_name, username, password):
+    def __init__(self, server_name, username, password, client_code='imp'):
         if server_name[:7] != "http://":
             server_name = "http://%s" % (server_name,)
+        self.client_code = client_code
         self.name = server_name
         self.password = password
         self.post_data = []
@@ -32,9 +33,11 @@ class GobbleServer(object):
         timestamp = int(time.time())
         token = (md5hash(md5hash(self.password).hexdigest()
                     + str(timestamp)).hexdigest())
-        auth_url = "%s/?hs=true&p=1.2&u=%s&t=%d&a=%s&c=imp" % (self.name,
-                                                               self.username,
-                                                               timestamp, token)
+        auth_url = "%s/?hs=true&p=1.2&u=%s&t=%d&a=%s&c=%s" % (self.name,
+                                                              self.username,
+                                                              timestamp,
+                                                              token,
+                                                              self.client_code)
         response = urlopen(auth_url).read()
         lines = response.split("\n")
         if lines[0] != "OK":
