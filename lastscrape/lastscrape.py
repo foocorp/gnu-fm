@@ -38,6 +38,10 @@ def parse_track(row):
 def fetch_tracks(user, request_delay=0.5):
     """Fetch all tracks from a profile page and return a list."""
     url = 'http://last.fm/user/%s/tracks' % user
+    try:
+        f = urllib2.urlopen(url)
+    except urllib2.HTTPError:
+        raise Exception("Username probably does not exist.")
     soup = BeautifulSoup(urllib2.urlopen(url),
                          convertEntities=BeautifulSoup.HTML_ENTITIES)
     try:
