@@ -53,6 +53,10 @@ $smarty->template_dir = $install_path . '/themes/'. $default_theme . '/templates
 $smarty->compile_dir = $install_path. '/themes/' . $default_theme . '/templates_c/';
 $smarty->cache_dir = $install_path. '/cache/';
 
+$current_lang = isset($_GET['lang']) ? $_GET['lang'] : $_COOKIE['lang'];
+
+$smarty->assign('current_lang', $current_lang);
+$smarty->assign('current_lang_array', array($current_lang => 1));
 $smarty->assign('base_url', $base_url);
 $smarty->assign('this_page', $_SERVER['REQUEST_URI']);
 $smarty->assign('this_page_absolute',

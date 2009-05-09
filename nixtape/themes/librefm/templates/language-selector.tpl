@@ -1,7 +1,7 @@
 <form method='get' action=''>
 	<select name='lang' id='lang' onchange='this.form.submit()'>
-		<option value='en_US'>{t}English (US){/t}</option>
-		<option value='de_DE'>{t}German (Germany){/t}</option>
+		<option {if $current_lang_array.en_US}selected="selected"{/if} value='en_US'>English (US)</option>
+		<option {if $current_lang_array.de_DE}selected="selected"{/if} value='de_DE'>Deutsch (Deutschland)</option>
 	</select>
 	<noscript>
 		<input type='submit' value='{t}Change Language{/t}' />
