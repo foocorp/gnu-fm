@@ -11,7 +11,13 @@ sys.stdout = codecs.lookup('utf-8')[-1](sys.stdout)
 
 def parse_page(page):
     """Parse a page of recently listened tracks and return a list."""
-    soup = BeautifulSoup(urllib2.urlopen(page), convertEntities=BeautifulSoup.HTML_ENTITIES)
+    try:
+        soup = BeautifulSoup(urllib2.urlopen(page),
+                             convertEntities=BeautifulSoup.HTML_ENTITIES)
+    except:
+        time.sleep(1)
+        soup = BeautifulSoup(urllib2.urlopen(page),
+                             convertEntities=BeautifulSoup.HTML_ENTITIES)
     for row in soup.find('table', 'candyStriped tracklist').findAll('tr'):
         artist, track, timestamp = parse_track(row)
         # Tracks submitted before 2005 have no timestamp
