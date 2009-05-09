@@ -142,7 +142,7 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
   }
   
   function getNodeContent($n, $outer = 0, $trim = 1) {
-    //echo '<pre>' . htmlspecialchars(//($n, 1)) . '</pre>';
+    //echo '<pre>' . htmlspecialchars(print_r($n, 1)) . '</pre>';
     if ($n['tag'] == 'cdata') {
       $r = $n['a']['value'];
     }
@@ -214,7 +214,7 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
   /*  */
   
   function open($p, $t, $a) {
-    //echo "<br />\n".'opening '.$t . ' ' . //($a, 1); flush();
+    //echo "<br />\n".'opening '.$t . ' ' . print_r($a, 1); flush();
     //echo "<br />\n".'opening '.$t; flush();
     $t = strtolower($t);
     /* base check */

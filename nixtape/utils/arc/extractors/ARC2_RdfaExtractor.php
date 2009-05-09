@@ -27,7 +27,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
   /*  */
   
   function extractRDF() {
-    //echo '<pre>' . htmlspecialchars(//($this->nodes, 1)) . '</pre>';
+    //echo '<pre>' . htmlspecialchars(print_r($this->nodes, 1)) . '</pre>';
     if (!isset($this->caller->detected_formats['rdfa'])) return 0;
     $root_node = $this->getRootNode();
     //$base = $this->v('xml:base', $this->getDocBase(), $root_node['a']);

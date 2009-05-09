@@ -53,7 +53,7 @@ class ARC2_AtomParser extends ARC2_LegacyXMLParser {
   function addT($t) {
     //if (!isset($t['o_datatype']))
     if ($this->skip_dupes) {
-      //$h = md5(//($t, 1));
+      //$h = md5(print_r($t, 1));
       $h = md5(serialize($t));
       if (!isset($this->added_triples[$h])) {
         $this->triples[$this->t_count] = $t;
@@ -83,7 +83,7 @@ class ARC2_AtomParser extends ARC2_LegacyXMLParser {
 
   function extractRDF() {
     $index = $this->getNodeIndex();
-    ////($index);
+    //print_r($index);
     $this->rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
     $this->atom = 'http://www.w3.org/2005/atom';
     $this->rss = 'http://purl.org/rss/1.0/';

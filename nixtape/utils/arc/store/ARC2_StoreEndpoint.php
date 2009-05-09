@@ -223,7 +223,7 @@ class ARC2_StoreEndpoint extends ARC2_Store {
     }
     else {
       $this->setHeader('content-type', 'Content-type: text/plain; charset=utf-8');
-      $this->result = 'Result serializer not available, dumping raw data:' . "\n" . //($r, 1);
+      $this->result = 'Result serializer not available, dumping raw data:' . "\n" . print_r($r, 1);
     }
   }
   
@@ -439,7 +439,7 @@ class ARC2_StoreEndpoint extends ARC2_Store {
 
   function getPlainSelectResultDoc($r) {
     $this->setHeader('content-type', 'Content-Type: text/plain');
-    return //($r['result'], 1);
+    return print_r($r['result'], 1);
   }
 
   function getHTMLTableSelectResultDoc($r) {

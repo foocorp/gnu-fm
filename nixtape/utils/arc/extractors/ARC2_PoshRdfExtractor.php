@@ -103,7 +103,7 @@ class ARC2_PoshRdfExtractor extends ARC2_RDFExtractor {
     /* new s */
     if ($this->hasClass($n, 'rdf-s')) {
       $lct['next_s'] = array($n['a']['class'], $this->getSubject($n, $lct));
-      //echo "\ns: " . //($lct['next_s'], 1);
+      //echo "\ns: " . print_r($lct['next_s'], 1);
     }
     /* p */
     if ($this->hasClass($n, 'rdf-p') || $this->hasRel($n, 'rdf-p')) {
