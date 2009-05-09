@@ -56,8 +56,8 @@ class ArtistXML {
 
 		$bio = $artistXml->addChild("bio", null);
 		$bio->addChild("published", $artist->bio_published);
-		$bio->addChild("summary", repamp($artist->bio_summary));
-		$bio->addChild("content", repamp($artist->bio_content));
+		$bio->addChild("summary", $artist->bio_summary);
+		$bio->addChild("content", $artist->bio_content);
 
 		return($xml);
 	}
@@ -72,16 +72,15 @@ class ArtistXML {
 
 		$xml = new SimpleXMLElement("<lfm status=\"ok\"></lfm>");
 		$root = $xml->addChild("toptracks", null);
-		$root->addAttribute("artist", repamp($artist->name));
+		$root->addAttribute("artist", $artist->name);
 
 		$tracks = $artist->getTopTracks(50);
 
 		// Loop over every result and add as children to "toptracks".
-		// Encode trackname as utf8 and replace bad symbols with html-equivalents
 		for($i = 1; $i < count($tracks); $i++) {
 			$track = $root->addChild("track", null);
 			$track->addAttribute("rank", $i);
-			$track->addChild("name", repamp($tracks[$i]->name));
+			$track->addChild("name", $tracks[$i]->name);
 			$track->addChild("mbid", $tracks[$i]->mbid);
 			$track->addChild("playcount", $tracks[$i]->getPlayCount());
 			$track->addChild("listeners", $tracks[$i]->getListenerCount());
