@@ -26,7 +26,7 @@ gettext("Create");
 gettext("Edit your group");
 
 /* ../templates/edit_group.tpl */
-gettext("The form below is still very experimental. Using this may wreck your account!");
+gettext("The form below is still very experimental. Using this may wreck your group!");
 
 /* ../templates/edit_group.tpl */
 gettext("Full name:");
@@ -45,6 +45,9 @@ gettext("Description:");
 
 /* ../templates/edit_group.tpl */
 gettext("The web address for a picture to represent your group on libre.fm. It should\n	not be more than 80x80 pixels. (64x64 is best.)");
+
+/* ../templates/edit_group.tpl */
+gettext("The group leader 'owns' the group and is able to make changes to the group.\n	A group can only have one leader, so if you make someone else the leader, you will\n	no longer be able to edit this group. You will not be able to undo this change!");
 
 /* ../templates/explore-artists.tpl */
 gettext("Explore popular artists");
@@ -109,6 +112,9 @@ gettext("must be valid!");
 /* ../templates/invite.tpl */
 gettext("Let them in!");
 
+/* ../templates/language-selector.tpl */
+gettext("Change Language");
+
 /* ../templates/listen.tpl */
 gettext("To listen to 100% free (libre) music simply enter the type of music you'd like to hear or select one of the common tags below:");
 
@@ -119,7 +125,7 @@ gettext("Custom tag:");
 gettext("Country:");
 
 /* ../templates/location-country.tpl */
-gettext("Users in %1");
+gettext("Users in");
 
 /* ../templates/login.tpl */
 gettext("Username");
@@ -132,6 +138,15 @@ gettext("Remember me");
 
 /* ../templates/login.tpl */
 gettext("Let me in!");
+
+/* ../templates/l.tpl */
+gettext("English (US)");
+
+/* ../templates/l.tpl */
+gettext("German (Germany)");
+
+/* ../templates/l.tpl */
+gettext("Change Language");
 
 /* ../templates/menu.tpl */
 gettext("Register");
