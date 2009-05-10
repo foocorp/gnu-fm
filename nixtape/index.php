@@ -26,12 +26,12 @@ require_once('data/Server.php');
 
 $smarty->assign('welcome', true);
 
-$station = "librefm://globaltags/rock";
+$station = 'librefm://globaltags/rock';
 if(isset($this_user)) {
 	$radio_session = $this_user->getRadioSession($station);
 } else {
 	$radio_session = Server::getRadioSession($station);
 }
-$smarty->assign("radio_session", $radio_session);
+$smarty->assign('radio_session', $radio_session);
 $smarty->display('welcome.tpl');
 ?>

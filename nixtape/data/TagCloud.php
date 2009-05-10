@@ -53,7 +53,7 @@ class TagCloud {
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$res = $adodb->CacheGetAll(7200,$query);
 		if (!$res) {
-			echo('ERROR $query');
+			echo('ERROR ' . $query);
 		} else {
 			foreach($res as $count => &$i) {
 				$i['size'] = $sizes[(int) ($count/(count($res)/7))];

@@ -26,7 +26,7 @@ $page = $_GET['page'];
 $fmt  = $_GET['fmt'];
 
 if (empty($fmt)) $fmt = 'xml';
-if (empty($page)) die("Required parameter 'page' not provided.");
+if (empty($page)) die('Required parameter \'page\' not provided.');
 
 $parser = ARC2::getSemHTMLParser(array('sem_html_formats' => 'rdfa'));
 $parser->parse($base_url . $page);
@@ -49,33 +49,35 @@ $conf = array(
 switch ($fmt)
 {
 	case 'xml' :
-		header("Content-Type: application/rdf+xml");
+		header('Content-Type: application/rdf+xml');
 		$ser = ARC2::getRDFXMLSerializer($conf);
 		break;
 	case 'ttl' :
-		header("Content-Type: application/x-turtle");
+		header('Content-Type: application/x-turtle');
 		$ser = ARC2::getTurtleSerializer($conf);
 		break;
 	case 'rss' :
-		header("Content-Type: application/rss+xml");
+		header('Content-Type: application/rss+xml');
 		$ser = ARC2::getRSS10Serializer($conf);
 		break;
 	case 'json' :
 		if ($_GET['callback'])
-			{ header("Content-Type: text/javascript"); }
+			{ header('Content-Type: text/javascript'); }
 		else 
-			{ header("Content-Type: application/json"); }
+			{ header('Content-Type: application/json'); }
 		$ser = ARC2::getRDFJSONSerializer($conf);
 		break;
 	case 'nt' :
-		header("Content-Type: text/plain");
+		header('Content-Type: text/plain');
 		$ser = ARC2::getNTriplesSerializer($conf);
 		break;
 }
 
-if ($_GET['callback'])
+if ($_GET['callback']) {
 	print $_GET['callback'] . '(';
+}
 print $ser->getSerializedIndex($index);
-if ($_GET['callback'])
+if ($_GET['callback']) {
 	print ');';
+}
 	

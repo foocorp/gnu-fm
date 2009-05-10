@@ -23,7 +23,7 @@ require_once('database.php');
 require_once('templating.php');
 require_once('utils/EmailAddressValidator.php');
 
-echo "<p>Invites are disabled.</p>";
+echo '<p>Invites are disabled.</p>';
 
 /*
 if(!$logged_in) {

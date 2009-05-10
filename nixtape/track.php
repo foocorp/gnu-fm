@@ -26,13 +26,13 @@ require_once('data/Server.php');
 require_once('data/TagCloud.php');
 
 $track = new Track(urldecode($_GET['track']), urldecode($_GET['artist']));
-$smarty->assign("track", $track);
+$smarty->assign('track', $track);
 
 $album = new Album($track->album_name, $track->artist_name);
-$smarty->assign("album", $album);
+$smarty->assign('album', $album);
 
 $artist = new Artist($track->artist_name);
-$smarty->assign("artist", $artist);
+$smarty->assign('artist', $artist);
 
 // no idea how this would be track-relevant
 $aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
@@ -40,19 +40,19 @@ if (!PEAR::isError ($aTagCloud)) {
         $smarty->assign('tagcloud', $aTagCloud);
 }
 
-$res = $mdb2->query("SELECT * FROM Track WHERE lower(artist_name) = " . $mdb2->quote(mb_strtolower($track->artist_name, "UTF-8"),"text") . " AND lower(name) = " . $mdb2->quote(mb_strtolower($track->name, "UTF-8"),"text"));
+$res = $mdb2->query('SELECT * FROM Track WHERE lower(artist_name) = ' . $mdb2->quote(mb_strtolower($track->artist_name, 'UTF-8'), 'text') . ' AND lower(name) = ' . $mdb2->quote(mb_strtolower($track->name, 'UTF-8'), 'text'));
 
 $aOtheralbums = array();
 $i = 0;
 
 while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
 	$trow = sanitize($row);
-	if ($trow["album"]) {
-		$aOtherAlbums[$i++] = new Album($trow["album"], $trow["artist"]);
+	if ($trow['album']) {
+		$aOtherAlbums[$i++] = new Album($trow['album'], $trow['artist']);
 	}
 }
 
-$smarty->assign("albums", $aOtherAlbums);
+$smarty->assign('albums', $aOtherAlbums);
 
 $smarty->assign('extra_head_links', array(
 		array(
@@ -63,5 +63,5 @@ $smarty->assign('extra_head_links', array(
 			)
 	));
 
-$smarty->display("track.tpl");
+$smarty->display('track.tpl');
 ?>

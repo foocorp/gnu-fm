@@ -24,13 +24,13 @@ require_once('auth.php');
 require_once('smarty/Smarty.class.php');
 
 if($_GET['lang']) {
-	$languages = array($_GET['lang'] . ".UTF-8");
-	setcookie('lang', $_GET['lang'] . ".UTF-8", time() + 31536000);
+	$languages = array($_GET['lang'] . '.UTF-8');
+	setcookie('lang', $_GET['lang'] . '.UTF-8', time() + 31536000);
 } elseif (isset($_COOKIE['lang'])) {
 	$languages = array($_COOKIE['lang']);
 } else {
 	// Attempt to mangle browser language strings in to valid gettext locales (needs a big lookup table to be 100% accurate)
-	$languages = preg_split("/,/", $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+	$languages = preg_split('/,/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
 	for($i = 0; $i < count($languages); $i++) {
 		$languages[$i] = preg_replace('/;q=\d\.\d/', '', $languages[$i]);
 		if(strlen($languages[$i]) == 2) {
@@ -40,12 +40,12 @@ if($_GET['lang']) {
 			$languages[$i] = $lcomponents[0]  . '_' . strtoupper($lcomponents[1]);
 		}
 		
-		$languages[$i] = $languages[$i] . ".UTF-8";
+		$languages[$i] = $languages[$i] . '.UTF-8';
 	}
 }
 $current_lang = setlocale(LC_ALL, $languages);
-bindtextdomain("nixtape", $install_path . '/themes/' . $default_theme . '/locale/');
-textdomain("nixtape");
+bindtextdomain('nixtape', $install_path . '/themes/' . $default_theme . '/locale/');
+textdomain('nixtape');
 
 $smarty = new Smarty();
 
@@ -76,7 +76,7 @@ if ($random_group!==false && !PEAR::isError($random_group))
 	$smarty-assign('random_group', $random_group);
 	} */
 
-header("Content-Type: text/html; charset=utf-8");
+header('Content-Type: text/html; charset=utf-8');
 
 function insert_getMenu($lidsid, $smrt) {
 	$smrt->display('menu.tpl');

@@ -21,10 +21,10 @@
 
 require_once('config.php');
 
-if ($_GET['method'] == "scrobble") {
-	$url = $submissions_server . "/submissions/1.2/";
-} elseif ($_GET['method'] == "nowplaying") {
-	$url = $submissions_server . "/nowplaying/1.2/";
+if ($_GET['method'] == 'scrobble') {
+	$url = $submissions_server . '/submissions/1.2/';
+} elseif ($_GET['method'] == 'nowplaying') {
+	$url = $submissions_server . '/nowplaying/1.2/';
 } else {
 	die("Invalid proxy method\n");
 }
@@ -36,7 +36,7 @@ foreach($_POST as $key => $element) {
 	if (is_array($element)) {
 		$i = 0;
 		foreach($element as $e) {
-			$post_vars .= $key . "[" . $i . "]=" . $e . "&";
+			$post_vars .= $key . '[' . $i . ']=' . $e . '&';
 			$i++;
 		}
 	} else {

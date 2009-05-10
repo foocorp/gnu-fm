@@ -20,8 +20,8 @@
 */
 
 
-if(!file_exists(dirname(__FILE__) . "/config.php")) {
-	die("Please run the <a href='install.php'>Install</a> script to configure your installation");
+if(!file_exists(dirname(__FILE__) . '/config.php')) {
+	die('Please run the <a href=\'install.php\'>Install</a> script to configure your installation');
 }
 
 require_once('config.php');
@@ -33,15 +33,15 @@ if (PEAR::isError($mdb2)) {
 }
 
 function reportError($text, $data) {
-    // make a fresh connection
-    $mdbe = MDB2::connect($connect_string);
-    if (PEAR::isError($mdbe)) {
-	    die($mdbe->getMessage());
-    }
-
-    $mdbe->exec("INSERT INTO Error (msg, data, time) VALUES ("
-	. $mdbe->quote($text, 'text') . ", "
-	. $mdbe->quote($data, 'text') . ", "
-	. time() . ")");
+	// make a fresh connection
+	$mdbe = MDB2::connect($connect_string);
+	if (PEAR::isError($mdbe)) {
+		die($mdbe->getMessage());
+	}
+    
+	$mdbe->exec('INSERT INTO Error (msg, data, time) VALUES ('
+		. $mdbe->quote($text, 'text') . ', '
+		. $mdbe->quote($data, 'text') . ', '
+		. time() . ')');
 }
 ?>
