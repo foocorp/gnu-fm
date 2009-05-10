@@ -9,7 +9,7 @@ import sys
 import mutagen
 from mutagen import easyid3
 
-from gobble import GobbleServer, GobbleTrack
+from gobble import get_parser, GobbleServer, GobbleTrack
 
 
 def _parse_date(string):
@@ -21,11 +21,7 @@ def _parse_date(string):
 
 if __name__ == '__main__':
     usage = "%prog [--server <SERVER>] <USERNAME> <START TIME> <MEDIA FILES>"
-    parser = OptionParser(usage=usage)
-    parser.add_option('-s', '--server',
-                      help="Server to submit to.  Defaults to"
-                           " 'turtle.libre.fm'.")
-    parser.set_defaults(server='turtle.libre.fm')
+    parser = get_parser(usage=usage)
     opts,args = parser.parse_args()
     if len(args) < 3:
         parser.error("All arguments are required.")

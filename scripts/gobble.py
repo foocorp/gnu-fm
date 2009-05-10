@@ -4,6 +4,7 @@ try:
 except ImportError:
     import md5
     md5hash = md5.new
+from optparse import OptionParser
 import time
 from urllib import urlencode
 from urllib2 import urlopen
@@ -94,3 +95,12 @@ class GobbleTrack(object):
         if self.mbid is not None:
             data.append(('m[%d]' % i, self.mbid))
         return data
+
+
+def get_parser(usage):
+    parser = OptionParser(usage=usage)
+    parser.add_option('-s', '--server',
+                      help="Server to submit to.  Defaults to"
+                           " 'turtle.libre.fm'.")
+    parser.set_defaults(server='turtle.libre.fm')
+    return parser
