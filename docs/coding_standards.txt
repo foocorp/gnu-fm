@@ -23,12 +23,9 @@ want your patches accepted and modules included in supported releases.
 
 7)	'If' statements need to use the following format:
 
-	if ($var == 'example')
-	{
+	if ($var == 'example') {
 		echo 'This is only an example';
-	} 
-	else
-	{
+	} else {
 		echo 'This is not a test.  This is the real thing';
 	}
 
@@ -46,20 +43,15 @@ want your patches accepted and modules included in supported releases.
 	/**
 	 * This class is for testing
 	 */
-	class ModuleTesting 
-	{
+	class ModuleTesting {
 		/**
 		 * Output the value of $my_var the user
 		 */
-		public function printToScreen()
-		{
+		public function printToScreen()	{
 			$my_var = new Monkey();
-			if ($my_var->name == 'example')
-			{
+			if ($my_var->name == 'example')	{
 				echo 'This is only an example';
-			}
-			else
-			{
+			} else {
 				echo 'This is not a test.  This is the real thing';
 			}
 		}
@@ -67,8 +59,7 @@ want your patches accepted and modules included in supported releases.
 
 10)	Associative arrays must be written in the following manner:
 
-	$array = array 
-	(
+	$array = array (
 		'var'   => 'value',
 		'var2'  => 'value2'
 	);
@@ -98,4 +89,8 @@ want your patches accepted and modules included in supported releases.
 	the closing tag is sent to the browser and cause errors, so don't include
 	them.
 
-18)	If you see code which doesn't comply with the above, please fix it :)
+18)	Translatable strings in templates should be surrounded by a {t} block,
+	(e.g. {t}Translate me!{/t}). See the smarty gettext documentation for more
+	advanced usage.
+
+19)	If you see code which doesn't comply with the above, please fix it :)
