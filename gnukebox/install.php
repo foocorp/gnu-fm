@@ -142,8 +142,8 @@ if (isset($_POST['install'])) {
 		$adodb->Execute("CREATE TABLE Track(
 			id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 			name VARCHAR(255),
-			artist VARCHAR(255) REFERENCES Artist(name),
-			album VARCHAR(255),
+			artist_name VARCHAR(255) REFERENCES Artist(name),
+			album_name VARCHAR(255),
 			mbid VARCHAR(36),
 			duration INTEGER,
 			streamable INTEGER DEFAULT 0,
@@ -156,8 +156,8 @@ if (isset($_POST['install'])) {
 		$adodb->Execute("CREATE TABLE Track(
 			id INTEGER NOT NULL DEFAULT nextval('track_id_seq'::regclass) PRIMARY KEY,
 			name VARCHAR(255),
-			artist VARCHAR(255) REFERENCES Artist(name),
-			album VARCHAR(255),
+			artist_name VARCHAR(255) REFERENCES Artist(name),
+			album_name VARCHAR(255),
 			mbid VARCHAR(36),
 			duration INTEGER,
 			streamable INTEGER DEFAULT 0,
@@ -297,7 +297,7 @@ if (isset($_POST['install'])) {
 // 	$adodb->Execute("CREATE INDEX album_artistname_idx ON Album(artist_name)");
 // 	$adodb->Execute("CREATE INDEX scrobbles_artist_idx ON Scrobbles(artist)");
 //	$adodb->Execute("CREATE INDEX scrobbles_time_idx ON Scrobbles(time)");
-//      $adodb->Execute("CREATE INDEX track_artist_idx ON Track(lower(artist))");
+//      $adodb->Execute("CREATE INDEX track_artist_idx ON Track(lower(artist_name))");
 //      $adodb->Execute("CREATE INDEX track_name_idx ON Track(lower(name))");
 //      $adodb->Execute("CREATE INDEX track_streamable_idx on Track(streamable);");
 //      $adodb->Execute("CREATE INDEX scrobbles_artist_idx on Scrobbles(lower(artist))");
