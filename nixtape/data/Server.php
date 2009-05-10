@@ -144,30 +144,30 @@ class Server {
 		return $result;
 	}
 
-    /**
-     * Retrieves a list of popular artists
-     *
-     * @param int $number The number of artists to return
-     * @return An array of artists or a PEAR_Error in case of failure
-     */
-    static function getTopArtists($number=20) {
-        global $mdb2;
+	/**
+	 * Retrieves a list of popular artists
+	 *
+	 * @param int $number The number of artists to return
+	 * @return An array of artists or a PEAR_Error in case of failure
+	*/
+	static function getTopArtists($number=20) {
+		global $mdb2;
 
-        $res = $mdb2->query("SELECT COUNT(artist) as c, artist FROM Scrobbles GROUP BY artist ORDER BY c DESC LIMIT 20");
+		$res = $mdb2->query("SELECT COUNT(artist) as c, artist FROM Scrobbles GROUP BY artist ORDER BY c DESC LIMIT 20");
 
-        if(PEAR::isError($res)) {
-            return $res;
-        }
+		if(PEAR::isError($res)) {
+			return $res;
+		}
 
-        $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-        foreach($data as $i) {
-            $row = sanitize($i);
-            $row["artisturl"] = Server::getArtistURL($row["artist"]);
-            $result[] = $row;
-        }
+		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+		foreach($data as $i) {
+			$row = sanitize($i);
+			$row["artisturl"] = Server::getArtistURL($row["artist"]);
+			$result[] = $row;
+		}
 
-        return $result;
-    }
+		return $result;
+	}
 
 	/**
 	 * Retrieves a list of the currently playing tracks
