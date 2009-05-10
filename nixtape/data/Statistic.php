@@ -22,88 +22,88 @@ require_once($install_path . '/database.php');
 require_once($install_path . '/data/Server.php');
 
 class Statistic {
-   /*
-    * returns an array counting appareances of a given field and his corresponding bargraph size
-    * @param string $table table name to be queried
-    * @param string $field field name to count
-    * @param integer $limit limit of the query
-    * @param string $constraint username or artistname depending on field
-    * @param integer $maxwidth bargraph max width ( to express visually the number of plays )
-    * inaccurate @param integer $sizes quantity of possible sizes
-    * inaccurate @param float $max_font_size maximum font size (px, em, %, etc)
-    * @return array playstats
-    */
-    static function generatePlayStats($table, $field, $limit = 40, $constraint = null, $maxwidth = 100 ) {
-        global $mdb2;
-        if (!is_string($field))          return false;	
-        if (!is_string($table))          return false;
-        if (!is_integer($limit))         return false;
-    	$query = "SELECT $field, count(*) AS count FROM $table";
-        $query .= (!is_null($constraint)) ? ' WHERE ' : null;
-	if ($field == "track") {
-        $query .= (!is_null($constraint)) ? ' artist = ' . $mdb2->quote($constraint, 'text') : null;
-	} else {
-        $query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
-	}
-        $query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
-        $res = $mdb2->query($query);
-	if (PEAR::isError($res)) {
-        	echo("ERROR" . $res->getMessage());
-	}
+	/*
+	 * returns an array counting appareances of a given field and his corresponding bargraph size
+	 * @param string $table table name to be queried
+	 * @param string $field field name to count
+	 * @param integer $limit limit of the query
+	 * @param string $constraint username or artistname depending on field
+	 * @param integer $maxwidth bargraph max width ( to express visually the number of plays )
+	 * inaccurate @param integer $sizes quantity of possible sizes
+	 * inaccurate @param float $max_font_size maximum font size (px, em, %, etc)
+	 * @return array playstats
+	 */
+	static function generatePlayStats($table, $field, $limit = 40, $constraint = null, $maxwidth = 100 ) {
+		global $mdb2;
+		if (!is_string($field))          return false;	
+		if (!is_string($table))          return false;
+		if (!is_integer($limit))         return false;
+		$query = "SELECT $field, count(*) AS count FROM $table";
+		$query .= (!is_null($constraint)) ? ' WHERE ' : null;
+		if ($field == "track") {
+			$query .= (!is_null($constraint)) ? ' artist = ' . $mdb2->quote($constraint, 'text') : null;
+		} else {
+			$query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
+		}
+		$query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
+		$res = $mdb2->query($query);
+		if (PEAR::isError($res)) {
+			echo("ERROR" . $res->getMessage());
+		}
+	
+		if (!$res->numRows()) {
+			return false;
+		} else {
+			$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+			$max = $data[0]['count'];
 
-        if (!$res->numRows()) {
-        	return false;
-        } else {
-                $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-                $max = $data[0]['count'];
-                
-		        foreach($data as &$i){
-					$i['pageurl'] = Server::getArtistURL($i['artist']);
-					$i['size'] = $i['count'] / $max * $maxwidth;
-                }
-                
-                return $data;
-        }
-    }
+			foreach($data as &$i){
+				$i['pageurl'] = Server::getArtistURL($i['artist']);
+				$i['size'] = $i['count'] / $max * $maxwidth;
+			}
+	
+			return $data;
+		}
+	}
     
 	static function generatePlayByDays($table, $limit = 100, $constraint = null, $maxwidth = 100 ) {
-        global $mdb2;
-        global $connect_string;
-        
-        if (!is_string($table))          return false;
-        if (!is_integer($limit))         return false;
-    	
-        /*
-         * todo: completly remove this dirty db type check. 
-         */
-    	$query = "SELECT COUNT(*) as count, DATE(TO_TIMESTAMP(time)) as date FROM $table";
-    	if( strpos($connect_string , "mysql" ) === 0 ) $query = "SELECT COUNT(*) as count,DATE(FROM_UNIXTIME(time)) as date FROM $table";
-    	
-        $query .= (!is_null($constraint)) ? ' WHERE ' : null;
+		global $mdb2;
+		global $connect_string;
+	
+		if (!is_string($table))          return false;
+		if (!is_integer($limit))         return false;
+	
+		/*
+		 * todo: completly remove this dirty db type check. 
+		 */
+		$query = "SELECT COUNT(*) as count, DATE(TO_TIMESTAMP(time)) as date FROM $table";
+		if( strpos($connect_string , "mysql" ) === 0 ) $query = "SELECT COUNT(*) as count,DATE(FROM_UNIXTIME(time)) as date FROM $table";
+	
+		$query .= (!is_null($constraint)) ? ' WHERE ' : null;
 		$query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
-        $query .= " GROUP BY date ORDER BY date DESC LIMIT $limit";
-        $res = $mdb2->query($query);
+		$query .= " GROUP BY date ORDER BY date DESC LIMIT $limit";
+		$res = $mdb2->query($query);
 		if (PEAR::isError($res)) {
-	        	echo("ERROR" . $res->getMessage());
+			echo("ERROR" . $res->getMessage());
 		}
+	
+		if (!$res->numRows()) {
+			return false; 
+		} else {
+			$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 
-        if (!$res->numRows()) {
-        	return false;
-        } else {
-            $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-            
-            $max = 0;
-                
-		    foreach($data as &$i){
+			$max = 0;
+
+			foreach($data as &$i){
 				if( $i['count'] > $max ) $max =  $i['count'];
-            }
-            
-        	foreach($data as &$i){
+			}
+			
+			foreach($data as &$i){
 				$i['size'] = $i['count'] / $max * $maxwidth;
-            }
-            
-            return $data;
-        }
-    }
+			}
+
+			return $data;
+		}
+	}
 }
 ?>
