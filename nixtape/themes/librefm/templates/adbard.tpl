@@ -1,4 +1,4 @@
-	    <div id="adbard">
+	    <div id="adbard-librefm">
 
 	    <!--Ad Bard advertisement snippet, begin -->
 
