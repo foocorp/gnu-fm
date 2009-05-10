@@ -20,16 +20,16 @@
 
 function radio_title_from_url($url) {
 
-	if(ereg("l(ast|ibre)fm://globaltags/(.*)", $url, $regs)) {
+	if(ereg('l(ast|ibre)fm://globaltags/(.*)', $url, $regs)) {
 		$tag = $regs[2];
-		return "Libre.fm " . ucwords($tag) . " Tag Radio";
+		return 'Libre.fm ' . ucwords($tag) . ' Tag Radio';
 	}
-	if(ereg("l(ast|ibre)fm://artist/(.*)/similarartists", $url, $regs)) {
+	if(ereg('l(ast|ibre)fm://artist/(.*)/similarartists', $url, $regs)) {
 		$artist = $regs[2];
-		return "Libre.fm " . $artist . " Artist Radio";
+		return 'Libre.fm ' . $artist . ' Artist Radio';
 	}
 
-	return "FAILED";
+	return 'FAILED';
 }
 
 ?>
