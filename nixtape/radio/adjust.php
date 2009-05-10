@@ -18,24 +18,24 @@
 
 */
 
-require_once("../database.php");
-require_once("radio-utils.php");
+require_once('../database.php');
+require_once('radio-utils.php');
 
 if(!isset($_GET['session']) || !isset($_GET['url'])) {
 	die("FAILED\n");
 }
 
-$session = $_GET["session"];
-$url = $_GET["url"];
+$session = $_GET['session'];
+$url = $_GET['url'];
 
-$res = $mdb2->query("SELECT username FROM Radio_Sessions WHERE session = " . $mdb2->quote($session, "text"));
+$res = $mdb2->query('SELECT username FROM Radio_Sessions WHERE session = ' . $mdb2->quote($session, 'text'));
 
 if(!$res->numRows()) {
         die("BADSESSION\n");
 }
 
-if(ereg("^(globaltags|artist)/[^:]+$", $url, $regs)) {
-	$url = "librefm://" . $url; // compensate for shell-fm sending incomplete urls
+if(ereg('^(globaltags|artist)/[^:]+$', $url, $regs)) {
+	$url = 'librefm://' . $url; // compensate for shell-fm sending incomplete urls
 }
 
 $stationname=radio_title_from_url($url);
@@ -43,7 +43,7 @@ if($stationname=="FAILED") {
 	die("FAILED Unavailable station\n");
 }
 
-$mdb2->exec("UPDATE Radio_Sessions SET url = " . $mdb2->quote($url, "text") . " WHERE session = " . $mdb2->quote($session, "text"));
+$mdb2->exec('UPDATE Radio_Sessions SET url = ' . $mdb2->quote($url, 'text') . ' WHERE session = ' . $mdb2->quote($session, 'text'));
 
 echo "response=OK\n";
 echo "url=http://libre.fm\n"; // Need to parse the station request and give a real URL
