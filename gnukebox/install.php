@@ -257,8 +257,8 @@ if (isset($_POST['install'])) {
 				WHERE t.streamable = 1");
 
 	$adodb->Execute("CREATE TABLE User_Relationships (
-		uid1 INTEGER REFERENCES Users(uniqueid),
-		uid2 INTEGER REFERENCES Users(uniqueid),
+		uid1 INTEGER REFERENCES Users(uniqueid) ON DELETE CASCADE,
+		uid2 INTEGER REFERENCES Users(uniqueid) ON DELETE CASCADE,
 		established INTEGER NOT NULL,
 		PRIMARY KEY (uid1, uid2))");
 
