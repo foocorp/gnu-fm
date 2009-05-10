@@ -40,20 +40,20 @@ class TagCloud {
 		if (!is_string($table))          return false;
 		if (!is_integer($limit))         return false;
 		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
-		$query = "SELECT $field, count(*) AS count FROM $table";
+		$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table;
 		$query .= (!is_null($constraint)) ? ' WHERE ' : null;
 		if ($constrained_field) {
-			$query .= (!is_null($constraint)) ? " $constrained_field  = " . $adodb->qstr($constraint) : null;
-		} elseif ($field == "track") {
+			$query .= (!is_null($constraint)) ? $constrained_field  . ' = ' . $adodb->qstr($constraint) : null;
+		} elseif ($field == 'track') {
 			$query .= (!is_null($constraint)) ? ' artist = ' . $adodb->qstr($constraint) : null;
 		} else {
 			$query .= (!is_null($constraint)) ? ' username = ' . $adodb->qstr($constraint) : null;
 		}
-		$query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
+		$query .= ' GROUP BY ' . $field . ' ORDER BY count DESC LIMIT ' . $limit;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$res = $adodb->CacheGetAll(7200,$query);
 		if (!$res) {
-			echo("ERROR $query");
+			echo('ERROR $query');
 		} else {
 			foreach($res as $count => &$i) {
 				$i['size'] = $sizes[(int) ($count/(count($res)/7))];

@@ -21,10 +21,10 @@
 
 
 require_once($install_path . '/database.php');
-require_once($install_path . "/data/sanitize.php");
-require_once($install_path . "/data/Album.php");
-require_once($install_path . "/data/Track.php");
-require_once($install_path . "/data/Server.php");
+require_once($install_path . '/data/sanitize.php');
+require_once($install_path . '/data/Album.php');
+require_once($install_path . '/data/Track.php');
+require_once($install_path . '/data/Server.php');
 require_once($install_path . '/utils/linkeddata.php');
 
 /**
@@ -48,22 +48,22 @@ class Artist {
 	function __construct($name, $mbid=false) {
 		global $mdb2;
 
-		$res = $mdb2->query("SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large FROM Artist WHERE "
-			. "mbid = " . $mdb2->quote($mbid, "text") . " OR "
-			. "name = " . $mdb2->quote($name, "text"));
+		$res = $mdb2->query('SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large FROM Artist WHERE '
+			. 'mbid = ' . $mdb2->quote($mbid, 'text') . ' OR '
+			. 'name = ' . $mdb2->quote($name, 'text'));
 		if(!$res->numRows()) {
-			return(new PEAR_Error("No such artist: " . $name));
+			return(new PEAR_Error('No such artist: ' . $name));
 		} else {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
-			$this->name = $row["name"];
-			$this->mbid = $row["mbid"];
-			$this->streamable = $row["streamable"];
-			$this->bio_published = $row["bio_published"];
-			$this->bio_content = $row["bio_content"];
-			$this->bio_summary = $row["bio_summary"];
-			$this->image_small = $row["image_small"];
-			$this->image_medium = $row["image_medium"];
-			$this->image_large = $row["image_large"];
+			$this->name = $row['name'];
+			$this->mbid = $row['mbid'];
+			$this->streamable = $row['streamable'];
+			$this->bio_published = $row['bio_published'];
+			$this->bio_content = $row['bio_content'];
+			$this->bio_summary = $row['bio_summary'];
+			$this->image_small = $row['image_small'];
+			$this->image_medium = $row['image_medium'];
+			$this->image_large = $row['image_large'];
 
 			$this->id = identifierArtist(null, $this->name, null, null, null, null, $this->mbid, null);
 		}
@@ -76,10 +76,10 @@ class Artist {
 	 */
 	function getAlbums() {
 		global $mdb2;
-		$res = $mdb2->query("SELECT name, image FROM Album WHERE artist_name = "
-			. $mdb2->quote($this->name, "text"));
+		$res = $mdb2->query('SELECT name, image FROM Album WHERE artist_name = '
+			. $mdb2->quote($this->name, 'text'));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-			$albums[] = new Album($row["name"], $this->name);
+			$albums[] = new Album($row['name'], $this->name);
 		}
 	      
 		return $albums;
@@ -92,10 +92,10 @@ class Artist {
 	 */
 	function getTracks() {
 		global $mdb2;
-		$res = $mdb2->query("SELECT name FROM Track WHERE artist_name = "
-			. $mdb2->quote($this->name, "text"));
+		$res = $mdb2->query('SELECT name FROM Track WHERE artist_name = '
+			. $mdb2->quote($this->name, 'text'));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-			$tracks[] = new Track($row["name"], $this->name);
+			$tracks[] = new Track($row['name'], $this->name);
 		}
 
 		return $tracks;
@@ -109,13 +109,13 @@ class Artist {
 	 */
 	function getTopTracks($number) {
 		global $mdb2;
-		$res = $mdb2->query("SELECT track, COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE"
-			. " artist = " . $mdb2->quote($this->name, 'text')
-			. " GROUP BY track ORDER BY freq DESC LIMIT " . $mdb2->quote($number, "integer"));
+		$res = $mdb2->query('SELECT track, COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE'
+			. ' artist = ' . $mdb2->quote($this->name, 'text')
+			. ' GROUP BY track ORDER BY freq DESC LIMIT ' . $mdb2->quote($number, 'integer'));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-			$track = new Track($row["track"], $this->name);
-			$track->setPlayCount($row["freq"]);
-			$track->setListenerCount($row["listeners"]);
+			$track = new Track($row['track'], $this->name);
+			$track->setPlayCount($row['freq']);
+			$track->setListenerCount($row['listeners']);
 			$tracks[] = $track;
 		}
 
@@ -128,12 +128,7 @@ class Artist {
 	 * @return A string containing the URL of this artist
 	 */
 	function getURL() {
-		global $friendly_urls, $base_url;
-		if($friendly_urls) {
-			return $base_url . "/artist/" . rawurlencode(stripslashes($this->name));
-		} else {
-			return $base_url . "/artist.php?artist=" . rawurlencode(stripslashes($this->name));
-		}
+		Server::getArtistURL($this->name);
 	}
 
 }

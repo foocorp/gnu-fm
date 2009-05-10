@@ -67,15 +67,15 @@ class User {
 			$this->location     = $row['location'];
 			$this->location_uri = $row['location_uri'];
 			$this->userlevel    = $row['userlevel'];
-			$this->id           = $row["webid_uri"];
-			$this->webid_uri    = $row["webid_uri"];
-			$this->avatar_uri   = $row["avatar_uri"];
-			$this->laconica_profile = $row["laconica_profile"];
-			$this->journal_rss  = $row["journal_rss"];
+			$this->id           = $row['webid_uri'];
+			$this->webid_uri    = $row['webid_uri'];
+			$this->avatar_uri   = $row['avatar_uri'];
+			$this->laconica_profile = $row['laconica_profile'];
+			$this->journal_rss  = $row['journal_rss'];
 			$this->acctid       = $this->getURL() . '#acct';
-			$this->created	    = $row["created"];
-			$this->modified     = $row["modified"];
-			$this->uniqueid     = $row["uniqueid"];
+			$this->created	    = $row['created'];
+			$this->modified     = $row['modified'];
+			$this->uniqueid     = $row['uniqueid'];
 			
 			$this->has_identica = preg_match('#^http://identi\.ca/#i', $this->laconica_profile);
 			
@@ -105,21 +105,21 @@ class User {
 		if (!empty($this->location_uri))
 			$dummy = Server::getLocationDetails($this->location_uri);
 		
-		$q = sprintf("UPDATE Users SET "
-				. "email=%s, "     # Send a confirmation email first??
-				. "password=%s, "
-				. "fullname=%s, "
-				. "homepage=%s, "
-				. "bio=%s, "
-				. "location=%s, "
-				. "userlevel=%d, "
-				. "webid_uri=%s, "
-				. "location_uri=%s, "
-				. "avatar_uri=%s, "
-				. "laconica_profile=%s, "
-				. "journal_rss=%s, "
-				. "modified=%d "
-				. "WHERE username=%s"
+		$q = sprintf('UPDATE Users SET '
+				. 'email=%s, '     # Send a confirmation email first??
+				. 'password=%s, '
+				. 'fullname=%s, '
+				. 'homepage=%s, '
+				. 'bio=%s, '
+				. 'location=%s, '
+				. 'userlevel=%d, '
+				. 'webid_uri=%s, '
+				. 'location_uri=%s, '
+				. 'avatar_uri=%s, '
+				. 'laconica_profile=%s, '
+				. 'journal_rss=%s, '
+				. 'modified=%d '
+				. 'WHERE username=%s'
 				, $mdb2->quote($this->email, 'text')
 				, $mdb2->quote($this->password, 'text')
 				, $mdb2->quote($this->fullname, 'text')
@@ -138,7 +138,7 @@ class User {
 		$res = $mdb2->query($q);
 		
 		if(PEAR::isError($res)) {
-			header("Content-Type: text/plain");
+			header('Content-Type: text/plain');
 			//($res);
 			exit;
 		}
@@ -168,7 +168,7 @@ class User {
 		if (!empty($this->avatar_uri))
 			return $this->avatar_uri;
 	
-		return "http://www.gravatar.com/avatar/" . md5($this->email) . "?s=" . $size . "&d=monsterid";
+		return 'http://www.gravatar.com/avatar/' . md5($this->email) . '?s=' . $size . '&d=monsterid';
 	}
 
 	function getURL($component='profile') {
@@ -192,11 +192,11 @@ class User {
 	function getScrobbleSession() {
 		global $mdb2;
 		$session_id = md5(mt_rand() . time());
-		$sql = "INSERT INTO Scrobble_Sessions(username, sessionid, client, expires) VALUES ("
-			. $mdb2->quote($this->name, "text") . ","
-			. $mdb2->quote($session_id, "text") . ","
-			. "'lfm',"
-			. $mdb2->quote(time() + 86400) . ")";
+		$sql = 'INSERT INTO Scrobble_Sessions(username, sessionid, client, expires) VALUES ('
+			. $mdb2->quote($this->name, 'text') . ','
+			. $mdb2->quote($session_id, 'text') . ','
+			. '\'lfm\','
+			. $mdb2->quote(time() + 86400) . ')';
 		$mdb2->query($sql);
 		return $session_id;
 	}
@@ -219,7 +219,7 @@ class User {
 	function getTopTracks($number=20) {
 		global $mdb2;
 
-		$res = $mdb2->query("SELECT COUNT(track) as c, artist, album, track FROM Scrobbles WHERE username = ".$mdb2->quote($this->name,"text")." GROUP BY artist,album,track ORDER BY c DESC LIMIT $number");
+		$res = $mdb2->query('SELECT COUNT(track) as c, artist, album, track FROM Scrobbles WHERE username = '.$mdb2->quote($this->name,'text').' GROUP BY artist,album,track ORDER BY c DESC LIMIT $number');
 
 	        if(PEAR::isError($res)) {
 	            return $res;
@@ -230,17 +230,17 @@ class User {
 	        $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 	        foreach($data as $i) {
 	            $row = sanitize($i);
-	            $row["artisturl"] = Server::getArtistURL($row["artist"]);
-	            $row["trackurl"] = Server::getTrackURL($row["artist"],$row["album"],$row["track"]);
-		    if ((int)$row["c"] > $maxcount) {
-			$maxcount = (int)$row["c"];
+	            $row['artisturl'] = Server::getArtistURL($row['artist']);
+	            $row['trackurl'] = Server::getTrackURL($row['artist'],$row['album'],$row['track']);
+		    if ((int)$row['c'] > $maxcount) {
+			$maxcount = (int)$row['c'];
 		    }
 	            $result[] = $row;
 	        }
 
 		if ($maxcount > 0) {
 			foreach($result as &$row) {
-			$row["width"]=(int)(100 * ($row["c"]/$maxcount));
+			$row['width']=(int)(100 * ($row['c']/$maxcount));
 			}
 		}
 

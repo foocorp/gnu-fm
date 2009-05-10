@@ -60,12 +60,12 @@ class Album {
 			$this->id = identifierAlbum(null, $this->artist_name, null, $this->name, null, null, null, $this->mbid);
 
 			// this	hack brought to	you by	mattl
-			//if ($row['image'] == ""){
+			//if ($row['image'] == ''){
 			//go_get_album_art($this->artist_name, $this->name);
 			//}
 			// mattl hack ovar
 
-			if($this->image == "") {
+			if($this->image == '') {
 				$this->image = false;
 			}
 		}
@@ -74,7 +74,7 @@ class Album {
 
 	function getPlayCount() {
 		global $mdb2;
-		$res = $mdb2->query("SELECT COUNT(*) AS scrobbles FROM Scrobbles JOIN Track ON Scrobbles.track = Track.name WHERE Scrobbles.artist = "
+		$res = $mdb2->query('SELECT COUNT(*) AS scrobbles FROM Scrobbles JOIN Track ON Scrobbles.track = Track.name WHERE Scrobbles.artist = '
 			. $mdb2->quote($this->artist_name, 'text') . ' AND Track.album_name ='
 			. $mdb2->quote($this->name, 'text'));
 		if(PEAR::isError($res)) {
@@ -122,48 +122,48 @@ class Album {
 function go_get_album_art($artist, $album){
 	global $mdb2;
 
-	$Access_Key_ID = "1EST86JB355JBS3DFE82"; // this is mattl's personal key :)
+	$Access_Key_ID = '1EST86JB355JBS3DFE82'; // this is mattl's personal key :)
 
 	$SearchIndex='Music';
 	$Keywords=urlencode($artist.' '.$album);
-	$Operation = "ItemSearch";
-	$Version = "2007-07-16";
-	$ResponseGroup = "ItemAttributes,Images";
+	$Operation = 'ItemSearch';
+	$Version = '2007-07-16';
+	$ResponseGroup = 'ItemAttributes,Images';
 	$request=
-		"http://ecs.amazonaws.com/onca/xml"
-		. "?Service=AWSECommerceService"
-		. "&AssociateTag=" . $Associate_tag
-		. "&AWSAccessKeyId=" . $Access_Key_ID
-		. "&Operation=" . $Operation
-		. "&Version=" . $Version
-		. "&SearchIndex=" . $SearchIndex
-		. "&Keywords=" . $Keywords
-		. "&ResponseGroup=" . $ResponseGroup;
+		'http://ecs.amazonaws.com/onca/xml'
+		. '?Service=AWSECommerceService'
+		. '&AssociateTag=' . $Associate_tag
+		. '&AWSAccessKeyId=' . $Access_Key_ID
+		. '&Operation=' . $Operation
+		. '&Version=' . $Version
+		. '&SearchIndex=' . $SearchIndex
+		. '&Keywords=' . $Keywords
+		. '&ResponseGroup=' . $ResponseGroup;
 
-	$aws_xml = simplexml_load_file($request) or die("xml response not loading");
+	$aws_xml = simplexml_load_file($request) or die('xml response not loading');
 
 	$image = $aws_xml->Items->Item->MediumImage->URL;
 	$URI = $aws_xml->Items->Item->DetailPageURL;
 	
 	if ($image) {
 
-		if ($license == "") { $license = "amazon"; }
+		if ($license == '') { $license = 'amazon'; }
 
 		$license = $mdb2->quote($license);
 		$image = $mdb2->quote($image);
 		$album = $mdb2->quote($album);
 		$artist = $mdb2->quote($artist);
 
-		$sql = ("UPDATE Album SET image = " 
-			. ($image) . ", "
-			. " artwork_license = "
-			. ($license) . " WHERE artist_name = ". ($artist) 
-			. " AND name = "	. ($album));
+		$sql = ('UPDATE Album SET image = '
+			. ($image) . ', '
+			. ' artwork_license = '
+			. ($license) . ' WHERE artist_name = '. ($artist) 
+			. ' AND name = '	. ($album));
 
 		$res = $mdb2->query($sql);
 
 		if(PEAR::isError($res)) {
-			die("FAILED " . $res->getMessage() . " query was :" . $sql);
+			die('FAILED ' . $res->getMessage() . ' query was :' . $sql);
 		}
 
 	}

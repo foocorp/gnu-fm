@@ -54,7 +54,7 @@ class Group {
 			$res = $mdb2->query('SELECT * FROM Groups WHERE lower(groupname) = ' . $mdb2->quote(strtolower($name), 'text'));
 			
 			if(PEAR::isError($res)) {
-				header("Content-Type: text/plain");
+				header('Content-Type: text/plain');
 				////($res);
 				
 				exit;
@@ -71,7 +71,7 @@ class Group {
 			$this->fullname     = $row['fullname'];
 			$this->homepage     = $row['homepage'];
 			$this->bio          = $row['bio'];
-			$this->avatar_uri   = $row["avatar_uri"];
+			$this->avatar_uri   = $row['avatar_uri'];
 			$this->owner        = User::new_from_uniqueid_number($row['owner']);
 			$this->count        = -1;
 			$this->users        = array();
@@ -139,7 +139,7 @@ class Group {
 
 		if (in_array(strtolower($name), array('new', 'search')))
 		{
-			return (new PEAR_Error("Not allowed to create a group called '$name' (reserved word)!"));
+			return (new PEAR_Error("Not allowed to create a group called '{$name}' (reserved word)!"));
 		}
 		
 		// Check to make sure no existing group with same name (case-insensitive).
@@ -156,8 +156,8 @@ class Group {
 			$existing = $row['groupname'];
 			return (new PEAR_Error(
 					($existing == $name) ?
-					"There is already a group called '$existing'." :
-					"The name '$name' it too similar to existing group '$existing'"
+					"There is already a group called '{$existing}'." :
+					"The name '{$name}' it too similar to existing group '{$existing}'"
 				));
 		}
 		
@@ -182,7 +182,7 @@ class Group {
 		}
 		elseif (!$res->numRows())
 		{
-			return (new PEAR_Error("Something has gone horribly, horribly wrong!"));
+			return (new PEAR_Error('Something has gone horribly, horribly wrong!'));
 		}
 		$grp = $res->fetchOne(0);
 
@@ -207,26 +207,26 @@ class Group {
 
 		if ($user)
 		{
-			$res = $mdb2->query("SELECT gc.* FROM "
-				. "Group_Members m "
-				."INNER JOIN (SELECT g.id, g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count "
-				."FROM Groups g "
-				."LEFT JOIN Group_Members gm ON gm.grp=g.id "
-				."GROUP BY g.id, g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype) gc "
-				."ON m.grp=gc.id "
-				."WHERE m.member=".$mdb2->quote($user->uniqueid, 'integer'));
+			$res = $mdb2->query('SELECT gc.* FROM '
+				.'Group_Members m '
+				.'INNER JOIN (SELECT g.id, g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count '
+				.'FROM Groups g '
+				.'LEFT JOIN Group_Members gm ON gm.grp=g.id '
+				.'GROUP BY g.id, g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype) gc '
+				.'ON m.grp=gc.id '
+				.'WHERE m.member='.$mdb2->quote($user->uniqueid, 'integer'));
 		}
 		else
 		{
-			$res = $mdb2->query("SELECT g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count "
-				."FROM Groups g "
-				."LEFT JOIN Group_Members gm ON gm.grp=g.id "
-				."GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype");
+			$res = $mdb2->query('SELECT g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count '
+				.'FROM Groups g '
+				.'LEFT JOIN Group_Members gm ON gm.grp=g.id '
+				.'GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype');
 		}
 		
 		if(PEAR::isError($res))
 		{
-			header("Content-Type: text/plain");
+			header('Content-Type: text/plain');
 			////($res);
 			exit;
 		}
@@ -246,14 +246,14 @@ class Group {
 	{
 		global $mdb2;
 		
-		$q = sprintf("UPDATE Groups SET "
-				. "owner=%s, "
-				. "fullname=%s, "
-				. "homepage=%s, "
-				. "bio=%s, "
-				. "avatar_uri=%s, "
-				. "modified=%d "
-				. "WHERE groupname=%s"
+		$q = sprintf('UPDATE Groups SET '
+				. 'owner=%s, '
+				. 'fullname=%s, '
+				. 'homepage=%s, '
+				. 'bio=%s, '
+				. 'avatar_uri=%s, '
+				. 'modified=%d '
+				. 'WHERE groupname=%s'
 				, $mdb2->quote($this->owner->uniqueid, 'integer')
 				, $mdb2->quote($this->fullname, 'text')
 				, $mdb2->quote($this->homepage, 'text')
@@ -265,7 +265,7 @@ class Group {
 		$res = $mdb2->query($q);
 		
 		if(PEAR::isError($res)) {
-			header("Content-Type: text/plain");
+			header('Content-Type: text/plain');
 			////($res);
 			exit;
 		}
@@ -283,7 +283,7 @@ class Group {
 		global $base_uri;
 		if (!empty($this->avatar_uri))
 			return $this->avatar_uri;
-		return $base_uri . "themes/" . $default_theme . "/images/qm50.png";
+		return $base_uri . 'themes/' . $default_theme . '/images/qm50.png';
 	}
 
 	function getURL() {
@@ -303,11 +303,11 @@ class Group {
 
 		if (!isset($this->users[0]))
 		{
-			$res = $mdb2->query("SELECT u.* "
-				. "FROM Users u "
-				. "INNER JOIN Group_Members gm ON u.uniqueid=gm.member "
-				. "WHERE gm.grp=".$mdb2->quote($this->gid,'integer')
-				. " ORDER BY gm.joined");
+			$res = $mdb2->query('SELECT u.* '
+				. 'FROM Users u '
+				. 'INNER JOIN Group_Members gm ON u.uniqueid=gm.member '
+				. 'WHERE gm.grp='.$mdb2->quote($this->gid,'integer')
+				. ' ORDER BY gm.joined');
 			if ($res->numRows())
 			{
 				while ($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))
@@ -334,7 +334,7 @@ class Group {
 			return false;
 		
 		global $mdb2;
-		$res = $mdb2->query(sprintf("INSERT INTO Group_Members (grp, member, joined) VALUES (%s, %s, %d)",
+		$res = $mdb2->query(sprintf('INSERT INTO Group_Members (grp, member, joined) VALUES (%s, %s, %d)',
 			$mdb2->quote($this->gid, 'integer'),
 			$mdb2->quote($user->name, 'text'),
 			time()));
@@ -357,7 +357,7 @@ class Group {
 			return false;
 		
 		global $mdb2;
-		$res = $mdb2->query(sprintf("DELETE FROM Group_Members WHERE grp=%s AND member=%s",
+		$res = $mdb2->query(sprintf('DELETE FROM Group_Members WHERE grp=%s AND member=%s',
 			$mdb2->quote($this->gid, 'integer'),
 			$mdb2->quote($user->uniqueid, 'integer')));
 		

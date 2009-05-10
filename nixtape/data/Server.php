@@ -24,10 +24,10 @@ require_once($install_path . '/data/Artist.php');
 // require_once($install_path . '/data/Group.php');
 require_once($install_path . '/data/Track.php');
 require_once($install_path . '/data/User.php');
-require_once($install_path . "/data/sanitize.php");
+require_once($install_path . '/data/sanitize.php');
 require_once($install_path . '/utils/linkeddata.php');
 require_once($install_path . '/utils/arc/ARC2.php');
-require_once($install_path . "/resolve-external.php"); // why isn't this in a subdir?
+require_once($install_path . '/resolve-external.php'); // why isn't this in a subdir?
 require_once($install_path . '/licenses.php'); // why isn't this in a subdir?
 
 /**
@@ -48,7 +48,7 @@ class Server {
 
 		if($username) {
 			$res = $mdb2->query(
-				"SELECT
+				'SELECT
 					s.username, 
 					s.artist, 
 					s.track, 
@@ -70,13 +70,13 @@ class Server {
 					ON s.stid = st.id
 				LEFT JOIN Track t
 					ON st.track = t.id
-				WHERE lower(s.username) = " . $mdb2->quote(strtolower($username), "text") . ' 
+				WHERE lower(s.username) = ' . $mdb2->quote(strtolower($username), 'text') . ' 
 				ORDER BY
 					s.time DESC 
-				LIMIT ' . $mdb2->quote($number, "integer"));
+				LIMIT ' . $mdb2->quote($number, 'integer'));
 		} else {
 			$res = $mdb2->query(
-				"SELECT
+				'SELECT
 					s.username,
 					s.artist, 
 					s.track,
@@ -100,7 +100,7 @@ class Server {
 					ON st.track = t.id
 				ORDER BY
 					s.time DESC 
-				LIMIT " . $mdb2->quote($number, "integer"));
+				LIMIT ' . $mdb2->quote($number, 'integer'));
 		}
 
 		if(PEAR::isError($res)) {
@@ -111,14 +111,15 @@ class Server {
 		foreach($data as $i) {
 			$row = sanitize($i);
 			
-			$row["userurl"] = Server::getUserURL($row["username"]);
-			if ($row['album'])
-				$row["albumurl"] = Server::getAlbumURL($row["artist"], $row["album"]);
-			$row["artisturl"] = Server::getArtistURL($row["artist"]);
-			$row["trackurl"] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
+			$row['userurl'] = Server::getUserURL($row['username']);
+			if ($row['album']) {
+				$row['albumurl'] = Server::getAlbumURL($row['artist'], $row['album']);
+			}
+			$row['artisturl'] = Server::getArtistURL($row['artist']);
+			$row['trackurl'] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
 
   			$row['timehuman'] = human_timestamp($row['time']);
-			$row["timeiso"]   = date('c', (int)$row['time']);
+			$row['timeiso']   = date('c', (int)$row['time']);
 			
 			$row['id']        = identifierScrobbleEvent($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 			$row['id_artist'] = identifierArtist($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
@@ -131,12 +132,12 @@ class Server {
 				$row['album_image'] = resolve_external_url($row['album_image']);
 			}
 
-			if ($row['artwork_license'] == "amazon") {
-				$row['album_image'] = str_replace("SL160","SL50",$row['album_image']);
+			if ($row['artwork_license'] == 'amazon') {
+				$row['album_image'] = str_replace('SL160','SL50',$row['album_image']);
 			}
 
-			$row["licenseurl"] = $row["license"];
-			$row["license"] = simplify_license($row["licenseurl"]);
+			$row['licenseurl'] = $row['license'];
+			$row['license'] = simplify_license($row['licenseurl']);
 			
 			$result[] = $row;
 		}
@@ -153,7 +154,7 @@ class Server {
 	static function getTopArtists($number=20) {
 		global $mdb2;
 
-		$res = $mdb2->query("SELECT COUNT(artist) as c, artist FROM Scrobbles GROUP BY artist ORDER BY c DESC LIMIT 20");
+		$res = $mdb2->query('SELECT COUNT(artist) as c, artist FROM Scrobbles GROUP BY artist ORDER BY c DESC LIMIT 20');
 
 		if(PEAR::isError($res)) {
 			return $res;
@@ -162,7 +163,7 @@ class Server {
 		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 		foreach($data as $i) {
 			$row = sanitize($i);
-			$row["artisturl"] = Server::getArtistURL($row["artist"]);
+			$row['artisturl'] = Server::getArtistURL($row['artist']);
 			$result[] = $row;
 		}
 
@@ -179,7 +180,7 @@ class Server {
 		global $mdb2;
 
 		if($username) {
-			$res = $mdb2->query("SELECT
+			$res = $mdb2->query('SELECT
 						username,
 						n.artist,
 						n.track,
@@ -200,10 +201,10 @@ class Server {
 						AND lower(n.album) = lower(t.album_name)
 						AND lower(n.track) = lower(t.name)
 						AND lower(n.mbid) = lower(t.mbid)
-					WHERE lower(username) = " . $mdb2->quote(strtolower($username), "text") . "
-					ORDER BY t.streamable DESC, n.expires DESC LIMIT " . $mdb2->quote($number, "integer"));
+					WHERE lower(username) = ' . $mdb2->quote(strtolower($username), 'text') . '
+					ORDER BY t.streamable DESC, n.expires DESC LIMIT ' . $mdb2->quote($number, 'integer'));
 		} else {
-			$res = $mdb2->query("SELECT
+			$res = $mdb2->query('SELECT
 						username,
 						n.artist,
 						n.track,
@@ -224,7 +225,7 @@ class Server {
 						AND lower(n.album) = lower(t.album_name)
 						AND lower(n.track) = lower(t.name)
 						AND lower(n.mbid) = lower(t.mbid)
-					ORDER BY t.streamable DESC, n.expires DESC LIMIT " . $mdb2->quote($number, "integer"));
+					ORDER BY t.streamable DESC, n.expires DESC LIMIT ' . $mdb2->quote($number, 'integer'));
 		}
 
 		if(PEAR::isError($res)) {
@@ -235,23 +236,23 @@ class Server {
 		foreach($data as &$i) {
 			$row = sanitize($i);
 			// this logic should be cleaned up and the free/nonfree decision be moved into the smarty templates
-			if($row["name"] == "") {
-				$clientstr = strip_tags(stripslashes($row["client"])) . " (unknown, <a href=\"http://ideas.libre.fm/index.php/Client_Codes\">please tell us what this is</a>)";
+			if($row['name'] == '') {
+				$clientstr = strip_tags(stripslashes($row['client'])) . ' (unknown, <a href=\"http://ideas.libre.fm/index.php/Client_Codes\">please tell us what this is</a>)';
 			} elseif($row["free"] == "Y") {
-				$clientstr = "<a href=\"" . strip_tags(stripslashes($row["url"])) . "\">" . strip_tags(stripslashes($row["name"])) . "</a>";
+				$clientstr = '<a href=\"' . strip_tags(stripslashes($row['url'])) . '\">' . strip_tags(stripslashes($row['name'])) . '</a>';
 			} else {
-				$clientstr = "<a href=\"http://en.wikipedia.org/wiki/Category:Free_media_players\">" . strip_tags(stripslashes($row["name"])) . "</a>";
+				$clientstr = '<a href=\"http://en.wikipedia.org/wiki/Category:Free_media_players\">' . strip_tags(stripslashes($row['name'])) . '</a>';
 			}
-			$row["clientstr"] = $clientstr;
-			$row["userurl"] = Server::getUserURL($row["username"]);
-			$row["artisturl"] = Server::getArtistURL($row["artist"]);
-			$row["trackurl"] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
+			$row['clientstr'] = $clientstr;
+			$row['userurl'] = Server::getUserURL($row['username']);
+			$row['artisturl'] = Server::getArtistURL($row['artist']);
+			$row['trackurl'] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
 			
 			// We really want to get an image URI from the database and only fall back to qm50.png if we can't find an image.
 			$row['albumart'] = $base_url . 'themes/' . $default_theme . '/images/qm50.png';
 
-			$row["licenseurl"] = $row["license"];
-			$row["license"] = simplify_license($row["licenseurl"]);
+			$row['licenseurl'] = $row['license'];
+			$row['license'] = simplify_license($row['licenseurl']);
 			
 			$result[] = $row;
 		}
@@ -271,9 +272,9 @@ class Server {
 		global $friendly_urls, $base_url;
 		if ($component == 'edit')
 		{
-			return $base_url . "/user-edit.php";
+			return $base_url . '/user-edit.php';
 		} elseif ($component == 'delete') {
-			return $base_url . "/delete-profile.php";
+			return $base_url . '/delete-profile.php';
 		}
 		elseif($friendly_urls)
 		{
@@ -281,7 +282,7 @@ class Server {
 				$component = '';
 			else
 				$component = "/{$component}";
-			return $base_url . "/user/" . rawurlencode($username) . $component;
+			return $base_url . '/user/' . rawurlencode($username) . $component;
 		}
 		else
 		{
@@ -292,38 +293,38 @@ class Server {
 	static function getGroupURL($groupname) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . "/group/" . rawurlencode($groupname);
+			return $base_url . '/group/' . rawurlencode($groupname);
 		} else {
-			return $base_url . "/group.php?group=" . rawurlencode($groupname);
+			return $base_url . '/group.php?group=' . rawurlencode($groupname);
 		}
 	}
 
 	static function getArtistURL($artist) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . "/artist/" . rawurlencode($artist);
+			return $base_url . '/artist/' . rawurlencode($artist);
 		} else {
-			return $base_url . "/artist.php?artist=" . rawurlencode($artist);
+			return $base_url . '/artist.php?artist=' . rawurlencode($artist);
 		}
 	}
 
 	static function getAlbumURL($artist, $album) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . "/artist/" . rawurlencode($artist) . "/album/" . rawurlencode($album);
+			return $base_url . '/artist/' . rawurlencode($artist) . '/album/' . rawurlencode($album);
 		} else {
-			return $base_url . "/album.php?artist=" . rawurlencode($artist) . "&album=" . rawurlencode($album);
+			return $base_url . '/album.php?artist=' . rawurlencode($artist) . '&album=' . rawurlencode($album);
 		}
 	}
 
 	static function getTrackURL($artist, $album, $track) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls && $album) {
-			return $base_url . "/artist/" . rawurlencode($artist) . "/album/" . rawurlencode($album) . "/track/" . rawurlencode($track);
+			return $base_url . '/artist/' . rawurlencode($artist) . '/album/' . rawurlencode($album) . '/track/' . rawurlencode($track);
 		} elseif ($friendly_urls) {
-			return $base_url . "/artist/" . rawurlencode($artist) . "/track/" . rawurlencode($track);
+			return $base_url . '/artist/' . rawurlencode($artist) . '/track/' . rawurlencode($track);
 		} else {
-			return $base_url . "/track.php?artist=" . rawurlencode($artist) .   "&album=" . rawurlencode($album) . "&track=" . rawurlencode($track);
+			return $base_url . '/track.php?artist=' . rawurlencode($artist) . '&album=' . rawurlencode($album) . '&track=' . rawurlencode($track);
 		}
 	}
 
@@ -393,16 +394,16 @@ class Server {
 		global $mdb2;
 		$session_id = md5(mt_rand() . time());
 		if($username) {
-			$sql = "INSERT INTO Radio_Sessions(username, session, url, expires) VALUES ("
-				. $mdb2->quote($username, "text") . ","
-				. $mdb2->quote($session_id, "text") . ","
-				. $mdb2->quote($station, "text") . ","
-				. $mdb2->quote(time() + 86400) . ")";
+			$sql = 'INSERT INTO Radio_Sessions(username, session, url, expires) VALUES ('
+				. $mdb2->quote($username, 'text') . ','
+				. $mdb2->quote($session_id, 'text') . ','
+				. $mdb2->quote($station, 'text') . ','
+				. $mdb2->quote(time() + 86400) . ')';
 		} else {
-			$sql = "INSERT INTO Radio_Sessions(session, url, expires) VALUES ("
-				. $mdb2->quote($session_id, "text") . ","
-				. $mdb2->quote($station, "text") . ","
-				. $mdb2->quote(time() + 86400) . ")";
+			$sql = 'INSERT INTO Radio_Sessions(session, url, expires) VALUES ('
+				. $mdb2->quote($session_id, 'text') . ','
+				. $mdb2->quote($station, 'text') . ','
+				. $mdb2->quote(time() + 86400) . ')';
 		}
 		$res = $mdb2->query($sql);
 		return $session_id;
