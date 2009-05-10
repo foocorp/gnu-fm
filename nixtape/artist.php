@@ -28,9 +28,9 @@ require_once('data/TagCloud.php');
 
 $artist = new Artist(urldecode($_GET['artist']));
 
-$smarty->assign("name", $artist->name);
-$smarty->assign("id", $artist->id);
-$smarty->assign("bio_summary", $artist->bio_summary);
+$smarty->assign('name', $artist->name);
+$smarty->assign('id', $artist->id);
+$smarty->assign('bio_summary', $artist->bio_summary);
 
 $aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
 if (!PEAR::isError ($aTagCloud)) {
@@ -39,7 +39,7 @@ if (!PEAR::isError ($aTagCloud)) {
 
 $aArtistAlbums = $artist->getAlbums();
 if (!PEAR::isError($aArtistAlbums)) {
-	$smarty->assign("albums", $aArtistAlbums);
+	$smarty->assign('albums', $aArtistAlbums);
 }
 
 $smarty->assign('extra_head_links', array(

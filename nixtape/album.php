@@ -20,20 +20,20 @@
 */
 
 
-require_once("database.php");
-require_once("templating.php");
-require_once("data/Album.php");
+require_once('database.php');
+require_once('templating.php');
+require_once('data/Album.php');
 
 $album = new Album(urldecode($_GET['album']), urldecode($_GET['artist']));
 $artist = new Artist($album->artist_name);
 
-$smarty->assign("name", $album->name);
-$smarty->assign("id", $album->id);
-$smarty->assign("artist", $artist);
-$smarty->assign("album", $album);
+$smarty->assign('name', $album->name);
+$smarty->assign('id', $album->id);
+$smarty->assign('artist', $artist);
+$smarty->assign('album', $album);
 $aAlbumTracks = $album->getTracks();
 if (!PEAR::isError($aAlbumTracks )) {
-	$smarty->assign("tracks", $aAlbumTracks);
+	$smarty->assign('tracks', $aAlbumTracks);
 }
 
 $smarty->assign('extra_head_links', array(
@@ -45,7 +45,7 @@ $smarty->assign('extra_head_links', array(
 			)
 	));
 	
-$smarty->display("album.tpl");
+$smarty->display('album.tpl');
 
 
 ?>

@@ -34,7 +34,7 @@ else
 	
 if ($_REQUEST['country'])
 {
-	$q = sprintf("SELECT u.* FROM Users u INNER JOIN Places p ON u.location_uri=p.location_uri AND p.country=%s ORDER BY %s() LIMIT 100",
+	$q = sprintf('SELECT u.* FROM Users u INNER JOIN Places p ON u.location_uri=p.location_uri AND p.country=%s ORDER BY %s() LIMIT 100',
 		$mdb2->quote(strtoupper($_REQUEST['country']), 'text'),
 		$random);
 	
@@ -46,7 +46,7 @@ if ($_REQUEST['country'])
 	}
 	
 	$smarty->assign('country', strtoupper($_REQUEST['country']));
-	$res = $mdb2->query(sprintf("SELECT * FROM Countries WHERE country=%s LIMIT 1",
+	$res = $mdb2->query(sprintf('SELECT * FROM Countries WHERE country=%s LIMIT 1',
 		$mdb2->quote(strtoupper($_REQUEST['country']), 'text')));
 	if ( $row = $res->fetchRow(MDB2_FETCHMODE_ASSOC) )
 	{

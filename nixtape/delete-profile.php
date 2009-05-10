@@ -1,32 +1,39 @@
 <?php
+
 /* Libre.fm -- a free network service for sharing your music listening habits
- Copyright (C) 2009 Libre.fm Project
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-require_once ('database.php');
+
+   Copyright (C) 2009 Libre.fm Project
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU Affero General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
 require_once ('templating.php');
 require_once ('data/User.php');
 require_once ('utils/random_code_generator.php');
+
 if ($logged_in == false) {
 	$smarty->assign('error', 'Error!');
 	$smarty->assign('details', 'Not logged in! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
 	die ();
 } elseif ( isset ($_GET['code'])) {
-	$mdb2->exec("DELETE FROM Delete_Request WHERE expires < " . $mdb2->quote(time(), "integer"));
+	$mdb2->exec('DELETE FROM Delete_Request WHERE expires < ' . $mdb2->quote(time(), 'integer'));
 
 	$username = $this_user->name;
 	$code = $_GET['code'];
-	$res = $mdb2->query("SELECT * FROM Delete_Request WHERE username = ".$mdb2->quote($username, 'text').' AND code = '.$mdb2->quote($code, 'text'));
+	$res = $mdb2->query('SELECT * FROM Delete_Request WHERE username = ' . $mdb2->quote($username, 'text') . ' AND code = ' . $mdb2->quote($code, 'text'));
 	if (PEAR::isError($res)) {
 		//($res);
 		exit ;
@@ -38,29 +45,29 @@ if ($logged_in == false) {
 		$smarty->display('error.tpl');
 		die ();
 	} else {
-		$mdb2->exec("DELETE FROM Scrobble_Sessions WHERE username = ".$mdb2->quote($username, 'text'));
-		$mdb2->exec("DELETE FROM Delete_Request WHERE username = ".$mdb2->quote($username, 'text'));
-		$mdb2->exec("DELETE FROM Auth WHERE username = ".$mdb2->quote($username, 'text'));
-		$mdb2->exec("DELETE FROM Group_Members WHERE member = ".$mdb2->quote($this_user->uniqueid, 'integer'));
-		$mdb2->exec("DELETE FROM Radio_Sessions WHERE username = ".$mdb2->quote($username, 'text'));
-		$mdb2->exec("DELETE FROM Recovery_Request WHERE username = ".$mdb2->quote($username, 'text'));
-		$mdb2->exec("DELETE FROM Scrobbles WHERE username = ".$mdb2->quote($username, 'text'));
-		$mdb2->exec("DELETE FROM User_Relationship_Flags WHERE uid1 = ".$mdb2->quote($this_user->uniqueid, 'integer'));
-		$mdb2->exec("DELETE FROM User_Relationship_Flags WHERE uid2 = ".$mdb2->quote($this_user->uniqueid, 'integer'));
-		$mdb2->exec("DELETE FROM User_Relationships WHERE uid1 = ".$mdb2->quote($this_user->uniqueid, 'integer'));
-		$mdb2->exec("DELETE FROM User_Relationships WHERE uid2 = ".$mdb2->quote($this_user->uniqueid, 'integer'));
-		$mdb2->exec("DELETE FROM Users WHERE lower(username) = ".$mdb2->quote(strtolower($username), 'text'));
+		$mdb2->exec('DELETE FROM Scrobble_Sessions WHERE username = ' . $mdb2->quote($username, 'text'));
+		$mdb2->exec('DELETE FROM Delete_Request WHERE username = ' . $mdb2->quote($username, 'text'));
+		$mdb2->exec('DELETE FROM Auth WHERE username = ' . $mdb2->quote($username, 'text'));
+		$mdb2->exec('DELETE FROM Group_Members WHERE member = ' . $mdb2->quote($this_user->uniqueid, 'integer'));
+		$mdb2->exec('DELETE FROM Radio_Sessions WHERE username = ' . $mdb2->quote($username, 'text'));
+		$mdb2->exec('DELETE FROM Recovery_Request WHERE username = ' . $mdb2->quote($username, 'text'));
+		$mdb2->exec('DELETE FROM Scrobbles WHERE username = ' . $mdb2->quote($username, 'text'));
+		$mdb2->exec('DELETE FROM User_Relationship_Flags WHERE uid1 = ' . $mdb2->quote($this_user->uniqueid, 'integer'));
+		$mdb2->exec('DELETE FROM User_Relationship_Flags WHERE uid2 = ' . $mdb2->quote($this_user->uniqueid, 'integer'));
+		$mdb2->exec('DELETE FROM User_Relationships WHERE uid1 = ' . $mdb2->quote($this_user->uniqueid, 'integer'));
+		$mdb2->exec('DELETE FROM User_Relationships WHERE uid2 = ' . $mdb2->quote($this_user->uniqueid, 'integer'));
+		$mdb2->exec('DELETE FROM Users WHERE lower(username) = ' . $mdb2->quote(strtolower($username), 'text'));
 		session_destroy();
-		header("Location: index.php");
+		header('Location: index.php');
 	}
 } else {
 	$code = generateCode();
 	$username = $this_user->name;
 	$email = $this_user->email;
 	$expire = time()+86400;
-	$mdb2->exec("INSERT INTO Delete_Request (code, expires, username) VALUES (".$mdb2->quote($code, 'text').', '.$mdb2->quote($expire, 'text').",".$mdb2->quote($username, 'text').')');
-	$url = $base_url."/delete-profile.php?code=".$code;
-	$content = "Hi!\n\nSomeone from the IP address ".$_SERVER['REMOTE_ADDR']." requested account deletion @ libre.fm.  To remove this account click: \n\n".$url."\n\n- The Libre.fm Team";
+	$mdb2->exec('INSERT INTO Delete_Request (code, expires, username) VALUES (' . $mdb2->quote($code, 'text') . ', ' . $mdb2->quote($expire, 'text') . "," .  $mdb2->quote($username, 'text') . ')');
+	$url = $base_url . '/delete-profile.php?code=' . $code;
+	$content = "Hi!\n\nSomeone from the IP address " . $_SERVER['REMOTE_ADDR'] . " requested account deletion at libre.fm.  To remove this account click: \n\n" . $url . "\n\n- The Libre.fm Team";
 	$headers = 'From: Libre.fm <account@libre.fm>';
 	$subject = 'Libre.fm Account Delete Request - Action needed!';
 	mail($email, $subject, $content, $headers);

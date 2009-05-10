@@ -54,14 +54,14 @@ if ($_GET['action'] && isset($this_user))
 	elseif ($_GET['action'] == 'leave')
 		$group->memberLeave($this_user);
 
-	header("Location: " . $group->getURL());
+	header('Location: ' . $group->getURL());
 	exit;
 }
 
 
 if(isset($group->name)) {
 
-	$smarty->assign("id", $group->id);
+	$smarty->assign('id', $group->id);
 	$smarty->assign('group', $group->name);
 	$smarty->assign('fullname', $group->fullname);
 	$smarty->assign('bio', $group->bio);

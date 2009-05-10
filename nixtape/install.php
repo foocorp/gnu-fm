@@ -23,19 +23,19 @@ require_once('MDB2.php');
 require_once('version.php');
 require_once('utils/get_absolute_url.php');
 
-if(file_exists("config.php")) {
-	die("A configuration file already exists. Please delete <i>config.php</i> if you wish to reinstall.");
+if(file_exists('config.php')) {
+	die('A configuration file already exists. Please delete <i>config.php</i> if you wish to reinstall.');
 }
 
 if (isset($_POST['install'])) {
 
 	//Get the database connection string
 	$dbms = $_POST['dbms'];
-	if($dbms == "sqlite") {
+	if($dbms == 'sqlite') {
 		$filename = $_POST['filename'];
-		$connect_string = "sqlite:///" . $filename;
+		$connect_string = 'sqlite:///' . $filename;
 	} else {
-		$connect_string = $dbms . "://" . $_POST['username'] . ":" . $_POST['password'] . "@" . $_POST['hostname'] . ":" . $_POST['port'] . "/" . $_POST['dbname'];
+		$connect_string = $dbms . '://' . $_POST['username'] . ':' . $_POST['password'] . '@' . $_POST['hostname'] . ':' . $_POST['port'] . '/' . $_POST['dbname'];
 	}
 
 	// Check the connection
@@ -45,7 +45,7 @@ if (isset($_POST['install'])) {
 	}
 	$mdb2->disconnect();
 
-	$install_path = dirname(__FILE__) . "/";
+	$install_path = dirname(__FILE__) . '/';
 
 	$default_theme = $_POST['default_theme'];
 	$base_url = $_POST['base_url'];
@@ -54,16 +54,16 @@ if (isset($_POST['install'])) {
 	//Write out the configuration
 	$config = "<?php\n \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$default_theme = '" . $default_theme . "';\n \$base_url = '" . $base_url . "';\n \$submissions_server = '" . $submissions_server . "';\n \$install_path = '" . $install_path . "'; ";
 
-	$conf_file = fopen("config.php", "w");
+	$conf_file = fopen('config.php', 'w');
 	$result = fwrite($conf_file, $config);
 	fclose($conf_file);
 
 	if(!$result) {
-		$print_config = str_replace("<", "&lt;", $config);
-		die("Unable to write to file '<i>config.php</i>'. Please create this file and copy the following in to it: <br /><pre>" . $print_config . "</pre>");
+		$print_config = str_replace('<', '&lt;', $config);
+		die('Unable to write to file \'<i>config.php</i>\'. Please create this file and copy the following in to it: <br /><pre>' . $print_config . '</pre>');
 	}	
 
-	die("Configuration completed successfully!");
+	die('Configuration completed successfully!');
 }
 
 ?>
@@ -72,13 +72,13 @@ if (isset($_POST['install'])) {
 		<title>Libre.fm Website Installer</title>
 		<script type='text/javascript'>
 			function showSqlite() {
-				document.getElementById("sqlite").style.visibility = "visible";
-				document.getElementById("networkdbms").style.visibility = "hidden";
+				document.getElementById('sqlite').style.visibility = 'visible';
+				document.getElementById('networkdbms').style.visibility = 'hidden';
 			}
 
 			function showNetworkDBMS() {
-				document.getElementById("sqlite").style.visibility = "hidden";
-				document.getElementById("networkdbms").style.visibility = "visible";
+				document.getElementById('sqlite').style.visibility = 'hidden';
+				document.getElementById('networkdbms').style.visibility = 'visible';
 			}
 		</script>
 	</head>
@@ -107,10 +107,10 @@ if (isset($_POST['install'])) {
 			<h2>General</h2>
 			Default Theme: <select name="default_theme">
 			<?php	
-				$dir = opendir("themes");
+				$dir = opendir('themes');
 				while($theme = readdir($dir)) {
-					if(is_dir("themes/" . $theme) && $theme[0] != ".")  {
-						echo "<option>" . $theme . "</option>";
+					if(is_dir('themes/' . $theme) && $theme[0] != '.')  {
+						echo '<option>' . $theme . '</option>';
 					}
 				}
 			?>

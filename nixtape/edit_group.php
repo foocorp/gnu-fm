@@ -41,7 +41,7 @@ if ($_REQUEST['group']=='new')
 
 		if ($result instanceof Group)
 		{
-			header("Location: {$base_url}/edit_group.php?group=".$_REQUEST['new']);
+			header('Location: ' . $base_url . '/edit_group.php?group=' . $_REQUEST['new']);
 			exit();
 		}
 		elseif (PEAR::isError($result))
@@ -84,9 +84,9 @@ if ($_POST['submit'])
 		# Need better URI validation, but this will do for now. I think
 		# PEAR has a suitable module to help out here.
 		if ( !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['homepage']) )
-			$errors[] = "Homepage must be a URI.";
+			$errors[] = 'Homepage must be a URI.';
 		if ( preg_match('/\s/', $_POST['homepage']) )
-			$errors[] = "Homepage must be a URI. Valid URIs cannot contain whitespace.";
+			$errors[] = 'Homepage must be a URI. Valid URIs cannot contain whitespace.';
 	}
 
 	if (!empty($_POST['avatar_uri']))
@@ -94,9 +94,9 @@ if ($_POST['submit'])
 		# Need better URI validation, but this will do for now. I think
 		# PEAR has a suitable module to help out here.
 		if ( !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['avatar_uri']) )
-			$errors[] = "Avatar must be a URI.";
+			$errors[] = 'Avatar must be a URI.';
 		if ( preg_match('/\s/', $_POST['avatar_uri']) )
-			$errors[] = "Avatar must be a URI. Valid URIs cannot contain whitespace.";
+			$errors[] = 'Avatar must be a URI. Valid URIs cannot contain whitespace.';
 	}
 
 	if (!isset($errors[0]))
@@ -125,13 +125,13 @@ if ($_POST['submit'])
 		
 		$group->save();
 
-		header("Location: " . $group->getURL());
+		header('Location: ' . $group->getURL());
 		exit;
 	}
 
 	if (isset($errors[0]))
 	{
-		header("Content-Type: text/plain");
+		header('Content-Type: text/plain');
 		//($errors);
 		exit;
 	}

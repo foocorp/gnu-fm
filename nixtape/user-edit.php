@@ -41,9 +41,9 @@ if ($_POST['submit'])
 		# Need better URI validation, but this will do for now. I think
 		# PEAR has a suitable module to help out here.
 		if ( !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['id']) )
-			$errors[] = "WebID must be a URI.";
+			$errors[] = 'WebID must be a URI.';
 		if ( preg_match('/\s/', $_POST['id']) )
-			$errors[] = "WebID must be a URI. Valid URIs cannot contain whitespace.";
+			$errors[] = 'WebID must be a URI. Valid URIs cannot contain whitespace.';
 	}
 
 	if (!empty($_POST['homepage']))
@@ -51,9 +51,9 @@ if ($_POST['submit'])
 		# Need better URI validation, but this will do for now. I think
 		# PEAR has a suitable module to help out here.
 		if ( !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['homepage']) )
-			$errors[] = "Homepage must be a URI.";
+			$errors[] = 'Homepage must be a URI.';
 		if ( preg_match('/\s/', $_POST['homepage']) )
-			$errors[] = "Homepage must be a URI. Valid URIs cannot contain whitespace.";
+			$errors[] = 'Homepage must be a URI. Valid URIs cannot contain whitespace.';
 	}
 
 	if (!empty($_POST['avatar_uri']))
@@ -61,9 +61,9 @@ if ($_POST['submit'])
 		# Need better URI validation, but this will do for now. I think
 		# PEAR has a suitable module to help out here.
 		if ( !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['avatar_uri']) )
-			$errors[] = "Avatar must be a URI.";
+			$errors[] = 'Avatar must be a URI.';
 		if ( preg_match('/\s/', $_POST['avatar_uri']) )
-			$errors[] = "Avatar must be a URI. Valid URIs cannot contain whitespace.";
+			$errors[] = 'Avatar must be a URI. Valid URIs cannot contain whitespace.';
 	}
 
 	if (!empty($_POST['laconica_profile']))
@@ -71,9 +71,9 @@ if ($_POST['submit'])
 		# Need better URI validation, but this will do for now. I think
 		# PEAR has a suitable module to help out here.
 		if ( !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['laconica_profile']) )
-			$errors[] = "Laconica profile must be a URI.";
+			$errors[] = 'Laconica profile must be a URI.';
 		if ( preg_match('/\s/', $_POST['laconica_profile']) )
-			$errors[] = "Laconica profile must be a URI. Valid URIs cannot contain whitespace.";
+			$errors[] = 'Laconica profile must be a URI. Valid URIs cannot contain whitespace.';
 	}
 
 	if (!empty($_POST['journal_rss']))
@@ -81,15 +81,15 @@ if ($_POST['submit'])
 		# Need better URI validation, but this will do for now. I think
 		# PEAR has a suitable module to help out here.
 		if ( !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['journal_rss']) )
-			$errors[] = "Journal RSS must be a URI.";
+			$errors[] = 'Journal RSS must be a URI.';
 		if ( preg_match('/\s/', $_POST['journal_rss']) )
-			$errors[] = "Journal RSS must be a URI. Valid URIs cannot contain whitespace.";
+			$errors[] = 'Journal RSS must be a URI. Valid URIs cannot contain whitespace.';
 	}
 
 	if (!empty($_POST['password_1']))
 	{
 		if ($_POST['password_1'] != $_POST['password_2'])
-			$errors[] = "Passwords do not match.";
+			$errors[] = 'Passwords do not match.';
 	}
 
 	if (!empty($_POST['location_uri']))
@@ -97,7 +97,7 @@ if ($_POST['submit'])
 		# Currently only allow geonames URIs, but there's no reason we can't accept
 		# others at some point in the future. (e.g. dbpedia)
 		if ( !preg_match('/^http:\/\/sws.geonames.org\/[0-9]+\/$/', $_POST['location_uri']) )
-			$errors[] = "This should be a geonames.org semantic web service URI.";
+			$errors[] = 'This should be a geonames.org semantic web service URI.';
 	}
 
 	if (!isset($errors[0]))
@@ -119,13 +119,13 @@ if ($_POST['submit'])
 		
 		$this_user->save();
 
-		header("Location: " . $this_user->getURL());
+		header('Location: ' . $this_user->getURL());
 		exit;
 	}
 
 	if (isset($errors[0]))
 	{
-		header("Content-Type: text/plain");
+		header('Content-Type: text/plain');
 		//($errors);
 		exit;
 	}
@@ -134,7 +134,7 @@ if ($_POST['submit'])
 if(isset($this_user->name))
 {
 	# Stuff which cannot be changed.
-	$smarty->assign("acctid", $this_user->acctid);
+	$smarty->assign('acctid', $this_user->acctid);
 	$smarty->assign('avatar', $this_user->getAvatar());
 	$smarty->assign('user',   $this_user->name);
 
@@ -146,7 +146,7 @@ if(isset($this_user->name))
 	
 	if ($_POST['submit'])
 	{
-		$smarty->assign("id",           $_POST['id']);
+		$smarty->assign('id',           $_POST['id']);
 		$smarty->assign('fullname',     $_POST['fullname']);
 		$smarty->assign('bio',          $_POST['bio']);
 		$smarty->assign('homepage',     $_POST['homepage']);
@@ -158,7 +158,7 @@ if(isset($this_user->name))
 	}
 	else
 	{
-		$smarty->assign("id",           ($this_user->webid_uri));
+		$smarty->assign('id',           ($this_user->webid_uri));
 		$smarty->assign('fullname',     ($this_user->fullname));
 		$smarty->assign('bio',          ($this_user->bio));
 		$smarty->assign('homepage',     ($this_user->homepage));

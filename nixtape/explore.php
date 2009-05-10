@@ -34,9 +34,9 @@ if (!PEAR::isError ($aTagCloud)) {
 
 $aTopArtists = Server::getTopArtists(20);
 if (!PEAR::isError ($aTopArtists)) {
-    $smarty->assign("topartists", $aTopArtists);
+    $smarty->assign('topartists', $aTopArtists);
 }
-$smarty->assign("explore", true);
-$smarty->display("explore-artists.tpl");
+$smarty->assign('explore', true);
+$smarty->display('explore-artists.tpl');
 
 ?>

@@ -28,65 +28,65 @@ $username = $u_user->name;
 $userlevel = $u_user->userlevel;
 
 function sendEmail($email) {
-    global $mdb2;
-    global $base_url;
-    global $u_user;	
-    $username = $u_user->name;
-    $code = md5(md5($username) . time());
+	global $mdb2;
+	global $base_url;
+	global $u_user;	
+	$username = $u_user->name;
+	$code = md5(md5($username) . time());
 
-    // Insert the invitation into the table
-    $sql = 'INSERT INTO Invitations (inviter, code) VALUES (' 
-	. $mdb2->quote($username, 'text') . ', ' 
-	. $mdb2->quote($code, 'text') . ')';
-
-    $affected =& $mdb2->exec($sql);
-
-    if (PEAR::isError($affected)) {
-	    die($affected->getMessage());
-    }
-      
-    $url = $base_url . '/register.php?authcode=' . $code;
-    $headers = 'From: Libre.fm Invitations <invitations@libre.fm>';
-    $subject = 'Libre.fm Invitation';
-    $body = 'Hi!' . "\n\n" . 'You requested an invite to libre.fm, and here it is! Just click the link and fill in your details.';
-    $body .= "\n\n" . $url;
-    $body .= "\n\n - The Libre.fm Team";
-    mail($email, $subject, $body, $headers);
-    unset($url, $subject, $body, $headers);
-}
-
-if ($userlevel < 2) {	
-    $smarty->assign("error", "Error!");
-    $smarty->assign("details", "Invalid privileges.");
-    $smarty->display("error.tpl");
-    die();
-} else {
-    $action = $_GET['action'];
-    if (isset($action)) {
-	if ($action == "invite") {
-	    if (!isset($_GET['email'])) {	
-	        $smarty->assign("error", "Error!");
-	        $smarty->assign("details", "Missing email.");
-		$smarty->display("error.tpl");
-		die();
-	    } else {
-		// Send the email
-		sendEmail($_GET['email']);
-		$smarty->assign('sent', true);
-		$sql = "UPDATE Invitation_Request SET status=1 WHERE email=" . $mdb2->quote($_GET['email'], 'text');
-		$mdb2->exec($sql);
-	    }
-	} else {
-	    $smarty->assign('error', "Error!");
-	    $smarty->assign('error', 'Missing argument!');
-	    $smarty->display('error.tpl');
-	    die();
-	}
-    }
+	// Insert the invitation into the table
+	$sql = 'INSERT INTO Invitations (inviter, code) VALUES (' 
+		. $mdb2->quote($username, 'text') . ', ' 
+		. $mdb2->quote($code, 'text') . ')';
     
+	$affected =& $mdb2->exec($sql);
+    
+	if (PEAR::isError($affected)) {
+		die($affected->getMessage());
+	}
+
+	$url = $base_url . '/register.php?authcode=' . $code;
+	$headers = 'From: Libre.fm Invitations <invitations@libre.fm>';
+	$subject = 'Libre.fm Invitation';
+	$body = 'Hi!' . "\n\n" . 'You requested an invite to libre.fm, and here it is! Just click the link and fill in your details.';
+	$body .= "\n\n" . $url;
+	$body .= "\n\n - The Libre.fm Team";
+	mail($email, $subject, $body, $headers);
+	unset($url, $subject, $body, $headers);
 }
 
-$res = $mdb2->query("SELECT email,status FROM Invitation_Request ORDER BY time ASC");
+if ($userlevel < 2) {
+	$smarty->assign('error', 'Error!');
+	$smarty->assign('details', 'Invalid privileges.');
+	$smarty->display('error.tpl');
+	die();
+} else {
+	$action = $_GET['action'];
+	if (isset($action)) {
+		if ($action == 'invite') {
+			if (!isset($_GET['email'])) {	
+				$smarty->assign('error', 'Error!');
+				$smarty->assign('details', 'Missing email.');
+				$smarty->display('error.tpl');
+				die();
+			} else {
+				// Send the email
+				sendEmail($_GET['email']);
+				$smarty->assign('sent', true);
+				$sql = 'UPDATE Invitation_Request SET status=1 WHERE email=' . $mdb2->quote($_GET['email'], 'text');
+				$mdb2->exec($sql);
+			}
+		} else {
+			$smarty->assign('error', 'Error!');
+			$smarty->assign('error', 'Missing argument!');
+			$smarty->display('error.tpl');
+			die();
+		}
+	}
+
+}
+
+$res = $mdb2->query('SELECT email,status FROM Invitation_Request ORDER BY time ASC');
 $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 $smarty->assign('emails', $data);
 $smarty->display('admin.tpl');
