@@ -56,6 +56,8 @@ $smarty->cache_dir = $install_path. '/cache/';
 $current_lang = preg_replace('/.UTF-8/', '', $current_lang);
 
 $smarty->assign('current_lang', $current_lang);
+$smarty->assign('lang_selector_array',
+	array((isset($_GET['lang'])?$_GET['lang']:$_COOKIE['lang']) => 1));
 $smarty->assign('base_url', $base_url);
 $smarty->assign('this_page', $_SERVER['REQUEST_URI']);
 $smarty->assign('this_page_absolute',
