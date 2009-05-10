@@ -21,11 +21,11 @@
 
 
 require_once($install_path . '/database.php');
-require_once($install_path . "/data/Artist.php");
-require_once($install_path . "/data/Album.php");
-require_once($install_path . "/data/Server.php");
-require_once($install_path . "/resolve-external.php");
-require_once($install_path . "/licenses.php");
+require_once($install_path . '/data/Artist.php');
+require_once($install_path . '/data/Album.php');
+require_once($install_path . '/data/Server.php');
+require_once($install_path . '/resolve-external.php');
+require_once($install_path . '/licenses.php');
 require_once($install_path . '/utils/linkeddata.php');
 
 /**
@@ -48,23 +48,23 @@ class Track {
 	 */
 	function __construct($name, $artist) {
 		global $mdb2;
-		$res = $mdb2->query("SELECT name, artist_name, album_name, duration, streamable, license, downloadurl, streamurl, mbid FROM Track WHERE "
-			. "name = " . $mdb2->quote($name, "text") . " AND "
-			. "artist_name = " . $mdb2->quote($artist, "text"));
+		$res = $mdb2->query('SELECT name, artist_name, album_name, duration, streamable, license, downloadurl, streamurl, mbid FROM Track WHERE '
+			. 'name = ' . $mdb2->quote($name, 'text') . ' AND '
+			. 'artist_name = ' . $mdb2->quote($artist, 'text'));
 		if(!$res->numRows()) {
-			$this->name = "No such track: " . $name;
+			$this->name = 'No such track: ' . $name;
 		} else {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
-			$this->name = $row["name"];
-			$this->mbid = $row["mbid"];
-			$this->artist_name = $row["artist_name"];
-			$this->album_name = $row["album_name"];
-			$this->duration = $row["duration"];
-			$this->streamable = $row["streamable"];
-			$this->license = simplify_license($row["license"]);
-			$this->licenseurl = $row["license"];
-			$this->downloadurl = resolve_external_url($row["downloadurl"]);
-			$this->streamurl = resolve_external_url($row["streamurl"]);
+			$this->name = $row['name'];
+			$this->mbid = $row['mbid'];
+			$this->artist_name = $row['artist_name'];
+			$this->album_name = $row['album_name'];
+			$this->duration = $row['duration'];
+			$this->streamable = $row['streamable'];
+			$this->license = simplify_license($row['license']);
+			$this->licenseurl = $row['license'];
+			$this->downloadurl = resolve_external_url($row['downloadurl']);
+			$this->streamurl = resolve_external_url($row['streamurl']);
 			
 			$this->id = identifierTrack(null, $this->artist_name, $this->name, $this->album_name, null, $this->mbid, null, null);
 		}
@@ -120,10 +120,10 @@ class Track {
 	private function _getPlayCountAndListenerCount() {
 		global $mdb2;
 
-		$res = $mdb2->query("SELECT COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE"
-			. " artist = " . $mdb2->quote($this->artist_name, 'text') 
-			. " AND track = " . $mdb2->quote($this->name, "text")
-			. " GROUP BY track ORDER BY freq DESC");
+		$res = $mdb2->query('SELECT COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE'
+			. ' artist = ' . $mdb2->quote($this->artist_name, 'text') 
+			. ' AND track = ' . $mdb2->quote($this->name, 'text')
+			. ' GROUP BY track ORDER BY freq DESC');
 
 		$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
 		if (!isset($row)) {

@@ -38,17 +38,17 @@ class Statistic {
 		if (!is_string($field))          return false;	
 		if (!is_string($table))          return false;
 		if (!is_integer($limit))         return false;
-		$query = "SELECT $field, count(*) AS count FROM $table";
+		$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table;
 		$query .= (!is_null($constraint)) ? ' WHERE ' : null;
-		if ($field == "track") {
+		if ($field == 'track') {
 			$query .= (!is_null($constraint)) ? ' artist = ' . $mdb2->quote($constraint, 'text') : null;
 		} else {
 			$query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
 		}
-		$query .= " GROUP BY $field ORDER BY count DESC LIMIT $limit";
+		$query .= ' GROUP BY ' . $field . ' ORDER BY count DESC LIMIT ' . $limit;
 		$res = $mdb2->query($query);
 		if (PEAR::isError($res)) {
-			echo("ERROR" . $res->getMessage());
+			echo('ERROR' . $res->getMessage());
 		}
 	
 		if (!$res->numRows()) {
@@ -76,15 +76,15 @@ class Statistic {
 		/*
 		 * todo: completly remove this dirty db type check. 
 		 */
-		$query = "SELECT COUNT(*) as count, DATE(TO_TIMESTAMP(time)) as date FROM $table";
-		if( strpos($connect_string , "mysql" ) === 0 ) $query = "SELECT COUNT(*) as count,DATE(FROM_UNIXTIME(time)) as date FROM $table";
+		$query = 'SELECT COUNT(*) as count, DATE(TO_TIMESTAMP(time)) as date FROM ' . $table;
+		if( strpos($connect_string , 'mysql' ) === 0 ) $query = 'SELECT COUNT(*) as count,DATE(FROM_UNIXTIME(time)) as date FROM ' .  $table;
 	
 		$query .= (!is_null($constraint)) ? ' WHERE ' : null;
 		$query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
-		$query .= " GROUP BY date ORDER BY date DESC LIMIT $limit";
+		$query .= ' GROUP BY date ORDER BY date DESC LIMIT ' . $limit;
 		$res = $mdb2->query($query);
 		if (PEAR::isError($res)) {
-			echo("ERROR" . $res->getMessage());
+			echo('ERROR' . $res->getMessage());
 		}
 	
 		if (!$res->numRows()) {
