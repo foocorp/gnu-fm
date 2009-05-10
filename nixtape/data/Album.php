@@ -75,7 +75,7 @@ class Album {
 	function getPlayCount() {
 		global $mdb2;
 		$res = $mdb2->query("SELECT COUNT(*) AS scrobbles FROM Scrobbles JOIN Track ON Scrobbles.track = Track.name WHERE Scrobbles.artist = "
-			. $mdb2->quote($this->artist_name, 'text') . ' AND Track.album ='
+			. $mdb2->quote($this->artist_name, 'text') . ' AND Track.album_name ='
 			. $mdb2->quote($this->name, 'text'));
 		if(PEAR::isError($res)) {
 			reportError($res->getMessage(), $res->getUserInfo());
@@ -95,11 +95,11 @@ class Album {
 	 */
 	function getTracks() {
 		global $mdb2;
-		$res = $mdb2->query('SELECT name, artist FROM Track WHERE artist = '
-			. $mdb2->quote($this->artist_name, 'text') . ' AND album = '
+		$res = $mdb2->query('SELECT name, artist_name FROM Track WHERE artist_name = '
+			. $mdb2->quote($this->artist_name, 'text') . ' AND album_name = '
 			. $mdb2->quote($this->name));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-			$tracks[] = new Track($row['name'], $row['artist']);
+			$tracks[] = new Track($row['name'], $row['artist_name']);
 		}
 
 		return $tracks;

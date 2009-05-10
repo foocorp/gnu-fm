@@ -92,7 +92,7 @@ class Artist {
 	 */
 	function getTracks() {
 		global $mdb2;
-		$res = $mdb2->query("SELECT name FROM Track WHERE artist = "
+		$res = $mdb2->query("SELECT name FROM Track WHERE artist_name = "
 			. $mdb2->quote($this->name, "text"));
 		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
 			$tracks[] = new Track($row["name"], $this->name);

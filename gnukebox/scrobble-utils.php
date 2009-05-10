@@ -104,9 +104,9 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	$artist = NoSpamTracks($artist);
 
 	if($album != 'NULL') {
-	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = lower(" . ($track) . ") AND lower(artist) = lower(" . ($artist) . ") AND lower(album) = lower(" . ($album) . ")");
+	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = lower(" . ($track) . ") AND lower(artist_name) = lower(" . ($artist) . ") AND lower(album_name) = lower(" . ($album) . ")");
 	} else {
-	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = lower(" . ($track) . ") AND lower(artist) = lower(" . ($artist) . ") AND album IS NULL");
+	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = lower(" . ($track) . ") AND lower(artist_name) = lower(" . ($artist) . ") AND album_name IS NULL");
 	}
 	if(PEAR::isError($res)) {
 		die("FAILED trk " . $res->getMessage() . "\n");
@@ -114,7 +114,7 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 
 	if(!$res->numRows()) {
 		// Create new track
-		$res = $mdb2->exec("INSERT INTO Track (name, artist, album, mbid) VALUES ("
+		$res = $mdb2->exec("INSERT INTO Track (name, artist_name, album_name, mbid) VALUES ("
 			. ($track) . ", "
 			. ($artist) . ", "
 			. ($album) . ", "

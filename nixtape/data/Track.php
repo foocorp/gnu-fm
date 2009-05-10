@@ -48,17 +48,17 @@ class Track {
 	 */
 	function __construct($name, $artist) {
 		global $mdb2;
-		$res = $mdb2->query("SELECT name, artist, album, duration, streamable, license, downloadurl, streamurl, mbid FROM Track WHERE "
+		$res = $mdb2->query("SELECT name, artist_name, album_name, duration, streamable, license, downloadurl, streamurl, mbid FROM Track WHERE "
 			. "name = " . $mdb2->quote($name, "text") . " AND "
-			. "artist = " . $mdb2->quote($artist, "text"));
+			. "artist_name = " . $mdb2->quote($artist, "text"));
 		if(!$res->numRows()) {
 			$this->name = "No such track: " . $name;
 		} else {
 			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
 			$this->name = $row["name"];
 			$this->mbid = $row["mbid"];
-			$this->artist_name = $row["artist"];
-			$this->album_name = $row["album"];
+			$this->artist_name = $row["artist_name"];
+			$this->album_name = $row["album_name"];
 			$this->duration = $row["duration"];
 			$this->streamable = $row["streamable"];
 			$this->license = simplify_license($row["license"]);

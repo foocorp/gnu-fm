@@ -25,7 +25,7 @@ require_once($install_path . '/templating.php');
 require_once($install_path . '/data/sanitize.php');
 
 $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-$recordSet = &$adodb->CacheExecute(7200, 'SELECT t.id, t.artist, t.album, t.name, t.mbid as tmbid, st.mbid as stmbid FROM Scrobble_Track st JOIN Track t ON lower(t.name)=st.name AND lower(t.album)=st.album AND lower(t.artist)=st.artist AND t.mbid<>st.mbid');
+$recordSet = &$adodb->CacheExecute(7200, 'SELECT t.id, t.artist_name, t.album_name, t.name, t.mbid as tmbid, st.mbid as stmbid FROM Scrobble_Track st JOIN Track t ON lower(t.name)=st.name AND lower(t.album_name)=st.album AND lower(t.artist_name)=st.artist AND t.mbid<>st.mbid');
 
 $aEntries = array();
 $i = 0;
