@@ -27,8 +27,8 @@ require_once($install_path . '/data/User.php');
 require_once($install_path . '/data/sanitize.php');
 require_once($install_path . '/utils/linkeddata.php');
 require_once($install_path . '/utils/arc/ARC2.php');
-require_once($install_path . '/resolve-external.php'); // why isn't this in a subdir?
-require_once($install_path . '/licenses.php'); // why isn't this in a subdir?
+require_once($install_path . '/utils/resolve-external.php'); 
+require_once($install_path . '/utils/licenses.php'); 
 
 /**
  * Provides access to server-wide data
