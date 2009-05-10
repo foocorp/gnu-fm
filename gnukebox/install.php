@@ -108,7 +108,8 @@ if (isset($_POST['install'])) {
 		username VARCHAR(64) REFERENCES Users(username))");
 
 	$adodb->Execute("CREATE TABLE Artist(
-		name VARCHAR(255) PRIMARY KEY,
+		id SERIAL PRIMARY KEY,
+		name VARCHAR(255),
 		mbid VARCHAR(36),
 		streamable INTEGER,
 		bio_published INTEGER,
@@ -121,6 +122,7 @@ if (isset($_POST['install'])) {
 		origin VARCHAR(255) REFERENCES Places(location_uri))");
 
 	$adodb->Execute("CREATE TABLE Album(
+		id SERIAL PRIMARY KEY,
 		name VARCHAR(255),
 		artist_name VARCHAR(255) REFERENCES Artist(name),
 		mbid VARCHAR(36),
