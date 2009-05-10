@@ -24,46 +24,46 @@ require_once('../api/ArtistXML.php');
 require_once('../api/UserXML.php');
 
 # Error constants
-define("LFM_INVALID_SERVICE",	2);
-define("LFM_INVALID_METHOD",	3);
-define("LFM_INVALID_TOKEN",	4);
-define("LFM_INVALID_FORMAT",	5);
-define("LFM_INVALID_PARAMS",	6);
-define("LFM_INVALID_RESOURCE",	7);
-define("LFM_TOKEN_ERROR",	8);
-define("LFM_INVALID_SESSION",	9);
-define("LFM_INVALID_APIKEY",	10);
-define("LFM_SERVICE_OFFLINE",	11);
-define("LFM_SUBSCRIPTION_ERROR",12);
-define("LFM_INVALID_SIGNATURE",	13);
-define("LFM_SUBSCRIPTION_REQD",	18);
+define('LFM_INVALID_SERVICE',	2);
+define('LFM_INVALID_METHOD',	3);
+define('LFM_INVALID_TOKEN',	4);
+define('LFM_INVALID_FORMAT',	5);
+define('LFM_INVALID_PARAMS',	6);
+define('LFM_INVALID_RESOURCE',	7);
+define('LFM_TOKEN_ERROR',	8);
+define('LFM_INVALID_SESSION',	9);
+define('LFM_INVALID_APIKEY',	10);
+define('LFM_SERVICE_OFFLINE',	11);
+define('LFM_SUBSCRIPTION_ERROR',12);
+define('LFM_INVALID_SIGNATURE',	13);
+define('LFM_SUBSCRIPTION_REQD',	18);
 
 # Error descriptions as per API documentation
 $error_text = array(
-	LFM_INVALID_SERVICE		=> "Invalid service - This service does not exist",
-	LFM_INVALID_METHOD		=> "Invalid Method - No method with that name in this package",
-	LFM_INVALID_TOKEN		=> "Invalid authentication token supplied",
-	LFM_INVALID_FORMAT		=> "Invalid format - This service doesn't exist in that format",
-	LFM_INVALID_PARAMS		=> "Invalid parameters - Your request is missing a required parameter",
-	LFM_INVALID_RESOURCE		=> "Invalid resource specified",
-	LFM_TOKEN_ERROR			=> "There was an error granting the request token. Please try again later",
-	LFM_INVALID_SESSION		=> "Invalid session key - Please re-authenticate",
-	LFM_INVALID_APIKEY		=> "Invalid API key - You must be granted a valid key by last.fm",
-	LFM_SERVICE_OFFLINE		=> "Service Offline - This service is temporarily offline. Try again later.",
-	LFM_SUBSCRIPTION_ERROR		=> "Subscription Error - The user needs to be subscribed in order to do that",
-	LFM_INVALID_SIGNATURE		=> "Invalid method signature supplied",
-	LFM_SUBSCRIPTION_REQD		=> "This user has no free radio plays left. Subscription required."
+	LFM_INVALID_SERVICE		=> 'Invalid service - This service does not exist',
+	LFM_INVALID_METHOD		=> 'Invalid Method - No method with that name in this package',
+	LFM_INVALID_TOKEN		=> 'Invalid authentication token supplied',
+	LFM_INVALID_FORMAT		=> 'Invalid format - This service doesn\'t exist in that format',
+	LFM_INVALID_PARAMS		=> 'Invalid parameters - Your request is missing a required parameter',
+	LFM_INVALID_RESOURCE		=> 'Invalid resource specified',
+	LFM_TOKEN_ERROR			=> 'There was an error granting the request token. Please try again later',
+	LFM_INVALID_SESSION		=> 'Invalid session key - Please re-authenticate',
+	LFM_INVALID_APIKEY		=> 'Invalid API key - You must be granted a valid key by last.fm',
+	LFM_SERVICE_OFFLINE		=> 'Service Offline - This service is temporarily offline. Try again later.',
+	LFM_SUBSCRIPTION_ERROR		=> 'Subscription Error - The user needs to be subscribed in order to do that',
+	LFM_INVALID_SIGNATURE		=> 'Invalid method signature supplied',
+	LFM_SUBSCRIPTION_REQD		=> 'This user has no free radio plays left. Subscription required.'
 );
 
 # Resolves method= parameters to handler functions
 $method_map = array(
-	"auth.gettoken"			=> method_auth_gettoken,
-	"auth.getsession"		=> method_auth_getsession,
-	"auth.getmobilesession"		=> method_auth_getmobilesession,
-	"artist.getinfo"		=> method_artist_getinfo,
-	"artist.gettoptracks"		=> method_artist_gettoptracks,
-	"user.getinfo"			=> method_user_getinfo,
-	"user.gettoptracks"		=> method_user_gettoptracks
+	'auth.gettoken'			=> method_auth_gettoken,
+	'auth.getsession'		=> method_auth_getsession,
+	'auth.getmobilesession'		=> method_auth_getmobilesession,
+	'artist.getinfo'		=> method_artist_getinfo,
+	'artist.gettoptracks'		=> method_artist_gettoptracks,
+	'user.getinfo'			=> method_user_getinfo,
+	'user.gettoptracks'		=> method_user_gettoptracks
 );
 
 function method_user_gettoptracks() {
@@ -71,7 +71,7 @@ function method_user_gettoptracks() {
 		report_failure(LFM_INVALID_SIGNATURE);
 	}
 
-	header("Content-Type: text/xml");
+	header('Content-Type: text/xml');
 	print(XML::prettyXML(UserXML::getTopTracks($_GET['user'], $_GET['period'])));
 }
 
@@ -79,7 +79,7 @@ function method_user_getinfo() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_SIGNATURE);
 	}
-	header("Content-Type: text/xml");
+	header('Content-Type: text/xml');
 	print(XML::prettyXML(UserXML::getInfo($_GET['user'])));
 }
 
@@ -87,7 +87,7 @@ function method_artist_getinfo() {
 	if (!isset($_GET['artist'])) {
 		report_failure(LFM_INVALID_SIGNATURE);
 	}
-	header("Content-Type: text/xml");
+	header('Content-Type: text/xml');
 	print(XML::prettyXML(ArtistXML::getInfo($_GET['artist'])));
 }
 
@@ -95,7 +95,7 @@ function method_artist_gettoptracks() {
 	if (!isset($_GET['artist'])) {
 	report_failure(LFM_INVALID_SIGNATURE);
 	}
-	header("Content-Type: text/xml");
+	header('Content-Type: text/xml');
 	print(XML::prettyXML(ArtistXML::getTopTracks($_GET['artist'])));
 
 }
@@ -116,7 +116,7 @@ function method_auth_gettoken() {
 		report_failure(LFM_SERVICE_OFFLINE);
 
 	print("<lfm status=\"ok\">\n");
-	print("	<token>$key</token></lfm>");
+	print("	<token>{$key}</token></lfm>");
 }
 
 function method_auth_getmobilesession() {
@@ -159,8 +159,8 @@ function method_auth_getmobilesession() {
 
 	print("<lfm status=\"ok\">\n");
 	print("	<session>\n");
-	print("		<name>$username</name>\n");
-	print("		<key>$session</key>\n");
+	print("		<name>{$username}</name>\n");
+	print("		<key>{$session}</key>\n");
 	print("		<subscriber>0</subscriber>\n");
 	print("	</session>\n");
 	print("</lfm>");
@@ -196,8 +196,8 @@ function method_auth_getsession() {
 
 	print("<lfm status=\"ok\">\n");
 	print("	<session>\n");
-	print("		<name>$username</name>\n");
-	print("		<key>$session</key>\n");
+	print("		<name>{$username}</name>\n");
+	print("		<key>{$session}</key>\n");
 	print("		<subscriber>0</subscriber>\n");
 	print("	</session>\n");
 	print("</lfm>");
@@ -215,7 +215,7 @@ function report_failure($code) {
 	global $error_text;
 
 	print("<lfm status=\"failed\">\n");
-	print("	<error code=\"$code\">".$error_text[$code]."</error></lfm>");
+	print("	<error code=\"{$code}\">".$error_text[$code]."</error></lfm>");
 	die();
 }
 

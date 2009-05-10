@@ -32,32 +32,32 @@ class ArtistXML {
 	 * @param string $lang A 2 character ISO 639 alpha-2 code indicating the language to return the information in
 	 * @return A SimpleXMLElement containing the artist's information
 	 */
-	public static function getInfo($artistName, $api_key=false, $mbid=false, $lang="en") {
+	public static function getInfo($artistName, $api_key=false, $mbid=false, $lang='en') {
 		// We assume $api_key is valid and set at this point
 		
 		if (!isset($artistName) && !isset($mbid)) {
-			echo XML::error("failed", "7", "Invalid resource specified");
+			echo XML::error('failed', '7', 'Invalid resource specified');
 			return;
 		}
 
 		$artist = new Artist($artistName, $mbid);
 
 		if (PEAR::isError($artist)) {	
-			return(XML::error("failed", "7", "Invalid resource specified"));
+			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
-		$xml = new SimpleXMLElement("<lfm status=\"ok\"></lfm>");
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 
-		$artistXml = $xml->addChild("artist", null);
-		$artistXml->addChild("name", $artist->name);
-		$artistXml->addChild("mbid", $artist->mbid);
-		$artistXml->addChild("url", $artist->getURL());
-		$artistXml->addChild("streamable", $artist->streamable);
+		$artistXml = $xml->addChild('artist', null);
+		$artistXml->addChild('name', $artist->name);
+		$artistXml->addChild('mbid', $artist->mbid);
+		$artistXml->addChild('url', $artist->getURL());
+		$artistXml->addChild('streamable', $artist->streamable);
 
-		$bio = $artistXml->addChild("bio", null);
-		$bio->addChild("published", $artist->bio_published);
-		$bio->addChild("summary", $artist->bio_summary);
-		$bio->addChild("content", $artist->bio_content);
+		$bio = $artistXml->addChild('bio', null);
+		$bio->addChild('published', $artist->bio_published);
+		$bio->addChild('summary', $artist->bio_summary);
+		$bio->addChild('content', $artist->bio_content);
 
 		return($xml);
 	}
@@ -67,23 +67,23 @@ class ArtistXML {
 		$artist = new Artist($artistName);
 
 		if (PEAR::isError($artist)) {
-			return(XML::error("failed", "7", "Invalid resource specified"));
+			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
-		$xml = new SimpleXMLElement("<lfm status=\"ok\"></lfm>");
-		$root = $xml->addChild("toptracks", null);
-		$root->addAttribute("artist", $artist->name);
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('toptracks', null);
+		$root->addAttribute('artist', $artist->name);
 
 		$tracks = $artist->getTopTracks(50);
 
 		// Loop over every result and add as children to "toptracks".
 		for($i = 1; $i < count($tracks); $i++) {
-			$track = $root->addChild("track", null);
-			$track->addAttribute("rank", $i);
-			$track->addChild("name", $tracks[$i]->name);
-			$track->addChild("mbid", $tracks[$i]->mbid);
-			$track->addChild("playcount", $tracks[$i]->getPlayCount());
-			$track->addChild("listeners", $tracks[$i]->getListenerCount());
+			$track = $root->addChild('track', null);
+			$track->addAttribute('rank', $i);
+			$track->addChild('name', $tracks[$i]->name);
+			$track->addChild('mbid', $tracks[$i]->mbid);
+			$track->addChild('playcount', $tracks[$i]->getPlayCount());
+			$track->addChild('listeners', $tracks[$i]->getListenerCount());
 		}
 
 		return($xml);	
