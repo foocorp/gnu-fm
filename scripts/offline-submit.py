@@ -20,15 +20,20 @@ def _parse_date(string):
 
 
 if __name__ == '__main__':
-    usage = "%prog <USERNAME> <SERVER> <START TIME> <MEDIA FILES>"
+    usage = "%prog [--server <SERVER>] <USERNAME> <START TIME> <MEDIA FILES>"
     parser = OptionParser(usage=usage)
+    parser.add_option('-s', '--server',
+                      help="Server to submit to.  Defaults to"
+                           " 'turtle.libre.fm'.")
+    parser.set_defaults(server='turtle.libre.fm')
     opts,args = parser.parse_args()
-    if len(args) < 4:
+    if len(args) < 3:
         parser.error("All arguments are required.")
 
-    username,server,start_string = args[:3]
+    username,start_string = args[:2]
+    server = opts.server
     password = getpass.getpass()
-    tracks = args[3:]
+    tracks = args[2:]
     server = GobbleServer(server, username, password)
 
     dt = _parse_date(start_string)
