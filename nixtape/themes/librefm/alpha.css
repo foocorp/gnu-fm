@@ -294,6 +294,7 @@ dt.libre{background-image: url(/themes/librefm/images/square.png); background-re
 li.libre{background-image: url(/themes/librefm/images/square.png); background-repeat: no-repeat; padding-left: 22px; background-color: #eee;}
 
 #adbard-librefm{
+        margin: 0 auto 0 auto;
 	height: 248px;
        	width: 182px;
        	position: relative;
