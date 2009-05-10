@@ -34,9 +34,9 @@ $result = $mdb2->query('SELECT username FROM Users WHERE '
 	. 'username = ' . $mdb2->quote($_POST['username'], 'text') . ' AND '
 	. 'password = ' . $mdb2->quote(md5($_POST['password']), 'text'));
 if (PEAR::isError($result))
-	die("Database error");
+	die('Database error');
 if (!$result->numRows())
-	die("Authentication failed");
+	die('Authentication failed');
 
 // Bind the user to the token and cancel the expiration rule
 $result = $mdb2->query('UPDATE Auth SET '
@@ -45,7 +45,7 @@ $result = $mdb2->query('UPDATE Auth SET '
 	. 'WHERE '
 	. 'token = ' . $mdb2->quote($_POST['token']));
 if (PEAR::isError($result))
-	die("Database error");
+	die('Database error');
 ?>
 
 <p>Thank you very much, <?php print($_POST['username']); ?>.  Your authorization has been recorded.</p>
@@ -64,9 +64,9 @@ $result = $mdb2->query('SELECT * FROM Auth WHERE '
 	. 'token = ' . $mdb2->quote($_GET['token'], 'text') . ' AND '
 	. 'username IS NULL');
 if (PEAR::isError($result))
-	die("Database error");
+	die('Database error');
 if (!$result->numRows())
-	die("Invalid token");
+	die('Invalid token');
 ?>
 
 <form method="post" action="">

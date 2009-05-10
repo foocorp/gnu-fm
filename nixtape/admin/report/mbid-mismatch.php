@@ -19,7 +19,7 @@
 
 */
 
-require("../../config.php");
+require('../../config.php');
 require_once($install_path . '/database2.php');
 require_once($install_path . '/templating.php');
 require_once($install_path . '/data/sanitize.php');
@@ -36,7 +36,7 @@ while (!$recordSet->EOF) {
 	$recordSet->MoveNext();
 }
 
-$smarty->assign("entries", $aEntries);
+$smarty->assign('entries', $aEntries);
 
-$smarty->display("mbid-mismatch-report.tpl");
+$smarty->display('mbid-mismatch-report.tpl');
 ?>
