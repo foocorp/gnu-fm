@@ -25,5 +25,7 @@ require_once('data/sanitize.php');
 require_once('data/Server.php');
 
 $smarty->assign('welcome', true);
+
+$smarty->assign("station", "rock");
 $smarty->display('welcome.tpl');
 ?>
