@@ -4,6 +4,7 @@ import datetime
 import getpass
 from optparse import OptionParser
 import subprocess
+import sys
 
 import mutagen
 from mutagen import easyid3
@@ -31,6 +32,11 @@ if __name__ == '__main__':
     server = GobbleServer(server, username, password)
 
     dt = _parse_date(start_string)
+    input = ''
+    while input not in ['y', 'n']:
+        input = raw_input("Did you mean '%s UTC'? [Y/n]: " % (dt,)).lower()
+    if input == 'n':
+        sys.exit()
 
     for track in tracks:
         f = mutagen.File(track)
