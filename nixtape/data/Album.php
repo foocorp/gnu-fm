@@ -22,7 +22,7 @@
 require_once($install_path . '/database.php');
 require_once($install_path . '/data/Artist.php');
 require_once($install_path . '/data/Track.php');
-require_once($install_path . "/resolve-external.php");
+require_once($install_path . "/utils/resolve-external.php");
 require_once($install_path . '/utils/linkeddata.php');
 
 /**

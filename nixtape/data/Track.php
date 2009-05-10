@@ -24,8 +24,8 @@ require_once($install_path . '/database.php');
 require_once($install_path . '/data/Artist.php');
 require_once($install_path . '/data/Album.php');
 require_once($install_path . '/data/Server.php');
-require_once($install_path . '/resolve-external.php');
-require_once($install_path . '/licenses.php');
+require_once($install_path . '/utils/resolve-external.php');
+require_once($install_path . '/utils/licenses.php');
 require_once($install_path . '/utils/linkeddata.php');
 
 /**
