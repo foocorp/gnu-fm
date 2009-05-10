@@ -128,7 +128,7 @@ class Artist {
 	 * @return A string containing the URL of this artist
 	 */
 	function getURL() {
-		Server::getArtistURL($this->name);
+		return Server::getArtistURL($this->name);
 	}
 
 }
