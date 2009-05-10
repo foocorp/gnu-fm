@@ -30,7 +30,12 @@ if (!PEAR::isError ($aTagCloud)) {
 
 if(isset($_GET['tag'])) {
 	$station = "librefm://globaltags/" . $_GET['tag'];
-	$smarty->assign("station", $station);
+	if(isset($this_user)) {
+		$radio_session = $this_user->getRadioSession($station);
+	} else {
+		$radio_session = Server::getRadioSession($station);
+	}
+	$smarty->assign("radio_session", $radio_session);
 }
 
 $smarty->display("listen.tpl");

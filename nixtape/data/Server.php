@@ -382,4 +382,30 @@ class Server {
 		return $rv;
 	}
 
+	/**
+	 * Log in to the radio server
+	 *
+	 * @param string $station The station to be played
+	 * @param string $username The user to associate this session with (optional)
+	 * @return A string containing the session key to be used for streaming
+	 */
+	static function getRadioSession($station, $username = false) {
+		global $mdb2;
+		$session_id = md5(mt_rand() . time());
+		if($username) {
+			$sql = "INSERT INTO Radio_Sessions(username, session, url, expires) VALUES ("
+				. $mdb2->quote($username, "text") . ","
+				. $mdb2->quote($session_id, "text") . ","
+				. $mdb2->quote($station, "text") . ","
+				. $mdb2->quote(time() + 86400) . ")";
+		} else {
+			$sql = "INSERT INTO Radio_Sessions(session, url, expires) VALUES ("
+				. $mdb2->quote($session_id, "text") . ","
+				. $mdb2->quote($station, "text") . ","
+				. $mdb2->quote(time() + 86400) . ")";
+		}
+		$res = $mdb2->query($sql);
+		return $session_id;
+	}
+
 }

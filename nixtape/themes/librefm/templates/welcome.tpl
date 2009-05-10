@@ -25,37 +25,19 @@
 </div>
     <div class="yui-u">
 
-    <div id="radio">
+	<div id="radio">
 
-    <div id="player">
-	<div id="interface">
-		<div id="trackinfo">
-			<span id="artistname"></span> - <span id="trackname"></span> <span id="showplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$base_url}/themes/librefm/images/player/show-playlist.png" alt="Show playlist" title="Show playlist" /></a></span><span id="hideplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$base_url}/themes/librefm/images/player/hide-playlist.png" alt="Hide playlist" title="Hide playlist" /></a></span>
-			<div id="playlist">
-				<hr />
-				<strong><u>{t}Playlist{/t}</u></strong>
-				<ul id="songs">
-				</ul>
-			</div>
-		</div>
-		<div id="progress">
-			<div id="progressbar"></div>
-			<span id="currenttime"></span>/<span id="duration"></span>
-		</div>
-		<span id="scrobbled">Scrobbled</span>
-		<div id="buttons">
-			<a href="#" onclick="skipBack()" id="skipback"><img src="{$base_url}/themes/librefm/images/player/skip-backward.png" alt= "Skip Backwards" /></a>
-			<a href="#" onclick="seekBack()" id="seekback"><img src="{$base_url}/themes/librefm/images/player/seek-backward.png" alt="Seek Backwards" /></a>
-			<a href="#" onclick="play()" id="play"><img src="{$base_url}/themes/librefm/images/player/play.png" alt="Play" /></a>
-			<a href="#" onclick="pause()" id="pause"><img src="{$base_url}/themes/librefm/images/player/pause.png" alt="Pause" /></a>
-			<a href="#" onclick="seekForward()" id="seekforward"><img src="{$base_url}/themes/librefm/images/player/seek-forward.png" alt="Seek Forwards" /></a>
-			<a href="#" onclick="skipForward()" id="skipforward"><img src="{$base_url}/themes/librefm/images/player/skip-forward.png" alt="Skip Forwards" /></a>
-		</div>
+		{include file='player.tpl'}
+
+		<script type="text/javascript">
+		{if isset($this_user)}
+			playerInit(false, "{$this_user->getScrobbleSession()}", "{$radio_session}");
+		{else}
+			playerInit(false, false, "{$radio_session}");
+		{/if}
+		</script>
+
 	</div>
-</div>
-
-
-    </div>
 
     <div id="downloads">
 
