@@ -30,6 +30,13 @@ var player_ready = false;
 var playable_songs = false;
 var streaming = false;
 
+/**
+ * Initialises the javascript player (player.tpl must also be included on the target page)
+ * 
+ * @param array list A playlist in the form ([artist, album, track, trackurl], [...]) or false if playing a radio stream
+ * @param string sk Scrobble session key or false if the user isn't logged in
+ * @param string rk Radio session key or false if streaming isn't required
+ */
 function playerInit(list, sk, rk) {
 	var audio = document.getElementById("audio");
 	if (!list) {
@@ -58,6 +65,9 @@ function playerInit(list, sk, rk) {
 	}
 }
 
+/**
+ * Finishes the player initialisation when the playlist has been loaded
+ */
 function playerReady() {
 	var audio = document.getElementById("audio");
 	
@@ -75,6 +85,9 @@ function playerReady() {
 	player_ready = true;
 }
 
+/**
+ * Begins playback
+ */
 function play() {
 	var audio = document.getElementById("audio");
 	audio.play();
@@ -87,6 +100,9 @@ function play() {
 	$("#seekback").fadeTo("normal", 1);
 }
 
+/**
+ * Pauses playback
+ */
 function pause() {
 	var audio = document.getElementById("audio");
 	audio.pause();
@@ -96,16 +112,25 @@ function pause() {
 	$("#seekback").fadeTo("normal", 0.5);
 }
 
+/**
+ * Seeks backwards 10 seconds in the current song
+ */
 function seekBack() {
 	var audio = document.getElementById("audio");
 	audio.currentTime = audio.currentTime - 10;
 }
 
+/**
+ * Seeks forwards 10 seconds in the current song
+ */
 function seekForward() {
 	var audio = document.getElementById("audio");
 	audio.currentTime = audio.currentTime + 10;
 }
 
+/**
+ * Updates the progress bar every 900 milliseconds
+ */
 function updateProgress() {
 	var audio = document.getElementById("audio");
 	if (audio.duration > 0) {
@@ -119,6 +144,9 @@ function updateProgress() {
 	setTimeout("updateProgress()", 900)
 }
 
+/**
+ * Called automatically when a song finished. Loads the next song if there is one
+ */
 function songEnded() {
 	var audio = document.getElementById("audio");
 	if(current_song == playlist.length - 1) {
@@ -129,6 +157,9 @@ function songEnded() {
 	}
 }
 
+/**
+ * Outputs the HTML playlist
+ */
 function populatePlaylist() {
 	var i, url;
 	//Clear the list
@@ -146,12 +177,21 @@ function populatePlaylist() {
 	$("#song-" + current_song).css({fontWeight : "bold"});
 }
 
+/**
+ * Shows/Hides the HTML playlist display
+ */
 function togglePlaylist() {
 	$("#playlist").toggle(1000);
 	$("#showplaylist").toggle();
 	$("#hideplaylist").toggle();
 }
 
+/**
+ * Submits a scrobble for the current song if a scrobble session key has been 
+ * provided. Makes use of a simple proxy to support installations where the
+ * gnukebox installation is at a different domain/sub-domain to the nixtape 
+ * installation.
+ */
 function scrobble() {
 	var timestamp;
 	scrobbled = true;
@@ -171,6 +211,10 @@ function scrobble() {
 		      	}, "text");
 }
 
+/**
+ * Submits 'now playing' data to the gnukebox server. Like scrobble() this 
+ * makes use of a proxy.
+ */
 function nowPlaying() {
 	var timestamp;
 	var audio = document.getElementById("audio");
@@ -183,12 +227,22 @@ function nowPlaying() {
 	$.post("/scrobble-proxy.php?method=nowplaying", { "a" : artist, "b" : album, "t" : track, "l" : audio.duration, "s" : session_key}, function(data) {}, "text");
 }
 
+/**
+ * Loads a song and beings playing it.
+ * 
+ * @param int song The song number in the playlist that should be played
+ */
 function playSong(song) {
 	var audio = document.getElementById("audio");
 	loadSong(song);
 	play();
 }
 
+/**
+ * Loads a song
+ *
+ * @param int song The song number in the playlist that should be loaded
+ */
 function loadSong(song) {
 	var url = playlist[song]["url"];
 	var audio = document.getElementById("audio");
@@ -227,6 +281,11 @@ function loadSong(song) {
 	$("#trackinfo > #trackname").text(track);
 }
 
+/**
+ * Retrieves a playlist from the radio streaming service. 
+ * A radio session key must be supplied when initialising
+ * the play for this to work.
+ */
 function getRadioPlaylist() {
 	var tracks, artist, album, title, url, i;
 	$.get("/radio/xspf.php", {'sk' : radio_key, 'desktop' : 0}, function(data) { 
@@ -253,14 +312,26 @@ function getRadioPlaylist() {
 		}, "text");
 }
 
+/**
+ * Plays the song previous to the current one in the playlist
+ */
 function skipBack() {
 	playSong(current_song - 1);
 }
 
+/**
+ * Plays the song after the current one in the playlist
+ */
 function skipForward() {
 	playSong(current_song + 1);
 }
 
+/**
+ * Converts a timestamp to "MM:SS" format.
+ *
+ * @param int timestamp A timestamp in seconds.
+ * @return string The provided time in "MM:SS" format
+ */
 function friendlyTime(timestamp) {
 	mins = Math.floor(timestamp / 60);
 	sec = String(Math.floor(timestamp % 60));
