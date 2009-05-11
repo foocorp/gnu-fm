@@ -2,8 +2,7 @@
 
  To install visit http://yourserver.com/path/to/gobbler/install.php
 
- As things stand you'll need the MDB2 pear module installed (and at least one MDB2 driver) this can be achieved by running "pear install mdb2 mdb2#sqlite".
- (For distribution we can include the latest version of MDB2 in the release packages if we want to make things even simpler for people.)
+ As things stand you'll need the ADODB module installed.
 
 Web services API:
  To test the authentication API once the server is set up:

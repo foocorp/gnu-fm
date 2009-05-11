@@ -18,7 +18,7 @@
 
 */
 
-require_once('../../database2.php');
+require_once('../../database.php');
 require_once('../../scrobble-utils.php');
 
 if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t'])) {

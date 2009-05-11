@@ -24,7 +24,7 @@
 
 
 header('Content-type: text/html; charset=utf-8');
-require_once('database2.php');
+require_once('database.php');
 
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	$res = $adodb->GetAll("SELECT name, artist_name, image, artwork_license FROM Album WHERE artwork_license IS NULL LIMIT 5000");

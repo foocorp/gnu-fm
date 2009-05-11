@@ -19,7 +19,7 @@
 
 */
 
-require_once('database2.php');	// include the database connection string
+require_once('database.php');	// include the database connection string
 
 function usernameFromSID($session_id) 
 {

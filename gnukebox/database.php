@@ -20,29 +20,19 @@
 */
 
 
-if(!file_exists(dirname(__FILE__) . "/config.php")) {
-	die("Please run the <a href='install.php'>Install</a> script to configure your installation");
+if(!file_exists(dirname(__FILE__) . '/config.php')) {
+	die('Please run the <a href=\'install.php\'>Install</a> script to configure your installation');
 }
 
 require_once('config.php');
-require_once('MDB2.php');
+require_once('adodb/adodb-exceptions.inc.php');
+require_once('adodb/adodb.inc.php');
 
-$mdb2 =& MDB2::connect($connect_string);
-if (PEAR::isError($mdb2)) {
-	die($mdb2->getMessage());
-}
+try { 
+	$adodb =& NewADOConnection($adodb_connect_string);
+} catch (exception $e) { 
+	var_dump($e); 
+	adodb_backtrace($e->gettrace());
+} 
 
-function reportError($text, $data) {
-    // make a fresh connection
-    global $connect_string;
-    $mdbe = MDB2::connect($connect_string);
-    if (PEAR::isError($mdbe)) {
-	    die($mdbe->getMessage());
-    }
-
-    $mdbe->exec("INSERT INTO Error (msg, data, time) VALUES ("
-	. $mdbe->quote($text, 'text') . ", "
-	. $mdbe->quote($data, 'text') . ", "
-	. time() . ")");
-}
 ?>
