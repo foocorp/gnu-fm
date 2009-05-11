@@ -4,6 +4,9 @@
 
 {if !empty($errors)}
 	<p id='errors'>{$errors}</p>
+    {if isset($invalid)}
+	<a href="{$base_url}/recovery.php">{t}Lost password{/t}?</a><br />
+    {/if}
 {/if}
 
 <div id='login'>

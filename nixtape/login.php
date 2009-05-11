@@ -51,6 +51,7 @@ if(isset($_POST['login'])) {
 			$errors .= 'A database error happened.';
 		} elseif(!$res->numRows()) {
 			$errors .= 'Invalid username or password.';
+			$smarty->assign('invalid', true);
 		} else {
 			// Give the user a session id, like any other client
 			$session_id = md5(md5($password) . time());
