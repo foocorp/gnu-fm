@@ -62,6 +62,7 @@ require_once('utils/human-time.php');
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
+		try {
 if ($req_user) {
 //			echo "SELECT username, artist, track, time FROM Scrobbles WHERE username = '" . $adodb->qstr($req_user) . "' ORDER BY time DESC LIMIT 100";
 			$res = $adodb->CacheGetAll(60, "SELECT username, artist, track, time FROM Scrobbles WHERE username = " . $adodb->qstr($req_user) . " ORDER BY time DESC LIMIT 100");
@@ -84,6 +85,7 @@ if ($req_user) {
 			$res = $adodb->CacheGetAll(60, "SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
 
 			echo "<h2>Last 10 tracks received</h2>";
+		}
 }
 
 ?>
@@ -92,10 +94,11 @@ if ($req_user) {
 			<tr><th>User</th><th>Artist</th><th>Track</th><th>Time</th></tr>
 
 <?php
-
-			if(PEAR::isError($res)) {
-				die($res->getMessage());
+			catch (exception $e)
+			{
+				die($e->getMessage());
 			}
+
 			$i = 0;
 			foreach($res as &$row){
 			$i++;
