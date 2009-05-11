@@ -139,7 +139,7 @@ class User {
 				, $adodb->qstr($this->laconica_profile)
 				, $adodb->qstr($this->journal_rss)
 				, time()
-				, $adodb->qstr($this->name)
+				, $adodb->qstr($this->name));
 				
 		$res = $adodb->Execute($q);
 		
