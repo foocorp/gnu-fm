@@ -24,29 +24,26 @@
 
 
 header('Content-type: text/html; charset=utf-8');
-require_once('database.php');
+require_once('database2.php');
 
-  $res = $mdb2->query("SELECT name, artist_name, image, artwork_license FROM Album WHERE artwork_license IS NULL LIMIT 5000");
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	$res = $adodb->GetAll("SELECT name, artist_name, image, artwork_license FROM Album WHERE artwork_license IS NULL LIMIT 5000");
 
-			if(PEAR::isError($res)) {
-				die($res->getMessage());
-			}
-			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-			echo "<img width=50 src=" . go_get_album_art($row['artist_name'], $row['name']) ." />&nbsp;";
+		if(!$res) {
+			die("sql error");
+		}
+		foreach($res as &$row) {
+		echo "<img width=50 src=" . go_get_album_art($row['artist_name'], $row['name']) ." />&nbsp;";
 
+		sleep (3);
+		for ($i = 0; $i < ob_get_level(); $i++) { ob_end_flush(); }
 
-			    sleep (3);
-			   for ($i = 0; $i < ob_get_level(); $i++) { ob_end_flush(); }
-    ob_implicit_flush(1)  ;
-
-
-			
-
-			}
-                        echo "</ol>";
+		ob_implicit_flush(1)  ;
+		}
+		echo "</ol>";
 
 	function go_get_album_art($artist, $album){
-		global $mdb2;
+		global $adodb;
 
   $Access_Key_ID = "1EST86JB355JBS3DFE82"; // this is mattl's personal key :)
 
@@ -71,16 +68,16 @@ $aws_xml = simplexml_load_file($request) or die("xml response not loading");
 $image = $aws_xml->Items->Item->MediumImage->URL;
        
        if (!$image) { $image = "/i/qm50.png"; $license="librefm";}
-	
+
 	if ($image) {
 
 	 
           if ($license == "") { $license = "amazon"; }
 
-	  $license = $mdb2->quote($license);
-	  $image = $mdb2->quote($image);
-	  $album = $mdb2->quote($album);
-	  $artist = $mdb2->quote($artist);
+	  $license = $adodb->qstr($license);
+	  $image = $adodb->qstr($image);
+	  $album = $adodb->qstr($album);
+	  $artist = $adodb->qstr($artist);
 
 		  $sql = ("UPDATE Album SET image = " 
 
@@ -92,10 +89,10 @@ $image = $aws_xml->Items->Item->MediumImage->URL;
                         . ($artist) . " AND name = "
 				      . ($album));
 
-		  $res = $mdb2->query($sql);
+		  $res = $adodb->Execute($sql);
 
-		if(PEAR::isError($res)) {
-		  die("FAILED " . $res->getMessage() . " query was :" . $sql);
+		if(!$res) {
+		  die("FAILED query was :" . $sql);
 		}
 
 	return $image;
