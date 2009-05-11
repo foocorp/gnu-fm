@@ -25,7 +25,7 @@ require_once('version.php');
 require_once('utils/get_absolute_url.php');
 
 if(file_exists("config.php")) {
-	die("A configuration file already exists. Please delete <i>config.php</i> if you wish to reinstall.\r\n");
+	die("A configuration file already exists. Please delete <i>config.php</i> if you wish to reinstall.");
 }
 
 if (isset($_POST['install'])) {
@@ -44,7 +44,7 @@ if (isset($_POST['install'])) {
 	} catch (exception $e) {
 		var_dump($e);
 		adodb_backtrace($e->gettrace());
-		die("Database connection failure\r\n");
+		die("Database connection failure\n");
 	}
 
 	//Create tables
@@ -329,10 +329,10 @@ if (isset($_POST['install'])) {
 
 	if(!$result) {
 		$print_config = str_replace("<", "&lt;", $config);
-		die("Unable to write to file '<i>config.php</i>'. Please create this file and copy the following in to it: <br /><pre>" . $print_config . "</pre>\r\n");
+		die("Unable to write to file '<i>config.php</i>'. Please create this file and copy the following in to it: <br /><pre>" . $print_config . "</pre>");
 	}
 
-	die("Configuration completed successfully!\r\n");
+	die("Configuration completed successfully!");
 }
 
 ?>

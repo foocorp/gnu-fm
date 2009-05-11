@@ -26,7 +26,7 @@ if ($_GET['method'] == 'scrobble') {
 } elseif ($_GET['method'] == 'nowplaying') {
 	$url = $submissions_server . '/nowplaying/1.2/';
 } else {
-	die("Invalid proxy method\r\n");
+	die("Invalid proxy method\n");
 }
 
 $session = curl_init($url);
