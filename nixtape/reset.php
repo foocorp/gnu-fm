@@ -29,15 +29,15 @@ global $mdb2;
 $errors = '';
 
 function sendEmail($text, $email) {
-    $headers = 'From: Libre.fm Recovery <recovery@libre.fm>';
-    $subject = 'Libre.fm Password Recovery';
+    $headers = 'From: Libre.fm Reset <recovery@libre.fm>';
+    $subject = 'Libre.fm Password Reset';
     mail($email, $subject, $text, $headers);
 }
 
 if (isset($_GET['code'])) {
     $res = $mdb2->query('SELECT * FROM Recovery_Request WHERE code=' . $mdb2->quote($_GET['code'], 'text'));
     if ($res->numRows() == 0) {
-	$errors .= "Invalid recovery token.\n";
+	$errors .= "Invalid reset token.\n";
 	$smarty->assign('errors', $errors);
 	$smarty->display('error.tpl');
 	die();
@@ -94,13 +94,13 @@ else if (isset($_POST['user'])) {
 	die();
     }
 
-    $url = $base_url . '/recovery.php?code=' . $code;
+    $url = $base_url . '/reset.php?code=' . $code;
     $content = "Hi!\n\nSomeone from the IP-address " . $_SERVER['REMOTE_ADDR'] . " entered your username " 
-	. "in the password recovery form at libre.fm. To change you password, please visit\n\n"
+	. "in the password reset form at libre.fm. To change you password, please visit\n\n"
 	. $url . "\n\n- The Libre.fm Team";
     sendEmail($content, $row['email']);
     $smarty->assign('sent', true);	
 } 
 
-$smarty->display('recovery.tpl');
+$smarty->display('reset.tpl');
 ?>
