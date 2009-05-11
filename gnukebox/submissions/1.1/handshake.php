@@ -42,23 +42,26 @@ if(!in_array($protocol, $supported_protocols))  {
 
 $timestamp = time();
 
-$res = $adodb->GetOne("SELECT password FROM Users WHERE username = ". $adodb->qstr($username));
-if(PEAR::isError($res)) {
-	die("FAILED " . $res->getMessage() . "\n");
+try {
+	$res = $adodb->GetOne("SELECT password FROM Users WHERE username = ". $adodb->qstr($username));
+}
+catch (exception $e) {
+	die("FAILED " . $e->getMessage() . "\n");
 }
 if(!$res->numRows()) {
 	die("BADUSER\n");
 }
 $password = $res;
 $session_id = md5($password . $timestamp);
+try {
 $res = $adodb->Execute("INSERT INTO Scrobble_Sessions(username, sessionid, client, expires) VALUES ("
 	. $adodb->qstr($username, "text") . ","
 	. $adodb->qstr($session_id, "text") . ","
 	. $adodb->qstr($client, "text") . ","
 	. $adodb->qstr(time() + 86400) . ")");
-
-if(PEAR::isError($res)) {
-        die("FAILED " . $res->getMessage() . "\n");
+}
+catch (exception $e) {
+        die("FAILED " . $e->getMessage() . "\n");
 }
 
 echo "UPTODATE\n";
