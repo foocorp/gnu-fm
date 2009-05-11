@@ -87,6 +87,10 @@ if ($req_user) {
 			echo "<h2>Last 10 tracks received</h2>";
 		}
 }
+			catch (exception $e)
+			{
+				die($e->getMessage());
+			}
 
 ?>
 
@@ -94,10 +98,6 @@ if ($req_user) {
 			<tr><th>User</th><th>Artist</th><th>Track</th><th>Time</th></tr>
 
 <?php
-			catch (exception $e)
-			{
-				die($e->getMessage());
-			}
 
 			$i = 0;
 			foreach($res as &$row){
