@@ -18,7 +18,7 @@
 
 */
 
-require_once('../../database.php');
+require_once('../../database2.php');
 require_once('../../scrobble-utils.php');
 
 if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t'])) {
@@ -30,16 +30,16 @@ if(empty($_POST['s']) || empty($_POST['a']) || empty($_POST['t'])) {
 
 $session_id = $_POST['s'];
 
-$username = $mdb2->quote(usernameFromSID($session_id), "text");
-$MQsess = $mdb2->quote($session_id, "text");
+$username = $adodb->qstr(usernameFromSID($session_id));
+$MQsess = $adodb->qstr($session_id);
 
-$artist = $mdb2->quote($_POST['a'], "text");
+$artist = $adodb->qstr($_POST['a']);
 if(isset($_POST['b'])) {
-	$album = $mdb2->quote($_POST['b'], "text");
+	$album = $adodb->qstr($_POST['b']);
 } else {
 	$album = 'NULL';
 }
-$track = $mdb2->quote($_POST['t'], "text");
+$track = $adodb->qstr($_POST['t']);
 if(isset($_POST['l']) && is_numeric($_POST['l'])) {
 	$expires = time() + (int) $_POST['l'];
 } else {
@@ -49,7 +49,7 @@ if(isset($_POST['l']) && is_numeric($_POST['l'])) {
 $mb = validateMBID($_POST['m']);
 
 if($mb) {
-	$mbid = $mdb2->quote($mb, "text");
+	$mbid = $adodb->qstr($mb, "text");
 } else {
 	$mbid = 'NULL';
 }
@@ -61,12 +61,12 @@ if($album != 'NULL') {
 getTrackCreateIfNew($artist, $album, $track, $mbid);
 
 //Expire old tracks
-$mdb2->exec("DELETE FROM Now_Playing WHERE expires < " . time());
+$adodb->Execute("DELETE FROM Now_Playing WHERE expires < " . time());
 
 //Delete this user's last playing song (if any)
-$mdb2->exec("DELETE FROM Now_Playing WHERE sessionid = " . ($MQsess));
+$adodb->Execute("DELETE FROM Now_Playing WHERE sessionid = " . ($MQsess));
 
-$mdb2->exec("INSERT INTO Now_Playing (sessionid, artist, album, track, expires, mbid) VALUES ("
+$adodb->Execute("INSERT INTO Now_Playing (sessionid, artist, album, track, expires, mbid) VALUES ("
 	. $MQsess . ", "
 	. $artist . ", "
 	. $album . ", "
