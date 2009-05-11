@@ -22,7 +22,6 @@ require_once('../../database.php');
 require_once('../../scrobble-utils.php');
 
 if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t']) || !isset($_POST['i'])) {
-	reportError($_POST['u'] . ' POST FAILED', var_dump($_POST));
 	die("Failed Required POST parameters are not set\n");
 }
 if(empty($_POST['s']) || empty($_POST['a']) || empty($_POST['t']) || empty($_POST['i'])) {
