@@ -23,14 +23,14 @@ require_once('../../scrobble-utils.php');
 
 if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t']) || !isset($_POST['i'])) {
 	reportError($_POST['u'] . ' POST FAILED', var_dump($_POST));
-	die("Failed Required POST parameters are not set\r\n");
+	die("Failed Required POST parameters are not set\n");
 }
 if(empty($_POST['s']) || empty($_POST['a']) || empty($_POST['t']) || empty($_POST['i'])) {
-	die("Failed Required POST parameters are empty\r\n");
+	die("Failed Required POST parameters are empty\n");
 }
 
 if(!is_array($_POST['a']) || !is_array($_POST['t']) || !is_array($_POST['i'])) {
-	die("FAILED Track parameters must be arrays\r\n");
+	die("FAILED Track parameters must be arrays\n");
 }
 
 $session_id = $_POST['s'];
@@ -46,7 +46,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 			$artist = $adodb->qstr($_POST['a'][$i]);
 			break;
 		default:
-			die("FAILED Bad encoding in artist submission $i\r\n");
+			die("FAILED Bad encoding in artist submission $i\n");
 		}
 	if(isset($_POST['b'][$i]) && !empty($_POST['b'])) {
 		switch (mb_detect_encoding($_POST['b'][$i])) {
@@ -55,7 +55,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 			$album = $adodb->qstr($_POST['b'][$i]);
 			break;
 		default:
-			die("FAILED Bad encoding in album submission $i\r\n");
+			die("FAILED Bad encoding in album submission $i\n");
 		}
 	} else {
 		$album = 'NULL';
@@ -66,7 +66,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	    $f .= isset($_POST['a'][$i]) ? "A({$_POST['a'][$i]})" : 'a';
 	    $f .= isset($_POST['i'][$i]) ? "I({$_POST['i'][$i]})" : 'i';
 
-	    die("FAILED Track $i was submitted with empty mandatory field(s): {$f}\r\n");
+	    die("FAILED Track $i was submitted with empty mandatory field(s): {$f}\n");
 	}
 
 	switch (mb_detect_encoding($_POST['t'][$i])) {
@@ -75,7 +75,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		    $track = $adodb->qstr($_POST['t'][$i]);
 		    break;
 		default:
-			die("FAILED Bad encoding in title submission $i\r\n");
+			die("FAILED Bad encoding in title submission $i\n");
 	}
 	if(is_numeric($_POST['i'][$i])) {
 		$time = (int) $_POST['i'][$i];
@@ -110,7 +110,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	}
 
 	if(($time - time()) > 300) {
-            die("FAILED Submitted track has timestamp in the future\r\n"); // let's try a 5-minute tolerance
+            die("FAILED Submitted track has timestamp in the future\n"); // let's try a 5-minute tolerance
 	}
 
 	createArtistIfNew($artist);
@@ -153,7 +153,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		    $adodb->FailTrans();
 		    $adodb->CompleteTrans();
 		    reportError($msg, $sql);
-                    die("FAILED " . $msg . "\nError has been reported to site administrators.\r\n");
+                    die("FAILED " . $msg . "\nError has been reported to site administrators.\n");
         	}
 
 		}
@@ -165,7 +165,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		    $adodb->FailTrans();
 		    $adodb->CompleteTrans();
 		    reportError($msg, $sql);
-                    die("FAILED " . $msg . "\nError has been reported to site administrators.\r\n");
+                    die("FAILED " . $msg . "\nError has been reported to site administrators.\n");
 		}
 
 	        // Destroy now_playing since it is almost certainly obsolescent
@@ -173,6 +173,6 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	}
 }
 
-die("OK\r\n");
+die("OK\n");
 
 ?>

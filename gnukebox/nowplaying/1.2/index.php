@@ -22,10 +22,10 @@ require_once('../../database2.php');
 require_once('../../scrobble-utils.php');
 
 if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t'])) {
-	die("FAILED Required POST parameters are not set\r\n");
+	die("FAILED Required POST parameters are not set\n");
 }
 if(empty($_POST['s']) || empty($_POST['a']) || empty($_POST['t'])) {
-	die("FAILED Required POST parameters are empty\r\n");
+	die("FAILED Required POST parameters are empty\n");
 }
 
 $session_id = $_POST['s'];
@@ -75,6 +75,6 @@ $adodb->Execute("INSERT INTO Now_Playing (sessionid, artist, album, track, expir
 	. $mbid . ")");
 
 
-die("OK\r\n");
+die("OK\n");
 
 ?>

@@ -31,23 +31,23 @@ $supported_protocols = array("1.1");
 
 
 if(!isset($_GET['p']) || !isset($_GET['u']) || !isset($_GET['c'])) {
-	die("FAILED\r\n");
+	die("FAILED\n");
 }
 
 $protocol = $_GET['p']; $username = $_GET['u']; $client = $_GET['c'];
 
 if(!in_array($protocol, $supported_protocols))  {
-	die("FAILED Unsupported protocol version\r\n");
+	die("FAILED Unsupported protocol version\n");
 }
 
 $timestamp = time();
 
 $res = $adodb->GetOne("SELECT password FROM Users WHERE username = ". $adodb->qstr($username));
 if(PEAR::isError($res)) {
-	die("FAILED " . $res->getMessage() . "\r\n");
+	die("FAILED " . $res->getMessage() . "\n");
 }
 if(!$res->numRows()) {
-	die("BADUSER\r\n");
+	die("BADUSER\n");
 }
 $password = $res;
 $session_id = md5($password . $timestamp);
@@ -58,12 +58,12 @@ $res = $adodb->Execute("INSERT INTO Scrobble_Sessions(username, sessionid, clien
 	. $adodb->qstr(time() + 86400) . ")");
 
 if(PEAR::isError($res)) {
-        die("FAILED " . $res->getMessage() . "\r\n");
+        die("FAILED " . $res->getMessage() . "\n");
 }
 
-echo "UPTODATE\r\n";
-echo $timestamp . "\r\n";
-echo $submissions_server . "/submissions/1.2/\r\n";
-echo "INTERVAL 1\r\n";
+echo "UPTODATE\n";
+echo $timestamp . "\n";
+echo $submissions_server . "/submissions/1.2/\n";
+echo "INTERVAL 1\n";
 
 ?>

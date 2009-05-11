@@ -26,7 +26,7 @@ require_once('radio-utils.php');
 // These deaths should probably just return an empty playlist
 
 if(!isset($_GET['sk']) || !isset($_GET['desktop'])) {
-	die("BADSESSION\r\n"); // this should return a blank dummy playlist instead
+	die("BADSESSION\n"); // this should return a blank dummy playlist instead
 }
 
 $session = $_GET['sk'];
@@ -34,7 +34,7 @@ $session = $_GET['sk'];
 $res = $mdb2->query('SELECT url FROM Radio_Sessions WHERE session = ' . $mdb2->quote($session, 'text'));
 
 if(!$res->numRows()) {
-	die("BADSESSION\r\n"); // this should return a blank dummy playlist instead
+	die("BADSESSION\n"); // this should return a blank dummy playlist instead
 }
 
 $url = $res->fetchOne(0);
@@ -49,7 +49,7 @@ if(ereg('l(ast|ibre)fm://globaltags/(.*)', $url, $regs)) {
 	$artist = $regs[2];
 	$res = $mdb2->query('SELECT name, artist_name, album_name FROM Track WHERE streamurl<>\'\' AND streamable=1 AND lower(artist_name) = ' . $mdb2->quote(mb_strtolower($artist, 'UTF-8'), 'text'));
 } else {
-	die("FAILED\r\n"); // this should return a blank dummy playlist instead
+	die("FAILED\n"); // this should return a blank dummy playlist instead
 }
 
 
