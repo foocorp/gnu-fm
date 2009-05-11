@@ -19,7 +19,7 @@
 */
 
 header('Content-type: text/html; charset=utf-8');
-require_once('database.php');
+require_once('database2.php');
 require_once('utils/human-time.php');
 
 ?>
