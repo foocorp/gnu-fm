@@ -35,7 +35,7 @@ if(!is_array($_POST['a']) || !is_array($_POST['t']) || !is_array($_POST['i'])) {
 
 $session_id = $_POST['s'];
 
-$username = $mdb2->quote(usernameFromSID($session_id), "text");
+$username = $adodb->qstr(usernameFromSID($session_id));
 $rowvalues = array();
 $actualcount = 0;
 
@@ -43,7 +43,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		switch (mb_detect_encoding($_POST['a'][$i])) {
 		case "ASCII":
 		case "UTF-8":
-			$artist = $mdb2->quote($_POST['a'][$i], "text");
+			$artist = $adodb->qstr($_POST['a'][$i]);
 			break;
 		default:
 			die("FAILED Bad encoding in artist submission $i\r\n");
@@ -52,7 +52,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		switch (mb_detect_encoding($_POST['b'][$i])) {
 		case "ASCII":
 		case "UTF-8":
-			$album = $mdb2->quote($_POST['b'][$i], "text");
+			$album = $adodb->qstr($_POST['b'][$i]);
 			break;
 		default:
 			die("FAILED Bad encoding in album submission $i\r\n");
@@ -72,7 +72,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	switch (mb_detect_encoding($_POST['t'][$i])) {
 		case "ASCII":
 		case "UTF-8":
-		    $track = $mdb2->quote($_POST['t'][$i], "text");
+		    $track = $adodb->qstr($_POST['t'][$i]);
 		    break;
 		default:
 			die("FAILED Bad encoding in title submission $i\r\n");
@@ -88,23 +88,23 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	$mb = validateMBID($_POST['m'][$i]);
 
 	if($mb) {
-		$mbid = $mdb2->quote($mb, "text");
+		$mbid = $adodb->qstr($mb);
 	} else {
 		$mbid = 'NULL';
 	}
 
 	if(isset($_POST['o'][$i])) {
-		$source = $mdb2->quote($_POST['o'][$i], "text");
+		$source = $adodb->qstr($_POST['o'][$i]);
 	} else {
 		$source = 'NULL';
 	}
 	if(!empty($_POST['r'][$i])) {
-		$rating = $mdb2->quote($_POST['r'][$i], "text");
+		$rating = $adodb->qstr($_POST['r'][$i]);
 	} else {
-		$rating = $mdb2->quote("0", "text"); // use the fake rating code 0 for now
+		$rating = $adodb->qstr("0"); // use the fake rating code 0 for now
 	}
 	if(isset($_POST['l'][$i])) {
-		$length = $mdb2->quote($_POST['l'][$i], "integer");
+		$length = (int)($_POST['l'][$i]);
 	} else {
 		$length = 'NULL';
 	}
@@ -141,33 +141,35 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 
 	if(($i+1) == count($_POST['a']) && $actualcount>0) {
 
-		$mdb2->exec("BEGIN");
+		$adodb->StartTrans();
 
 		for($j = 0; $j < $actualcount; $j++) {
 
 	// Scrobble!
 		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length, stid) VALUES " . $rowvalues[$j];
-		$res =& $mdb2->exec($sql);
+		$res =& $adodb->Execute($sql);
 		if(PEAR::isError($res)) {
 		    $msg = $res->getMessage() . " - " . $res->getUserInfo();
-		    $mdb2->exec("ROLLBACK");
+		    $adodb->FailTrans();
+		    $adodb->CompleteTrans();
 		    reportError($msg, $sql);
                     die("FAILED " . $msg . "\nError has been reported to site administrators.\r\n");
         	}
 
 		}
 
-		$mdb2->exec("COMMIT");
+		$adodb->CompleteTrans();
 
 		if(PEAR::isError($res)) {
 		    $msg = $res->getMessage() . " - " . $res->getUserInfo();
-		    $mdb2->exec("ROLLBACK");
+		    $adodb->FailTrans();
+		    $adodb->CompleteTrans();
 		    reportError($msg, $sql);
                     die("FAILED " . $msg . "\nError has been reported to site administrators.\r\n");
 		}
 
 	        // Destroy now_playing since it is almost certainly obsolescent
-	        $mdb2->exec("DELETE FROM Now_Playing WHERE sessionid = " . $mdb2->quote($session_id, "text"));
+	        $adodb->Execute("DELETE FROM Now_Playing WHERE sessionid = " . $adodb->qstr($session_id));
 	}
 }
 

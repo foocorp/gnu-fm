@@ -42,20 +42,20 @@ if(!in_array($protocol, $supported_protocols))  {
 
 $timestamp = time();
 
-$res = $mdb2->query("SELECT password FROM Users WHERE username = ". $mdb2->quote($username, "text"));
+$res = $adodb->GetOne("SELECT password FROM Users WHERE username = ". $adodb->qstr($username));
 if(PEAR::isError($res)) {
 	die("FAILED " . $res->getMessage() . "\r\n");
 }
 if(!$res->numRows()) {
 	die("BADUSER\r\n");
 }
-$password = $res->fetchOne(0);
+$password = $res;
 $session_id = md5($password . $timestamp);
-$res = $mdb2->exec("INSERT INTO Scrobble_Sessions(username, sessionid, client, expires) VALUES ("
-	. $mdb2->quote($username, "text") . ","
-	. $mdb2->quote($session_id, "text") . ","
-	. $mdb2->quote($client, "text") . ","
-	. $mdb2->quote(time() + 86400) . ")");
+$res = $adodb->Execute("INSERT INTO Scrobble_Sessions(username, sessionid, client, expires) VALUES ("
+	. $adodb->qstr($username, "text") . ","
+	. $adodb->qstr($session_id, "text") . ","
+	. $adodb->qstr($client, "text") . ","
+	. $adodb->qstr(time() + 86400) . ")");
 
 if(PEAR::isError($res)) {
         die("FAILED " . $res->getMessage() . "\r\n");

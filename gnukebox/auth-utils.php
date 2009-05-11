@@ -19,40 +19,39 @@
 
 */
 
-require_once('database.php');
+require_once('database2.php');
 
 function check_web_auth($username, $token, $timestamp, $api_key, $sk) {
 	// Validates authentication using a web services token
-	global $mdb2;
+	global $adodb;
 
 	// Using the valid_api_key function from nixtape/2.0/index.php would be appropriate here
 	if (strlen($api_key) != 32) {
 		return false;
 	}
 
-	$result = $mdb2->query('SELECT username FROM Auth WHERE '
+	$result = $adodb->GetOne('SELECT username FROM Auth WHERE '
 		//. 'expires > ' . time() . ' AND '   // session keys have an infinite lifetime
-		. 'sk = ' . $mdb2->quote($sk, 'text')
+		. 'sk = ' . $adodb->qstr($sk)
 		);
-	if (PEAR::isError($result) || !$result->numRows()) {
+	if (!$result) {
 		// TODO: Log failures somewhere
 		return false;
 	}
 
-	return $result->fetchOne(0) == $username;
+	return $result == $username;
 }
 
 function check_standard_auth($username, $token, $timestamp) {
 	// Validates authentication using a standard authentication token
-	global $mdb2;
+	global $adodb;
 
-	$result = $mdb2->query("SELECT password FROM Users WHERE username =" . $mdb2->quote($username, 'text'));
-	if (PEAR::isError($result) || !$result->numRows()) {
+	$pass = $adodb->GetOne("SELECT password FROM Users WHERE username =" . $adodb->qstr($username));
+	if (!$pass) {
 		// TODO: Log failures somewhere
 		return false;
 	}
 
-	$pass = $result->fetchOne(0);
 	$check_token = md5($pass . $timestamp);
 
 	return $check_token == $token;

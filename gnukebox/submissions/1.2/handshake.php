@@ -56,12 +56,12 @@ if(!$authed) {
 
 $session_id = md5($auth_token . time());
 $sql = "INSERT INTO Scrobble_Sessions(username, sessionid, client, expires) VALUES ("
-	. $mdb2->quote($username, "text") . ","
-	. $mdb2->quote($session_id, "text") . ","
-	. $mdb2->quote($client, "text") . ","
-	. $mdb2->quote(time() + 86400) . ")";
+	. $adodb->qstr($username) . ","
+	. $adodb->qstr($session_id) . ","
+	. $adodb->qstr($client) . ","
+	. (time() + 86400) . ")";
 
-$res = $mdb2->exec($sql);
+$res = $adodb->Execute($sql);
 
 if(PEAR::isError($res)) {
 	$msg = $res->getMessage();
