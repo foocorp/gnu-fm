@@ -163,7 +163,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 			$adodb->CompleteTrans();
 		}
 		catch (exception $e) {
-                    die("FAILED " . $e->getMessage() . "\n";
+                    die("FAILED " . $e->getMessage() . "\n");
 		}
 		
 		}
