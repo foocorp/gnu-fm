@@ -60,31 +60,30 @@ require_once('utils/human-time.php');
 		$req_artist	= urldecode($_GET["a"]);
 		$req_track	= urldecode($_GET["t"]);
 
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
 if ($req_user) {
-//			echo "SELECT username, artist, track, time FROM Scrobbles WHERE username = '" . $mdb2->quote($req_user, 'text') . "' ORDER BY time DESC LIMIT 100";
-			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE username = " . $mdb2->quote($req_user, 'text') . " ORDER BY time DESC LIMIT 100");
+//			echo "SELECT username, artist, track, time FROM Scrobbles WHERE username = '" . $adodb->qstr($req_user) . "' ORDER BY time DESC LIMIT 100";
+			$res = $adodb->CacheGetAll(60, "SELECT username, artist, track, time FROM Scrobbles WHERE username = " . $adodb->qstr($req_user) . " ORDER BY time DESC LIMIT 100");
 
 			echo "<h2>" . $req_user . "'s most recent listening data</h2>";
 
 } elseif ($req_artist) {
 
-			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE artist = '" . $mdb2->quote($req_artist, 'text') ."' ORDER BY time DESC LIMIT 100");
+			$res = $adodb->CacheGetAll(60, "SELECT username, artist, track, time FROM Scrobbles WHERE artist = '" . $adodb->qstr($req_artist) ."' ORDER BY time DESC LIMIT 100");
 
 			echo "<h2>Last 100 Tracks by " . $req_artist . "</h2>";
 
 } elseif ($req_track) {
 
-			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles WHERE track = '" . $mdb2->quote($req_track, 'text') . "' ORDER BY time DESC LIMIT 100");
+			$res = $adodb->CacheGetAll(60, "SELECT username, artist, track, time FROM Scrobbles WHERE track = '" . $adodb->qstr($req_track) . "' ORDER BY time DESC LIMIT 100");
 
 			echo "<h2>Last 100 plays of " . $req_track . "</h2>";
 
 } elseif (!$res) {
-
-			$res = $mdb2->query("SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
+			$res = $adodb->CacheGetAll(60, "SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
 
 			echo "<h2>Last 10 tracks received</h2>";
-
 }
 
 ?>
@@ -98,7 +97,7 @@ if ($req_user) {
 				die($res->getMessage());
 			}
 			$i = 0;
-			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+			foreach($res as &$row){
 			$i++;
 				echo ($i % 2 == 0) ? "<tr class=\"even\">" : "<tr class=\"odd\">";
 				foreach($row as $field => $value) {
@@ -122,37 +121,36 @@ if ($req_user) {
 		<h2>Statistics</h2>
 
 		<?php
-			$res = $mdb2->query("SELECT COUNT(*) as total from Scrobbles");
-			if(PEAR::isError($res)) {
-				die($res->getMessage());
+			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+			$total = $adodb->CacheGetOne(60, 'SELECT COUNT(*) as total from Scrobbles');
+			if(!$res) {
+				die("sql error");
 			}
-			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
-			echo "<p>" . stripslashes($row["total"]) . " gobbles.</p>";
+			echo "<p>" . stripslashes($total) . " gobbles.</p>";
 
-			$res = $mdb2->query("SELECT COUNT(*) as total from Track");
-			if(PEAR::isError($res)) {
-				die($res->getMessage());
+			$total = $adodb->CacheGetOne(120, 'SELECT COUNT(*) as total from Track');
+			if(!$res) {
+				die("sql error");
 			}
-			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
-			echo "<p>" . stripslashes($row["total"]) . " tracks.</p>";
+			echo "<p>" . stripslashes($total) . " tracks.</p>";
 
-			$res = $mdb2->query("SELECT COUNT(*) as total from Users");
-			if(PEAR::isError($res)) {
-				die($res->getMessage());
+			$total = $adodb->CacheGetOne(720, 'SELECT COUNT(*) as total from Users');
+			if(!$res) {
+				die("sql error");
 			}
-			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
-			echo "<p>" . stripslashes($row["total"]) . " users.</p>";
+			echo "<p>" . stripslashes($total) . " users.</p>";
 
 		?>
 
 		<h2>Now Playing?</h2>
 
 		<?php
-			$res = $mdb2->query("SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT 10");
-			if(PEAR::isError($res)) {
-				die($res->getMessage());
+			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+			$res = $adodb->GetAll('SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT 10');
+			if(!$res) {
+				die("sql error");
 			}
-			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+			foreach($res as &$row){
 				if($row["name"] == "") {
 				  $client = strip_tags(stripslashes($row["client"])) . "(unknown, please tell us what this is)";
 				} else {
@@ -178,7 +176,7 @@ if ($req_user) {
 </div>
 <div class="yui-g">
     <div class="yui-u first" id="links">
-This site handles <em>gobble</em> and <em>now playing</em>
+This site handles <em>track</em> and <em>now playing</em>
 submissions from client applications and offers access to our web
 services API. If you just want to use <a
 href="http://libre.fm">libre.fm</a> then you probably want to

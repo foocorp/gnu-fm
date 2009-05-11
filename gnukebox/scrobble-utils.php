@@ -19,49 +19,49 @@
 
 */
 
-require_once('database.php');	// include the database connection string
+require_once('database2.php');	// include the database connection string
 
 function usernameFromSID($session_id) 
 {
 
 //derive the username from a session ID
 
-	global $mdb2; 	       // include the Database connector
+	global $adodb; 	       // include the Database connector
 
 	// Delete any expired session ids
-	$mdb2->query("DELETE FROM Scrobble_Sessions WHERE expires < " . time());
+	$adodb->Execute("DELETE FROM Scrobble_Sessions WHERE expires < " . time());
 
-	$res = $mdb2->query("SELECT username FROM Scrobble_Sessions WHERE sessionid = " . $mdb2->quote($session_id, "text")); // get the username from the table
+	$res = $adodb->GetOne("SELECT username FROM Scrobble_Sessions WHERE sessionid = " . $adodb->qstr($session_id)); // get the username from the table
 
 	if(PEAR::isError($res)) {   
 		die("FAILED ufs " . $res->getMessage() . "\n");
 		// die is there is an error, printing the error
 	}
 
-	if(!$res->numRows()) {
+	if(!$res) {
 		die("BADSESSION\n");
 
 		// the user has no session
 	}
 
-	return $res->fetchOne(0);
+	return $res;
 
 	       // return the first user
 }
 
 function createArtistIfNew($artist) {
-	global $mdb2;
+	global $adodb;
 
 	$artist = NoSpamTracks($artist);
 
-	$res = $mdb2->query("SELECT name FROM Artist WHERE name = " . ($artist));
+	$res = $adodb->Execute("SELECT name FROM Artist WHERE name = " . ($artist));
 	if(PEAR::isError($res)) {
 		die("FAILED art " . $res->getMessage() . "\n");
 	}
 
-	if(!$res->numRows()) {
+	if(!$res) {
 		// Artist doesn't exist, so we create them
-		$res = $mdb2->query("INSERT INTO Artist (name) VALUES (" . ($artist) . ")");
+		$res = $adodb->Execute("INSERT INTO Artist (name) VALUES (" . ($artist) . ")");
 		if(PEAR::isError($res)) {
 			die("FAILED artc " . $res->getMessage() . "\n");
 		}
@@ -69,25 +69,25 @@ function createArtistIfNew($artist) {
 }
 
 function createAlbumIfNew($artist, $album) {
-	global $mdb2;
+	global $adodb;
 
-	$res = $mdb2->query("SELECT name FROM Album WHERE name = " . ($album) . " AND artist_name = " . ($artist));
+	$res = $adodb->Execute("SELECT name FROM Album WHERE name = " . ($album) . " AND artist_name = " . ($artist));
 	if(PEAR::isError($res)) {
 		die("FAILED alb " . $res->getMessage() . "\n");
 	}
 
-	if(!$res->numRows()) {
+	if(!$res) {
 		// Album doesn't exist, so create it
 	        
-	  $art = $mdb2->quote(getAlbumArt($artist, $album));
+	  $art = $adodb->qstr(getAlbumArt($artist, $album));
 	  if ($art !="") {
-	    $license = $mdb2->quote("amazon");
+	    $license = $adodb->qstr("amazon");
 
-	    $res = $mdb2->query("INSERT INTO Album (name, artist_name, image, artwork_license) VALUES (" . ($album) . ", " . ($artist) . ", " . ($art) . ", " . ($license) .")");
+	    $res = $adodb->Execute("INSERT INTO Album (name, artist_name, image, artwork_license) VALUES (" . ($album) . ", " . ($artist) . ", " . ($art) . ", " . ($license) .")");
 
 	  } else {
 
-		$res = $mdb2->query("INSERT INTO Album (name, artist_name) VALUES (" . ($album) . ", " . ($artist) . ")");
+		$res = $adodb->Execute("INSERT INTO Album (name, artist_name) VALUES (" . ($album) . ", " . ($artist) . ")");
 
 	  }
 
@@ -98,15 +98,15 @@ function createAlbumIfNew($artist, $album) {
 }
 
 function getTrackCreateIfNew($artist, $album, $track, $mbid) {
-	global $mdb2;
+	global $adodb;
 
 	$track = NoSpamTracks($track);
 	$artist = NoSpamTracks($artist);
 
 	if($album != 'NULL') {
-	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = lower(" . ($track) . ") AND lower(artist_name) = lower(" . ($artist) . ") AND lower(album_name) = lower(" . ($album) . ")");
+	$res = $adodb->GetOne("SELECT id FROM Track WHERE lower(name) = lower(" . ($track) . ") AND lower(artist_name) = lower(" . ($artist) . ") AND lower(album_name) = lower(" . ($album) . ")");
 	} else {
-	$res = $mdb2->query("SELECT id FROM Track WHERE lower(name) = lower(" . ($track) . ") AND lower(artist_name) = lower(" . ($artist) . ") AND album_name IS NULL");
+	$res = $adodb->GetOne("SELECT id FROM Track WHERE lower(name) = lower(" . ($track) . ") AND lower(artist_name) = lower(" . ($artist) . ") AND album_name IS NULL");
 	}
 	if(PEAR::isError($res)) {
 		die("FAILED trk " . $res->getMessage() . "\n");
@@ -114,7 +114,7 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 
 	if(!$res->numRows()) {
 		// Create new track
-		$res = $mdb2->exec("INSERT INTO Track (name, artist_name, album_name, mbid) VALUES ("
+		$res = $adodb->Execute("INSERT INTO Track (name, artist_name, album_name, mbid) VALUES ("
 			. ($track) . ", "
 			. ($artist) . ", "
 			. ($album) . ", "
@@ -124,14 +124,14 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 		}
 		return getTrackCreateIfNew($artist, $album, $track, $mbid);
 	} else {
-		return $res->fetchOne(0);
+		return $res;
 	}
 }
 
 function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
-	global $mdb2;
+	global $adodb;
 
-	$res = $mdb2->query("SELECT id FROM Scrobble_Track WHERE name = lower("
+	$res = $adodb->GetOne("SELECT id FROM Scrobble_Track WHERE name = lower("
 		. ($track) . ") AND artist = lower(" . ($artist) . ") AND album "
 		. (($album == 'NULL') ? "IS NULL" : ("= lower(" . ($album) . ")")) . " AND mbid "
 		. (($mbid == 'NULL') ? "IS NULL" : ("= lower(" . ($mbid) . ")")));
@@ -139,14 +139,14 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 		die("FAILED st " . $res->getMessage() . "\n");
 	}
 
-	if(!$res->numRows()) {
+	if(!$res) {
 		$sql = "INSERT INTO Scrobble_Track (name, artist, album, mbid, track) VALUES ("
 			. "lower(" . ($track) . "), "
 			. "lower(" . ($artist) . "), "
 			. (($album == 'NULL') ? "NULL" : "lower(" . ($album) . ")") . ", "
 			. (($mbid == 'NULL') ? "NULL" : "lower(" . ($mbid) . ")") . ", "
 			. ($tid) . ")";
-		$res = $mdb2->exec($sql);
+		$res = $adodb->Execute($sql);
 		if(PEAR::isError($res)) {
 			$msg = $res->getMessage() . " - " . $res->getUserInfo();
 			reportError($msg, $sql);
@@ -155,19 +155,19 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 		}
 		return getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid);
 	} else {
-		return $res->fetchOne(0);
+		return $res;
 	}
 }
 
 function scrobbleExists($username, $artist, $track, $time) {
-	global $mdb2;
+	global $adodb;
 
-	$res = $mdb2->query("SELECT time FROM Scrobbles WHERE username = " . ($username) . " AND artist = " . ($artist) . " AND track = " . ($track) . " AND time = " . ($time));
+	$res = $adodb->GetOne("SELECT time FROM Scrobbles WHERE username = " . ($username) . " AND artist = " . ($artist) . " AND track = " . ($track) . " AND time = " . ($time));
 	if(PEAR::isError($res)) {
 		die("FAILED se " . $res->getMessage() . "\n");
 	}
 
-	if(!$res->numRows()) {
+	if(!$res) {
 		return false;
 	} else {
 		return true;
