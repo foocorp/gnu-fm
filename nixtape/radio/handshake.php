@@ -21,7 +21,7 @@
 require_once('../database.php');
 
 if(!isset($_GET['username']) || !isset($_GET['passwordmd5'])) {
-	die("BADAUTH\n");
+	die("BADAUTH\r\n");
 }
 
 $username = $_GET['username'];
@@ -29,7 +29,7 @@ $passmd5 = $_GET['passwordmd5'];
 
 $res = $mdb2->query('SELECT username FROM Users WHERE username = ' . $mdb2->quote($username, 'text') . ' AND password = ' . $mdb2->quote($passmd5, 'text'));
 if (!$res->numRows()) {
-	die("BADAUTH\n");
+	die("BADAUTH\r\n");
 }
 
 $session = md5($passmd5 . time());

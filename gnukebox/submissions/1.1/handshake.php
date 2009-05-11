@@ -31,23 +31,23 @@ $supported_protocols = array("1.1");
 
 
 if(!isset($_GET['p']) || !isset($_GET['u']) || !isset($_GET['c'])) {
-	die("FAILED\n");
+	die("FAILED\r\n");
 }
 
 $protocol = $_GET['p']; $username = $_GET['u']; $client = $_GET['c'];
 
 if(!in_array($protocol, $supported_protocols))  {
-	die("FAILED Unsupported protocol version\n");
+	die("FAILED Unsupported protocol version\r\n");
 }
 
 $timestamp = time();
 
 $res = $mdb2->query("SELECT password FROM Users WHERE username = ". $mdb2->quote($username, "text"));
 if(PEAR::isError($res)) {
-	die("FAILED " . $res->getMessage() . "\n");
+	die("FAILED " . $res->getMessage() . "\r\n");
 }
 if(!$res->numRows()) {
-	die("BADUSER\n");
+	die("BADUSER\r\n");
 }
 $password = $res->fetchOne(0);
 $session_id = md5($password . $timestamp);
@@ -58,12 +58,12 @@ $res = $mdb2->exec("INSERT INTO Scrobble_Sessions(username, sessionid, client, e
 	. $mdb2->quote(time() + 86400) . ")");
 
 if(PEAR::isError($res)) {
-        die("FAILED " . $res->getMessage() . "\n");
+        die("FAILED " . $res->getMessage() . "\r\n");
 }
 
-echo "UPTODATE\n";
-echo $timestamp . "\n";
-echo $submissions_server . "/submissions/1.2/\n";
-echo "INTERVAL 1\n";
+echo "UPTODATE\r\n";
+echo $timestamp . "\r\n";
+echo $submissions_server . "/submissions/1.2/\r\n";
+echo "INTERVAL 1\r\n";
 
 ?>

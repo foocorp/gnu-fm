@@ -22,7 +22,7 @@ require_once('../database.php');
 require_once('radio-utils.php');
 
 if(!isset($_GET['session']) || !isset($_GET['url'])) {
-	die("FAILED\n");
+	die("FAILED\r\n");
 }
 
 $session = $_GET['session'];
@@ -31,7 +31,7 @@ $url = $_GET['url'];
 $res = $mdb2->query('SELECT username FROM Radio_Sessions WHERE session = ' . $mdb2->quote($session, 'text'));
 
 if(!$res->numRows()) {
-        die("BADSESSION\n");
+        die("BADSESSION\r\n");
 }
 
 if(ereg('^(globaltags|artist)/[^:]+$', $url, $regs)) {
@@ -40,7 +40,7 @@ if(ereg('^(globaltags|artist)/[^:]+$', $url, $regs)) {
 
 $stationname=radio_title_from_url($url);
 if($stationname=="FAILED") {
-	die("FAILED Unavailable station\n");
+	die("FAILED Unavailable station\r\n");
 }
 
 $mdb2->exec('UPDATE Radio_Sessions SET url = ' . $mdb2->quote($url, 'text') . ' WHERE session = ' . $mdb2->quote($session, 'text'));
