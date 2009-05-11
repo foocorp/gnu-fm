@@ -166,11 +166,10 @@ for($i = 0; $i < count($_POST['a']); $i++) {
                     die("FAILED " . $e->getMessage() . "\n");
 		}
 		
-		}
+	}
 
 	        // Destroy now_playing since it is almost certainly obsolescent
 	        $adodb->Execute("DELETE FROM Now_Playing WHERE sessionid = " . $adodb->qstr($session_id));
-	}
 }
 
 die("OK\n");
