@@ -61,10 +61,11 @@ $sql = "INSERT INTO Scrobble_Sessions(username, sessionid, client, expires) VALU
 	. $adodb->qstr($client) . ","
 	. (time() + 86400) . ")";
 
+try {
 $res = $adodb->Execute($sql);
-
-if(PEAR::isError($res)) {
-	$msg = $res->getMessage();
+}
+catch (exception $e) {
+	$msg = $e->getMessage();
 	reportError($msg, $sql);
 	die("FAILED " . $msg . "\n");
 }

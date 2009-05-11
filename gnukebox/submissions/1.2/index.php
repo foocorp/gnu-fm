@@ -146,9 +146,11 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 
 	// Scrobble!
 		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length, stid) VALUES " . $rowvalues[$j];
+		try {
 		$res =& $adodb->Execute($sql);
-		if(PEAR::isError($res)) {
-		    $msg = $res->getMessage() . " - " . $res->getUserInfo();
+		}
+		catch (exception $e) {
+		    $msg = $e->getMessage() . " - " . $e->getUserInfo();
 		    $adodb->FailTrans();
 		    $adodb->CompleteTrans();
 		    reportError($msg, $sql);
@@ -157,14 +159,13 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 
 		}
 
-		$adodb->CompleteTrans();
-
-		if(PEAR::isError($res)) {
-		    $msg = $res->getMessage() . " - " . $res->getUserInfo();
-		    $adodb->FailTrans();
-		    $adodb->CompleteTrans();
-		    reportError($msg, $sql);
-                    die("FAILED " . $msg . "\nError has been reported to site administrators.\n");
+		try {
+			$adodb->CompleteTrans();
+		}
+		catch (exception $e) {
+                    die("FAILED " . $e->getMessage() . "\n";
+		}
+		
 		}
 
 	        // Destroy now_playing since it is almost certainly obsolescent
