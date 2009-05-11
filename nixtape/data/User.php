@@ -228,7 +228,7 @@ class User {
 	function getTopTracks($number=20) {
 		global $adodb;
 
-		$q = 'SELECT COUNT(track) as c, artist, album, track FROM Scrobbles WHERE username = '.$adodb->qstr($this->name).' GROUP BY artist,album,track ORDER BY c DESC LIMIT ' . ($number);
+		$query = 'SELECT COUNT(track) as c, artist, album, track FROM Scrobbles WHERE username = '.$adodb->qstr($this->name).' GROUP BY artist,album,track ORDER BY c DESC LIMIT ' . ($number);
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$data = $adodb->CacheGetAll(7200,$query);
 		if (!$res) {
