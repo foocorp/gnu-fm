@@ -27,21 +27,21 @@ $supported_protocols = array("1.2", "1.2.1");
 
 
 if(!isset($_GET['p']) || !isset($_GET['u']) || !isset($_GET['t']) || !isset($_GET['a']) || !isset($_GET['c'])) {
-	die("BADAUTH\n");
+	die("BADAUTH\r\n");
 }
 
 $protocol = $_GET['p']; $username = $_GET['u']; $timestamp = $_GET['t']; $auth_token = $_GET['a']; $client = $_GET['c'];
 
 if($client == "import") {
-	die("FAILED Import scripts are broken\n"); // this should be removed or changed to check the version once import.php is fixed
+	die("FAILED Import scripts are broken\r\n"); // this should be removed or changed to check the version once import.php is fixed
 }
 
 if(!in_array($protocol, $supported_protocols))  {
-	die("FAILED Unsupported protocol version\n");
+	die("FAILED Unsupported protocol version\r\n");
 }
 
 if(abs($timestamp - time()) > 300) {
-	die("BADTIME\n"); // let's try a 5-minute tolerance
+	die("BADTIME\r\n"); // let's try a 5-minute tolerance
 }
 
 if(isset($_GET['api_key']) && isset($_GET['sk'])) {
@@ -51,7 +51,7 @@ if(isset($_GET['api_key']) && isset($_GET['sk'])) {
 }
 
 if(!$authed) {
-	die("BADAUTH\n");
+	die("BADAUTH\r\n");
 }
 
 $session_id = md5($auth_token . time());
@@ -66,12 +66,12 @@ $res = $mdb2->exec($sql);
 if(PEAR::isError($res)) {
 	$msg = $res->getMessage();
 	reportError($msg, $sql);
-	die("FAILED " . $msg . "\n");
+	die("FAILED " . $msg . "\r\n");
 }
 
-echo "OK\n";
-echo $session_id . "\n";
-echo $submissions_server . "/nowplaying/1.2/\n";
-echo $submissions_server . "/submissions/1.2/\n";
+echo "OK\r\n";
+echo $session_id . "\r\n";
+echo $submissions_server . "/nowplaying/1.2/\r\n";
+echo $submissions_server . "/submissions/1.2/\r\n";
 
 ?>
