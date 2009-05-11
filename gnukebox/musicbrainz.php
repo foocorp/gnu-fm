@@ -24,18 +24,18 @@
 
 
 header('Content-type: text/html; charset=utf-8');
-require_once('database.php');
+require_once('database2.php');
 require_once('utils/human-time.php');
 
-$res = $mdb2->query("SELECT artist, track from scrobbles where Album is null LIMIT 20;");
+$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+$res = $adodb->GetAll("SELECT artist, track from scrobbles where Album is null LIMIT 20;");
 
      echo "<ul>";
 
-			if(PEAR::isError($res)) {
-				die($res->getMessage());
+			if(!$res) {
+				die("sql error");
 			}
-			while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-
+			foreach($res as &$row) {
 
 			echo "<li>" . $row['artist'] . "&mdash;" . $row['track'] . "</li>";
 
@@ -45,7 +45,6 @@ $res = $mdb2->query("SELECT artist, track from scrobbles where Album is null LIM
 
 			   for ($i = 0; $i < ob_get_level(); $i++) { ob_end_flush(); }
     ob_implicit_flush(1)  ;
-
 
 			}
 			
@@ -68,39 +67,34 @@ function doABunchOfShit($artist, $track){
 
 function ScrobbleLookup($artist, $track){
 
-	 	     global $mdb2;
+	 	     global $adodb;
 
-			$sql = "SELECT album from scrobbles where artist = " . $mdb2->quote($artist) . " and track = " . $mdb2->quote($track) . " LIMIT 1;";
+			$sql = "SELECT album from scrobbles where artist = " . $adodb->qstr($artist) . " and track = " . $adodb->qstr($track) . " LIMIT 1;";
 
-			$resAlbum = $mdb2->query($sql);
+			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+			$album = $adodb->GetOne($sql);
 
-			if(PEAR::isError($resAlbum)) {
-			     die($resAlbum->getMessage());
+			if(!$album) {
+			     die("sql error");
                         }
 
-			$albumData = $resAlbum->fetchRow(MDB2_FETCHMODE_ASSOC);
-
-			return $albumData['album'];
-
+			return $album;
 }
 
 function BrainzLookup($artist, $track){
 
-	 	     global $mdb2;
+	 	     global $adodb;
 
-			$sql = "select a.name as artist,l.name as album, t.name as track,t.gid as mbid from brainz.track t left join brainz.artist a on t.artist=a.id left join brainz.albumjoin j on j.track=t.id left join brainz.album l on l.id=j.album  where lower(t.name)=" . $mdb2->quote(mb_strtolower($track, "UTF-8")) . " and lower(a.name)=" . $mdb2->quote(mb_strtolower($artist, "UTF-8")) . " LIMIT 1;";
+			$sql = "select a.name as artist,l.name as album, t.name as track,t.gid as mbid from brainz.track t left join brainz.artist a on t.artist=a.id left join brainz.albumjoin j on j.track=t.id left join brainz.album l on l.id=j.album  where lower(t.name)=" . $adodb->qstr(mb_strtolower($track, "UTF-8")) . " and lower(a.name)=" . $adodb->qstr(mb_strtolower($artist, "UTF-8")) . " LIMIT 1;";
 			
-			$resBrainz = $mdb2->query($sql);
+			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+			$albumData = $adodb->GetRow($sql);
 
-			if(PEAR::isError($resBrainz)) {
-			     die($resBrainz->getMessage());
+			if(!$albumData)) {
+			     die("sql error");
                         }
 
-			$albumData = $resBrainz->fetchRow(MDB2_FETCHMODE_ASSOC);
-
 			return $albumData['album'];
-
 }
-
-		?>
+?>
 		</ul>
