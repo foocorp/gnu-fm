@@ -3,7 +3,6 @@
 	<li><a href="{$this_user->getURL()}">{$this_user->name}</a></li>
 {else}
 	<li><a href="{$base_url}/register.php">{t}Register{/t}</a></li>
-	<li><a href="{$base_url}/recovery.php">{t}Lost password?{/t}</a></li>
 {/if}
 
 {if ($logged_in)}
