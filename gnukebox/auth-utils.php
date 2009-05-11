@@ -19,7 +19,7 @@
 
 */
 
-require_once('database2.php');
+require_once('database.php');
 
 function check_web_auth($username, $token, $timestamp, $api_key, $sk) {
 	// Validates authentication using a web services token
