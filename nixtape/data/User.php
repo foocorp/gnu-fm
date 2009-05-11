@@ -19,7 +19,7 @@
 
 */
 
-require_once($install_path . '/database.php');
+require_once($install_path . '/database2.php');
 require_once($install_path . '/data/sanitize.php');
 require_once($install_path . '/utils/human-time.php');
 require_once($install_path . '/data/Server.php');
@@ -50,13 +50,15 @@ class User {
 			$row = $data;
 		}
 		else {
-			global $mdb2;
-			$res = $mdb2->query('SELECT * FROM Users WHERE lower(username) = ' . $mdb2->quote(strtolower($name), 'text'));
-			if($res->numRows()) {
-				$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
-			}
+			global $adodb;
+			$query = 'SELECT * FROM Users WHERE lower(username) = ' . $adodb->qstr(strtolower($name));
+                	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	                $row = $adodb->CacheGetRow(7200,$query);
+                	if (!$row) {
+				return(new PEAR_Error('ERROR ' . $query));
+	                }
 		}
-			
+
 		if (is_array($row)) {
 			$this->name         = $row['username'];
 			$this->password     = $row['password'];
@@ -87,17 +89,21 @@ class User {
 	
 	public static function new_from_uniqueid_number ($uid)
 	{
-		global $mdb2;
-		$res = $mdb2->query(sprintf('SELECT * FROM Users WHERE uniqueid = %d', (int)$uid));
-		if($res->numRows()) {
-			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+		global $adodb;
+		$query = sprintf('SELECT * FROM Users WHERE uniqueid = %d', (int)$uid);
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		$row = $adodb->CacheGetRow(7200,$query);
+
+		if($row) {
 			return new User($row['username'], $row);
+		} else {
+			return false;
 		}
 	}
 	
 	function save ()
 	{
-		global $mdb2;
+		global $adodb;
 		
 		// It appears we just discard this data, but this is here for a reason!
 		// getLocationDetails will fill in latitude,longitude details into the Places table in the database
@@ -120,22 +126,22 @@ class User {
 				. 'journal_rss=%s, '
 				. 'modified=%d '
 				. 'WHERE username=%s'
-				, $mdb2->quote($this->email, 'text')
-				, $mdb2->quote($this->password, 'text')
-				, $mdb2->quote($this->fullname, 'text')
-				, $mdb2->quote($this->homepage, 'text')
-				, $mdb2->quote($this->bio, 'text')
-				, $mdb2->quote($this->location, 'text')
+				, $adodb->qstr($this->email)
+				, $adodb->qstr($this->password)
+				, $adodb->qstr($this->fullname)
+				, $adodb->qstr($this->homepage)
+				, $adodb->qstr($this->bio)
+				, $adodb->qstr($this->location)
 				, $this->userlevel
-				, $mdb2->quote($this->id, 'text')
-				, (empty($this->location_uri) ? 'NULL' : $mdb2->quote($this->location_uri, 'text'))
-				, $mdb2->quote($this->avatar_uri, 'text')
-				, $mdb2->quote($this->laconica_profile, 'text')
-				, $mdb2->quote($this->journal_rss, 'text')
+				, $adodb->qstr($this->id)
+				, (empty($this->location_uri) ? 'NULL' : $adodb->qstr($this->location_uri))
+				, $adodb->qstr($this->avatar_uri)
+				, $adodb->qstr($this->laconica_profile)
+				, $adodb->qstr($this->journal_rss)
 				, time()
-				, $mdb2->quote($this->name, 'text'));
+				, $adodb->qstr($this->name)
 				
-		$res = $mdb2->query($q);
+		$res = $adodb->Execute($q);
 		
 		if(PEAR::isError($res)) {
 			header('Content-Type: text/plain');
@@ -190,15 +196,18 @@ class User {
 	 * @return A string containing the session key to be used for scrobbling
 	 */
 	function getScrobbleSession() {
-		global $mdb2;
+		global $adodb;
 		$session_id = md5(mt_rand() . time());
 		$sql = 'INSERT INTO Scrobble_Sessions(username, sessionid, client, expires) VALUES ('
-			. $mdb2->quote($this->name, 'text') . ','
-			. $mdb2->quote($session_id, 'text') . ','
+			. $adodb->qstr($this->name) . ','
+			. $adodb->qstr($session_id) . ','
 			. '\'lfm\','
-			. $mdb2->quote(time() + 86400) . ')';
-		$mdb2->query($sql);
-		return $session_id;
+			. (time() + 86400) . ')';
+		if($adodb->Execute($sql)) {
+			return $session_id;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -217,18 +226,18 @@ class User {
 	 * @return user's top 20 tracks
 	 */
 	function getTopTracks($number=20) {
-		global $mdb2;
+		global $adodb;
 
-		$res = $mdb2->query('SELECT COUNT(track) as c, artist, album, track FROM Scrobbles WHERE username = '.$mdb2->quote($this->name,'text').' GROUP BY artist,album,track ORDER BY c DESC LIMIT ' . ($number));
-
-	        if(PEAR::isError($res)) {
-	            return $res;
-	        }
+		$q = 'SELECT COUNT(track) as c, artist, album, track FROM Scrobbles WHERE username = '.$adodb->qstr($this->name).' GROUP BY artist,album,track ORDER BY c DESC LIMIT ' . ($number);
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		$data = $adodb->CacheGetAll(7200,$query);
+		if (!$res) {
+			return(new PEAR_Error('ERROR ' . $query));
+		}
 
 		$maxcount = 0;
 
-	        $data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-	        foreach($data as $i) {
+	        foreach($data as &$i) {
 	            $row = sanitize($i);
 	            $row['artisturl'] = Server::getArtistURL($row['artist']);
 	            $row['trackurl'] = Server::getTrackURL($row['artist'],$row['album'],$row['track']);
@@ -249,4 +258,3 @@ class User {
 
 
 }
-
