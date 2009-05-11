@@ -112,7 +112,7 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 		die("FAILED trk " . $res->getMessage() . "\n");
 	}
 
-	if(!$res->numRows()) {
+	if(!$res) {
 		// Create new track
 		$res = $adodb->Execute("INSERT INTO Track (name, artist_name, album_name, mbid) VALUES ("
 			. ($track) . ", "
