@@ -20,7 +20,7 @@
 */
 
 
-require_once('database.php');
+require_once('database2.php');
 require_once('templating.php');
 require_once($install_path . '/data/User.php');
 
@@ -44,12 +44,15 @@ if(isset($_POST['login'])) {
 	}
 
 	if(empty($errors)) {
-		$res = $mdb2->query('SELECT username FROM Users WHERE '
-			. ' lower(username) = ' . $mdb2->quote(strtolower($username), 'text')
-			. ' AND password = ' . $mdb2->quote(md5($password), 'text') . ' AND active = 1');
-		if(PEAR::isError($res)) {
+		try {
+		$res = $adodb->GetOne('SELECT username FROM Users WHERE '
+			. ' lower(username) = ' . $adodb->qstr(strtolower($username))
+			. ' AND password = ' . $adodb->qstr(md5($password)) . ' AND active = 1');
+		}
+		catch (exception $e) {
 			$errors .= 'A database error happened.';
-		} elseif(!$res->numRows()) {
+		}
+		if(!$res) {
 			$errors .= 'Invalid username or password.';
 			$smarty->assign('invalid', true);
 		} else {
@@ -60,10 +63,10 @@ if(isset($_POST['login'])) {
 			} else {
 				$session_time = time() + 86400; // 1 day
 			}
-			$mdb2->query('INSERT INTO Scrobble_Sessions (username, sessionid, expires) VALUES ('
-				. $mdb2->quote($username, 'text') . ', '
-				. $mdb2->quote($session_id, 'text') . ', '
-				. $mdb2->quote($session_time, 'integer') . ')');
+			$adodb->Execute('INSERT INTO Scrobble_Sessions (username, sessionid, expires) VALUES ('
+				. $adodb->qstr($username) . ', '
+				. $adodb->qstr($session_id) . ', '
+				. (int)($session_time) . ')');
 
 			setcookie('session_id', $session_id, $session_time);
 			$logged_in = true;
