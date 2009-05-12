@@ -47,7 +47,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		default:
 			die("FAILED Bad encoding in artist submission $i\n");
 		}
-	if(isset($_POST['b'][$i]) && !empty($_POST['b'])) {
+	if(isset($_POST['b'][$i]) && !empty($_POST['b'][$i])) {
 		switch (mb_detect_encoding($_POST['b'][$i])) {
 		case "ASCII":
 		case "UTF-8":
