@@ -19,7 +19,7 @@
 
 */
 
-require_once($install_path . '/database.php');
+require_once($install_path . '/database2.php');
 require_once($install_path . '/data/Artist.php');
 require_once($install_path . '/data/Track.php');
 require_once($install_path . "/utils/resolve-external.php");
@@ -43,14 +43,16 @@ class Album {
 	 * @param string artist The name of the artist who recorded this album
 	 */
 	function __construct($name, $artist) {
-		global $mdb2;
-		$res = $mdb2->query('SELECT name, artist_name, mbid, image, releasedate FROM Album WHERE '
-			. 'name = ' . $mdb2->quote($name, 'text') . ' AND '
-			. 'artist_name = ' . $mdb2->quote($artist, 'text'));
-		if(!$res->numRows()) {
+		global $adodb;
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		$r = $adodb->CacheGetRow(1200,
+			'SELECT name, artist_name, mbid, image, releasedate FROM Album WHERE '
+			. 'name = ' . $adodb->qstr($name) . ' AND '
+			. 'artist_name = ' . $adodb->qstr($artist));
+		if(!$w) {
 			$this->name = 'No such album: ' . $name;
 		} else {
-			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
+			$row = sanitize($r);
 			$this->name = $row['name'];
 			$this->mbid = $row['mbid'];
 			$this->artist_name = $row['artist_name'];
@@ -73,17 +75,22 @@ class Album {
 	}
 
 	function getPlayCount() {
-		global $mdb2;
-		$res = $mdb2->query('SELECT COUNT(*) AS scrobbles FROM Scrobbles JOIN Track ON Scrobbles.track = Track.name WHERE Scrobbles.artist = '
-			. $mdb2->quote($this->artist_name, 'text') . ' AND Track.album_name ='
-			. $mdb2->quote($this->name, 'text'));
-		if(PEAR::isError($res)) {
+		global $adodb;
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
+		$count = $adodb->CacheGetOne(600,
+			'SELECT COUNT(*) AS scrobbles FROM Scrobbles JOIN Track ON Scrobbles.track = Track.name WHERE Scrobbles.artist = '
+			. $adodb->qstr($this->artist_name) . ' AND Track.album_name ='
+			. $adodb->qstr($this->name));
+		}
+		catch (exception $e) {
 			reportError($res->getMessage(), $res->getUserInfo());
-		} else if (!$res->numRows()) {
+			$c = 0;
+		}
+		if (!$count) {
 			$c = 0;
 		} else {
-			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
-			$c = $row['scrobbles'];
+			$c = $count;
 		}
 		return $c;
 	}
@@ -94,11 +101,12 @@ class Album {
 	 * @return An array of Track objects
 	 */
 	function getTracks() {
-		global $mdb2;
-		$res = $mdb2->query('SELECT name, artist_name FROM Track WHERE artist_name = '
-			. $mdb2->quote($this->artist_name, 'text') . ' AND album_name = '
-			. $mdb2->quote($this->name));
-		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+		global $adodb;
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		$res = $adodb->CacheGetAll(600, 'SELECT name, artist_name FROM Track WHERE artist_name = '
+			. $adodb->qstr($this->artist_name) . ' AND album_name = '
+			. $adodb->qstr($this->name));
+		foreach($res as &$row) {
 			$tracks[] = new Track($row['name'], $row['artist_name']);
 		}
 
@@ -120,7 +128,8 @@ class Album {
 
 
 function go_get_album_art($artist, $album){
-	global $mdb2;
+	global $adodb;
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
 	$Access_Key_ID = '1EST86JB355JBS3DFE82'; // this is mattl's personal key :)
 
@@ -149,10 +158,10 @@ function go_get_album_art($artist, $album){
 
 		if ($license == '') { $license = 'amazon'; }
 
-		$license = $mdb2->quote($license);
-		$image = $mdb2->quote($image);
-		$album = $mdb2->quote($album);
-		$artist = $mdb2->quote($artist);
+		$license = $adodb->qstr($license);
+		$image = $adodb->qstr($image);
+		$album = $adodb->qstr($album);
+		$artist = $adodb->qstr($artist);
 
 		$sql = ('UPDATE Album SET image = '
 			. ($image) . ', '
@@ -160,12 +169,11 @@ function go_get_album_art($artist, $album){
 			. ($license) . ' WHERE artist_name = '. ($artist) 
 			. ' AND name = '	. ($album));
 
-		$res = $mdb2->query($sql);
-
-		if(PEAR::isError($res)) {
-			die('FAILED ' . $res->getMessage() . ' query was :' . $sql);
+		try {
+			$res = $adodb->Execute($sql);
 		}
-
+		catch (exception e) {
+			die('FAILED ' . $e->getMessage() . ' query was :' . $sql);
+		}
 	}
-	
 }
