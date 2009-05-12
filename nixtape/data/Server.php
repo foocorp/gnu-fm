@@ -343,7 +343,7 @@ class Server {
 			. 'LEFT JOIN Countries c ON p.country=c.country '
 			. 'WHERE p.location_uri=' . $adodb->qstr($name, 'text'));
 		
-		if(!$rv) {
+		if($rv) {
 		
 			if (! ($rv['latitude'] && $rv['longitude'] && $rv['country'])) {
 			
