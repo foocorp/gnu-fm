@@ -89,11 +89,11 @@ $image = $aws_xml->Items->Item->MediumImage->URL;
 			. ($license) . " WHERE artist_name = "
                         . ($artist) . " AND name = "
 				      . ($album));
-
+		try {
 		  $res = $adodb->Execute($sql);
-
-		if(!$res) {
-		  die("FAILED query was :" . $sql);
+		}
+		catch (exception $e) {
+		  die($e->getMessage() . ", FAILED query was :" . $sql);
 		}
 
 	return $image;
