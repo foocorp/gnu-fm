@@ -20,7 +20,7 @@
 */
 
 
-require_once($install_path . '/database.php');
+require_once($install_path . '/database2.php');
 require_once($install_path . '/data/Artist.php');
 require_once($install_path . '/data/Album.php');
 require_once($install_path . '/data/Server.php');
@@ -47,14 +47,15 @@ class Track {
 	 * @param string $artist The name of the artist who recorded this track
 	 */
 	function __construct($name, $artist) {
-		global $mdb2;
-		$res = $mdb2->query('SELECT name, artist_name, album_name, duration, streamable, license, downloadurl, streamurl, mbid FROM Track WHERE '
-			. 'name = ' . $mdb2->quote($name, 'text') . ' AND '
-			. 'artist_name = ' . $mdb2->quote($artist, 'text'));
-		if(!$res->numRows()) {
+		global $adodb;
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		$res = $adodb->CacheGetRow(600, 'SELECT name, artist_name, album_name, duration, streamable, license, downloadurl, streamurl, mbid FROM Track WHERE '
+			. 'name = ' . $adodb->qstr($name) . ' AND '
+			. 'artist_name = ' . $adodb->qstr($artist);
+		if(!$res) {
 			$this->name = 'No such track: ' . $name;
 		} else {
-			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
+			$row = $res;
 			$this->name = $row['name'];
 			$this->mbid = $row['mbid'];
 			$this->artist_name = $row['artist_name'];
@@ -118,14 +119,14 @@ class Track {
 
 
 	private function _getPlayCountAndListenerCount() {
-		global $mdb2;
+		global $adodb;
 
-		$res = $mdb2->query('SELECT COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE'
-			. ' artist = ' . $mdb2->quote($this->artist_name, 'text') 
-			. ' AND track = ' . $mdb2->quote($this->name, 'text')
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		$row = $adodb->CacheGetRow(300, 'SELECT COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE'
+			. ' artist = ' . $adodb->qstr($this->artist_name)
+			. ' AND track = ' . $adodb->qstr($this->name)
 			. ' GROUP BY track ORDER BY freq DESC');
 
-		$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
 		if (!isset($row)) {
 		        $this->setPlaycount(0);
 			$this->setListenerCount(0);
