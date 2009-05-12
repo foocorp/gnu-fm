@@ -66,6 +66,7 @@ $adodb->Execute("DELETE FROM Now_Playing WHERE expires < " . time());
 //Delete this user's last playing song (if any)
 $adodb->Execute("DELETE FROM Now_Playing WHERE sessionid = " . ($MQsess));
 
+try {
 $adodb->Execute("INSERT INTO Now_Playing (sessionid, artist, album, track, expires, mbid) VALUES ("
 	. $MQsess . ", "
 	. $artist . ", "
@@ -73,7 +74,10 @@ $adodb->Execute("INSERT INTO Now_Playing (sessionid, artist, album, track, expir
 	. $track . ", "
 	. $expires . ", "
 	. $mbid . ")");
-
+}
+catch (exception $e) {
+	die("FAILED " . $e->getMessage() . "\n");
+}
 
 die("OK\n");
 
