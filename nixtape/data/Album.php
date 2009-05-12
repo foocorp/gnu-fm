@@ -49,7 +49,7 @@ class Album {
 			'SELECT name, artist_name, mbid, image, releasedate FROM Album WHERE '
 			. 'name = ' . $adodb->qstr($name) . ' AND '
 			. 'artist_name = ' . $adodb->qstr($artist));
-		if(!$w) {
+		if(!$r) {
 			$this->name = 'No such album: ' . $name;
 		} else {
 			$row = sanitize($r);
