@@ -77,7 +77,7 @@ function createAlbumIfNew($artist, $album) {
 	global $adodb;
 
 	try {
-		$name = $adodb->GetOne("SELECT name FROM Album WHERE name = " . ($album) . " AND artist_name = " . ($artist));
+		$name = $adodb->GetOne('SELECT name FROM Album WHERE lower(name) = lower(' . ($album) . ') AND lower(artist_name) = lower(' . ($artist) . ')');
 	}
 	catch (exception $e) {
 		die("FAILED alb " . $e->getMessage() . "\n");
