@@ -49,7 +49,7 @@ if(isset($_POST['l']) && is_numeric($_POST['l'])) {
 $mb = validateMBID($_POST['m']);
 
 if($mb) {
-	$mbid = $adodb->qstr($mb, "text");
+	$mbid = $adodb->qstr($mb);
 } else {
 	$mbid = 'NULL';
 }
