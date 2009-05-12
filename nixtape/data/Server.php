@@ -19,7 +19,7 @@
 
 */
 
-require_once($install_path . '/database.php');
+require_once($install_path . '/database2.php');
 require_once($install_path . '/data/Artist.php');
 // require_once($install_path . '/data/Group.php');
 require_once($install_path . '/data/Track.php');
@@ -44,10 +44,12 @@ class Server {
 	 * @return An array of scrobbles or a PEAR_Error in case of failure
 	 */
 	static function getRecentScrobbles($number=10, $username=false) {
-		global $mdb2;
+		global $adodb;
 
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
 		if($username) {
-			$res = $mdb2->query(
+			$res = $adodb->CacheGetAll(60,
 				'SELECT
 					s.username, 
 					s.artist, 
@@ -70,12 +72,12 @@ class Server {
 					ON s.stid = st.id
 				LEFT JOIN Track t
 					ON st.track = t.id
-				WHERE lower(s.username) = ' . $mdb2->quote(strtolower($username), 'text') . ' 
+				WHERE lower(s.username) = ' . $adodb->qstr(strtolower($username)) . ' 
 				ORDER BY
 					s.time DESC 
-				LIMIT ' . $mdb2->quote($number, 'integer'));
+				LIMIT ' . (int)($number));
 		} else {
-			$res = $mdb2->query(
+			$res = $adodb->CacheGetAll(60,
 				'SELECT
 					s.username,
 					s.artist, 
@@ -100,15 +102,14 @@ class Server {
 					ON st.track = t.id
 				ORDER BY
 					s.time DESC 
-				LIMIT ' . $mdb2->quote($number, 'integer'));
+				LIMIT ' . (int)($number));
+		}
+		}
+		catch (exception $e) {
+			return $false;
 		}
 
-		if(PEAR::isError($res)) {
-			return $res;
-		}
-
-		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-		foreach($data as $i) {
+		foreach($res as &$i) {
 			$row = sanitize($i);
 			
 			$row['userurl'] = Server::getUserURL($row['username']);
@@ -152,16 +153,17 @@ class Server {
 	 * @return An array of artists or a PEAR_Error in case of failure
 	*/
 	static function getTopArtists($number=20) {
-		global $mdb2;
+		global $adodb;
 
-		$res = $mdb2->query('SELECT COUNT(artist) as c, artist FROM Scrobbles GROUP BY artist ORDER BY c DESC LIMIT 20');
-
-		if(PEAR::isError($res)) {
-			return $res;
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
+		$data = $adodb->CacheGetAll(720, 'SELECT COUNT(artist) as c, artist FROM Scrobbles GROUP BY artist ORDER BY c DESC LIMIT 20');
+		}
+		catch (exception $e) {
+			return false;
 		}
 
-		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-		foreach($data as $i) {
+		foreach($data as &$i) {
 			$row = sanitize($i);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
 			$result[] = $row;
@@ -177,10 +179,12 @@ class Server {
 	 * @return An array of now playing data or a PEAR_Error in case of failure
 	 */
 	static function getNowPlaying($number, $username=false) {
-		global $mdb2;
+		global $adodb;
 
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
 		if($username) {
-			$res = $mdb2->query('SELECT
+			$data = $adodb->CacheGetAll(60, 'SELECT
 						username,
 						n.artist,
 						n.track,
@@ -201,10 +205,10 @@ class Server {
 						AND lower(n.album) = lower(t.album_name)
 						AND lower(n.track) = lower(t.name)
 						AND lower(n.mbid) = lower(t.mbid)
-					WHERE lower(username) = ' . $mdb2->quote(strtolower($username), 'text') . '
-					ORDER BY t.streamable DESC, n.expires DESC LIMIT ' . $mdb2->quote($number, 'integer'));
+					WHERE lower(username) = ' . $adodb->qstr(strtolower($username)) . '
+					ORDER BY t.streamable DESC, n.expires DESC LIMIT ' . (int)($number));
 		} else {
-			$res = $mdb2->query('SELECT
+			$data = $adodb->CacheGetAll(60, 'SELECT
 						username,
 						n.artist,
 						n.track,
@@ -225,11 +229,11 @@ class Server {
 						AND lower(n.album) = lower(t.album_name)
 						AND lower(n.track) = lower(t.name)
 						AND lower(n.mbid) = lower(t.mbid)
-					ORDER BY t.streamable DESC, n.expires DESC LIMIT ' . $mdb2->quote($number, 'integer'));
+					ORDER BY t.streamable DESC, n.expires DESC LIMIT ' . (int)($number));
 		}
-
-		if(PEAR::isError($res)) {
-			return $res;
+		}
+		catch (exception $e) {	
+			return false;
 		}
 
 		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
@@ -329,20 +333,19 @@ class Server {
 	}
 
 	static function getLocationDetails($name) {
-		global $mdb2;
+		global $adodb;
 		
 		if (!$name)
 			return array();
 
-		$res = $mdb2->query('SELECT p.latitude, p.longitude, p.country, c.country_name, c.wikipedia_en '
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		$rv = $adodb->GetRow('SELECT p.latitude, p.longitude, p.country, c.country_name, c.wikipedia_en '
 			. 'FROM Places p '
 			. 'LEFT JOIN Countries c ON p.country=c.country '
-			. 'WHERE p.location_uri=' . $mdb2->quote($name, 'text'));
+			. 'WHERE p.location_uri=' . $adodb->qstr($name, 'text'));
 		
-		if($res->numRows()) {
+		if(!$rv) {
 		
-			$rv = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
-			
 			if (! ($rv['latitude'] && $rv['longitude'] && $rv['country'])) {
 			
 				$parser = ARC2::getRDFXMLParser();
@@ -355,11 +358,11 @@ class Server {
 					'country'   => strtoupper(substr($index[$name]['http://www.geonames.org/ontology#inCountry'][0], -2))
 					);
 
-				$mdb2->query(sprintf('UPDATE Places SET latitude=%f, longitude=%f, country=%s WHERE location_uri=%s',
+				$adodb->Execute(sprintf('UPDATE Places SET latitude=%f, longitude=%f, country=%s WHERE location_uri=%s',
 					(float)$rv['latitude'],
 					(float)$rv['longitude'],
-					$mdb2->quote($rv['country'], 'text'),
-					$mdb2->quote($name, 'text')));
+					$adodb->qstr($rv['country']),
+					$adodb->qstr($name)));
 			}
 		}
 		else {
@@ -373,11 +376,11 @@ class Server {
 				'country'   => strtoupper(substr($index[$name]['http://www.geonames.org/ontology#inCountry'][0], -2))
 				);
 
-			$mdb2->query(sprintf('INSERT INTO Places VALUES (%s, %f, %f, %s)',
-				$mdb2->quote($name, 'text'),
+			$adodb->Execute(sprintf('INSERT INTO Places VALUES (%s, %f, %f, %s)',
+				$adodb->qstr($name),
 				(float)$rv['latitude'],
 				(float)$rv['longitude'],
-				$mdb2->quote($rv['country'], 'text')));
+				$adodb->qstr($rv['country'])));
 		}
 			
 		return $rv;
@@ -391,21 +394,21 @@ class Server {
 	 * @return A string containing the session key to be used for streaming
 	 */
 	static function getRadioSession($station, $username = false) {
-		global $mdb2;
+		global $adodb;
 		$session_id = md5(mt_rand() . time());
 		if($username) {
 			$sql = 'INSERT INTO Radio_Sessions(username, session, url, expires) VALUES ('
-				. $mdb2->quote($username, 'text') . ','
-				. $mdb2->quote($session_id, 'text') . ','
-				. $mdb2->quote($station, 'text') . ','
-				. $mdb2->quote(time() + 86400) . ')';
+				. $adodb->qstr($username) . ','
+				. $adodb->qstr($session_id) . ','
+				. $adodb->qstr($station) . ','
+				. (int)(time() + 86400) . ')';
 		} else {
 			$sql = 'INSERT INTO Radio_Sessions(session, url, expires) VALUES ('
-				. $mdb2->quote($session_id, 'text') . ','
-				. $mdb2->quote($station, 'text') . ','
-				. $mdb2->quote(time() + 86400) . ')';
+				. $adodb->qstr($session_id) . ','
+				. $adodb->qstr($station) . ','
+				. (int)(time() + 86400) . ')';
 		}
-		$res = $mdb2->query($sql);
+		$res = $adodb->Execute($sql);
 		return $session_id;
 	}
 
