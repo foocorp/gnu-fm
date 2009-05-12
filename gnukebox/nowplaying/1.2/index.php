@@ -30,7 +30,6 @@ if(empty($_POST['s']) || empty($_POST['a']) || empty($_POST['t'])) {
 
 $session_id = $_POST['s'];
 
-$username = $adodb->qstr(usernameFromSID($session_id));
 $MQsess = $adodb->qstr($session_id);
 
 $artist = $adodb->qstr($_POST['a']);
