@@ -77,13 +77,13 @@ function createAlbumIfNew($artist, $album) {
 	global $adodb;
 
 	try {
-	$res = $adodb->Execute("SELECT name FROM Album WHERE name = " . ($album) . " AND artist_name = " . ($artist));
+		$name = $adodb->CacheGetOne(600, "SELECT name FROM Album WHERE name = " . ($album) . " AND artist_name = " . ($artist));
 	}
 	catch (exception $e) {
 		die("FAILED alb " . $e->getMessage() . "\n");
 	}
 
-	if(!$res) {
+	if(!$name) {
 		// Album doesn't exist, so create it
 	        
 	  $art = $adodb->qstr(getAlbumArt($artist, $album));
