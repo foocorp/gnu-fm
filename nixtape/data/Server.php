@@ -236,7 +236,6 @@ class Server {
 			return false;
 		}
 
-		$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 		foreach($data as &$i) {
 			$row = sanitize($i);
 			// this logic should be cleaned up and the free/nonfree decision be moved into the smarty templates
