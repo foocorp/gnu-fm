@@ -20,7 +20,7 @@
 */
 
 
-require_once($install_path . '/database.php');
+require_once($install_path . '/database2.php');
 require_once($install_path . '/data/sanitize.php');
 require_once($install_path . '/data/Album.php');
 require_once($install_path . '/data/Track.php');
@@ -46,15 +46,15 @@ class Artist {
 	 * @param string $mbid The mbid of the artist (optional)
 	 */
 	function __construct($name, $mbid=false) {
-		global $mdb2;
+		global $adodb;
 
-		$res = $mdb2->query('SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large FROM Artist WHERE '
-			. 'mbid = ' . $mdb2->quote($mbid, 'text') . ' OR '
-			. 'name = ' . $mdb2->quote($name, 'text'));
-		if(!$res->numRows()) {
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		$row = $adodb->CacheGetRow(1200, 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large FROM Artist WHERE '
+			. 'mbid = ' . $adodb->qstr($mbid) . ' OR '
+			. 'name = ' . $adodb->qstr($name);
+		if(!$row) {
 			return(new PEAR_Error('No such artist: ' . $name));
 		} else {
-			$row = sanitize($res->fetchRow(MDB2_FETCHMODE_ASSOC));
 			$this->name = $row['name'];
 			$this->mbid = $row['mbid'];
 			$this->streamable = $row['streamable'];
@@ -75,10 +75,11 @@ class Artist {
 	 * @return An array of Album objects
 	 */
 	function getAlbums() {
-		global $mdb2;
-		$res = $mdb2->query('SELECT name, image FROM Album WHERE artist_name = '
-			. $mdb2->quote($this->name, 'text'));
-		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+		global $adodb;
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		$res = $adodb->CacheGetAll(600, 'SELECT name, image FROM Album WHERE artist_name = '
+			. $adodb->qstr($this->name));
+		foreach($res as &$row) {
 			$albums[] = new Album($row['name'], $this->name);
 		}
 	      
@@ -91,10 +92,11 @@ class Artist {
 	 * @return An array of Track objects
 	 */
 	function getTracks() {
-		global $mdb2;
-		$res = $mdb2->query('SELECT name FROM Track WHERE artist_name = '
-			. $mdb2->quote($this->name, 'text'));
-		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+		global $adodb;
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		$res = $adodb->CacheGetAll(600, 'SELECT name FROM Track WHERE artist_name = '
+			. $adodb->qstr($this->name));
+		foreach($res as &$row) {
 			$tracks[] = new Track($row['name'], $this->name);
 		}
 
@@ -108,11 +110,13 @@ class Artist {
 	 * @return An array of Track objects
 	 */
 	function getTopTracks($number) {
-		global $mdb2;
-		$res = $mdb2->query('SELECT track, COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE'
-			. ' artist = ' . $mdb2->quote($this->name, 'text')
-			. ' GROUP BY track ORDER BY freq DESC LIMIT ' . $mdb2->quote($number, 'integer'));
-		while($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+		global $adodb;
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		$res = $adodb->CacheGetAll(600,
+			'SELECT track, COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE'
+			. ' artist = ' . $adodb->qstr($this->name)
+			. ' GROUP BY track ORDER BY freq DESC LIMIT ' . (int)($number));
+		foreach($res as &$row) {
 			$track = new Track($row['track'], $this->name);
 			$track->setPlayCount($row['freq']);
 			$track->setListenerCount($row['listeners']);
