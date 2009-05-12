@@ -19,7 +19,7 @@
 
 */
 
-require_once('database.php');
+require_once('database2.php');
 require_once('templating.php');
 require_once('utils/EmailAddressValidator.php');
 
@@ -43,20 +43,23 @@ function sendEmail($text, $email) {
 }
 if(isset($_GET['auth'])) {
 	$authcode = $_GET['auth'];
-	$res = $mdb2->query('SELECT * FROM AccountActivation WHERE authcode = ' . $mdb2->quote($authcode, 'text'));
-	if (PEAR::isError($res) || !$res->numRows()) {
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	try {
+	$row = $adodb->GetRow('SELECT * FROM AccountActivation WHERE authcode = ' . $adodb->qstr($authcode));
+	}
+	catch (exception $e) {
 		$errors = 'Unknown activationcode.';
 		$smarty->assign('errors', $errors);
 		$smarty->display('error.tpl');
 		die();
 	}
 
-	$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
-
-	$sql = 'UPDATE Users SET active = 1 WHERE username = ' . $mdb2->quote($row['username'], 'text');
-	$res = $mdb2->exec($sql);
-	if (PEAR::isError($res)) {
-	    $errors = 'Error: ' . $res->getUserInfo();
+	$sql = 'UPDATE Users SET active = 1 WHERE username = ' . $adodb->qstr($row['username']);
+	try {
+	$res = $adodb->Execute($sql);
+	}
+	catch (exception $e) {
+	    $errors = 'Error: ' . $e->getMessage();
 	    $smarty->assign('errors', $errors);
 	    $smarty->display('error.tpl');
 	    die();
@@ -96,24 +99,31 @@ if(isset($_POST['register'])) {
 	}
 
 	//Check this username is available
-	$res = $mdb2->query('SELECT username FROM Users WHERE lower(username) = ' . $mdb2->quote(strtolower($username)));
-	if($res->numRows()) {
+	try {
+		$res = $adodb->GetOne('SELECT username FROM Users WHERE lower(username) = ' . $adodb->qstr(strtolower($username)));
+	}
+	catch (exception $e) {
+		$errors .= 'Database error.<br />';
+	}
+	if($res) {
 		$errors .= 'Sorry, that username is already registered.<br />';
 	}
 
 	if(empty($errors)) {
 		// Create the user
 		$sql = 'INSERT INTO Users (username, password, email, fullname, bio, location, created, active) VALUES ('
-			. $mdb2->quote($username, 'text') . ', '
-			. $mdb2->quote(md5($password), 'text') . ', '
-			. $mdb2->quote($email, 'text') . ', '
-			. $mdb2->quote($fullname, 'text') . ', '
-			. $mdb2->quote($bio, 'text') . ', '
-			. $mdb2->quote($location, 'text') . ', '
+			. $adodb->qstr($username) . ', '
+			. $adodb->qstr(md5($password)) . ', '
+			. $adodb->qstr($email) . ', '
+			. $adodb->qstr($fullname) . ', '
+			. $adodb->qstr($bio) . ', '
+			. $adodb->qstr($location) . ', '
 			. time() . ', 0)';
-		$insert = $mdb2->exec($sql);
-		if (PEAR::isError($insert)) {
-		    reportError('Create user, insert, register.php', $res->getUserInfo());
+		try {
+		$insert = $adodb->Execute($sql);
+		}
+		catch (exception $e) {
+		    reportError('Create user, insert, register.php', $e->getMessage());
 		    $errors .= 'An error occurred.';
 		    $smarty->assign('errors', $errors);
 		    $smarty->display('error.tpl');
@@ -122,12 +132,13 @@ if(isset($_POST['register'])) {
 
 		$code = md5($username . time());
 		$sql = 'INSERT INTO AccountActivation (username, authcode) VALUES('
-			. $mdb2->quote($username, 'text') . ', '
-			. $mdb2->quote($code, 'text') . ')';
-		$res = $mdb2->exec($sql);
-
-		if (PEAR::isError($res)) {
-		    reportError('AccountActivation, insert, register.php', $res->getUserInfo());
+			. $adodb->qstr($username) . ', '
+			. $adodb->qstr($code) . ')';
+		try {
+		$res = $adodb->Execute($sql);
+		}
+		catch (exception $e) {
+		    reportError('AccountActivation, insert, register.php', $e->getMessage());
 		    $errors .= 'An error occurred.';
 		    $smarty->assign('errors', $errors);
 		    $smarty->display('error.tpl');
