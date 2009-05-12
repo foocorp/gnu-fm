@@ -85,24 +85,25 @@ function createAlbumIfNew($artist, $album) {
 
 	if(!$name) {
 		// Album doesn't exist, so create it
-	        
-	  $art = $adodb->qstr(getAlbumArt($artist, $album));
 
-	try {
-	  if ($art !="") {
-	    $license = $adodb->qstr("amazon");
+		$art = $adodb->qstr(getAlbumArt($artist, $album));
 
-	    $res = $adodb->Execute("INSERT INTO Album (name, artist_name, image, artwork_license) VALUES (" . ($album) . ", " . ($artist) . ", " . ($art) . ", " . ($license) .")");
+		if ($art !="") {
+			$license = $adodb->qstr("amazon");
 
-	  } else {
+			$sql = "INSERT INTO Album (name, artist_name, image, artwork_license) VALUES (" . ($album) . ", " . ($artist) . ", " . ($art) . ", " . ($license) .")";
 
-		$res = $adodb->Execute("INSERT INTO Album (name, artist_name) VALUES (" . ($album) . ", " . ($artist) . ")");
+		} else {
 
-	  }
-	}
-	catch (exception $e) {
-		die("FAILED albc " . $e->getMessage() . "\n");
-	}
+			$sql = "INSERT INTO Album (name, artist_name) VALUES (" . ($album) . ", " . ($artist) . ")";
+
+		}
+		try {
+			$adodb->Execute($sql);
+		}
+		catch (exception $e) {
+			die("FAILED albc " . $e->getMessage() . "\n");
+		}
 	}
 }
 
