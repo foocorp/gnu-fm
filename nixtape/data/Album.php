@@ -172,7 +172,7 @@ function go_get_album_art($artist, $album){
 		try {
 			$res = $adodb->Execute($sql);
 		}
-		catch (exception e) {
+		catch (exception $e) {
 			die('FAILED ' . $e->getMessage() . ' query was :' . $sql);
 		}
 	}
