@@ -27,11 +27,12 @@ header('Content-type: text/html; charset=utf-8');
 require_once('database.php');
 
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	try {
 	$res = $adodb->GetAll("SELECT name, artist_name, image, artwork_license FROM Album WHERE artwork_license IS NULL LIMIT 5000");
-
-		if(!$res) {
-			die("sql error");
-		}
+	}
+	catch (exception $e) {
+		die($e->getMessage());
+	}
 		foreach($res as &$row) {
 		echo "<img width=50 src=" . go_get_album_art($row['artist_name'], $row['name']) ." />&nbsp;";
 
