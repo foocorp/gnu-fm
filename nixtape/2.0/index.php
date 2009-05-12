@@ -19,7 +19,7 @@
 
 */
 
-require_once('../database.php');
+require_once('../database2.php');
 require_once('../api/ArtistXML.php');
 require_once('../api/UserXML.php');
 
@@ -101,26 +101,29 @@ function method_artist_gettoptracks() {
 }
 
 function method_auth_gettoken() {
-	global $mdb2;
+	global $adodb;
 
 	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
 		report_failure(LFM_INVALID_SIGNATURE);
 
 	$key = md5(time() . rand());
 
-	$result = $mdb2->query('INSERT INTO Auth (token, expires) VALUES ('
-		. $mdb2->quote($key, 'text') . ", "
-		. $mdb2->quote(time() + 3600, 'integer')
+	try {
+	$result = $adodb->Execute('INSERT INTO Auth (token, expires) VALUES ('
+		. $adodb->qstr($key) . ", "
+		. (int)(time() + 3600)
 		. ")");
-	if (PEAR::isError($result))
+	}
+	catch (exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
+	}
 
 	print("<lfm status=\"ok\">\n");
 	print("	<token>{$key}</token></lfm>");
 }
 
 function method_auth_getmobilesession() {
-	global $mdb2;
+	global $adodb;
 
 	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
 		report_failure(LFM_INVALID_SIGNATURE);
@@ -129,9 +132,11 @@ function method_auth_getmobilesession() {
 		report_failure(LFM_INVALID_TOKEN);
 
 	// Check for a token that is bound to a user
-	$result = $mdb2->queryRow('SELECT username, password FROM Users WHERE '
-		. 'username = ' . $mdb2->quote($_GET['username'], 'text'));
-	if (PEAR::isError($result)) {
+	try {
+	$result = $adodb->GetRow('SELECT username, password FROM Users WHERE '
+		. 'username = ' . $adodb->qstr($_GET['username']));
+	}
+	catch (exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 	if (is_null($result)) {
@@ -147,15 +152,18 @@ function method_auth_getmobilesession() {
 	$session = md5(time() . rand());
 
 	// Update the Auth record with the new session key
-	$result = $mdb2->query('INSERT INTO Auth (token, sk, expires, username) '
+	try {
+	$result = $adodb->Execute('INSERT INTO Auth (token, sk, expires, username) '
 		. 'VALUES ('
-		. $mdb2->quote($key, 'text') . ', '
-		. $mdb2->quote($session, 'text') . ', '
-		. $mdb2->quote(time() + 3600, 'integer') . ', '
-		. $mdb2->quote($username, 'text')
+		. $adodb->qstr($key) . ', '
+		. $adodb->qstr($session) . ', '
+		. (int)(time() + 3600) . ', '
+		. $adodb->qstr($username)
 		. ')');
-	if (PEAR::isError($result))
+	}
+	catch (exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
+	}
 
 	print("<lfm status=\"ok\">\n");
 	print("	<session>\n");
@@ -167,7 +175,7 @@ function method_auth_getmobilesession() {
 }
 
 function method_auth_getsession() {
-	global $mdb2;
+	global $adodb;
 
 	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
 		report_failure(LFM_INVALID_SIGNATURE);
@@ -176,23 +184,29 @@ function method_auth_getsession() {
 		report_failure(LFM_INVALID_TOKEN);
 
 	// Check for a token that (1) is bound to a user, and (2) is not bound to a session
-	$result = $mdb2->query('SELECT username FROM Auth WHERE '
-		. 'token = ' . $mdb2->quote($_GET['token'], 'text') . ' AND '
+	try {
+	$username = $adodb->GetOne('SELECT username FROM Auth WHERE '
+		. 'token = ' . $adodb->qstr($_GET['token']) . ' AND '
 		. 'username IS NOT NULL AND sk IS NULL');
-	if (PEAR::isError($result))
+	}
+	catch (exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
-	if (!$result->numRows())
+	}
+	if (!$username) {
 		report_failure(LFM_INVALID_TOKEN);
+	}
 
-	$username = $result->fetchOne(0);
 	$session = md5(time() . rand());
 
 	// Update the Auth record with the new session key
-	$result = $mdb2->query('UPDATE Auth SET '
-		. 'sk = ' . $mdb2->quote($session, 'text') . ' WHERE '
-		. 'token = ' . $mdb2->quote($_GET['token'], 'text'));
-	if (PEAR::isError($result))
+	try {
+	$result = $adodb->Execute('UPDATE Auth SET '
+		. 'sk = ' . $adodb->qstr($session) . ' WHERE '
+		. 'token = ' . $adodb->qstr($_GET['token']));
+	}
+	catch (exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
+	}
 
 	print("<lfm status=\"ok\">\n");
 	print("	<session>\n");
