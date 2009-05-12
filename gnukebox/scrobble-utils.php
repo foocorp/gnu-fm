@@ -94,9 +94,7 @@ function createAlbumIfNew($artist, $album) {
 			$sql = "INSERT INTO Album (name, artist_name, image, artwork_license) VALUES (" . ($album) . ", " . ($artist) . ", " . ($art) . ", " . ($license) .")";
 
 		} else {
-
 			$sql = "INSERT INTO Album (name, artist_name) VALUES (" . ($album) . ", " . ($artist) . ")";
-
 		}
 		try {
 			$adodb->Execute($sql);
