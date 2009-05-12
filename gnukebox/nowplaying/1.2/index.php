@@ -66,13 +66,13 @@ $adodb->Execute("DELETE FROM Now_Playing WHERE expires < " . time());
 $adodb->Execute("DELETE FROM Now_Playing WHERE sessionid = " . ($MQsess));
 
 try {
-$adodb->Execute("INSERT INTO Now_Playing (sessionid, artist, album, track, expires, mbid) VALUES ("
-	. $MQsess . ", "
-	. $artist . ", "
-	. $album . ", "
-	. $track . ", "
-	. $expires . ", "
-	. $mbid . ")");
+	$adodb->Execute("INSERT INTO Now_Playing (sessionid, artist, album, track, expires, mbid) VALUES ("
+			. $MQsess . ", "
+			. $artist . ", "
+			. $album . ", "
+			. $track . ", "
+			. $expires . ", "
+			. $mbid . ")");
 }
 catch (exception $e) {
 	die("FAILED " . $e->getMessage() . "\n");
