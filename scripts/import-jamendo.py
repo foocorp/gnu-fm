@@ -155,7 +155,7 @@ class JamendoImport:
 						print e
 				else:
 					try:
-						self.cursor.execute("INSERT INTO Artist (name, image_small, mbid, homepage)  VALUES (%s, %s, %s, %s)", (artist["name"], artist["image"], artist["url"], artist["mbid"]))
+						self.cursor.execute("INSERT INTO Artist (name, image_small, mbid, homepage)  VALUES (%s, %s, %s, %s)", (artist["name"], artist["image"], artist["mbid"], artist["url"]))
 						self.conn.commit()
 					except Exception,  e:
 						self.conn.rollback()
