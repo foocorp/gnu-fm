@@ -385,7 +385,10 @@ class JamendoImport:
 
 	def tag_exists(self, tag, artist, album, track=None):
 		try:
-			self.cursor.execute("SELECT tag FROM Tags WHERE tag = %s AND artist = %s AND album = %s AND track = %s", (tag, artist, album, track))
+			if track:
+				self.cursor.execute("SELECT tag FROM Tags WHERE tag = %s AND artist = %s AND album = %s AND track = %s", (tag, artist, album, track))
+			else:
+				self.cursor.execute("SELECT tag FROM Tags WHERE tag = %s AND artist = %s AND album = %s AND track IS NULL", (tag, artist, album))
 			return self.cursor.rowcount != 0
 		except:
 			return False
