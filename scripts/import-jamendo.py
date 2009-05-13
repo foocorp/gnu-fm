@@ -261,7 +261,7 @@ class JamendoImport:
 				artist["image"] = artist_e.text
 			
 			if artist_e.tag == "mbgid":
-				if len(artist_e.text) == 36:
+				if artist_e.tag == None or len(artist_e.text) == 36:
 					artist["mbid"] = artist_e.text
 				else:
 					print "Artist mbgid wrong length (%d): %s" % (len(artist_e.text),artist_e.text)
@@ -299,7 +299,7 @@ class JamendoImport:
 				album["tags"].append(genre)
 		
 			if album_e.tag == "mbgid":
-				if len(album_e.text) == 36:
+				if album_e.tag == None or len(album_e.text) == 36:
 					album["mbid"] = album_e.text
 				else:
 					print "Album mbgid wrong length (%d): %s" % (len(album_e.text),album_e.text)
@@ -343,7 +343,7 @@ class JamendoImport:
 				track["duration"] = track_e.text
 
 			if track_e.tag == "mbgid":
-				if len(track_e.text) == 36:
+				if track_e.text == None or len(track_e.text) == 36:
 					track["mbid"] = track_e.text
 				else:
 					print "Track mbgid wrong length (%d): %s" % (len(track_e.text),track_e.text)
