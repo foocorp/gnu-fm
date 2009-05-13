@@ -211,14 +211,14 @@ class JamendoImport:
 
 						if self.track_exists(artist["name"], album["name"], track["name"]):
 							try:
-								self.cursor.execute("UPDATE Track SET downloadurl = %s, streamurl = %s, mbid = %s, license = %s, duration = %s, otherid = %s, streamable = %s WHERE name = %s AND artist = %s AND album = %s", (track["downloadurl"], track["streamurl"], track["mbid"], track["license"], duration, otherid, streamable, track["name"], artist["name"], album["name"]))
+								self.cursor.execute("UPDATE Track SET downloadurl = %s, streamurl = %s, mbid = %s, license = %s, duration = %s, otherid = %s, streamable = %s WHERE name = %s AND artist_name = %s AND album_name = %s", (track["downloadurl"], track["streamurl"], track["mbid"], track["license"], duration, otherid, streamable, track["name"], artist["name"], album["name"]))
 								self.conn.commit()
 							except Exception,  e:
 								self.conn.rollback()
 								print 'ut', e
 						else:
 							try:
-								self.cursor.execute("INSERT INTO Track (name, artist, album, mbid, downloadurl, streamurl, license, duration, otherid, streamable) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (track["name"], artist["name"], album["name"], track["mbid"], track["downloadurl"], track["streamurl"], track["license"], duration, otherid, streamable))
+								self.cursor.execute("INSERT INTO Track (name, artist_name, album_name, mbid, downloadurl, streamurl, license, duration, otherid, streamable) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (track["name"], artist["name"], album["name"], track["mbid"], track["downloadurl"], track["streamurl"], track["license"], duration, otherid, streamable))
 								self.conn.commit()
 							except Exception,  e:
 								self.conn.rollback()
@@ -377,7 +377,7 @@ class JamendoImport:
 
 	def track_exists(self, artist, album, track):
 		try:
-			self.cursor.execute("SELECT name FROM Track WHERE artist = %s AND album = %s AND name = %s", (artist, album, track))
+			self.cursor.execute("SELECT name FROM Track WHERE artist_name = %s AND album_name = %s AND name = %s", (artist, album, track))
 			return self.cursor.rowcount != 0
 		except:
 			return False
