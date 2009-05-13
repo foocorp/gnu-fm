@@ -152,14 +152,14 @@ class JamendoImport:
 						self.conn.commit()
 					except Exception,  e:
 						self.conn.rollback()
-						print e
+						print 'ua', e
 				else:
 					try:
 						self.cursor.execute("INSERT INTO Artist (name, image_small, mbid, homepage)  VALUES (%s, %s, %s, %s)", (artist["name"], artist["image"], artist["mbid"], artist["url"]))
 						self.conn.commit()
 					except Exception,  e:
 						self.conn.rollback()
-						print e
+						print 'ia', e
 
 				for album in artist["albums"]:
 					if self.album_exists(artist["name"], album["name"]):
@@ -170,7 +170,7 @@ class JamendoImport:
 							self.conn.commit()
 						except Exception,  e:
 							self.conn.rollback()
-							print e
+							print 'ub', e
 					else:
 						try:
 							self.cursor.execute("INSERT INTO Album (name, artist_name, albumurl, image, artwork_license, mbid, releasedate, downloadurl) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
@@ -178,7 +178,7 @@ class JamendoImport:
 							self.conn.commit()
 						except Exception,  e:
 							self.conn.rollback()
-							print e
+							print 'ib', e
 
 					for tag in album["tags"]:
 						if not self.tag_exists(tag, artist["name"], album["name"]):
@@ -188,7 +188,7 @@ class JamendoImport:
 								self.conn.commit()
 							except Exception,  e:
 								self.conn.rollback()
-								print e
+								print 'ig', e
 
 					for track in album["tracks"]:
 
@@ -215,14 +215,14 @@ class JamendoImport:
 								self.conn.commit()
 							except Exception,  e:
 								self.conn.rollback()
-								print e
+								print 'ut', e
 						else:
 							try:
 								self.cursor.execute("INSERT INTO Track (name, artist, album, mbid, downloadurl, streamurl, license, duration, otherid, streamable) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (track["name"], artist["name"], album["name"], track["mbid"], track["downloadurl"], track["streamurl"], track["license"], duration, otherid, streamable))
 								self.conn.commit()
 							except Exception,  e:
 								self.conn.rollback()
-								print e
+								print 'it', e
 
 						for tag in track["tags"]:
 							if not self.tag_exists(tag, artist["name"], album["name"], track["name"]):
@@ -232,7 +232,7 @@ class JamendoImport:
 									self.conn.commit()
 								except Exception,  e:
 									self.conn.rollback()
-									print e
+									print 'ig2', e
 
 
 
