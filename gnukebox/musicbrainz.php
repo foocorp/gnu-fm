@@ -47,22 +47,22 @@ $res = $adodb->GetAll("SELECT artist, track from scrobbles where Album is null L
     ob_implicit_flush(1)  ;
 
 			}
-			
+
 
 function doABunchOfShit($artist, $track){
 
 	 $album = ScrobbleLookup($artist, $track);
 
 	 if ($album){
-	 
+
 	 return $album;
 
 	 } else {
 
 	 $album = BrainzLookup ($artist, $track);
 
-	 return $album;} 
-	 	 
+	 return $album;}
+
 }
 
 function ScrobbleLookup($artist, $track){
@@ -86,7 +86,7 @@ function BrainzLookup($artist, $track){
 	 	     global $adodb;
 
 			$sql = "select a.name as artist,l.name as album, t.name as track,t.gid as mbid from brainz.track t left join brainz.artist a on t.artist=a.id left join brainz.albumjoin j on j.track=t.id left join brainz.album l on l.id=j.album  where lower(t.name)=" . $adodb->qstr(mb_strtolower($track, "UTF-8")) . " and lower(a.name)=" . $adodb->qstr(mb_strtolower($artist, "UTF-8")) . " LIMIT 1;";
-			
+
 			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 			$albumData = $adodb->GetRow($sql);
 
