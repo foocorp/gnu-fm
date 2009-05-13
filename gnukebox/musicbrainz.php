@@ -66,35 +66,34 @@ function doABunchOfShit($artist, $track){
 }
 
 function ScrobbleLookup($artist, $track){
+	global $adodb;
 
-	 	     global $adodb;
+	$sql = "SELECT album from scrobbles where artist = " . $adodb->qstr($artist) . " and track = " . $adodb->qstr($track) . " LIMIT 1;";
 
-			$sql = "SELECT album from scrobbles where artist = " . $adodb->qstr($artist) . " and track = " . $adodb->qstr($track) . " LIMIT 1;";
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	$album = $adodb->GetOne($sql);
 
-			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-			$album = $adodb->GetOne($sql);
+	if(!$album) {
+		die("sql error");
+	}
 
-			if(!$album) {
-			     die("sql error");
-                        }
-
-			return $album;
+	return $album;
 }
 
 function BrainzLookup($artist, $track){
 
-	 	     global $adodb;
+	global $adodb;
 
-			$sql = "select a.name as artist,l.name as album, t.name as track,t.gid as mbid from brainz.track t left join brainz.artist a on t.artist=a.id left join brainz.albumjoin j on j.track=t.id left join brainz.album l on l.id=j.album  where lower(t.name)=" . $adodb->qstr(mb_strtolower($track, "UTF-8")) . " and lower(a.name)=" . $adodb->qstr(mb_strtolower($artist, "UTF-8")) . " LIMIT 1;";
+	$sql = "select a.name as artist,l.name as album, t.name as track,t.gid as mbid from brainz.track t left join brainz.artist a on t.artist=a.id left join brainz.albumjoin j on j.track=t.id left join brainz.album l on l.id=j.album  where lower(t.name)=" . $adodb->qstr(mb_strtolower($track, "UTF-8")) . " and lower(a.name)=" . $adodb->qstr(mb_strtolower($artist, "UTF-8")) . " LIMIT 1;";
 
-			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-			$albumData = $adodb->GetRow($sql);
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	$albumData = $adodb->GetRow($sql);
 
-			if(!$albumData)) {
-			     die("sql error");
-                        }
+	if(!$albumData)) {
+		die("sql error");
+	}
 
-			return $albumData['album'];
+	return $albumData['album'];
 }
 ?>
 		</ul>

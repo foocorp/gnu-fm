@@ -165,7 +165,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		catch (exception $e) {
                     die("FAILED " . $e->getMessage() . "\n");
 		}
-		
+
 	}
 
 	        // Destroy now_playing since it is almost certainly obsolescent
