@@ -388,7 +388,7 @@ class JamendoImport:
 			if track:
 				self.cursor.execute("SELECT tag FROM Tags WHERE tag = %s AND artist = %s AND album = %s AND track = %s", (tag, artist, album, track))
 			else:
-				self.cursor.execute("SELECT tag FROM Tags WHERE tag = %s AND artist = %s AND album = %s AND track IS NULL", (tag, artist, album))
+				self.cursor.execute("SELECT tag FROM Tags WHERE tag = %s AND artist = %s AND album = %s AND track = ''", (tag, artist, album))
 			return self.cursor.rowcount != 0
 		except:
 			return False
