@@ -30,17 +30,17 @@ $userlevel = $u_user->userlevel;
 function sendEmail($email) {
 	global $mdb2;
 	global $base_url;
-	global $u_user;	
+	global $u_user;
 	$username = $u_user->name;
 	$code = md5(md5($username) . time());
 
 	// Insert the invitation into the table
-	$sql = 'INSERT INTO Invitations (inviter, code) VALUES (' 
-		. $mdb2->quote($username, 'text') . ', ' 
+	$sql = 'INSERT INTO Invitations (inviter, code) VALUES ('
+		. $mdb2->quote($username, 'text') . ', '
 		. $mdb2->quote($code, 'text') . ')';
-    
+
 	$affected =& $mdb2->exec($sql);
-    
+
 	if (PEAR::isError($affected)) {
 		die($affected->getMessage());
 	}
@@ -64,7 +64,7 @@ if ($userlevel < 2) {
 	$action = $_GET['action'];
 	if (isset($action)) {
 		if ($action == 'invite') {
-			if (!isset($_GET['email'])) {	
+			if (!isset($_GET['email'])) {
 				$smarty->assign('error', 'Error!');
 				$smarty->assign('details', 'Missing email.');
 				$smarty->display('error.tpl');
