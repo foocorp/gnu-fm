@@ -9,6 +9,9 @@
 
 {if !empty($errors)}
 	<p id='errors'>{$errors}</p>
+    {if isset($invalid)}
+	<p><a href="{$base_url}/reset.php">{t}Reset my password{/t}?</a></p>
+    {/if}
 {/if}
 
 <div id='login-form'>
@@ -20,9 +23,7 @@
 			<label for='password'>{t}Password{/t}<span>&nbsp;</span></label>
 			<input id='password' name='password' type='password' value=''/>
 
-    {if isset($invalid)}
-	<p><a href="{$base_url}/reset.php">{t}Reset my password{/t}?</a></p>
-    {/if}
+
 			
 			<label for='remember'>{t}Remember me{/t}<span>&nbsp;</span></label>
 			<input id='remember' name='remember' type='checkbox' value='1'/>
