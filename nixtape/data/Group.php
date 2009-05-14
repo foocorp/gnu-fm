@@ -20,7 +20,6 @@
 */
 
 require_once($install_path . '/database.php');
-require_once($install_path . '/config.php');
 require_once($install_path . '/data/sanitize.php');
 require_once($install_path . '/utils/human-time.php');
 require_once($install_path . '/data/Server.php');
@@ -284,7 +283,7 @@ class Group {
 		global $base_uri;
 		if (!empty($this->avatar_uri))
 			return $this->avatar_uri;
-		return $base_url . '/themes/' . $default_theme . '/images/default-avatar.stream.png';
+		return $base_url . '/themes/librefm/images/default-avatar.stream.png';
 	}
 
 	function getURL() {
