@@ -12,7 +12,7 @@
 
 */
 
-html{background: #ececec url(images/bgs.png);}
+html{background: #ececec;}
 
 #hd {margin-top: -9px;}
 
@@ -458,6 +458,6 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
 
 /* end of player CSS */
 
-#register-prompt {background-color: #eee; padding: 12px;}
+#register-prompt {background-color: #eee; padding: 12px; border: 5px solid #aaa;}
 
 .photo{padding: 1px; border 1px solid #ccc; width: 48px; height: 48px; float: left;}
