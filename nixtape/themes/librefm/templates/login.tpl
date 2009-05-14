@@ -11,7 +11,7 @@
 	<p id='errors'>{$errors}</p>
 {/if}
 
-<div id='login'>
+<div id='login-form'>
 	<form action='' method='post'>
 		<fieldset>
 			<label for='username'>{t}Username{/t}<span>&nbsp;</span></label>
