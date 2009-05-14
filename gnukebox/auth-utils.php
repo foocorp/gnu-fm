@@ -46,7 +46,7 @@ function check_standard_auth($username, $token, $timestamp) {
 	// Validates authentication using a standard authentication token
 	global $adodb;
 
-	$pass = $adodb->GetOne("SELECT password FROM Users WHERE username =" . $adodb->qstr($username));
+	$pass = $adodb->GetOne('SELECT password FROM Users WHERE username =' . $adodb->qstr($username));
 	if (!$pass) {
 		// TODO: Log failures somewhere
 		return false;
@@ -55,4 +55,18 @@ function check_standard_auth($username, $token, $timestamp) {
 	$check_token = md5($pass . $timestamp);
 
 	return $check_token == $token;
+}
+
+/**
+ * Checks if the session is still valid. Assumes $sessionID is already quoted.
+ */
+function check_session($sessionID) {
+	global $adodb;
+
+	$session = $adodb->GetOne('SELECT expires from Scrobble_Sessions WHERE sessionid = ' . $sessionID);
+	if (!$session) {
+		return(false);
+	}
+
+	return($session <= time());
 }
