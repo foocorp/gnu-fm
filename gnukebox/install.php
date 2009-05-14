@@ -324,7 +324,7 @@ if (isset($_POST['install'])) {
 	$install_path = dirname(__FILE__) . "/";
 
 	//Write out the configuration
-	$config = "<?php\n \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$submissions_server = '" . $submissions_server . "';\n\ $install_path = '" . $install_path . "'; ";
+	$config = "<?php\n \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$submissions_server = '" . $submissions_server . "';\n \$install_path = '" . $install_path . "'; ";
 
 	$conf_file = fopen("config.php", "w");
 	$result = fwrite($conf_file, $config);
