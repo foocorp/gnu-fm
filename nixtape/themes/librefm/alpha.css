@@ -283,11 +283,12 @@ h3 {
 }
 
 .user, .group {
-    background: #fff url(images/bg.png) repeat-x ;
     padding: .5em;
     position: relative;
     margin-bottom: .5em;
 }
+
+.user{    background: #fff url(images/bg.png) repeat-x ;}
 
 .user dl, .group dl
 {
