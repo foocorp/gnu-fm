@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /* Libre.fm -- a free network service for sharing your music listening habits
 

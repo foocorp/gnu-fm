@@ -53,7 +53,7 @@ if(isset($user->name)) {
 	$smarty->assign('isme', ($this_user->name == $user->name));
 	$smarty->assign('me', $user);
 	$smarty->assign('profile', true);
-	
+
 	$smarty->assign('extra_head_links', array(
 			array(
 				'rel'=>'alternate',

@@ -15,7 +15,7 @@ class ARC2_OpenidExtractor extends ARC2_RDFExtractor {
   function __construct($a = '', &$caller) {
     parent::__construct($a, $caller);
   }
-  
+
   function ARC2_OpenidExtractor($a = '', &$caller) {
     $this->__construct($a, $caller);
   }
@@ -26,7 +26,7 @@ class ARC2_OpenidExtractor extends ARC2_RDFExtractor {
   }
 
   /*  */
-  
+
   function extractRDF() {
     $t_vals = array();
     $t = '';
@@ -41,7 +41,7 @@ class ARC2_OpenidExtractor extends ARC2_RDFExtractor {
       $this->addTs(ARC2::getTriplesFromIndex($doc));
     }
   }
-  
+
   /*  */
 
   function extractLink($n, $t_vals, $t) {
@@ -60,7 +60,7 @@ class ARC2_OpenidExtractor extends ARC2_RDFExtractor {
     }
     return array($t_vals, $t);
   }
-  
+
   /*  */
-  
+
 }

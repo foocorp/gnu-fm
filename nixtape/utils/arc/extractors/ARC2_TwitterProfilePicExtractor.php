@@ -15,7 +15,7 @@ class ARC2_TwitterProfilePicExtractor extends ARC2_RDFExtractor {
   function __construct($a = '', &$caller) {
     parent::__construct($a, $caller);
   }
-  
+
   function ARC2_TwitterProfilePicExtractor($a = '', &$caller) {
     $this->__construct($a, $caller);
   }
@@ -27,7 +27,7 @@ class ARC2_TwitterProfilePicExtractor extends ARC2_RDFExtractor {
   }
 
   /*  */
-  
+
   function extractRDF() {
     $t_vals = array();
     $t = '';
@@ -45,5 +45,5 @@ class ARC2_TwitterProfilePicExtractor extends ARC2_RDFExtractor {
   }
 
   /*  */
-  
+
 }

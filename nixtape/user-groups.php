@@ -46,7 +46,7 @@ if(isset($user->name)) {
 	$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
 	$smarty->assign('me', $user);
 	$smarty->assign('profile', true);
-	
+
 	$smarty->assign('groups', Group::groupList($user));
 
 	$smarty->assign('extra_head_links', array(
@@ -57,7 +57,7 @@ if(isset($user->name)) {
 				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL('groups')))
 				)
 		));
-		
+
 	$smarty->display('user-groups.tpl');
 } else {
 	$smarty->assign('error', 'User not found');

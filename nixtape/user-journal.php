@@ -90,4 +90,4 @@ $smarty->assign('extra_head_links', array(
 			)
 	));
 $smarty->display('user-journal.tpl');
-	
+

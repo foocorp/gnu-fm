@@ -61,7 +61,7 @@ if (isset($_POST['install'])) {
 	if(!$result) {
 		$print_config = str_replace('<', '&lt;', $config);
 		die('Unable to write to file \'<i>config.php</i>\'. Please create this file and copy the following in to it: <br /><pre>' . $print_config . '</pre>');
-	}	
+	}
 
 	die('Configuration completed successfully!');
 }
@@ -106,7 +106,7 @@ if (isset($_POST['install'])) {
 			<br />
 			<h2>General</h2>
 			Default Theme: <select name="default_theme">
-			<?php	
+			<?php
 				$dir = opendir('themes');
 				while($theme = readdir($dir)) {
 					if(is_dir('themes/' . $theme) && $theme[0] != '.')  {

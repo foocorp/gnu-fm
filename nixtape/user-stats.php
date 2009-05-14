@@ -40,20 +40,20 @@ if(isset($user->name)) {
 #	if (!PEAR::isError ($aUserTagCloud)) {
 #		$smarty->assign('user_tagcloud',$aUserTagCloud);
 #	}
-	
+
 	$smarty->assign('stat_barwidth', 320);
 	$aUserPlayStat =  Statistic::GeneratePlayStats('Scrobbles', 'artist', 40, $user->name, 300);
 	if (!PEAR::isError ($aUserPlayStat)) {
 		$smarty->assign('user_playstats',$aUserPlayStat);
 	}
-	
+
 	$aUserDayStat =  Statistic::generatePlayByDays('Scrobbles', 40, $user->name, 300);
 	if (!PEAR::isError ($aUserDayStat)) {
 		$smarty->assign('user_daystats',$aUserDayStat);
 	}
 
 	$smarty->assign('toptracks', $user->getTopTracks(40));
-	
+
 	$smarty->assign('me', $user);
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
 	$smarty->assign('isme', ($this_user->name == $user->name));
@@ -66,7 +66,7 @@ if(isset($user->name)) {
 				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL()))
 				)
 		));
-	
+
 	$smarty->assign('stats', true);
 	$smarty->display('user-stats.tpl');
 } else {

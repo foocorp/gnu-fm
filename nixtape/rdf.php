@@ -63,7 +63,7 @@ switch ($fmt)
 	case 'json' :
 		if ($_GET['callback'])
 			{ header('Content-Type: text/javascript'); }
-		else 
+		else
 			{ header('Content-Type: application/json'); }
 		$ser = ARC2::getRDFJSONSerializer($conf);
 		break;
@@ -80,4 +80,4 @@ print $ser->getSerializedIndex($index);
 if ($_GET['callback']) {
 	print ');';
 }
-	
+

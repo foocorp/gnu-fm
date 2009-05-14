@@ -44,10 +44,10 @@ if (isset($_GET['code'])) {
     }
 
     $row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
-    
+
     $password = '';
     $chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    
+
     for ($i = 0; $i < 8; $i++) {
 	$password .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
     }
@@ -70,14 +70,14 @@ else if (isset($_POST['user'])) {
     $username = $_POST['user'];
 
     $res = $mdb2->query('SELECT * FROM Users WHERE username="'
-       . $mdb2->quote($username, 'text'));	
+       . $mdb2->quote($username, 'text'));
 
     if (PEAR::isError($res) || $res->numRows() == 0) {
 	$errors .= "User not found.\n";
 	$smarty->assign('errors', $errors);
 	$smarty->display('error.tpl');
 	die();
-    } 
+    }
     $row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
     $code = md5($username . $row['email'] . time());
     $sql = 'INSERT INTO Recovery_Request (username, email, code, expires) VALUES('
@@ -95,12 +95,12 @@ else if (isset($_POST['user'])) {
     }
 
     $url = $base_url . '/reset.php?code=' . $code;
-    $content = "Hi!\n\nSomeone from the IP-address " . $_SERVER['REMOTE_ADDR'] . " entered your username " 
+    $content = "Hi!\n\nSomeone from the IP-address " . $_SERVER['REMOTE_ADDR'] . " entered your username "
 	. "in the password reset form at libre.fm. To change you password, please visit\n\n"
 	. $url . "\n\n- The Libre.fm Team";
     sendEmail($content, $row['email']);
-    $smarty->assign('sent', true);	
-} 
+    $smarty->assign('sent', true);
+}
 
 $smarty->display('reset.tpl');
 ?>

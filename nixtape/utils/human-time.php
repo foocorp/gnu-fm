@@ -25,9 +25,9 @@
 
     function human_timestamp ($unix_timestamp, $now = null) {
         if (is_null($now)) {
-            $now = time(); 
+            $now = time();
         }
-        
+
         $diff = $now - $unix_timestamp;
 
         # ugly!

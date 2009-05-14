@@ -34,7 +34,7 @@ class ArtistXML {
 	 */
 	public static function getInfo($artistName, $api_key=false, $mbid=false, $lang='en') {
 		// We assume $api_key is valid and set at this point
-		
+
 		if (!isset($artistName) && !isset($mbid)) {
 			echo XML::error('failed', '7', 'Invalid resource specified');
 			return;
@@ -42,7 +42,7 @@ class ArtistXML {
 
 		$artist = new Artist($artistName, $mbid);
 
-		if (PEAR::isError($artist)) {	
+		if (PEAR::isError($artist)) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
@@ -86,7 +86,7 @@ class ArtistXML {
 			$track->addChild('listeners', $tracks[$i]->getListenerCount());
 		}
 
-		return($xml);	
+		return($xml);
 	}
 
 }

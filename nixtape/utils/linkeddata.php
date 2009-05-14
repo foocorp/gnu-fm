@@ -57,7 +57,7 @@ function identifierAlbum ($username, $artist, $track, $album, $time, $mbid=NULL,
 	{
 		return sprintf('http://dbtune.org/musicbrainz/resource/record/%s', strtolower($lmbid));
 	}
-	
+
 	$u = identifierScrobbleEvent($username, $artist, $track, $album, $time, $mbid, $ambid, $lmbid) . '.album';
 	if ($u != '.album') return $u;
 
@@ -73,7 +73,7 @@ function identifierTrack ($username, $artist, $track, $album, $time, $mbid=NULL,
 
 	$u = identifierScrobbleEvent($username, $artist, $track, $album, $time, $mbid, $ambid, $lmbid) . '.track';
 	if ($u != '.track') return $u;
-	
+
 	return sprintf('%s#track', Server::getTrackURL($artist, $album, $track));
 }
 
