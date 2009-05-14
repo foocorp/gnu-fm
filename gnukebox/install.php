@@ -236,7 +236,7 @@ if (isset($_POST['install'])) {
 			session VARCHAR(32),
 			url VARCHAR(255),
 			expires INTEGER NOT NULL DEFAULT 0,
-			PRIMARY KEY(username,session))");
+			PRIMARY KEY(session))");
 
 	//Table for delete profile requests
 	$adodb->Execute("CREATE TABLE Delete_Request (
