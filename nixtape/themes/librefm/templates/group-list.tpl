@@ -14,14 +14,13 @@
 			</div>
 			<dl>
 				<dt>
-					<span class="fn org" property="foaf:name">{$g->fullname|escape:'html':'UTF-8'}</span>
-					(<span class="nickname" property="foaf:nick">{$g->name|escape:'html':'UTF-8'}</span>)
+					<a rel="foaf:homepage" rev="foaf:primaryTopic" property="dc:description" href="{$g->getURL()|escape:'html':'UTF-8'}"><span class="fn org" property="foaf:name">{$g->fullname|escape:'html':'UTF-8'}</span></div>
 				</dt>
 				<dd>{if $g->homepage}<a class="url" rel="foaf:page" href="{$g->homepage|escape:'html':'UTF-8'}">{$g->homepage|escape:'html':'UTF-8'}</a>{/if}</dd>
 				<dd class="note" property="dc:abstract">{$g->bio|escape:'html':'UTF-8'}</dd>
-				<dd><a rel="foaf:homepage" rev="foaf:primaryTopic" property="dc:description" href="{$g->getURL()|escape:'html':'UTF-8'}">{t members='$g->count}%1 members{/t}</a></dd>
+				<dd>{t members='$g->count}%1 members{/t}</dd>
 			</dl>
-			<hr style="border: 1px solid transparent; clear: both;" />
+			<hr />
 		</div>
 	</li>
 	
