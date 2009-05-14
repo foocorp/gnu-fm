@@ -460,4 +460,4 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
 
 #register-prompt {background-color: #eee; padding: 12px;}
 
-.photo{padding: 1px; border 1px solid #ccc; width: 64px; height: 64px; float: left;}
+.photo{padding: 1px; border 1px solid #ccc; width: 64px; height: 64px; float: left; background-image: url(images/default-avatar-stream.png};}
