@@ -18,7 +18,7 @@
 
 */
 
-require_once('../database.php');
+require_once('../database2.php');
 
 if(!isset($_GET['username']) || !isset($_GET['passwordmd5'])) {
 	die("BADAUTH\n");
@@ -27,17 +27,16 @@ if(!isset($_GET['username']) || !isset($_GET['passwordmd5'])) {
 $username = $_GET['username'];
 $passmd5 = $_GET['passwordmd5'];
 
-$res = $mdb2->query('SELECT username FROM Users WHERE username = ' . $mdb2->quote($username, 'text') . ' AND password = ' . $mdb2->quote($passmd5, 'text'));
-if (!$res->numRows()) {
+$res = $adodb->GetOne('SELECT username FROM Users WHERE username = ' . $adodb->qstr($username) . ' AND password = ' . $adodb->qstr($passmd5));
+if (!$res) {
 	die("BADAUTH\n");
 }
 
 $session = md5($passmd5 . time());
 
-$mdb2->exec('DELETE FROM Radio_Sessions WHERE expires < ' . $mdb2->quote(time(), 'integer'));
+$adodb->Execute('DELETE FROM Radio_Sessions WHERE expires < ' . (int)(time()));
 
-$mdb2->query('INSERT INTO Radio_Sessions (username, session, expires) VALUES ( ' . $mdb2->quote($username, 'text"' . ', ' . $mdb2->quote($session, "text") . ', ' . $mdb2->quote(time() + 259200,'integer') . ')');
-
+$adodb->Execute('INSERT INTO Radio_Sessions (username, session, expires) VALUES ( ' . $adodb->qstr($username) . ', ' . $adodb->qstr($session) . ', ' . (int)(time() + 259200) . ')');
 
 echo 'session=' . $session . "\n";
 echo "stream_url=this.is.broken.{$username}.example.com\n";
