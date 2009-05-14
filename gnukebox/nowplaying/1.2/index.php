@@ -69,14 +69,14 @@ catch (exception $e) {
 	die("FAILED " . $e->getMessage() . "\n");
 }
 
-// createArtistIfNew($artist);
-// if($album != 'NULL') {
-// 	createAlbumIfNew($artist, $album);
-// }
-// getTrackCreateIfNew($artist, $album, $track, $mbid);
+createArtistIfNew($artist);
+if($album != 'NULL') {
+	createAlbumIfNew($artist, $album);
+}
+getTrackCreateIfNew($artist, $album, $track, $mbid);
 
 //Expire old tracks
-$adodb->Execute("DELETE FROM Now_Playing WHERE expires < " . time());
+// $adodb->Execute("DELETE FROM Now_Playing WHERE expires < " . time());
 
 die("OK\n");
 
