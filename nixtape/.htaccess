@@ -15,3 +15,5 @@ RewriteRule ^group/([^/]+)/?$                                   group.php?group=
 RewriteRule ^group/?$                                           group.php                               [B,NC]
 RewriteRule ^country/([^/]+)/?$					location.php?country=$1			[B,NC]
 RewriteRule ^logout 						login.php?action=logout			[B,NC]
+RewriteRule ^listen 						listen.php
+RewriteRule ^music 						artist.php?popular=true
