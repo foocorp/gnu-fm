@@ -79,14 +79,14 @@ if(isset($logged_in) && $logged_in) {
 	if ( substr($_POST['return'], 0, 1) == '/' ) {
 		header(sprintf('Location: http://%s%s', $_SERVER['SERVER_NAME'], $_POST['return']));
 	} else {
-		header('Location: ' . $base_url); 
+		header('Location: ' . $base_url);
 	}
 
 } else {
 	if ( substr($_REQUEST['return'], 0, 1) == '/' ) {
 		$smarty->assign('return', $_REQUEST['return']);
 	} else {
-		$smarty->assign('return', ''); 
+		$smarty->assign('return', '');
 	}
 
 	$smarty->assign('username', $username);
