@@ -8,10 +8,12 @@
 </div>
 
 {if !empty($errors)}
-	<p id='errors'>{$errors}</p>
+<div id='errors'>
+	<p>{$errors}</p>
     {if isset($invalid)}
 	<p><a href="{$base_url}/reset.php">{t}Reset my password{/t}?</a></p>
     {/if}
+</div>
 {/if}
 
 <div id='login-form'>
