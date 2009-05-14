@@ -52,9 +52,9 @@ class User {
 		else {
 			global $adodb;
 			$query = 'SELECT * FROM Users WHERE lower(username) = ' . $adodb->qstr(strtolower($name));
-                	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	                $row = $adodb->CacheGetRow(7200,$query);
-                	if (!$row) {
+			if (!$row) {
 				return(new PEAR_Error('ERROR ' . $query));
 	                }
 		}

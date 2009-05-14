@@ -119,7 +119,7 @@ class Server {
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
 			$row['trackurl'] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
 
-  			$row['timehuman'] = human_timestamp($row['time']);
+			$row['timehuman'] = human_timestamp($row['time']);
 			$row['timeiso']   = date('c', (int)$row['time']);
 
 			$row['id']        = identifierScrobbleEvent($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);

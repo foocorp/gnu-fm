@@ -104,25 +104,25 @@ if ($_POST['submit'])
 		if ($_POST['owner'] != $group->owner->username)
 		{
 			$new_owner = new User($_POST['owner']);
-			
+
 			if (! $group->memberCheck($new_owner))
 			{
 				$smarty->assign('error', 'Error!');
 				$smarty->assign('details', 'Cannot assign group ownership to someone who is not a member!');
 				$smarty->display('error.tpl');
-				die();				
+				die();
 			}
 			else
 			{
 				$group->owner = $new_owner;
 			}
 		}
-		
+
 		$group->fullname    = $_POST['fullname'];
 		$group->homepage    = $_POST['homepage'];
 		$group->bio         = $_POST['bio'];
 		$group->avatar_uri  = $_POST['avatar_uri'];
-		
+
 		$group->save();
 
 		header('Location: ' . $group->getURL());

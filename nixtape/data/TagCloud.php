@@ -64,7 +64,7 @@ class TagCloud {
 			sort($res);
 			return $res;
 		}
-    	}
+	}
 
 	/**
 	 * Returns the preferred table to generate scrobble data from.

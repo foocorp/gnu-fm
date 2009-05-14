@@ -38,7 +38,7 @@ function reportError($text, $data) {
 	if (PEAR::isError($mdbe)) {
 		die($mdbe->getMessage());
 	}
-    
+
 	$mdbe->exec('INSERT INTO Error (msg, data, time) VALUES ('
 		. $mdbe->quote($text, 'text') . ', '
 		. $mdbe->quote($data, 'text') . ', '
