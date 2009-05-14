@@ -44,8 +44,7 @@ $smarty->assign('extra_head_links', array(
 			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(htmlentities(str_replace($base_url, '', $album->getURL())))
 			)
 	));
-	
-$smarty->display('album.tpl');
 
+$smarty->display('album.tpl');
 
 ?>

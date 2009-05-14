@@ -27,8 +27,8 @@ require_once($install_path . '/data/User.php');
 require_once($install_path . '/data/sanitize.php');
 require_once($install_path . '/utils/linkeddata.php');
 require_once($install_path . '/utils/arc/ARC2.php');
-require_once($install_path . '/utils/resolve-external.php'); 
-require_once($install_path . '/utils/licenses.php'); 
+require_once($install_path . '/utils/resolve-external.php');
+require_once($install_path . '/utils/licenses.php');
 
 /**
  * Provides access to server-wide data
@@ -51,18 +51,18 @@ class Server {
 		if($username) {
 			$res = $adodb->CacheGetAll(60,
 				'SELECT
-					s.username, 
-					s.artist, 
-					s.track, 
-					s.album, 
-					s.time, 
-					s.mbid, 
+					s.username,
+					s.artist,
+					s.track,
+					s.album,
+					s.time,
+					s.mbid,
 					a.mbid AS artist_mbid,
 					l.mbid AS album_mbid,
 					l.image AS album_image,
 					l.artwork_license,
 					t.license
-				FROM Scrobbles s 
+				FROM Scrobbles s
 				LEFT JOIN Artist a
 					ON s.artist=a.name
 				LEFT JOIN Album l
@@ -72,15 +72,15 @@ class Server {
 					ON s.stid = st.id
 				LEFT JOIN Track t
 					ON st.track = t.id
-				WHERE lower(s.username) = ' . $adodb->qstr(strtolower($username)) . ' 
+				WHERE lower(s.username) = ' . $adodb->qstr(strtolower($username)) . '
 				ORDER BY
-					s.time DESC 
+					s.time DESC
 				LIMIT ' . (int)($number));
 		} else {
 			$res = $adodb->CacheGetAll(60,
 				'SELECT
 					s.username,
-					s.artist, 
+					s.artist,
 					s.track,
 					s.album,
 					s.time,
@@ -101,7 +101,7 @@ class Server {
 				LEFT JOIN Track t
 					ON st.track = t.id
 				ORDER BY
-					s.time DESC 
+					s.time DESC
 				LIMIT ' . (int)($number));
 		}
 		}
@@ -111,7 +111,7 @@ class Server {
 
 		foreach($res as &$i) {
 			$row = sanitize($i);
-			
+
 			$row['userurl'] = Server::getUserURL($row['username']);
 			if ($row['album']) {
 				$row['albumurl'] = Server::getAlbumURL($row['artist'], $row['album']);
@@ -121,7 +121,7 @@ class Server {
 
   			$row['timehuman'] = human_timestamp($row['time']);
 			$row['timeiso']   = date('c', (int)$row['time']);
-			
+
 			$row['id']        = identifierScrobbleEvent($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 			$row['id_artist'] = identifierArtist($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 			$row['id_track']  = identifierTrack($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
@@ -139,7 +139,7 @@ class Server {
 
 			$row['licenseurl'] = $row['license'];
 			$row['license'] = simplify_license($row['licenseurl']);
-			
+
 			$result[] = $row;
 		}
 
@@ -232,7 +232,7 @@ class Server {
 					ORDER BY t.streamable DESC, n.expires DESC LIMIT ' . (int)($number));
 		}
 		}
-		catch (exception $e) {	
+		catch (exception $e) {
 			return false;
 		}
 
@@ -250,13 +250,13 @@ class Server {
 			$row['userurl'] = Server::getUserURL($row['username']);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
 			$row['trackurl'] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
-			
+
 			// We really want to get an image URI from the database and only fall back to qm50.png if we can't find an image.
 			$row['albumart'] = $base_url . 'themes/' . $default_theme . '/images/qm50.png';
 
 			$row['licenseurl'] = $row['license'];
 			$row['license'] = simplify_license($row['licenseurl']);
-			
+
 			$result[] = $row;
 		}
 
@@ -333,7 +333,7 @@ class Server {
 
 	static function getLocationDetails($name) {
 		global $adodb;
-		
+
 		if (!$name)
 			return array();
 
@@ -342,15 +342,15 @@ class Server {
 			. 'FROM Places p '
 			. 'LEFT JOIN Countries c ON p.country=c.country '
 			. 'WHERE p.location_uri=' . $adodb->qstr($name, 'text'));
-		
+
 		if($rv) {
-		
+
 			if (! ($rv['latitude'] && $rv['longitude'] && $rv['country'])) {
-			
+
 				$parser = ARC2::getRDFXMLParser();
 				$parser->parse($name);
 				$index = $parser->getSimpleIndex();
-				
+
 				$rv = array(
 					'latitude'  => $index[$name]['http://www.w3.org/2003/01/geo/wgs84_pos#lat'][0],
 					'longitude' => $index[$name]['http://www.w3.org/2003/01/geo/wgs84_pos#long'][0],
@@ -368,7 +368,7 @@ class Server {
 			$parser = ARC2::getRDFXMLParser();
 			$parser->parse($name);
 			$index = $parser->getSimpleIndex();
-			
+
 			$rv = array(
 				'latitude'  => $index[$name]['http://www.w3.org/2003/01/geo/wgs84_pos#lat'][0],
 				'longitude' => $index[$name]['http://www.w3.org/2003/01/geo/wgs84_pos#long'][0],
@@ -381,7 +381,7 @@ class Server {
 				(float)$rv['longitude'],
 				$adodb->qstr($rv['country'])));
 		}
-			
+
 		return $rv;
 	}
 

@@ -31,7 +31,7 @@ require_once($install_path . '/utils/linkeddata.php');
 /**
  * Represents track data
  *
- * All track attributes are accessible as public variables. 
+ * All track attributes are accessible as public variables.
  */
 class Track {
 
@@ -66,7 +66,7 @@ class Track {
 			$this->licenseurl = $row['license'];
 			$this->downloadurl = resolve_external_url($row['downloadurl']);
 			$this->streamurl = resolve_external_url($row['streamurl']);
-			
+
 			$this->id = identifierTrack(null, $this->artist_name, $this->name, $this->album_name, null, $this->mbid, null, null);
 		}
 

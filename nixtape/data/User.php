@@ -78,15 +78,15 @@ class User {
 			$this->created	    = $row['created'];
 			$this->modified     = $row['modified'];
 			$this->uniqueid     = $row['uniqueid'];
-			
+
 			$this->has_identica = preg_match('#^http://identi\.ca/#i', $this->laconica_profile);
-			
+
 			if (! preg_match('/\:/', $this->id))
 				$this->id = $this->getURL() . '#me';
-		}		
+		}
 	}
-	
-	
+
+
 	public static function new_from_uniqueid_number ($uid)
 	{
 		global $adodb;
@@ -100,17 +100,17 @@ class User {
 			return false;
 		}
 	}
-	
+
 	function save ()
 	{
 		global $adodb;
-		
+
 		// It appears we just discard this data, but this is here for a reason!
 		// getLocationDetails will fill in latitude,longitude details into the Places table in the database
 		// if it's not already there. This is important as the location_uri field is a foreign key.
 		if (!empty($this->location_uri))
 			$dummy = Server::getLocationDetails($this->location_uri);
-		
+
 		$q = sprintf('UPDATE Users SET '
 				. 'email=%s, '     # Send a confirmation email first??
 				. 'password=%s, '
@@ -140,9 +140,9 @@ class User {
 				, $adodb->qstr($this->journal_rss)
 				, time()
 				, $adodb->qstr($this->name));
-				
+
 		$res = $adodb->Execute($q);
-		
+
 		if(PEAR::isError($res)) {
 			header('Content-Type: text/plain');
 			//($res);
@@ -173,7 +173,7 @@ class User {
 	function getAvatar($size=64) {
 		if (!empty($this->avatar_uri))
 			return $this->avatar_uri;
-	
+
 		return 'http://www.gravatar.com/avatar/' . md5($this->email) . '?s=' . $size . '&d=monsterid';
 	}
 

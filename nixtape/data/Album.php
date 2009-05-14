@@ -28,7 +28,7 @@ require_once($install_path . '/utils/linkeddata.php');
 /**
  * Represents album data
  *
- * General album attributes are accessible as public variables. 
+ * General album attributes are accessible as public variables.
  * Lists of tracks are only generated when requested.
  */
 class Album {
@@ -153,7 +153,7 @@ function go_get_album_art($artist, $album){
 
 	$image = $aws_xml->Items->Item->MediumImage->URL;
 	$URI = $aws_xml->Items->Item->DetailPageURL;
-	
+
 	if ($image) {
 
 		if ($license == '') { $license = 'amazon'; }
@@ -166,7 +166,7 @@ function go_get_album_art($artist, $album){
 		$sql = ('UPDATE Album SET image = '
 			. ($image) . ', '
 			. ' artwork_license = '
-			. ($license) . ' WHERE artist_name = '. ($artist) 
+			. ($license) . ' WHERE artist_name = '. ($artist)
 			. ' AND name = '	. ($album));
 
 		try {
