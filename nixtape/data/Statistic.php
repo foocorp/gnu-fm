@@ -35,7 +35,7 @@ class Statistic {
 	 */
 	static function generatePlayStats($table, $field, $limit = 40, $constraint = null, $maxwidth = 100 ) {
 		global $mdb2;
-		if (!is_string($field))          return false;	
+		if (!is_string($field))          return false;
 		if (!is_string($table))          return false;
 		if (!is_integer($limit))         return false;
 		$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table;
@@ -50,7 +50,7 @@ class Statistic {
 		if (PEAR::isError($res)) {
 			echo('ERROR' . $res->getMessage());
 		}
-	
+
 		if (!$res->numRows()) {
 			return false;
 		} else {
@@ -61,24 +61,24 @@ class Statistic {
 				$i['pageurl'] = Server::getArtistURL($i['artist']);
 				$i['size'] = $i['count'] / $max * $maxwidth;
 			}
-	
+
 			return $data;
 		}
 	}
-    
+
 	static function generatePlayByDays($table, $limit = 100, $constraint = null, $maxwidth = 100 ) {
 		global $mdb2;
 		global $connect_string;
-	
+
 		if (!is_string($table))          return false;
 		if (!is_integer($limit))         return false;
-	
+
 		/*
-		 * todo: completly remove this dirty db type check. 
+		 * todo: completly remove this dirty db type check.
 		 */
 		$query = 'SELECT COUNT(*) as count, DATE(TO_TIMESTAMP(time)) as date FROM ' . $table;
 		if( strpos($connect_string , 'mysql' ) === 0 ) $query = 'SELECT COUNT(*) as count,DATE(FROM_UNIXTIME(time)) as date FROM ' .  $table;
-	
+
 		$query .= (!is_null($constraint)) ? ' WHERE ' : null;
 		$query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
 		$query .= ' GROUP BY date ORDER BY date DESC LIMIT ' . $limit;
@@ -86,9 +86,9 @@ class Statistic {
 		if (PEAR::isError($res)) {
 			echo('ERROR' . $res->getMessage());
 		}
-	
+
 		if (!$res->numRows()) {
-			return false; 
+			return false;
 		} else {
 			$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
 
@@ -97,7 +97,7 @@ class Statistic {
 			foreach($data as &$i){
 				if( $i['count'] > $max ) $max =  $i['count'];
 			}
-			
+
 			foreach($data as &$i){
 				$i['size'] = $i['count'] / $max * $maxwidth;
 			}

@@ -52,11 +52,11 @@ class Group {
 		else {
 			global $mdb2;
 			$res = $mdb2->query('SELECT * FROM Groups WHERE lower(groupname) = ' . $mdb2->quote(strtolower($name), 'text'));
-			
+
 			if(PEAR::isError($res)) {
 				header('Content-Type: text/plain');
 				////($res);
-				
+
 				exit;
 			}
 
@@ -64,7 +64,7 @@ class Group {
 				$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
 			}
 		}
-			
+
 		if (is_array($row)) {
 			$this->gid          = $row['id'];
 			$this->name         = $row['groupname'];
@@ -77,9 +77,9 @@ class Group {
 			$this->users        = array();
 			if (! preg_match('/\:/', $this->id))
 				$this->id = $base.'/group/' . rawurlencode($this->name) . '#group';
-		}		
+		}
 	}
-	
+
 	/**
 	 * Selects a random nixtape group.
 	 *
@@ -89,7 +89,7 @@ class Group {
 	static function random ()
 	{
 		global $mdb2;
-		
+
 		if ( strtolower(substr($mdb2->phptype, 0, 5)) == 'mysql'  )
 		{
 			$random = 'RAND';
@@ -141,7 +141,7 @@ class Group {
 		{
 			return (new PEAR_Error("Not allowed to create a group called '{$name}' (reserved word)!"));
 		}
-		
+
 		// Check to make sure no existing group with same name (case-insensitive).
 		$q = sprintf('SELECT groupname FROM Groups WHERE LOWER(groupname)=LOWER(%s)'
 				, $mdb2->quote($name, 'text'));
@@ -160,7 +160,7 @@ class Group {
 					"The name '{$name}' it too similar to existing group '{$existing}'"
 				));
 		}
-		
+
 		// Create new group
 		$q = sprintf('INSERT INTO Groups (groupname, owner, created, modified) VALUES (%s, %s, %d, %d)'
 				, $mdb2->quote($name, 'text')
@@ -200,7 +200,7 @@ class Group {
 		// Return the newly created group. Callers should check the return value.
 		return (new Group($name));
 	}
-	
+
 	static function groupList ($user=false)
 	{
 		global $mdb2;
@@ -223,7 +223,7 @@ class Group {
 				.'LEFT JOIN Group_Members gm ON gm.grp=g.id '
 				.'GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype');
 		}
-		
+
 		if(PEAR::isError($res))
 		{
 			header('Content-Type: text/plain');
@@ -241,11 +241,11 @@ class Group {
 
 		return $list;
 	}
-	
+
 	function save ()
 	{
 		global $mdb2;
-		
+
 		$q = sprintf('UPDATE Groups SET '
 				. 'owner=%s, '
 				. 'fullname=%s, '
@@ -261,9 +261,9 @@ class Group {
 				, $mdb2->quote($this->avatar_uri, 'text')
 				, time()
 				, $mdb2->quote($this->name, 'text'));
-				
+
 		$res = $mdb2->query($q);
-		
+
 		if(PEAR::isError($res)) {
 			header('Content-Type: text/plain');
 			////($res);
@@ -289,7 +289,7 @@ class Group {
 	function getURL() {
 		return Server::getGroupURL($this->name);
 	}
-	
+
 	function getURLAction ($action) {
 		$url = $this->getURL();
 		if (strstr($url, '?'))
@@ -297,7 +297,7 @@ class Group {
 		else
 			return $url . '?action=' . rawurlencode($action);
 	}
-	
+
 	function getUsers () {
 		global $mdb2;
 
@@ -315,7 +315,7 @@ class Group {
 					$this->users[ $row['username'] ] = new User($row['username'], $row);
 				}
 			}
-			
+
 			$this->count = count($this->users);
 		}
 
@@ -328,22 +328,22 @@ class Group {
 			return true;
 		return false;
 	}
-	
+
 	function memberJoin ($user) {
 		if ($this->memberCheck($user))
 			return false;
-		
+
 		global $mdb2;
 		$res = $mdb2->query(sprintf('INSERT INTO Group_Members (grp, member, joined) VALUES (%s, %s, %d)',
 			$mdb2->quote($this->gid, 'integer'),
 			$mdb2->quote($user->name, 'text'),
 			time()));
-		
+
 		if(PEAR::isError($res))
 		{
 			return false;
 		}
-			
+
 		$this->users[ $user->name ] = $user;
 		return true;
 	}
@@ -351,19 +351,19 @@ class Group {
 	function memberLeave ($user) {
 		if (!$this->memberCheck($user))
 			return false;
-		
+
 		// Group owner cannot leave, so we need a way to reassign ownership.
 		if ($this->owner->name == $user->name)
 			return false;
-		
+
 		global $mdb2;
 		$res = $mdb2->query(sprintf('DELETE FROM Group_Members WHERE grp=%s AND member=%s',
 			$mdb2->quote($this->gid, 'integer'),
 			$mdb2->quote($user->uniqueid, 'integer')));
-		
+
 		if(PEAR::isError($res))
 			return false;
-			
+
 		$this->users[ $user->name ] = null;
 		// The array key still exists though. That's annoying. PHP needs an equivalent of Perl's 'delete'.
 		// This shouldn't actually cause us any problems, but people should be aware of the oddness.

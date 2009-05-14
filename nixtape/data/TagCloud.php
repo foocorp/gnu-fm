@@ -23,7 +23,7 @@ require_once($install_path . '/data/Server.php');
 require_once($install_path . '/config.php'); // Should already be required though.
 
 class TagCloud {
-	
+
 	/*
 	 * returns an array counting appareances of a given field and his corresponding font-size.
 	 * @param string $table table name to be queried
@@ -36,7 +36,7 @@ class TagCloud {
 	 */
 	static function generateTagCloud($table, $field, $limit = 40, $constraint = null, $constrained_field = false) {
 		global $adodb;
-		if (!is_string($field))          return false;	
+		if (!is_string($field))          return false;
 		if (!is_string($table))          return false;
 		if (!is_integer($limit))         return false;
 		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
@@ -65,7 +65,7 @@ class TagCloud {
 			return $res;
 		}
     	}
-    
+
 	/**
 	 * Returns the preferred table to generate scrobble data from.
 	 *
@@ -77,17 +77,17 @@ class TagCloud {
 	{
 		// This array can be set up in config.php
 		global  $scrobblecloud_table;
-		
+
 		if (!empty($scrobblecloud_table[$area]))
 		{
 			return $scrobblecloud_table[$area];
 		}
-		
+
 		if ($area == 'main')
 		{
 			return 'Free_Scrobbles';
 		}
-		
+
 		return 'Scrobbles';
 	}
 }

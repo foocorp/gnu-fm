@@ -30,7 +30,7 @@ require_once($install_path . '/utils/linkeddata.php');
 /**
  * Represents artist data
  *
- * General artist attributes are accessible as public variables. 
+ * General artist attributes are accessible as public variables.
  * Lists of tracks and albums are only generated when requested.
  */
 class Artist {
@@ -82,7 +82,7 @@ class Artist {
 		foreach($res as &$row) {
 			$albums[] = new Album($row['name'], $this->name);
 		}
-	      
+
 		return $albums;
 	}
 
