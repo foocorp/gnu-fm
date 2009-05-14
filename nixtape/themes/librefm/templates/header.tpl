@@ -22,11 +22,8 @@
 	<meta name="author" content="FooCorp catalogue number FOO200 and contributors" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/reset-fonts-grids.css" type="text/css" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/base.css" type="text/css" />
-	<link rel="stylesheet" href="{$base_url}/themes/librefm/librefm.css" type="text/css" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/alpha.css" type="text/css" />
-	<link rel="stylesheet" href="{$base_url}/themes/librefm/player.css" type="text/css" />
 	<link rel="icon" href="{$base_url}/favicon.ico" type="image/x-icon" />
-	<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/" />
 	<script type="text/javascript" src="{$base_url}/js/player.js"></script>
 	<script type="text/javascript" src="{$base_url}/js/jquery-1.3.2.min.js"></script>
 	<script type="text/javascript" src="{$base_url}/js/jquery-ui-1.7.1.custom.min.js"></script>

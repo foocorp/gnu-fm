@@ -12,6 +12,87 @@
 
 */
 
+html{background: #ececec url(images/bgs.png);}
+
+#hd {background-color: #980101; margin-top: -9px;}
+
+#bd {background-color: white; padding: 15px;}
+
+#hd {margin-bottom: 8px; height: 70px; position: relative;}
+
+#hd ul{ margin: 0; padding: 0; line-height: 70px; position: absolute; top: 0; right: 20px;}
+
+#hd li a:link, #hd li a:visited { color: black; text-decoration: none; padding: 7px; }
+
+#hd li a:hover{background-color: maroon; color: yellow;}
+
+#login a:link, #login a:visited { color: yellow !important; text-decoration: underline !important; }
+
+#hd li{ display: inline; font-size: 21px; text-transform: lowercase; font-weight: bold; margin-right: 20px;}
+
+#banner { height: 345px; position: relative;}
+
+#banner img{ position: absolute; top: -12px; left: 0; }
+
+#sidebar {background-color: #eee;}
+
+#hd, #sidebar, #bd, #artists, #hd li {-moz-border-radius: 8px;}
+
+#artists{background-color: lightblue; margin: 15px 0 15px 0; padding: 5px;}
+
+#links, #moarlinks, #ft{font-size: 85%;}
+
+#ft{margin-top: 15px; height: 102px;position: relative;}
+
+#ft p{ text-align: right;}
+
+#ft li{ display: inline; margin-right: 0.5em; }
+
+#ft li.copy { margin-right: 1em; }
+
+#hd h1{ background: #ececec url(/themes/librefm/images/header.png) no-repeat;
+     border: 0;
+     padding: 0;
+     }
+
+#hd h1 a { 
+       display: block;
+       text-decoration: none;
+       overflow: hidden;
+       border: 0;
+       margin: 0;
+       padding: 0;
+       padding-top: 70px;
+       height: 0px !important;
+       height /**/: 70px;
+       width: 950px;
+       cursor: pointer;
+     }
+
+li{ line-height: 1.6em; }
+
+.tagcloud { margin: 0; padding: 0; text-align: center; }
+
+
+.tagcloud li{ display: inline; margin-right: 0.2em; line-height: 1.2em; }
+
+.tagcloud .t1 { font-size: 200%; }
+.tagcloud .t2 { font-size: 180%; }
+.tagcloud .t3 { font-size: 160%; }
+.tagcloud .t4 { font-size: 140%; }
+.tagcloud .t5 { font-size: 120%; }
+.tagcloud .t6 { font-size: 100%; }
+
+a:hover { color: red; }
+a:visited{ color: #07c;}
+
+.highlight{ background-color: #ffb;}
+
+th{background-color: black; color: white;}
+tr.odd{background-color: #edf3fe;}
+
+#try-the-alpha{font-size: 14px; padding: 4px; background-color: #fdca01; text-align: center;}
+
 a:link, a:visited {
     text-decoration: none;
     outline: none;
@@ -309,3 +390,65 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
 
 #errors {background-color: red; padding: 1em; color: white;}
 
+/* CSS for player */
+
+#player > #interface {
+	background: #980101 url("images/player/background.jpg") repeat-x;
+	width: 280px;
+	border: 1px solid black;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	padding: 10px;
+	padding-bottom: 0px;
+	color: white;
+	display: none;
+}
+
+#player > #interface > #buttons a {
+	opacity: 0.5;
+}
+
+#player > #interface > #progress {
+	text-align: right;
+}
+
+#player > #interface > #trackinfo {
+	border: 1px solid black;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	overflow: hidden;
+	padding: 3px 5px;
+	margin-bottom: 5px;
+	background: white;
+	color: black;
+}
+
+#player > #interface > #trackinfo > #playlist {
+	display: none;
+}
+
+#showplaylist {
+	margin-top: 2px;
+	float: right;
+}
+
+#hideplaylist {
+	margin-top: 2px;
+	display: none;
+	float: right;
+}
+
+#scrobbled {
+	display: none;
+	float: right;
+}
+
+.ui-widget { font-family: Verdana,Arial,sans-serif/*{ffDefault}*/; font-size: 1.1em/*{fsDefault}*/; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Verdana,Arial,sans-serif/*{ffDefault}*/; font-size: 1em; }
+.ui-widget-content { border: 1px solid #aaaaaa/*{borderColorContent}*/; background: #ffffff/*{bgColorContent}*/ color: #222222/*{fcContent}*/; }
+.ui-widget-content a { color: #222222/*{fcContent}*/; }
+.ui-corner-all { -moz-border-radius: 4px/*{cornerRadius}*/; -webkit-border-radius: 4px/*{cornerRadius}*/; }
+
+.ui-progressbar { height: 11px; text-align: left; }
+.ui-progressbar .ui-progressbar-value {height:100%; }/* Resizable */
+.ui-progressbar-value { background-image: url(images/player/pbar-ani.gif); }
