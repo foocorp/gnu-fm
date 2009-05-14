@@ -221,7 +221,7 @@ class Group {
 			$res = $mdb2->query('SELECT g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count '
 				.'FROM Groups g '
 				.'LEFT JOIN Group_Members gm ON gm.grp=g.id '
-				.'GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype LIMIT 20);
+				.'GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype);
 		}
 
 		if(PEAR::isError($res))
