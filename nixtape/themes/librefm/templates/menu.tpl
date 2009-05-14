@@ -1,4 +1,5 @@
 <ul>
+	<li><a href="($base_url/music/">Popular Artists</a></li>
 {if ($logged_in)}
 	<li><a href="{$this_user->getURL()}">{$this_user->name}</a></li>
 	<li><a href="{$base_url}/listen.php">{t}Listen{/t}</a></li>
