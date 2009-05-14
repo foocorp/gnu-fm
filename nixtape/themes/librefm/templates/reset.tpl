@@ -1,6 +1,6 @@
 {include file='header.tpl'}
 
-<h2>{t}Password reset{/t}</h2>
+<h2>{t}Reset my password{/t}</h2>
 
 {if isset($errors)}
 	<p id='errors'>{$errors}</p>
@@ -19,9 +19,8 @@
 
 	<form action="{$base_url}/reset.php" method='post'>
 		<fieldset>
-	        <p><a href='http://libre.fm' rel='bookmark' class='vcard fn org url'>libre.fm</a> {t}Password Reset{/t}</p>
 
-			<label for='username'>{t}Username{/t} <span>{t}must be valid!{/t}</span></label>
+			<label for='username'>{t}Username{/t}</span></label>
 			<input id='username' name='user' type='text' value='' />
 
 			<input type='submit' name='recover' value='{t}Reset my password!{/t}'/>
