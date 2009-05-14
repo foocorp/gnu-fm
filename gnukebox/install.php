@@ -111,7 +111,7 @@ if (isset($_POST['install'])) {
 
 	$adodb->Execute("CREATE TABLE Artist(
 		id SERIAL PRIMARY KEY,
-		name VARCHAR(255),
+		name VARCHAR(255) unique,
 		mbid VARCHAR(36),
 		streamable INTEGER,
 		bio_published INTEGER,
