@@ -39,9 +39,6 @@ if(isset($_POST['login'])) {
 	if(empty($username)) {
 		$errors .= 'You must enter a username.<br />';
 	}
-	if(empty($password)) {
-		$errors .= 'You must enter a password.<br />';
-	}
 
 	if(empty($errors)) {
 		try {
