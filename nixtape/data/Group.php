@@ -283,7 +283,7 @@ class Group {
 		global $base_uri;
 		if (!empty($this->avatar_uri))
 			return $this->avatar_uri;
-		return $base_uri . 'themes/' . $default_theme . '/images/qm50.png';
+		return $base_uri . 'themes/' . $default_theme . '/images/default-avatar.stream.png';
 	}
 
 	function getURL() {
