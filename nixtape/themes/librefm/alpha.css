@@ -391,7 +391,7 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
 
 .disclaimer {padding: 8px; background-color: yellow; text-align: center; margin-top: 1em;}
 
-#errors {background-color: red; padding: 1em; color: white;}
+#errors {border: 2px solid red; margin: 1em; padding: 1em; color: white;}
 
 /* CSS for player */
 
