@@ -14,7 +14,7 @@
 			</div>
 			<dl>
 				<dt>
-					<a rel="foaf:homepage" rev="foaf:primaryTopic" property="dc:description" href="{$g->getURL()|escape:'html':'UTF-8'}"><span class="fn org" property="foaf:name">{$g->fullname|escape:'html':'UTF-8'}</span></div>
+					<a rel="foaf:homepage" rev="foaf:primaryTopic" property="dc:description" href="{$g->getURL()|escape:'html':'UTF-8'}"><span class="fn org" property="foaf:name">{$g->fullname|escape:'html':'UTF-8'}</span>
 				</dt>
 				<dd>{if $g->homepage}<a class="url" rel="foaf:page" href="{$g->homepage|escape:'html':'UTF-8'}">{$g->homepage|escape:'html':'UTF-8'}</a>{/if}</dd>
 				<dd class="note" property="dc:abstract">{$g->bio|escape:'html':'UTF-8'}</dd>
