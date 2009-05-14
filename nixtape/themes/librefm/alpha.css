@@ -122,24 +122,24 @@ div#footer a {
 
 div#invite,
 div#register,
-div#login {
+div#login-form {
 	margin: 1em auto 0 auto;
 }
 div#invite form,
 div#register form,
-div#login form {
+div#login-form form {
 	width: 30em;
 	margin: 0 auto;
 }
 div#invite form fieldset,
 div#register form fieldset,
-div#login form fieldset {
+div#login-form form fieldset {
 	border: none;
     padding: 0;
 }
 div#invite form fieldset label,
 div#register form fieldset label,
-div#login form fieldset label {
+div#login-form form fieldset label {
 	float:left;
 	font-weight:bold;
 	text-align:right;
@@ -147,7 +147,7 @@ div#login form fieldset label {
 }
 div#invite form fieldset label span,
 div#register form fieldset label span,
-div#login form fieldset label span {
+div#login-form form fieldset label span {
 	color:#666666;
 	display:block;
 	font-weight:normal;
@@ -156,7 +156,7 @@ div#login form fieldset label span {
 }
 div#invite form fieldset input,
 div#register form fieldset input,
-div#login form fieldset input {
+div#login-form form fieldset input {
 	float:left;
 	padding:.2em .1em;
 	width:200px;
@@ -164,7 +164,7 @@ div#login form fieldset input {
 }
 div#invite form fieldset input[type=submit],
 div#register form fieldset input[type=submit],
-div#login form fieldset input[type=submit] {
+div#login-form form fieldset input[type=submit] {
 	margin: 0;
 	width: 100%;
 }
@@ -391,7 +391,7 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
 
 .disclaimer {padding: 8px; background-color: yellow; text-align: center; margin-top: 1em;}
 
-#errors {border: 2px solid red; margin: 1em; padding: 1em; color: white;}
+#errors {border: 2px solid red; margin: 1em; padding: 1em; color: red !important;}
 
 /* CSS for player */
 
