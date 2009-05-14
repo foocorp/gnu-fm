@@ -26,7 +26,7 @@ class testLibreFM extends UnitTestCase {
         # Testing if we have an array as result
         $this->assertIsA(TagCloud::generateTagCloud('Scrobbles', 'artist', 20, null), 'array');
     }
-    
+
     function login ($username, $password) {
         $timestamp = time();
         $token = md5(md5($password) . $timestamp);

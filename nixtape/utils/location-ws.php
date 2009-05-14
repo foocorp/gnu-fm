@@ -62,13 +62,13 @@ elseif (function_exists('parse_url'))
 	$_uri = parse_url($uri);
 	if (! $_uri['port'])
 		$_uri['port'] = 80;
-		
+
 	if (! ($nh = fsockopen($_uri['host'], $_uri['port'], $errno, $errstr, 20)) )
 	{
 		header("Content-Type: text/plain");
 		die("Could not open network connection! ($errno - $errstr)\r\n");
 	}
-	
+
 	fwrite($nh, "GET {$_uri[path]}?{$_uri[query]} HTTP/1.0\r\n"
 		. "Host: {$_uri['host']}\r\n"
 		. "User-Agent: libre.fm\r\n"
@@ -80,7 +80,7 @@ elseif (function_exists('parse_url'))
 		$output .= fgets($nh, 128);
 	}
 	fclose($nh);
-	
+
 	// Remove HTTP header.
 	echo substr(strstr($output, "\r\n\r\n"), 4);
 }

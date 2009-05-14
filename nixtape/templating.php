@@ -39,7 +39,7 @@ if($_GET['lang']) {
 			$lcomponents = preg_split('/-/', $languages[$i]);
 			$languages[$i] = $lcomponents[0]  . '_' . strtoupper($lcomponents[1]);
 		}
-		
+
 		$languages[$i] = $languages[$i] . '.UTF-8';
 	}
 }
@@ -59,7 +59,7 @@ $smarty->assign('lang_selector_array', array(($current_lang) => 1));
 $smarty->assign('base_url', $base_url);
 $smarty->assign('this_page', $_SERVER['REQUEST_URI']);
 $smarty->assign('this_page_absolute',
-	 (empty($_SERVER['HTTPS']) ? 'http://' : 'http://') 
+	 (empty($_SERVER['HTTPS']) ? 'http://' : 'http://')
 	.(empty($_SERVER['HOST']) ? $_SERVER['SERVER_NAME'] : $_SERVER['HOST'])
 	.(($_SERVER['SERVER_PORT']==80) ? '' : (':'.$_SERVER['SERVER_PORT']))
 	. $_SERVER['REQUEST_URI']);

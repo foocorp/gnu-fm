@@ -20,7 +20,7 @@
 
 	/**
 	 * Used for random code generation
-	 * 
+	 *
 	 * @author piotrszulawski
 	 * @return (String) code
 	 */

@@ -67,12 +67,12 @@ $request=
 $aws_xml = simplexml_load_file($request) or die("xml response not loading");
 
 $image = $aws_xml->Items->Item->MediumImage->URL;
-       
+
        if (!$image) { $image = "/i/qm50.png"; $license="librefm";}
 
 	if ($image) {
 
-	 
+
           if ($license == "") { $license = "amazon"; }
 
 	  $license = $adodb->qstr($license);
@@ -80,7 +80,7 @@ $image = $aws_xml->Items->Item->MediumImage->URL;
 	  $album = $adodb->qstr($album);
 	  $artist = $adodb->qstr($artist);
 
-		  $sql = ("UPDATE Album SET image = " 
+		  $sql = ("UPDATE Album SET image = "
 
 			  . ($image) . ", "
 

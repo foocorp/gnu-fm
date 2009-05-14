@@ -2,9 +2,9 @@
 function resolve_external_url($url) {
 	if (substr($url, 0, 10) == 'jamendo://') {
 		return process_jamendo_url($url);
-	} 
+	}
 
-	return $url;	
+	return $url;
 }
 
 function process_jamendo_url($url) {

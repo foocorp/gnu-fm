@@ -21,7 +21,7 @@
 
 require_once('database.php');	// include the database connection string
 
-function usernameFromSID($session_id) 
+function usernameFromSID($session_id)
 {
 
 //derive the username from a session ID
@@ -198,7 +198,7 @@ function NoSpamTracks ($track) {
   $track = str_replace(' (PREVIEW: buy it at www.magnatune.com)', "", $track);
 
   return $track;
-  
+
 }
 
 function getAlbumArt($artist, $album) {

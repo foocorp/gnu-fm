@@ -35,7 +35,7 @@ function _resolve_relative_url ($absolute, $relative)
 
 	extract(parse_url($absolute));
 
-	$path = dirname($path); 
+	$path = dirname($path);
 
 	if($relative{0} == '/')
 	{
@@ -66,11 +66,11 @@ function _resolve_relative_url ($absolute, $relative)
 
 	if($scheme)
 		$url = "$scheme://";
-		
+
 	if($user)
 	{
 		$url .= "$user";
-		if ($pass) 
+		if ($pass)
 			$url .= ":$pass";
 		$url .= "@";
 	}
@@ -99,13 +99,13 @@ function _http ($uri)
 		$_uri = parse_url($uri);
 		if (! $_uri['port'])
 			$_uri['port'] = 80;
-			
+
 		if (! ($nh = fsockopen($_uri['host'], $_uri['port'], $errno, $errstr, 20)) )
 		{
 			header("Content-Type: text/plain");
 			die("Could not open network connection! ($errno - $errstr)\r\n");
 		}
-		
+
 		fwrite($nh, "GET {$_uri[path]}?{$_uri[query]} HTTP/1.0\r\n"
 			. "Host: {$_uri['host']}\r\n"
 			. "Connection: close\r\n\r\n"
@@ -115,11 +115,11 @@ function _http ($uri)
 			$output .= fgets($nh, 128);
 		}
 		fclose($nh);
-		
+
 		// Remove HTTP header.
 		return substr(strstr($output, "\r\n\r\n"), 4);
 	}
-	
+
 	return null;
 }
 
@@ -128,7 +128,7 @@ function getFromLaconica ($account)
 	if (!preg_match('/^https?:\/\//i', $account ))
 		$account = "http://identi.ca/{$account}";
 	preg_replace('/\/$/', '', $account);
-		
+
 	$foaf = $account . "/foaf";
 
 	return getFromFOAF($foaf);
@@ -142,12 +142,12 @@ function getFromFOAF ($foaf, $knownHomepage = NULL, $data = NULL)
 	else
 		$parser->parse($foaf, $data);
 	$index = $parser->getSimpleIndex();
-	
+
 	if ($index[$foaf]['http://xmlns.com/foaf/0.1/primaryTopic'][0])
 	{
 		$webid = $index[$foaf]['http://xmlns.com/foaf/0.1/primaryTopic'][0];
 	}
-	
+
 	if (!$webid)
 	{
 		foreach ($index as $subject => $dummy)
@@ -176,7 +176,7 @@ function getFromFOAF ($foaf, $knownHomepage = NULL, $data = NULL)
 			}
 		}
 	}
-	
+
 	if ($webid)
 	{
 		$r = array(
@@ -184,13 +184,13 @@ function getFromFOAF ($foaf, $knownHomepage = NULL, $data = NULL)
 			'Pages' => $index[$webid]['http://xmlns.com/foaf/0.1/homepage'],
 			'Name' => $index[$webid]['http://xmlns.com/foaf/0.1/name'][0]
 			);
-			
+
 		if (substr($r['WebID'], 0, 2) == '_:')
 			$r['WebID'] = 'http://thing-described-by.org/?'.$foaf;
-		
+
 		return $r;
 	}
-	
+
 	return null;
 }
 
@@ -217,7 +217,7 @@ function getFromWebsite ($url)
 	$doc->loadHTML( $str );
 	error_reporting($e);
 	$links = $doc->getElementsByTagName('link');
-	
+
 	foreach ($links as $l)
 	{
 		if ( preg_match('/\b(meta)\b/i', $l->getAttribute('rel')) )
@@ -237,7 +237,7 @@ function getFromGoogleSocialGraphAPI ($url)
 	$api   = "http://socialgraph.apis.google.com/lookup?pretty=1&sgn=1&edi=1&edo=1&fme=1&q={$url}";
 	$data  = json_decode( _http($api) , 1 );
 	$canon = $data['canonical_mapping'][$url];
-	
+
 	if (substr($canon, 0, 3) == 'sgn')
 	{
 		return array(

@@ -70,7 +70,7 @@ input.wide
 	if ($_REQUEST['submit'])
 	{
 		require_once 'guts.php';
-		
+
 		switch ($_REQUEST['source'])
 		{
 			case 'laconica' :
@@ -91,11 +91,11 @@ input.wide
 			default :
 				$info = getBestGuess( $_REQUEST[ $_REQUEST['source'] ] );
 		}
-		
+
 		if ($info['WebID'])
 		{
 			print "<div class=\"success\">\n";
-			printf("<p>Found a WebID%s:<br /><tt id=\"webid\" title=\"%s\">%s</tt></p>\n", 
+			printf("<p>Found a WebID%s:<br /><tt id=\"webid\" title=\"%s\">%s</tt></p>\n",
 				(empty($info['Name']) ? '' : (' for ' . htmlentities($info['Name']))),
 				htmlentities($info['WebID']),
 				htmlentities($info['WebID']));

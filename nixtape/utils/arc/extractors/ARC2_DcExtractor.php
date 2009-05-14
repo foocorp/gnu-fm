@@ -15,7 +15,7 @@ class ARC2_DcExtractor extends ARC2_RDFExtractor {
   function __construct($a = '', &$caller) {
     parent::__construct($a, $caller);
   }
-  
+
   function ARC2_DcExtractor($a = '', &$caller) {
     $this->__construct($a, $caller);
   }
@@ -26,7 +26,7 @@ class ARC2_DcExtractor extends ARC2_RDFExtractor {
   }
 
   /*  */
-  
+
   function extractRDF() {
     $t_vals = array();
     $t = '';
@@ -43,7 +43,7 @@ class ARC2_DcExtractor extends ARC2_RDFExtractor {
       $this->addTs(ARC2::getTriplesFromIndex($doc));
     }
   }
-  
+
   /*  */
 
   function extractTitle($n, $t_vals, $t) {
@@ -52,7 +52,7 @@ class ARC2_DcExtractor extends ARC2_RDFExtractor {
     }
     return array($t_vals, $t);
   }
-  
+
   /*  */
 
   function extractLink($n, $t_vals, $t) {
@@ -69,7 +69,7 @@ class ARC2_DcExtractor extends ARC2_RDFExtractor {
     }
     return array($t_vals, $t);
   }
-  
+
   function extractMeta($n, $t_vals, $t) {
     if ($this->hasAttribute('http-equiv', $n, 'Content-Type') || $this->hasAttribute('http-equiv', $n, 'content-type')) {
       if ($v = $this->v('content', '', $n['a'])) {
@@ -78,7 +78,7 @@ class ARC2_DcExtractor extends ARC2_RDFExtractor {
     }
     return array($t_vals, $t);
   }
-  
+
   /*  */
-  
+
 }

@@ -113,10 +113,10 @@ if ($_POST['submit'])
 		$this_user->avatar_uri   = $_POST['avatar_uri'];
 		$this_user->laconica_profile = $_POST['laconica_profile'];
 		$this_user->journal_rss  = $_POST['journal_rss'];
-		
+
 		if (!empty( $_POST['password_1'] ))
 			$user->password = md5($_POST['password_1']);
-		
+
 		$this_user->save();
 
 		header('Location: ' . $this_user->getURL());
@@ -140,10 +140,10 @@ if(isset($this_user->name))
 
 	# Stuff which cannot be changed *here*
 	$smarty->assign('userlevel', $this_user->userlevel);
-	
+
 	# Stuff which cannot be changed *yet*
 	$smarty->assign('email', $this_user->email);
-	
+
 	if ($_POST['submit'])
 	{
 		$smarty->assign('id',           $_POST['id']);

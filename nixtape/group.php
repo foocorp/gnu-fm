@@ -72,7 +72,7 @@ if(isset($group->name)) {
 	if (!PEAR::isError ($aUserTagCloud)) {
 		$smarty->assign('group_tagcloud',$aUserTagCloud);
 	}
-	
+
 	$smarty->assign('userlist', $group->getUsers());
 
 	$smarty->assign('ismember', $group->memberCheck($this_user));
@@ -90,7 +90,7 @@ if(isset($group->name)) {
 				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $_SERVER['REQUEST_URI']))
 				)
 		));
-	
+
 	$smarty->assign('profile', true);
 	$smarty->display('group.tpl');
 

@@ -166,7 +166,7 @@ if (isset($_POST['install'])) {
 			streamurl VARCHAR(255),
 			otherid VARCHAR(16))");
 	}
-	
+
 	$adodb->Execute("CREATE TABLE Scrobbles(
 		username VARCHAR(64) REFERENCES Users(username),
 		track VARCHAR(255),
@@ -226,7 +226,7 @@ if (isset($_POST['install'])) {
 		    username VARCHAR(64),
 		    email VARCHAR(255),
 		    code VARCHAR(32),
-		    expires INTEGER, 
+		    expires INTEGER,
 		    PRIMARY KEY(username))");
 
 	$adodb->Execute("CREATE TABLE Radio_Sessions(
@@ -235,11 +235,11 @@ if (isset($_POST['install'])) {
 			url VARCHAR(255),
 			expires INTEGER NOT NULL DEFAULT 0,
 			PRIMARY KEY(username,session))");
-	
-	//Table for delete profile requests		
+
+	//Table for delete profile requests
 	$adodb->Execute("CREATE TABLE Delete_Request (
-			code VARCHAR(300), 
-			expires INTEGER, 
+			code VARCHAR(300),
+			expires INTEGER,
 			username VARCHAR(64) REFERENCES Users(username),
 			PRIMARY KEY(code)");
 
