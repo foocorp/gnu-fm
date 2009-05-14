@@ -27,7 +27,6 @@ if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t'])) {
 if(empty($_POST['s']) || empty($_POST['a']) || empty($_POST['t'])) {
 	die("FAILED Required POST parameters are empty\n");
 }
-die("OK\n");
 
 $session_id = $_POST['s'];
 
