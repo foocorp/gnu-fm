@@ -48,7 +48,7 @@ try {
 catch (exception $e) {
 	die("FAILED " . $e->getMessage() . "\n");
 }
-if(!$res->numRows()) {
+if(!$res) {
 	die("BADUSER\n");
 }
 $password = $res;
