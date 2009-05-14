@@ -53,15 +53,6 @@ if($mb) {
 	$mbid = 'NULL';
 }
 
-createArtistIfNew($artist);
-if($album != 'NULL') {
-	createAlbumIfNew($artist, $album);
-}
-getTrackCreateIfNew($artist, $album, $track, $mbid);
-
-//Expire old tracks
-$adodb->Execute("DELETE FROM Now_Playing WHERE expires < " . time());
-
 //Delete this user's last playing song (if any)
 $adodb->Execute("DELETE FROM Now_Playing WHERE sessionid = " . ($MQsess));
 
@@ -77,6 +68,15 @@ try {
 catch (exception $e) {
 	die("FAILED " . $e->getMessage() . "\n");
 }
+
+// createArtistIfNew($artist);
+// if($album != 'NULL') {
+// 	createAlbumIfNew($artist, $album);
+// }
+// getTrackCreateIfNew($artist, $album, $track, $mbid);
+
+//Expire old tracks
+$adodb->Execute("DELETE FROM Now_Playing WHERE expires < " . time());
 
 die("OK\n");
 
