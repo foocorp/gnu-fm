@@ -11,7 +11,7 @@
 <div id='errors'>
 	<p>{$errors}</p>
     {if isset($invalid)}
-	<p><a href="{$base_url}/reset.php">{t}Reset my password{/t}?</a></p>
+	<p><a href="{$base_url}/reset.php"><strong>{t}Reset your password{/t}</a></strong></p>
     {/if}
 </div>
 {/if}
