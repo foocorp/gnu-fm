@@ -37,6 +37,8 @@ if (isset($_POST['install'])) {
 	} else {
 		$connect_string = $dbms . '://' . $_POST['username'] . ':' . $_POST['password'] . '@' . $_POST['hostname'] . ':' . $_POST['port'] . '/' . $_POST['dbname'];
 	}
+	
+	$adodb_connect_string = str_replace('pgsql:', 'postgres:', $connect_string );
 
 	// Check the connection
 	$mdb2 =& MDB2::connect($connect_string);
@@ -52,7 +54,7 @@ if (isset($_POST['install'])) {
 	$submissions_server = $_POST['submissions_server'];
 
 	//Write out the configuration
-	$config = "<?php\n \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$default_theme = '" . $default_theme . "';\n \$base_url = '" . $base_url . "';\n \$submissions_server = '" . $submissions_server . "';\n \$install_path = '" . $install_path . "'; ";
+	$config = "<?php\n \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$default_theme = '" . $default_theme . "';\n \$base_url = '" . $base_url . "';\n \$submissions_server = '" . $submissions_server . "';\n \$install_path = '" . $install_path . "';\n \$adodb_connect_string = '" . $adodb_connect_string . "'; ";
 
 	$conf_file = fopen('config.php', 'w');
 	$result = fwrite($conf_file, $config);
