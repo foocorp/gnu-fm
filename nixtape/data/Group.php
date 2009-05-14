@@ -336,7 +336,7 @@ class Group {
 		global $mdb2;
 		$res = $mdb2->query(sprintf('INSERT INTO Group_Members (grp, member, joined) VALUES (%s, %s, %d)',
 			$mdb2->quote($this->gid, 'integer'),
-			$mdb2->quote($user->name, 'text'),
+			$mdb2->quote($user->uniqueid, 'integer'),
 			time()));
 
 		if(PEAR::isError($res))
