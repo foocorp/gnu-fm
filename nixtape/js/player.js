@@ -3,9 +3,9 @@
 
    Copyright (C) 2009 Libre.fm Project
 
-   @licstart  The following is the entire license notice for the 
+   @licstart  The following is the entire license notice for the
    JavaScript code in this page.
-    
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
@@ -32,7 +32,7 @@ var streaming = false;
 
 /**
  * Initialises the javascript player (player.tpl must also be included on the target page)
- * 
+ *
  * @param array list A playlist in the form ([artist, album, track, trackurl], [...]) or false if playing a radio stream
  * @param string sk Scrobble session key or false if the user isn't logged in
  * @param string rk Radio session key or false if streaming isn't required
@@ -70,7 +70,7 @@ function playerInit(list, sk, rk) {
  */
 function playerReady() {
 	var audio = document.getElementById("audio");
-	
+
 	populatePlaylist();
 	if(!playable_songs) {
 		return;
@@ -94,7 +94,7 @@ function play() {
 	if(!now_playing) {
 		nowPlaying();
 	}
-	$("#play").fadeTo("normal", 0.5); 
+	$("#play").fadeTo("normal", 0.5);
 	$("#pause").fadeTo("normal", 1);
 	$("#seekforward").fadeTo("normal", 1);
 	$("#seekback").fadeTo("normal", 1);
@@ -187,9 +187,9 @@ function togglePlaylist() {
 }
 
 /**
- * Submits a scrobble for the current song if a scrobble session key has been 
+ * Submits a scrobble for the current song if a scrobble session key has been
  * provided. Makes use of a simple proxy to support installations where the
- * gnukebox installation is at a different domain/sub-domain to the nixtape 
+ * gnukebox installation is at a different domain/sub-domain to the nixtape
  * installation.
  */
 function scrobble() {
@@ -212,7 +212,7 @@ function scrobble() {
 }
 
 /**
- * Submits 'now playing' data to the gnukebox server. Like scrobble() this 
+ * Submits 'now playing' data to the gnukebox server. Like scrobble() this
  * makes use of a proxy.
  */
 function nowPlaying() {
@@ -229,7 +229,7 @@ function nowPlaying() {
 
 /**
  * Loads a song and beings playing it.
- * 
+ *
  * @param int song The song number in the playlist that should be played
  */
 function playSong(song) {
@@ -282,13 +282,13 @@ function loadSong(song) {
 }
 
 /**
- * Retrieves a playlist from the radio streaming service. 
+ * Retrieves a playlist from the radio streaming service.
  * A radio session key must be supplied when initialising
  * the play for this to work.
  */
 function getRadioPlaylist() {
 	var tracks, artist, album, title, url, i;
-	$.get("/radio/xspf.php", {'sk' : radio_key, 'desktop' : 0}, function(data) { 
+	$.get("/radio/xspf.php", {'sk' : radio_key, 'desktop' : 0}, function(data) {
 			parser=new DOMParser();
 		      	xmlDoc=parser.parseFromString(data,"text/xml");
 			tracks = xmlDoc.getElementsByTagName("track")
