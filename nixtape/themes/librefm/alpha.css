@@ -50,7 +50,7 @@ html{background: #ececec url(images/bgs.png);}
 
 #ft li.copy { margin-right: 1em; }
 
-#hd h1{ background: #ececec url(/themes/librefm/images/header.png) no-repeat;
+#hd h1{ background: url(/themes/librefm/images/header.png) no-repeat;
      border: 0;
      padding: 0;
      }
