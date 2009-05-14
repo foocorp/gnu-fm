@@ -243,7 +243,7 @@ if (isset($_POST['install'])) {
 			code VARCHAR(300),
 			expires INTEGER,
 			username VARCHAR(64) REFERENCES Users(username),
-			PRIMARY KEY(code)");
+			PRIMARY KEY(code))");
 
 	$adodb->Execute("CREATE TABLE Scrobble_Track(
 			id SERIAL PRIMARY KEY,
