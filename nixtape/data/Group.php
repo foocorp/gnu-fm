@@ -283,7 +283,7 @@ class Group {
 		global $base_uri;
 		if (!empty($this->avatar_uri))
 			return $this->avatar_uri;
-		return $base_url . '/themes/librefm/images/default-avatar.stream.png';
+		return $base_url . '/themes/librefm/images/default-avatar-stream.png';
 	}
 
 	function getURL() {
