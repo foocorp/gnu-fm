@@ -265,6 +265,10 @@ if (isset($_POST['install'])) {
 		uid2 INTEGER REFERENCES Users(uniqueid) ON DELETE CASCADE,
 		established INTEGER NOT NULL,
 		PRIMARY KEY (uid1, uid2))");
+	
+	$adodb->Execute("CREATE TABLE Relationship_Flags (
+		flag VARCHAR(12),
+		PRIMARY KEY (flag))");
 
 	$adodb->Execute("CREATE TABLE User_Relationship_Flags (
 		uid1 INTEGER,
@@ -272,11 +276,8 @@ if (isset($_POST['install'])) {
 		flag VARCHAR(12) REFERENCES Relationship_Flags(flag),
 		PRIMARY KEY (uid1, uid2, flag),
 		FOREIGN KEY (uid1, uid2) REFERENCES User_Relationships (uid1, uid2))");
-
-	$adodb->Execute("CREATE TABLE Relationship_Flags (
-		flag VARCHAR(12),
-		PRIMARY KEY (flag))");
-
+	
+	
 	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('contact')");
 	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('acquaintance')");
 	$adodb->Execute("INSERT INTO Relationship_Flags VALUES ('friend')");
