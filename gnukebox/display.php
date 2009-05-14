@@ -28,6 +28,7 @@ require_once('utils/human-time.php');
 <html>
 <head>
    <title>Libre.fm &mdash; discover new music</title>
+   <meta name="author" content="FooCorp catalogue number FOO200 and contributors" />
    <link rel="stylesheet" href="<?php echo $submissions_server ?>/reset-fonts-grids.css" type="text/css">
    <link rel="stylesheet" href="<?php echo $submissions_server ?>/base.css" type="text/css">
    <link rel="stylesheet" href="<?php echo $submissions_server ?>/librefm.css" type="text/css">
