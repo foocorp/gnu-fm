@@ -19,6 +19,7 @@
 	
 <head profile="http://www.w3.org/1999/xhtml/vocab http://purl.org/uF/2008/03/ http://purl.org/uF/hAudio/0.9/">
 	<title>Libre.fm &mdash; {t}discover new music{/t}</title>
+	<meta name="author" content="FooCorp catalogue number FOO200 and contributors" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/reset-fonts-grids.css" type="text/css" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/base.css" type="text/css" />
 	<link rel="stylesheet" href="{$base_url}/themes/librefm/librefm.css" type="text/css" />
