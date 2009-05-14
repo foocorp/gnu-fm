@@ -38,6 +38,8 @@ if (isset($_POST['install'])) {
 	} else {
 		$connect_string = $dbms . "://" . $_POST['username'] . ":" . $_POST['password'] . "@" . $_POST['hostname'] . ":" . $_POST['port'] . "/" . $_POST['dbname'];
 	}
+	
+	$adodb_connect_string = str_replace('pgsql:', 'postgres:', $connect_string );
 
 	try {
 		$adodb =& NewADOConnection($adodb_connect_string);
@@ -62,7 +64,7 @@ if (isset($_POST['install'])) {
 
 	$adodb->Execute("CREATE TABLE Users (
 		uniqueid SERIAL PRIMARY KEY,
-		username VARCHAR(64),
+		username VARCHAR(64) unique,
 		password VARCHAR(32) NOT NULL,
 		email VARCHAR(255),
 		fullname VARCHAR(255),
