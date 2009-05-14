@@ -335,7 +335,7 @@ h3 {
 	padding: 0;
 	margin: 0 0 1em;	
     list-style-type: none;
-    min-height: 80px;
+    min-height: 64px;
     clear: both;
 }
 
@@ -460,4 +460,4 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
 
 #register-prompt {background-color: #eee; padding: 12px;}
 
-.photo{padding: 1px; border 1px solid #ccc; width: 64px; height: 64px; float: left; background-image: url(images/default-avatar-stream.png};}
+.photo{padding: 1px; border 1px solid #ccc; width: 64px; height: 64px; float: left;}
