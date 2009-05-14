@@ -220,8 +220,8 @@ if (isset($_POST['install'])) {
 		track VARCHAR(255))");
 
 	$adodb->Execute("CREATE TABLE Error(
-		    id INTEGER(11) AUTO_INCREMENT KEY,
-		    msg TEXT,
+			id SERIAL PRIMARY KEY,
+			msg TEXT,
 		    data TEXT,
 		    time INTEGER)");
 	$adodb->Execute("CREATE TABLE Recovery_Request(
