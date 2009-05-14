@@ -20,6 +20,7 @@
 
 require_once('../../database.php');
 require_once('../../scrobble-utils.php');
+require_once('../../auth-utils.php');
 
 if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t'])) {
 	die("FAILED Required POST parameters are not set\n");
@@ -55,6 +56,10 @@ if($mb) {
 
 //Delete this user's last playing song (if any)
 $adodb->Execute("DELETE FROM Now_Playing WHERE sessionid = " . ($MQsess));
+
+if (!check_session($MQsess)) {
+	die("BADSESSION");
+}
 
 try {
 	$adodb->Execute("INSERT INTO Now_Playing (sessionid, artist, album, track, expires, mbid) VALUES ("
