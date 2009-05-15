@@ -19,7 +19,7 @@
 
 */
 
-require_once('database.php');
+require_once('database2.php');
 require_once('templating.php');
 require_once('utils/EmailAddressValidator.php');
 
@@ -47,9 +47,9 @@ if(isset($_POST['invite'])) {
 
 	if(empty($errors)) {
 		$code = md5(md5($username) . time());
-		$mdb2->query('INSERT INTO Invitations (inviter, code) VALUES ('
-			. $mdb2->quote($username, 'text') . ', '
-			. $mdb2->quote($code, 'text') . ')');
+		$adodb->Execute('INSERT INTO Invitations (inviter, code) VALUES ('
+			. $adodb->qstr($username) . ', '
+			. $adodb->qstr($code) . ')');
 
 		$url = $base_url . '/register.php?authcode=' . $code;
         $headers = 'From: Libre.fm Invitations <invitations@libre.fm>';

@@ -30,8 +30,8 @@ if($logged_in == true){
 // Moving to open alpha
 /*$authcode = $_GET["authcode"];
 
-$res = $mdb2->query("SELECT inviter FROM Invitations WHERE code = " . $mdb2->quote($authcode, "text"));
-if(!$res->numRows()) {
+$res = $adodb->GetRow('SELECT inviter FROM Invitations WHERE code = ' . $adodb->qstr($authcode));
+if(!$res) {
 	$invalid_authcode = true;
 } else {
 	$invalid_authcode = false;
@@ -152,9 +152,9 @@ if(isset($_POST['register'])) {
 		sendEmail($content, $email);
 
 		// Remove auth code and set their username as the invitee
-		//$mdb2->query("UPDATE Invitations SET code = NULL, invitee = " . $mdb2->quote($username, "text") . " WHERE code = " . $mdb2->quote($authcode, "text"));
-		//$removesql = "DELETE FROM Invitation_Request WHERE email=" . $mdb2->quote($email, 'text');
-		//$mdb2->exec($removesql);
+		//$adodb->Execute("UPDATE Invitations SET code = NULL, invitee = " . $adodb->qstr($username) . " WHERE code = " . $adodb->qstr($authcode));
+		//$removesql = "DELETE FROM Invitation_Request WHERE email=" . $adodb->qstr($email);
+		//$adodb->Execute($removesql);
 		$smarty->assign('registered', true);
 	} else {
 		$smarty->assign('username', $username);
