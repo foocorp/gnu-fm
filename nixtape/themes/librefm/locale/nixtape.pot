@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-09 22:54+0100\n"
+"POT-Creation-Date: 2009-05-15 09:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,11 +57,11 @@ msgid ""
 "The form below is still very experimental. Using this may wreck your group!"
 msgstr ""
 
-#: translatable_strings.c:32 translatable_strings.c:287
+#: translatable_strings.c:32 translatable_strings.c:284
 msgid "Full name:"
 msgstr ""
 
-#: translatable_strings.c:35 translatable_strings.c:302
+#: translatable_strings.c:35 translatable_strings.c:299
 msgid "Homepage URL:"
 msgstr ""
 
@@ -69,9 +69,9 @@ msgstr ""
 msgid "Logo URL:"
 msgstr ""
 
-#: translatable_strings.c:41 translatable_strings.c:299
-#: translatable_strings.c:308 translatable_strings.c:314
-#: translatable_strings.c:320 translatable_strings.c:326
+#: translatable_strings.c:41 translatable_strings.c:296
+#: translatable_strings.c:305 translatable_strings.c:311
+#: translatable_strings.c:317 translatable_strings.c:323
 msgid "What's this?"
 msgstr ""
 
@@ -127,258 +127,235 @@ msgstr ""
 msgid "Powered by Nixtape"
 msgstr ""
 
-#: translatable_strings.c:77
+#: translatable_strings.c:77 translatable_strings.c:80
 msgid "All Groups"
 msgstr ""
 
-#: translatable_strings.c:80
+#: translatable_strings.c:83
 msgid "%1 members"
 msgstr ""
 
-#: translatable_strings.c:83
+#: translatable_strings.c:86
 msgid "Group:"
 msgstr ""
 
-#: translatable_strings.c:86
+#: translatable_strings.c:89
 msgid "edit"
 msgstr ""
 
-#: translatable_strings.c:89
+#: translatable_strings.c:92
 msgid "leave"
 msgstr ""
 
-#: translatable_strings.c:92
+#: translatable_strings.c:95
 msgid "join"
 msgstr ""
 
-#: translatable_strings.c:95
+#: translatable_strings.c:98
 msgid "Top artists"
 msgstr ""
 
-#: translatable_strings.c:98
+#: translatable_strings.c:101
 msgid "discover new music"
 msgstr ""
 
-#: translatable_strings.c:101
+#: translatable_strings.c:104
 msgid ""
 "Your invitation has been sent, pretty soon your friend should be thanking "
 "you profusely."
 msgstr ""
 
-#: translatable_strings.c:104
+#: translatable_strings.c:107
 msgid ""
 "Do you have an awesome friend you'd like to share <a href='http://libre.fm' "
 "rel='bookmark' class='vcard fn org url'>libre.fm</a> with? Just enter his/"
 "her email address and we'll sort them out with an invitation code."
 msgstr ""
 
-#: translatable_strings.c:107
+#: translatable_strings.c:110
 msgid "Invitee's E-mail:"
 msgstr ""
 
-#: translatable_strings.c:110 translatable_strings.c:194
-#: translatable_strings.c:263
+#: translatable_strings.c:113 translatable_strings.c:245
 msgid "must be valid!"
 msgstr ""
 
-#: translatable_strings.c:113
+#: translatable_strings.c:116
 msgid "Let them in!"
 msgstr ""
 
-#: translatable_strings.c:116 translatable_strings.c:149
+#: translatable_strings.c:119 translatable_strings.c:155
 msgid "Change Language"
 msgstr ""
 
-#: translatable_strings.c:119
+#: translatable_strings.c:122
 #, c-format
 msgid ""
 "To listen to 100% free (libre) music simply enter the type of music you'd "
 "like to hear or select one of the common tags below:"
 msgstr ""
 
-#: translatable_strings.c:122
+#: translatable_strings.c:125
 msgid "Custom tag:"
 msgstr ""
 
-#: translatable_strings.c:125
+#: translatable_strings.c:128
 msgid "Country:"
 msgstr ""
 
-#: translatable_strings.c:128
+#: translatable_strings.c:131
 msgid "Users in"
 msgstr ""
 
-#: translatable_strings.c:131 translatable_strings.c:191
+#: translatable_strings.c:134
+msgid "Reset your password"
+msgstr ""
+
+#: translatable_strings.c:137 translatable_strings.c:260
 msgid "Username"
 msgstr ""
 
-#: translatable_strings.c:134
+#: translatable_strings.c:140
 msgid "Password"
 msgstr ""
 
-#: translatable_strings.c:137
+#: translatable_strings.c:143
 msgid "Remember me"
 msgstr ""
 
-#: translatable_strings.c:140
+#: translatable_strings.c:146
 msgid "Let me in!"
 msgstr ""
 
-#: translatable_strings.c:143
+#: translatable_strings.c:149
 msgid "English (US)"
 msgstr ""
 
-#: translatable_strings.c:146
+#: translatable_strings.c:152
 msgid "German (Germany)"
 msgstr ""
 
-#: translatable_strings.c:152
-msgid "Register"
-msgstr ""
-
-#: translatable_strings.c:155
-msgid "Admin"
-msgstr ""
-
 #: translatable_strings.c:158
-msgid "Logout"
-msgstr ""
-
-#: translatable_strings.c:161
 msgid "Listen"
 msgstr ""
 
-#: translatable_strings.c:164
-msgid "Login"
-msgstr ""
-
-#: translatable_strings.c:167
+#: translatable_strings.c:161
 msgid "Bugs"
 msgstr ""
 
-#: translatable_strings.c:170
+#: translatable_strings.c:164
 msgid "Help"
 msgstr ""
 
+#: translatable_strings.c:167
+msgid "Admin"
+msgstr ""
+
+#: translatable_strings.c:170
+msgid "Logout"
+msgstr ""
+
 #: translatable_strings.c:173
+msgid "Login"
+msgstr ""
+
+#: translatable_strings.c:176
 msgid ""
 "Sorry, you need a browser capable of making use of the HTML 5 &lt;audio&gt; "
 "tag to enjoy the streaming service via the JavaScript player."
 msgstr ""
 
-#: translatable_strings.c:176
+#: translatable_strings.c:179
 msgid "Playlist"
 msgstr ""
 
-#: translatable_strings.c:179
-msgid "Password recovery"
-msgstr ""
-
 #: translatable_strings.c:182
-msgid "Your new password has been emailed to you."
-msgstr ""
-
-#: translatable_strings.c:185
-msgid ""
-"An email with further information has been sent to the email address "
-"associated with your profile."
-msgstr ""
-
-#: translatable_strings.c:188
-msgid "Password Recovery"
-msgstr ""
-
-#: translatable_strings.c:197
-msgid "Recover my password!"
-msgstr ""
-
-#: translatable_strings.c:200
 msgid "Your account has been activated! You may now login!"
 msgstr ""
 
-#: translatable_strings.c:203
+#: translatable_strings.c:185
 msgid ""
 "You're now registered with libre.fm! An email has been sent to the email "
 "address you provided. Please follow the link in the email to activate your "
 "account!"
 msgstr ""
 
-#: translatable_strings.c:206
+#: translatable_strings.c:188
 msgid "Find out how to start sending us your listening habits"
 msgstr ""
 
-#: translatable_strings.c:209
+#: translatable_strings.c:191
 msgid "Join our mailing list"
 msgstr ""
 
-#: translatable_strings.c:212
+#: translatable_strings.c:194
 msgid "Read our blog"
 msgstr ""
 
-#: translatable_strings.c:215
+#: translatable_strings.c:197
 msgid "and"
 msgstr ""
 
-#: translatable_strings.c:218
+#: translatable_strings.c:200
 msgid "subscribe to Matt (our founder) on identi.ca"
 msgstr ""
 
-#: translatable_strings.c:221
+#: translatable_strings.c:203
 msgid "Your username:"
 msgstr ""
 
-#: translatable_strings.c:224
+#: translatable_strings.c:206
 msgid "(no more than 16 chars.)"
 msgstr ""
 
-#: translatable_strings.c:227
+#: translatable_strings.c:209
 msgid "Your password:"
 msgstr ""
 
-#: translatable_strings.c:230
+#: translatable_strings.c:212
 msgid "(make it hard to guess)"
 msgstr ""
 
-#: translatable_strings.c:233
+#: translatable_strings.c:215
 msgid "Your password again"
 msgstr ""
 
-#: translatable_strings.c:236
+#: translatable_strings.c:218
 msgid "(you should repeat it.)"
 msgstr ""
 
-#: translatable_strings.c:239
+#: translatable_strings.c:221
 msgid "Your e-mail:"
 msgstr ""
 
-#: translatable_strings.c:242
+#: translatable_strings.c:224
 msgid "(must be valid!)"
 msgstr ""
 
-#: translatable_strings.c:245
+#: translatable_strings.c:227
 msgid ""
 "Please note: we plan make your <a href=\"http://turtle.libre.fm/data/"
 "\">listening data available</a>, under the <a href=\"http://wiki."
 "openstreetmap.org/wiki/Open_Database_License\">the Open Database License</a>."
 msgstr ""
 
-#: translatable_strings.c:248
+#: translatable_strings.c:230
 msgid "Sign up"
 msgstr ""
 
-#: translatable_strings.c:251
+#: translatable_strings.c:233
 msgid ""
 "We won't sell, swap or give away your email address. You can optionally "
 "include personal data on your profile, which is displayed publicly."
 msgstr ""
 
-#: translatable_strings.c:254
+#: translatable_strings.c:236
 msgid ""
 "Your request for an invitation has been registered. Thank you for your "
 "interest in libre.fm!"
 msgstr ""
 
-#: translatable_strings.c:257
+#: translatable_strings.c:239
 msgid ""
 "<a href='http://libre.fm' rel='bookmark' class='vcard fn org url'>libre.fm</"
 "a> is now in alpha. We're slowly adding new users, so if you're interested, "
@@ -386,84 +363,102 @@ msgid ""
 "time."
 msgstr ""
 
-#: translatable_strings.c:260
+#: translatable_strings.c:242
 msgid "Email"
 msgstr ""
 
-#: translatable_strings.c:266
+#: translatable_strings.c:248
 msgid "Request invite!"
 msgstr ""
 
-#: translatable_strings.c:269
+#: translatable_strings.c:251
+msgid "Reset my password"
+msgstr ""
+
+#: translatable_strings.c:254
+msgid "Your new password has been emailed to you."
+msgstr ""
+
+#: translatable_strings.c:257
+msgid ""
+"An email with further information has been sent to the email address "
+"associated with your profile."
+msgstr ""
+
+#: translatable_strings.c:263
+msgid "Reset my password!"
+msgstr ""
+
+#: translatable_strings.c:266
 msgid "Artist:"
 msgstr ""
 
-#: translatable_strings.c:272
+#: translatable_strings.c:269
 msgid "Album:"
 msgstr ""
 
-#: translatable_strings.c:275
+#: translatable_strings.c:272
 msgid "Playcount:"
 msgstr ""
 
-#: translatable_strings.c:278
+#: translatable_strings.c:275
 msgid "Listeners:"
 msgstr ""
 
-#: translatable_strings.c:281
+#: translatable_strings.c:278
 msgid "Albums containing this track:"
 msgstr ""
 
-#: translatable_strings.c:284
+#: translatable_strings.c:281
 msgid ""
 "The form below is still very experimental. Using this may wreck your account!"
 msgstr ""
 
-#: translatable_strings.c:290
+#: translatable_strings.c:287
 msgid "Location:"
 msgstr ""
 
-#: translatable_strings.c:293
+#: translatable_strings.c:290
 msgid "Geoname:"
 msgstr ""
 
-#: translatable_strings.c:296
+#: translatable_strings.c:293
 msgid "Find ..."
 msgstr ""
 
-#: translatable_strings.c:305
+#: translatable_strings.c:302
 msgid "Avatar URL:"
 msgstr ""
 
-#: translatable_strings.c:311
+#: translatable_strings.c:308
 msgid "Mini Biography:"
 msgstr ""
 
-#: translatable_strings.c:317
+#: translatable_strings.c:314
 msgid "Laconica/identi.ca Profile:"
 msgstr ""
 
-#: translatable_strings.c:323
+#: translatable_strings.c:320
 msgid "RSS Feed:"
 msgstr ""
 
-#: translatable_strings.c:329
+#: translatable_strings.c:326
 msgid "Password:"
 msgstr ""
 
-#: translatable_strings.c:332
+#: translatable_strings.c:329
 msgid "Leave this blank if you don't want to change your password."
 msgstr ""
 
-#: translatable_strings.c:335
+#: translatable_strings.c:332
 msgid "Confirm Password:"
 msgstr ""
 
-#: translatable_strings.c:338
+#: translatable_strings.c:335
 msgid "Location check"
 msgstr ""
 
-#: translatable_strings.c:341
+#: translatable_strings.c:338
 msgid ""
 "This feature looks up your location on <a href=\"http://www.geonames.org"
 "\">geonames</a>. You don't need to do it, but it will help us find your "
@@ -471,11 +466,11 @@ msgid ""
 "features in the future."
 msgstr ""
 
-#: translatable_strings.c:344
+#: translatable_strings.c:341
 msgid "Avatar URL"
 msgstr ""
 
-#: translatable_strings.c:347
+#: translatable_strings.c:344
 msgid ""
 "The web address for a picture to represent you on libre.fm. It should not be "
 "more than 80x80 pixels. (64x64 is best.) If you leave this empty, libre.fm "
@@ -483,69 +478,69 @@ msgid ""
 "you."
 msgstr ""
 
-#: translatable_strings.c:350
+#: translatable_strings.c:347
 msgid ""
 "A URI that represents you in RDF. See <a href=\"http://esw.w3.org/topic/WebID"
 "\">WebID</a> for details. If you don't know what this is, it's best to leave "
 "it blank."
 msgstr ""
 
-#: translatable_strings.c:353
+#: translatable_strings.c:350
 msgid "Now Playing:"
 msgstr ""
 
-#: translatable_strings.c:356
+#: translatable_strings.c:353
 msgid "Latest %1 Plays:"
 msgstr ""
 
-#: translatable_strings.c:359
+#: translatable_strings.c:356
 msgid "%1's statistics"
 msgstr ""
 
-#: translatable_strings.c:362
+#: translatable_strings.c:359
 msgid "%1's most played artists"
 msgstr ""
 
-#: translatable_strings.c:365
+#: translatable_strings.c:362
 msgid "%1's top tracks"
 msgstr ""
 
-#: translatable_strings.c:368
+#: translatable_strings.c:365
 msgid "%1's scrobbles by day"
 msgstr ""
 
-#: translatable_strings.c:371
+#: translatable_strings.c:368
 msgid "Most played artists"
 msgstr ""
 
-#: translatable_strings.c:374
+#: translatable_strings.c:371
 msgid "Top tracks"
 msgstr ""
 
-#: translatable_strings.c:377
+#: translatable_strings.c:374
 msgid "Scrobbles by day"
 msgstr ""
 
-#: translatable_strings.c:380
+#: translatable_strings.c:377
 msgid "New on Libre.fm..."
 msgstr ""
 
-#: translatable_strings.c:383
+#: translatable_strings.c:380
 msgid "Upcoming events..."
 msgstr ""
 
-#: translatable_strings.c:386
+#: translatable_strings.c:383
 msgid "Libre music downloads..."
 msgstr ""
 
-#: translatable_strings.c:389
+#: translatable_strings.c:386
 msgid "More Libre music downloads..."
 msgstr ""
 
-#: translatable_strings.c:392
+#: translatable_strings.c:389
 msgid "License"
 msgstr ""
 
-#: translatable_strings.c:395
+#: translatable_strings.c:392
 msgid "Featured group"
 msgstr ""
