@@ -17,9 +17,9 @@
    You should have received a copy of the GNU Affero General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-*/
+ */
 
-require_once($install_path . '/database.php');
+require_once($install_path . '/database2.php');
 require_once($install_path . '/data/sanitize.php');
 require_once($install_path . '/utils/human-time.php');
 require_once($install_path . '/data/Server.php');
@@ -50,18 +50,18 @@ class Group {
 			$row = $data;
 		}
 		else {
-			global $mdb2;
-			$res = $mdb2->query('SELECT * FROM Groups WHERE lower(groupname) = ' . $mdb2->quote(strtolower($name), 'text'));
-
-			if(PEAR::isError($res)) {
+			global $adodb;
+			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+			try {
+				$res = $adodb->GetRow('SELECT * FROM Groups WHERE lower(groupname) = ' . $adodb->qstr(strtolower($name)));
+			}
+			catch {
 				header('Content-Type: text/plain');
-				////($res);
-
 				exit;
 			}
 
-			if($res->numRows()) {
-				$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+			if($res) {
+				$row = $res;
 			}
 		}
 
@@ -83,18 +83,18 @@ class Group {
 	/**
 	 * Selects a random nixtape group.
 	 *
-	 * @return object a Group object on success, a PEAR_Error object on error, or FALSE if there are no groups existing.
+	 * @return object a Group object on success, or FALSE if there are no groups existing.
 	 * @author tobyink
 	 */
 	static function random ()
 	{
-		global $mdb2;
+		global $adodb;
 
-		if ( strtolower(substr($mdb2->phptype, 0, 5)) == 'mysql'  )
+		if ( strtolower(substr($connect_string, 0, 5)) == 'mysql'  )
 		{
 			$random = 'RAND';
 		}
-		elseif ( strtolower(substr($mdb2->phptype, 0, 5)) == 'mssql'  )
+		elseif ( strtolower(substr($connect_string, 0, 5)) == 'mssql'  )
 		{
 			$random = 'NEWID';  // I don't think we try to support MSSQL, but here's how it's done theoretically anyway
 		}
@@ -103,18 +103,18 @@ class Group {
 			$random = 'RANDOM';  // postgresql, sqlite, possibly others
 		}
 
-		$res = $mdb2->query("SELECT * FROM Groups ORDER BY {$random}() LIMIT 1");
-		if (PEAR::isError($res))
-		{
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
+			$res = $adodb->GetRow("SELECT * FROM Groups ORDER BY {$random}() LIMIT 1");
+		}
+		catch {
 			return $res;
 		}
-		elseif ($res->numRows())
-		{
-			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+		if ($res) {
+			$row = $res;
 			return (new Group($row['groupname'], $row));
 		}
-		else
-		{
+		else {
 			// No groups found.
 			return false;
 		}
@@ -125,73 +125,76 @@ class Group {
 	 *
 	 * @param string $name the name of the group (used to generate its URL).
 	 * @param object $owner a User object representing the person who owns this group.
-	 * @return object a Group object on success, a PEAR_Error object otherwise.
+	 * @return object a Group object on success, throw an Exception object otherwise.
 	 * @author tobyink
 	 */
 	static function create ($name, $owner)
 	{
-		global $mdb2;
+		global $adodb;
 
 		if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9_\.-]*[A-Za-z0-9]$/', $name))
 		{
-			return (new PEAR_Error('Group names should only contain letters, numbers, hyphens, underscores and full stops (a.k.a. dots/periods), must be at least two characters long, and can\'t start or end with punctuation.'));
+			throw (new Exception('Group names should only contain letters, numbers, hyphens, underscores and full stops (a.k.a. dots/periods), must be at least two characters long, and can\'t start or end with punctuation.'));
 		}
 
 		if (in_array(strtolower($name), array('new', 'search')))
 		{
-			return (new PEAR_Error("Not allowed to create a group called '{$name}' (reserved word)!"));
+			throw (new Exception("Not allowed to create a group called '{$name}' (reserved word)!"));
 		}
 
 		// Check to make sure no existing group with same name (case-insensitive).
 		$q = sprintf('SELECT groupname FROM Groups WHERE LOWER(groupname)=LOWER(%s)'
-				, $mdb2->quote($name, 'text'));
-		$res = $mdb2->query($q);
-		if (PEAR::isError($res))
-		{
+				, $adodb->qstr($name));
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
+			$res = $adodb->GetRow($q);
+		}
+		catch {
 			return $res;
 		}
-		elseif ($res->numRows())
-		{
-			$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+		if ($res) {
+			$row = $res;
 			$existing = $row['groupname'];
-			return (new PEAR_Error(
-					($existing == $name) ?
-					"There is already a group called '{$existing}'." :
-					"The name '{$name}' it too similar to existing group '{$existing}'"
-				));
+			throw (new Exception(
+						($existing == $name) ?
+						"There is already a group called '{$existing}'." :
+						"The name '{$name}' it too similar to existing group '{$existing}'"
+					      ));
 		}
 
 		// Create new group
 		$q = sprintf('INSERT INTO Groups (groupname, owner, created, modified) VALUES (%s, %s, %d, %d)'
-				, $mdb2->quote($name, 'text')
-				, $mdb2->quote($owner->uniqueid, 'integer')
+				, $adodb->qstr($name)
+				, (int)($owner->uniqueid)
 				, time()
 				, time());
-		$res = $mdb2->query($q);
-		if (PEAR::isError($res))
-		{
+		try {
+			$res = $adodb->Execute($q);
+		}
+		catch {
 			return $res;
 		}
 
 		// Get ID number for group
-		$q = sprintf('SELECT id FROM Groups WHERE lower(groupname) = lower(%s)', $mdb2->quote($name, 'text'));
-		$res = $mdb2->query($q);
-		if (PEAR::isError($res))
-		{
+		$q = sprintf('SELECT id FROM Groups WHERE lower(groupname) = lower(%s)', $adodb->quote($name, 'text'));
+		try {
+			$res = $adodb->GetOne($q);
+		}
+		catch {
 			return $res;
 		}
-		elseif (!$res->numRows())
+		if (!$res)
 		{
-			return (new PEAR_Error('Something has gone horribly, horribly wrong!'));
+			throw (new Exception('Something has gone horribly, horribly wrong!'));
 		}
-		$grp = $res->fetchOne(0);
+		$grp = $res;
 
 		// Group owner must be a member of the group
 		$q = sprintf('INSERT INTO Group_Members (grp, member, joined) VALUES (%s, %s, %d)'
-				, $mdb2->quote($grp, 'integer')
-				, $mdb2->quote($owner->uniqueid, 'integer')
+				, (int)($grp)
+				, (int)($owner->uniqueid)
 				, time());
-		$res = $mdb2->query($q);
+		$res = $adodb->Execute($q);
 		if (PEAR::isError($res))
 		{
 			return $res;
@@ -203,37 +206,38 @@ class Group {
 
 	static function groupList ($user=false)
 	{
-		global $mdb2;
+		global $adodb;
 
-		if ($user)
-		{
-			$res = $mdb2->query('SELECT gc.* FROM '
-				.'Group_Members m '
-				.'INNER JOIN (SELECT g.id, g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count '
-				.'FROM Groups g '
-				.'LEFT JOIN Group_Members gm ON gm.grp=g.id '
-				.'GROUP BY g.id, g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype) gc '
-				.'ON m.grp=gc.id '
-				.'WHERE m.member='.$mdb2->quote($user->uniqueid, 'integer'));
-		}
-		else
-		{
-			$res = $mdb2->query('SELECT g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count '
-				.'FROM Groups g '
-				.'LEFT JOIN Group_Members gm ON gm.grp=g.id '
-				.'GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype');
-		}
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
 
-		if(PEAR::isError($res))
-		{
+			if ($user)
+			{
+				$res = $adodb->GetAll('SELECT gc.* FROM '
+						.'Group_Members m '
+						.'INNER JOIN (SELECT g.id, g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count '
+							.'FROM Groups g '
+							.'LEFT JOIN Group_Members gm ON gm.grp=g.id '
+							.'GROUP BY g.id, g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype) gc '
+						.'ON m.grp=gc.id '
+						.'WHERE m.member='.(int)($user->uniqueid));
+			}
+			else
+			{
+				$res = $adodb->GetAll('SELECT g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count '
+						.'FROM Groups g '
+						.'LEFT JOIN Group_Members gm ON gm.grp=g.id '
+						.'GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype');
+			}
+
+		}
+		catch {
 			header('Content-Type: text/plain');
-			////($res);
 			exit;
 		}
 
 		$list = array();
-		while ($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))
-		{
+		foreach($res as &$row) {
 			$g = new Group($row['group_name'], $row);
 			$g->count = $row['member_count'];
 			$list[] = $g;
@@ -244,7 +248,7 @@ class Group {
 
 	function save ()
 	{
-		global $mdb2;
+		global $adodb;
 
 		$q = sprintf('UPDATE Groups SET '
 				. 'owner=%s, '
@@ -254,19 +258,19 @@ class Group {
 				. 'avatar_uri=%s, '
 				. 'modified=%d '
 				. 'WHERE groupname=%s'
-				, $mdb2->quote($this->owner->uniqueid, 'integer')
-				, $mdb2->quote($this->fullname, 'text')
-				, $mdb2->quote($this->homepage, 'text')
-				, $mdb2->quote($this->bio, 'text')
-				, $mdb2->quote($this->avatar_uri, 'text')
+				, (int)($this->owner->uniqueid)
+				, $adodb->qstr($this->fullname)
+				, $adodb->qstr($this->homepage)
+				, $adodb->qstr($this->bio)
+				, $adodb->qstr($this->avatar_uri)
 				, time()
-				, $mdb2->quote($this->name, 'text'));
+				, $adodb->qstr($this->name));
 
-		$res = $mdb2->query($q);
-
-		if(PEAR::isError($res)) {
+		try {
+			$res = $adodb->Execute($q);
+		}
+		catch {
 			header('Content-Type: text/plain');
-			////($res);
 			exit;
 		}
 
@@ -299,19 +303,19 @@ class Group {
 	}
 
 	function getUsers () {
-		global $mdb2;
+		global $adodb;
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
 		if (!isset($this->users[0]))
 		{
-			$res = $mdb2->query('SELECT u.* '
-				. 'FROM Users u '
-				. 'INNER JOIN Group_Members gm ON u.uniqueid=gm.member '
-				. 'WHERE gm.grp='.$mdb2->quote($this->gid,'integer')
-				. ' ORDER BY gm.joined');
-			if ($res->numRows())
+			$res = $adodb->GetAll('SELECT u.* '
+					. 'FROM Users u '
+					. 'INNER JOIN Group_Members gm ON u.uniqueid=gm.member '
+					. 'WHERE gm.grp='.(int)($this->gid)
+					. ' ORDER BY gm.joined');
+			if ($res)
 			{
-				while ($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))
-				{
+				foreach($res as &$row) {
 					$this->users[ $row['username'] ] = new User($row['username'], $row);
 				}
 			}
@@ -333,14 +337,14 @@ class Group {
 		if ($this->memberCheck($user))
 			return false;
 
-		global $mdb2;
-		$res = $mdb2->query(sprintf('INSERT INTO Group_Members (grp, member, joined) VALUES (%s, %s, %d)',
-			$mdb2->quote($this->gid, 'integer'),
-			$mdb2->quote($user->uniqueid, 'integer'),
-			time()));
-
-		if(PEAR::isError($res))
-		{
+		global $adodb;
+		try {
+			$res = $adodb->Execute(sprintf('INSERT INTO Group_Members (grp, member, joined) VALUES (%s, %s, %d)',
+						(int)($this->gid, 'integer'),
+						(int)($user->uniqueid, 'integer'),
+						time()));
+		}
+		catch {
 			return false;
 		}
 
@@ -356,13 +360,15 @@ class Group {
 		if ($this->owner->name == $user->name)
 			return false;
 
-		global $mdb2;
-		$res = $mdb2->query(sprintf('DELETE FROM Group_Members WHERE grp=%s AND member=%s',
-			$mdb2->quote($this->gid, 'integer'),
-			$mdb2->quote($user->uniqueid, 'integer')));
-
-		if(PEAR::isError($res))
+		global $adodb;
+		try {
+			$res = $adodb->Execute(sprintf('DELETE FROM Group_Members WHERE grp=%s AND member=%s',
+						(int)($this->gid),
+						(int)($user->uniqueid)));
+		}
+catch {
 			return false;
+}
 
 		$this->users[ $user->name ] = null;
 		// The array key still exists though. That's annoying. PHP needs an equivalent of Perl's 'delete'.
@@ -372,11 +378,11 @@ class Group {
 
 	function tagCloudData () {
 		return TagCloud::generateTagCloud(
-			TagCloud::scrobblesTable('group').' s LEFT JOIN Users u ON s.username=u.username LEFT JOIN Group_Members gm ON u.uniqueid=gm.member LEFT JOIN Groups g ON gm.grp=g.id',
-			'artist',
-			40,
-			$this->name,
-			'groupname');
+				TagCloud::scrobblesTable('group').' s LEFT JOIN Users u ON s.username=u.username LEFT JOIN Group_Members gm ON u.uniqueid=gm.member LEFT JOIN Groups g ON gm.grp=g.id',
+				'artist',
+				40,
+				$this->name,
+				'groupname');
 	}
 
 }
