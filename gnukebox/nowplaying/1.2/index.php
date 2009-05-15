@@ -22,6 +22,8 @@ require_once('../../database.php');
 require_once('../../scrobble-utils.php');
 require_once('../../auth-utils.php');
 
+header("Content-Type: text/plain");
+
 if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t'])) {
 	die("FAILED Required POST parameters are not set\n");
 }
