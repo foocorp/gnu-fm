@@ -30,11 +30,11 @@ def _get_date(start_string):
 
 
 def _get_track(filename):
-    f = mutagen.File(track)
+    f = mutagen.File(filename)
     if f is None:
         raise Exception("%s caused problems." % (track,))
     if isinstance(f, mutagen.mp3.MP3):
-        f = mutagen.mp3.MP3(track, ID3=easyid3.EasyID3)
+        f = mutagen.mp3.MP3(filename, ID3=easyid3.EasyID3)
     return f
 
 
