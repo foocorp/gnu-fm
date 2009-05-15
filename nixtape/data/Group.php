@@ -55,7 +55,7 @@ class Group {
 			try {
 				$res = $adodb->GetRow('SELECT * FROM Groups WHERE lower(groupname) = ' . $adodb->qstr(strtolower($name)));
 			}
-			catch {
+			catch (exception $e) {
 				header('Content-Type: text/plain');
 				exit;
 			}
@@ -107,7 +107,7 @@ class Group {
 		try {
 			$res = $adodb->GetRow("SELECT * FROM Groups ORDER BY {$random}() LIMIT 1");
 		}
-		catch {
+		catch (exception $e) {
 			return $res;
 		}
 		if ($res) {
@@ -149,7 +149,7 @@ class Group {
 		try {
 			$res = $adodb->GetRow($q);
 		}
-		catch {
+		catch (exception $e) {
 			return $res;
 		}
 		if ($res) {
@@ -171,7 +171,7 @@ class Group {
 		try {
 			$res = $adodb->Execute($q);
 		}
-		catch {
+		catch (exception $e) {
 			return $res;
 		}
 
@@ -180,7 +180,7 @@ class Group {
 		try {
 			$res = $adodb->GetOne($q);
 		}
-		catch {
+		catch (exception $e) {
 			return $res;
 		}
 		if (!$res)
@@ -231,7 +231,7 @@ class Group {
 			}
 
 		}
-		catch {
+		catch (exception $e) {
 			header('Content-Type: text/plain');
 			exit;
 		}
@@ -269,7 +269,7 @@ class Group {
 		try {
 			$res = $adodb->Execute($q);
 		}
-		catch {
+		catch (exception $e) {
 			header('Content-Type: text/plain');
 			exit;
 		}
@@ -344,7 +344,7 @@ class Group {
 						(int)($user->uniqueid, 'integer'),
 						time()));
 		}
-		catch {
+		catch (exception $e) {
 			return false;
 		}
 
@@ -366,9 +366,9 @@ class Group {
 						(int)($this->gid),
 						(int)($user->uniqueid)));
 		}
-catch {
+		catch (exception $e) {
 			return false;
-}
+		}
 
 		$this->users[ $user->name ] = null;
 		// The array key still exists though. That's annoying. PHP needs an equivalent of Perl's 'delete'.
