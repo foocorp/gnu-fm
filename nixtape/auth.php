@@ -19,21 +19,27 @@
 
 */
 
-require_once('database.php');
+require_once('database2.php');
 require_once('data/User.php');
 session_start();
 if(isset($_COOKIE['session_id'])) {
-	$res = $mdb2->query('SELECT username FROM Scrobble_Sessions WHERE '
-		. 'sessionid = ' . $mdb2->quote($_COOKIE['session_id'], 'text')
-		. ' AND expires > ' . $mdb2->quote(time(), 'integer'));
-	if(PEAR::isError ($res) || !$res->numRows()) {
+	$err = 0;
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	try {
+		$row = $adodb->GetRow('SELECT username FROM Scrobble_Sessions WHERE '
+				. 'sessionid = ' . $adodb->qstr($_COOKIE['session_id'])
+				. ' AND expires > ' . (int)(time()));
+	}
+	catch (exception $e) {
+		$err = 1;
+	}
+	if($err || !$row) {
 		// Session is invalid
 		setcookie('session_id', '', time() - 3600);
 		session_unset();
 		session_destroy();
 	} else {
 		$logged_in = true;
-		$row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
 		$this_user = new User($row['username']);
 	}
 }
