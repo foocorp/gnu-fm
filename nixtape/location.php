@@ -19,15 +19,15 @@
 
 */
 
-require_once('database.php');
+require_once('database2.php');
 require_once('templating.php');
 require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/User.php');
 
-if ( strtolower(substr($mdb2->phptype, 0, 5)) == 'mysql'  )
+if ( strtolower(substr($connect_string)) == 'mysql'  )
 	$random = 'RAND';
-elseif ( strtolower(substr($mdb2->phptype, 0, 5)) == 'mssql'  )
+elseif ( strtolower(substr($connect_string, 0, 5)) == 'mssql'  )
 	$random = 'NEWID';  // I don't think we try to support MSSQL, but here's how it's done theoretically anyway
 else
 	$random = 'RANDOM';  // postgresql, sqlite, possibly others
@@ -35,21 +35,20 @@ else
 if ($_REQUEST['country'])
 {
 	$q = sprintf('SELECT u.* FROM Users u INNER JOIN Places p ON u.location_uri=p.location_uri AND p.country=%s ORDER BY %s() LIMIT 100',
-		$mdb2->quote(strtoupper($_REQUEST['country']), 'text'),
+		$adodb->qstr(strtoupper($_REQUEST['country'])),
 		$random);
 
-	$res = $mdb2->query($q);
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	$res = $adodb->GetAll($q);
 
-	while ( $row = $res->fetchRow(MDB2_FETCHMODE_ASSOC) )
-	{
+	foreach($res as &$row) {
 		$userlist[] = new User($row['username'], $row);
 	}
 
 	$smarty->assign('country', strtoupper($_REQUEST['country']));
-	$res = $mdb2->query(sprintf('SELECT * FROM Countries WHERE country=%s LIMIT 1',
-		$mdb2->quote(strtoupper($_REQUEST['country']), 'text')));
-	if ( $row = $res->fetchRow(MDB2_FETCHMODE_ASSOC) )
-	{
+	$row = $adodb->GetRow(sprintf('SELECT * FROM Countries WHERE country=%s LIMIT 1',
+		$adodb->qstr(strtoupper($_REQUEST['country']))));
+	if ( $row ) {
 		$smarty->assign('country_info', $row);
 	}
 
