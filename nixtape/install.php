@@ -19,7 +19,8 @@
 
 */
 
-require_once('MDB2.php');
+require_once('adodb/adodb-exceptions.inc.php');
+require_once('adodb/adodb.inc.php');
 require_once('version.php');
 require_once('utils/get_absolute_url.php');
 
@@ -41,11 +42,13 @@ if (isset($_POST['install'])) {
 	$adodb_connect_string = str_replace('pgsql:', 'postgres:', $connect_string );
 
 	// Check the connection
-	$mdb2 =& MDB2::connect($connect_string);
-	if (PEAR::isError($mdb2)) {
-		die($mdb2->getMessage());
+	try {
+	$adodb =& NewADOConnection($connect_string);
 	}
-	$mdb2->disconnect();
+	catch (exception $e) {
+		die($e->getMessage());
+	}
+	$adodb->Close();
 
 	$install_path = dirname(__FILE__) . '/';
 
@@ -124,5 +127,3 @@ if (isset($_POST['install'])) {
 		</form>
 	</body>
 </html>
-
-
