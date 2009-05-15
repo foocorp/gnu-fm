@@ -60,7 +60,7 @@ if($mb) {
 $adodb->Execute("DELETE FROM Now_Playing WHERE sessionid = " . ($MQsess));
 
 if (!check_session($MQsess)) {
-	die("BADSESSION");
+	die("BADSESSION\n");
 }
 
 try {
