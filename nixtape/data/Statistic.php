@@ -18,7 +18,7 @@
 
 */
 
-require_once($install_path . '/database.php');
+require_once($install_path . '/database2.php');
 require_once($install_path . '/data/Server.php');
 
 class Statistic {
@@ -34,40 +34,41 @@ class Statistic {
 	 * @return array playstats
 	 */
 	static function generatePlayStats($table, $field, $limit = 40, $constraint = null, $maxwidth = 100 ) {
-		global $mdb2;
+		global $adodb;
 		if (!is_string($field))          return false;
 		if (!is_string($table))          return false;
 		if (!is_integer($limit))         return false;
 		$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table;
 		$query .= (!is_null($constraint)) ? ' WHERE ' : null;
 		if ($field == 'track') {
-			$query .= (!is_null($constraint)) ? ' artist = ' . $mdb2->quote($constraint, 'text') : null;
+			$query .= (!is_null($constraint)) ? ' artist = ' . $adodb->qstr($constraint) : null;
 		} else {
-			$query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
+			$query .= (!is_null($constraint)) ? ' username = ' . $adodb->qstr($constraint) : null;
 		}
 		$query .= ' GROUP BY ' . $field . ' ORDER BY count DESC LIMIT ' . $limit;
-		$res = $mdb2->query($query);
-		if (PEAR::isError($res)) {
-			echo('ERROR' . $res->getMessage());
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
+			$res = $adodb->GetAll($query);
 		}
-
-		if (!$res->numRows()) {
+		catch (exception $e) {
+			echo('ERROR' . $e->getMessage());
+		}
+		if (!$res) {
 			return false;
 		} else {
-			$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-			$max = $data[0]['count'];
+			$max = $res[0]['count'];
 
-			foreach($data as &$i){
+			foreach($res as &$i){
 				$i['pageurl'] = Server::getArtistURL($i['artist']);
 				$i['size'] = $i['count'] / $max * $maxwidth;
 			}
 
-			return $data;
+			return $res;
 		}
 	}
 
 	static function generatePlayByDays($table, $limit = 100, $constraint = null, $maxwidth = 100 ) {
-		global $mdb2;
+		global $adodb;
 		global $connect_string;
 
 		if (!is_string($table))          return false;
@@ -80,29 +81,29 @@ class Statistic {
 		if( strpos($connect_string , 'mysql' ) === 0 ) $query = 'SELECT COUNT(*) as count,DATE(FROM_UNIXTIME(time)) as date FROM ' .  $table;
 
 		$query .= (!is_null($constraint)) ? ' WHERE ' : null;
-		$query .= (!is_null($constraint)) ? ' username = ' . $mdb2->quote($constraint, 'text') : null;
+		$query .= (!is_null($constraint)) ? ' username = ' . $adodb->qstr($constraint) : null;
 		$query .= ' GROUP BY date ORDER BY date DESC LIMIT ' . $limit;
-		$res = $mdb2->query($query);
-		if (PEAR::isError($res)) {
-			echo('ERROR' . $res->getMessage());
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
+			$res = $adodb->GetAll($query);
 		}
-
-		if (!$res->numRows()) {
+		catch (exception $e) {
+			echo('ERROR' . $e->getMessage());
+		}
+		if (!$res) {
 			return false;
 		} else {
-			$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
-
 			$max = 0;
 
-			foreach($data as &$i){
+			foreach($res as &$i){
 				if( $i['count'] > $max ) $max =  $i['count'];
 			}
 
-			foreach($data as &$i){
+			foreach($res as &$i){
 				$i['size'] = $i['count'] / $max * $maxwidth;
 			}
 
-			return $data;
+			return $res;
 		}
 	}
 }
