@@ -19,7 +19,7 @@
 
 */
 
-require_once('database2.php');
+require_once('database.php');
 require_once('templating.php');
 require_once('data/sanitize.php');
 require_once('data/Server.php');

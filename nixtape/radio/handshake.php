@@ -18,7 +18,7 @@
 
 */
 
-require_once('../database2.php');
+require_once('../database.php');
 
 if(!isset($_GET['username']) || !isset($_GET['passwordmd5'])) {
 	die("BADAUTH\n");

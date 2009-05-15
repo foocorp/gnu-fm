@@ -20,7 +20,7 @@
 */
 
 
-require_once($install_path . '/database2.php');
+require_once($install_path . '/database.php');
 require_once($install_path . '/data/sanitize.php');
 require_once($install_path . '/data/Album.php');
 require_once($install_path . '/data/Track.php');

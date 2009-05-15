@@ -19,7 +19,7 @@
 
 */
 
-require_once('../database2.php');
+require_once('../database.php');
 require_once('../api/ArtistXML.php');
 require_once('../api/UserXML.php');
 

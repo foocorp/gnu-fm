@@ -18,7 +18,7 @@
 
 */
 
-require_once('../database2.php');
+require_once('../database.php');
 require_once('../templating.php');
 require_once('../data/Track.php');
 require_once('radio-utils.php');
