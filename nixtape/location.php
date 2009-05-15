@@ -25,9 +25,9 @@ require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/User.php');
 
-if ( strtolower(substr($connect_string)) == 'mysql'  )
+if ( strtolower(substr($connect_string, 0, 5)) == 'mysql' )
 	$random = 'RAND';
-elseif ( strtolower(substr($connect_string, 0, 5)) == 'mssql'  )
+elseif ( strtolower(substr($connect_string, 0, 5)) == 'mssql' )
 	$random = 'NEWID';  // I don't think we try to support MSSQL, but here's how it's done theoretically anyway
 else
 	$random = 'RANDOM';  // postgresql, sqlite, possibly others
