@@ -19,20 +19,21 @@ def _parse_date(string):
     return datetime.datetime.utcfromtimestamp(float(string))
 
 
-def _get_date(start_string=None, tracks=None):
-    if start_string is not None:
-        dt = _parse_date(start_string)
-        input = ''
-        while input not in ['y', 'n']:
-            input = raw_input("Did you mean '%s UTC'? [Y/n]: " % (dt,)).lower()
-        if input == 'n':
-            sys.exit()
-    else:
-        offset = datetime.timedelta()
-        for track in tracks:
-            offset += datetime.timedelta(seconds=_get_track(track).info.length)
-        dt = datetime.datetime.now() - offset
+def _get_date_from_string(start_string):
+    dt = _parse_date(start_string)
+    input = ''
+    while input not in ['y', 'n']:
+        input = raw_input("Did you mean '%s UTC'? [Y/n]: " % (dt,)).lower()
+    if input == 'n':
+        sys.exit()
     return dt
+
+
+def _get_offset_date(tracks):
+    offset = datetime.timedelta()
+    for track in tracks:
+        offset += datetime.timedelta(seconds=_get_track(track).info.length)
+    return datetime.datetime.now() - offset
 
 
 def _get_track(filename):
@@ -71,9 +72,9 @@ if __name__ == '__main__':
     server = GobbleServer(server, username, password)
 
     if opts.just_finished:
-        dt = _get_date(tracks=tracks)
+        dt = _get_offset_date(tracks)
     else:
-        dt = _get_date(start_string)
+        dt = _get_date_from_string(start_string)
 
     for track in tracks:
         f = _get_track(track)
