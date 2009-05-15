@@ -18,7 +18,7 @@
 
  */
 
-require_once($install_path . '/database.php');
+require_once($install_path . '/database2.php');
 require_once($install_path . '/data/User.php');
 require_once('xml.php');
 
@@ -46,7 +46,7 @@ class UserXML {
 	}
 
 	public static function getTopTracks($username, $time) {
-		global $mdb2;
+		global $adodb;
 
 		$timestamp;
 		if (!isset($time))
@@ -66,13 +66,20 @@ class UserXML {
 			return(XML::error('error', '13', 'Invalid method signature supplied'));
 		}
 
-		$res = $mdb2->query('SELECT Track.*, Artist.mbid AS artmbid, COUNT(*) AS freq
-			FROM Track, Scrobbles,Artist
-			WHERE Scrobbles.username = ' . $mdb2->quote($username, 'text') . '
-			AND Scrobbles.track = Track.name AND Scrobbles.time > ' . $timestamp . ' AND Track.artist = Artist.name
-			GROUP BY Track.name ORDER BY freq DESC LIMIT 20');
+		$err = 0;
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
+			$res = $adodb->CacheGetAll(600, 'SELECT Track.*, Artist.mbid AS artmbid, COUNT(*) AS freq
+					FROM Track, Scrobbles,Artist
+					WHERE Scrobbles.username = ' . $adodb->qstr($username, 'text') . '
+					AND Scrobbles.track = Track.name AND Scrobbles.time > ' . $timestamp . ' AND Track.artist = Artist.name
+					GROUP BY Track.name ORDER BY freq DESC LIMIT 20');
+		}
+		catch (exception $e) {
+			$err = 1;
+		}
 
-		if (PEAR::isError($res) || !$res->numRows()) {
+		if ($err || !$res) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
@@ -81,8 +88,7 @@ class UserXML {
 		$root->addAttribute('user', $username);
 		$root->addAttribute('type', $time);
 		$i = 1;
-		while(($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
-
+		foreach($res as &$row) {
 			$track = $root->addChild('track', null);
 			$track->addAttribute('rank', $i);
 			$track->addChild('name', repamp($row['name']));
@@ -98,20 +104,27 @@ class UserXML {
 	}
 
 	public static function getRecentTracks($user, $limit) {
-		global $mdb2;
+		global $adodb;
 
 		if (!isset($limit)) {
 			$limit = 10;
 		}
 
-		$res = $mdb2->query('SELECT Track . * , COUNT( * ) AS freq
-			FROM Track, Scrobbles
-			WHERE Scrobbles.username = ' . $mdb2->quote($user, 'text') . '
-			AND Scrobbles.track = Track.name
-			GROUP BY Track.name
-			LIMIT 10');
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		$err = 0;
+		try {
+			$res = $adodb->GetAll('SELECT Track . * , COUNT( * ) AS freq
+					FROM Track, Scrobbles
+					WHERE Scrobbles.username = ' . $adodb->qstr($user) . '
+					AND Scrobbles.track = Track.name
+					GROUP BY Track.name
+					LIMIT 10');
+		}
+		catch (exception $e) {
+			$err = 1;
+		}
 
-		if (PEAR::isError($res) || !$res->numRows()) {
+		if ($err || !$res) {
 			return(XML::error('error', '7', 'Invalid resource specified'));
 		}
 
@@ -119,7 +132,7 @@ class UserXML {
 		$root = $xml->addChild('recenttracks', null);
 		$root->addAttribute('user', $user);
 
-		while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
+		foreach($res as &$row) {
 			$track = $root->addChild('track', null);
 			$artist = $track->addChild('artist', repamp($row['artist']));
 			$artist->addAttribute('mbid', $row['artmbid']);
