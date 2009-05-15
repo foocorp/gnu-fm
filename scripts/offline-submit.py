@@ -19,13 +19,19 @@ def _parse_date(string):
     return datetime.datetime.utcfromtimestamp(float(string))
 
 
-def _get_date(start_string):
-    dt = _parse_date(start_string)
-    input = ''
-    while input not in ['y', 'n']:
-        input = raw_input("Did you mean '%s UTC'? [Y/n]: " % (dt,)).lower()
-    if input == 'n':
-        sys.exit()
+def _get_date(start_string=None, tracks=None):
+    if start_string is not None:
+        dt = _parse_date(start_string)
+        input = ''
+        while input not in ['y', 'n']:
+            input = raw_input("Did you mean '%s UTC'? [Y/n]: " % (dt,)).lower()
+        if input == 'n':
+            sys.exit()
+    else:
+        offset = datetime.timedelta()
+        for track in tracks:
+            offset += datetime.timedelta(seconds=_get_track(track).info.length)
+        dt = datetime.datetime.now() - offset
     return dt
 
 
@@ -56,6 +62,7 @@ if __name__ == '__main__':
         parser.error("All arguments are required.")
 
     username = args.pop(0)
+    start_string = None
     if not opts.just_finished:
         start_string = args.pop(0)
     server = opts.server
@@ -63,7 +70,10 @@ if __name__ == '__main__':
     tracks = args
     server = GobbleServer(server, username, password)
 
-    dt = _get_date(start_string)
+    if opts.just_finished:
+        dt = _get_date(tracks=tracks)
+    else:
+        dt = _get_date(start_string)
 
     for track in tracks:
         f = _get_track(track)
