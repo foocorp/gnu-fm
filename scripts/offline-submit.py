@@ -19,13 +19,17 @@ def _parse_date(string):
     return datetime.datetime.utcfromtimestamp(float(string))
 
 
-def _get_date_from_string(start_string):
-    dt = _parse_date(start_string)
+def _date_prompt(dt):
     input = ''
     while input not in ['y', 'n']:
         input = raw_input("Did you mean '%s UTC'? [Y/n]: " % (dt,)).lower()
     if input == 'n':
         sys.exit()
+
+
+def _get_date_from_string(start_string):
+    dt = _parse_date(start_string)
+    _date_prompt(dt)
     return dt
 
 
@@ -33,7 +37,9 @@ def _get_offset_date(tracks):
     offset = datetime.timedelta()
     for track in tracks:
         offset += datetime.timedelta(seconds=_get_track(track).info.length)
-    return datetime.datetime.now() - offset
+    dt = datetime.datetime.now() - offset
+    _date_prompt(dt)
+    return dt
 
 
 def _get_track(filename):
