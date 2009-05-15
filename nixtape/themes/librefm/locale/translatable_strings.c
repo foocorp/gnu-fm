@@ -77,6 +77,9 @@ gettext("Powered by Nixtape");
 gettext("All Groups");
 
 /* ../templates/group-list.tpl */
+gettext("All Groups");
+
+/* ../templates/group-list.tpl */
 gettext("%1 members");
 
 /* ../templates/group.tpl */
@@ -128,6 +131,9 @@ gettext("Country:");
 gettext("Users in");
 
 /* ../templates/login.tpl */
+gettext("Reset your password");
+
+/* ../templates/login.tpl */
 gettext("Username");
 
 /* ../templates/login.tpl */
@@ -149,7 +155,13 @@ gettext("German (Germany)");
 gettext("Change Language");
 
 /* ../templates/menu.tpl */
-gettext("Register");
+gettext("Listen");
+
+/* ../templates/menu.tpl */
+gettext("Bugs");
+
+/* ../templates/menu.tpl */
+gettext("Help");
 
 /* ../templates/menu.tpl */
 gettext("Admin");
@@ -158,43 +170,13 @@ gettext("Admin");
 gettext("Logout");
 
 /* ../templates/menu.tpl */
-gettext("Listen");
-
-/* ../templates/menu.tpl */
 gettext("Login");
-
-/* ../templates/menu.tpl */
-gettext("Bugs");
-
-/* ../templates/menu.tpl */
-gettext("Help");
 
 /* ../templates/player.tpl */
 gettext("Sorry, you need a browser capable of making use of the HTML 5 &lt;audio&gt; tag to enjoy the streaming service via the JavaScript player.");
 
 /* ../templates/player.tpl */
 gettext("Playlist");
-
-/* ../templates/recovery.tpl */
-gettext("Password recovery");
-
-/* ../templates/recovery.tpl */
-gettext("Your new password has been emailed to you.");
-
-/* ../templates/recovery.tpl */
-gettext("An email with further information has been sent to the email address associated with your profile.");
-
-/* ../templates/recovery.tpl */
-gettext("Password Recovery");
-
-/* ../templates/recovery.tpl */
-gettext("Username");
-
-/* ../templates/recovery.tpl */
-gettext("must be valid!");
-
-/* ../templates/recovery.tpl */
-gettext("Recover my password!");
 
 /* ../templates/register.tpl */
 gettext("Your account has been activated! You may now login!");
@@ -264,6 +246,21 @@ gettext("must be valid!");
 
 /* ../templates/request.tpl */
 gettext("Request invite!");
+
+/* ../templates/reset.tpl */
+gettext("Reset my password");
+
+/* ../templates/reset.tpl */
+gettext("Your new password has been emailed to you.");
+
+/* ../templates/reset.tpl */
+gettext("An email with further information has been sent to the email address associated with your profile.");
+
+/* ../templates/reset.tpl */
+gettext("Username");
+
+/* ../templates/reset.tpl */
+gettext("Reset my password!");
 
 /* ../templates/track.tpl */
 gettext("Artist:");
