@@ -29,6 +29,15 @@ def _get_date(start_string):
     return dt
 
 
+def _get_track(filename):
+    f = mutagen.File(track)
+    if f is None:
+        raise Exception("%s caused problems." % (track,))
+    if isinstance(f, mutagen.mp3.MP3):
+        f = mutagen.mp3.MP3(track, ID3=easyid3.EasyID3)
+    return f
+
+
 if __name__ == '__main__':
     usage = "%prog [--server <SERVER>] <USERNAME> <START TIME> <MEDIA FILES>"
     parser = get_parser(usage=usage)
@@ -57,11 +66,7 @@ if __name__ == '__main__':
     dt = _get_date(start_string)
 
     for track in tracks:
-        f = mutagen.File(track)
-        if f is None:
-            raise Exception("%s caused problems." % (track,))
-        if isinstance(f, mutagen.mp3.MP3):
-            f = mutagen.mp3.MP3(track, ID3=easyid3.EasyID3)
+        f = _get_track(track)
         title = f['title'][0]
         artist = f['artist'][0]
         length = f.info.length
