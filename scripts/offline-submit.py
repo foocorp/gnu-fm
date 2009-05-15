@@ -22,14 +22,26 @@ def _parse_date(string):
 if __name__ == '__main__':
     usage = "%prog [--server <SERVER>] <USERNAME> <START TIME> <MEDIA FILES>"
     parser = get_parser(usage=usage)
+    parser.add_option('-j', '--just-finished', action="store_true",
+                      help="Works out START TIME as if you've just finished"
+                           " listening to MEDIA FILES.  START TIME argument"
+                           " will be treated as a media file, so don't pass"
+                           " it.")
+    parser.set_defaults(just_finished=False)
     opts,args = parser.parse_args()
-    if len(args) < 3:
+    if opts.just_finished:
+        expected_args = 2
+    else:
+        expected_args = 3
+    if len(args) < expected_args:
         parser.error("All arguments are required.")
 
-    username,start_string = args[:2]
+    username = args.pop(0)
+    if not opts.just_finished:
+        start_string = args.pop(0)
     server = opts.server
     password = getpass.getpass()
-    tracks = args[2:]
+    tracks = args
     server = GobbleServer(server, username, password)
 
     dt = _parse_date(start_string)
