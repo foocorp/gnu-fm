@@ -29,34 +29,35 @@ if ($logged_in == false) {
 	$smarty->display('error.tpl');
 	die ();
 } elseif ( isset ($_GET['code'])) {
-	$mdb2->exec('DELETE FROM Delete_Request WHERE expires < ' . $mdb2->quote(time(), 'integer'));
+	$adodb->Execute('DELETE FROM Delete_Request WHERE expires < ' . (int)(time()));
 
 	$username = $this_user->name;
 	$code = $_GET['code'];
-	$res = $mdb2->query('SELECT * FROM Delete_Request WHERE username = ' . $mdb2->quote($username, 'text') . ' AND code = ' . $mdb2->quote($code, 'text'));
-	if (PEAR::isError($res)) {
-		//($res);
-		exit ;
+try {
+	$res = $adodb->GetRow('SELECT * FROM Delete_Request WHERE username = ' . $adodb->qstr($username) . ' AND code = ' . $adodb->qstr($code));
+}
+catch (exception $e) {
+		exit;
 	}
-	if (!$res->numRows()) {
+	if (!$res) {
 		$error = 'Invalid code.';
 		$smarty->assign('error', 'Error!');
 		$smarty->assign('details', $error);
 		$smarty->display('error.tpl');
 		die ();
 	} else {
-		$mdb2->exec('DELETE FROM Scrobble_Sessions WHERE username = ' . $mdb2->quote($username, 'text'));
-		$mdb2->exec('DELETE FROM Delete_Request WHERE username = ' . $mdb2->quote($username, 'text'));
-		$mdb2->exec('DELETE FROM Auth WHERE username = ' . $mdb2->quote($username, 'text'));
-		$mdb2->exec('DELETE FROM Group_Members WHERE member = ' . $mdb2->quote($this_user->uniqueid, 'integer'));
-		$mdb2->exec('DELETE FROM Radio_Sessions WHERE username = ' . $mdb2->quote($username, 'text'));
-		$mdb2->exec('DELETE FROM Recovery_Request WHERE username = ' . $mdb2->quote($username, 'text'));
-		$mdb2->exec('DELETE FROM Scrobbles WHERE username = ' . $mdb2->quote($username, 'text'));
-		$mdb2->exec('DELETE FROM User_Relationship_Flags WHERE uid1 = ' . $mdb2->quote($this_user->uniqueid, 'integer'));
-		$mdb2->exec('DELETE FROM User_Relationship_Flags WHERE uid2 = ' . $mdb2->quote($this_user->uniqueid, 'integer'));
-		$mdb2->exec('DELETE FROM User_Relationships WHERE uid1 = ' . $mdb2->quote($this_user->uniqueid, 'integer'));
-		$mdb2->exec('DELETE FROM User_Relationships WHERE uid2 = ' . $mdb2->quote($this_user->uniqueid, 'integer'));
-		$mdb2->exec('DELETE FROM Users WHERE lower(username) = ' . $mdb2->quote(strtolower($username), 'text'));
+		$adodb->Execute('DELETE FROM Scrobble_Sessions WHERE username = ' . $adodb->qstr($username));
+		$adodb->Execute('DELETE FROM Delete_Request WHERE username = ' . $adodb->qstr($username));
+		$adodb->Execute('DELETE FROM Auth WHERE username = ' . $adodb->qstr($username));
+		$adodb->Execute('DELETE FROM Group_Members WHERE member = ' . (int)($this_user->uniqueid));
+		$adodb->Execute('DELETE FROM Radio_Sessions WHERE username = ' . $adodb->qstr($username));
+		$adodb->Execute('DELETE FROM Recovery_Request WHERE username = ' . $adodb->qstr($username));
+		$adodb->Execute('DELETE FROM Scrobbles WHERE username = ' . $adodb->qstr($username));
+		$adodb->Execute('DELETE FROM User_Relationship_Flags WHERE uid1 = ' . (int)($this_user->uniqueid));
+		$adodb->Execute('DELETE FROM User_Relationship_Flags WHERE uid2 = ' . (int)($this_user->uniqueid));
+		$adodb->Execute('DELETE FROM User_Relationships WHERE uid1 = ' . (int)($this_user->uniqueid));
+		$adodb->Execute('DELETE FROM User_Relationships WHERE uid2 = ' . (int)($this_user->uniqueid));
+		$adodb->Execute('DELETE FROM Users WHERE lower(username) = ' . $adodb->qstr(strtolower($username)));
 		session_destroy();
 		header('Location: index.php');
 	}
@@ -65,7 +66,7 @@ if ($logged_in == false) {
 	$username = $this_user->name;
 	$email = $this_user->email;
 	$expire = time()+86400;
-	$mdb2->exec('INSERT INTO Delete_Request (code, expires, username) VALUES (' . $mdb2->quote($code, 'text') . ', ' . $mdb2->quote($expire, 'text') . "," .  $mdb2->quote($username, 'text') . ')');
+	$adodb->Execute('INSERT INTO Delete_Request (code, expires, username) VALUES (' . $adodb->qstr($code) . ', ' . $adodb->qstr($expire) . "," .  $adodb->qstr($username) . ')');
 	$url = $base_url . '/delete-profile.php?code=' . $code;
 	$content = "Hi!\n\nSomeone from the IP address " . $_SERVER['REMOTE_ADDR'] . " requested account deletion at libre.fm.  To remove this account click: \n\n" . $url . "\n\n- The Libre.fm Team";
 	$headers = 'From: Libre.fm <account@libre.fm>';
