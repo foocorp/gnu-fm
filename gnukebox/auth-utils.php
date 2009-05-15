@@ -68,5 +68,5 @@ function check_session($sessionID) {
 		return(false);
 	}
 
-	return($session <= time());
+	return($session >= time());
 }
