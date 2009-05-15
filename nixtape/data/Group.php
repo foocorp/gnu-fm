@@ -340,8 +340,8 @@ class Group {
 		global $adodb;
 		try {
 			$res = $adodb->Execute(sprintf('INSERT INTO Group_Members (grp, member, joined) VALUES (%s, %s, %d)',
-						(int)($this->gid, 'integer'),
-						(int)($user->uniqueid, 'integer'),
+						(int)($this->gid),
+						(int)($user->uniqueid),
 						time()));
 		}
 		catch (exception $e) {
