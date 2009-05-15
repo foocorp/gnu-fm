@@ -19,7 +19,7 @@
 
 */
 require_once('auth.php');
-require_once('database.php');
+require_once('database2.php');
 require_once('templating.php');
 require_once('config.php');
 
@@ -28,7 +28,7 @@ $username = $u_user->name;
 $userlevel = $u_user->userlevel;
 
 function sendEmail($email) {
-	global $mdb2;
+	global $adodb;
 	global $base_url;
 	global $u_user;
 	$username = $u_user->name;
@@ -36,13 +36,14 @@ function sendEmail($email) {
 
 	// Insert the invitation into the table
 	$sql = 'INSERT INTO Invitations (inviter, code) VALUES ('
-		. $mdb2->quote($username, 'text') . ', '
-		. $mdb2->quote($code, 'text') . ')';
+			. $adodb->qstr($username) . ', '
+			. $adodb->qstr($code) . ')';
 
-	$affected =& $mdb2->exec($sql);
-
-	if (PEAR::isError($affected)) {
-		die($affected->getMessage());
+	try {
+		$adodb->Execute($sql);
+	}
+	catch (exception $e) {
+		die($e->getMessage());
 	}
 
 	$url = $base_url . '/register.php?authcode=' . $code;
@@ -73,8 +74,8 @@ if ($userlevel < 2) {
 				// Send the email
 				sendEmail($_GET['email']);
 				$smarty->assign('sent', true);
-				$sql = 'UPDATE Invitation_Request SET status=1 WHERE email=' . $mdb2->quote($_GET['email'], 'text');
-				$mdb2->exec($sql);
+				$sql = 'UPDATE Invitation_Request SET status=1 WHERE email=' . $adodb->qstr($_GET['email']);
+				$adodb->Execute($sql);
 			}
 		} else {
 			$smarty->assign('error', 'Error!');
@@ -86,8 +87,8 @@ if ($userlevel < 2) {
 
 }
 
-$res = $mdb2->query('SELECT email,status FROM Invitation_Request ORDER BY time ASC');
-$data = $res->fetchAll(MDB2_FETCHMODE_ASSOC);
+$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+$data = $adodb->GetAll('SELECT email,status FROM Invitation_Request ORDER BY time ASC');
 $smarty->assign('emails', $data);
 $smarty->display('admin.tpl');
 ?>
