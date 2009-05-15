@@ -19,7 +19,7 @@
 
 */
 
-require_once('database.php');
+require_once('database2.php');
 require_once('templating.php');
 require_once('data/sanitize.php');
 require_once('data/Server.php');
@@ -40,12 +40,13 @@ if (!PEAR::isError ($aTagCloud)) {
         $smarty->assign('tagcloud', $aTagCloud);
 }
 
-$res = $mdb2->query('SELECT * FROM Track WHERE lower(artist_name) = ' . $mdb2->quote(mb_strtolower($track->artist_name, 'UTF-8'), 'text') . ' AND lower(name) = ' . $mdb2->quote(mb_strtolower($track->name, 'UTF-8'), 'text'));
+$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+$res = $adodb->GetAll('SELECT * FROM Track WHERE lower(artist_name) = ' . $adodb->qstr(mb_strtolower($track->artist_name, 'UTF-8')) . ' AND lower(name) = ' . $adodb->qstr(mb_strtolower($track->name, 'UTF-8')));
 
 $aOtheralbums = array();
 $i = 0;
 
-while (($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC))) {
+foreach($res as &$row) {
 	$trow = sanitize($row);
 	if ($trow['album']) {
 		$aOtherAlbums[$i++] = new Album($trow['album'], $trow['artist']);
