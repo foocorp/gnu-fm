@@ -21,85 +21,93 @@
 
 // TODO: Check if the request has expired before changing.
 
-require_once('database.php');
+require_once('database2.php');
 require_once('templating.php');
 require_once('utils/EmailAddressValidator.php');
 
-global $mdb2;
+global $adodb;
 $errors = '';
 
 function sendEmail($text, $email) {
-    $headers = 'From: Libre.fm Reset <recovery@libre.fm>';
-    $subject = 'Libre.fm Password Reset';
-    mail($email, $subject, $text, $headers);
+	$headers = 'From: Libre.fm Reset <recovery@libre.fm>';
+	$subject = 'Libre.fm Password Reset';
+	mail($email, $subject, $text, $headers);
 }
 
 if (isset($_GET['code'])) {
-    $res = $mdb2->query('SELECT * FROM Recovery_Request WHERE code=' . $mdb2->quote($_GET['code'], 'text'));
-    if ($res->numRows() == 0) {
-	$errors .= "Invalid reset token.\n";
-	$smarty->assign('errors', $errors);
-	$smarty->display('error.tpl');
-	die();
-    }
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	$row = $adodb->GetRow('SELECT * FROM Recovery_Request WHERE code=' . $adodb->qstr($_GET['code']));
+	if (!$row) {
+		$errors .= "Invalid reset token.\n";
+		$smarty->assign('errors', $errors);
+		$smarty->display('error.tpl');
+		die();
+	}
 
-    $row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
+	$password = '';
+	$chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
-    $password = '';
-    $chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+	for ($i = 0; $i < 8; $i++) {
+		$password .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
+	}
 
-    for ($i = 0; $i < 8; $i++) {
-	$password .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
-    }
+	$email = $row['email'];
 
-    $email = $row['email'];
+	$sql = 'UPDATE Users SET password=' . $adodb->qstr(md5($password)) . ' WHERE email='
+		. $adodb->qstr($email);
 
-    $sql = 'UPDATE Users SET password=' . $mdb2->quote(md5($password), 'text') . ' WHERE email='
-	 . $mdb2->quote($email, 'text');
+	$adodb->Execute($sql);
 
-    $mdb2->exec($sql);
-
-    $content = "Hi!\n\nYour password has been set to " . $password . "\n\n - The Libre.fm Team";
-    sendEmail($content, $email);
-    $sql = 'DELETE FROM Recovery_Request WHERE code=' . $mdb2->quote($email, 'text');
-    $mdb2->exec($sql);
-    $smarty->assign('changed', true);
+	$content = "Hi!\n\nYour password has been set to " . $password . "\n\n - The Libre.fm Team";
+	sendEmail($content, $email);
+	$sql = 'DELETE FROM Recovery_Request WHERE code=' . $adodb->qstr($email);
+	$adodb->Execute($sql);
+	$smarty->assign('changed', true);
 }
 
 else if (isset($_POST['user'])) {
-    $username = $_POST['user'];
+	$username = $_POST['user'];
 
-    $res = $mdb2->query('SELECT * FROM Users WHERE username="'
-       . $mdb2->quote($username, 'text'));
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	$err = 0;
 
-    if (PEAR::isError($res) || $res->numRows() == 0) {
-	$errors .= "User not found.\n";
-	$smarty->assign('errors', $errors);
-	$smarty->display('error.tpl');
-	die();
-    }
-    $row = $res->fetchRow(MDB2_FETCHMODE_ASSOC);
-    $code = md5($username . $row['email'] . time());
-    $sql = 'INSERT INTO Recovery_Request (username, email, code, expires) VALUES('
-	. $mdb2->quote($username, 'text') . ', '
-	. $mdb2->quote($row['email'], 'text') . ', '
-	. $mdb2->quote($code, 'text') . ', '
-	. $mdb2->quote(time() + 86400, 'text') . ')';
+	try {
+		$row = $adodb->GetRow('SELECT * FROM Users WHERE username="'
+				. $adodb->qstr($username));
+	}
+	catch (exception $e) {
+		$err = 1;
+	}
 
-    $res = $mdb2->exec($sql);
-    if (PEAR::isError($res)) {
-	$errors .= 'Error on: ' . $sql;
-	$smarty->assign('errors', $errors);
-	$smarty->display('error.tpl');
-	die();
-    }
+	if ($err || !$row) {
+		$errors .= "User not found.\n";
+		$smarty->assign('errors', $errors);
+		$smarty->display('error.tpl');
+		die();
+	}
+	$code = md5($username . $row['email'] . time());
+	$sql = 'INSERT INTO Recovery_Request (username, email, code, expires) VALUES('
+			. $adodb->qstr($username) . ', '
+			. $adodb->qstr($row['email']) . ', '
+			. $adodb->qstr($code) . ', '
+			. $adodb->qstr(time() + 86400) . ')';
 
-    $url = $base_url . '/reset.php?code=' . $code;
-    $content = "Hi!\n\nSomeone from the IP-address " . $_SERVER['REMOTE_ADDR'] . " entered your username "
-	. "in the password reset form at libre.fm. To change you password, please visit\n\n"
-	. $url . "\n\n- The Libre.fm Team";
-    sendEmail($content, $row['email']);
-    $smarty->assign('sent', true);
+			try {
+			$res = $adodb->Execute($sql);
+			}
+			catch (exception $e) {
+			$errors .= 'Error on: ' . $sql;
+			$smarty->assign('errors', $errors);
+			$smarty->display('error.tpl');
+			die();
+			}
+
+			$url = $base_url . '/reset.php?code=' . $code;
+			$content = "Hi!\n\nSomeone from the IP-address " . $_SERVER['REMOTE_ADDR'] . " entered your username "
+			. "in the password reset form at libre.fm. To change you password, please visit\n\n"
+			. $url . "\n\n- The Libre.fm Team";
+			sendEmail($content, $row['email']);
+			$smarty->assign('sent', true);
 }
 
 $smarty->display('reset.tpl');
