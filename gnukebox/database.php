@@ -29,7 +29,7 @@ require_once('adodb/adodb-exceptions.inc.php');
 require_once('adodb/adodb.inc.php');
 
 try {
-	$adodb =& NewADOConnection($adodb_connect_string);
+	$adodb =& NewADOConnection($connect_string);
 } catch (exception $e) {
 	var_dump($e);
 	adodb_backtrace($e->gettrace());
