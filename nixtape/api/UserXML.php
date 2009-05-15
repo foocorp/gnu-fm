@@ -18,7 +18,7 @@
 
  */
 
-require_once($install_path . '/database2.php');
+require_once($install_path . '/database.php');
 require_once($install_path . '/data/User.php');
 require_once('xml.php');
 

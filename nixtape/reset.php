@@ -21,7 +21,7 @@
 
 // TODO: Check if the request has expired before changing.
 
-require_once('database2.php');
+require_once('database.php');
 require_once('templating.php');
 require_once('utils/EmailAddressValidator.php');
 

@@ -19,7 +19,7 @@
 
  */
 
-require_once($install_path . '/database2.php');
+require_once($install_path . '/database.php');
 require_once($install_path . '/data/sanitize.php');
 require_once($install_path . '/utils/human-time.php');
 require_once($install_path . '/data/Server.php');

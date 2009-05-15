@@ -19,7 +19,7 @@
 
 */
 
-require_once($install_path . '/database2.php');
+require_once($install_path . '/database.php');
 require_once($install_path . '/data/Artist.php');
 // require_once($install_path . '/data/Group.php');
 require_once($install_path . '/data/Track.php');

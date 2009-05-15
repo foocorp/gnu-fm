@@ -19,7 +19,7 @@
 
 */
 
-require_once('database2.php');
+require_once('database.php');
 require_once('data/User.php');
 session_start();
 if(isset($_COOKIE['session_id'])) {

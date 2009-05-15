@@ -18,7 +18,7 @@
 
 */
 
-require_once('../database2.php');
+require_once('../database.php');
 require_once('radio-utils.php');
 
 if(!isset($_GET['session']) || !isset($_GET['url'])) {

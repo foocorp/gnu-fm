@@ -18,7 +18,7 @@
 
 */
 
-require_once($install_path . '/database2.php');
+require_once($install_path . '/database.php');
 require_once($install_path . '/data/Server.php');
 require_once($install_path . '/config.php'); // Should already be required though.
 

@@ -19,7 +19,7 @@
 
 */
 require_once('auth.php');
-require_once('database2.php');
+require_once('database.php');
 require_once('templating.php');
 require_once('config.php');
 
