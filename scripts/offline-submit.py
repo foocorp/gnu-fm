@@ -19,6 +19,16 @@ def _parse_date(string):
     return datetime.datetime.utcfromtimestamp(float(string))
 
 
+def _get_date(start_string):
+    dt = _parse_date(start_string)
+    input = ''
+    while input not in ['y', 'n']:
+        input = raw_input("Did you mean '%s UTC'? [Y/n]: " % (dt,)).lower()
+    if input == 'n':
+        sys.exit()
+    return dt
+
+
 if __name__ == '__main__':
     usage = "%prog [--server <SERVER>] <USERNAME> <START TIME> <MEDIA FILES>"
     parser = get_parser(usage=usage)
@@ -44,12 +54,7 @@ if __name__ == '__main__':
     tracks = args
     server = GobbleServer(server, username, password)
 
-    dt = _parse_date(start_string)
-    input = ''
-    while input not in ['y', 'n']:
-        input = raw_input("Did you mean '%s UTC'? [Y/n]: " % (dt,)).lower()
-    if input == 'n':
-        sys.exit()
+    dt = _get_date(start_string)
 
     for track in tracks:
         f = mutagen.File(track)
