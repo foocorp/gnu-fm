@@ -19,7 +19,7 @@
 
  */
 
-require_once('database.php');
+require_once('database2.php');
 require_once('templating.php');
 require_once('utils/EmailAddressValidator.php');
 
@@ -36,8 +36,8 @@ if (isset($_POST['request'])) {
     unset($validator);
 
     if(empty($errors)) {
-	$mdb2->query('INSERT INTO Invitation_Request (email, time, status) VALUES('
-	    . $mdb2->quote($email, 'text') . ', '
+	$adodb->Execute('INSERT INTO Invitation_Request (email, time, status) VALUES('
+	    . $adodb->qstr($email) . ', '
 	    . time() . ', 0)');
 	$smarty->assign('reg', true);
     } else {
