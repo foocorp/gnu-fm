@@ -224,10 +224,14 @@ class User {
 	 *
 	 * @return user's top 20 tracks
 	 */
-	function getTopTracks($number=20) {
+	function getTopTracks($number=20, $since=null) {
 		global $adodb;
 
-		$query = 'SELECT COUNT(track) as c, artist, album, track FROM Scrobbles WHERE username = '.$adodb->qstr($this->name).' GROUP BY artist,album,track ORDER BY c DESC LIMIT ' . ($number);
+		if ($since) {
+			$query = 'SELECT COUNT(track) as c, artist, album, track FROM Scrobbles WHERE username = '.$adodb->qstr($this->name).' AND time > '.(int)($since).' GROUP BY artist,album,track ORDER BY c DESC LIMIT ' . ($number);
+		} else {
+			$query = 'SELECT COUNT(track) as c, artist, album, track FROM Scrobbles WHERE username = '.$adodb->qstr($this->name).' GROUP BY artist,album,track ORDER BY c DESC LIMIT ' . ($number);
+		}
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$data = $adodb->CacheGetAll(7200,$query);
 		if (!$data) {
@@ -236,23 +240,23 @@ class User {
 
 		$maxcount = 0;
 
-	        foreach($data as &$i) {
-	            $row = sanitize($i);
-	            $row['artisturl'] = Server::getArtistURL($row['artist']);
-	            $row['trackurl'] = Server::getTrackURL($row['artist'],$row['album'],$row['track']);
-		    if ((int)$row['c'] > $maxcount) {
-			$maxcount = (int)$row['c'];
-		    }
-	            $result[] = $row;
-	        }
+		foreach($data as &$i) {
+			$row = sanitize($i);
+			$row['artisturl'] = Server::getArtistURL($row['artist']);
+			$row['trackurl'] = Server::getTrackURL($row['artist'],$row['album'],$row['track']);
+			if ((int)$row['c'] > $maxcount) {
+				$maxcount = (int)$row['c'];
+			}
+			$result[] = $row;
+		}
 
 		if ($maxcount > 0) {
 			foreach($result as &$row) {
-			$row['width']=(int)(100 * ($row['c']/$maxcount));
+				$row['width']=(int)(100 * ($row['c']/$maxcount));
 			}
 		}
 
-	        return $result;
+		return $result;
 	}
 
 
