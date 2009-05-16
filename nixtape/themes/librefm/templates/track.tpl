@@ -8,7 +8,7 @@
 
 	<div id="purchase-download">
 
-	<h2>Purchase this album</h2>
+	<h2>Purchase this track</h2>
 
 	<ul>
 	<li><a href="http://libre.fm/affliate.php?a={$track->artist_name}&m={$track->album_name}&t={$track->name}">Amazon MP3</a></li>
