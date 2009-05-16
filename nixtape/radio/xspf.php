@@ -96,6 +96,6 @@ $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
 $smarty->assign('radiotracks', $radiotracks);
 
-$smarty->display('radio_xspf.tpl');
+$smarty->display('radio_oldxspf.tpl');
 
 ?>
