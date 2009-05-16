@@ -41,7 +41,9 @@
 
     <div id="downloads">
 
+{if !isset($this_user) || $this_user->anticommercial<>1}
     {include file='adbard.tpl'}
+{/fi}
 
     <h2>{t}Libre music downloads...{/t}</h2>
 

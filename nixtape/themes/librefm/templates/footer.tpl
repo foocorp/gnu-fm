@@ -5,7 +5,9 @@
 
 <!-- sidebar -->
 
+{if !isset($this_user) || $this_user->anticommercial<>1}
 	{include file='adbard.tpl'}     
+{/fi}
 
 	{include file=$sidebartemplate}
 
