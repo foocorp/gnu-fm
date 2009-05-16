@@ -113,6 +113,7 @@ if ($_POST['submit'])
 		$this_user->avatar_uri   = $_POST['avatar_uri'];
 		$this_user->laconica_profile = $_POST['laconica_profile'];
 		$this_user->journal_rss  = $_POST['journal_rss'];
+		$this_user->anticommercial  = $_POST['anticommercial'] == "on" ? 1 : 0;
 
 		if (!empty( $_POST['password_1'] ))
 			$user->password = md5($_POST['password_1']);
@@ -155,6 +156,7 @@ if(isset($this_user->name))
 		$smarty->assign('avatar_uri',   $_POST['avatar_uri']);
 		$smarty->assign('laconica_profile', $_POST['laconica_profile']);
 		$smarty->assign('journal_rss',  $_POST['journal_rss']);
+		$smarty->assign('anticommercial',  $_POST['anticommercial']);
 	}
 	else
 	{
@@ -167,6 +169,7 @@ if(isset($this_user->name))
 		$smarty->assign('avatar_uri',   ($this_user->avatar_uri));
 		$smarty->assign('laconica_profile', ($this_user->laconica_profile));
 		$smarty->assign('journal_rss',  ($this_user->journal_rss));
+		$smarty->assign('anticommercial',  $this_user->anticommercial);
 	}
 
 	# And display the page.

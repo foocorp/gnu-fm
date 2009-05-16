@@ -59,6 +59,11 @@
 			<td><a href="#dfn_journal_rss" rel="glossary">{t}What's this?{/t}</a></td>
 		</tr>
 		<tr>
+			<th align="right" valign="top"><label for="anticommercial">{t}Anticommercial{/t}</label></th>
+			<td><input name="anticommercial" id="anticommercial" type="checkbox"{if $anticommercial == 1} checked="checked"{/if} /></td>
+			<td><a href="#dfn_anticommercial" rel="glossary">{t}What's this?{/t}</a></td>
+		</tr>
+		<tr>
 			<th align="right" valign="top"><label for="password_1">{t}Password:{/t}</label></th>
 			<td><input name="password_1" id="password_1" type="password" value="" /></td>
 			<td rowspan="2">{t}Leave this blank if you don't want to change your password.{/t}</td>
@@ -88,6 +93,12 @@
 
 	<dt id="dfn_id">WebID (FOAF)</dt>
 	<dd>{t escape=no}A URI that represents you in RDF. See <a href="http://esw.w3.org/topic/WebID">WebID</a> for details. If you don't know what this is, it's best to leave it blank.{/t}</dd>
+
+	<dt id="dfn_anticommercial">Anticommercial</dt>
+	<dd>{t escape=no}By enabling this option, you will not be shown advertisements or affiliate purchase links.{/t}</dd>
+</dl>
+
+{include file='footer.tpl'}
 </dl>
 
 {include file='footer.tpl'}
