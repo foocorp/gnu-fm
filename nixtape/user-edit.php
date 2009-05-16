@@ -156,7 +156,7 @@ if(isset($this_user->name))
 		$smarty->assign('avatar_uri',   $_POST['avatar_uri']);
 		$smarty->assign('laconica_profile', $_POST['laconica_profile']);
 		$smarty->assign('journal_rss',  $_POST['journal_rss']);
-		$smarty->assign('anticommercial',  $_POST['anticommercial']);
+		$smarty->assign('anticommercial',  $_POST['anticommercial'] == "on" ? 1 : 0);
 	}
 	else
 	{
