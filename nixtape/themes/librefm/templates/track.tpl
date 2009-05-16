@@ -4,6 +4,18 @@
 
 	<h2 property="dc:title" class="fn" rel="foaf:page" rev="foaf:primaryTopic" resource="">{$track->name|escape:'html':'UTF-8'}</h2>
 
+	<div id="purchase-download">
+
+	<h2>Purchase this album</h2>
+
+	<ul>
+	<li><a href="http://libre.fm/affliate.php?a={$track->artist_name}&m={$track->album_name}&t={$track->name}">Amazon MP3</a></li>
+	<li><a href="http://libre.fm/affliate.php?{$track->artist_name}&m={$track->album_name}&t={$track->name}&x=1">eMusic</a> (<a href="http://www.anrdoezrs.net/9g117dlurlt8CDHDBBH8A9D9IEBA">Join eMusic)</a></li>
+        </ul>
+
+        </div>
+
+
 	{include file='player.tpl'}
 	<script type="text/javascript">
 		var playlist = [{ldelim}"artist" : "{$track->artist_name}", "album" : "{$track->album_name}", "track" : "{$track->name}", "url" : "{$track->streamurl}"{rdelim}];
