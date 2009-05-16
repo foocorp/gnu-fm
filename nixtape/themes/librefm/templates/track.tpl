@@ -4,6 +4,8 @@
 
 	<h2 property="dc:title" class="fn" rel="foaf:page" rev="foaf:primaryTopic" resource="">{$track->name|escape:'html':'UTF-8'}</h2>
 
+	{if !$track->licenseurl && !$track->license}
+
 	<div id="purchase-download">
 
 	<h2>Purchase this album</h2>
@@ -15,6 +17,9 @@
 
         </div>
 
+	{/if}
+
+	<hr />
 
 	{include file='player.tpl'}
 	<script type="text/javascript">
