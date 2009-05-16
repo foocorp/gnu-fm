@@ -37,6 +37,10 @@ define('LFM_SERVICE_OFFLINE',	11);
 define('LFM_SUBSCRIPTION_ERROR',12);
 define('LFM_INVALID_SIGNATURE',	13);
 define('LFM_SUBSCRIPTION_REQD',	18);
+define('LFM_NOT_ENOUGH_CONTENT',	20);
+define('LFM_NOT_ENOUGH_MEMBERS',	21);
+define('LFM_NOT_ENOUGH_FANS',	22);
+define('LFM_NOT_ENOUGH_NEIGHBORS',	23);
 
 # Error descriptions as per API documentation
 $error_text = array(
@@ -53,6 +57,10 @@ $error_text = array(
 	LFM_SUBSCRIPTION_ERROR		=> 'Subscription Error - The user needs to be subscribed in order to do that',
 	LFM_INVALID_SIGNATURE		=> 'Invalid method signature supplied',
 	LFM_SUBSCRIPTION_REQD		=> 'This user has no free radio plays left. Subscription required.'
+	LFM_NOT_ENOUGH_CONTENT		=> 'There is not enough content to play this station'
+	LFM_NOT_ENOUGH_MEMBERS		=> 'This group does not have enough members for radio'
+	LFM_NOT_ENOUGH_FANS		=> 'This artist does not have enough fans for radio'
+	LFM_NOT_ENOUGH_NEIGHBORS	=> 'Thare are not enough neighbors for radio'
 );
 
 # Resolves method= parameters to handler functions
@@ -63,7 +71,9 @@ $method_map = array(
 	'artist.getinfo'		=> method_artist_getinfo,
 	'artist.gettoptracks'		=> method_artist_gettoptracks,
 	'user.getinfo'			=> method_user_getinfo,
-	'user.gettoptracks'		=> method_user_gettoptracks
+	'user.gettoptracks'		=> method_user_gettoptracks,
+	'radio.tune'			=> method_radio_tune,
+	'radio.getPlaylist'		=> method_radio_getPlaylist,
 );
 
 function method_user_gettoptracks() {
@@ -216,6 +226,79 @@ function method_auth_getsession() {
 	print("	</session>\n");
 	print("</lfm>");
 }
+
+function method_radio_tune() {
+	global $adodb;
+
+	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
+		report_failure(LFM_INVALID_SIGNATURE);
+
+	if (!isset($_GET['station']))
+		report_failure(LFM_INVALID_PARAMS);
+
+	if (!isset($_GET['api_key']))
+		report_failure(LFM_INVALID_PARAMS);
+
+	if (!isset($_GET['sk']))
+		report_failure(LFM_INVALID_PARAMS);
+
+	try {
+	$username = $adodb->GetOne('SELECT username FROM Auth WHERE '
+		. 'token = ' . $adodb->qstr($_GET['token']) . ' AND '
+		. 'username IS NOT NULL AND sk = '.$adodb->qstr($_GET['sk']));
+	}
+	catch (exception $e) {
+		report_failure(LFM_SERVICE_OFFLINE);
+	}
+	if (!$username) {
+		report_failure(LFM_INVALID_TOKEN);
+	}
+
+/*
+ * Here we should tune the station.  The immediate problem is that
+ * without radio handshake, the user will not necessarily have a
+ * session in Radio_Sessions.
+ *
+ * After that's solved, we should either set $stationtype,
+ * $stationname, $stationurl, or report_failure.
+ */
+	report_failure(LFM_SUBSCRIPTION_REQD);
+
+	print("<lfm status=\"ok\">\n");
+	print("	<station>\n");
+	print("		<type>{$stationtype}</type>\n");
+	print("		<name>{$stationname}</name>\n");
+	print("		<url>{$stationurl}</url>\n");
+	print("		<supportsdiscovery>0</supportsdiscovery>\n");
+	print("	</station>\n");
+	print("</lfm>");
+}
+
+function method_radio_getPlaylist() {
+	global $adodb;
+
+	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
+		report_failure(LFM_INVALID_SIGNATURE);
+
+	if (!isset($_GET['api_key']))
+		report_failure(LFM_INVALID_PARAMS);
+
+	if (!isset($_GET['sk']))
+		report_failure(LFM_INVALID_PARAMS);
+
+/*
+ * Here we should get the station based on the session key.  If
+ * no station is tuned for that key, we should default to something
+ * reasonable.
+ *
+ * Then we should return a playlist identical to the one spit out
+ * by xspf.php.
+ */
+
+	die("Unimplemented.\n");
+
+}
+
 
 function valid_api_key($key) {
 	return strlen($key) == 32;
