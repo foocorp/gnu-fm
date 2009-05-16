@@ -16,8 +16,6 @@
 			alt="{$album->name|escape:'html':'UTF-8'}" title="{$album->name|escape:'html':'UTF-8'}" width="160" />
 	</div>
 
-	<hr />
-
 	<div id="purchase-download">
 
 	<h2>Purchase this album</h2>
@@ -28,6 +26,8 @@
         </ul>
 
         </div>
+
+	<hr />
 
 {include file='player.tpl'}
 
