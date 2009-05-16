@@ -68,7 +68,7 @@ $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	for($i=0; $i<5; $i++) {
 
 	$res->Move($tr[$i]);
-	$row = $res->GetRow();
+	$row = $res->FetchRow();
 
 	$track = new Track($row['name'], $row['artist_name']);
 	$album = new Album($row['album_name'], $row['artist_name']);
