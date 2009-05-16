@@ -170,11 +170,10 @@ if(isset($this_user->name))
 	}
 
 	# And display the page.
-	$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $this_user->name);
-	if (!PEAR::isError ($aTagCloud))
-	{
+	try {
+		$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $this_user->name);
 		$smarty->assign('tagcloud', $aTagCloud);
-	}
+	} catch (exception $e) {}
 	$smarty->assign('errors', $errors);
 	$smarty->display('user-edit.tpl');
 }

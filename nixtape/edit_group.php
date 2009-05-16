@@ -37,29 +37,26 @@ if ($_REQUEST['group']=='new')
 {
 	if ($_REQUEST['new'])
 	{
-	  $result = Group::create(strtolower($_REQUEST['new']), $this_user);
-
-		if ($result instanceof Group)
-		{
-			header('Location: ' . $base_url . '/edit_group.php?group=' . $_REQUEST['new']);
-			exit();
-		}
-		elseif (PEAR::isError($result))
-		{
+		try {
+			$result = Group::create(strtolower($_REQUEST['new']), $this_user);
+		} catch (exception $e) {
 			$smarty->assign('error', 'Error!');
-			$smarty->assign('details', $result->getMessage());
+			$smarty->assign('details', $e->getMessage());
 			$smarty->display('error.tpl');
 			die();
+		}
+		if ($result instanceof Group) {
+			header('Location: ' . $base_url . '/edit_group.php?group=' . $_REQUEST['new']);
+			exit();
 		}
 	}
 	else
 	{
 		$smarty->assign('newform', true);
-		$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
-		if (!PEAR::isError ($aTagCloud))
-		{
+		try {
+			$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
 			$smarty->assign('tagcloud', $aTagCloud);
-		}
+		} catch (exception $e) {}
 		$smarty->display('edit_group.tpl');
 		exit();
 	}
@@ -163,11 +160,10 @@ if(isset($group->name))
 	# And display the page.
 	$smarty->assign('errors', $errors);
 	$smarty->assign('newform', false);
-	$aUserTagCloud = $group->tagCloudData();
-	if (!PEAR::isError ($aTagCloud))
-	{
+	try {
+		$aUserTagCloud = $group->tagCloudData();
 		$smarty->assign('tagcloud', $aTagCloud);
-	}
+	} catch (exception $e) {}
 	$smarty->display('edit_group.tpl');
 }
 

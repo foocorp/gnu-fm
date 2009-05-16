@@ -33,12 +33,12 @@ $smarty->assign('id', $artist->id);
 $smarty->assign('bio_summary', $artist->bio_summary);
 
 $aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
-if (!PEAR::isError ($aTagCloud)) {
+if ($aTagCloud) {
         $smarty->assign('tagcloud', $aTagCloud);
 }
 
 $aArtistAlbums = $artist->getAlbums();
-if (!PEAR::isError($aArtistAlbums)) {
+if ($aArtistAlbums) {
 	$smarty->assign('albums', $aArtistAlbums);
 }
 

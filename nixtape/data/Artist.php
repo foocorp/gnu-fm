@@ -53,7 +53,7 @@ class Artist {
 			. 'mbid = ' . $adodb->qstr($mbid) . ' OR '
 			. 'name = ' . $adodb->qstr($name));
 		if(!$row) {
-			return(new PEAR_Error('No such artist: ' . $name));
+			throw new Exception('No such artist' . $name);
 		} else {
 			$this->name = $row['name'];
 			$this->mbid = $row['mbid'];

@@ -41,7 +41,7 @@ class Server {
 	 * Retrieves a list of recent scrobbles
 	 *
 	 * @param int $number The number of scrobbles to return
-	 * @return An array of scrobbles or a PEAR_Error in case of failure
+	 * @return An array of scrobbles or null in case of failure
 	 */
 	static function getRecentScrobbles($number=10, $username=false) {
 		global $adodb;
@@ -106,7 +106,7 @@ class Server {
 		}
 		}
 		catch (exception $e) {
-			return $false;
+			return null;
 		}
 
 		foreach($res as &$i) {
@@ -150,7 +150,7 @@ class Server {
 	 * Retrieves a list of popular artists
 	 *
 	 * @param int $number The number of artists to return
-	 * @return An array of artists or a PEAR_Error in case of failure
+	 * @return An array of artists or null in case of failure
 	*/
 	static function getTopArtists($number=20) {
 		global $adodb;
@@ -160,7 +160,7 @@ class Server {
 		$data = $adodb->CacheGetAll(720, 'SELECT COUNT(artist) as c, artist FROM Scrobbles GROUP BY artist ORDER BY c DESC LIMIT 20');
 		}
 		catch (exception $e) {
-			return false;
+			return null;
 		}
 
 		foreach($data as &$i) {
@@ -176,7 +176,7 @@ class Server {
 	 * Retrieves a list of the currently playing tracks
 	 *
 	 * @param int $number The maximum number of tracks to return
-	 * @return An array of now playing data or a PEAR_Error in case of failure
+	 * @return An array of now playing data or null in case of failure
 	 */
 	static function getNowPlaying($number, $username=false) {
 		global $adodb;
@@ -233,7 +233,7 @@ class Server {
 		}
 		}
 		catch (exception $e) {
-			return false;
+			return null;
 		}
 
 		foreach($data as &$i) {

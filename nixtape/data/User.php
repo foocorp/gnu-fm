@@ -55,7 +55,7 @@ class User {
 			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	                $row = $adodb->CacheGetRow(7200,$query);
 			if (!$row) {
-				return(new PEAR_Error('ERROR ' . $query));
+				throw new Exception('ERROR ' . $query);
 	                }
 		}
 
@@ -141,11 +141,10 @@ class User {
 				, time()
 				, $adodb->qstr($this->name));
 
-		$res = $adodb->Execute($q);
-
-		if(PEAR::isError($res)) {
+		try {
+			$res = $adodb->Execute($q);
+		} catch (exception $e) {
 			header('Content-Type: text/plain');
-			//($res);
 			exit;
 		}
 
@@ -232,7 +231,7 @@ class User {
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$data = $adodb->CacheGetAll(7200,$query);
 		if (!$data) {
-			return(new PEAR_Error('ERROR ' . $query));
+			throw new Exception('ERROR ' . $query);
 		}
 
 		$maxcount = 0;

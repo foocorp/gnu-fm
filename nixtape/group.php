@@ -29,18 +29,17 @@ if (! $_GET['group'])
 {
 	$smarty->assign('groups', Group::groupList());
 	$smarty->assign('extra_head_links', array(
-			array(
-				'rel' => 'meta',
-				'type' => 'application/rdf+xml' ,
-				'title' => 'FOAF',
-				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $_SERVER['REQUEST_URI']))
-				)
-		));
-	$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
-	if (!PEAR::isError ($aTagCloud))
-	{
+				array(
+					'rel' => 'meta',
+					'type' => 'application/rdf+xml' ,
+					'title' => 'FOAF',
+					'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $_SERVER['REQUEST_URI']))
+				     )
+				));
+	try {
+		$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
 		$smarty->assign('tagcloud', $aTagCloud);
-	}
+	} catch (exception $e) {}
 	$smarty->display('group-list.tpl');
 	exit;
 }
@@ -68,10 +67,10 @@ if(isset($group->name)) {
 	$smarty->assign('homepage', $group->homepage);
 	$smarty->assign('avatar', $group->getAvatar());
 
-	$aUserTagCloud = $group->tagCloudData();
-	if (!PEAR::isError ($aUserTagCloud)) {
+	try {
+		$aUserTagCloud = $group->tagCloudData();
 		$smarty->assign('group_tagcloud',$aUserTagCloud);
-	}
+	} catch (exception $e) {}
 
 	$smarty->assign('userlist', $group->getUsers());
 
@@ -83,13 +82,13 @@ if(isset($group->name)) {
 	$smarty->assign('link', $group->getURL());
 
 	$smarty->assign('extra_head_links', array(
-			array(
-				'rel' => 'meta',
-				'type' => 'application/rdf+xml' ,
-				'title' => 'FOAF',
-				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $_SERVER['REQUEST_URI']))
-				)
-		));
+				array(
+					'rel' => 'meta',
+					'type' => 'application/rdf+xml' ,
+					'title' => 'FOAF',
+					'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $_SERVER['REQUEST_URI']))
+				     )
+				));
 
 	$smarty->assign('profile', true);
 	$smarty->display('group.tpl');

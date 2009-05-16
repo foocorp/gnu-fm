@@ -42,7 +42,7 @@ class ArtistXML {
 
 		$artist = new Artist($artistName, $mbid);
 
-		if (PEAR::isError($artist)) {
+		if (!$artist) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
@@ -66,7 +66,7 @@ class ArtistXML {
 
 		$artist = new Artist($artistName);
 
-		if (PEAR::isError($artist)) {
+		if (!$artist) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
