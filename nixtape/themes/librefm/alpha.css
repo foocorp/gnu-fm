@@ -460,4 +460,6 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
 
 #register-prompt {background-color: #eee; padding: 12px; border: 5px solid #aaa;}
 
+#purchase-download{background-color: #ececec; -moz-border-radius: 1em;}
+
 .photo{padding: 1px; border 1px solid #ccc; float: left;}

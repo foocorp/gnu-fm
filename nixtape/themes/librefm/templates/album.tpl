@@ -16,6 +16,19 @@
 			alt="{$album->name|escape:'html':'UTF-8'}" title="{$album->name|escape:'html':'UTF-8'}" width="160" />
 	</div>
 
+	<hr />
+
+	<div id="purchase-download">
+
+	<h2>Purchase this album</h2>
+
+	<ul>
+	<li><a href="http://libre.fm/affliate.php?a={$artist->name}&m={$name}">Amazon MP3</a></li>
+	<li><a href="http://libre.fm/affliate.php?a={$artist->name}&m={$name}&x=1">eMusic</a> (<a href="http://www.anrdoezrs.net/9g117dlurlt8CDHDBBH8A9D9IEBA">Join eMusic)</a></li>
+        </ul>
+
+        </div>
+
 {include file='player.tpl'}
 
 <script type="text/javascript">
