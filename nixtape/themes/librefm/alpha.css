@@ -464,4 +464,4 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
 
 .photo{padding: 1px; border 1px solid #ccc; float: left;}
 
-hr {clear: both; height: 1px; color: white !important; background-color: transparent !important;}
+hr {clear: both; height: 0px; color: white !important; background-color: transparent !important;}
