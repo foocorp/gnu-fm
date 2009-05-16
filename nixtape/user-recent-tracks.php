@@ -42,14 +42,14 @@ elseif (!$scrobbleCount)
 if(isset($user->name)) {
 
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
+	try {
 	$aUserScrobbles = $user->getScrobbles( $scrobbleCount );
-	if (!PEAR::isError ($aUserScrobbles)) {
 		$smarty->assign('scrobbles', $aUserScrobbles);
-	}
+	} catch (exception $e) {}
+	try {
 	$aUserTagCloud =  TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->name);
-	if (!PEAR::isError ($aUserTagCloud)) {
 		$smarty->assign('user_tagcloud',$aUserTagCloud);
-	}
+	} catch (exception $e) {}
 	$smarty->assign('isme', ($this_user->name == $user->name));
 	$smarty->assign('me', $user);
 	$smarty->assign('profile', true);

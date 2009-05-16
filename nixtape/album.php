@@ -32,7 +32,7 @@ $smarty->assign('id', $album->id);
 $smarty->assign('artist', $artist);
 $smarty->assign('album', $album);
 $aAlbumTracks = $album->getTracks();
-if (!PEAR::isError($aAlbumTracks )) {
+if ($aAlbumTracks) {
 	$smarty->assign('tracks', $aAlbumTracks);
 }
 

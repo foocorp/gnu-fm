@@ -66,28 +66,28 @@ foreach ($index as $subject => $data)
 	}
 }
 
-$aUserTagCloud =  TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->name);
-if (!PEAR::isError ($aUserTagCloud)) {
+try {
+	$aUserTagCloud =  TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->name);
 	$smarty->assign('user_tagcloud',$aUserTagCloud);
-}
+} catch (exception $e) {}
 $smarty->assign('isme', ($this_user->name == $user->name));
 $smarty->assign('me', $user);
 $smarty->assign('geo', Server::getLocationDetails($user->location_uri));
 $smarty->assign('profile', true);
 $smarty->assign('items', $items);
 $smarty->assign('extra_head_links', array(
-		array(
-			'rel'=>'alternate',
-			'type' => 'application/rss+xml' ,
-			'title' => 'RSS 1.0 Feed (Journal)',
-			'href' => $user->journal_rss
-			),
-		array(
-			'rel' => 'meta',
-			'type' => 'application/rdf+xml' ,
-			'title' => 'FOAF',
-			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL()))
-			)
-	));
+			array(
+				'rel'=>'alternate',
+				'type' => 'application/rss+xml' ,
+				'title' => 'RSS 1.0 Feed (Journal)',
+				'href' => $user->journal_rss
+			     ),
+			array(
+				'rel' => 'meta',
+				'type' => 'application/rdf+xml' ,
+				'title' => 'FOAF',
+				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL()))
+			     )
+			));
 $smarty->display('user-journal.tpl');
 

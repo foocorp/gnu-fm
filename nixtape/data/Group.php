@@ -194,10 +194,10 @@ class Group {
 				, (int)($grp)
 				, (int)($owner->uniqueid)
 				, time());
-		$res = $adodb->Execute($q);
-		if (PEAR::isError($res))
-		{
-			return $res;
+		try {
+			$res = $adodb->Execute($q);
+		} catch (exception $e) {
+			return null;
 		}
 
 		// Return the newly created group. Callers should check the return value.

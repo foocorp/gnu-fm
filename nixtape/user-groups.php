@@ -39,10 +39,10 @@ $user = new User($_GET['user']);
 if(isset($user->name)) {
 
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
-	$aUserTagCloud =  TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->name);
-	if (!PEAR::isError ($aUserTagCloud)) {
+	try {
+		$aUserTagCloud =  TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->name);
 		$smarty->assign('user_tagcloud',$aUserTagCloud);
-	}
+	} catch (exception $e) {}
 	$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
 	$smarty->assign('me', $user);
 	$smarty->assign('profile', true);
@@ -50,13 +50,13 @@ if(isset($user->name)) {
 	$smarty->assign('groups', Group::groupList($user));
 
 	$smarty->assign('extra_head_links', array(
-			array(
-				'rel' => 'meta',
-				'type' => 'application/rdf+xml' ,
-				'title' => 'FOAF',
-				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL('groups')))
-				)
-		));
+				array(
+					'rel' => 'meta',
+					'type' => 'application/rdf+xml' ,
+					'title' => 'FOAF',
+					'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL('groups')))
+				     )
+				));
 
 	$smarty->display('user-groups.tpl');
 } else {

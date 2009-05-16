@@ -37,43 +37,43 @@ $user = new User($_GET['user']);
 if(isset($user->name)) {
 
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
-	$aUserScrobbles = $user->getScrobbles(10);
-	if (!PEAR::isError ($aUserScrobbles)) {
+	try {
+		$aUserScrobbles = $user->getScrobbles(10);
 		$smarty->assign('scrobbles', $aUserScrobbles);
-	}
+	} catch (exception $e) {}
+	try {
 	$aUserNowPlaying = $user->getNowPlaying(10);
-	if (!PEAR::isError ($aUserNowPlaying)) {
 		$smarty->assign('nowplaying', $aUserNowPlaying);
-	}
+	} catch (exception $e) {}
+	try {
 	$aUserTagCloud =  TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->name);
-	if (!PEAR::isError ($aUserTagCloud)) {
 		$smarty->assign('user_tagcloud',$aUserTagCloud);
-	}
+	} catch (exception $e) {}
 	$smarty->assign('isme', ($this_user->name == $user->name));
 	$smarty->assign('me', $user);
 	$smarty->assign('sidebar', true);
 	$smarty->assign('sidebartemplate', 'profile-sidebar.tpl');
 
 	$smarty->assign('extra_head_links', array(
-			array(
-				'rel'=>'alternate',
-				'type' => 'application/rss+xml' ,
-				'title' => 'RSS 1.0 Feed (Recent plays)',
-				'href' => $base_url.'/rdf.php?fmt=rss&page='.urlencode(str_replace($base_url, '', $user->getURL('recent-tracks')))
-				),
-			array(
-				'rel'=>'alternate',
-				'type' => 'application/rss+xml' ,
-				'title' => 'RSS 1.0 Feed (Journal)',
-				'href' => $user->journal_rss
-				),
-			array(
-				'rel' => 'meta',
-				'type' => 'application/rdf+xml' ,
-				'title' => 'FOAF',
-				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL()))
-				)
-		));
+				array(
+					'rel'=>'alternate',
+					'type' => 'application/rss+xml' ,
+					'title' => 'RSS 1.0 Feed (Recent plays)',
+					'href' => $base_url.'/rdf.php?fmt=rss&page='.urlencode(str_replace($base_url, '', $user->getURL('recent-tracks')))
+				     ),
+				array(
+					'rel'=>'alternate',
+					'type' => 'application/rss+xml' ,
+					'title' => 'RSS 1.0 Feed (Journal)',
+					'href' => $user->journal_rss
+				     ),
+				array(
+					'rel' => 'meta',
+					'type' => 'application/rdf+xml' ,
+					'title' => 'FOAF',
+					'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL()))
+				     )
+				));
 
 	$smarty->display('user-profile.tpl');
 } else {

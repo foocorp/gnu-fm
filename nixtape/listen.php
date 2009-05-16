@@ -23,10 +23,10 @@ require_once('database.php');
 require_once('templating.php');
 require_once('data/TagCloud.php');
 
+try {
 $aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
-if (!PEAR::isError ($aTagCloud)) {
         $smarty->assign('tagcloud', $aTagCloud);
-}
+} catch (exception $e) {}
 
 if(isset($_GET['tag'])) {
 	$station = 'librefm://globaltags/' . $_GET['tag'];

@@ -27,7 +27,7 @@ class UserXML {
 	public static function getInfo($username) {
 
 		$user = new User($username);
-		if (PEAR::isError($user)) {
+		if (!$user) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
