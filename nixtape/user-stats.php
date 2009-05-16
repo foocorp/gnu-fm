@@ -52,11 +52,7 @@ try {
 		$smarty->assign('user_daystats',$aUserDayStat);
 	} catch (exception $e) {}
 
-	if(isset($_GET['week'])) {
-		$smarty->assign('toptracks', $user->getTopTracks(40), time() - 604800);
-	} else {
-		$smarty->assign('toptracks', $user->getTopTracks(40));
-	}
+	$smarty->assign('toptracks', $user->getTopTracks(40));
 
 	$smarty->assign('me', $user);
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
