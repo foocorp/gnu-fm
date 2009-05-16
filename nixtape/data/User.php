@@ -34,7 +34,7 @@ class User {
 
 	public $name, $email, $fullname, $bio, $location, $homepage, $error, $userlevel;
 	public $id, $acctid, $avatar_uri, $location_uri, $webid_uri, $laconica_profile, $journal_rss;
-	public $password, $has_identica, $created, $modified, $uniqueid;
+	public $password, $has_identica, $created, $modified, $uniqueid, $anticommercial;
 
 	/**
 	 * User constructor
@@ -78,6 +78,7 @@ class User {
 			$this->created	    = $row['created'];
 			$this->modified     = $row['modified'];
 			$this->uniqueid     = $row['uniqueid'];
+			$this->anticommercial     = $row['anticommercial'];
 
 			$this->has_identica = preg_match('#^http://identi\.ca/#i', $this->laconica_profile);
 
@@ -124,6 +125,7 @@ class User {
 				. 'avatar_uri=%s, '
 				. 'laconica_profile=%s, '
 				. 'journal_rss=%s, '
+				. 'anticommercial=%d, '
 				. 'modified=%d '
 				. 'WHERE username=%s'
 				, $adodb->qstr($this->email)
@@ -138,6 +140,7 @@ class User {
 				, $adodb->qstr($this->avatar_uri)
 				, $adodb->qstr($this->laconica_profile)
 				, $adodb->qstr($this->journal_rss)
+				, (int)($this->anticommercial)
 				, time()
 				, $adodb->qstr($this->name));
 

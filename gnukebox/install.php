@@ -74,6 +74,7 @@ if (isset($_POST['install'])) {
 		created INTEGER NOT NULL,
 		modified INTEGER,
 		userlevel INTEGER DEFAULT 0,
+		anticommercial INTEGER DEFAULT 0,
 		webid_uri VARCHAR(255),
 		avatar_uri VARCHAR(255),
 		active INTEGER DEFAULT 1,
