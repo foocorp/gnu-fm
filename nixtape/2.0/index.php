@@ -291,7 +291,8 @@ function method_radio_getPlaylist() {
  * no station is tuned for that key, we should default to something
  * reasonable.
  *
- * Then we should return a playlist identical to the one spit out
+ * Then we should return a playlist in a format not quite identical
+ * to the one spit out
  * by xspf.php.
  */
 
