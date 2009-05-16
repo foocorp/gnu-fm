@@ -10,10 +10,12 @@
 
 	<h2>Purchase this track</h2>
 
+{if !isset($this_user) || $this_user->anticommercial<>1}
 	<ul>
 	<li><a href="http://libre.fm/affliate.php?a={$track->artist_name}&m={$track->album_name}&t={$track->name}">Amazon MP3</a></li>
 	<li><a href="http://libre.fm/affliate.php?{$track->artist_name}&m={$track->album_name}&t={$track->name}&x=1">eMusic</a> (<a href="http://www.anrdoezrs.net/9g117dlurlt8CDHDBBH8A9D9IEBA">Join eMusic)</a></li>
         </ul>
+{/fi}
 
         </div>
 

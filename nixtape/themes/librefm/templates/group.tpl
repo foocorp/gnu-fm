@@ -56,6 +56,7 @@
 	{/section}
 </ul>
 
+{if !isset($this_user) || $this_user->anticommercial<>1}
 	    <!--Ad Bard advertisement snippet, begin -->
 
 	    <script type='text/javascript'>
@@ -66,6 +67,7 @@
             <script type='text/javascript' src='http://cdn1.adbard.net/js/ab1.js'></script>
 
 	    <!--Ad Bard, end -->
+{/fi}
 
 
 
