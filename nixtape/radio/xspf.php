@@ -54,18 +54,18 @@ if(ereg('l(ast|ibre)fm://globaltags/(.*)', $url, $regs)) {
 
 $avail = $res->RecordCount();
 
-// This needs some kind of deduplication among other things
 $tr[0] = rand(0,$avail-1);
 $tr[1] = rand(0,$avail-1);
 $tr[2] = rand(0,$avail-1);
 $tr[3] = rand(0,$avail-1);
 $tr[4] = rand(0,$avail-1);
-sort($tr);
+$tr = array_unique($tr, SORT_NUMERIC);
+// we should probably shuffle these here
 
 $radiotracks = array();
 $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
-	for($i=0; $i<5; $i++) {
+	for($i=0; $i<count($tr); $i++) {
 
 	$res->Move($tr[$i]);
 	$row = $res->FetchRow();
