@@ -4,21 +4,6 @@
 
 	<h2 property="dc:title" class="fn" rel="foaf:page" rev="foaf:primaryTopic" resource="">{$track->name|escape:'html':'UTF-8'}</h2>
 
-	{if !$track->licenseurl && !$track->license && (!isset($this_user) || $this_user->anticommercial<>1)}
-
-	<div id="purchase-download" style="display: none;">
-
-	<h2>Purchase this track</h2>
-
-	<ul>
-	<li><a href="http://libre.fm/affliate.php?a={$track->artist_name}&m={$track->album_name}&t={$track->name}">Amazon MP3</a></li>
-	<li><a href="http://libre.fm/affliate.php?{$track->artist_name}&m={$track->album_name}&t={$track->name}&x=1">eMusic</a> (<a href="http://www.anrdoezrs.net/9g117dlurlt8CDHDBBH8A9D9IEBA">Join eMusic)</a></li>
-        </ul>
-
-        </div>
-
-	{/if}
-
 	<hr />
 
 	{include file='player.tpl'}
