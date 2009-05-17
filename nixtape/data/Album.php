@@ -158,7 +158,7 @@ class Album {
             $search_results = unserialize(stream_get_contents($open));
             fclose($open);
 
-            if (!isset($search_results['query']['search']) || count($search_results['query']['search']) == 0) 
+            if (!isset($search_results['query']['search']) || count($search_results['query']['search']) == 0)
                 return false;
 
             $results = array();
@@ -249,8 +249,8 @@ class Album {
         } catch (exception $e) {
             reportError($e->getMessage());
         }
- 
-        return $album_art_url; 
+
+        return $album_art_url;
     }
 }
 
