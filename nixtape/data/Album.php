@@ -122,8 +122,137 @@ class Album {
 		return Server::getAlbumURL($this->artist_name, $this->name);
 	}
 
-}
+    /*
+     * Return Album Art URL from Wikipedia
+     * @param string Album
+     * @param string Artist
+     * @param bool Save info to Album table.
+     * @param string Wikipedia API URL
+     * @return an object with the url and usage_url properties
+     */
+    function WikipediaAlbumArt ($album_name, $artist_name, $save = false, $api_url = 'http://en.wikipedia.org/w/api.php') {
+        global $adodb;
+        /*
+         * Search query string
+         */
+        $album_name  = mb_convert_case($album_name, 'UTF-8');
+        $artist_name = mb_convert_case($artist_name, 'UTF-8');
+        $get_params  = array(
+            'action'    => 'query',
+            'format'    => 'php',
+            'redirects' => true,
+            'list'      => 'search',
+            'srsearch'  => "$album_name $artist_name album",
+            'srlimit'   => 10
+        );
 
+        try {
+            if (is_null($album_name)) throw new Exception('No album name provided.');
+
+            $search_url = $api_url . '?' . http_build_query($get_params);
+
+            $open = fopen($search_url, 'r');
+
+            if ($open == false) throw new Exception('Can\'t open Search URL');
+
+            $search_results = unserialize(stream_get_contents($open));
+            fclose($open);
+
+            if (!isset($search_results['query']['search']) || count($search_results['query']['search']) == 0) 
+                return false;
+
+            $results = array();
+
+            foreach ($search_results['query']['search'] as $id => $page) {
+                switch ($page['title']) {
+                case ($album_name):
+                    $weight = 0.5;
+                    break;
+                case ("$album_name (album)"):
+                    $weight = 0.75;
+                    break;
+                case ("$album_name ($artist_name album)"):
+                    $weight = 1;
+                    break
+                default:
+                    $weight = 0;
+                }
+
+                if ($weight > 0)
+                    $results[$page['title']] = $weight;
+            }
+
+            if (count($results) > 0) {
+                # order by weight
+                # highest gets on bottom
+                asort($results);
+                end($results);
+
+                $possible_cover = key($results);
+
+                # Cover search query string
+                $cover_params = array(
+                    'action'    => 'query',
+                    'format'    => 'php',
+                    'redirects' => true,
+                    'generator' => 'images',
+                    'titles'    => $possible_cover,
+                    'prop'      => 'imageinfo',
+                    'iiprop'    => 'url'
+                );
+
+                $cover_search_url = $api_url . '?' . http_build_query($cover_params);
+                $open_cover_url   = fopen($cover_search_url, 'r');
+
+                if ($open_cover_url == false) throw new Exception ('Can\'t open Cover Search URL');
+                $cover_search_results = unserialize(stream_get_contents($open_cover_url));
+                fclose($open_cover_url);
+
+                if (!isset($cover_search_results['query']['pages')] || count($cover_search_results['query']['pages']) == 0)
+                    return false;
+
+                foreach ($cover_search_results['query']['pages'] as $image_id => $image) {
+                    # Wikipedia covers are mostly JPEG images.
+                    # Gets the first image (hard guess!)
+                    if (preg_match('/\.jpg$/i', $image['title']) == 1) {
+                        $cover = $image['imageinfo'][0];
+                        break;
+                    }
+                }
+
+                /*
+                 * Save the info if $save = true
+                 */
+                if ($save) {
+                    $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+                    $album   = $adodb->qstr($album_name);
+                    $artist  = $adodb->qstr($artist_name);
+                    $license = $adodb->qstr($cover['descriptionurl']);
+                    $image   = $adodb->qstr($cover['url']);
+
+		            $sql = ('UPDATE Album SET image = '
+                         . ($image) . ', '
+                         . ' artwork_license = '
+                         . ($license) . ' WHERE artist_name = '. ($artist)
+                         . ' AND name = '	. ($album));
+
+                    $res = $adodb->Execute($sql);
+                }
+
+                return $cover['url'];
+
+            } else {
+                return false;
+            }
+
+
+        } catch (exception $e) {
+            reportError($e->getMessage());
+        }
+ 
+        return $album_art_url; 
+    }
+}
 
 
 
