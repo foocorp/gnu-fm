@@ -6,7 +6,7 @@
 
 	{if !$track->licenseurl && !$track->license && (!isset($this_user) || $this_user->anticommercial<>1)}
 
-	<div id="purchase-download">
+	<div id="purchase-download" style="display: none;">
 
 	<h2>Purchase this track</h2>
 

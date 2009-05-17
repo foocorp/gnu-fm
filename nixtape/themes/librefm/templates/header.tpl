@@ -27,6 +27,7 @@
 	<script type="text/javascript" src="{$base_url}/js/player.js"></script>
 	<script type="text/javascript" src="{$base_url}/js/jquery-1.3.2.min.js"></script>
 	<script type="text/javascript" src="{$base_url}/js/jquery-ui-1.7.1.custom.min.js"></script>
+	<script type="text/javascript" src="{$base_url}/js/links.js"></script>
 {section name=i loop=$extra_head_links}
 	<link rel="{$extra_head_links[i].rel|escape:'html':'UTF-8'}" href="{$extra_head_links[i].href|escape:'html':'UTF-8'}" type="{$extra_head_links[i].type|escape:'html':'UTF-8'}" title="{$extra_head_links[i].title|escape:'html':'UTF-8'}"  />
 {/section}
