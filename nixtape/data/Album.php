@@ -173,7 +173,7 @@ class Album {
                     break;
                 case ("$album_name ($artist_name album)"):
                     $weight = 1;
-                    break
+                    break;
                 default:
                     $weight = 0;
                 }
@@ -208,7 +208,7 @@ class Album {
                 $cover_search_results = unserialize(stream_get_contents($open_cover_url));
                 fclose($open_cover_url);
 
-                if (!isset($cover_search_results['query']['pages')] || count($cover_search_results['query']['pages']) == 0)
+                if (!isset($cover_search_results['query']['pages']) || count($cover_search_results['query']['pages']) == 0)
                     return false;
 
                 foreach ($cover_search_results['query']['pages'] as $image_id => $image) {
