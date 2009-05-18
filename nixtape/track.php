@@ -43,13 +43,11 @@ $aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
 $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 $res = $adodb->GetAll('SELECT * FROM Track WHERE lower(artist_name) = ' . $adodb->qstr(mb_strtolower($track->artist_name, 'UTF-8')) . ' AND lower(name) = ' . $adodb->qstr(mb_strtolower($track->name, 'UTF-8')));
 
-$aOtheralbums = array();
-$i = 0;
+$aOtherAlbums = array();
 
-foreach($res as &$row) {
-	$trow = sanitize($row);
+foreach($res as &$trow) {
 	if ($trow['album']) {
-		$aOtherAlbums[$i++] = new Album($trow['album'], $trow['artist']);
+		$aOtherAlbums[] = new Album($trow['album'], $trow['artist']);
 	}
 }
 
