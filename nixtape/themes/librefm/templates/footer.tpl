@@ -1,7 +1,7 @@
 
 	        {include file='adbard.tpl'}
 
-	</div>
+	</div>	</div>
 </div>
 </div>
 
