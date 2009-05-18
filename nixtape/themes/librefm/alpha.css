@@ -46,7 +46,7 @@ html, body{background: #fff; padding: 0; margin: 0;}
 
 #artists{background-color: lightblue; margin: 15px 0 15px 0; padding: 5px;}
 
-#ft{margin-top: 15px; position: relative; background-color: #111;}
+#ft{margin-top: 15px; position: relative; background-color: #111; color: white; margin-bottom: 0 !important;}
 
 #ft p{ text-align: right;}
 
@@ -387,7 +387,6 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
        	width: 140px;
        	position: relative;
 	padding: 5px; text-align: center;
-	float: right;
 }
 
 .cc-license {font-size: 73%; color: red;}
