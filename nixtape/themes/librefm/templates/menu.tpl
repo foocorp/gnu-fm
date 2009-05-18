@@ -8,8 +8,8 @@
 	{if $this_user->userlevel > 0}
 	<li><a href="/admin.php">{t}Admin{/t}</a></li>
 	{/if}
-	<li><a href="{$base_url}/login.php?action=logout">{t}Logout{/t}</a></li>
+	<li id="login"><a href="{$base_url}/login.php?action=logout">{t}Logout{/t}</a></li>
 {else}
-        <li><a href="{$base_url}/login.php?return={$this_page|urlencode|htmlentities}">{t}Login{/t}</a></li>
+        <li id="login"><a href="{$base_url}/login.php?return={$this_page|urlencode|htmlentities}">{t}Login{/t}</a></li>
 {/if}
 </ul>

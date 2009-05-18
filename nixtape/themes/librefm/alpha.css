@@ -33,9 +33,9 @@ html, body{background: #fff; padding: 0; margin: 0;}
 
 #hd li a:hover{background-color: maroon; color: yellow;}
 
-#login a:link, #login a:visited { color: yellow !important; text-decoration: underline !important; }
+#hd li #login {font-weight: bold;}
 
-#hd li{ display: inline; text-transform: lowercase; margin-right: 20px;}
+#hd li{ display: inline; text-transform: lowercase; margin-right: 20px; border-rright: 1px solid #aaa;}
 
 #banner { height: 345px; position: relative;}
 
