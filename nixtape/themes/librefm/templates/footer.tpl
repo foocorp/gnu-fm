@@ -5,6 +5,8 @@
 	<div id="ft" role="navigation" style="clear:both;">
 	<div class="inner">
 
+	        {include file='adbard.tpl'}
+
 		{include file='language-selector.tpl'}
 
 		<ul>

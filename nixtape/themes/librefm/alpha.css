@@ -381,12 +381,11 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
 
 #adbard-librefm{
         margin: 0 auto 0 auto;
-	height: 248px;
-       	width: 182px;
+	height: 205px;
+       	width: 140px;
        	position: relative;
-       	background: transparent url(images/adbard.png) no-repeat;
-       	margin-top: 1em;
-       	margin-bottom: 1em;
+	padding: 5px; text-align: center;
+	float: right;
 }
 
 .cc-license {font-size: 73%; color: red;}
