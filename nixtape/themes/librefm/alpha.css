@@ -20,7 +20,8 @@ html, body{background: #fff; padding: 0; margin: 0;}
 
 #hd {margin-top: -9px;}
 
-#sidebar {background-color: cyan;}
+
+#hd .inner, #sidebar {background-color: cyan;}
 .yui-u .first {background-color: white;}
 
 #hd {margin-bottom: 8px; height: 40px; position: relative;}
