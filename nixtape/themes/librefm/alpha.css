@@ -46,7 +46,7 @@ html, body{background: #fff; padding: 0; margin: 0;}
 
 #artists{background-color: lightblue; margin: 15px 0 15px 0; padding: 5px;}
 
-#ft{margin-top: 15px; height: 250px;position: relative; background-color: #ececec;}
+#ft{margin-top: 15px; position: relative; background-color: #111;}
 
 #ft p{ text-align: right;}
 
