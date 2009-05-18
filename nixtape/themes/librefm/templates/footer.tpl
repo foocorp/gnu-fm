@@ -1,11 +1,12 @@
+
+	        {include file='adbard.tpl'}
+
 	</div>
 </div>
 </div>
 
 	<div id="ft" role="navigation" style="clear:both;">
 	<div class="inner">
-
-	        {include file='adbard.tpl'}
 
 		{include file='language-selector.tpl'}
 
