@@ -12,11 +12,9 @@
 
 */
 
-html{background: #ececec;}
+html, body{background: #fff; padding: 0; margin: 0;}
 
 #hd {margin-top: -9px;}
-
-#bd {background-color: white; padding: 15px;}
 
 #hd {margin-bottom: 8px; height: 70px; position: relative;}
 
@@ -28,7 +26,7 @@ html{background: #ececec;}
 
 #login a:link, #login a:visited { color: yellow !important; text-decoration: underline !important; }
 
-#hd li{ display: inline; font-size: 21px; text-transform: lowercase; font-weight: bold; margin-right: 20px;}
+#hd li{ display: inline; font-size: 11px; text-transform: lowercase; margin-right: 20px;}
 
 #banner { height: 345px; position: relative;}
 
