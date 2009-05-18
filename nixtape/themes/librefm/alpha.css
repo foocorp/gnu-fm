@@ -20,6 +20,9 @@ html, body{background: #fff; padding: 0; margin: 0;}
 
 #hd {margin-top: -9px;}
 
+.yui-u{background-color: cyan;}
+.yui-u .first {background-color: white;}
+
 #hd {margin-bottom: 8px; height: 40px; position: relative;}
 
 #hd ul{ margin: 0; padding: 0; line-height: 40px; position: absolute; top: 0; right: 20px;}
