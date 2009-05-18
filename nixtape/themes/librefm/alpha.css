@@ -16,9 +16,9 @@ html, body{background: #fff; padding: 0; margin: 0;}
 
 #hd {margin-top: -9px;}
 
-#hd {margin-bottom: 8px; height: 70px; position: relative;}
+#hd {margin-bottom: 8px; height: 40px; position: relative;}
 
-#hd ul{ margin: 0; padding: 0; line-height: 70px; position: absolute; top: 0; right: 20px;}
+#hd ul{ margin: 0; padding: 0; line-height: 40px; position: absolute; top: 0; right: 20px;}
 
 #hd li a:link, #hd li a:visited { color: black; text-decoration: none; padding: 7px; }
 
@@ -26,7 +26,7 @@ html, body{background: #fff; padding: 0; margin: 0;}
 
 #login a:link, #login a:visited { color: yellow !important; text-decoration: underline !important; }
 
-#hd li{ display: inline; font-size: 11px; text-transform: lowercase; margin-right: 20px;}
+#hd li{ display: inline; text-transform: lowercase; margin-right: 20px;}
 
 #banner { height: 345px; position: relative;}
 
@@ -60,10 +60,10 @@ html, body{background: #fff; padding: 0; margin: 0;}
        border: 0;
        margin: 0;
        padding: 0;
-       padding-top: 70px;
+       padding-top: 40px;
        height: 0px !important;
-       height /**/: 70px;
-       width: 950px;
+       height /**/: 40px;
+       width: 120px;
        cursor: pointer;
      }
 
