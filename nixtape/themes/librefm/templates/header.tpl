@@ -43,8 +43,6 @@
            </div>
 	</div>
 
-  {if ($sidebar)}   <div id="bd" role="main"><div id="yui-main"> 
-  <div class="yui-b"><div class="yui-g">{else}
-   <div id="bd" role="main"> 
-    <div class="yui-g">{/if}
-{if ($sidebar)}<div class="inner yui-t5">{else}<div class="inner yui-t7"> {/if}
+   <div id="bd" role="main">
+<div class="inner yui-t7">  
+    <div class="yui-g">
