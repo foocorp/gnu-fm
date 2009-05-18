@@ -1,5 +1,6 @@
 {include file='header.tpl'}
     <div class="yui-u first" id="new-libre-fm">
+    <div class="inner-p">
     <h2>{t}New on Libre.fm...{/t}</h2>
 
     	   <ul>
@@ -18,7 +19,7 @@
 	   <li>Artist</li>
 	   </ul>
 
-   </div>
+   </div>   </div>
     <div class="yui-u" id="sidebar">
 
 	<div id="radio">
