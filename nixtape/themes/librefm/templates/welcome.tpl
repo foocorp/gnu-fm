@@ -23,7 +23,7 @@
 
    </div>
 </div>
-    <div class="yui-u">
+    <div class="yui-u" id="sidebar">
 
 	<div id="radio">
 
@@ -67,18 +67,5 @@
 
 </div>
 </div>
-    <div class="yui-gb" style="width: 100%;">
-        <div class="yui-u first" id="featured-artist">
-
-	<a href="/artist/Brad+Sucks"><img src="/themes/librefm/images/fa-bs.png" alt="Brad Sucks" /></a>
-
-</div>
-        <div class="yui-u" id="featured-group">
-{t}Featured group{/t}
-</div>
-        <div class="yui-u" id="featured-user">
-	<a href="/user/mattl"><img src="/themes/librefm/images/fu-mattl.png" alt="Matt Lee (mattl) from Boston, MA" /></a>
-</div>
-    </div>
 
 {include file='footer.tpl'}
