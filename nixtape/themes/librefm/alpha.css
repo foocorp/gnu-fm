@@ -18,6 +18,8 @@ html, body{background: #fff; padding: 0; margin: 0;}
 
 .inner{width:73.076em;*width:71.25em;}
 
+.inner-p{padding: 10px;}
+
 #hd {margin-top: -9px;}
 
 #hd .inner {position: relative;}
