@@ -21,7 +21,6 @@
 	   </ul>
 
    </div>
-</div>
     <div class="yui-u" id="sidebar">
 
 	<div id="radio">
