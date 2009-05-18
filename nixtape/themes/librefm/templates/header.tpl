@@ -45,4 +45,4 @@
 
    <div id="bd" role="main">
 <div class="inner yui-t7">  
-    <div class="yui-g">
+    <div class="yui-gc">
