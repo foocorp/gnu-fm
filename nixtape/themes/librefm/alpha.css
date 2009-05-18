@@ -466,3 +466,5 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
 .photo{padding: 1px; border 1px solid #ccc; float: left;}
 
 hr {clear: both; height: 0px; color: white !important; background-color: transparent !important;}
+
+#new-libre-fm{background-color: black; color: white; padding-top: 190px;}
