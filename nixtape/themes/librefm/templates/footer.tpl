@@ -1,21 +1,6 @@
-{if ($sidebar)}	</div>
-</div>
 	</div>
-	<div class="yui-b">
-
-<!-- sidebar -->
-
-{if !isset($this_user) || $this_user->anticommercial<>1}
-	{include file='adbard.tpl'}     
-{/if}
-
-	{include file=$sidebartemplate}
-
-</div></div></div>
-
-{else}
-</div></div></div>
-{/if}
+</div>
+</div>
 
 	<div id="ft" role="navigation" style="clear:both;">
 	<div class="inner">

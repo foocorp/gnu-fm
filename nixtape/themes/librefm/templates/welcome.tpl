@@ -1,8 +1,5 @@
 {include file='header.tpl'}
-
-	<div class="yui-gc">
     <div class="yui-u first" id="new-libre-fm" style="background-color: black; color: white;">
-    <div class="inner">
     <h2>{t}New on Libre.fm...{/t}</h2>
 
     	   <ul>
@@ -22,7 +19,6 @@
 	   </ul>
 
    </div>
-</div>
     <div class="yui-u" id="sidebar">
 
 	<div id="radio">
@@ -66,6 +62,4 @@
     </div>
 
 </div>
-</div>
-
 {include file='footer.tpl'}
