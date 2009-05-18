@@ -36,10 +36,12 @@
 
 <div id="try-the-alpha"><a href="http://alpha.libre.fm{$this_page}">This is the current, live, in-development beta version of the site</a></div>
 
-{if ($sidebar)}<div id="doc2" class="yui-t5">{else}<div id="doc2" class="yui-t7"> {/if}
+{if ($sidebar)}<div id="dobbbc2" class="yuibbb-t5">{else}<div id="docbbb2" class="yuibbb-t7"> {/if}
 	<div id="hd" role="navigation">
+	  <div class="inner">
 		<h1 rel="dc:publisher" class="vcard"><a property="foaf:name" rel="foaf:homepage" href="{$base_url}" class="fn org url">Libre.fm</a></h1>
 		{include file='menu.tpl'}
+           </div>
 	</div>
 
 
@@ -47,3 +49,4 @@
   <div class="yui-b"><div class="yui-g">{else}
    <div id="bd" role="main"> 
     <div class="yui-g">{/if}
+     <div class="inner">

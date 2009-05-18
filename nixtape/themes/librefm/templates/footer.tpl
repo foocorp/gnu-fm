@@ -11,13 +11,14 @@
 
 	{include file=$sidebartemplate}
 
-</div></div>
+</div></div></div>
 
 {else}
-</div></div>
+</div></div></div>
 {/if}
 
 	<div id="ft" role="navigation" style="clear:both;">
+	<div class="inner">
 
 		{include file='language-selector.tpl'}
 
@@ -38,6 +39,7 @@
 		</ul>
 
 	</div>
+</div>
 </div>
 </body>
 </html>
