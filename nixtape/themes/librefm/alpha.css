@@ -40,7 +40,7 @@ html, body{background: #fff; padding: 0; margin: 0;}
 
 #links, #moarlinks, #ft{font-size: 85%;}
 
-#ft{margin-top: 15px; height: 102px;position: relative;}
+#ft{margin-top: 15px; height: 102px;position: relative; background-color: #ececec;}
 
 #ft p{ text-align: right;}
 
