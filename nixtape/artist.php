@@ -26,7 +26,7 @@ require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/TagCloud.php');
 
-$artist = new Artist(urldecode($_GET['artist']));
+$artist = new Artist($_GET['artist']);
 
 $smarty->assign('name', $artist->name);
 $smarty->assign('id', $artist->id);
