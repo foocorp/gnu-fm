@@ -240,11 +240,11 @@ class Server {
 			$row = sanitize($i);
 			// this logic should be cleaned up and the free/nonfree decision be moved into the smarty templates
 			if($row['name'] == '') {
-				$clientstr = strip_tags(stripslashes($row['client'])) . ' (unknown, <a href=\"http://ideas.libre.fm/index.php/Client_Codes\">please tell us what this is</a>)';
+				$clientstr = strip_tags(stripslashes($row['client'])) . ' (unknown, <a href="http://ideas.libre.fm/index.php/Client_Codes">please tell us what this is</a>)';
 			} elseif($row["free"] == "Y") {
-				$clientstr = '<a href=\"' . strip_tags(stripslashes($row['url'])) . '\">' . strip_tags(stripslashes($row['name'])) . '</a>';
+				$clientstr = '<a href="' . strip_tags(stripslashes($row['url'])) . '">' . strip_tags(stripslashes($row['name'])) . '</a>';
 			} else {
-				$clientstr = '<a href=\"http://en.wikipedia.org/wiki/Category:Free_media_players\">' . strip_tags(stripslashes($row['name'])) . '</a>';
+				$clientstr = '<a href="http://en.wikipedia.org/wiki/Category:Free_media_players">' . strip_tags(stripslashes($row['name'])) . '</a>';
 			}
 			$row['clientstr'] = $clientstr;
 			$row['userurl'] = Server::getUserURL($row['username']);
