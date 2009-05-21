@@ -59,7 +59,7 @@ $tr[1] = rand(0,$avail-1);
 $tr[2] = rand(0,$avail-1);
 $tr[3] = rand(0,$avail-1);
 $tr[4] = rand(0,$avail-1);
-$tr = array_unique($tr, SORT_NUMERIC);
+$tr = array_unique($tr);
 // we should probably shuffle these here
 
 $radiotracks = array();
