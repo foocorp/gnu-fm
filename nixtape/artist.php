@@ -26,7 +26,13 @@ require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/TagCloud.php');
 
-$artist = new Artist($_GET['artist']);
+try {
+	$artist = new Artist($_GET['artist']);
+} catch (exception $e) {
+        $smarty->assign('error', 'Artist not found.');
+        $smarty->assign('details', 'The artist '.($artist).' was not found in the database.');
+	$smarty->display("error.tpl");
+}
 
 $smarty->assign('name', $artist->name);
 $smarty->assign('id', $artist->id);
@@ -52,6 +58,5 @@ $smarty->assign('extra_head_links', array(
 	));
 
 $smarty->display("artist.tpl");
-
 
 ?>
