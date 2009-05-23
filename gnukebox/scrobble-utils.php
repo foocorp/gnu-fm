@@ -33,7 +33,7 @@ function usernameFromSID($session_id)
 	$adodb->Execute('DELETE FROM Scrobble_Sessions WHERE expires < ' . time());
 
 	try {
-		$res = $adodb->GetOne('SELECT user FROM Scrobble_Sessions WHERE sessionid = ' . $adodb->qstr($session_id)); // get the username from the table
+		$res = $adodb->GetOne('SELECT userid FROM Scrobble_Sessions WHERE sessionid = ' . $adodb->qstr($session_id)); // get the username from the table
 	}
 	catch (exception $e) {
 		die('FAILED ufs ' . $e->getMessage() . '\n');
