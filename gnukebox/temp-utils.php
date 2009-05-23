@@ -28,7 +28,7 @@ function username_to_uniqueid($username) {
 
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	try {
-		$uniqueid = GetOne('SELECT uniqueid from Users where lower(username) = lower('.$adodb->qstr($username).')');
+		$uniqueid = $adodb->GetOne('SELECT uniqueid from Users where lower(username) = lower('.$adodb->qstr($username).')');
 	} catch (exception $e) {
 		return null;
 	}
