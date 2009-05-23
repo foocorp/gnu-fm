@@ -264,4 +264,21 @@ class User {
 
 		return $result;
 	}
+
+	public function getTotalTracks($since=null) {
+		global $adodb;
+
+		if ($since) {
+			$query = 'SELECT COUNT(*) FROM Scrobbles WHERE username = '.$adodb->qstr($this->name).' AND time > '.(int)($since);
+		} else {
+			$query = 'SELECT COUNT(*) FROM Scrobbles WHERE username = '.$adodb->qstr($this->name);
+		}
+		try {
+			$tracks = $adodb->CacheGetOne(200, $query)
+		} catch (exception $e) {
+			$tracks = 0;
+		}
+
+		return $tracks;
+	}
 }
