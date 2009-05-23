@@ -21,7 +21,7 @@
 
 require_once('database.php');
 require_once('data/User.php');
-require_once('../turtle/temp-utils.php'); // this is extremely dodgy and shameful
+require_once($install_path . '/../turtle/temp-utils.php'); // this is extremely dodgy and shameful
 
 session_start();
 if(isset($_COOKIE['session_id'])) {
