@@ -54,9 +54,10 @@ if(!$authed) {
 	die("BADAUTH\n");
 }
 
+$uniqueid = username_to_uniqueid($username);
 $session_id = md5($auth_token . time());
-$sql = "INSERT INTO Scrobble_Sessions(username, sessionid, client, expires) VALUES ("
-	. $adodb->qstr($username) . ","
+$sql = "INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires) VALUES ("
+	. ($uniqueid) . ","
 	. $adodb->qstr($session_id) . ","
 	. $adodb->qstr($client) . ","
 	. (time() + 86400) . ")";

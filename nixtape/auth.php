@@ -26,7 +26,7 @@ if(isset($_COOKIE['session_id'])) {
 	$err = 0;
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	try {
-		$row = $adodb->GetRow('SELECT username FROM Scrobble_Sessions WHERE '
+		$row = $adodb->GetRow('SELECT user FROM Scrobble_Sessions WHERE '
 				. 'sessionid = ' . $adodb->qstr($_COOKIE['session_id'])
 				. ' AND expires > ' . (int)(time()));
 	}
@@ -40,7 +40,8 @@ if(isset($_COOKIE['session_id'])) {
 		session_destroy();
 	} else {
 		$logged_in = true;
-		$this_user = new User($row['username']);
+		$username = uniqueid_to_username();
+		$this_user = new User($username);
 	}
 }
 ?>
