@@ -30,7 +30,7 @@ function username_to_uniqueid($username) {
 	try {
 		$uniqueid = $adodb->GetOne('SELECT uniqueid from Users where lower(username) = lower('.$adodb->qstr($username).')');
 	} catch (exception $e) {
-		return null;
+		return 0;
 	}
 
 	return $uniqueid;
@@ -43,7 +43,7 @@ function uniqueid_to_username($uniqueid) {
 	try {
 		$username = $adodb->GetOne('SELECT username from Users where uniqueid = '.($uniqueid));
 	} catch (exception $e) {
-		return null;
+		return "BROKEN";
 	}
 
 	return $username;
