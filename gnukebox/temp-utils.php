@@ -41,7 +41,7 @@ function uniqueid_to_username($uniqueid) {
 
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	try {
-		$username = GetOne('SELECT username from Users where uniqueid) = '.($uniqueid));
+		$username = $adodb->GetOne('SELECT username from Users where uniqueid) = '.($uniqueid));
 	} catch (exception $e) {
 		return null;
 	}
