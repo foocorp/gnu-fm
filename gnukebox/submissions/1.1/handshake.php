@@ -26,6 +26,7 @@
 
 require_once('auth-utils.php');
 require_once('config.php');
+require_once('temp-utils.php');
 
 $supported_protocols = array("1.1");
 
