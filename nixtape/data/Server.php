@@ -185,7 +185,7 @@ class Server {
 		try {
 		if($username) {
 			$data = $adodb->CacheGetAll(60, 'SELECT
-						username,
+						ss.userid,
 						n.artist,
 						n.track,
 						n.album,
@@ -196,7 +196,7 @@ class Server {
 						n.mbid,
 						t.license
 					FROM Now_Playing n
-					LEFT OUTER JOIN Scrobble_Sessions
+					LEFT OUTER JOIN Scrobble_Sessions ss
 						ON n.sessionid=Scrobble_Sessions.sessionid
 					LEFT OUTER JOIN ClientCodes
 						ON Scrobble_Sessions.client=ClientCodes.code
@@ -209,7 +209,7 @@ class Server {
 					ORDER BY t.streamable DESC, n.expires DESC LIMIT ' . (int)($number));
 		} else {
 			$data = $adodb->CacheGetAll(60, 'SELECT
-						username,
+						ss.userid,
 						n.artist,
 						n.track,
 						n.album,
@@ -220,7 +220,7 @@ class Server {
 						n.mbid,
 						t.license
 					FROM Now_Playing n
-					LEFT OUTER JOIN Scrobble_Sessions
+					LEFT OUTER JOIN Scrobble_Sessions ss
 						ON n.sessionid=Scrobble_Sessions.sessionid
 					LEFT OUTER JOIN ClientCodes
 						ON Scrobble_Sessions.client=ClientCodes.code
@@ -247,7 +247,8 @@ class Server {
 				$clientstr = '<a href="http://en.wikipedia.org/wiki/Category:Free_media_players">' . strip_tags(stripslashes($row['name'])) . '</a>';
 			}
 			$row['clientstr'] = $clientstr;
-			$row['userurl'] = Server::getUserURL($row['username']);
+			$username = uniqueid_to_username($row['userid']);
+			$row['userurl'] = Server::getUserURL($username);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
 			$row['trackurl'] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
 
