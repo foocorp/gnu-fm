@@ -274,7 +274,7 @@ class User {
 			$query = 'SELECT COUNT(*) FROM Scrobbles WHERE username = '.$adodb->qstr($this->name);
 		}
 		try {
-			$tracks = $adodb->CacheGetOne(200, $query)
+			$tracks = $adodb->CacheGetOne(200, $query);
 		} catch (exception $e) {
 			$tracks = 0;
 		}
