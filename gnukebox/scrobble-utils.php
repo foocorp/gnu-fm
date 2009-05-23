@@ -20,6 +20,7 @@
 */
 
 require_once('database.php');	// include the database connection string
+require_once('temp-utils.php');
 
 function usernameFromSID($session_id)
 {
@@ -241,32 +242,6 @@ function validateMBID ($input) {
 		return null;
 	}
 
-}
-
-function username_to_uniqueid($username) {
-	global $adodb;
-
-	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-	try {
-		$uniqueid = GetOne('SELECT uniqueid from Users where lower(username) = lower('.$adodb->qstr($username).')');
-	} catch (exception $e) {
-		return null;
-	}
-
-	return $uniqueid;
-}
-
-function uniqueid_to_username($uniqueid) {
-	global $adodb;
-
-	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-	try {
-		$username = GetOne('SELECT username from Users where uniqueid) = '.($uniqueid));
-	} catch (exception $e) {
-		return null;
-	}
-
-	return $username;
 }
 
 ?>
