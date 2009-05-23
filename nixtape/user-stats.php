@@ -52,7 +52,14 @@ try {
 		$smarty->assign('user_daystats',$aUserDayStat);
 	} catch (exception $e) {}
 
-	$smarty->assign('toptracks', $user->getTopTracks(40));
+	try {
+		$smarty->assign('toptracks', $user->getTopTracks(40));
+	} catch (exception $e) {
+		$smarty->assign('error', 'Error!');
+		$smarty->assign('details', 'Couldn\'t get your top tracks!');
+		$smarty->display('error.tpl');
+		die();
+	}
 	$smarty->assign('totaltracks', $user->getTotalTracks());
 
 	$smarty->assign('me', $user);
