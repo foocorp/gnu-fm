@@ -42,20 +42,22 @@ if(!in_array($protocol, $supported_protocols))  {
 
 $timestamp = time();
 
+$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 try {
-	$res = $adodb->GetOne("SELECT password FROM Users WHERE username = ". $adodb->qstr($username));
+	$row = $adodb->GetRow('SELECT uniqueid,password FROM Users WHERE username = '. $adodb->qstr($username));
 }
 catch (exception $e) {
 	die("FAILED " . $e->getMessage() . "\n");
 }
-if(!$res) {
+if(!$row) {
 	die("BADUSER\n");
 }
-$password = $res;
+$password = $row['password'];
+$uniqueid = $row['uniqueid'];
 $session_id = md5($password . $timestamp);
 try {
-$res = $adodb->Execute("INSERT INTO Scrobble_Sessions(username, sessionid, client, expires) VALUES ("
-	. $adodb->qstr($username, "text") . ","
+$res = $adodb->Execute("INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires) VALUES ("
+	. ($uniqueid) . ","
 	. $adodb->qstr($session_id, "text") . ","
 	. $adodb->qstr($client, "text") . ","
 	. $adodb->qstr(time() + 86400) . ")");

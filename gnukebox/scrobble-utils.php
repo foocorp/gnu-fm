@@ -32,7 +32,7 @@ function usernameFromSID($session_id)
 	$adodb->Execute('DELETE FROM Scrobble_Sessions WHERE expires < ' . time());
 
 	try {
-		$res = $adodb->GetOne('SELECT username FROM Scrobble_Sessions WHERE sessionid = ' . $adodb->qstr($session_id)); // get the username from the table
+		$res = $adodb->GetOne('SELECT user FROM Scrobble_Sessions WHERE sessionid = ' . $adodb->qstr($session_id)); // get the username from the table
 	}
 	catch (exception $e) {
 		die('FAILED ufs ' . $e->getMessage() . '\n');
@@ -45,7 +45,8 @@ function usernameFromSID($session_id)
 		// the user has no session
 	}
 
-	return $res;
+	$username = uniqueid_to_username($res);
+	return $username;
 
 	       // return the first user
 }
@@ -229,16 +230,43 @@ $image = $aws_xml->Items->Item->MediumImage->URL;
 }
 
 function validateMBID ($input) {
-if(isset($input)) {
-	$input = strtolower(rtrim($input));
-	if(preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $input)) {
-		return $input;
+	if(isset($input)) {
+		$input = strtolower(rtrim($input));
+		if(preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $input)) {
+			return $input;
+		} else {
+			return null;
+		}
 	} else {
 		return null;
 	}
-} else {
-	return null;
-}
 
 }
+
+function username_to_uniqueid($username) {
+	global $adodb;
+
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	try {
+		$uniqueid = GetOne('SELECT uniqueid from Users where lower(username) = lower('.$adodb->qstr($username).')');
+	} catch (exception $e) {
+		return null;
+	}
+
+	return $uniqueid;
+}
+
+function uniqueid_to_username($uniqueid) {
+	global $adodb;
+
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	try {
+		$username = GetOne('SELECT username from Users where uniqueid) = '.($uniqueid));
+	} catch (exception $e) {
+		return null;
+	}
+
+	return $username;
+}
+
 ?>

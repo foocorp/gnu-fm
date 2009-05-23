@@ -203,8 +203,8 @@ class User {
 	function getScrobbleSession() {
 		global $adodb;
 		$session_id = md5(mt_rand() . time());
-		$sql = 'INSERT INTO Scrobble_Sessions(username, sessionid, client, expires) VALUES ('
-			. $adodb->qstr($this->name) . ','
+		$sql = 'INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires) VALUES ('
+			. ($this->uniqueid) . ','
 			. $adodb->qstr($session_id) . ','
 			. '\'lfm\','
 			. (time() + 86400) . ')';

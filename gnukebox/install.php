@@ -183,7 +183,7 @@ if (isset($_POST['install'])) {
 		stid INTEGER)");
 
 	$adodb->Execute("CREATE TABLE Scrobble_Sessions(
-		username VARCHAR(64) REFERENCES Users(username),
+		userid INTEGER REFERENCES Users(uniqueid),
 		sessionid VARCHAR(32) PRIMARY KEY,
 		client CHAR(3),
 		expires INTEGER)");

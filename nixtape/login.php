@@ -42,14 +42,14 @@ if(isset($_POST['login'])) {
 
 	if(empty($errors)) {
 		try {
-		$res = $adodb->GetOne('SELECT username FROM Users WHERE '
+		$userid = $adodb->GetOne('SELECT uniqueid FROM Users WHERE '
 			. ' lower(username) = ' . $adodb->qstr(strtolower($username))
 			. ' AND password = ' . $adodb->qstr(md5($password)) . ' AND active = 1');
 		}
 		catch (exception $e) {
 			$errors .= 'A database error happened.';
 		}
-		if(!$res) {
+		if(!$userid) {
 			$errors .= 'Invalid username or password.';
 			$smarty->assign('invalid', true);
 		} else {
@@ -60,8 +60,8 @@ if(isset($_POST['login'])) {
 			} else {
 				$session_time = time() + 86400; // 1 day
 			}
-			$adodb->Execute('INSERT INTO Scrobble_Sessions (username, sessionid, expires) VALUES ('
-				. $adodb->qstr($username) . ', '
+			$adodb->Execute('INSERT INTO Scrobble_Sessions (userid, sessionid, expires) VALUES ('
+				. ($userid) . ', '
 				. $adodb->qstr($session_id) . ', '
 				. (int)($session_time) . ')');
 

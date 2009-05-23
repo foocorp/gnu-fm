@@ -46,7 +46,7 @@ catch (exception $e) {
 		$smarty->display('error.tpl');
 		die ();
 	} else {
-		$adodb->Execute('DELETE FROM Scrobble_Sessions WHERE username = ' . $adodb->qstr($username));
+		$adodb->Execute('DELETE FROM Scrobble_Sessions WHERE userid = ' . $adodb->qstr($this_user->uniqueid));
 		$adodb->Execute('DELETE FROM Delete_Request WHERE username = ' . $adodb->qstr($username));
 		$adodb->Execute('DELETE FROM Auth WHERE username = ' . $adodb->qstr($username));
 		$adodb->Execute('DELETE FROM Group_Members WHERE member = ' . (int)($this_user->uniqueid));
