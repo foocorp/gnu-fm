@@ -21,6 +21,7 @@
 header('Content-type: text/html; charset=utf-8');
 require_once('database.php');
 require_once('utils/human-time.php');
+require_once('temp-utils.php');
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
@@ -150,7 +151,7 @@ if ($req_user) {
 
 		<?php
 			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-			$res = $adodb->GetAll('SELECT username, artist, track, client, ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT 10');
+			$res = $adodb->GetAll('SELECT userid, artist, track, client, ClientCodes.name, ClientCodes.url from Now_Playing LEFT OUTER JOIN Scrobble_Sessions ON Now_Playing.sessionid=Scrobble_Sessions.sessionid LEFT OUTER JOIN ClientCodes ON Scrobble_Sessions.client=ClientCodes.code ORDER BY Now_Playing.expires DESC LIMIT 10');
 			if(!$res) {
 				die("sql error");
 			}
@@ -160,7 +161,7 @@ if ($req_user) {
 				} else {
 				  $client = "<a href=\"" . strip_tags(stripslashes($row["url"])) . "\">" . strip_tags(stripslashes($row["name"])) . "</a>";
 				}
-				echo "<p>" . strip_tags(stripslashes($row["username"])) . " is listening to " . strip_tags(stripslashes($row["track"])) . " by " . strip_tags(stripslashes($row["artist"])) . " with " . $client . "</p>";
+				echo "<p>" . strip_tags(stripslashes(userid_to_username($row["userid"]))) . " is listening to " . strip_tags(stripslashes($row["track"])) . " by " . strip_tags(stripslashes($row["artist"])) . " with " . $client . "</p>";
 			}
 		?>
 
