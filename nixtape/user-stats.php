@@ -53,6 +53,7 @@ try {
 	} catch (exception $e) {}
 
 	$smarty->assign('toptracks', $user->getTopTracks(40));
+	$smarty->assign('totaltracks', $user->getTotalTracks());
 
 	$smarty->assign('me', $user);
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));

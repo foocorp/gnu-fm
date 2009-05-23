@@ -4,6 +4,10 @@
 
 {include file='maxiprofile.tpl'}
 
+<ul>
+<li>Total tracks: {$totaltracks}</li>
+</ul>
+
 <h3 id="stats_by_artist">{t name=$me->name|escape:'html':'UTF-8'}%1's most played artists{/t}</h3>
 <table class="stats_artists" about="{$me->id}">
 	{section name=i loop=$user_playstats}
