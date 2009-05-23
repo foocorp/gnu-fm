@@ -43,7 +43,7 @@ function uniqueid_to_username($uniqueid) {
 	try {
 		$username = $adodb->GetOne('SELECT username from Users where uniqueid = '.($uniqueid));
 	} catch (exception $e) {
-		return "BROKEN";
+		return "BROKEN($uniqueid)";
 	}
 
 	return $username;
