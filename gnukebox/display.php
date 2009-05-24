@@ -43,7 +43,11 @@ require_once('temp-utils.php');
 
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
+	try {
+
 	$res = $adodb->CacheGetAll(60, "SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 100");
+
+	}
 
 	catch (exception $e)
 	{
