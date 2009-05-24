@@ -1,6 +1,6 @@
 Libre.fm Coding Standards (Adapted from phpGroupWare standards)
 
-Please comply with the following standard when working on Libre.fm if you 
+Please comply with the following standard when working on Libre.fm if you
 want your patches accepted and modules included in supported releases.
 
 1)	Format your code so that we can read it, please!
@@ -9,12 +9,12 @@ want your patches accepted and modules included in supported releases.
 	developers to view a tab as however many spaces as they prefer - we use 4 spaces.
 	Spaces do not allow this.
 
-3)	Use ' instead of " for strings, where substitutions aren't required.  This is a 
-	performance issue, and prevents	a lot of inconsistent coding styles.  When using 
+3)	Use ' instead of " for strings, where substitutions aren't required.  This is a
+	performance issue, and prevents	a lot of inconsistent coding styles.  When using
 	substitutions, use curly braces around your variables - like so:
 	$var = "my_var: {$my_var}";
 
-4)	Comments go on the line ABOVE the code, NOT to the right of the code, unless it 
+4)	Comments go on the line ABOVE the code, NOT to the right of the code, unless it
 	is very short.
 
 5)	All functions and methods are to be documented using PhpDocumentor - http://phpdoc.org
@@ -85,7 +85,7 @@ want your patches accepted and modules included in supported releases.
 
 16)	Files should be in either ASCII or UTF-8 encoding with UNIX line endings.
 
-17)	Files should not end with an ending php tag "?>".  Any whitespace after 
+17)	Files should not end with an ending php tag "?>".  Any whitespace after
 	the closing tag is sent to the browser and cause errors, so don't include
 	them.
 
