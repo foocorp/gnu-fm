@@ -24,7 +24,9 @@ done
 
    echo 'COPY (SELECT Artist,Track,Album from Scrobbles) TO STDOUT WITH CSV HEADER;' | psql -q >> 'anonymous'
 
-    mv anonymous /home/librefm/turtle/data/
+    bzip2 -q -z --best anonymous anonymous.bz2
+    rm anonymous
+    mv anonymous.bz2 /home/librefm/turtle/data/
 
 if [ -x /usr/bin/lockfile-create ]; then
 	kill "${LOCKER}"
