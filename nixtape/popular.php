@@ -26,35 +26,12 @@ require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/TagCloud.php');
 
-try {
-	$artist = new Artist($_GET['artist']);
-} catch (exception $e) {
-        $smarty->assign('error', 'Artist not found.');
-        $smarty->assign('details', 'The artist '.($_GET['artist']).' was not found in the database.');
-	$smarty->display("error.tpl");
-	die();
+$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
+if ($aTagCloud) {
+        $smarty->assign('tagcloud', $aTagCloud);
 }
 
-$smarty->assign('name', $artist->name);
-$smarty->assign('id', $artist->id);
-$smarty->assign('bio_summary', $artist->bio_summary);
 
-$aArtistAlbums = $artist->getAlbums();
-if ($aArtistAlbums) {
-	$smarty->assign('albums', $aArtistAlbums);
-}
-
-$smarty->assign('extra_head_links', array(
-		array(
-			'rel' => 'meta',
-			'type' => 'application/rdf+xml' ,
-			'title' => 'FOAF',
-			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $artist->getURL()))
-			)
-	));
-
-$smarty->display("artist.tpl");
-
-}
+$smarty->display("popular.tpl");
 
 ?>
