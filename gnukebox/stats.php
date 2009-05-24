@@ -32,7 +32,7 @@ require_once('temp-utils.php');
 <title>Statistics</title>
 </head>
 <body>
-		<h1>Statistics</h1>
+		<h1><a href="/">GNUkebox</a> Statistics</h1>
 
 		<?php
 			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);

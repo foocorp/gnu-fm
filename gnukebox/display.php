@@ -33,7 +33,7 @@ require_once('temp-utils.php');
 </head>
 <body>
 
-<h1><a href="<?php echo $submissions_server ?>">GNUkebox</a></h1>
+<h1>GNUkebox <a href="stats.php">statistics</a></h1>
 
        <?php include('info.html'); ?>
 
