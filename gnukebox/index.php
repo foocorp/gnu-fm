@@ -48,6 +48,5 @@ if (isset($_GET['hs']) && isset($_GET['p'])) {
 	 { 
 	 echo "<h1>GNUkebox!</h1><p>Please configure your system for " . $_SERVER['SERVER_NAME'] . "</p>"; }
 
-?>
-}
+	 }
 ?>
