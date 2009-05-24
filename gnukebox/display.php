@@ -30,12 +30,10 @@ require_once('temp-utils.php');
 <head>
    <title>GNUkebox version <?php echo $version; ?></title>
    <meta name="author" content="FooCorp catalogue number FOO200 and contributors" />
-   <link rel="stylesheet" href="<?php echo $submissions_server ?>/reset-fonts-grids.css" type="text/css">
-   <link rel="stylesheet" href="<?php echo $submissions_server ?>/base.css" type="text/css">
 </head>
 <body>
 
-<h1><a href="<?php echo $submissions_server ?>">Header</a></h1>
+<h1><a href="<?php echo $submissions_server ?>">GNUkebox</a></h1>
 
        <h2>Last 100 tracks received</h2>
 
@@ -56,13 +54,11 @@ require_once('temp-utils.php');
 
 ?>
 
-			<tr><th>User</th><th>Artist</th><th>Track</th><th>Time</th></tr>
-
 <?php
 
 			foreach($res as &$row){
 
-			echo "<li>" . $row['user'] . " listened to " . $row['artist'] . "&mdash;" . $row['track'] . 'at <abbr title=\'' . strftime('%c', $row['time']) . '\'>' . human_timestamp($row['time']) . '</abbr></li>';
+			echo "<li>" . $row['username'] . " listened to " . $row['artist'] . "&mdash;" . $row['track'] . 'at <abbr title=\'' . strftime('%c', $row['time']) . '\'>' . human_timestamp($row['time']) . '</abbr></li>';
 
 			}
 
