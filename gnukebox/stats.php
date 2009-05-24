@@ -34,6 +34,8 @@ require_once('temp-utils.php');
 <body>
 		<h1><a href="/">GNUkebox</a> Statistics</h1>
 
+		<p>Please note, results are cached for approximately 9 minutes.</p>
+
 		<?php
 			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 			$total = $adodb->CacheGetOne(500, 'SELECT COUNT(*) as total from Scrobbles');
