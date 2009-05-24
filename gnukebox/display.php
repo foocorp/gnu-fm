@@ -58,8 +58,7 @@ require_once('temp-utils.php');
 
 			echo "<li>" . $row['username'] . " listened to
 			" . $row['artist'] . "&mdash;" . $row['track']
-			. " at " . $row['time'])
-			. "</li>\n";
+			. " at " . $row['time'] . "</li>\n";
 
 			} 
 			?>
