@@ -23,6 +23,8 @@ require_once('database.php');
 require_once('utils/human-time.php');
 require_once('temp-utils.php');
 
+if ($display-things) {
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
  "http://www.w3.org/TR/html4/strict.dtd">
@@ -34,6 +36,8 @@ require_once('temp-utils.php');
 <body>
 
 <h1><a href="<?php echo $submissions_server ?>">GNUkebox</a></h1>
+
+       <?php include('info.html'); ?>
 
        <h2>Last 100 tracks received</h2>
 
@@ -71,3 +75,4 @@ require_once('temp-utils.php');
 
 </body>
 </html>
+} else { echo "<h1>GNUkebox!</h1><p>" . $_SERVER['SERVER-NAME'] . "</p>"; }
