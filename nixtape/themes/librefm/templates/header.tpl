@@ -34,7 +34,17 @@
 
 <body typeof="foaf:Document">
 
-<div id="try-the-alpha"><a href="http://alpha.libre.fm{$this_page}">This is the current, live, in-development beta version of the site</a></div>
+<div id="project-links">
+
+<ul>
+<li><a href="http://libre.fm/">Libre.fm</a></li>
+<li><a href="http://libre.fm#what/">What is Libre.fm?</a></li>
+<li><a href="http://libre.fm#why/">Why use Libre.fm?</a></li>
+<li><a href="http://libre.fm#artists/">What's in it for artists?</a></li>
+<li><a href="http://libre.fm#users/">What's in it for users?</a></li>
+</ul>
+
+</div>
 
 	<div id="hd" role="navigation">
 	  <div class="inner">
