@@ -75,4 +75,10 @@ if ($display-things) {
 
 </body>
 </html>
-} else { echo "<h1>GNUkebox!</h1><p>" . $_SERVER['SERVER-NAME'] . "</p>"; }
+<?php
+
+} 
+else
+ { echo "<h1>GNUkebox!</h1><p>" . $_SERVER['SERVER-NAME'] . "</p>"; }
+
+?>
