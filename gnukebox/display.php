@@ -62,7 +62,7 @@ require_once('temp-utils.php');
 
 			}
 
-	echo "</ul>\";
+	echo "</ul>\"; ?>
 
 </body>
 </html>
