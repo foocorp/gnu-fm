@@ -1,6 +1,6 @@
 <?php
 
-/* Libre.fm -- a free network service for sharing your music listening habits
+/* GNUkebox -- a free software server for recording your listening habits
 
    Copyright (C) 2009 Libre.fm Project
 
