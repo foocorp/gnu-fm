@@ -61,12 +61,10 @@ require_once('temp-utils.php');
 			. "at " . human_timestamp($row['time'])
 			. "</li>\n";
 
-			}
+			} 
+			?>
 
-	echo "</ul>\"; 
-
-	?>
+	</ul>
 
 </body>
 </html>
-
