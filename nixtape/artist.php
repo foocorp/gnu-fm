@@ -32,6 +32,7 @@ try {
         $smarty->assign('error', 'Artist not found.');
         $smarty->assign('details', 'The artist '.($_GET['artist']).' was not found in the database.');
 	$smarty->display("error.tpl");
+	die();
 }
 
 $smarty->assign('name', $artist->name);
