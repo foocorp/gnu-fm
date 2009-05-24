@@ -58,7 +58,7 @@ require_once('temp-utils.php');
 
 			echo "<li>" . $row['username'] . " listened to
 			" . $row['artist'] . "&mdash;" . $row['track']
-			. " at " . $row['time'] . "</li>\n";
+			. " (" . human_timestamp($row['time']) . ")</li>\n";
 
 			} 
 			?>
