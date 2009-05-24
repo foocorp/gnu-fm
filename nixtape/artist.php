@@ -26,6 +26,8 @@ require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/TagCloud.php');
 
+if (!$_GET['popular']) {
+
 try {
 	$artist = new Artist($_GET['artist']);
 } catch (exception $e) {
@@ -38,11 +40,6 @@ try {
 $smarty->assign('name', $artist->name);
 $smarty->assign('id', $artist->id);
 $smarty->assign('bio_summary', $artist->bio_summary);
-
-$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
-if ($aTagCloud) {
-        $smarty->assign('tagcloud', $aTagCloud);
-}
 
 $aArtistAlbums = $artist->getAlbums();
 if ($aArtistAlbums) {
@@ -59,5 +56,18 @@ $smarty->assign('extra_head_links', array(
 	));
 
 $smarty->display("artist.tpl");
+
+}
+
+else {
+
+$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
+if ($aTagCloud) {
+        $smarty->assign('tagcloud', $aTagCloud);
+}
+
+$smarty->display("top-artists.tpl");
+
+}
 
 ?>
