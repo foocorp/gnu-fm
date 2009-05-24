@@ -54,11 +54,12 @@ require_once('temp-utils.php');
 
 	echo "<ul>\n";
 
-
-
 			foreach($res as &$row){
 
-			echo "<li>" . $row['username'] . " listened to " . $row['artist'] . "&mdash;" . $row['track'] . 'at <abbr title=\'' . strftime('%c', $row['time']) . '\'>' . human_timestamp($row['time']) . '</abbr></li>\n';
+			echo "<li>" . $row['username'] . " listened to
+			" . $row['artist'] . "&mdash;" . $row['track']
+			. "at " . human_timestamp($row['time'])
+			. "</li>\n";
 
 			}
 
