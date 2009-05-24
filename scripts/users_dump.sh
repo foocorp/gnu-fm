@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /home/librefm/turtle/data/wip || exit 1
+cd /home/librefm/wip || exit 1
 
 if [ -x /usr/bin/lockfile-create ]; then
 	lockfile-create /var/lock/gnukebox-userdump.lock
@@ -11,7 +11,7 @@ else
 fi
 
 #we rely on lack of whitespace here
-LIST=$(echo "SELECT DISTINCT username FROM Users;" | psql -q -t)
+LIST=$(echo "SELECT DISTINCT username FROM Users where public_export = 1;" | psql -q -t)
 
 for I in $LIST; do
 
@@ -19,8 +19,12 @@ for I in $LIST; do
     
     echo 'COPY (SELECT * FROM Scrobbles where username='"'$I'"') TO STDOUT WITH CSV HEADER;' | psql -q >> $I.text.utf8
 
-    mv -- $I.text.utf8 /home/librefm/turtle/data/
+    mv -- $I.text.utf8 /home/librefm/turtle/data/users/
 done
+
+   echo 'COPY (SELECT Artist,Track,Album from Scrobbles) TO STDOUT WITH CSV HEADER;' | psql -q >> 'anonymous'
+
+    mv anonymous /home/librefm/turtle/data/
 
 if [ -x /usr/bin/lockfile-create ]; then
 	kill "${LOCKER}"
