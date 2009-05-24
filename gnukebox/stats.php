@@ -37,19 +37,19 @@ require_once('temp-utils.php');
 		<?php
 			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 			$total = $adodb->CacheGetOne(60, 'SELECT COUNT(*) as total from Scrobbles');
-			if(!$res) {
+			if(!$total) {
 				die("sql error");
 			}
 			echo "<p>" . stripslashes($total) . " listens.</p>";
 
 			$total = $adodb->CacheGetOne(120, 'SELECT COUNT(*) as total from Track');
-			if(!$res) {
+			if(!$total) {
 				die("sql error");
 			}
 			echo "<p>" . stripslashes($total) . " unique tracks.</p>";
 
 			$total = $adodb->CacheGetOne(720, 'SELECT COUNT(*) as total from Users');
-			if(!$res) {
+			if(!$total) {
 				die("sql error");
 			}
 			echo "<p>" . stripslashes($total) . " users.</p>";
