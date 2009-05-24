@@ -23,8 +23,6 @@ require_once('database.php');
 require_once('utils/human-time.php');
 require_once('temp-utils.php');
 
-if ($display-things) {
-
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
  "http://www.w3.org/TR/html4/strict.dtd">
@@ -75,10 +73,3 @@ if ($display-things) {
 
 </body>
 </html>
-<?php
-
-} 
-else
- { echo "<h1>GNUkebox!</h1><p>Please configure your system for " . $_SERVER['SERVER_NAME'] . "</p>"; }
-
-?>

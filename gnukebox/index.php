@@ -38,6 +38,16 @@ if (isset($_GET['hs']) && isset($_GET['p'])) {
 	}
 } else {
 	//If we're not handshaking then just display some nice stats
+
+	if ($display-things) {
+
 	require_once('display.php');
+
+	} 
+	else
+	 { 
+	 echo "<h1>GNUkebox!</h1><p>Please configure your system for " . $_SERVER['SERVER_NAME'] . "</p>"; }
+
+?>
 }
 ?>
