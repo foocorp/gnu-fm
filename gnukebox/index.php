@@ -24,7 +24,7 @@ require_once('version.php');
 
 // Display things?
 
-$display-things == 1;
+$displaythings = True;
 
 if (!isset($config_version) || $config_version != $version) {
 	die("Configuration file is out of date. Please delete it (and associated database) and <a href='install.php'>reinstall</a>."); //TODO: Upgrade script for release versions
@@ -39,7 +39,7 @@ if (isset($_GET['hs']) && isset($_GET['p'])) {
 } else {
 	//If we're not handshaking then just display some nice stats
 
-	if ($display-things) {
+	if ($displaythings) {
 
 	require_once('display.php');
 
