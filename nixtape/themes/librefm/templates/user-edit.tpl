@@ -99,6 +99,3 @@
 </dl>
 
 {include file='footer.tpl'}
-</dl>
-
-{include file='footer.tpl'}
