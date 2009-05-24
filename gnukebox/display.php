@@ -58,13 +58,17 @@ require_once('temp-utils.php');
 
 			echo "<li>" . $row['username'] . " listened to
 			" . $row['artist'] . "&mdash;" . $row['track']
-			. "at " . human_timestamp($row['time'])
+			. " at " . $row['time'])
 			. "</li>\n";
 
 			} 
 			?>
 
 	</ul>
+
+	<hr>
+
+	<address>Powered by <a href="http://gnukebox.org">GNUkebox</a> &mdash; <a href="http://svn.savannah.gnu.org/viewvc/trunk/gnukebox/?root=librefm">Source code</a></address>
 
 </body>
 </html>
