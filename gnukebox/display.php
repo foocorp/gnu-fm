@@ -52,18 +52,17 @@ require_once('temp-utils.php');
 		die($e->getMessage());
 	}
 
-?>
+	echo "<ul>\n";
 
-<?php
+
 
 			foreach($res as &$row){
 
-			echo "<li>" . $row['username'] . " listened to " . $row['artist'] . "&mdash;" . $row['track'] . 'at <abbr title=\'' . strftime('%c', $row['time']) . '\'>' . human_timestamp($row['time']) . '</abbr></li>';
+			echo "<li>" . $row['username'] . " listened to " . $row['artist'] . "&mdash;" . $row['track'] . 'at <abbr title=\'' . strftime('%c', $row['time']) . '\'>' . human_timestamp($row['time']) . '</abbr></li>\n';
 
 			}
 
-		?>
-		</ul>
+	echo "</ul>\";
 
 </body>
 </html>
