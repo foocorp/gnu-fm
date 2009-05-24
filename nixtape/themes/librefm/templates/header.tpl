@@ -34,18 +34,6 @@
 
 <body typeof="foaf:Document">
 
-<div id="project-links">
-
-<ul>
-<li><a href="http://libre.fm/">Libre.fm</a></li>
-<li><a href="http://libre.fm#what/">What is Libre.fm?</a></li>
-<li><a href="http://libre.fm#why/">Why use Libre.fm?</a></li>
-<li><a href="http://libre.fm#artists/">What's in it for artists?</a></li>
-<li><a href="http://libre.fm#users/">What's in it for users?</a></li>
-</ul>
-
-</div>
-
 	<div id="hd" role="navigation">
 	  <div class="inner">
 		<h1 rel="dc:publisher" class="vcard"><a property="foaf:name" rel="foaf:homepage" href="{$base_url}" class="fn org url">Libre.fm</a></h1>
