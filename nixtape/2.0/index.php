@@ -56,10 +56,10 @@ $error_text = array(
 	LFM_SERVICE_OFFLINE		=> 'Service Offline - This service is temporarily offline. Try again later.',
 	LFM_SUBSCRIPTION_ERROR		=> 'Subscription Error - The user needs to be subscribed in order to do that',
 	LFM_INVALID_SIGNATURE		=> 'Invalid method signature supplied',
-	LFM_SUBSCRIPTION_REQD		=> 'This user has no free radio plays left. Subscription required.'
-	LFM_NOT_ENOUGH_CONTENT		=> 'There is not enough content to play this station'
-	LFM_NOT_ENOUGH_MEMBERS		=> 'This group does not have enough members for radio'
-	LFM_NOT_ENOUGH_FANS		=> 'This artist does not have enough fans for radio'
+	LFM_SUBSCRIPTION_REQD		=> 'This user has no free radio plays left. Subscription required.',
+	LFM_NOT_ENOUGH_CONTENT		=> 'There is not enough content to play this station',
+	LFM_NOT_ENOUGH_MEMBERS		=> 'This group does not have enough members for radio',
+	LFM_NOT_ENOUGH_FANS		=> 'This artist does not have enough fans for radio',
 	LFM_NOT_ENOUGH_NEIGHBORS	=> 'Thare are not enough neighbors for radio'
 );
 
