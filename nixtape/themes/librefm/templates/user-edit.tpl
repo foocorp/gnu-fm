@@ -86,13 +86,19 @@
 <h3>Help</h3>
 <dl>
 	<dt id="dfn_location_uri">{t}Location check{/t}</dt>
-	<dd>{t escape=no}This feature looks up your location on <a href="http://www.geonames.org">geonames</a>. You don't need to do it, but it will help us find your latitude and longitude, which will help us add some great location-based features in the future.{/t}</dd>
+	<dd>{t escape=no}This feature looks up your location on <a href="http://www.geonames.org">geonames</a>. You don't need to do it, but it will allow us find your latitude and longitude so we can add some great location-based features in the future.{/t}</dd>
 
 	<dt id="dfn_avatar_uri">{t}Avatar URL{/t}</dt>
 	<dd>{t escape=no}The web address for a picture to represent you on libre.fm. It should not be more than 80x80 pixels. (64x64 is best.) If you leave this empty, libre.fm will use <a href="http://gravatar.com">Gravatar</a> to find an image for you.{/t}</dd>
 
 	<dt id="dfn_id">WebID (FOAF)</dt>
 	<dd>{t escape=no}A URI that represents you in RDF. See <a href="http://esw.w3.org/topic/WebID">WebID</a> for details. If you don't know what this is, it's best to leave it blank.{/t}</dd>
+
+	<dt id="dfn_laconica_profile">Laconica/identi.ca Profile</dt>
+	<dd>{t escape=no}The URL for your micro-blog on a <a href="http://laconi.ca/">Laconica</a>-powered site such as <a href="http://identi.ca/">identi.ca</a>.{/t}</dd>
+
+	<dt id="dfn_journal_rss">RSS Feed</dt>
+	<dd>{t escape=no}An RSS feed which will be used to populate your journal on libre.fm. Defaults to your Laconica RSS feed if you provide your Laconica micro-blog address.{/t}</dd>
 
 	<dt id="dfn_anticommercial">Anticommercial</dt>
 	<dd>{t escape=no}By enabling this option, you will not be shown advertisements or affiliate purchase links.{/t}</dd>
