@@ -72,9 +72,20 @@ $method_map = array(
 	'artist.gettoptracks'		=> method_artist_gettoptracks,
 	'user.getinfo'			=> method_user_getinfo,
 	'user.gettoptracks'		=> method_user_gettoptracks,
+	'user.getrecenttracks'		=> method_user_getrecenttracks,
 	'radio.tune'			=> method_radio_tune,
 	'radio.getPlaylist'		=> method_radio_getPlaylist,
+
 );
+
+function method_user_getrecenttracks() {
+	if (!isset($_GET['user'])) {
+		report_failure(LFM_INVALID_SIGNATURE);
+	}
+
+	header('Content-Type: text/xml');
+	print(XML::prettyXML(UserXML::getTopTracks($_GET['user'], $_GET['limit'])));
+}
 
 function method_user_gettoptracks() {
 	if (!isset($_GET['user'])) {
