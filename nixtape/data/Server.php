@@ -248,8 +248,8 @@ class Server {
 				$clientstr = '<a href="http://en.wikipedia.org/wiki/Category:Free_media_players">' . strip_tags(stripslashes($row['name'])) . '</a>';
 			}
 			$row['clientstr'] = $clientstr;
-			$username = uniqueid_to_username($row['userid']);
-			$row['userurl'] = Server::getUserURL($username);
+			$row['username'] = uniqueid_to_username($row['userid']);
+			$row['userurl'] = Server::getUserURL($row['username']);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
 			$row['trackurl'] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
 
