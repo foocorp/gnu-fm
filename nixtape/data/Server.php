@@ -198,9 +198,9 @@ class Server {
 						t.license
 					FROM Now_Playing n
 					LEFT OUTER JOIN Scrobble_Sessions ss
-						ON n.sessionid=Scrobble_Sessions.sessionid
+						ON n.sessionid=ss.sessionid
 					LEFT OUTER JOIN ClientCodes
-						ON Scrobble_Sessions.client=ClientCodes.code
+						ON ss.client=ClientCodes.code
 					LEFT OUTER JOIN Track t
 						ON lower(n.artist) = lower(t.artist_name)
 						AND lower(n.album) = lower(t.album_name)
@@ -222,9 +222,9 @@ class Server {
 						t.license
 					FROM Now_Playing n
 					LEFT OUTER JOIN Scrobble_Sessions ss
-						ON n.sessionid=Scrobble_Sessions.sessionid
+						ON n.sessionid=ss.sessionid
 					LEFT OUTER JOIN ClientCodes
-						ON Scrobble_Sessions.client=ClientCodes.code
+						ON ss.client=ClientCodes.code
 					LEFT OUTER JOIN Track t
 						ON lower(n.artist) = lower(t.artist_name)
 						AND lower(n.album) = lower(t.album_name)
