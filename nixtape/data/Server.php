@@ -29,6 +29,7 @@ require_once($install_path . '/utils/linkeddata.php');
 require_once($install_path . '/utils/arc/ARC2.php');
 require_once($install_path . '/utils/resolve-external.php');
 require_once($install_path . '/utils/licenses.php');
+require_once($install_path . '/../turtle/temp-utils.php'); // this is extremely dodgy and shameful
 
 /**
  * Provides access to server-wide data
@@ -205,7 +206,7 @@ class Server {
 						AND lower(n.album) = lower(t.album_name)
 						AND lower(n.track) = lower(t.name)
 						AND lower(n.mbid) = lower(t.mbid)
-					WHERE lower(username) = ' . $adodb->qstr(strtolower($username)) . '
+					WHERE ss.userid= ' . username_to_uniqueid($username) . '
 					ORDER BY t.streamable DESC, n.expires DESC LIMIT ' . (int)($number));
 		} else {
 			$data = $adodb->CacheGetAll(60, 'SELECT
