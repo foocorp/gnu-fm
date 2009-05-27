@@ -413,4 +413,25 @@ class Server {
 		return $session_id;
 	}
 
+
+	static function getAllArtists() {
+		global $adodb;
+
+		$sql = 'SELECT * from Artist ORDER by name';
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
+			$res = $adodb->CacheGetAll(86400,$sql);
+		} catch (exception $e) {
+			return null;
+		}
+
+		foreach($res as &$i) {
+			$row = sanitize($i);
+
+			$row['artisturl'] = Server::getArtistURL($row['name']);
+		}
+
+		return $res;
+	}
+
 }
