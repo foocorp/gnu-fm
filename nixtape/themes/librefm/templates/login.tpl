@@ -38,6 +38,17 @@
 		</fieldset>
 
 	</form>
+
+
+	<h2>Like OpenID?</h2>
+
+	<p>So do we. We'll be adding OpenID support in the next few days.</p>
+
+	<p>Join us in #libre.fm on irc.freenode.net to help shape
+	that, or <a
+	href="http://lists.autonomo.us/mailman/listinfo/libre-fm">join
+	our mailing list</a> and have your say!</p>
+
 </div>
 
     <div class="yui-u" id="privacy">
