@@ -34,7 +34,7 @@ class UserXML {
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$user_node = $xml->addChild('user', null);
 		$user_node->addChild('name', $user->name);
-		$user_node->addChild('email', $user->email);
+//		$user_node->addChild('email', $user->email); // should this be public
 		$user_node->addChild('homepage', $user->homepage);
 		$user_node->addChild('location', $user->location);
 		$user_node->addChild('bio', $user->bio);
@@ -112,7 +112,6 @@ class UserXML {
 			$res = $user->getScrobbles($limit);
 		} catch (exception $e) {
 			$err = 1;
-die($e);
 		}
 
 		if ($err || !$res) {
