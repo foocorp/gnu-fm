@@ -113,6 +113,7 @@ class Server {
 		foreach($res as &$i) {
 			$row = sanitize($i);
 
+			$row['username'] = uniqueid_to_username($row['userid']);
 			$row['userurl'] = Server::getUserURL(uniqueid_to_username($row['userid']));
 			if ($row['album']) {
 				$row['albumurl'] = Server::getAlbumURL($row['artist'], $row['album']);
