@@ -43,7 +43,7 @@ class Statistic {
 		if ($field == 'track') {
 			$query .= (!is_null($constraint)) ? ' artist = ' . $adodb->qstr($constraint) : null;
 		} else {
-			$query .= (!is_null($constraint)) ? ' username = ' . $adodb->qstr($constraint) : null;
+			$query .= (!is_null($constraint)) ? ' userid = ' . ($constraint) : null;
 		}
 		$query .= ' GROUP BY ' . $field . ' ORDER BY count DESC LIMIT ' . $limit;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -81,7 +81,7 @@ class Statistic {
 		if( strpos($connect_string , 'mysql' ) === 0 ) $query = 'SELECT COUNT(*) as count,DATE(FROM_UNIXTIME(time)) as date FROM ' .  $table;
 
 		$query .= (!is_null($constraint)) ? ' WHERE ' : null;
-		$query .= (!is_null($constraint)) ? ' username = ' . $adodb->qstr($constraint) : null;
+		$query .= (!is_null($constraint)) ? ' username = ' . ($constraint) : null;
 		$query .= ' GROUP BY date ORDER BY date DESC LIMIT ' . $limit;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {

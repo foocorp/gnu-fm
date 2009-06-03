@@ -43,12 +43,12 @@ if(isset($user->name)) {
 
 	$smarty->assign('stat_barwidth', 320);
 try {
-	$aUserPlayStat =  Statistic::GeneratePlayStats('Scrobbles', 'artist', 40, $user->name, 300);
+	$aUserPlayStat =  Statistic::GeneratePlayStats('Scrobbles', 'artist', 40, $user->uniqueid, 300);
 		$smarty->assign('user_playstats',$aUserPlayStat);
 	} catch (exception $e) {}
 
 try {
-	$aUserDayStat =  Statistic::generatePlayByDays('Scrobbles', 40, $user->name, 300);
+	$aUserDayStat =  Statistic::generatePlayByDays('Scrobbles', 40, $user->uniqueid, 300);
 		$smarty->assign('user_daystats',$aUserDayStat);
 	} catch (exception $e) {}
 
