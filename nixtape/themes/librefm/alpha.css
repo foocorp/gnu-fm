@@ -480,9 +480,7 @@ hr {clear: both; height: 0px; color: white !important; background-color: transpa
 
 #artist-box h2, #user-box h2 {font-size: 30px; margin-bottom: 10px; text-align: center; color: #980101;}
 
-#artist-box p, #user-box p{font-size: 14px;}
-
-#boxes div p{color: #333; font-size: 16px; line-height: 1.4em;}
+#artist-box p, #user-box p{color: #333; font-size: 16px; line-height: 1.4em;}
 
 #boxes div:hover {background-color: #ace;}
 
