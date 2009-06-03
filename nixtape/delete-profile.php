@@ -22,6 +22,7 @@
 require_once ('templating.php');
 require_once ('data/User.php');
 require_once ('utils/random_code_generator.php');
+require_once($install_path . '/../turtle/temp-utils.php'); // this is extremely dodgy and shameful
 
 if ($logged_in == false) {
 	$smarty->assign('error', 'Error!');
@@ -52,7 +53,7 @@ catch (exception $e) {
 		$adodb->Execute('DELETE FROM Group_Members WHERE member = ' . (int)($this_user->uniqueid));
 		$adodb->Execute('DELETE FROM Radio_Sessions WHERE username = ' . $adodb->qstr($username));
 		$adodb->Execute('DELETE FROM Recovery_Request WHERE username = ' . $adodb->qstr($username));
-		$adodb->Execute('DELETE FROM Scrobbles WHERE username = ' . $adodb->qstr($username));
+		$adodb->Execute('DELETE FROM Scrobbles WHERE userid = ' . username_to_uniqueid($username));
 		$adodb->Execute('DELETE FROM User_Relationship_Flags WHERE uid1 = ' . (int)($this_user->uniqueid));
 		$adodb->Execute('DELETE FROM User_Relationship_Flags WHERE uid2 = ' . (int)($this_user->uniqueid));
 		$adodb->Execute('DELETE FROM User_Relationships WHERE uid1 = ' . (int)($this_user->uniqueid));

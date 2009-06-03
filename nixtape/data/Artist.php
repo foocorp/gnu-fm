@@ -113,7 +113,7 @@ class Artist {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$res = $adodb->CacheGetAll(600,
-			'SELECT track, COUNT(track) AS freq, COUNT(DISTINCT username) AS listeners FROM Scrobbles WHERE'
+			'SELECT track, COUNT(track) AS freq, COUNT(DISTINCT userid) AS listeners FROM Scrobbles WHERE'
 			. ' artist = ' . $adodb->qstr($this->name)
 			. ' GROUP BY track ORDER BY freq DESC LIMIT ' . (int)($number));
 		foreach($res as &$row) {

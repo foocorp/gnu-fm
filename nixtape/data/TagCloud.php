@@ -47,7 +47,7 @@ class TagCloud {
 		} elseif ($field == 'track') {
 			$query .= (!is_null($constraint)) ? ' artist = ' . $adodb->qstr($constraint) : null;
 		} else {
-			$query .= (!is_null($constraint)) ? ' username = ' . $adodb->qstr($constraint) : null;
+			$query .= (!is_null($constraint)) ? ' userid = ' . $adodb->qstr($constraint) : null;
 		}
 		$query .= ' GROUP BY ' . $field . ' ORDER BY count DESC LIMIT ' . $limit;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
