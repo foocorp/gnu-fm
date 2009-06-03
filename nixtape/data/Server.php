@@ -52,7 +52,7 @@ class Server {
 		if($username) {
 			$res = $adodb->CacheGetAll(60,
 				'SELECT
-					s.username,
+					s.userid,
 					s.artist,
 					s.track,
 					s.album,
@@ -73,14 +73,14 @@ class Server {
 					ON s.stid = st.id
 				LEFT JOIN Track t
 					ON st.track = t.id
-				WHERE lower(s.username) = ' . $adodb->qstr(strtolower($username)) . '
+				WHERE s.userid = ' . username_to_uniqueid($username) . '
 				ORDER BY
 					s.time DESC
 				LIMIT ' . (int)($number));
 		} else {
 			$res = $adodb->CacheGetAll(60,
 				'SELECT
-					s.username,
+					s.userid,
 					s.artist,
 					s.track,
 					s.album,
@@ -113,7 +113,7 @@ class Server {
 		foreach($res as &$i) {
 			$row = sanitize($i);
 
-			$row['userurl'] = Server::getUserURL($row['username']);
+			$row['userurl'] = Server::getUserURL(uniqueid_to_username($row['userid']));
 			if ($row['album']) {
 				$row['albumurl'] = Server::getAlbumURL($row['artist'], $row['album']);
 			}
@@ -123,10 +123,10 @@ class Server {
 			$row['timehuman'] = human_timestamp($row['time']);
 			$row['timeiso']   = date('c', (int)$row['time']);
 
-			$row['id']        = identifierScrobbleEvent($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
-			$row['id_artist'] = identifierArtist($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
-			$row['id_track']  = identifierTrack($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
-			$row['id_album']  = identifierAlbum($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id']        = identifierScrobbleEvent(uniqueid_to_username($row['userid']), $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id_artist'] = identifierArtist(uniqueid_to_username($row['userid']), $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id_track']  = identifierTrack(uniqueid_to_username($row['userid']), $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id_album']  = identifierAlbum(uniqueid_to_username($row['userid']), $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 
 			if (!$row['album_image']) {
 				$row['album_image'] = false;
