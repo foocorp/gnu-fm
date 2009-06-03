@@ -49,7 +49,7 @@ class Server {
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
-		if($username) {
+		if($userid) {
 			$res = $adodb->CacheGetAll(60,
 				'SELECT
 					s.userid,
