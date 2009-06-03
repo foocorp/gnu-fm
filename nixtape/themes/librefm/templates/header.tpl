@@ -38,4 +38,4 @@
 		<h1 rel="dc:publisher" class="vcard"><a property="foaf:name" rel="foaf:homepage" href="{$base_url}" class="fn org url">Libre.fm</a></h1>
   </div>
    <div id="bd" role="main">
-    <div class="yui-g">
+    <div class="yui-g" id="top">
