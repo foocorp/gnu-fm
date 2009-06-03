@@ -1,4 +1,4 @@
-i'{include file='header.tpl'}
+{include file='header.tpl'}
 {if ($logged_in)}
 <h2>Welcome, <a href="{$this_user->getURL()}">{$this_user->name}</a>.</h2>
 </div>
