@@ -55,8 +55,8 @@ try {
 	try {
 		$smarty->assign('toptracks', $user->getTopTracks(40));
 	} catch (exception $e) {
-		$smarty->assign('error', 'Error!');
-		$smarty->assign('details', 'Couldn\'t get your top tracks!');
+		$smarty->assign('error', 'Couldn\'t get your top tracks!');
+		$smarty->assign('details', $e->getMessage());
 		$smarty->display('error.tpl');
 		die();
 	}
