@@ -21,6 +21,7 @@
 require_once($install_path . '/database.php');
 require_once($install_path . '/data/User.php');
 require_once('xml.php');
+require_once($install_path . '/../turtle/temp-utils.php'); // this is extremely dodgy and shameful
 
 class UserXML {
 
@@ -71,7 +72,7 @@ class UserXML {
 		try {
 			$res = $adodb->CacheGetAll(600, 'SELECT Track.*, Artist.mbid AS artmbid, COUNT(*) AS freq
 					FROM Track, Scrobbles,Artist
-					WHERE Scrobbles.username = ' . $adodb->qstr($username, 'text') . '
+					WHERE Scrobbles.userid = ' . username_to_uniqueid($username) . '
 					AND Scrobbles.track = Track.name AND Scrobbles.time > ' . $timestamp . ' AND Track.artist = Artist.name
 					GROUP BY Track.name ORDER BY freq DESC LIMIT 20');
 		}
@@ -115,7 +116,7 @@ class UserXML {
 		try {
 			$res = $adodb->GetAll('SELECT Track . * , COUNT( * ) AS freq
 					FROM Track, Scrobbles
-					WHERE Scrobbles.username = ' . $adodb->qstr($user) . '
+					WHERE Scrobbles.userid = ' . username_to_uniqueid($user) . '
 					AND Scrobbles.track = Track.name
 					GROUP BY Track.name
 					LIMIT 10');
