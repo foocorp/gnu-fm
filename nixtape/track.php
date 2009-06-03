@@ -31,7 +31,15 @@ $smarty->assign('track', $track);
 $album = new Album($track->album_name, $track->artist_name);
 $smarty->assign('album', $album);
 
-$artist = new Artist($track->artist_name);
+try {
+	$artist = new Artist($track->artist_name);
+} catch (exception $e) {
+	$smarty->assign('error', 'Artist not found.');
+	$smarty->assign('details', 'The artist ' . $track->artist_name . ' was not found in the database.');
+	$smarty->display('error.tpl');
+	die();
+}
+
 $smarty->assign('artist', $artist);
 
 // no idea how this would be track-relevant
