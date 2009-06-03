@@ -43,7 +43,7 @@ if(isset($user->name)) {
 
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
 	try {
-	$aUserScrobbles = $user->getScrobbles( $scrobbleCount );
+		$aUserScrobbles = $user->getScrobbles( $scrobbleCount );
 		$smarty->assign('scrobbles', $aUserScrobbles);
 	} catch (exception $e) {}
 	try {
