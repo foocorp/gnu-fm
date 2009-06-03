@@ -17,9 +17,8 @@
 </div>
 
 <div class="yui-g">
-    <div class="yui-u first">
+    <div class="yui-u first" id="login-form">
 
-<div id='login-form'>
 	<form action='' method='post'>
 		<fieldset>
 			<label for='username'>{t}Username{/t}<span>&nbsp;</span></label>
