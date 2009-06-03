@@ -8,9 +8,10 @@
 	<span class="edit">
 	<a href="{$me->getURL('edit')|escape:'html':'UTF-8'}">[edit]</a>
 	</span>
-	{/if}
-
+	<h2 about="" property="dc:title">{t}Your profile{/t}</h2>
+	{else}
 	<h2 about="" property="dc:title">{$me->name|escape:'html':'UTF-8'}'s profile</h2>
+	{/if}
 
 	<dl>
 		<dt>
