@@ -111,7 +111,6 @@ class UserXML {
 			$user = new User($user);
 			$res = $user->getScrobbles($limit);
 		} catch (exception $e) {
-die($e);
 			$err = 1;
 		}
 

@@ -44,7 +44,7 @@ class Server {
 	 * @param int $number The number of scrobbles to return
 	 * @return An array of scrobbles or null in case of failure
 	 */
-	static function getRecentScrobbles($number=10, $username=false) {
+	static function getRecentScrobbles($number=10, $userid=false) {
 		global $adodb;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -73,7 +73,7 @@ class Server {
 					ON s.stid = st.id
 				LEFT JOIN Track t
 					ON st.track = t.id
-				WHERE s.userid = ' . username_to_uniqueid($username) . '
+				WHERE s.userid = ' . ($userid) . '
 				ORDER BY
 					s.time DESC
 				LIMIT ' . (int)($number));
