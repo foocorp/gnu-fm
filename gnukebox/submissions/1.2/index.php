@@ -34,7 +34,7 @@ if(!is_array($_POST['a']) || !is_array($_POST['t']) || !is_array($_POST['i'])) {
 
 $session_id = $_POST['s'];
 
-$username = $adodb->qstr(usernameFromSID($session_id));
+$userid = $adodb->qstr(useridFromSID($session_id));
 $rowvalues = array();
 $actualcount = 0;
 
@@ -119,12 +119,12 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	$tid = getTrackCreateIfNew($artist, $album, $track, $mbid);
 	$stid = getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid);
 
-	$exists = scrobbleExists($username, $artist, $track, $time);
+	$exists = scrobbleExists($userid, $artist, $track, $time);
 
 	if((!$exists) && $rating<>'S') {
 	// Scrobble!
 	$rowvalues[$actualcount] = "("
-		. $username . ", "
+		. $userid . ", "
 		. $artist . ", "
 		. $album . ", "
 		. $track . ", "
@@ -145,7 +145,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		for($j = 0; $j < $actualcount; $j++) {
 
 	// Scrobble!
-		$sql = "INSERT INTO Scrobbles (username, artist, album, track, time, mbid, source, rating, length, stid) VALUES " . $rowvalues[$j];
+		$sql = "INSERT INTO Scrobbles (userid, artist, album, track, time, mbid, source, rating, length, stid) VALUES " . $rowvalues[$j];
 		try {
 		$res =& $adodb->Execute($sql);
 		}

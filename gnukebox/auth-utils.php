@@ -30,6 +30,7 @@ function check_web_auth($username, $token, $timestamp, $api_key, $sk) {
 		return false;
 	}
 
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC); // this query should get the uniqueid and then return it on success
 	$result = $adodb->GetOne('SELECT username FROM Auth WHERE '
 		//. 'expires > ' . time() . ' AND '   // session keys have an infinite lifetime
 		. 'sk = ' . $adodb->qstr($sk)
@@ -46,6 +47,7 @@ function check_standard_auth($username, $token, $timestamp) {
 	// Validates authentication using a standard authentication token
 	global $adodb;
 
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC); // this query should get the uniqueid and then return it on success
 	$pass = $adodb->GetOne('SELECT password FROM Users WHERE username =' . $adodb->qstr($username));
 	if (!$pass) {
 		// TODO: Log failures somewhere

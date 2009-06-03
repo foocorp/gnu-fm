@@ -45,7 +45,7 @@ require_once('temp-utils.php');
 
 	try {
 
-	$res = $adodb->CacheGetAll(60, "SELECT username, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 100");
+	$res = $adodb->CacheGetAll(60, "SELECT userid, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 100");
 
 	}
 
@@ -58,7 +58,7 @@ require_once('temp-utils.php');
 
 			foreach($res as &$row){
 
-			echo "<li>" . $row['username'] . " listened to
+			echo "<li>" . $row['userid'] . " listened to
 			" . $row['artist'] . "&mdash;" . $row['track']
 			. " (" . human_timestamp($row['time']) . ")</li>\n";
 
