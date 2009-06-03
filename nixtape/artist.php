@@ -31,7 +31,7 @@ try {
 } catch (exception $e) {
         $smarty->assign('error', 'Artist not found.');
         $smarty->assign('details', 'The artist '.($_GET['artist']).' was not found in the database.');
-	$smarty->display("error.tpl");
+	$smarty->display('error.tpl');
 	die();
 }
 
