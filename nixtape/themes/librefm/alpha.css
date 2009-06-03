@@ -478,7 +478,7 @@ hr {clear: both; height: 0px; color: white !important; background-color: transpa
 
 #boxes div div{padding: 10px;}
 
-#artist-box h2, #user-box h2 {font-size: 36px; margin-bottom: 10px; text-align: center;}
+#artist-box h2, #user-box h2 {font-size: 30px; margin-bottom: 10px; text-align: center; color: #980101;}
 
 #boxes div p{color: #333; font-size: 16px; line-height: 1.4em;}
 
