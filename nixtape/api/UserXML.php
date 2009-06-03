@@ -68,13 +68,9 @@ class UserXML {
 		}
 
 		$err = 0;
-		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
-			$res = $adodb->CacheGetAll(600, 'SELECT Track.*, Artist.mbid AS artmbid, COUNT(*) AS freq
-					FROM Track, Scrobbles,Artist
-					WHERE Scrobbles.userid = ' . username_to_uniqueid($username) . '
-					AND Scrobbles.track = Track.name AND Scrobbles.time > ' . $timestamp . ' AND Track.artist = Artist.name
-					GROUP BY Track.name ORDER BY freq DESC LIMIT 20');
+			$user = new User($user);
+			$res = $user->getTopTracks(20, $timestamp);
 		}
 		catch (exception $e) {
 			$err = 1;
@@ -96,7 +92,7 @@ class UserXML {
 
 			$track->addChild('playcount', $row['freq']);
 			$artist = $track->addChild('artist', repamp($row['artist']));
-			$artist->addChild('mbid', $row['artmbid']);
+			$artist->addChild('mbid', $row['artist_mbid']);  // artist_mbid isn't being set by getTopTracks yet
 			$i++;
 		}
 
@@ -111,17 +107,11 @@ class UserXML {
 			$limit = 10;
 		}
 
-		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$err = 0;
 		try {
-			$res = $adodb->GetAll('SELECT Track . * , COUNT( * ) AS freq
-					FROM Track, Scrobbles
-					WHERE Scrobbles.userid = ' . username_to_uniqueid($user) . '
-					AND Scrobbles.track = Track.name
-					GROUP BY Track.name
-					LIMIT 10');
-		}
-		catch (exception $e) {
+			$user = new User($user);
+			$res = $user->getScrobbles($limit);
+		} catch (exception $e) {
 			$err = 1;
 		}
 
@@ -136,7 +126,7 @@ class UserXML {
 		foreach($res as &$row) {
 			$track = $root->addChild('track', null);
 			$artist = $track->addChild('artist', repamp($row['artist']));
-			$artist->addAttribute('mbid', $row['artmbid']);
+			$artist->addAttribute('mbid', $row['artist_mbid']);
 			$track->addChild('name', repamp($row['name']));
 		}
 
