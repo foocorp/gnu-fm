@@ -34,7 +34,7 @@ if(!is_array($_POST['a']) || !is_array($_POST['t']) || !is_array($_POST['i'])) {
 
 $session_id = $_POST['s'];
 
-$userid = $adodb->qstr(useridFromSID($session_id));
+$userid = useridFromSID($session_id);
 $rowvalues = array();
 $actualcount = 0;
 
