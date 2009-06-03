@@ -21,7 +21,6 @@
 require_once($install_path . '/database.php');
 require_once($install_path . '/data/User.php');
 require_once('xml.php');
-require_once($install_path . '/../turtle/temp-utils.php'); // this is extremely dodgy and shameful
 
 class UserXML {
 
@@ -112,6 +111,7 @@ class UserXML {
 			$user = new User($user);
 			$res = $user->getScrobbles($limit);
 		} catch (exception $e) {
+die($e);
 			$err = 1;
 		}
 
