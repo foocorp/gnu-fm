@@ -47,6 +47,7 @@ catch (exception $e) {
 		$smarty->display('error.tpl');
 		die ();
 	} else {
+		try {
 		$adodb->Execute('DELETE FROM Scrobble_Sessions WHERE userid = ' . $adodb->qstr($this_user->uniqueid));
 		$adodb->Execute('DELETE FROM Delete_Request WHERE username = ' . $adodb->qstr($username));
 		$adodb->Execute('DELETE FROM Auth WHERE username = ' . $adodb->qstr($username));
@@ -58,7 +59,13 @@ catch (exception $e) {
 		$adodb->Execute('DELETE FROM User_Relationship_Flags WHERE uid2 = ' . (int)($this_user->uniqueid));
 		$adodb->Execute('DELETE FROM User_Relationships WHERE uid1 = ' . (int)($this_user->uniqueid));
 		$adodb->Execute('DELETE FROM User_Relationships WHERE uid2 = ' . (int)($this_user->uniqueid));
-		$adodb->Execute('DELETE FROM Users WHERE lower(username) = ' . $adodb->qstr(strtolower($username)));
+		$adodb->Execute('DELETE FROM Users WHERE uniqueid = ' . ($this_user->uniqueid));
+		} catch (exception $e) {
+			$smarty->assign('error', 'Error!');
+			$smarty->assign('details', 'Something went amiss.');
+			$smarty->display('error.tpl');
+			die ();
+		}
 		session_destroy();
 		header('Location: index.php');
 	}
