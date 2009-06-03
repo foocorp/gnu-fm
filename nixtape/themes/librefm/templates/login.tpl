@@ -41,7 +41,7 @@
 	</form>
 </div>
 
-    <div class="yui-u first" id="privacy">
+    <div class="yui-u" id="privacy">
 
       <div>
       <h2>We take your privacy seriously</h2>
