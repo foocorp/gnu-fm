@@ -238,9 +238,9 @@ class User {
 		global $adodb;
 
 		if ($since) {
-			$query = 'SELECT COUNT(track) as freq, artist, album, track FROM Scrobbles WHERE userid = '.($this->uniqueid).' AND time > '.(int)($since).' GROUP BY artist,album,track ORDER BY c DESC LIMIT ' . ($number);
+			$query = 'SELECT COUNT(track) as freq, artist, album, track FROM Scrobbles WHERE userid = '.($this->uniqueid).' AND time > '.(int)($since).' GROUP BY artist,album,track ORDER BY freq DESC LIMIT ' . ($number);
 		} else {
-			$query = 'SELECT COUNT(track) as freq, artist, album, track FROM Scrobbles WHERE userid = '.($this->uniqueid).' GROUP BY artist,album,track ORDER BY c DESC LIMIT ' . ($number);
+			$query = 'SELECT COUNT(track) as freq, artist, album, track FROM Scrobbles WHERE userid = '.($this->uniqueid).' GROUP BY artist,album,track ORDER BY freq DESC LIMIT ' . ($number);
 		}
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$data = $adodb->CacheGetAll(7200,$query);
