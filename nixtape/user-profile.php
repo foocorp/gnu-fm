@@ -32,7 +32,11 @@ if(!isset($_GET['user']) && $logged_in == false) {
 	die();
 }
 
-$user = new User($_GET['user']);
+try {
+	$user = new User($_GET['user']);
+} catch (exception $e) {
+	$error = 'User not found';
+}
 
 if(isset($user->name)) {
 
@@ -77,7 +81,7 @@ if(isset($user->name)) {
 
 	$smarty->display('user-profile.tpl');
 } else {
-	$smarty->assign('error', 'User not found');
+	$smarty->assign('error', $error);
 	$smarty->assign('details', 'Shall I call in a missing persons report?');
 	$smarty->display('error.tpl');
 }
