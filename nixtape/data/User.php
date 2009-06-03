@@ -250,15 +250,15 @@ class User {
 			$row = sanitize($i);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
 			$row['trackurl'] = Server::getTrackURL($row['artist'],$row['album'],$row['track']);
-			if ((int)$row['c'] > $maxcount) {
-				$maxcount = (int)$row['c'];
+			if ((int)$row['freq'] > $maxcount) {
+				$maxcount = (int)$row['freq'];
 			}
 			$result[] = $row;
 		}
 
 		if ($maxcount > 0) {
 			foreach($result as &$row) {
-				$row['width']=(int)(100 * ($row['c']/$maxcount));
+				$row['width']=(int)(100 * ($row['freq']/$maxcount));
 			}
 		}
 
