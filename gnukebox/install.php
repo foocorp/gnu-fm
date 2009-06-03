@@ -77,6 +77,7 @@ if (isset($_POST['install'])) {
 		anticommercial INTEGER DEFAULT 0,
 		webid_uri VARCHAR(255),
 		avatar_uri VARCHAR(255),
+		openid_uri VARCHAR(100),
 		active INTEGER DEFAULT 1,
 		public_export INTEGER DEFAULT 0,
 		location_uri VARCHAR(255) REFERENCES Places(location_uri),
