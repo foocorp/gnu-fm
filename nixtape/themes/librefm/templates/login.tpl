@@ -2,10 +2,7 @@
 
 <h2>Login</h2>
 
-<div id="register-prompt">
 <h3>Need an account? <a href="register.php">Register now!</a></h3>
-<p>It's free, easy and takes only a few seconds...</p>
-</div>
 
 {if !empty($errors)}
 <div id='errors'>
