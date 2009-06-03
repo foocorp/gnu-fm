@@ -33,14 +33,9 @@
 </head>
 
 <body typeof="foaf:Document">
-
-	<div id="hd" role="navigation">
-	  <div class="inner">
+<div id="doc2" class="yui-t7">
+  <div id="hd" role="navigation">
 		<h1 rel="dc:publisher" class="vcard"><a property="foaf:name" rel="foaf:homepage" href="{$base_url}" class="fn org url">Libre.fm</a></h1>
-		{include file='menu.tpl'}
-           </div>
-	</div>
-
+  </div>
    <div id="bd" role="main">
-<div class="inner yui-t7">  
-    <div class="yui-gc">
+    <div class="yui-g">
