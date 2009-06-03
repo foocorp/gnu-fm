@@ -22,7 +22,7 @@
 require_once('database.php');	// include the database connection string
 require_once('temp-utils.php');
 
-function usernameFromSID($session_id)
+function useridFromSID($session_id)
 {
 
 //derive the username from a session ID
@@ -46,8 +46,7 @@ function usernameFromSID($session_id)
 		// the user has no session
 	}
 
-	$username = uniqueid_to_username($res);
-	return $username;
+	return $res;
 
 	       // return the first user
 }
@@ -177,11 +176,11 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 	}
 }
 
-function scrobbleExists($username, $artist, $track, $time) {
+function scrobbleExists($userid, $artist, $track, $time) {
 	global $adodb;
 
 	try {
-	$res = $adodb->GetOne('SELECT time FROM Scrobbles WHERE username = ' . ($username) . ' AND artist = ' . ($artist) . ' AND track = ' . ($track) . ' AND time = ' . ($time));
+	$res = $adodb->GetOne('SELECT time FROM Scrobbles WHERE userid = ' . ($userid) . ' AND artist = ' . ($artist) . ' AND track = ' . ($track) . ' AND time = ' . ($time));
 	}
 	catch (exception $e) {
 		die('FAILED se ' . $e->getMessage() . '\n');

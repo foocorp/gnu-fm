@@ -172,7 +172,7 @@ if (isset($_POST['install'])) {
 	}
 
 	$adodb->Execute("CREATE TABLE Scrobbles(
-		username VARCHAR(64) REFERENCES Users(username),
+		userid INTEGER REFERENCES Users(uniqueid),
 		track VARCHAR(255),
 		album VARCHAR(255),
 		artist VARCHAR(255) REFERENCES Artist(name),
