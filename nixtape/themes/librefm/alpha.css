@@ -478,7 +478,7 @@ hr {clear: both; height: 0px; color: white !important; background-color: transpa
 
 #boxes div div{padding: 10px;}
 
-#boxes div h4 {font-size: 23px; margin-bottom: 10px;}
+#artist-box h2, #user-box h2 {font-size: 36px; margin-bottom: 10px; text-align: center;}
 
 #boxes div p{color: #333; font-size: 16px; line-height: 1.4em;}
 
@@ -502,3 +502,6 @@ hr {clear: both; height: 0px; color: white !important; background-color: transpa
 
 #foocorp span{background-color: black; padding: 3px}
 
+.signup-link, c{text-align: center;}
+
+.signup-link{font-size: 26px; font-weight: bold;}
