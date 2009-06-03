@@ -41,9 +41,11 @@ if __name__ == '__main__':
     password = getpass.getpass()
     gobbler = GobbleServer(server, username, password)
 
+    n = 0
     for line in file(data):
+        n = n + 1
         artist,track,timestamp = line.strip().split("\t")
         dt = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
         gobbler.add_track(GobbleTrack(artist, track, dt))
-        print "Adding to post %s playing %s" % (artist, track)
+        print "%d: Adding to post %s playing %s" % (n, artist, track)
     gobbler.submit()
