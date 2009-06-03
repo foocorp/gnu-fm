@@ -4,9 +4,10 @@
 </div>
 <div class="yui-gc"> 
     <div class="yui-u first">
+    foo
     </div>
     <div class="yui-u">   
-
+bar
     </div>
 </div>
 {else}
@@ -44,8 +45,8 @@
 
     <h2>For users</h2>
 
-
-
+    ...
+    
     </div>
 </div>
 
