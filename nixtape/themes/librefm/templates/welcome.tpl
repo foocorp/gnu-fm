@@ -36,20 +36,30 @@ bar
     you use are developed. We believe this freedom is important, and
     want to do the best we can, for you and for our users.</p>
 
-    <h3 class="signup-link"><a href="/register.php?t=artist">Join us now</a></h3>
-
-    <p class="c"><small>It's free and very easy.</small></p>
-
     </div>
     <div class="yui-u" id="user-box">   
 
     <h2>For users</h2>
 
-    ...
+    <p>Take control of your data. Take control of your listening
+    habits and take control of your privacy.</p>
+
+    <p>Use Libre.fm, or download our software and run your own server
+    or website.</p>
+
+    <p>Join Libre.fm and get access to wealth of new music from
+    artists who contribute to a social pool of music that you can
+    download, copy, swap and re-use without restriction.</p>
     
     </div>
 </div>
 
 {/if}
+
+<div class="yui-g">
+    <h3 class="signup-link"><a href="/register.php?t=artist">Join us now</a></h3>
+
+    <p class="c"><small>It's free and very easy.</small></p>
+</div>
 
 {include file='footer.tpl'}
