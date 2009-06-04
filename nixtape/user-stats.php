@@ -55,7 +55,7 @@ try {
 	try {
 		$smarty->assign('toptracks', $user->getTopTracks(40));
 	} catch (exception $e) {
-		$smarty->assign('error', 'Couldn\'t get your top tracks!');
+		$smarty->assign('error', 'Couldn\'t get users top tracks!');
 		$smarty->assign('details', 'User ' . $user->name . ' doesn\'t seem to have scrobbled anything yet.');
 		$smarty->display('error.tpl');
 		die();
