@@ -132,11 +132,12 @@ if(isset($_POST['register'])) {
 		}
 
 		$code = md5($username . time());
-		$sql = 'INSERT INTO AccountActivation (username, authcode) VALUES('
+		$sql = 'INSERT INTO AccountActivation (username, authcode, expires) VALUES('
 			. $adodb->qstr($username) . ', '
-			. $adodb->qstr($code) . ')';
+			. $adodb->qstr($code) . ', '
+			. (time()+(86400*2)) . ')';
 		try {
-		$res = $adodb->Execute($sql);
+			$res = $adodb->Execute($sql);
 		}
 		catch (exception $e) {
 		    reportError('AccountActivation, insert, register.php', $e->getMessage());
