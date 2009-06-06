@@ -54,9 +54,11 @@ if(isset($_GET['auth'])) {
 		die();
 	}
 
-	$sql = 'UPDATE Users SET active = 1 WHERE username = ' . $adodb->qstr($row['username']);
+	$sql_update = 'UPDATE Users SET active = 1 WHERE username = ' . $adodb->qstr($row['username']);
+	$sql_delete = 'DELETE FROM AccountActivation WHERE authcode = ' . $adodb->qstr($authcode);
 	try {
-	$res = $adodb->Execute($sql);
+		$res = $adodb->Execute($sql_update);
+		$res = $adodb->Execute($sql_delete);
 	}
 	catch (exception $e) {
 	    $errors = 'Error: ' . $e->getMessage();
@@ -111,14 +113,13 @@ if(isset($_POST['register'])) {
 
 	if(empty($errors)) {
 		// Create the user
-		$sql = 'INSERT INTO Users (username, password, email, fullname, bio, location, created, active) VALUES ('
+		$sql = 'INSERT INTO Users (username, password, email, fullname, bio, location, active) VALUES ('
 			. $adodb->qstr($username) . ', '
 			. $adodb->qstr(md5($password)) . ', '
 			. $adodb->qstr($email) . ', '
 			. $adodb->qstr($fullname) . ', '
 			. $adodb->qstr($bio) . ', '
-			. $adodb->qstr($location) . ', '
-			. time() . ', 0)';
+			. $adodb->qstr($location) . ', 0)';
 		try {
 		$insert = $adodb->Execute($sql);
 		}
