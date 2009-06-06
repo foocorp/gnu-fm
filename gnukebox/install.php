@@ -102,7 +102,8 @@ if (isset($_POST['install'])) {
 
 	$adodb->Execute("CREATE TABLE AccountActivation(
 		username VARCHAR(64),
-		authcode VARCHAR(32))");
+		authcode VARCHAR(32),
+		expires INTEGER)");
 
 	$adodb->Execute("CREATE TABLE Auth (
 		token VARCHAR(32) PRIMARY KEY,
