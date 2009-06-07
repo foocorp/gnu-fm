@@ -148,9 +148,11 @@ if(isset($_POST['register'])) {
 		}
 
 		$url = $base_url . '/register.php?auth=' . $code;
-		$content = "Hi!\n\nSomeone from the IP-address " . $_SERVER['REMOTE_ADDR'] . " registered an account "
+		$content = "Hi!\n\nSomeone registered an account "
 		    . "at http://alpha.libre.fm. If this was you, please visit the webpage specified below to activate "
-		    . "your account. If not, please disregard this email.\n\n" . $url . "\n\n- The Libre.fm Team";
+		    . "your account within 48 hours, after which time all information provided by you and "
+		    . "your activation code will be permanently deleted from our database. If you do not want to activate your account, "
+		    . "please disregard this email.\n\n" . $url . "\n\n- The Libre.fm Team";
 		sendEmail($content, $email);
 
 		// Remove auth code and set their username as the invitee
