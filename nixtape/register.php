@@ -61,10 +61,12 @@ if(isset($_GET['auth'])) {
 		$res = $adodb->Execute($sql_delete);
 	}
 	catch (exception $e) {
-	    $errors = 'Error: ' . $e->getMessage();
-	    $smarty->assign('errors', $errors);
-	    $smarty->display('error.tpl');
-	    die();
+		$errors = 'An error occurred.';
+		$details =  $e->getMessage();
+		$smarty->assign('error', $errors);
+		$smarty->assign('details', $details);
+		$smarty->display('error.tpl');
+	    	die();
 	}
 	$smarty->assign('activated', true);
 }
