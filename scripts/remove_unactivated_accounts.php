@@ -31,7 +31,7 @@ try {
 	adodb_backtrace($e->gettrace());
 }
 
-$sql_update = 'UPDATE AccountActivation SET expires = ' . time() . 
+$sql_update = 'UPDATE AccountActivation SET expires = ' . (time()+(86400*2)) . 
 	' WHERE expires < ' . time();
 
 try {
