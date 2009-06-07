@@ -125,8 +125,10 @@ if(isset($_POST['register'])) {
 		}
 		catch (exception $e) {
 		    reportError('Create user, insert, register.php', $e->getMessage());
-		    $errors .= 'An error occurred.';
-		    $smarty->assign('errors', $errors);
+		    $errors .= 'An error occurred.'; 
+		    $details = $e->getMessage();
+		    $smarty->assign('error', $errors);
+		    $smarty->assign('details', $details);
 		    $smarty->display('error.tpl');
 		    die();
 		}
