@@ -142,7 +142,7 @@ if(isset($_POST['register'])) {
 		catch (exception $e) {
 		    reportError('AccountActivation, insert, register.php', $e->getMessage());
 		    $errors .= 'An error occurred.';
-		    $errors .) "\n" . $e->getMessage();
+		    $errors .= "\n" . $e->getMessage();
 		    $smarty->assign('errors', $errors);
 		    $smarty->display('error.tpl');
 		    die();
