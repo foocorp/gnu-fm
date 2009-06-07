@@ -36,7 +36,7 @@ $sql = 'SELECT a.username,authcode,email FROM
 	ON a.username=u.username 
 	WHERE u.active=0';
 
-$adodb->GetAll($sql);
+$res = $adodb->GetAll($sql);
 
 $headers = 'From: Libre.fm Account Activation <account@libre.fm>';
 $subject = 'Libre.fm - Have you forgotten us?';
@@ -47,7 +47,7 @@ $mail_body = "Hi!\n\nHave you forgotten to activate your account at Libre.fm? If
 
 print "Mail body: $mail";
 
-foreach($res as &$i) {
+foreach($res as $row) {
 	$username = $row['username'];
 	$email = $row['email'];
 	$authcode = $row['authcode'];
