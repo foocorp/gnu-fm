@@ -31,19 +31,26 @@ try {
 	adodb_backtrace($e->gettrace());
 }
 
+$sql_update = 'UPDATE AccountActivation SET expires = ' . time() . 
+	' WHERE expires < ' . time();
+
+try {
+	$adodb->Execute($sql);
+	print "Updated field 'expires' in table.\n";
+} catch (exception $e) {}
+
 $sql = 'SELECT a.username,authcode,email FROM
 	accountactivation a LEFT JOIN users u 
 	ON a.username=u.username 
 	WHERE u.active=0';
 
-$res = $adodb->GetAll($sql);
+try {
+	$res = $adodb->GetAll($sql);
+	print "Fetched data.\n";
+} catch (exception $e) {}
 
 $headers = 'From: Libre.fm Account Activation <account@libre.fm>';
 $subject = 'Libre.fm - Have you forgotten us?';
-
-$mail_body = "Hi!\n\nHave you forgotten to activate your account at Libre.fm? If so, just follow this link to activate
-	your account within 48 hours, after which time your profile and activation code will be permanently deleted from 
-	our database.\n\n";
 
 print "Mail body: $mail";
 
@@ -56,7 +63,12 @@ foreach($res as $row) {
 
 	print "Username: $username, URL: $url";
 
+	$mail_body = "Hi!\n\nHave you forgotten to activate your account at Libre.fm? If so, just follow this link to activate
+		your account within 48 hours, after which time your profile and activation code will be permanently deleted from 
+		our database.\n\n";
 	$mail_body .= $url . "\n\n - The Libre.fm Team";
+
+	//mail($email, $subject, $mail_body, $headers);
 }
 
 ?>
