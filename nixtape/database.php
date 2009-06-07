@@ -35,4 +35,9 @@ try {
 	adodb_backtrace($e->gettrace());
 }
 
+// To keep compatibility with existing code
+function reportError($title, $msg) {
+
+}
+
 ?>
