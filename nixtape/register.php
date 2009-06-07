@@ -113,13 +113,14 @@ if(isset($_POST['register'])) {
 
 	if(empty($errors)) {
 		// Create the user
-		$sql = 'INSERT INTO Users (username, password, email, fullname, bio, location, active) VALUES ('
+		$sql = 'INSERT INTO Users (username, password, email, fullname, bio, location, created, active) VALUES ('
 			. $adodb->qstr($username) . ', '
 			. $adodb->qstr(md5($password)) . ', '
 			. $adodb->qstr($email) . ', '
 			. $adodb->qstr($fullname) . ', '
 			. $adodb->qstr($bio) . ', '
-			. $adodb->qstr($location) . ', 0)';
+			. $adodb->qstr($location) . ', ' 
+			. time() . ', 0)';
 		try {
 		$insert = $adodb->Execute($sql);
 		}
