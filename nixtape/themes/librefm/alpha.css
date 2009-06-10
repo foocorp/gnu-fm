@@ -121,17 +121,20 @@ div#footer a {
  */
 
 div#invite,
+div#user-edit,
 div#register,
 div#login-form {
 	margin: 1em auto 0 auto;
 }
 div#invite form,
+div#user-edit form,
 div#register form,
 div#login-form form {
 	width: 30em;
 	margin: 0 auto;
 }
 div#invite form fieldset,
+div#user-edit form fieldset,
 div#register form fieldset,
 div#login-form form fieldset {
 	border: none;
@@ -146,6 +149,7 @@ div#login-form form fieldset label {
     width: 11em;
 }
 div#invite form fieldset label span,
+div#user-edit form fieldset label span,
 div#register form fieldset label span,
 div#login-form form fieldset label span {
 	color:#666666;
@@ -163,10 +167,28 @@ div#login-form form fieldset input {
 	margin:2px 0 20px 10px;
 }
 div#invite form fieldset input[type=submit],
+div#user-edit form fieldset input[type=submit],
 div#register form fieldset input[type=submit],
 div#login-form form fieldset input[type=submit] {
 	margin: 0;
 	width: 100%;
+}
+
+div#user-edit form {
+	width: 40em
+}
+div#user-edit form fieldset ul li {
+	list-style: none;
+	padding: .4em
+}
+div#user-edit form fieldset ul li label {
+	display: -moz-inline-block;
+	display: inline-block;
+	padding: 0 1em;
+	vertical-align: top;
+	width: 10em;
+	text-align: right
+	
 }
 
 /* sidebar navigation */
