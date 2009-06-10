@@ -29,7 +29,7 @@ require_once($install_path . '/utils/linkeddata.php');
 require_once($install_path . '/utils/arc/ARC2.php');
 require_once($install_path . '/utils/resolve-external.php');
 require_once($install_path . '/utils/licenses.php');
-require_once($install_path . '/../turtle/temp-utils.php'); // this is extremely dodgy and shameful
+require_once($install_path . '/../gnukebox/temp-utils.php'); // this is extremely dodgy and shameful
 
 /**
  * Provides access to server-wide data
@@ -378,10 +378,10 @@ class Server {
 				'country'   => strtoupper(substr($index[$name]['http://www.geonames.org/ontology#inCountry'][0], -2))
 				);
 
-			$adodb->Execute(sprintf('INSERT INTO Places VALUES (%s, %f, %f, %s)',
+			$adodb->Execute(sprintf('INSERT INTO Places (`location_uri`, `latitude`, `longitude`, `country`) VALUES (%s, %f, %f, %s)',
 				$adodb->qstr($name),
-				(float)$rv['latitude'],
-				(float)$rv['longitude'],
+				$rv['latitude'],
+				$rv['longitude'],
 				$adodb->qstr($rv['country'])));
 		}
 
