@@ -29,7 +29,7 @@ require_once($install_path . '/utils/linkeddata.php');
 require_once($install_path . '/utils/arc/ARC2.php');
 require_once($install_path . '/utils/resolve-external.php');
 require_once($install_path . '/utils/licenses.php');
-require_once($install_path . '/../gnukebox/temp-utils.php'); // this is extremely dodgy and shameful
+require_once($install_path . '/../turtle/temp-utils.php'); // this is extremely dodgy and shameful
 
 /**
  * Provides access to server-wide data
@@ -361,8 +361,8 @@ class Server {
 					);
 
 				$adodb->Execute(sprintf('UPDATE Places SET latitude=%f, longitude=%f, country=%s WHERE location_uri=%s',
-					(float)$rv['latitude'],
-					(float)$rv['longitude'],
+					$rv['latitude'],
+					$rv['longitude'],
 					$adodb->qstr($rv['country']),
 					$adodb->qstr($name)));
 			}
