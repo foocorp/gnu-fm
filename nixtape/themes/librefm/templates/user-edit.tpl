@@ -19,9 +19,11 @@
 					<label for='location_uri'>{t}Geoname:{/t}
 						<span><a href='#dfn_location_uri' rel='glossary'>{t}What's this?{/t}</a></span>
 					</label>
-					<input type='hidden' name='location_uri' id='location_uri' value='{$location_uri|escape:'html':'UTF-8'}' />
-					<input type='button' value='{t}Find...{/t}' onclick='LocationCheck();' />
-					<span id='location_uri_label'></span>
+					<span id='chooser'>
+						<input type='hidden' name='location_uri' id='location_uri' value='{$location_uri|escape:'html':'UTF-8'}' />
+						<input type='button' value='{t}Find...{/t}' onclick='LocationCheck();' />
+						<span id='location_uri_label'></span>
+					</span>
 				</li>
 				<li>
 					<label for='homepage'>{t}Homepage URL:{/t}</label>
