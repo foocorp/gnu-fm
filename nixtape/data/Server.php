@@ -361,8 +361,8 @@ class Server {
 					);
 
 				$adodb->Execute(sprintf('UPDATE Places SET latitude=%f, longitude=%f, country=%s WHERE location_uri=%s',
-					$rv['latitude'],
-					$rv['longitude'],
+					$adodb->qstr($rv['latitude']),
+					$adodb->qstr($rv['longitude']),
 					$adodb->qstr($rv['country']),
 					$adodb->qstr($name)));
 			}
@@ -380,8 +380,8 @@ class Server {
 
 			$adodb->Execute(sprintf('INSERT INTO Places (`location_uri`, `latitude`, `longitude`, `country`) VALUES (%s, %f, %f, %s)',
 				$adodb->qstr($name),
-				$rv['latitude'],
-				$rv['longitude'],
+				$adodb->qstr($rv['latitude']),
+				$adodb->qstr($rv['longitude']),
 				$adodb->qstr($rv['country'])));
 		}
 
