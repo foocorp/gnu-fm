@@ -360,7 +360,7 @@ class Server {
 					'country'   => strtoupper(substr($index[$name]['http://www.geonames.org/ontology#inCountry'][0], -2))
 					);
 
-				$adodb->Execute(sprintf('UPDATE Places SET latitude=%f, longitude=%f, country=%s WHERE location_uri=%s',
+				$adodb->Execute(sprintf('UPDATE Places SET latitude=%s, longitude=%s, country=%s WHERE location_uri=%s',
 					$adodb->qstr($rv['latitude']),
 					$adodb->qstr($rv['longitude']),
 					$adodb->qstr($rv['country']),
@@ -378,7 +378,7 @@ class Server {
 				'country'   => strtoupper(substr($index[$name]['http://www.geonames.org/ontology#inCountry'][0], -2))
 				);
 
-			$adodb->Execute(sprintf('INSERT INTO Places (`location_uri`, `latitude`, `longitude`, `country`) VALUES (%s, %f, %f, %s)',
+			$adodb->Execute(sprintf('INSERT INTO Places (`location_uri`, `latitude`, `longitude`, `country`) VALUES (%s, %s, %s, %s)',
 				$adodb->qstr($name),
 				$adodb->qstr($rv['latitude']),
 				$adodb->qstr($rv['longitude']),
