@@ -256,7 +256,7 @@ if (isset($_POST['install'])) {
 			track INTEGER NOT NULL)");
 
 	$adodb->Execute("CREATE VIEW Free_Scrobbles AS
-			SELECT s.username, s.track, s.artist, s.time, s.mbid, s.album, s.source, s.rating, s.length
+			SELECT s.userid, s.track, s.artist, s.time, s.mbid, s.album, s.source, s.rating, s.length
 				FROM Scrobbles s
 				JOIN Scrobble_Track st ON s.stid = st.id
 				JOIN Track t ON st.track = t.id
