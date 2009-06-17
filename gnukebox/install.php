@@ -316,9 +316,9 @@ if (isset($_POST['install'])) {
 
 	// Test user configuration
 	$adodb->Execute("INSERT INTO Users
-		(username, password, created)
+		(username, password)
 		VALUES
-		('testuser', '" . md5('password') . "', " . time() . ");");
+		('testuser', '" . md5('password') . "');");
 
 	$adodb->Close();
 
