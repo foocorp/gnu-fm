@@ -45,7 +45,7 @@ $timestamp = time();
 
 $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 try {
-	$row = $adodb->GetRow('SELECT uniqueid,password FROM Users WHERE username = '. $adodb->qstr($username));
+	$row = $adodb->GetRow('SELECT uniqueid,password FROM Users WHERE lower(username) = '. $adodb->qstr($username));
 }
 catch (exception $e) {
 	die("FAILED " . $e->getMessage() . "\n");
