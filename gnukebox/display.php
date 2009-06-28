@@ -69,7 +69,7 @@ require_once('temp-utils.php');
 
 	<hr>
 
-	<address>Powered by <a href="http://gnukebox.org">GNUkebox</a> &mdash; <a href="http://svn.savannah.gnu.org/viewvc/trunk/gnukebox/?root=librefm">Source code</a></address>
+	<address>Powered by <a href="http://gnukebox.org">GNUkebox</a> &mdash; <a href="http://bzr.savannah.gnu.org/lh/librefm/">Source code</a></address>
 
 </body>
 </html>
