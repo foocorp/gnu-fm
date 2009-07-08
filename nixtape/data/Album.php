@@ -84,7 +84,7 @@ class Album {
 			. $adodb->qstr($this->name));
 		}
 		catch (exception $e) {
-			reportError($res->getMessage(), $res->getUserInfo());
+			reportError($res->getMessage());
 			$c = 0;
 		}
 		if (!$count) {
