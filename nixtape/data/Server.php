@@ -62,7 +62,8 @@ class Server {
 					l.mbid AS album_mbid,
 					l.image AS album_image,
 					l.artwork_license,
-					t.license
+					t.license,
+					t.mbid AS track_mbid
 				FROM Scrobbles s
 				LEFT JOIN Artist a
 					ON s.artist=a.name
@@ -90,7 +91,8 @@ class Server {
 					l.mbid AS album_mbid,
 					l.image AS album_image,
 					l.artwork_license,
-					t.license
+					t.license,
+					t.mbid AS track_mbid
 				FROM Scrobbles s
 				LEFT JOIN Artist a
 					ON s.artist=a.name
