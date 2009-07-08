@@ -112,8 +112,6 @@ class UserXML {
 			$res = $user->getScrobbles($limit);
 		} catch (exception $e) {
 			$err = 1;
-			$tmp = 'TEMPORARY '.$e->getMessage();
-			return(XML::error('error', '7', $tmp));
 		}
 
 		if ($err || !$res) {
