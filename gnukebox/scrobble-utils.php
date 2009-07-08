@@ -165,7 +165,7 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 			$res = $adodb->Execute($sql);
 		}
 		catch (exception $e) {
-			$msg = $e->getMessage() . ' - ' . $e->getUserInfo();
+			$msg = $e->getMessage();
 			reportError($msg, $sql);
 
 			die('FAILED stc ' . $res->getMessage() . '\n');

@@ -150,7 +150,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		$res =& $adodb->Execute($sql);
 		}
 		catch (exception $e) {
-		    $msg = $e->getMessage() . " - " . $e->getUserInfo();
+		    $msg = $e->getMessage();
 		    $adodb->FailTrans();
 		    $adodb->CompleteTrans();
 		    reportError($msg, $sql);
