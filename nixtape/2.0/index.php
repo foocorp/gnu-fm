@@ -84,7 +84,7 @@ function method_user_getrecenttracks() {
 	}
 
 	header('Content-Type: text/xml');
-	print(XML::prettyXML(UserXML::getTopTracks($_GET['user'], $_GET['limit'])));
+	print(XML::prettyXML(UserXML::getRecentTracks($_GET['user'], $_GET['limit'])));
 }
 
 function method_user_gettoptracks() {
