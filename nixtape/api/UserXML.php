@@ -99,7 +99,7 @@ class UserXML {
 
 	}
 
-	public static function getRecentTracks($user, $limit) {
+	public static function getRecentTracks($u, $limit) {
 		global $adodb;
 
 		if (!isset($limit)) {
@@ -108,7 +108,7 @@ class UserXML {
 
 		$err = 0;
 		try {
-			$user = new User($user);
+			$user = new User($u);
 			$res = $user->getScrobbles($limit);
 		} catch (exception $e) {
 			$err = 1;
@@ -120,7 +120,7 @@ class UserXML {
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$root = $xml->addChild('recenttracks', null);
-		$root->addAttribute('user', $user);
+		$root->addAttribute('user', $user->name);
 
 		foreach($res as &$row) {
 			$track = $root->addChild('track', null);
