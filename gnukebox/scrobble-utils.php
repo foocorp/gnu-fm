@@ -41,7 +41,7 @@ function useridFromSID($session_id)
 	}
 
 	if(!$res) {
-		die('BADSESSION\n');
+		die("BADSESSION\n");
 
 		// the user has no session
 	}
