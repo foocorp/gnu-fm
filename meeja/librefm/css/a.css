@@ -1,6 +1,6 @@
 /* 
 
-   Libre.fm -- a free network service for sharing your music listening
+   GNU FM -- a free network service for sharing your music listening
    habits
 
    Copyright (C) 2009 Free Software Foundation, Inc
@@ -12,7 +12,13 @@
 
 */
 
-html, body{background: #fff; padding: 0; margin: 0;}
+html, body{background: #ddd; padding: 0; margin: 0;}
+
+body{background: url(http://static.libre.fm/img/bg-red.png) repeat-x;}
+
+#content {background-color: #fff;}
+
+#sidebar{background-color: #b3defd;}
 
 .inner{margin:auto;text-align:left;width:57.69em;*width:56.25em;}
 
@@ -22,13 +28,17 @@ html, body{background: #fff; padding: 0; margin: 0;}
 
 #hd {margin-top: -9px;}
 
+#hd td label{display: none !important;}
+
 #hd .inner {position: relative;}
 
 .yui-u .first {background-color: white;}
 
-#hd {margin-bottom: 8px; height: 40px; position: relative;}
+#hd {margin-bottom: 8px; height: 100px; position: relative;}
 
-#hd ul{ margin: 0; padding: 0; line-height: 40px; position: absolute; top: 0; left: 140px; font-size: 22px; }
+#hd table, #hd td {border: 0;}
+
+#hd ul{ margin: 0; padding: 0; line-height: 100px; position: absolute; top: 0; right: 0px;}
 
 #hd li a:link, #hd li a:visited { color: black; text-decoration: none; padding: 7px; }
 
@@ -36,7 +46,7 @@ html, body{background: #fff; padding: 0; margin: 0;}
 
 #hd li #login {font-weight: bold;}
 
-#hd li{ display: inline; text-transform: lowercase; margin-left: 20px; border-rright: 1px solid #aaa;}
+#hd li{ display: inline; text-transform: lowercase; margin-left: 20px; border-rright: 1px solid #aaa; font-size: 18px;}
 
 #banner { height: 345px; position: relative;}
 
@@ -44,15 +54,18 @@ html, body{background: #fff; padding: 0; margin: 0;}
 
 #artists{background-color: lightblue; margin: 15px 0 15px 0; padding: 5px;}
 
-#ft p{ text-align: right;}
+#ft{margin-top: 15px;}
+
+#ft p{text-align: center;}
 
 #ft li{ display: inline; margin-right: 0.5em; }
 
 #ft li.copy { margin-right: 1em; }
 
-#hd h1{ background: url(/themes/librefm/images/header.png) no-repeat;
+#hd h1{ background: url(http://static.libre.fm/img/lfm-top.png) no-repeat;
      border: 0;
      padding: 0;
+     margin: 0;
      }
 
 #hd h1 a { 
@@ -62,10 +75,10 @@ html, body{background: #fff; padding: 0; margin: 0;}
        border: 0;
        margin: 0;
        padding: 0;
-       padding-top: 40px;
+       padding-top: 100px;
        height: 0px !important;
-       height /**/: 40px;
-       width: 120px;
+       height /**/: 100px;
+       width: 181px;
        cursor: pointer;
      }
 
@@ -121,20 +134,17 @@ div#footer a {
  */
 
 div#invite,
-div#user-edit,
 div#register,
 div#login-form {
 	margin: 1em auto 0 auto;
 }
 div#invite form,
-div#user-edit form,
 div#register form,
 div#login-form form {
 	width: 30em;
 	margin: 0 auto;
 }
 div#invite form fieldset,
-div#user-edit form fieldset,
 div#register form fieldset,
 div#login-form form fieldset {
 	border: none;
@@ -149,7 +159,6 @@ div#login-form form fieldset label {
     width: 11em;
 }
 div#invite form fieldset label span,
-div#user-edit form fieldset label span,
 div#register form fieldset label span,
 div#login-form form fieldset label span {
 	color:#666666;
@@ -167,28 +176,10 @@ div#login-form form fieldset input {
 	margin:2px 0 20px 10px;
 }
 div#invite form fieldset input[type=submit],
-div#user-edit form fieldset input[type=submit],
 div#register form fieldset input[type=submit],
 div#login-form form fieldset input[type=submit] {
 	margin: 0;
 	width: 100%;
-}
-
-div#user-edit form {
-	width: 40em
-}
-div#user-edit form fieldset ul li {
-	list-style: none;
-	padding: .4em
-}
-div#user-edit form fieldset ul li label {
-	display: -moz-inline-block;
-	display: inline-block;
-	padding: 0 1em;
-	vertical-align: top;
-	width: 10em;
-	text-align: right
-	
 }
 
 /* sidebar navigation */
@@ -310,7 +301,7 @@ h3 {
     margin-bottom: .5em;
 }
 
-.user{    background: #fff url(images/bg.png) repeat-x ;}
+.user{    background: #fff url(/img/bg.png) repeat-x ;}
 
 .user dl, .group dl
 {
@@ -396,14 +387,13 @@ ul#albums dl dd.description {
 .stats_artists .bar div{ background: #970102; height: 1em; }
 .stats_artists .counts{ text-align: right; }
 
-dt.libre{background-image: url(/themes/librefm/images/square.png); background-repeat: no-repeat; padding-left: 22px; background-color: #eee;}
-li.libre{background-image: url(/themes/librefm/images/square.png); background-repeat: no-repeat; padding-left: 22px; background-color: #eee;}
+dt.libre{background-image: url(/img/square.png); background-repeat: no-repeat; padding-left: 22px; background-color: #eee;}
+li.libre{background-image: url(/img/square.png); background-repeat: no-repeat; padding-left: 22px; background-color: #eee;}
 
-#adbard-librefm{
+#adbard{
         margin: 0 auto 0 auto;
 	height: 205px;
        	width: 140px;
-       	position: relative;
 	padding: 5px; text-align: center;
 }
 
@@ -416,7 +406,7 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
 /* CSS for player */
 
 #player > #interface {
-	background: #980101 url("images/player/background.jpg") repeat-x;
+	background: #980101 url(/img/player/background.jpg) repeat-x;
 	width: 280px;
 	border: 1px solid black;
 	-moz-border-radius: 8px;
@@ -474,7 +464,7 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
 
 .ui-progressbar { height: 11px; text-align: left; }
 .ui-progressbar .ui-progressbar-value {height:100%; }/* Resizable */
-.ui-progressbar-value { background-image: url(images/player/pbar-ani.gif); }
+.ui-progressbar-value { background-image: url(/img/player/pbar-ani.gif); }
 
 /* end of player CSS */
 
@@ -487,43 +477,3 @@ li.libre{background-image: url(/themes/librefm/images/square.png); background-re
 hr {clear: both; height: 0px; color: white !important; background-color: transparent !important;}
 
 #new-libre-fm{background-color: black; color: white; padding-top: 190px;}
-
-#top h2, h3{margin: 0; padding: 0;}
-
-#top h2{text-align: center; font-size: 45px; color: #222; margin-bottom: 14px }
-
-#top h3{text-align: center; font-size: 20px; font-weight: normal;  margin-bottom: 22px;}
-
-#boxes{border-bottom: 1px solid #aaa; margin-bottom: 10px; padding-bottom: 20px;}
-
-#boxes div{text-align: center; -moz-border-radius: 10px;}
-
-#boxes div div{padding: 10px;}
-
-#artist-box h2, #user-box h2 {font-size: 30px; margin-bottom: 10px; text-align: center; color: #980101;}
-
-#artist-box p, #user-box p{text-align: justify; color: #333; font-size: 16px; line-height: 1.4em;}
-
-#boxes div:hover {background-color: #ace;}
-
-#about{font-size: 90%;}
-
-#about div{margin-bottom: 24px}
-
-#privacy div {padding: 14px}
-
-#privacy h2, #about h2{color: #980101; font-size: 20px;}
-	  
-#ft {background-color: white; color: black; }
-
-#ft p {font-size: 18px; text-align: center;}
-
-#foocorp {line-height: 32px; background: url(i/stripe.png); text-align: right; font-size: 23px; font-weight: bold;  }
-
-#foocorp a{ color:#fdca01 !important;}
-
-#foocorp span{background-color: black; padding: 3px}
-
-.signup-link, .c{text-align: center;}
-
-.signup-link{font-size: 26px; font-weight: bold;}
