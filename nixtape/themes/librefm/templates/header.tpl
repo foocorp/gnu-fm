@@ -18,27 +18,40 @@
 	xml:lang="en">
 	
 <head profile="http://www.w3.org/1999/xhtml/vocab http://purl.org/uF/2008/03/ http://purl.org/uF/hAudio/0.9/">
+	{if !($pagetitle)}
 	<title>Libre.fm &mdash; {t}discover new music{/t}</title>
+	{else}
+	<title>{$pagetitle|escape:'html':'UTF-8'} &mdash; Libre.fm &mdash; {t}discover new music{/t}</title>
+	{/if}
 	<meta name="author" content="FooCorp catalogue number FOO200 and contributors" />
-	<link rel="stylesheet" href="{$base_url}/themes/librefm/reset-fonts-grids.css" type="text/css" />
-	<link rel="stylesheet" href="{$base_url}/themes/librefm/base.css" type="text/css" />
-	<link rel="stylesheet" href="{$base_url}/themes/librefm/alpha.css" type="text/css" />
-	<link rel="icon" href="{$base_url}/favicon.ico" type="image/x-icon" />
-	<script type="text/javascript" src="{$base_url}/js/player.js"></script>
-	<script type="text/javascript" src="{$base_url}/js/jquery-1.3.2.min.js"></script>
-	<script type="text/javascript" src="{$base_url}/js/jquery-ui-1.7.1.custom.min.js"></script>
+	<link rel="stylesheet" href="http://static.libre.fm/css/r.css" type="text/css" />
+	<link rel="stylesheet" href="http://static.libre.fm/css/b.css" type="text/css" />
+	<link rel="stylesheet" href="http://static.libre.fm/css/a.css" type="text/css" />
+	<link rel="icon" href="http://static.libre.fm/img/favicon.ico" type="image/x-icon" />
+	<script type="text/javascript" src="http://static.libre.fm/js/player.js"></script>
+	<script type="text/javascript" src="http://static.libre.fm/js/jquery-1.3.2.min.js"></script>
+	<script type="text/javascript" src="http://static.libre.fm/js/jquery-ui-1.7.1.custom.min.js"></script>
 {section name=i loop=$extra_head_links}
 	<link rel="{$extra_head_links[i].rel|escape:'html':'UTF-8'}" href="{$extra_head_links[i].href|escape:'html':'UTF-8'}" type="{$extra_head_links[i].type|escape:'html':'UTF-8'}" title="{$extra_head_links[i].title|escape:'html':'UTF-8'}"  />
 {/section}
 </head>
 
 <body typeof="foaf:Document">
+
 <div id="doc2" class="yui-t7">
-  <div id="hd" role="navigation">
+	<div id="hd" role="navigation">
 		<h1 rel="dc:publisher" class="vcard"><a property="foaf:name" rel="foaf:homepage" href="{$base_url}" class="fn org url">Libre.fm</a></h1>
-    {include file='menu.tpl'}
-  </div>
+		{include file='menu.tpl'}
+	</div>
+
    <div id="bd" role="main">
-    <div class="yui-g" id="top">
+   <div id="coolio">
+<div class="yui-gc">
+    <div class="yui-u first" id="content">
+    <div style="padding: 10px;">
 
-
+{if !empty($errors)}
+<div id='errors'>
+	<p>{$errors}</p>
+</div>
+{/if}
