@@ -56,6 +56,7 @@
 	</div>
    <div id="ft" role="navigation">
 	{include file='language-selector.tpl'}
+	<br />
 
    <p><a href="http://identi.ca/tag/librefm">Blog</a> |
    <a href="http://libre.fm/">About Libre.fm</a> |
