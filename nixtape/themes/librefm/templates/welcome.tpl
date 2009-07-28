@@ -1,63 +1,24 @@
 {include file='header.tpl'}
 {if ($logged_in)}
-<h2>Welcome, <a href="{$this_user->getURL()}">{$this_user->name}</a>.</h2>
-</div>
-<div class="yui-gc"> 
-    <div class="yui-u first">
-    foo
-    </div>
-    <div class="yui-u">   
-bar
-    </div>
-</div>
+
+<h2>Hey <a href="{$this_user->getURL()}">{$this_user->name}</a>!</h2>
+
+<p>Some of the changes we have coming up in the next few weeks that we'd like your feedback on:-</p>
+
+{include file='features.tpl'}
+
+<p>You can send your feedback to our <a href="http://lists.autonomo.us/mailman/listinfo/libre-fm">mailing list</a>, which you should join.</p>
+
 {else}
-<h2>A better deal for artists and users.</h2>
-       <h3>Libre.fm allows you to share your listening habits and discover new music.</h3>
-</div>
-<div class="yui-g"> 
-    <div class="yui-u first" id="artist-box">
 
-    <h2>For artists</h2>
+<h2 style="font-size: 24px; color: red;">Libre.fm lets you discover new music and share your listening habits with your friends.</h2>
 
-    <p>We're building the best tools possible for the next generation
-    of musicial talent &mdash; from direct communications with your
-    fans that <strong>you</strong> can control, to the most advanced
-    audio and video integration on the web ever.</p>
+<h2>Sign up now. It's free, quick and easy.</h2>
 
-    <p>As a Libre artist, you set yourself apart from the crowd by
-    contributing to a commons of talent and creativity that will be
-    the future of music. It is our job to create the tools and
-    opportunities for you to directly speak to the people who like
-    your music and want to support you as an artist.</p>
-
-    </div>
-    <div class="yui-u" id="user-box">   
-
-    <h2>For users</h2>
-
-    <p>Take control of your data. Take control of your listening
-    habits and take control of your privacy.</p>
-
-    <p>Use Libre.fm, or download our software and run your own server
-    or website.</p>
-
-    <p>Join Libre.fm and get access to wealth of new music from
-    artists who contribute to a social pool of music that you can
-    download, copy, swap and re-use without restriction.</p>
-    
-    </div>
-</div>
+<form action="/register.php" method="post">
+{include file='register-form.tpl'}
+</form>
 
 {/if}
-
-<div class="yui-g">
-
-    <p class="c">Libre.fm is built with privacy and freedom as
-    features and goals, not things to worry about at a later date.</p>
-
-    <h3 class="signup-link"><a href="/register.php">Join us now</a></h3>
-
-    <p class="c"><small>It's free and very easy.</small></p>
-</div>
 
 {include file='footer.tpl'}
