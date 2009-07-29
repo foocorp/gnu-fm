@@ -49,10 +49,6 @@ if(isset($user->name)) {
 	$aUserNowPlaying = $user->getNowPlaying(10);
 		$smarty->assign('nowplaying', $aUserNowPlaying);
 	} catch (exception $e) {}
-	try {
-	$aUserTagCloud =  TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->name);
-		$smarty->assign('user_tagcloud',$aUserTagCloud);
-	} catch (exception $e) {}
 	$smarty->assign('isme', ($this_user->name == $user->name));
 	$smarty->assign('me', $user);
 	$smarty->assign('sidebar', true);
