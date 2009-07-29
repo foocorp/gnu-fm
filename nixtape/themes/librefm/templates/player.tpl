@@ -8,7 +8,7 @@
 	</audio>
 	<div id="interface">
 		<div id="trackinfo">
-			<span id="artistname"></span> - <span id="trackname"></span> <span id="showplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$base_url}/themes/librefm/images/player/show-playlist.png" alt="Show playlist" title="Show playlist" /></a></span><span id="hideplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$base_url}/themes/librefm/images/player/hide-playlist.png" alt="Hide playlist" title="Hide playlist" /></a></span>
+			<span id="artistname"></span> - <span id="trackname"></span> <span id="showplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$media_url}/{$default_theme}/img/player/show-playlist.png" alt="Show playlist" title="Show playlist" /></a></span><span id="hideplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$media_url}/{$default_theme}/librefm/img/player/hide-playlist.png" alt="Hide playlist" title="Hide playlist" /></a></span>
 			<div id="playlist">
 				<hr />
 				<strong><u>{t}Playlist{/t}</u></strong>
