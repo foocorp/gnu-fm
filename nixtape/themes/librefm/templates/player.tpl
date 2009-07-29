@@ -8,7 +8,7 @@
 	</audio>
 	<div id="interface">
 		<div id="trackinfo">
-			<span id="artistname"></span> - <span id="trackname"></span> <span id="showplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$base_url}/themes/librefm/images/player/show-playlist.png" alt="Show playlist" title="Show playlist" /></a></span><span id="hideplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$base_url}/themes/librefm/images/player/hide-playlist.png" alt="Hide playlist" title="Hide playlist" /></a></span>
+			<span id="artistname"></span> - <span id="trackname"></span> <span id="showplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$media_url}/{$default_theme}/img/player/show-playlist.png" alt="Show playlist" title="Show playlist" /></a></span><span id="hideplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$media_url}/{$default_theme}/librefm/img/player/hide-playlist.png" alt="Hide playlist" title="Hide playlist" /></a></span>
 			<div id="playlist">
 				<hr />
 				<strong><u>{t}Playlist{/t}</u></strong>
@@ -22,12 +22,12 @@
 		</div>
 		<span id="scrobbled">Scrobbled</span>
 		<div id="buttons">
-			<a href="#" onclick="skipBack()" id="skipback"><img src="{$base_url}/themes/librefm/images/player/skip-backward.png" alt= "Skip Backwards" /></a>
-			<a href="#" onclick="seekBack()" id="seekback"><img src="{$base_url}/themes/librefm/images/player/seek-backward.png" alt="Seek Backwards" /></a>
-			<a href="#" onclick="play()" id="play"><img src="{$base_url}/themes/librefm/images/player/play.png" alt="Play" /></a>
-			<a href="#" onclick="pause()" id="pause"><img src="{$base_url}/themes/librefm/images/player/pause.png" alt="Pause" /></a>
-			<a href="#" onclick="seekForward()" id="seekforward"><img src="{$base_url}/themes/librefm/images/player/seek-forward.png" alt="Seek Forwards" /></a>
-			<a href="#" onclick="skipForward()" id="skipforward"><img src="{$base_url}/themes/librefm/images/player/skip-forward.png" alt="Skip Forwards" /></a>
+			<a href="#" onclick="skipBack()" id="skipback"><img src="{$media_url}/{$default_theme}/img/player/skip-backward.png" alt= "Skip Backwards" /></a>
+			<a href="#" onclick="seekBack()" id="seekback"><img src="{$media_url}/{$default_theme}/img/player/seek-backward.png" alt="Seek Backwards" /></a>
+			<a href="#" onclick="play()" id="play"><img src="{$media_url}/{$default_theme}/img/player/play.png" alt="Play" /></a>
+			<a href="#" onclick="pause()" id="pause"><img src="{$media_url}/{$default_theme}/img/player/pause.png" alt="Pause" /></a>
+			<a href="#" onclick="seekForward()" id="seekforward"><img src="{$media_url}/{$default_theme}/img/player/seek-forward.png" alt="Seek Forwards" /></a>
+			<a href="#" onclick="skipForward()" id="skipforward"><img src="{$media_url}/{$default_theme}/img/player/skip-forward.png" alt="Skip Forwards" /></a>
 		</div>
 	</div>
 </div>
