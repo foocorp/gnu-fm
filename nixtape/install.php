@@ -54,10 +54,11 @@ if (isset($_POST['install'])) {
 
 	$default_theme = $_POST['default_theme'];
 	$base_url = $_POST['base_url'];
+	$media_url = $_POST['media_url'];
 	$submissions_server = $_POST['submissions_server'];
 
 	//Write out the configuration
-	$config = "<?php\n \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$default_theme = '" . $default_theme . "';\n \$base_url = '" . $base_url . "';\n \$submissions_server = '" . $submissions_server . "';\n \$install_path = '" . $install_path . "';\n \$adodb_connect_string = '" . $adodb_connect_string . "'; ";
+	$config = "<?php\n \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$default_theme = '" . $default_theme . "';\n \$media_url = '" . $media_url . "';\n \$base_url = '" . $base_url . "';\n \$submissions_server = '" . $submissions_server . "';\n \$install_path = '" . $install_path . "';\n \$adodb_connect_string = '" . $adodb_connect_string . "'; ";
 
 	$conf_file = fopen('config.php', 'w');
 	$result = fwrite($conf_file, $config);
@@ -121,6 +122,7 @@ if (isset($_POST['install'])) {
 			?>
 			</select><br />
 			Base URL: <input type="text" name="base_url" value="<?php echo getAbsoluteURL(); ?>" /><br />
+			Media URL: <input type="text" name="media_url" value="http://localhost/meeja" /><br />
 			Submissions Server: <input type="text" name="submissions_server" /> (URL to your gnukebox install)<br />
 			<br /><br />
 			<input type="submit" value="Install" name="install" />
