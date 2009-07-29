@@ -14,7 +14,7 @@
 
 html, body{background: #ddd; padding: 0; margin: 0;}
 
-body{background: url(http://static.libre.fm/img/bg-red.png) repeat-x;}
+body{background: url(../img/bg-red.png) repeat-x;}
 
 #content {background-color: #fff;}
 
@@ -62,7 +62,7 @@ body{background: url(http://static.libre.fm/img/bg-red.png) repeat-x;}
 
 #ft li.copy { margin-right: 1em; }
 
-#hd h1{ background: url(http://static.libre.fm/img/lfm-top.png) no-repeat;
+#hd h1{ background: url(../img/lfm-top.png) no-repeat;
      border: 0;
      padding: 0;
      margin: 0;
