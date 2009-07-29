@@ -24,13 +24,13 @@
 	<title>{$pagetitle|escape:'html':'UTF-8'} &mdash; Libre.fm &mdash; {t}discover new music{/t}</title>
 	{/if}
 	<meta name="author" content="FooCorp catalogue number FOO200 and contributors" />
-	<link rel="stylesheet" href="http://static.libre.fm/css/r.css" type="text/css" />
-	<link rel="stylesheet" href="http://static.libre.fm/css/b.css" type="text/css" />
-	<link rel="stylesheet" href="http://static.libre.fm/css/a.css" type="text/css" />
-	<link rel="icon" href="http://static.libre.fm/img/favicon.ico" type="image/x-icon" />
-	<script type="text/javascript" src="http://static.libre.fm/js/player.js"></script>
-	<script type="text/javascript" src="http://static.libre.fm/js/jquery-1.3.2.min.js"></script>
-	<script type="text/javascript" src="http://static.libre.fm/js/jquery-ui-1.7.1.custom.min.js"></script>
+	<link rel="stylesheet" href="{$media_url}/{$default_theme}/css/r.css" type="text/css" />
+	<link rel="stylesheet" href="{$media_url}/{$default_theme}/css/b.css" type="text/css" />
+	<link rel="stylesheet" href="{$media_url}/{$default_theme}/css/a.css" type="text/css" />
+	<link rel="icon" href="{$media_url}/{$default_theme}/img/favicon.ico" type="image/x-icon" />
+	<script type="text/javascript" src="{$media_url}/js/player.js"></script>
+	<script type="text/javascript" src="{$media_url}/js/jquery-1.3.2.min.js"></script>
+	<script type="text/javascript" src="{$media_url}/js/jquery-ui-1.7.1.custom.min.js"></script>
 {section name=i loop=$extra_head_links}
 	<link rel="{$extra_head_links[i].rel|escape:'html':'UTF-8'}" href="{$extra_head_links[i].href|escape:'html':'UTF-8'}" type="{$extra_head_links[i].type|escape:'html':'UTF-8'}" title="{$extra_head_links[i].title|escape:'html':'UTF-8'}"  />
 {/section}
