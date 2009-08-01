@@ -187,7 +187,6 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener {
     	final ViewAnimator view = (ViewAnimator) findViewById(R.id.viewAnimator);
     	String username = usernameEntry.getText().toString();
     	String password = passwordEntry.getText().toString();
-    	password = "blah243";
     	String passMD5 = "";
     	try {
     		MessageDigest md = MessageDigest.getInstance("MD5");
