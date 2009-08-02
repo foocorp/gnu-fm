@@ -15,7 +15,7 @@
 
 <h2>Sign up now. It's free, quick and easy.</h2>
 
-<form action="/register.php" method="post">
+<form action="{$base_url}/register.php" method="post">
 {include file='register-form.tpl'}
 </form>
 
