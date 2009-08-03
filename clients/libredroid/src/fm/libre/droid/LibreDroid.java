@@ -62,6 +62,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
@@ -106,12 +107,25 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
         this.playlist = new Playlist();
         
         // Setup buttons
-        final Button folkButton = (Button) findViewById(R.id.folkButton);
-        folkButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                LibreDroid.this.tuneStation("globaltags", "folk");
-            }
-        });
+        String radioButtons[] = {"Folk", "Rock", "Metal", "Classical", "Pop", "Punk", "Jazz", "Blues", "Rap", "Ambient"};
+        int i = 0;
+        TableRow row = (TableRow) findViewById(R.id.TableRow01);
+        for (String buttonStr : radioButtons) {
+        	Button button = new Button(this);
+        	button.setText(buttonStr);
+        	button.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                	Button b = (Button) v;
+                    LibreDroid.this.tuneStation("globaltags", b.getText().toString().toLowerCase());
+                }
+            });
+        	row.addView(button);
+        	i++;
+        	if(i == 5) {
+        		row = (TableRow) findViewById(R.id.TableRow02);
+        	}
+        }
+        
         final ImageButton nextButton = (ImageButton) findViewById(R.id.nextButton);
         nextButton.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
