@@ -56,6 +56,7 @@ import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -174,6 +175,7 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
     
     public void tuneStation(String type, String station) {
     	try {
+    		this.playlist = new Playlist();
     		String output = this.httpGet("http://alpha.libre.fm/radio/adjust.php?session=" + this.sessionKey + "&url=librefm://" + type + "/" + station);
     		if (output.split(" ")[0].equals("FAILED")) {
     			Toast.makeText(this, output.substring(7), Toast.LENGTH_LONG).show();
@@ -349,7 +351,7 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
 			Song song = this.playlist.getSong(this.currentSong);
 			try { 
 				String time = Long.toString(new Date().getTime() / 1000);
-				String output = this.httpPost("http://turtle.libre.fm/submissions/1.2/", "s", this.scrobbleKey, "a[0]", song.artist, "t[0]", song.title, "b[0]", song.album, "i[0]", time);
+				this.httpPost("http://turtle.libre.fm/submissions/1.2/", "s", this.scrobbleKey, "a[0]", song.artist, "t[0]", song.title, "b[0]", song.album, "i[0]", time);
 			} catch (Exception ex) {
 				Log.d("libredroid", "Couldn't scrobble: " + ex.getMessage());
 			}
@@ -357,5 +359,24 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
 			this.next();			
 		}
 	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent ev) { 
+		switch(keyCode) {
+			case KeyEvent.KEYCODE_BACK:
+				final ViewAnimator view = (ViewAnimator) findViewById(R.id.viewAnimator);
+				if (view.getDisplayedChild() == 2) {
+					if (this.playing) {
+						mp.stop();
+						this.playing = false;
+					}
+					view.showPrevious();
+					return true;
+				}
+				break;
+		}
+		return false;
+	}
+	
 
 }
