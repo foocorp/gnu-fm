@@ -163,6 +163,12 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
     	}
     }
     
+    @Override
+    public void onDestroy() {
+    	super.onDestroy();
+    	this.mp.release();
+    }
+    
     public String httpGet(String url) throws URISyntaxException, ClientProtocolException, IOException {
     	DefaultHttpClient client = new DefaultHttpClient();
     	URI uri = new URI(url);
