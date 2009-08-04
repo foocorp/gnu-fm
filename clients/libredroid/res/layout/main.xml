@@ -10,14 +10,14 @@
 
 <TextView android:id="@+id/TextView05" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Don't have an account?" android:layout_marginTop="20px" android:textStyle="bold"></TextView><TextView android:id="@+id/TextView04" android:layout_width="wrap_content" android:layout_height="wrap_content" android:autoLink="web" android:clickable="true" android:text="Visit www.libre.fm to sign up for a free account."></TextView>
 
-</TableLayout><TableLayout android:id="@+id/TableLayout01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:visibility="visible"><ImageView android:id="@+id/ImageView01" android:layout_height="wrap_content" android:src="@drawable/icon" android:layout_width="fill_parent" android:layout_marginTop="5px"></ImageView><TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Popular Stations:"></TextView><TableRow android:id="@+id/TableRow01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="10px">
+</TableLayout><TableLayout android:id="@+id/TableLayout01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:visibility="visible"><ImageView android:id="@+id/ImageView01" android:layout_height="wrap_content" android:src="@drawable/icon" android:layout_width="fill_parent" android:layout_marginTop="5px"></ImageView><TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Popular Stations:"></TextView><TableRow android:id="@+id/TableRow01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="10px" android:gravity="center_horizontal">
 
 
 
 
 
 </TableRow>
-<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_height="wrap_content">
+<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_horizontal">
 
 
 
