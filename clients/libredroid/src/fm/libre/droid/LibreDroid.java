@@ -54,10 +54,13 @@ import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -106,6 +109,7 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
         });
         this.currentSong = 0;
         this.playlist = new Playlist();
+        this.sessionKey = "";
         
         // Setup buttons
         String radioButtons[] = {"Folk", "Rock", "Metal", "Classical", "Pop", "Punk", "Jazz", "Blues", "Rap", "Ambient"};
@@ -147,6 +151,18 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
         });
     }
     
+    @Override
+    public void onResume() {
+    	super.onResume();
+    	// Return to the correct page when resuming
+    	final ViewAnimator view = (ViewAnimator) findViewById(R.id.viewAnimator);
+    	if (this.mp.isPlaying()) {
+    		view.setDisplayedChild(2);
+    	} else if (this.sessionKey.length() > 0) {
+    		view.setDisplayedChild(1);
+    	}
+    }
+    
     public String httpGet(String url) throws URISyntaxException, ClientProtocolException, IOException {
     	DefaultHttpClient client = new DefaultHttpClient();
     	URI uri = new URI(url);
@@ -174,26 +190,8 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
     }
     
     public void tuneStation(String type, String station) {
-    	try {
-    		this.playlist = new Playlist();
-    		String output = this.httpGet("http://alpha.libre.fm/radio/adjust.php?session=" + this.sessionKey + "&url=librefm://" + type + "/" + station);
-    		if (output.split(" ")[0].equals("FAILED")) {
-    			Toast.makeText(this, output.substring(7), Toast.LENGTH_LONG).show();
-    		} else {
-    			final ViewAnimator view = (ViewAnimator) findViewById(R.id.viewAnimator);
-    			String[] result = output.split("[=\n]");
-    		    for (int x=0; x<result.length; x++)  {
-    		    	if (result[x].trim().equals("stationname")) {
-    		    		final TextView stationNameText = (TextView) findViewById(R.id.stationNameText);
-    		    		stationNameText.setText(result[x+1].trim());
-    		    	}
-    		    }
-    			view.showNext();
-    			this.play();
-    		}
-    	} catch (Exception ex) {
-    		Toast.makeText(this, "Unable to tune station: " + ex.getMessage(), Toast.LENGTH_LONG).show();
-    	}
+    	Toast.makeText(this, "Tuning in...", Toast.LENGTH_LONG).show();
+    	new TuneStationTask().execute(type, station);
     }
     
     public void play() {
@@ -212,7 +210,7 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
     	titleText.setText(song.title);
     	artistText.setText(song.artist);
     	if (song.imageURL.length() > 0) {
-    		albumImage.setImageBitmap(this.getImageBitmap(song.imageURL));
+    		new AlbumImageTask().execute(song.imageURL);
     	} else {
     		albumImage.setImageResource(R.drawable.album);
     	}
@@ -231,23 +229,6 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
     		this.next();
     	}
     	
-    }
-    
-    private Bitmap getImageBitmap(String url) {
-        Bitmap bm = null;
-        try {
-            URL aURL = new URL(url);
-            URLConnection conn = aURL.openConnection();
-            conn.connect();
-            InputStream is = conn.getInputStream();
-            BufferedInputStream bis = new BufferedInputStream(is);
-            bm = BitmapFactory.decodeStream(bis);
-            bis.close();
-            is.close();
-       } catch (IOException e) {
-           
-       }
-       return bm;
     }
     
     public void next() {
@@ -361,22 +342,90 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
 	}
 	
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent ev) { 
-		switch(keyCode) {
-			case KeyEvent.KEYCODE_BACK:
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuItem changeStation = menu.add(0, Menu.FIRST, 0, "Change Station").setIcon(R.drawable.back);
+		changeStation.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			public boolean onMenuItemClick(MenuItem item) {
 				final ViewAnimator view = (ViewAnimator) findViewById(R.id.viewAnimator);
 				if (view.getDisplayedChild() == 2) {
-					if (this.playing) {
-						mp.stop();
-						this.playing = false;
-					}
+					LibreDroid.this.mp.stop();
 					view.showPrevious();
 					return true;
+				} else {
+					return false;
 				}
-				break;
-		}
-		return false;
+			}
+        });
+		
+		return super.onCreateOptionsMenu(menu);
 	}
 	
+	
+	private class TuneStationTask extends AsyncTask<String,String,String> {
+	     
+		protected String doInBackground(String... params) {
+	    	 String type = params[0];
+	    	 String station = params[1];
+	    	 String result = "";
+	    	 try {
+	    		 result = LibreDroid.this.httpGet("http://alpha.libre.fm/radio/adjust.php?session=" + LibreDroid.this.sessionKey + "&url=librefm://" + type + "/" + station);
+	    	 } catch (Exception ex) {
+	    		 Toast.makeText(LibreDroid.this, "Unable to tune station: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+	    	 }
+	    	 return result;
+	     }
 
+	     protected void onPostExecute(String output) {
+	    	
+	    	 if (output.length() == 0) {
+	    		 return;
+	    	 }
+	    	 
+	    	 LibreDroid.this.playlist = new Playlist();
+	    	 
+	    	 if (output.split(" ")[0].equals("FAILED")) {
+	    		 Toast.makeText(LibreDroid.this, output.substring(7), Toast.LENGTH_LONG).show();
+	    	 } else {
+	    		 final ViewAnimator view = (ViewAnimator) findViewById(R.id.viewAnimator);
+	    		 String[] result = output.split("[=\n]");
+	    		 for (int x=0; x<result.length; x++)  {
+	    			 if (result[x].trim().equals("stationname")) {
+	    				 final TextView stationNameText = (TextView) findViewById(R.id.stationNameText);
+	    				 stationNameText.setText(result[x+1].trim());
+	    			 }
+	    		 }
+	    		 view.showNext();
+	    		 LibreDroid.this.play();
+	    	 }
+	     }
+	}
+	
+	
+	private class AlbumImageTask extends AsyncTask<String, String, Bitmap> {
+		
+		protected Bitmap doInBackground(String... params) {
+			String url = params[0];
+			Bitmap bm = null;
+			try {
+				URL aURL = new URL(url);
+				URLConnection conn = aURL.openConnection();
+				conn.connect();
+				InputStream is = conn.getInputStream();
+				BufferedInputStream bis = new BufferedInputStream(is);
+				bm = BitmapFactory.decodeStream(bis);
+				bis.close();
+				is.close();
+			} catch (IOException e) {
+				
+					
+		    }
+		    return bm;
+		}
+		
+		protected void onPostExecute(Bitmap bm) {
+			final ImageView albumImage = (ImageView) findViewById(R.id.albumImage);
+			albumImage.setImageBitmap(bm);
+		}
+		
+	}
 }
