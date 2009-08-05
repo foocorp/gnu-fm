@@ -1,8 +1,8 @@
 /************************************************************************\
 *                                                                       *
-* Libre Droid - A libre.fm streaming music client for the Android       *
-* mobile platform                                                       *
-* Copyright (C) 2009  Michael Sheldon <mike@mikeasoft.com>              *
+* Libre Droid - A GNU FM streaming music client for the Android mobile  *
+* platform                                                              *
+* Copyright (C) 2009 Free Software Foundation, Inc                      *
 *                                                                       *
 * This program is free software: you can redistribute it and/or modify  *
 * it under the terms of the GNU General Public License as published by  *
