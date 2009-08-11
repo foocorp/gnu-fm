@@ -47,6 +47,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
@@ -57,6 +61,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,6 +89,7 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.registerReceiver(new MediaButtonReceiver(), new IntentFilter(Intent.ACTION_MEDIA_BUTTON));
         setContentView(R.layout.main);
         this.mp = new MediaPlayer();
         
@@ -431,6 +437,34 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
 		protected void onPostExecute(Bitmap bm) {
 			final ImageView albumImage = (ImageView) findViewById(R.id.albumImage);
 			albumImage.setImageBitmap(bm);
+		}
+		
+	}
+	
+	
+	private class MediaButtonReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			KeyEvent ev = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
+			if (ev.getAction() == KeyEvent.ACTION_UP) {
+				// Only perform the action on keydown/multiple
+				return;
+			}
+			switch(ev.getKeyCode()) {
+				case KeyEvent.KEYCODE_MEDIA_NEXT:
+					LibreDroid.this.next();
+					this.abortBroadcast();
+					break;
+				case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+					LibreDroid.this.prev();
+					this.abortBroadcast();
+					break;
+				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+					LibreDroid.this.togglePause();
+					this.abortBroadcast();
+					break;
+			}
 		}
 		
 	}
