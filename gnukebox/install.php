@@ -80,6 +80,7 @@ if (isset($_POST['install'])) {
 		public_export INTEGER DEFAULT 0,
 		location_uri VARCHAR(255) REFERENCES Places(location_uri),
 		laconica_profile VARCHAR(255),
+		created INTEGER DEFAULT 0,
 		journal_rss VARCHAR(255))");
 
 	$adodb->Execute("CREATE TABLE Groups (
