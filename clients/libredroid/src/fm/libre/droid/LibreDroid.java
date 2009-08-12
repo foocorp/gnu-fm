@@ -22,10 +22,14 @@
 package fm.libre.droid;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -35,6 +39,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -56,10 +61,14 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.media.MediaScannerConnection;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaScannerConnection.MediaScannerConnectionClient;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -153,6 +162,12 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
         playPauseButton.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		LibreDroid.this.togglePause();
+        	}
+        });
+        final ImageButton saveButton = (ImageButton) findViewById(R.id.saveButton);
+        saveButton.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v) {
+        		LibreDroid.this.save();
         	}
         });
     }
@@ -328,6 +343,12 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
     		Toast.makeText(this, "Unable to connect to libre.fm server: " + ex.getMessage(), Toast.LENGTH_LONG).show();
     	}
     }
+    
+    public void save() {
+    	Song song = this.playlist.getSong(this.currentSong);
+    	Toast.makeText(LibreDroid.this, "Downloading \"" + song.title + "\" to your SD card.", Toast.LENGTH_LONG).show();
+    	new DownloadTrackTask().execute(song);
+    }
 
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
 		if (percent > 2 && !mp.isPlaying() && this.playing) {
@@ -382,7 +403,7 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
 	    	 try {
 	    		 result = LibreDroid.this.httpGet("http://alpha.libre.fm/radio/adjust.php?session=" + LibreDroid.this.sessionKey + "&url=librefm://" + type + "/" + station);
 	    	 } catch (Exception ex) {
-	    		 Toast.makeText(LibreDroid.this, "Unable to tune station: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+	    		 Log.w("libredroid", "Unable to tune station: " + ex.getMessage());
 	    	 }
 	    	 return result;
 	     }
@@ -437,6 +458,82 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
 		protected void onPostExecute(Bitmap bm) {
 			final ImageView albumImage = (ImageView) findViewById(R.id.albumImage);
 			albumImage.setImageBitmap(bm);
+		}
+		
+	}
+	
+	
+	private class DownloadTrackTask extends AsyncTask<Song, String, List<Object>> implements MediaScannerConnectionClient {
+
+		private MediaScannerConnection msc;
+		private String path;
+		
+		@Override
+		protected List<Object> doInBackground(Song... params) {
+			Song song = params[0];
+			List<Object> res = new ArrayList<Object>();
+			try {
+				File root = Environment.getExternalStorageDirectory();
+				if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+					res.add(false);
+					res.add("Please ensure an SD card is inserted before attempting to download songs. " + Environment.getExternalStorageState());
+					return res;
+				}
+				File musicDir = new File(root, "Music");
+				if (!musicDir.exists()) {
+					musicDir.mkdir();
+				}
+
+				File f = new File(musicDir, song.artist + " - " + song.title + ".ogg");
+				this.path = f.getAbsolutePath();
+				FileOutputStream fo = new FileOutputStream(f);
+				URL aURL = new URL(song.location);
+				HttpURLConnection conn = (HttpURLConnection) aURL.openConnection();
+				conn.connect();
+				if (conn.getResponseCode() == 301 || conn.getResponseCode() == 302 || conn.getResponseCode() == 307) {
+					// Redirected
+					aURL = new URL(conn.getHeaderField("Location"));
+					conn = (HttpURLConnection) aURL.openConnection();
+				}
+				InputStream is = conn.getInputStream();
+				BufferedInputStream bis = new BufferedInputStream(is);
+				BufferedOutputStream bos = new BufferedOutputStream(fo);
+				byte buf[] = new byte[1024];
+				int count = 0;
+				while( (count = bis.read(buf, 0, 1024)) != -1)
+				{
+					bos.write(buf, 0, count);
+				}
+				bos.close();
+				fo.close();
+				bis.close();
+				is.close();
+				res.add(true);
+				res.add("Finished downloading \"" + song.title + "\"");
+			} catch (Exception ex) {
+				 res.add(false);
+				 res.add("Unable to download \"" + song.title + "\": " + ex.getMessage());
+			}
+			return res; 
+		}
+		
+		protected void onPostExecute(List<Object> result) {
+			Boolean res = (Boolean) result.get(0);
+			String msg = (String) result.get(1);
+			if (res.booleanValue() == true) {
+				// Update the media library so it knows about the new file
+				this.msc = new MediaScannerConnection(LibreDroid.this, this);
+				this.msc.connect();
+			}
+			Toast.makeText(LibreDroid.this, msg, Toast.LENGTH_LONG).show();
+		}
+
+		public void onMediaScannerConnected() {
+			this.msc.scanFile(this.path, null);
+		}
+
+		public void onScanCompleted(String path, Uri uri) {
+			
 		}
 		
 	}
