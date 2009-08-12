@@ -56,7 +56,6 @@ public class Playlist extends DefaultHandler {
 	
 	public void startElement(String uri, String name, String qName, Attributes atts) {
 		this.currentElement = name;
-		Log.d("libredroid", "Processing: " + name);
 		if (name.equals("track")) {
 			this.processingSong = new Song();
 		}
