@@ -72,7 +72,7 @@ else if (isset($_POST['user'])) {
 	$err = 0;
 
 	try {
-		$row = $adodb->GetRow('SELECT * FROM Users WHERE username="'
+		$row = $adodb->GetRow('SELECT * FROM Users WHERE username='
 				. $adodb->qstr($username));
 	}
 	catch (exception $e) {
