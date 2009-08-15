@@ -477,3 +477,12 @@ li.libre{background-image: url(/img/square.png); background-repeat: no-repeat; p
 hr {clear: both; height: 0px; color: white !important; background-color: transparent !important;}
 
 #new-libre-fm{background-color: black; color: white; padding-top: 190px;}
+
+.bugs-button {
+	position: fixed;
+	top: 200px; 
+	left: 0px; 
+	width: 50px; 
+	height: 89px;
+	z-index: 1;
+	}
