@@ -97,7 +97,6 @@ else if (isset($_POST['user'])) {
 				$adodb->qstr($username);
 			$adodb->Exectute($sql);
 		}
-		
 	} catch (exception $e) {
 		$errors .= 'Error on: ' . $sql;
 		$smarty->assign('errors', $errors);
@@ -106,27 +105,27 @@ else if (isset($_POST['user'])) {
 	}
 
 	$sql = 'INSERT INTO Recovery_Request (username, email, code, expires) VALUES('
-			. $adodb->qstr($username) . ', '
-			. $adodb->qstr($row['email']) . ', '
-			. $adodb->qstr($code) . ', '
-			. $adodb->qstr(time() + 86400) . ')';
+		. $adodb->qstr($username) . ', '
+		. $adodb->qstr($row['email']) . ', '
+		. $adodb->qstr($code) . ', '
+		. $adodb->qstr(time() + 86400) . ')';
 
-			try {
-			$res = $adodb->Execute($sql);
-			}
-			catch (exception $e) {
-			$errors .= 'Error on: ' . $sql;
-			$smarty->assign('errors', $errors);
-			$smarty->display('error.tpl');
-			die();
-			}
+	try {
+		$res = $adodb->Execute($sql);
+	}
+	catch (exception $e) {
+		$errors .= 'Error on: ' . $sql;
+		$smarty->assign('errors', $errors);
+		$smarty->display('error.tpl');
+		die();
+	}
 
-			$url = $base_url . '/reset.php?code=' . $code;
-			$content = "Hi!\n\nSomeone from the IP-address " . $_SERVER['REMOTE_ADDR'] . " entered your username "
-			. "in the password reset form at libre.fm. To change you password, please visit\n\n"
-			. $url . "\n\n- The Libre.fm Team";
-			sendEmail($content, $row['email']);
-			$smarty->assign('sent', true);
+	$url = $base_url . '/reset.php?code=' . $code;
+	$content = "Hi!\n\nSomeone from the IP-address " . $_SERVER['REMOTE_ADDR'] . " entered your username "
+		. "in the password reset form at libre.fm. To change you password, please visit\n\n"
+		. $url . "\n\n- The Libre.fm Team";
+	sendEmail($content, $row['email']);
+	$smarty->assign('sent', true);
 }
 
 $smarty->display('reset.tpl');
