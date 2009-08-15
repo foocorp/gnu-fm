@@ -35,4 +35,10 @@ try {
 	adodb_backtrace($e->gettrace());
 }
 
+// To keep functionality with existing code
+// TODO: Log to disk with __FILE__, __FUNCTION__, __LINE__ ?
+function reportError($msg, $sql) {
+
+}
+
 ?>
