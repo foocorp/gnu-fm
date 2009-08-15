@@ -38,6 +38,8 @@
 
 <body typeof="foaf:Document">
 
+<a href="http://bugs.libre.fm/newticket" title="Give us Feedback! Report bugs!"><img class="feedback" src="($media_url)/{$default_theme}/img/bugs.png" alt="Give us Feedback! Report bugs!"></a>
+
 <div id="doc2" class="yui-t7">
 	<div id="hd" role="navigation">
 		<h1 rel="dc:publisher" class="vcard"><a property="foaf:name" rel="foaf:homepage" href="{$base_url}" class="fn org url">Libre.fm</a></h1>
