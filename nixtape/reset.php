@@ -86,6 +86,25 @@ else if (isset($_POST['user'])) {
 		die();
 	}
 	$code = md5($username . $row['email'] . time());
+	
+	// If a recovery_request already exists, delete it from the database
+	$sql = 'SELECT COUNT(*) as c FROM Recovery_Request WHERE username =' . 
+		$adodb->qstr($username);
+	try {
+		$res = $adodb->GetRow($sql);
+		if ($res['c'] != 0) {
+			$sql = 'DELETE FROM Recovery_Request WHERE username =' .
+				$adodb->qstr($username);
+			$adodb->Exectute($sql);
+		}
+		
+	} catch (exception $e) {
+		$errors .= 'Error on: ' . $sql;
+		$smarty->assign('errors', $errors);
+		$smarty->display('error.tpl');
+		die();
+	}
+
 	$sql = 'INSERT INTO Recovery_Request (username, email, code, expires) VALUES('
 			. $adodb->qstr($username) . ', '
 			. $adodb->qstr($row['email']) . ', '
