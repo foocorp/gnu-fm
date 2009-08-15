@@ -121,8 +121,9 @@ else if (isset($_POST['user'])) {
 	}
 
 	$url = $base_url . '/reset.php?code=' . $code;
-	$content = "Hi!\n\nSomeone from the IP-address " . $_SERVER['REMOTE_ADDR'] . " entered your username "
-		. "in the password reset form at libre.fm. To change you password, please visit\n\n"
+	// TODO: Read names from variable
+	$content = "Hi!\n\nSomeone entered your username "
+		. "in the password reset form at libre.fm. To reset your password, please visit\n\n"
 		. $url . "\n\n- The Libre.fm Team";
 	sendEmail($content, $row['email']);
 	$smarty->assign('sent', true);
