@@ -27,7 +27,7 @@ if(!isset($_GET['username']) || !isset($_GET['passwordmd5'])) {
 $username = $_GET['username'];
 $passmd5 = $_GET['passwordmd5'];
 
-$res = $adodb->GetOne('SELECT username FROM Users WHERE username = ' . $adodb->qstr($username) . ' AND password = ' . $adodb->qstr($passmd5));
+$res = $adodb->GetOne('SELECT username FROM Users WHERE lower(username) = ' . $adodb->qstr(strtolower($username)) . ' AND password = ' . $adodb->qstr($passmd5));
 if (!$res) {
 	die("BADAUTH\n");
 }
