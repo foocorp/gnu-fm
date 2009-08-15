@@ -25,7 +25,7 @@ require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/TagCloud.php');
 
-$track = new Track($_GET['track'], $_GET['artist']);
+$track = new Track(urldecode($_GET['track']), urldecode($_GET['artist']));
 $smarty->assign('track', $track);
 
 $album = new Album($track->album_name, $track->artist_name);
