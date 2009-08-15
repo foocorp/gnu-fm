@@ -95,7 +95,7 @@ else if (isset($_POST['user'])) {
 		if ($res['c'] != 0) {
 			$sql = 'DELETE FROM Recovery_Request WHERE username =' .
 				$adodb->qstr($username);
-			$adodb->Exectute($sql);
+			$adodb->Execute($sql);
 		}
 	} catch (exception $e) {
 		$errors .= 'Error on: ' . $sql;
