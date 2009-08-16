@@ -31,7 +31,7 @@ $errors = '';
 function sendEmail($text, $email) {
 	$headers = 'From: Libre.fm Reset <recovery@libre.fm>';
 	$subject = 'Libre.fm Password Reset';
-	mail($email, $subject, $text, $headers);
+	return(mail($email, $subject, $text, $headers));
 }
 
 if (isset($_GET['code'])) {
@@ -125,7 +125,16 @@ else if (isset($_POST['user'])) {
 	$content = "Hi!\n\nSomeone entered your username "
 		. "in the password reset form at libre.fm. To reset your password, please visit\n\n"
 		. $url . "\n\n- The Libre.fm Team";
-	sendEmail($content, $row['email']);
+
+	$status = sendEmail($content, $row['email']);
+	if (!$status) {
+		$errors = 'Error while trying to send email to: ' . $row['email'];
+		$errors .= '. Please try again later, or contact the site administrators.';
+		$smarty->assign('errors', $errors);
+		$smarty->display('error.tpl');
+		die();
+	}
+
 	$smarty->assign('sent', true);
 }
 
