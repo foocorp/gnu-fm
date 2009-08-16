@@ -116,7 +116,7 @@ if ($_POST['submit'])
 		$this_user->anticommercial  = $_POST['anticommercial'] == "on" ? 1 : 0;
 
 		if (!empty( $_POST['password_1'] ))
-			$user->password = md5($_POST['password_1']);
+			$this_user->password = md5($_POST['password_1']);
 
 		$this_user->save();
 
