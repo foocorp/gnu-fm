@@ -1,7 +1,7 @@
 /*
-   Libre.fm -- a free network service for sharing your music listening hab""s
+   GNU FM -- a free network service for sharing your music listening hab""s
 
-   Copyright (C) 2009 Libre.fm Project
+   Copyright (C) 2009 Free Software Foundation, Inc
 
    @licstart  The following is the entire license notice for the
    JavaScript code in this page.
