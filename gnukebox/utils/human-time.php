@@ -2,7 +2,7 @@
 
 /* GNUkebox -- a free software server for recording your listening habits
 
-   Copyright (C) 2009 Libre.fm Project
+   Copyright (C) 2009 Free Software Foundation, Inc
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
