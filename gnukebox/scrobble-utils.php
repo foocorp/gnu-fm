@@ -89,6 +89,7 @@ function createAlbumIfNew($artist, $album) {
 
 		// Disable to fix scrobble breakage
 		//$art = $adodb->qstr(getAlbumArt($artist, $album));
+		$art = "";
 
 		if ($art !="") {
 			$license = $adodb->qstr('amazon');
