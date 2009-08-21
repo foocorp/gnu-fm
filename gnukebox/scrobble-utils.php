@@ -87,7 +87,8 @@ function createAlbumIfNew($artist, $album) {
 	if(!$name) {
 		// Album doesn't exist, so create it
 
-		$art = $adodb->qstr(getAlbumArt($artist, $album));
+		// Disable to fix scrobble breakage
+		//$art = $adodb->qstr(getAlbumArt($artist, $album));
 
 		if ($art !="") {
 			$license = $adodb->qstr('amazon');
