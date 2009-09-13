@@ -193,7 +193,7 @@ if (isset($_POST['install'])) {
 	$adodb->Execute("CREATE TABLE Now_Playing(
 		sessionid VARCHAR(32) PRIMARY KEY REFERENCES Scrobble_Sessions(sessionid) ON DELETE CASCADE,
 		track VARCHAR(255),
-		artist VARCHAR(255) REFERENCES Artist(name),
+		artist VARCHAR(255),
 		album VARCHAR(255),
 		mbid VARCHAR(36),
 		expires INTEGER)");
