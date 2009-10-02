@@ -16,9 +16,6 @@
 
 </div>
 
-<div class="yui-g">
-    <div class="yui-u first" id="login-form">
-
 	<form action='' method='post'>
 		<fieldset>
 			<label for='username'>{t}Username{/t}<span>&nbsp;</span></label>
@@ -49,12 +46,6 @@
 	href="http://lists.autonomo.us/mailman/listinfo/libre-fm">join
 	our mailing list</a> and have your say!</p>
 
-</div>
-
-    <div class="yui-u" id="privacy">
-
     {include file='privacy.tpl'}
-
-</div>
 
 {include file='footer.tpl'}
