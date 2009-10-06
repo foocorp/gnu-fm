@@ -74,7 +74,7 @@ $method_map = array(
 	'user.gettoptracks'		=> method_user_gettoptracks,
 	'user.getrecenttracks'		=> method_user_getrecenttracks,
 	'radio.tune'			=> method_radio_tune,
-	'radio.getPlaylist'		=> method_radio_getPlaylist,
+	'radio.getplaylist'		=> method_radio_getPlaylist,
 
 );
 
