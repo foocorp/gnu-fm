@@ -28,7 +28,7 @@
 					{if $scrobbles[i].albumurl}<a rel="foaf:page" href="{$scrobbles[i].albumurl|escape:'html':'UTF-8'}">{/if}
 						<span{if $scrobbles[i].album_image} rel="foaf:depiction"{/if}{if $scrobbles[i].albumurl} about="{$scrobbles[i].id_album|escape:'html':'UTF-8'}"{/if}>
 							<img height="50" width="50" 
-								src="{if !$scrobbles[i].album_image}/themes/librefm/images/qm50.png{else}{$scrobbles[i].album_image|escape:'html':'UTF-8'}{/if}" 
+								src="{if !$scrobbles[i].album_image}http://s.libre.fm/librefm/img/qm50.png{else}{$scrobbles[i].album_image|escape:'html':'UTF-8'}{/if}" 
 								class="albumart{if !$scrobbles[i].album_image} photo{/if}" 
 								{if $scrobbles[i].album}title="{$scrobbles[i].album|escape:'html':'UTF-8'}" alt="Album: {$scrobbles[i].album|escape:'html':'UTF-8'}"{else}alt="Unknown album"{/if}  />
 						</span>
