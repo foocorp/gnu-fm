@@ -28,7 +28,7 @@
 	<link rel="stylesheet" href="{$media_url}/{$default_theme}/css/b.css" type="text/css" />
 	<link rel="stylesheet" href="{$media_url}/{$default_theme}/css/a.css" type="text/css" />
 	<link rel="icon" href="{$media_url}/{$default_theme}/img/favicon.ico" type="image/x-icon" />
-	<script type="text/javascript" src="{$media_url}/js/player.js"></script>
+	<script type="text/javascript" src="{$media_url}/js/player.min.js"></script>
 	<script type="text/javascript" src="{$media_url}/js/jquery-1.3.2.min.js"></script>
 	<script type="text/javascript" src="{$media_url}/js/jquery-ui-1.7.1.custom.min.js"></script>
 {section name=i loop=$extra_head_links}
