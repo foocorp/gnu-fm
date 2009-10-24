@@ -2,53 +2,9 @@
     <div class="yui-u" id="sidebar">
         <div style="padding: 10px;">
 
-	{if !($logged_in_disabled_ads_for_now)}
-
-	<!-- put something here -->
-
-	    <div id="adbard" style="margin: 1em auto 1em auto;">
-
-	    <!--Ad Bard advertisement snippet, begin -->
-
-	    <script type='text/javascript'>
-	     var ab_h = '4bcaab930d3bdfded68fd7be730d7db4';
-     	     var ab_s = '55fd9cde6d855a75f9ca43d854272f6b';
-     	    </script>
-   	    
-            <script type='text/javascript' src='http://cdn1.adbard.net/js/ab1.js'></script>
-
-	    <!--Ad Bard, end -->
-
- 
-	    </div>
-
-	{/if}
-
 	   <h3>Top 40 libre artists</h3>
 	   
 	   {include file='tc-40.inc'}
-
-	{if ($logged_in_disabled_ads_for_now)}
-
-	<!-- put something here -->
-
-	    <div id="adbard" style="margin: 1em auto 1em auto;">
-
-	    <!--Ad Bard advertisement snippet, begin -->
-
-	    <script type='text/javascript'>
-	     var ab_h = '4bcaab930d3bdfded68fd7be730d7db4';
-     	     var ab_s = '55fd9cde6d855a75f9ca43d854272f6b';
-     	    </script>
-   	    
-            <script type='text/javascript' src='http://cdn1.adbard.net/js/ab1.js'></script>
-
-	    <!--Ad Bard, end -->
-
- 
-	    </div>
-
-	    {/if}
      
         </div>
     </div>
