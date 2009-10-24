@@ -27,6 +27,7 @@
 	<link rel="stylesheet" href="{$media_url}/{$default_theme}/css/r.css" type="text/css" />
 	<link rel="stylesheet" href="{$media_url}/{$default_theme}/css/b.css" type="text/css" />
 	<link rel="stylesheet" href="{$media_url}/{$default_theme}/css/a.css" type="text/css" />
+	<link rel="stylesheet" href="{$media_url}/{$default_theme}/css/new.css" type="text/css" />
 	<link rel="icon" href="{$media_url}/{$default_theme}/img/favicon.ico" type="image/x-icon" />
 	<script type="text/javascript" src="{$media_url}/js/player.min.js"></script>
 	<script type="text/javascript" src="{$media_url}/js/jquery-1.3.2.min.js"></script>
@@ -45,10 +46,7 @@
 	</div>
 
    <div id="bd" role="main">
-   <div id="coolio">
-<div class="yui-gc">
-    <div class="yui-u first" id="content">
-    <div style="padding: 10px;">
+<div class="yui-g">
 
 {if !empty($errors)}
 <div id='errors'>
