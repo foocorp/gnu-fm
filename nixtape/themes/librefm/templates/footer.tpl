@@ -1,15 +1,5 @@
     </div></div>
-    <div class="yui-u" id="sidebar">
-        <div style="padding: 10px;">
 
-	   <h3>Top 40 libre artists</h3>
-	   
-	   {include file='tc-40.inc'}
-     
-        </div>
-    </div>
-</div></div>
-	</div>
    <div id="ft" role="navigation">
 	{include file='language-selector.tpl'}
 	<br />
