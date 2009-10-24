@@ -42,6 +42,11 @@
 <div id="doc2" class="yui-t7">
 	<div id="hd" role="navigation">
 		<h1 rel="dc:publisher" class="vcard"><a property="foaf:name" rel="foaf:homepage" href="{$base_url}" class="fn org url">Libre.fm</a></h1>
+
+{if ($logged_in)}
+	<p><a href="{$this_user->getURL()}">{$this_user->name}</a>'s</p>
+{/if}
+
 		{include file='menu.tpl'}
 	</div>
 
