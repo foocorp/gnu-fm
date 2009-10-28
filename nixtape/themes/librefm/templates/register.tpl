@@ -1,35 +1,23 @@
 {include file='header.tpl'}
 
-<h2>Register</h2>
-
 {if isset($activated)}
 
 	<h3>{t}Your account has been activated! You may now login!{/t}</h3>
 
 {elseif isset($registered) }
-	<h3>{t}You're now registered with libre.fm! An email has been sent to the email address you provided. Please follow the link in the email to activate your account!{/t}</h3>
-	
-	<ul>
-	<li><a href="http://ideas.libre.fm/index.php/Using_turtle">{t}Find out how to start sending us your listening habits{/t}</a></li>
-	<li><a href="http://lists.autonomo.us/mailman/listinfo/libre-fm">{t}Join our mailing list{/t}</a></li>
-	<li><a href="http://blog.libre.fm/">{t}Read our blog{/t}</a> {t}and{/t} <a href="http://identi.ca/mattl">{t}subscribe to Matt (our founder) on identi.ca{/t}</a></li>
-	</ul>
 
+	<h2><img src="http://s.libre.fm/librefm/img/check-mail.png" alt="Go! Go! Go! Check your email now" /></h2>
+
+	<h3>{t}Please follow the link in your email to activate your account!{/t}</h3>
+	
 {else}
+
+<h2><img src="http://s.libre.fm/librefm/img/look-awesome.png" alt="You look awesome today by the way" /></h2>
 
 	{if isset($errors) }
 		<p id='errors'>{$errors}</p>
 	{/if}
 
-</div>
-
-<div class="yui-g">
-    <div class="yui-u first" id="privacy">
-
-{include file='privacy.tpl'}
-
-</div>
-    <div class="yui-u" id="register">
 	<form action='' method='post'>
 		<fieldset>
 
@@ -47,19 +35,11 @@
 
 		</fieldset>
 
-		<hr />
-
-			<!-- <p class="cc-license">{t escape=no}Please note: we plan make your <a href="http://turtle.libre.fm/data/">listening data available</a>, under the <a href="http://wiki.openstreetmap.org/wiki/Open_Database_License">the Open Database License</a>.{/t}</p> -->
-
-			<input type='submit' name='register' value="{t}Sign up{/t}" />
-
+		<input type='submit' name='register' value="{t}Sign up{/t}" />
 
 	</form>
 
 	<p class="disclaimer">{t}We won't sell, swap or give away your email address. You can optionally include personal data on your profile, which is displayed publicly.{/t}</p>
 	
-	</div>
-</div>
-
 {/if}
 {include file='footer.tpl'}
