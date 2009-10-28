@@ -10,8 +10,8 @@
    <li><a href="http://lists.autonomo.us/mailman/listinfo/libre-fm">Mailing List</a></li>
    </ul>
 
-   <p><strong>Developers! Check out our code <a
-   href="http://bzr.savannah.gnu.org/lh/librefm/">at Savannah</a> or
+   <p><strong>Developers! Check out our code:</strong> <a
+   href="http://bzr.savannah.gnu.org/lh/librefm/">bzr repo</a> or
    <a href="http://s.libre.fm/nightly.tgz">download a nightly
    build</a>.</p>
 
