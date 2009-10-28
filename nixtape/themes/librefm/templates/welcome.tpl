@@ -18,6 +18,8 @@
 {include file='login-form.tpl'}
 </form>
 
+<p>No account? No problem, <a href="/register.php">sign up now</a>.</p>
+
 {/if}
 
 {include file='footer.tpl'}
