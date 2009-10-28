@@ -22,7 +22,7 @@ or select one of the common tags below:</p>
 
 <form method='get' action=''>
 <div><label for="tag">{t}Custom tag:{/t}</label><input type="text" id="tag" name="tag" /></div>
-<div>input type="submit" value="Listen" /></div></form>
+<div><input type="submit" value="Listen" /></div></form>
 {/if}
 
 {include file='footer.tpl'}
