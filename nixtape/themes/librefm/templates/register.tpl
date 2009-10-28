@@ -21,25 +21,27 @@
 	<form action='' method='post'>
 		<fieldset>
 
-			<label for='username'>{t}Your username:{/t}<span>{t}(no more than 16 chars.){/t}</span></label>
-			<input id='username' name='username' type='text' value='{$username}' maxlength='16' />
+			<div><label for='username'>{t}Your username:{/t}<span>{t}(no more than 16 chars.){/t}</span></label>
+			<input id='username' name='username' type='text' value='{$username}' maxlength='16' /></div>
 
+			<div>
 			<label for='password'>{t}Your password:{/t}<span>{t}(make it hard to guess){/t}</span></label>
-			<input id='password' name='password' type='password' value=''/>
+			<input id='password' name='password' type='password' value=''/></div>
 
+			<div>
 			<label for='password-repeat'>{t}Your password again{/t}<span>{t}(you should repeat it.){/t}</span></label>
-			<input id='password-repeat' name='password-repeat' type='password' value=''/>
+			<input id='password-repeat' name='password-repeat' type='password' value=''/></div>
 
-			<label for='email'>{t}Your e-mail:{/t}<span>{t}(must be valid!){/t}</span></label>
-			<input id='email' name='email' type='text' value='{$email}' maxlength='64' />
+			<div><label for='email'>{t}Your e-mail:{/t}<span>{t}(must be valid!){/t}</span></label>
+			<input id='email' name='email' type='text' value='{$email}' maxlength='64' /></div>
 
 		</fieldset>
 
-		<input type='submit' name='register' value="{t}Sign up{/t}" />
+		<p><input type='submit' name='register' value="{t}Sign up{/t}" /></p>
 
 	</form>
 
-	<p class="disclaimer">{t}We won't sell, swap or give away your email address. You can optionally include personal data on your profile, which is displayed publicly.{/t}</p>
+	<h3 class="disclaimer">{t}We won't sell, swap or give away your email address. You can optionally include personal data on your profile, which is displayed publicly.{/t}</h3>
 	
 {/if}
 {include file='footer.tpl'}
