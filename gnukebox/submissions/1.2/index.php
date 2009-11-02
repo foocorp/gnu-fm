@@ -112,6 +112,10 @@ for($i = 0; $i < count($_POST['a']); $i++) {
             die("FAILED Submitted track has timestamp in the future\n"); // let's try a 5-minute tolerance
 	}
 
+	if($time == 0) {
+            die("FAILED Submitted track has zero timestamp\n");
+	}
+
 	createArtistIfNew($artist);
 	if($album != 'NULL') {
 		createAlbumIfNew($artist, $album);
