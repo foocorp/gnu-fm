@@ -24,18 +24,6 @@ require_once('templating.php');
 require_once('data/sanitize.php');
 require_once('data/Server.php');
 
-$offset = 3600;
-$expire = "Expires: " . gmdate("D, d M Y H:i:s", time() + $offset) . " GMT";
-header($expire);
-
 $smarty->assign('welcome', true);
-
-$station = 'librefm://globaltags/rock';
-if(isset($this_user)) {
-	$radio_session = $this_user->getRadioSession($station);
-} else {
-	$radio_session = Server::getRadioSession($station);
-}
-$smarty->assign('radio_session', $radio_session);
 $smarty->display('welcome.tpl');
 ?>

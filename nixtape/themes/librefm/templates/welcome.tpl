@@ -1,23 +1,24 @@
 {include file='header.tpl'}
 {if ($logged_in)}
 
-<h2>Hey <a href="{$this_user->getURL()}">{$this_user->name}</a>!</h2>
+<h2><img src="http://s.libre.fm/librefm/img/dashboard.png" alt="Your dashboard." /></h2>
 
-<p>Some of the changes we have coming up in the next few weeks that we'd like your feedback on:-</p>
+<ul>
+<li>Have you configured your player to report your music listening habits?</li>
+<li>Have you tried our funky in-browser player?</li>
+</ul>
 
-{include file='features.tpl'}
-
-<p>You can send your feedback to our <a href="http://lists.autonomo.us/mailman/listinfo/libre-fm">mailing list</a>, which you should join.</p>
+<h2><a href="{$this_user->getURL()}">Go to your profile</a> or <a href="{$this_user->getURL()}/stats">view your listening statistics</a>.</h2>
 
 {else}
 
-<h2 style="font-size: 24px; color: red;">Libre.fm lets you discover new music and share your listening habits with your friends.</h2>
+<h2><img src="http://s.libre.fm/librefm/img/more-fun-logged-in.png" alt="A lot more fun if you're logged in." /></h2>
 
-<h2>Sign up now. It's free, quick and easy.</h2>
-
-<form action="{$base_url}/register.php" method="post">
-{include file='register-form.tpl'}
+<form action="{$base_url}/login.php" method="post">
+{include file='login-form.tpl'}
 </form>
+
+<p>No account? No problem, <a href="/register.php">sign up now</a>.</p>
 
 {/if}
 
