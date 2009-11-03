@@ -37,6 +37,7 @@ $session_id = $_POST['s'];
 $userid = useridFromSID($session_id);
 $rowvalues = array();
 $actualcount = 0;
+$timeisstupid = 0;
 
 for($i = 0; $i < count($_POST['a']); $i++) {
 		switch (mb_detect_encoding($_POST['a'][$i])) {
@@ -112,8 +113,8 @@ for($i = 0; $i < count($_POST['a']); $i++) {
             die("FAILED Submitted track has timestamp in the future\n"); // let's try a 5-minute tolerance
 	}
 
-	if($time <= 0) {
-            die("FAILED Submitted track has invalid timestamp\n");
+	if($time <= 1009000000) {
+            $timeisstupid = 1;
 	}
 
 	createArtistIfNew($artist);
@@ -142,7 +143,8 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	$actualcount++;
 	}
 
-	if(($i+1) == count($_POST['a']) && $actualcount>0) {
+	if(($i+1) == count($_POST['a'])) {
+		if($actualcount>0) {
 
 		$adodb->StartTrans();
 
@@ -170,6 +172,11 @@ for($i = 0; $i < count($_POST['a']); $i++) {
                     die("FAILED " . $e->getMessage() . "\n");
 		}
 
+		} else {
+		if($timeisstupid == 1) {
+			die("FAILED Too many submitted tracks with invalid timestamps\n");
+		}
+		}
 	}
 
 	        // Destroy now_playing since it is almost certainly obsolescent
