@@ -24,20 +24,24 @@ require_once('utils/human-time.php');
 require_once('temp-utils.php');
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
- "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-   <title>GNUkebox version <?php echo $version; ?></title>
+   <title>Libre.fm server version <?php echo $version; ?></title>
    <meta name="author" content="FooCorp catalogue number FOO200 and contributors" />
+   <link rel="stylesheet" href="http://s.libre.fm/librefm/css/r.css" type="text/css" />
+   <link rel="stylesheet" href="http://s.libre.fm/librefm/css/b.css" type="text/css" />
+<meta http-equiv="refresh" content="20" />
 </head>
 <body>
+<div id="doc2" class="yui-t6">
+   <div id="hd" role="banner">
+   <h1><a href="http://libre.fm/"><img src="http://s.libre.fm/librefm/img/lfm-top-black.png" alt="Libre.fm" /></a></h1></div>
+   <div id="bd" role="main">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
-<h1>GNUkebox <a href="stats.php">statistics</a></h1>
-
-       <?php include('info.html'); ?>
-
-       <h2>Last 100 tracks received</h2>
+       <h2>Last 10 tracks received</h2>
 
      <?php
 
@@ -45,7 +49,7 @@ require_once('temp-utils.php');
 
 	try {
 
-	$res = $adodb->CacheGetAll(60, "SELECT userid, artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 100");
+	$res = $adodb->CacheGetAll(60, "SELECT artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
 
 	}
 
@@ -58,18 +62,20 @@ require_once('temp-utils.php');
 
 			foreach($res as &$row){
 
-			echo "<li>" . $row['userid'] . " listened to
-			" . $row['artist'] . "&mdash;" . $row['track']
-			. " (" . human_timestamp($row['time']) . ")</li>\n";
+			echo "<li>" . $row['artist'] . "&mdash;" . $row['track'] . "</li>\n";
 
 			} 
 			?>
 
 	</ul>
+</div>
+</div>
+	</div>
+	<div class="yui-b">
 
-	<hr>
+        </div>
 
-	<address>Powered by <a href="http://gnukebox.org">GNUkebox</a> &mdash; <a href="http://bzr.savannah.gnu.org/lh/librefm/">Source code</a></address>
-
+</div>
+  <div id="ft" role="contentinfo"><p>Libre.fm is powered by <a href="http://bzr.savannah.gnu.org/lh/librefm/">GNU FM</a></p></div>
 </body>
 </html>
