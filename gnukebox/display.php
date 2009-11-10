@@ -73,13 +73,9 @@ require_once('temp-utils.php');
 	</div>
 	<div class="yui-b">
 
-	 <script type="text/javascript" src="http://identi.ca/js/identica-badge.js">
-    {
-       "user":"librefm",
-       "server":"identi.ca",
-       "headerText":" status updates"
-    }
-    </script>
+	  <h2>Libre.fm status updates</h2>
+
+	    <p>Nothing to report at this time.</p>
 
         <p>Subscribe to updates <a href="http://identi.ca/librefm">at identi.ca</a>.</p>
 
