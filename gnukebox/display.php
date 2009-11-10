@@ -31,7 +31,7 @@ require_once('temp-utils.php');
    <meta name="author" content="FooCorp catalogue number FOO200 and contributors" />
    <link rel="stylesheet" href="http://s.libre.fm/librefm/css/r.css" type="text/css" />
    <link rel="stylesheet" href="http://s.libre.fm/librefm/css/b.css" type="text/css" />
-<meta http-equiv="refresh" content="20" />
+<meta http-equiv="refresh" content="180" />
 </head>
 <body>
 <div id="doc2" class="yui-t6">
@@ -41,7 +41,7 @@ require_once('temp-utils.php');
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 
-       <h2>Last 10 tracks received</h2>
+       <h2>Last 25 tracks received</h2>
 
      <?php
 
@@ -49,7 +49,7 @@ require_once('temp-utils.php');
 
 	try {
 
-	$res = $adodb->CacheGetAll(60, "SELECT artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 10");
+	$res = $adodb->CacheGetAll(60, "SELECT artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 25");
 
 	}
 
@@ -72,6 +72,16 @@ require_once('temp-utils.php');
 </div>
 	</div>
 	<div class="yui-b">
+
+	 <script type="text/javascript" src="http://identi.ca/js/identica-badge.js">
+    {
+       "user":"librefm",
+       "server":"identi.ca",
+       "headerText":" status updates"
+    }
+    </script>
+
+        <p>Subscribe to updates <a href="http://identi.ca/librefm">at identi.ca</a>.</p>
 
         </div>
 
