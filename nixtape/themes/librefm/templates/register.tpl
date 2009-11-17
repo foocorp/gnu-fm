@@ -2,7 +2,7 @@
 
 {if isset($activated)}
 
-	<h3>{t}Your account has been activated! You may now login!{/t}</h3>
+	<h3>Your account has been activated! You may now <a href="/login.php">login!</a></h3>
 
 {elseif isset($registered) }
 
