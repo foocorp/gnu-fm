@@ -23,27 +23,27 @@ require_once('config.php');
 require_once('auth.php');
 require_once('smarty/Smarty.class.php');
 
-if($_GET['lang']) {
-	$languages = array($_GET['lang'] . '.UTF-8');
-	setcookie('lang', $_GET['lang'] . '.UTF-8', time() + 31536000);
-} elseif (isset($_COOKIE['lang'])) {
-	$languages = array($_COOKIE['lang']);
-} else {
-	// Attempt to mangle browser language strings in to valid gettext locales (needs a big lookup table to be 100% accurate)
-	$languages = preg_split('/,/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-	for($i = 0; $i < count($languages); $i++) {
-		$languages[$i] = preg_replace('/;q=\d\.\d/', '', $languages[$i]);
-		if(strlen($languages[$i]) == 2) {
-			$languages[$i] = $languages[$i] . '_' . strtoupper($languages[$i]);
-		} elseif (stristr($languages[$i], '-')) {
-			$lcomponents = preg_split('/-/', $languages[$i]);
-			$languages[$i] = $lcomponents[0]  . '_' . strtoupper($lcomponents[1]);
-		}
+/* if($_GET['lang']) { */
+/* 	$languages = array($_GET['lang'] . '.UTF-8'); */
+/* 	setcookie('lang', $_GET['lang'] . '.UTF-8', time() + 31536000); */
+/* } elseif (isset($_COOKIE['lang'])) { */
+/* 	$languages = array($_COOKIE['lang']); */
+/* } else { */
+/* 	// Attempt to mangle browser language strings in to valid gettext locales (needs a big lookup table to be 100% accurate) */
+/* 	$languages = preg_split('/,/', $_SERVER['HTTP_ACCEPT_LANGUAGE']); */
+/* 	for($i = 0; $i < count($languages); $i++) { */
+/* 		$languages[$i] = preg_replace('/;q=\d\.\d/', '', $languages[$i]); */
+/* 		if(strlen($languages[$i]) == 2) { */
+/* 			$languages[$i] = $languages[$i] . '_' . strtoupper($languages[$i]); */
+/* 		} elseif (stristr($languages[$i], '-')) { */
+/* 			$lcomponents = preg_split('/-/', $languages[$i]); */
+/* 			$languages[$i] = $lcomponents[0]  . '_' . strtoupper($lcomponents[1]); */
+/* 		} */
 
-		$languages[$i] = $languages[$i] . '.UTF-8';
-	}
-}
-$current_lang = setlocale(LC_ALL, $languages);
+/* 		$languages[$i] = $languages[$i] . '.UTF-8'; */
+/* 	} */
+/* } */
+/* $current_lang = setlocale(LC_ALL, $languages); */
 bindtextdomain('nixtape', $install_path . '/themes/' . $default_theme . '/locale/');
 textdomain('nixtape');
 
@@ -53,9 +53,9 @@ $smarty->template_dir = $install_path . '/themes/'. $default_theme . '/templates
 $smarty->compile_dir = $install_path. '/themes/' . $default_theme . '/templates_c/';
 $smarty->cache_dir = $install_path. '/cache/';
 
-$current_lang = preg_replace('/.UTF-8/', '', $current_lang);
-$smarty->assign('current_lang', $current_lang);
-$smarty->assign('lang_selector_array', array(($current_lang) => 1));
+/* $current_lang = preg_replace('/.UTF-8/', '', $current_lang); */
+/* $smarty->assign('current_lang', $current_lang); */
+/* $smarty->assign('lang_selector_array', array(($current_lang) => 1)); */
 $smarty->assign('base_url', $base_url);
 $smarty->assign('media_url', $media_url);
 $smarty->assign('default_theme', $default_theme);
