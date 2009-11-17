@@ -54,7 +54,7 @@ $smarty->compile_dir = $install_path. '/themes/' . $default_theme . '/templates_
 $smarty->cache_dir = $install_path. '/cache/';
 
 /* $current_lang = preg_replace('/.UTF-8/', '', $current_lang); */
-/* $smarty->assign('current_lang', $current_lang); */
+$smarty->assign('current_lang', 'en'); */
 /* $smarty->assign('lang_selector_array', array(($current_lang) => 1)); */
 $smarty->assign('base_url', $base_url);
 $smarty->assign('media_url', $media_url);
