@@ -8,13 +8,9 @@
 
 {if isset($changed)}
 	<p>{t}Your new password has been emailed to you.{/t}</p>
-{/if}
-
-{if isset($sent)}
+{elseif isset($sent)}
 	<p>{t}An email with further information has been sent to the email address associated with your profile.{/t}</p>
-	
 {else}
-
 <div id='invite'>
 
 	<form action="{$base_url}/reset.php" method='post'>
