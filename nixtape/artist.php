@@ -39,7 +39,7 @@ $smarty->assign('name', $artist->name);
 $smarty->assign('id', $artist->id);
 $smarty->assign('bio_summary', $artist->bio_summary);
 
-$aArtistAlbums = $artist->getAlbums(4);
+$aArtistAlbums = $artist->getAlbums();
 if ($aArtistAlbums) {
 	$smarty->assign('albums', $aArtistAlbums);
 }
