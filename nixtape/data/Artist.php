@@ -74,11 +74,11 @@ class Artist {
 	 *
 	 * @return An array of Album objects
 	 */
-	function getAlbums($i=50) {
+	function getAlbums() {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$res = $adodb->CacheGetAll(600, 'SELECT name, image FROM Album WHERE artist_name = '
-			. $adodb->qstr($this->name)) . ' LIMIT ' . $i;
+			. $adodb->qstr($this->name));
 		foreach($res as &$row) {
 			$albums[] = new Album($row['name'], $this->name);
 		}
