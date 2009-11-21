@@ -39,19 +39,19 @@ $smarty->assign('name', $artist->name);
 $smarty->assign('id', $artist->id);
 $smarty->assign('bio_summary', $artist->bio_summary);
 
-$aArtistAlbums = $artist->getAlbums();
+$aArtistAlbums = $artist->getAlbums(4);
 if ($aArtistAlbums) {
 	$smarty->assign('albums', $aArtistAlbums);
 }
 
-$smarty->assign('extra_head_links', array(
-		array(
-			'rel' => 'meta',
-			'type' => 'application/rdf+xml' ,
-			'title' => 'FOAF',
-			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $artist->getURL()))
-			)
-	));
+/* $smarty->assign('extra_head_links', array( */
+/* 		array( */
+/* 			'rel' => 'meta', */
+/* 			'type' => 'application/rdf+xml' , */
+/* 			'title' => 'FOAF', */
+/* 			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $artist->getURL())) */
+/* 			) */
+/* 	)); */
 
 $smarty->display("artist.tpl");
 ?>
