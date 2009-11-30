@@ -75,7 +75,7 @@ if (isset($_POST['install'])) {
 ?>
 <html>
 	<head>
-		<title>Libre.fm Website Installer</title>
+		<title>Installer</title>
 		<script type='text/javascript'>
 			function showSqlite() {
 				document.getElementById('sqlite').style.visibility = 'visible';
@@ -90,8 +90,9 @@ if (isset($_POST['install'])) {
 	</head>
 
 	<body onload="showSqlite()">
-		<h1>Libre.fm Website Installer</h1>
-		<p>Before installing the libre.fm website please be sure that you've installed and configured gobbler, as this creates all the database tables.</p>
+		<h1>Installer</h1>
+		<p>Before installing the website please be sure that you've installed and configured gnukebox, as this creates all the database tables.</p>
+
 		<form method="post">
 			<h2>Database</h2>
 			Database Management System: <br />
