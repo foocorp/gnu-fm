@@ -1,27 +1,36 @@
- This is the libre.fm audioscrobbler server, compatible with the last.fm API.
+This is the GNU FM server, compatible with the last.fm API.
 
- To install visit http://yourserver.com/path/to/gobbler/install.php
+To install visit http://yourserver.com/install.php
 
- As things stand you'll need the ADODB module installed.
+As things stand you'll need the ADODB module installed.
 
 Web services API:
- To test the authentication API once the server is set up:
+
+To test the authentication API once the server is set up:
+
   1. Navigate to /2.0/?method=auth.gettoken&api_key=01234567890123456789012345678901&api_sig=01234567890123456789012345678901
      (The api_key and api_sig are only checked to be 32 characters long since Last.FM shared secrets cannot be checked)
+
   2. Copy the key that is returned by the auth.gettoken method
+
   3. Navigate to /api/auth/?api_key=01234567890123456789012345678901&token=<copied token>
      (Inserting the copied token into the noted place)
+
   4. Login as testuser/password (this user is hard-coded upon database setup)
+
   5. Close the browser when requested
+
   6. Navigate to /2.0/?method=auth.getsession&api_key=01234567890123456789012345678901&api_sig=01234567890123456789012345678901&token=<copied token>
      (Once again substituting the old copied token into the noted place)
+
   7. The 32-byte key returned between the <key> tags in this response will be used in the Submissions protocol handshake
 
-
 Submissions API:
+
  The submissions API (http://www.last.fm/api/submissions) is used by clients for scrobbling tracks, authentication can either be carried out with a token from the web services API or via a token created by "md5(md5(password) + timestamp)"
 
  To test standard authentication:
 
  1. Visit /?hs=true&p=1.2&u=testuser&t=1238855138&a=a40dfdc5aa3012c64425a5953267b232&c=tst
+
  2. You should receive "OK" (followed by a session id, and the URL for the now playing and submissions servers).
