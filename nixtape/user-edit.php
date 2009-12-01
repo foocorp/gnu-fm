@@ -174,7 +174,7 @@ if(isset($this_user->name))
 
 	# And display the page.
 	try {
-		$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $this_user->name);
+		$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $this_user->uniqueid, "userid");
 		$smarty->assign('tagcloud', $aTagCloud);
 	} catch (exception $e) {}
 	$smarty->assign('errors', $errors);
