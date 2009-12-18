@@ -55,7 +55,7 @@ class User {
 			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	                $row = $adodb->CacheGetRow(7200,$query);
 			if (!$row) {
-				throw new Exception('ERROR ' . $query);
+				throw new Exception('EUSER', 22);
 	                }
 		}
 
