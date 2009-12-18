@@ -33,13 +33,14 @@ if(!isset($_GET['user']) && $logged_in == false) {
 }
 
 try {
-$user = new User($_GET['user']);
+    $user = new User($_GET['user']);
 } catch (Exception $e) {
     if ($e->getCode() == 22) {
        echo('We had some trouble locating that user.  Are you sure you spelled it correctly?'."\n");
     } else {
     echo 'Caught exception: ',  $e->getMessage(), "\n";
     }
+    $user = NULL;
 }
 
 if(isset($user->name)) {
