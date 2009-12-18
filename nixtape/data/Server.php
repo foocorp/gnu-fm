@@ -65,6 +65,15 @@ class Server {
 					t.license,
 					t.mbid AS track_mbid
 				FROM Scrobbles s
+				WHERE s.userid = ' . ($userid) . '
+				ORDER BY
+					s.time DESC
+				LIMIT ' . (int)($number));
+
+			/**
+
+                                removed this.
+
 				LEFT JOIN Artist a
 					ON s.artist=a.name
 				LEFT JOIN Album l
@@ -74,10 +83,10 @@ class Server {
 					ON s.stid = st.id
 				LEFT JOIN Track t
 					ON st.track = t.id
-				WHERE s.userid = ' . ($userid) . '
-				ORDER BY
-					s.time DESC
-				LIMIT ' . (int)($number));
+
+			*/
+
+
 		} else {
 			$res = $adodb->CacheGetAll(60,
 				'SELECT
@@ -94,6 +103,13 @@ class Server {
 					t.license,
 					t.mbid AS track_mbid
 				FROM Scrobbles s
+				ORDER BY
+					s.time DESC
+				LIMIT ' . (int)($number));
+
+
+			/**
+
 				LEFT JOIN Artist a
 					ON s.artist=a.name
 				LEFT JOIN Album l
@@ -103,9 +119,8 @@ class Server {
 					ON s.stid = st.id
 				LEFT JOIN Track t
 					ON st.track = t.id
-				ORDER BY
-					s.time DESC
-				LIMIT ' . (int)($number));
+
+			 */
 		}
 		}
 		catch (exception $e) {
