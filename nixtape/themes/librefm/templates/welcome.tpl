@@ -12,7 +12,7 @@
 
 {else}
 
-<h2 id="txt-a-lot-more-fun-if-youre-logged-in"><img src="http://s.libre.fm/librefm/img/more-fun-logged-in.png" alt="A lot more fun if you're logged in." /></h2>
+<h2 id="txt-a-lot-more-fun-if-youre-logged-in">A lot more fun if you're logged in.</h2>
 
 <form action="{$base_url}/login.php" method="post">
 {include file='login-form.tpl'}
