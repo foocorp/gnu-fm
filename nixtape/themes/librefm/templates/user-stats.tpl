@@ -10,9 +10,9 @@
 
 <ul class="stats_artists" about="{$me->id}">
 	{section name=i loop=$user_playstats}
-	<li><span class="counts">{$user_playstats[i].count}</span> &mdash; <a
+	<li><a
 	href="{$user_playstats[i].pageurl|escape:'html':'UTF-8'}" rel="{if $user_playstats[i].size|substr:-5 ==
-	'large'}foaf:interest {/if}tag">{$user_playstats[i].artist|escape:"html":"UTF-8"}</a> &mdash; <div style="width:{$user_playstats[i].size}px; background-color: red;" class="artist"></div></li>
+	'large'}foaf:interest {/if}tag">{$user_playstats[i].artist|escape:"html":"UTF-8"}</a> &mdash; <div style="width:{$user_playstats[i].size}px; background-color: red;" class="artist">{$user_playstats[i].count}</div></li>
 	{/section}
 </ul>
 
@@ -37,7 +37,7 @@
 <h4 id="stats_by_day">{t name=$me->name|escape:'html':'UTF-8'}%1's scrobbles by day{/t}</h4>
 <ul class="stats_artists" about="{$me->id}">
 	{section name=i loop=$user_daystats}
-	<li>{$user_daystats[i].count} &mdash; {$user_daystats[i].date} <div style="width:{$user_daystats[i].size}px; background-color: red;" class="artist"></div>
+	<li>{$user_daystats[i].date} &mdash; <div style="width:{$user_daystats[i].size}px; background-color: red;" class="artist">{$user_daystats[i].count}</div>
 	{/section}
 </ul>
 
