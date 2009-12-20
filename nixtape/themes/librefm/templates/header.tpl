@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- @role doesn't validate with this DTD, but is useful for accessibility -->
 <html>
 <head>
 	{if !($pagetitle)}
@@ -17,7 +16,7 @@
 
 <div id="doc3">
 	<div id="hd">
-		<h1 href="{$base_url}">Libre.fm</a></h1>
+		<h1><a href="{$base_url}">Libre.fm</a></h1>
 
 {if ($logged_in)}
 	<p><a href="{$this_user->getURL()}">{$this_user->name}</a>'s</p>
@@ -29,10 +28,10 @@
    <div id="bd">
 <div class="yui-g">
 
-<p>We're doing some work on the site, regular design will return shortly.</p>
+<p><b>We're doing some work on the site, regular design will return shortly.</b></p>
 
 {if !empty($errors)}
-<div id='errors'>
+<div id="errors">
 	<p>{$errors}</p>
 </div>
 {/if}
