@@ -1,41 +1,35 @@
 <div about="{$me->id|escape:'html':'UTF-8'}" typeof="foaf:Agent" class="user vcard">
 
+
+	{if $isme}
+	<span class="edit">
+	<a href="{$me->getURL('edit')|escape:'html':'UTF-8'}"><b>Edit my profile</b></a>
+	</span>
+	<h2>This is your profile{/t}</h2>
+	{else}
+	{if $me->fullname}
+	<h2>{$me->fullname|escape:'html':'UTF-8'}</h2>
+	{else}
+	<h2>{$me->name|escape:'html':'UTF-8'}</h2>	
+	{/if}
+
 	<div class="avatar" rel="foaf:depiction">
 		<img src="{$me->getAvatar()|escape:'html':'UTF-8'}" alt="avatar" class="photo" width="64" height="64" />
 	</div>
 
-	{if $isme}
-	<span class="edit">
-	<a href="{$me->getURL('edit')|escape:'html':'UTF-8'}">[edit]</a>
-	</span>
-	<h2 about="" property="dc:title">{t}Your profile{/t}</h2>
-	{else}
-	<h2 about="" property="dc:title">{$me->name|escape:'html':'UTF-8'}'s profile</h2>
-	{/if}
-
-	<dl>
-		<dt>
-			<span class="fn" property="foaf:name">{$me->fullname|escape:'html':'UTF-8'}</span>
-			<span property="foaf:nick" content="{$me->name|escape:'html':'UTF-8'}" rel="foaf:holdsAccount" rev="sioc:account_of">
-				<span about="{$me->acctid|escape:'html':'UTF-8'}" typeof="sioc:User">
-					(<span class="nickname" property="foaf:accountName">{$me->name|escape:'html':'UTF-8'}</span>)
-					<span rel="foaf:accountServiceHomepage" resource="{$base_url}"></span>
-					<span rel="foaf:accountProfilePage" rev="foaf:topic" resource="{$me->getURL()|escape:'html':'UTF-8'}"></span>
-				</span>
-			</span>
-		</dt>
+	<ul>
 		{if $me->homepage}
-		<dd>
+		<li>
 			<a href="{$me->homepage|escape:'html':'UTF-8'}" rel="me foaf:homepage" class="url">{$me->homepage|escape:'html':'UTF-8'}</a>
-		</dd>
+		</l>
 		{/if}
 		{if $me->laconica_profile}
-		<dd>
+		<li>
 			<a href="{$me->laconica_profile|escape:'html':'UTF-8'}" rel="foaf:homepage" class="url">{$me->laconica_profile|escape:'html':'UTF-8'} (microblog)</a>
-		</dd>
+		</li>
 		{/if}
 		{if $me->location}
-		<dd rel="foaf:based_near">
+		<li rel="foaf:based_near">
 			<span {if $me->location_uri} about="{$me->location_uri|escape:'html':'UTF-8'}"{/if}>
 				<span class="label" property="rdfs:comment">{$me->location|escape:'html':'UTF-8'}</span>
 				{if $geo.latitude}
@@ -50,20 +44,20 @@
 				</small>
 				{/if}
 			</span>
-		</dd>
+		</li>
 		{/if}
 		{if $me->bio}
-		<dd class="note" property="bio:olb">{$me->bio|escape:'html':'UTF-8'}</dd>
+		<li class="note" property="bio:olb">{$me->bio|escape:'html':'UTF-8'}</li>
 		{/if}
-	</dl>
+	</ul>
 
-	<div style="text-align:right;clear:right;font-size:80%">
-		<a{if $this_page_absolute != $me->getURL()} rel="rdfs:seeAlso" href="{$me->getURL()|escape:'html':'UTF-8'}"{/if}>profile</a>
-		&middot; <a{if $this_page_absolute != $me->getURL('stats')} rel="rdfs:seeAlso" href="{$me->getURL('stats')|escape:'html':'UTF-8'}"{/if}>stats</a>
-		&middot; <a{if $this_page_absolute != $me->getURL('recent-tracks')} rel="rdfs:seeAlso" href="{$me->getURL('recent-tracks')|escape:'html':'UTF-8'}"{/if}>recent tracks</a>
-		{if $me->journal_rss} &middot; <a{if $this_page_absolute != $me->getURL('journal')} rel="rdfs:seeAlso" href="{$me->getURL('journal')|escape:'html':'UTF-8'}"{/if}>journal</a>{/if}
-		&middot; <a{if $this_page_absolute != $me->getURL('groups')} rel="rdfs:seeAlso" href="{$me->getURL('groups')|escape:'html':'UTF-8'}"{/if}>groups</a>
-	</div>
-	<hr style="border: 1px solid transparent; clear: both;" rel="foaf:page" rev="foaf:primaryTopic" resource="" />
+	<ul>
+		<li><a{if $this_page_absolute != $me->getURL()} rel="rdfs:seeAlso" href="{$me->getURL()|escape:'html':'UTF-8'}"{/if}>profile</a></li>
+		<li><a{if $this_page_absolute != $me->getURL('stats')} rel="rdfs:seeAlso" href="{$me->getURL('stats')|escape:'html':'UTF-8'}"{/if}>stats</a></li>
+		<li><a{if $this_page_absolute != $me->getURL('recent-tracks')} rel="rdfs:seeAlso" href="{$me->getURL('recent-tracks')|escape:'html':'UTF-8'}"{/if}>recent tracks</a></li>
+		{if $me->journal_rss} <li><a{if $this_page_absolute != $me->getURL('journal')} rel="rdfs:seeAlso" href="{$me->getURL('journal')|escape:'html':'UTF-8'}"{/if}>journal</a></li>{/if}
+		<li><a{if $this_page_absolute != $me->getURL('groups')} rel="rdfs:seeAlso" href="{$me->getURL('groups')|escape:'html':'UTF-8'}"{/if}>groups</a></li>
+	</ul>
+	<hr />
 
 </div>
