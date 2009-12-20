@@ -16,11 +16,11 @@
 
 <div id="doc3">
 	<div id="hd">
-		<h1><a href="{$base_url}">Libre.fm</a></h1>
+		<h1>{if ($logged_in)}
+	<a href="{$this_user->getURL()}">{$this_user->name}</a>'s&nbsp;
+	{/if}
+<a href="{$base_url}">Libre.fm</a></h1>
 
-{if ($logged_in)}
-	<p><a href="{$this_user->getURL()}">{$this_user->name}</a>'s</p>
-{/if}
 
 		{include file='menu.tpl'}
 	</div>
