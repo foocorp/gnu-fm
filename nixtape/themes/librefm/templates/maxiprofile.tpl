@@ -12,6 +12,7 @@
 	{else}
 	<h2>{$me->name|escape:'html':'UTF-8'}</h2>	
 	{/if}
+	{/if}
 
 	<div class="avatar" rel="foaf:depiction">
 		<img src="{$me->getAvatar()|escape:'html':'UTF-8'}" alt="avatar" class="photo" width="64" height="64" />
