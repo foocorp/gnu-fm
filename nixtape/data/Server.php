@@ -51,7 +51,16 @@ class Server {
 		try {
 		if($userid) {
 			$res = $adodb->CacheGetAll(60,
-				'SELECT
+				'SELECT * 
+				FROM Scrobbles s
+				WHERE s.userid = ' . ($userid) . '
+				ORDER BY
+					s.time DESC
+				LIMIT ' . (int)($number));
+
+			/**
+
+
 					s.userid,
 					s.artist,
 					s.track,
@@ -64,13 +73,6 @@ class Server {
 					l.artwork_license,
 					t.license,
 					t.mbid AS track_mbid
-				FROM Scrobbles s
-				WHERE s.userid = ' . ($userid) . '
-				ORDER BY
-					s.time DESC
-				LIMIT ' . (int)($number));
-
-			/**
 
                                 removed this.
 
@@ -89,19 +91,7 @@ class Server {
 
 		} else {
 			$res = $adodb->CacheGetAll(60,
-				'SELECT
-					s.userid,
-					s.artist,
-					s.track,
-					s.album,
-					s.time,
-					s.mbid,
-					a.mbid AS artist_mbid,
-					l.mbid AS album_mbid,
-					l.image AS album_image,
-					l.artwork_license,
-					t.license,
-					t.mbid AS track_mbid
+				'SELECT * 
 				FROM Scrobbles s
 				ORDER BY
 					s.time DESC
