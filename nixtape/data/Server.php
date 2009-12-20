@@ -52,10 +52,8 @@ class Server {
 		if($userid) {
 			$res = $adodb->CacheGetAll(60,
 				'SELECT * 
-				FROM Scrobbles s
-				WHERE s.userid = ' . ($userid) . '
-				ORDER BY
-					s.time DESC
+				FROM Scrobbles
+				WHERE userid = ' . ($userid) . '
 				LIMIT ' . (int)($number));
 
 			/**
@@ -92,9 +90,7 @@ class Server {
 		} else {
 			$res = $adodb->CacheGetAll(60,
 				'SELECT * 
-				FROM Scrobbles s
-				ORDER BY
-					s.time DESC
+				FROM Scrobbles
 				LIMIT ' . (int)($number));
 
 
