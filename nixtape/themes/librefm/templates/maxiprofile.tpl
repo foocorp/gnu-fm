@@ -7,13 +7,11 @@
 	{/if}
 
 	{if $isme}
-	<span class="edit">
-	<a href="{$me->getURL('edit')|escape:'html':'UTF-8'}"><b>Edit my profile</b></a>
-	</span>
+	<p><a href="{$me->getURL('edit')|escape:'html':'UTF-8'}"><b>Edit my profile</b></a></p>
 	{/if}
 
 	<div class="avatar" rel="foaf:depiction">
-		<img src="{$me->getAvatar()|escape:'html':'UTF-8'}" alt="avatar" class="photo" width="64" height="64" />
+		<p><img src="{$me->getAvatar()|escape:'html':'UTF-8'}" alt="avatar" class="photo" width="64" height="64" /></p>
 	</div>
 
 	<ul>
