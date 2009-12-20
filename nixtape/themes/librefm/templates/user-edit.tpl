@@ -5,7 +5,7 @@
 
 	<form action='{$base_url}/user-edit.php' method='post'>
 
-	<div><label for='fullname'>{t}Full name:{/t}</h3>
+	<div><h3><label for='fullname'>{t}Full name:{/t}</h3>
 
 	<div class="formHelp">Enter your name here, if you want to.</div>
 
@@ -14,14 +14,14 @@
 				<div>
 					<h3><label for='location'>{t}Location:{/t}</h3>
 
-					<div class="formHelp">&nbsp;</div>
+					<div class="formHelp"></div>
 
 					<input name='location' id='location' value='{$location|escape:'html':'UTF-8'}' />
 				</div>
 				<div>
 					<h3><label for='homepage'>{t}Homepage URL:{/t}</h3>
 
-					<div class="formHelp">&nbsp;</div>
+					<div class="formHelp"></div>
 					<input name='homepage' id='homepage' value='{$homepage|escape:'html':'UTF-8'}' />
 				</div>
 				<div>
@@ -29,14 +29,14 @@
 						<span><a href='#dfn_avatar_uri' rel='glossary'>{t}What's this?{/t}</a></span>
 					</h3>
 
-					<div class="formHelp">&nbsp;</div>
+					<div class="formHelp"></div>
 
 					<input name='avatar_uri' id='avatar_uri' value='{$avatar_uri|escape:'html':'UTF-8'}' />
 				</div>
 				<div>
 					<h3><label for='bio'>{t}Mini Biography:{/t}</h3>
 
-					<div class="formHelp">&nbsp;</div>
+					<div class="formHelp"></div>
 
 					<textarea name='bio' id='bio'>{$bio|escape:'html':'UTF-8'}</textarea>
 				</div>
@@ -45,7 +45,7 @@
 						<span><a href='#dfn_id' rel='glossary'>{t}What's this?{/t}</a></span>
 					</h3>
 
-					<div class="formHelp">&nbsp;</div>
+					<div class="formHelp"></div>
 
 					<input name='id' id='id' value='{$id|escape:'html':'UTF-8'}' />
 				</div>
@@ -55,7 +55,7 @@
 					</h3>
 
 
-					<div class="formHelp">&nbsp;</div>
+					<div class="formHelp"></div>
 
 					<input onchange='laconicaChange();' onclick='laconicaClick();' name='laconica_profile' id='laconica_profile' value='{$laconica_profile|escape:'html':'UTF-8'}' />
 				</div>
@@ -65,7 +65,7 @@
 					</h3>
 
 
-					<div class="formHelp">&nbsp;</div>
+					<div class="formHelp"></div>
 
 					<input name='journal_rss' id='journal_rss' value='{$journal_rss|escape:'html':'UTF-8'}' />
 				</div>
@@ -74,14 +74,14 @@
 						<span>{t}Leave this blank if you don't want to change your password.{/t}</span>
 					</h3>
 
-					<div class="formHelp">&nbsp;</div>
+					<div class="formHelp"></div>
 
 					<input name='password_1' id='password_1' type='password' autocomplete="off" value='' />
 				</div>
 				<div>
 					<h3><label for='password_2'>{t}Confirm Password:{/t}</h3>
 
-					<div class="formHelp">&nbsp;</div>
+					<div class="formHelp"></div>
 
 
 					<input name='password_2' id='password_2' type='password' autocomplete="off" value='' />
