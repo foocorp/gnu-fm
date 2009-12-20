@@ -22,7 +22,7 @@
 		{if $me->homepage}
 		<li>
 			<a href="{$me->homepage|escape:'html':'UTF-8'}" rel="me foaf:homepage" class="url">{$me->homepage|escape:'html':'UTF-8'}</a>
-		</l>
+		</li>
 		{/if}
 		{if $me->laconica_profile}
 		<li>
