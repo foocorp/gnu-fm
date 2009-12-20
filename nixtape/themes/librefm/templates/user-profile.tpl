@@ -4,14 +4,13 @@
 
 {if $nowplaying|@count > 0}
 <h3>{t}Now Playing:{/t}</h3>
-<!-- We should try to make this list work like the gobbles list. -->
-<dl class='now-playing'>
     {section name=i loop=$nowplaying}
-    <dt class='track-name {if $scrobbles[i].license > 0}libre{/if}'><a href="{$nowplaying[i].trackurl|escape:'html':'UTF-8'}">{$nowplaying[i].track|escape:'html':'UTF-8'}</a></dt>
-    <dd>by <span class='artist-name'><a href='{$nowplaying[i].artisturl|escape:'html':'UTF-8'}'>{$nowplaying[i].artist|escape:'html':'UTF-8'}</a></span></dd>
-    <dd>with <span class='gobbler'>{$nowplaying[i].clientstr}</span></dd>
+    <p><a href="{$nowplaying[i].trackurl|escape:'html':'UTF-8'}">{$nowplaying[i].track|escape:'html':'UTF-8'}</a> by <span class='artist-name'><a href='{$nowplaying[i].artisturl|escape:'html':'UTF-8'}'>{$nowplaying[i].artist|escape:'html':'UTF-8'}</a></span> with <span class='gobbler'>{$nowplaying[i].clientstr}</span>
+
+<!-- {if $scrobbles[i].license > 0}{/if} we should put a download link here -->
+
+</p>
     {/section}
-</dl>
 {/if}
 
 <div about="[_:seq1]" typeof="rdf:Seq" rev="rss:items">
