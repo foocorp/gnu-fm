@@ -1,10 +1,6 @@
 <div about="{$me->id|escape:'html':'UTF-8'}" typeof="foaf:Agent" class="user vcard">
 
 
-	{if $isme}
-	<span class="edit">
-	<a href="{$me->getURL('edit')|escape:'html':'UTF-8'}"><b>Edit my profile</b></a>
-	</span>
 	<h2>This is your profile</h2>
 	{else}
 	{if $me->fullname}
@@ -12,6 +8,11 @@
 	{else}
 	<h2>{$me->name|escape:'html':'UTF-8'}</h2>	
 	{/if}
+
+	{if $isme}
+	<span class="edit">
+	<a href="{$me->getURL('edit')|escape:'html':'UTF-8'}"><b>Edit my profile</b></a>
+	</span>
 	{/if}
 
 	<div class="avatar" rel="foaf:depiction">

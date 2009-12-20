@@ -4,84 +4,96 @@
 	<h2 property='dc:title'>Edit your profile</h2>
 
 	<form action='{$base_url}/user-edit.php' method='post'>
-		<fieldset>
-			<legend><strong>{t}The form below is still very experimental. Using this may wreck your account!{/t}</strong></legend>
-			<ul>
-				<li>
-					<label for='fullname'>{t}Full name:{/t}</label>
-					<input name='fullname' id='fullname' value='{$fullname|escape:'html':'UTF-8'}' />
-				</li>
-				<li>
+
+	<div><label for='fullname'>{t}Full name:{/t}</label>
+
+	<div class="formHelp">Enter your name here, if you want to.</div>
+
+	<input name='fullname' id='fullname' value='{$fullname|escape:'html':'UTF-8'}' />
+				</div>
+				<div>
 					<label for='location'>{t}Location:{/t}</label>
 					<input name='location' id='location' value='{$location|escape:'html':'UTF-8'}' />
-				</li>
-				<li>
-					<label for='location_uri'>{t}Geoname:{/t}
-						<span><a href='#dfn_location_uri' rel='glossary'>{t}What's this?{/t}</a></span>
-					</label>
-					<span id='chooser'>
-						<input type='hidden' name='location_uri' id='location_uri' value='{$location_uri|escape:'html':'UTF-8'}' />
-						<input type='button' value='{t}Find...{/t}' onclick='LocationCheck();' />
-						<span id='location_uri_label'></span>
-					</span>
-				</li>
-				<li>
+				</div>
+				<div>
 					<label for='homepage'>{t}Homepage URL:{/t}</label>
+
+					<div class="formHelp">&nbsp;</div>
 					<input name='homepage' id='homepage' value='{$homepage|escape:'html':'UTF-8'}' />
-				</li>
-				<li>
+				</div>
+				<div>
 					<label for='avatar_uri'>{t}Avatar URL:{/t}
 						<span><a href='#dfn_avatar_uri' rel='glossary'>{t}What's this?{/t}</a></span>
 					</label>
+
+					<div class="formHelp">&nbsp;</div>
+
 					<input name='avatar_uri' id='avatar_uri' value='{$avatar_uri|escape:'html':'UTF-8'}' />
-				</li>
-				<li>
+				</div>
+				<div>
 					<label for='bio'>{t}Mini Biography:{/t}</label>
+
+					<div class="formHelp">&nbsp;</div>
+
 					<textarea name='bio' id='bio'>{$bio|escape:'html':'UTF-8'}</textarea>
-				</li>
-				<li>
+				</div>
+				<div>
 					<label for='id'>{t}WebID (FOAF){/t}
 						<span><a href='#dfn_id' rel='glossary'>{t}What's this?{/t}</a></span>
 					</label>
+
+					<div class="formHelp">&nbsp;</div>
+
 					<input name='id' id='id' value='{$id|escape:'html':'UTF-8'}' />
-				</li>
-				<li>
+				</div>
+				<div>
 					<label for='laconica_profile'>{t}Laconica/identi.ca Profile:{/t}
 						<span><a href='#dfn_laconica_profile' rel='glossary'>{t}What's this?{/t}</a></span>
 					</label>
+
+
+					<div class="formHelp">&nbsp;</div>
+
 					<input onchange='laconicaChange();' onclick='laconicaClick();' name='laconica_profile' id='laconica_profile' value='{$laconica_profile|escape:'html':'UTF-8'}' />
-				</li>
-				<li>
+				</div>
+				<div>
 					<label for='journal_rss'>{t}RSS Feed:{/t}
 						<span><a href='#dfn_journal_rss' rel='glossary'>{t}What's this?{/t}</a></span>
 					</label>
+
+
+					<div class="formHelp">&nbsp;</div>
+
 					<input name='journal_rss' id='journal_rss' value='{$journal_rss|escape:'html':'UTF-8'}' />
-				</li>
-				<li>
-					<label for='anticommercial'>{t}Anticommercial{/t}
-						<span><a href='#dfn_anticommercial' rel='glossary'>{t}What's this?{/t}</a></span>
-					</label>
-					<input name='anticommercial' id='anticommercial' type='checkbox'{if $anticommercial == 1} checked='checked'{/if} />
-				</li>
-				<li>
+				</div>
+				<div>
 					<label for='password_1'>{t}Password:{/t}
 						<span>{t}Leave this blank if you don't want to change your password.{/t}</span>
 					</label>
-					<input name='password_1' id='password_1' type='password' value='' />
-				</li>
-				<li>
+
+					<div class="formHelp">&nbsp;</div>
+
+					<input name='password_1' id='password_1' type='password' autocomplete="off" value='' />
+				</div>
+				<div>
 					<label for='password_2'>{t}Confirm Password:{/t}</label>
-					<input name='password_2' id='password_2' type='password' value='' />
-				</li>
-				<li>
+
+					<div class="formHelp">&nbsp;</div>
+
+
+					<input name='password_2' id='password_2' type='password' autocomplete="off" value='' />
+				</div>
+
+			</ul>
+
+				<p>
 					<input type='submit' value='Change' />
 					<input name='submit' value='1' type='hidden' />
-				</li>
-			</ul>
-		</fieldset>
+				</p>
+
 	</form>
 
-	<script type='text/javascript' src='{$base_url}/js/user-edit.js'></script>
+<!-- 
 
 	<h3>{t}Help{/t}</h3>
 	<dl>
@@ -104,4 +116,7 @@
 		<dd>{t escape=no}By enabling this option, you will not be shown advertisements or affiliate purchase links.{/t}</dd>
 	</dl>
 </div>
+
+-->
+
 {include file='footer.tpl'}
