@@ -1,8 +1,5 @@
 <div about="{$me->id|escape:'html':'UTF-8'}" typeof="foaf:Agent" class="user vcard">
 
-
-	<h2>This is your profile</h2>
-	{else}
 	{if $me->fullname}
 	<h2>{$me->fullname|escape:'html':'UTF-8'}</h2>
 	{else}

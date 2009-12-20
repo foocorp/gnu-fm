@@ -5,51 +5,54 @@
 
 	<form action='{$base_url}/user-edit.php' method='post'>
 
-	<div><label for='fullname'>{t}Full name:{/t}</label>
+	<div><label for='fullname'>{t}Full name:{/t}</h3>
 
 	<div class="formHelp">Enter your name here, if you want to.</div>
 
 	<input name='fullname' id='fullname' value='{$fullname|escape:'html':'UTF-8'}' />
 				</div>
 				<div>
-					<label for='location'>{t}Location:{/t}</label>
+					<h3><label for='location'>{t}Location:{/t}</h3>
+
+					<div class="formHelp">&nbsp;</div>
+
 					<input name='location' id='location' value='{$location|escape:'html':'UTF-8'}' />
 				</div>
 				<div>
-					<label for='homepage'>{t}Homepage URL:{/t}</label>
+					<h3><label for='homepage'>{t}Homepage URL:{/t}</h3>
 
 					<div class="formHelp">&nbsp;</div>
 					<input name='homepage' id='homepage' value='{$homepage|escape:'html':'UTF-8'}' />
 				</div>
 				<div>
-					<label for='avatar_uri'>{t}Avatar URL:{/t}
+					<h3><label for='avatar_uri'>{t}Avatar URL:{/t}
 						<span><a href='#dfn_avatar_uri' rel='glossary'>{t}What's this?{/t}</a></span>
-					</label>
+					</h3>
 
 					<div class="formHelp">&nbsp;</div>
 
 					<input name='avatar_uri' id='avatar_uri' value='{$avatar_uri|escape:'html':'UTF-8'}' />
 				</div>
 				<div>
-					<label for='bio'>{t}Mini Biography:{/t}</label>
+					<h3><label for='bio'>{t}Mini Biography:{/t}</h3>
 
 					<div class="formHelp">&nbsp;</div>
 
 					<textarea name='bio' id='bio'>{$bio|escape:'html':'UTF-8'}</textarea>
 				</div>
 				<div>
-					<label for='id'>{t}WebID (FOAF){/t}
+					<h3><label for='id'>{t}WebID (FOAF){/t}
 						<span><a href='#dfn_id' rel='glossary'>{t}What's this?{/t}</a></span>
-					</label>
+					</h3>
 
 					<div class="formHelp">&nbsp;</div>
 
 					<input name='id' id='id' value='{$id|escape:'html':'UTF-8'}' />
 				</div>
 				<div>
-					<label for='laconica_profile'>{t}Laconica/identi.ca Profile:{/t}
+					<h3><label for='laconica_profile'>{t}Laconica/identi.ca Profile:{/t}
 						<span><a href='#dfn_laconica_profile' rel='glossary'>{t}What's this?{/t}</a></span>
-					</label>
+					</h3>
 
 
 					<div class="formHelp">&nbsp;</div>
@@ -57,9 +60,9 @@
 					<input onchange='laconicaChange();' onclick='laconicaClick();' name='laconica_profile' id='laconica_profile' value='{$laconica_profile|escape:'html':'UTF-8'}' />
 				</div>
 				<div>
-					<label for='journal_rss'>{t}RSS Feed:{/t}
+					<h3><label for='journal_rss'>{t}RSS Feed:{/t}
 						<span><a href='#dfn_journal_rss' rel='glossary'>{t}What's this?{/t}</a></span>
-					</label>
+					</h3>
 
 
 					<div class="formHelp">&nbsp;</div>
@@ -67,16 +70,16 @@
 					<input name='journal_rss' id='journal_rss' value='{$journal_rss|escape:'html':'UTF-8'}' />
 				</div>
 				<div>
-					<label for='password_1'>{t}Password:{/t}
+					<h3><label for='password_1'>{t}Password:{/t}
 						<span>{t}Leave this blank if you don't want to change your password.{/t}</span>
-					</label>
+					</h3>
 
 					<div class="formHelp">&nbsp;</div>
 
 					<input name='password_1' id='password_1' type='password' autocomplete="off" value='' />
 				</div>
 				<div>
-					<label for='password_2'>{t}Confirm Password:{/t}</label>
+					<h3><label for='password_2'>{t}Confirm Password:{/t}</h3>
 
 					<div class="formHelp">&nbsp;</div>
 
