@@ -21,7 +21,7 @@
 	<li>
 	<a href="{$scrobbles[i].trackurl|escape:'html':'UTF-8'}">{$scrobbles[i].track|escape:'html':'UTF-8'}</a> by <a about="{$scrobbles[i].id_artist|escape:'html':'UTF-8'}" typeof="mo:MusicArtist" property="foaf:name" rel="foaf:page"
 					class="fn url" href="{$scrobbles[i].artisturl|escape:'html':'UTF-8'}"
-					>{$scrobbles[i].artist|escape:'html':'UTF-8'}</a> {if $scrobbles[i].albumurl} on the album, <a href="{$scrobbles[i].albumurl|escape:'html':'UTF-8'}">{/if}
+					>{$scrobbles[i].artist|escape:'html':'UTF-8'}</a> {if $scrobbles[i].albumurl} on the album, <a href="{$scrobbles[i].albumurl|escape:'html':'UTF-8'}">{$scrobbles[i].album|escape:'html':'UTF-8'}</a>{/if}
 			&mdash; {$scrobbles[i].timehuman}
 	</li>
 {/section}
