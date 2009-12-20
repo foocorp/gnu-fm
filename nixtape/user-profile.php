@@ -51,8 +51,6 @@ if(isset($user->name)) {
 	} catch (exception $e) {}
 	$smarty->assign('isme', ($this_user->name == $user->name));
 	$smarty->assign('me', $user);
-	$smarty->assign('sidebar', true);
-	$smarty->assign('sidebartemplate', 'profile-sidebar.tpl');
 
 	$smarty->assign('extra_head_links', array(
 				array(
