@@ -4,20 +4,19 @@
 
 {include file='maxiprofile.tpl'}
 
-<ul>
-<li>Total tracks: {$totaltracks}</li>
+<h3>Total tracks: {$totaltracks}</h3>
+
+<h4 id="stats_by_artist">{t name=$me->name|escape:'html':'UTF-8'}%1's most played artists{/t}</h4>
+
+<ul class="stats_artists" about="{$me->id}">
+	{section name=i loop=$user_playstats}
+	<li><span class="counts">{$user_playstats[i].count}</span> &mdash; <a
+	href="{$user_playstats[i].pageurl|escape:'html':'UTF-8'}" rel="{if $user_playstats[i].size|substr:-5 ==
+	'large'}foaf:interest {/if}tag">{$user_playstats[i].artist|escape:"html":"UTF-8"}</a> &mdash; <div style="width:{$user_playstats[i].size}px; background-color: red;" class="artist"></div></li>
+	{/section}
 </ul>
 
-<h3 id="stats_by_artist">{t name=$me->name|escape:'html':'UTF-8'}%1's most played artists{/t}</h3>
-<table class="stats_artists" about="{$me->id}">
-	{section name=i loop=$user_playstats}
-	<tr><td class="counts">{$user_playstats[i].count}</td><td class="bar" style="width: {$stat_barwidth}px"><div style="width:{$user_playstats[i].size}px" class="artist"></div></td><td><a
-	href="{$user_playstats[i].pageurl|escape:'html':'UTF-8'}" rel="{if $user_playstats[i].size|substr:-5 ==
-	'large'}foaf:interest {/if}tag">{$user_playstats[i].artist|escape:"html":"UTF-8"}</a></td></tr>
-	{/section}
-</table>
-
-<h3 id="stats_by_track">{t name=$me->name|escape:'html':'UTF-8'}%1's top tracks{/t}</h3>
+<h4 id="stats_by_track">{t name=$me->name|escape:'html':'UTF-8'}%1's top tracks{/t}</h4>
 <table class="stats_artists" about="{$me->id}">
 {section name=i loop=$toptracks}
 	<tr>
@@ -35,12 +34,12 @@
 {/section}
 </table>
 
-<h3 id="stats_by_day">{t name=$me->name|escape:'html':'UTF-8'}%1's scrobbles by day{/t}</h3>
-<table class="stats_artists" about="{$me->id}">
+<h4 id="stats_by_day">{t name=$me->name|escape:'html':'UTF-8'}%1's scrobbles by day{/t}</h4>
+<ul class="stats_artists" about="{$me->id}">
 	{section name=i loop=$user_daystats}
-	<tr><td class="counts">{$user_daystats[i].count}</td><td class="bar" style="width: {$stat_barwidth}px"><div style="width:{$user_daystats[i].size}px" class="artist"></div></td><td class="date">{$user_daystats[i].date}</td></tr>
+	<li>{$user_daystats[i].count} &mdash; {$user_daystats[i].date} <div style="width:{$user_daystats[i].size}px; background-color: red;" class="artist"></div>
 	{/section}
-</table>
+</ul>
 
 <ul>
 	<li><a href="#stats_by_artist">{t}Most played artists{/t}</a></li>
