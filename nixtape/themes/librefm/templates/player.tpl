@@ -1,4 +1,4 @@
-<div id="player">
+<!-- <div id="player">
 	<audio id="audio">
 		{if $track->streamurl}
 			<object id="fallbackembed" style="width:200px;height:50px;" type="application/ogg" data="{$track->streamurl}"><a type="application/ogg" rel="enclosure" href="{$track->streamurl}">Listen to this track</a></object>
@@ -31,3 +31,5 @@
 		</div>
 	</div>
 </div>
+
+-->
