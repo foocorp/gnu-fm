@@ -8,6 +8,8 @@
 
    <p>Libre.fm &mdash; you own your own data.</p>
 
+    {include file='privacy.tpl'}
+
    </div>
 </div>
 </body>
