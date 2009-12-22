@@ -5,10 +5,6 @@
 	    </div>
 </div>
 </div>
-	</div>
-	<div class="yui-b">
-	</div>
-</div>
 
    <div id="ft">
 
