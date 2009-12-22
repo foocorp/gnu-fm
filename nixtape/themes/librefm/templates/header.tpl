@@ -19,10 +19,10 @@
 
 <div id="doc3" class="yui-t7">
 	<div id="hd">
-		<h1>{if ($logged_in)}
-	<a href="{$this_user->getURL()}">{$this_user->name}</a>'s&nbsp;
+		{if ($logged_in)}
+	<p><a href="{$this_user->getURL()}">{$this_user->name}</a>'s</p>
 	{/if}
-<a href="{$base_url}">Libre.fm</a></h1>
+<h1><a href="{$base_url}">Libre.fm</a></h1>
 
 
 		{include file='menu.tpl'}
