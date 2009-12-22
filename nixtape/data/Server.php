@@ -29,7 +29,7 @@ require_once($install_path . '/utils/linkeddata.php');
 require_once($install_path . '/utils/arc/ARC2.php');
 require_once($install_path . '/utils/resolve-external.php');
 require_once($install_path . '/utils/licenses.php');
-require_once($install_path . '/../turtle/temp-utils.php'); // this is extremely dodgy and shameful
+require_once($install_path . '/temp-utils.php'); // this is extremely dodgy and shameful
 
 /**
  * Provides access to server-wide data
