@@ -1,4 +1,3 @@
-<div about="{$me->id|escape:'html':'UTF-8'}" typeof="foaf:Agent" class="user vcard">
 
 	{if $me->fullname}
 	<h2>{$me->fullname|escape:'html':'UTF-8'}</h2>
@@ -10,9 +9,7 @@
 	<p><a href="{$me->getURL('edit')|escape:'html':'UTF-8'}"><b>Edit my profile</b></a></p>
 	{/if}
 
-	<div class="avatar" rel="foaf:depiction">
 		<p><img src="{$me->getAvatar()|escape:'html':'UTF-8'}" alt="avatar" class="photo" width="64" height="64" /></p>
-	</div>
 
 	<ul>
 		{if $me->homepage}
