@@ -56,5 +56,3 @@
 		<li><a{if $this_page_absolute != $me->getURL('groups')} rel="rdfs:seeAlso" href="{$me->getURL('groups')|escape:'html':'UTF-8'}"{/if}>groups</a></li>
 	</ul>
 	<hr />
-
-</div>

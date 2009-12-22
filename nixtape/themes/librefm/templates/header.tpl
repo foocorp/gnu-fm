@@ -14,7 +14,7 @@
 
 <body>
 
-<div id="doc3">
+<div id="doc3" class="yui-t2">
 	<div id="hd">
 		<h1>{if ($logged_in)}
 	<a href="{$this_user->getURL()}">{$this_user->name}</a>'s&nbsp;
@@ -26,7 +26,9 @@
 	</div>
 
    <div id="bd">
-<div class="yui-g">
+<div id="yui-main">
+	<div class="yui-b"><div class="yui-ge">
+    <div class="yui-u first">
 
 <p><b>We're doing some work on the site, regular design will return shortly.</b></p>
 
