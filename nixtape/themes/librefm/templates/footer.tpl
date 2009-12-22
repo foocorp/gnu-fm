@@ -1,4 +1,14 @@
-    </div></div>
+    </div>
+
+    <div class="yui-u">
+    {include file='privacy.tpl'}
+	    </div>
+</div>
+</div>
+	</div>
+	<div class="yui-b">
+	</div>
+</div>
 
    <div id="ft">
 
@@ -8,7 +18,6 @@
 
    <p>Libre.fm &mdash; you own your own data.</p>
 
-    {include file='privacy.tpl'}
 
    </div>
 </div>
