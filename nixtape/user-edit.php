@@ -123,17 +123,14 @@ if ($_POST['submit'])
 		header('Location: ' . $this_user->getURL());
 		exit;
 	}
-
-	if (isset($errors[0]))
-	{
-		header('Content-Type: text/plain');
-		//($errors);
-		exit;
-	}
 }
 
 if(isset($this_user->name))
 {
+	if (isset($errors[0])) 
+	{
+		$smarty->assign('errors', $errors);
+	}
 	# Stuff which cannot be changed.
 	$smarty->assign('acctid', $this_user->acctid);
 	$smarty->assign('avatar', $this_user->getAvatar());

@@ -1,5 +1,13 @@
 {include file='header.tpl'}
 
+{if isset($errors)}
+<div id="errors">
+{section loop=$errors name=error}
+	<p>{$errors[error]}</p>
+{/section}
+</div>
+{/if}
+
 <div id='user-edit'>
 	<h2 property='dc:title'>Edit your profile</h2>
 

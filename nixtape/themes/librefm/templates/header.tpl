@@ -33,9 +33,3 @@
     <div class="yui-u first">
 
 <p><b>We're doing some work on the site, regular design will return shortly.</b></p>
-
-{if !empty($errors)}
-<div id="errors">
-	<p>{$errors}</p>
-</div>
-{/if}
