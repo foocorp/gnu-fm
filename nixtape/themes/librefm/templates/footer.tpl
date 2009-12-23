@@ -14,6 +14,9 @@
 
    <p>Libre.fm &mdash; you own your own data.</p>
 
+   <h3>Want support?</h3>
+
+   <p><a href="/chat.html">Live help chat</a></p>
 
    </div>
 </div>
