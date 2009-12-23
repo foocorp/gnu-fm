@@ -66,6 +66,7 @@ function createArtistIfNew($artist) {
 	if(!$res) {
 		// Artist doesn't exist, so we create them
 		try {
+      $artist = substr($artist,0,255);
 			$res = $adodb->Execute('INSERT INTO Artist (name) VALUES (' . ($artist) . ')');
 		}
 		catch (exception $e) {
@@ -78,6 +79,8 @@ function createAlbumIfNew($artist, $album) {
 	global $adodb;
 
 	try {
+    $artist = substr($artist,0,255);
+    $album = substr($album,0,255);
 		$name = $adodb->GetOne('SELECT name FROM Album WHERE lower(name) = lower(' . ($album) . ') AND lower(artist_name) = lower(' . ($artist) . ')');
 	}
 	catch (exception $e) {
@@ -128,6 +131,9 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	if(!$res) {
 		// Create new track
 		try {
+    $track = substr($track,0,255);
+    $artist = substr($artist,0,255);
+    $album = substr($album,0,255);
 		$res = $adodb->Execute('INSERT INTO Track (name, artist_name, album_name, mbid) VALUES ('
 			. ($track) . ', '
 			. ($artist) . ', '
