@@ -229,6 +229,19 @@ class User {
 		return Server::getRadioSession($station, $this->name);
 	}
 
+	function getUserList($alpha) {
+	  global $adodb;
+
+	  $query = "SELECT username from users where username LIKE '" . $alpha . "%'";
+
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		$data = $adodb->CacheGetAll(7200,$query);
+		if (!$data) {
+			throw new Exception('ERROR ' . $query);
+		} 
+
+	}
+
 	/**
 	 * get user's top 20 tracks
 	 *
