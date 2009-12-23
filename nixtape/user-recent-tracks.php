@@ -47,7 +47,7 @@ if(isset($user->name)) {
 		$smarty->assign('scrobbles', $aUserScrobbles);
 	} catch (exception $e) {}
 	try {
-	$aUserTagCloud =  TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->name);
+	$aUserTagCloud =  TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->uniqueid);
 		$smarty->assign('user_tagcloud',$aUserTagCloud);
 	} catch (exception $e) {}
 	$smarty->assign('isme', ($this_user->name == $user->name));
