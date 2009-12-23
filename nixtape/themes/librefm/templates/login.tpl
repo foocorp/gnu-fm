@@ -4,18 +4,6 @@
 
 <h3>Need an account? <a href="register.php">Register now!</a></h3>
 
-
-{if !empty($errors)}
-<div id='errors'>
-	<p>{$errors}</p>
-    {if isset($invalid)}
-	<p><a href="{$base_url}/reset.php"><strong>{t}Reset your password{/t}</a></strong></p>
-    {/if}
-</div>
-{/if}
-
-</div>
-
 <form method="post">
 {include file='login-form.tpl'}
 </form>
