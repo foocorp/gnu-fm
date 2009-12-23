@@ -35,9 +35,7 @@ if(!isset($_GET['alpha'])) {
 
  }
 
-$users = getUserList($alpha);
-
-$smarty->assign('userlist', $users);
+$smarty->assign('userlist', Server::getUserList($alpha));
 
 $smarty->display('user-list.tpl');
 
