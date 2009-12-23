@@ -177,6 +177,19 @@ class Server {
 		return $result;
 	}
 
+	static function getUserList($alpha) {
+	  global $adodb;
+
+	  $query = "SELECT username from users where username LIKE '" . $alpha . "%'";
+
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		$data = $adodb->CacheGetAll(7200,$query);
+		if (!$data) {
+			throw new Exception('ERROR ' . $query);
+		} 
+
+	}
+
 	/**
 	 * Retrieves a list of the currently playing tracks
 	 *
