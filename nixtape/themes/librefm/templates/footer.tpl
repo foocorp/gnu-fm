@@ -2,7 +2,7 @@
 
     <div class="yui-u">
 
-       <p style="background-color: yellow; padding: 12px;"><a href="/chat.html">Live help chat</a></p>
+       <p style="background-color: yellow; padding: 12px; text-align: center;"><a style="display: block;" href="/chat.html">Live help chat</a></p>
 
     {include file='privacy.tpl'}
 	    </div>
