@@ -25,6 +25,8 @@ require_once('data/User.php');
 require_once('data/TagCloud.php');
 require_once('data/Server.php');
 
+$user = new User();
+
 if(!isset($_GET['alpha'])) {
 
   $alpha = 'a';
