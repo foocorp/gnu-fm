@@ -16,25 +16,9 @@
 
 </div>
 
-	<form action='' method='post'>
-		<fieldset>
-			<label for='username'>{t}Username{/t}<span>&nbsp;</span></label>
-			<input id='username' name='username' type='text' value='{$username}' maxlength='64' />
-
-			<label for='password'>{t}Password{/t}<span>&nbsp;</span></label>
-			<input id='password' name='password' type='password' value=''/>
-
-
-			
-			<label for='remember'>{t}Remember me{/t}<span>&nbsp;</span></label>
-			<input id='remember' name='remember' type='checkbox' value='1'/>
-			
-			<input type='submit' name='login' value='{t}Let me in!{/t}' />
-			<input name="return" type="hidden" value="{$return|htmlentities}" />
-			
-		</fieldset>
-
-	</form>
+<form method="post">
+{include file='login-form.tpl'}
+</form>
 
 	<p>Join us in #libre.fm on irc.freenode.net to help shape
 	that, or <a
