@@ -1,6 +1,9 @@
     </div>
 
     <div class="yui-u">
+
+       <p style="background-color: yellow; padding: 12px;"><a href="/chat.html">Live help chat</a></p>
+
     {include file='privacy.tpl'}
 	    </div>
 </div>
@@ -13,10 +16,6 @@
    <p><a href="http://playogg.org/">Libre.fm is a proud supporter of the Play Ogg campaign</a></p>
 
    <p>Libre.fm &mdash; you own your own data.</p>
-
-   <h3>Want support?</h3>
-
-   <p><a href="/chat.html">Live help chat</a></p>
 
    </div>
 </div>
