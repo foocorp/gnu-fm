@@ -1,6 +1,6 @@
 <?php
 
-/* GNU FM -- a free network service for sharing your music listening habits
+/* GNUkebox -- a free software server for recording your listening habits
 
    Copyright (C) 2009 Free Software Foundation, Inc
 
@@ -19,31 +19,34 @@
 
 */
 
-require_once('database.php');
-require_once('data/User.php');
-require_once($install_path . '/temp-utils.php'); // this is extremely dodgy and shameful
+require_once('database.php');	// include the database connection string
 
-session_start();
-if(isset($_COOKIE['session_id'])) {
-	$err = 0;
+// these functions should be short-lived while things go through a transition
+
+function username_to_uniqueid($username) {
+	global $adodb;
+
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	try {
-		$row = $adodb->GetRow('SELECT userid FROM Scrobble_Sessions WHERE '
-				. 'sessionid = ' . $adodb->qstr($_COOKIE['session_id'])
-				. ' AND expires > ' . (int)(time()));
+		$uniqueid = $adodb->GetOne('SELECT uniqueid from Users where lower(username) = lower('.$adodb->qstr($username).')');
+	} catch (exception $e) {
+		return 0;
 	}
-	catch (exception $e) {
-		$err = 1;
-	}
-	if($err || !$row) {
-		// Session is invalid
-		setcookie('session_id', '', time() - 3600);
-		session_unset();
-		session_destroy();
-	} else {
-		$logged_in = true;
-		$username = uniqueid_to_username($row['userid']);
-		$this_user = new User($username);
-	}
+
+	return $uniqueid;
 }
+
+function uniqueid_to_username($uniqueid) {
+	global $adodb;
+
+	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	try {
+		$username = $adodb->GetOne('SELECT username from Users where uniqueid = '.($uniqueid));
+	} catch (exception $e) {
+		return "BROKEN($uniqueid)";
+	}
+
+	return $username;
+}
+
 ?>
