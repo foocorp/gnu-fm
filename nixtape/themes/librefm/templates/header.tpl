@@ -24,7 +24,7 @@
 <h1><a href="{$base_url}">Libre.fm</a></h1>
 
 
-		{include file='menu.tpl'}
+
 	</div>
 
    <div id="bd">
