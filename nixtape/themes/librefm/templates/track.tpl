@@ -4,18 +4,6 @@
 
 	<h2 property="dc:title" class="fn" rel="foaf:page" rev="foaf:primaryTopic" resource="">{$track->name|escape:'html':'UTF-8'}</h2>
 
-	<hr />
-
-	{include file='player.tpl'}
-	<script type="text/javascript">
-		var playlist = [{ldelim}"artist" : "{$track->artist_name}", "album" : "{$track->album_name}", "track" : "{$track->name}", "url" : "{$track->streamurl}"{rdelim}];
-		{if isset($this_user)}
-		playerInit(playlist, "{$this_user->getScrobbleSession()}", false);
-		{else}
-		playerInit(playlist, false, false);
-		{/if}
-	</script>
-
 	<dl>
 		<dt>{t}Artist:{/t}</dt>
 		<dd rel="foaf:maker" rev="foaf:made" class="contributor vcard">
@@ -46,19 +34,19 @@
 		<li property="rdfs:comment">{t}Listeners:{/t} {$track->getListenerCount()}</li>
 	</ul>
   
-	<h3>{t}Albums containing this track:{/t}</h3>
-	<div rev="mo:track">
-	{section name=i loop=$albums}
-	
-		<span about="{$albums[i]->id|escape:'html':'UTF-8'}" typeof="mo:Record" property="dc:title" content="{$albums[i]->name|escape:'html':'UTF-8'}">
-			<a rel="foaf:page" rev="foaf:primaryTopic" href="{$albums[i]->getURL()|escape:'html':'UTF-8'}">
-				<img {if $albums[i]->image == false} src="{$base_url}/themes/librefm/images/qm160.png"{else}src="{$albums[i]->image|escape:'html':'UTF-8'}" rev="foaf:depiction" resource="{$albums[i]->id|escape:'html':'UTF-8'}"{/if}
-					alt="{$albums[i]->name|escape:'html':'UTF-8'}" title="{$albums[i]->name|escape:'html':'UTF-8'}" width="160" />
-			</a>
-		</span>
-	{/section}
-	</div>
-  
+
+	<hr />
+
+	{include file='player.tpl'}
+	<script type="text/javascript">
+		var playlist = [{ldelim}"artist" : "{$track->artist_name}", "album" : "{$track->album_name}", "track" : "{$track->name}", "url" : "{$track->streamurl}"{rdelim}];
+		{if isset($this_user)}
+		playerInit(playlist, "{$this_user->getScrobbleSession()}", false);
+		{else}
+		playerInit(playlist, false, false);
+		{/if}
+	</script>
+
+ 
 </div>
-<div class="cleaner">&nbsp;</div>
 {include file='footer.tpl'}
