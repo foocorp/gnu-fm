@@ -3,7 +3,12 @@
 		{if $track->streamurl}
 			<object id="fallbackembed" style="width:200px;height:50px;" type="application/ogg" data="{$track->streamurl}"><a type="application/ogg" rel="enclosure" href="{$track->streamurl}">Listen to this track</a></object>
 		{elseif isset($radio_session)}
-			<p><!-- {t escape=no}Sorry, you need a browser capable of making use of the HTML 5 &lt;audio&gt; tag to enjoy the streaming service via the JavaScript player.{/t}--></p>
+			
+			<p>Player problems? The player currently works
+			in Icecat/Firefox 3.5 or later &mdash; it may
+			also work in Chrome, Safari and Opera, though
+			we don't recommend them.</p>
+
 		{/if}
 	</audio>
 	<div id="interface">
@@ -32,6 +37,10 @@
 	</div>
 </div>
 
-<p>Player problems? The player currently works in Icecat/Firefox 3.5
-or later &mdash; it may also work in Chrome, Safari and Opera, though
-we don't recommend them.</p>
+		{if !$track->streamurl}
+		
+		<p>Sorry, this track doesn't offer you the ability to
+		legally share this song, so we're unable to bring you
+		a stream/download.</p>
+
+		{/if}
