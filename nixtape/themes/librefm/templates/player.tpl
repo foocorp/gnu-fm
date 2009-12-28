@@ -44,7 +44,7 @@
 		this song</a>, so we're unable to bring you a
 		stream/download.</p>
 
-		<p>If you feel this is a mistake, please <a href="http://bugs.libre.fm/newticket?summary={$track->name} by {$track->artist} is a free track&component=website-alpha">let us know</a>.</p>
+		<p>If you feel this is a mistake, please <a href="http://bugs.libre.fm/newticket?summary={$track->name} by {$track->artist_name} is a free track&component=website-alpha">let us know</a>.</p>
 
 		{else}
 
