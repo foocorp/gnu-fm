@@ -16,24 +16,6 @@
 			alt="{$album->name|escape:'html':'UTF-8'}" title="{$album->name|escape:'html':'UTF-8'}" width="160" />
 	</div>
 
-	<hr />
-
-{include file='player.tpl'}
-
-<script type="text/javascript">
-	var playlist = [
-	{section name=i loop=$tracks}
-		{ldelim} "artist" : "{$tracks[i]->artist_name}", "album" : "{$tracks[i]->album_name}", "track" : "{$tracks[i]->name}", "url" : "{$tracks[i]->streamurl}" {rdelim},
-	{/section}
-	];
-
-	{if isset($this_user)}
-	playerInit(playlist, "{$this_user->getScrobbleSession()}", false);
-	{else}
-	playerInit(playlist, false, false);
-	{/if}
-</script>
-
 <ul id="tracks" rel="mo:track">
 	{section name=i loop=$tracks}
 	<li about="{$tracks[i]->id}" typeof="mo:Track" class="item">
