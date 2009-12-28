@@ -34,9 +34,6 @@
 		<li property="rdfs:comment">{t}Listeners:{/t} {$track->getListenerCount()}</li>
 	</ul>
   
-
-	<hr />
-
 	{include file='player.tpl'}
 	<script type="text/javascript">
 		var playlist = [{ldelim}"artist" : "{$track->artist_name}", "album" : "{$track->album_name}", "track" : "{$track->name}", "url" : "{$track->streamurl}"{rdelim}];

@@ -40,7 +40,14 @@
 		{if !$track->streamurl}
 		
 		<p>Sorry, this track doesn't offer you the ability to
-		legally share this song, so we're unable to bring you
-		a stream/download.</p>
+		<a href="http://freedomdefined.org/">legally share
+		this song</a>, so we're unable to bring you a
+		stream/download.</p>
+
+		{else}
+
+		<p><a href="http://freedomdefined.org/"><img
+		src="http://freedomdefined.org/upload/b/bf/Mfalzon-freecontent_logo01--wikilogo.png"
+		alt="Free music" /></a></p>
 
 		{/if}
