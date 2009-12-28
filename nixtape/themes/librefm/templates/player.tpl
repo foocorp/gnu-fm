@@ -31,3 +31,7 @@
 		</div>
 	</div>
 </div>
+
+<p>Player problems? The player currently works in Icecat/Firefox 3.5
+or later &mdash; it may also work in Chrome, Safari and Opera, though
+we don't recommend them.</p>

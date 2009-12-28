@@ -1,6 +1,6 @@
 {include file='header.tpl'}
 
-<h2><img src="http://s.libre.fm/librefm/img/listen-all-you-want.png" alt="Go ahead, listen all you want" /></h2>
+<h2>Go ahead, listen all you want</h2>
 
 {if isset($radio_session)}
 {include file='player.tpl'}
