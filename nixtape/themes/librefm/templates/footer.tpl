@@ -20,7 +20,7 @@
 
    <hr />
 
-   <p><a href="http://foocorp.net/"><img src="http://s.libre.fm/foocorp.png" alt="FooCorp" /></a></p>
+   <a style="float: left;" href="http://foocorp.net/"><img src="http://s.libre.fm/foocorp.png" alt="FooCorp" /></a>
 
    <a href="http://foocorp.net/cat.html"><img src="http://s.libre.fm/foo200.png" alt="FOO200" style="float: right;" /></a>
 
