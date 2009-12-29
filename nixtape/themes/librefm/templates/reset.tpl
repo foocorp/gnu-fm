@@ -13,13 +13,16 @@
 {else}
 <div id='invite'>
 
+<p>Enter your email address and we'll email you a link to reset your
+password. All passwords are encrypted in our database.</p>
+
 	<form action="{$base_url}/reset.php" method='post'>
 		<fieldset>
 
-			<label for='username'>{t}Username{/t}</span></label>
-			<input id='username' name='user' type='text' value='' />
+			<h3><label for='username'>{t}Username{/t}</span></label></h3>
+			<div><input id='username' name='user' type='text' value='' /></div>
 
-			<input type='submit' name='recover' value='{t}Reset my password!{/t}'/>
+			<p><input type='submit' name='recover' value='{t}Reset my password!{/t}'/></p>
 		</fieldset>
 
 	</form>
