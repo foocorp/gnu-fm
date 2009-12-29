@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='mini-header.tpl'}
 
 <h2>{t}Reset my password{/t}</h2>
 
@@ -27,4 +27,4 @@
 
 {/if}
 
-{include file='footer.tpl'}
+{include file='mini-footer.tpl'}

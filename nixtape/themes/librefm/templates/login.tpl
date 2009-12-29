@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='mini-header.tpl'}
 
 <h2>Login</h2>
 
@@ -13,4 +13,4 @@
 	href="http://lists.autonomo.us/mailman/listinfo/libre-fm">join
 	our mailing list</a> and have your say!</p>
 
-{include file='footer.tpl'}
+{include file='mini-footer.tpl'}

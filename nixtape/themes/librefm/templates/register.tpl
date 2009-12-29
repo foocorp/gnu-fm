@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='mini-header.tpl'}
 
 {if isset($activated)}
 
@@ -44,4 +44,4 @@
 	<h3 class="disclaimer">{t}We won't sell, swap or give away your email address. You can optionally include personal data on your profile, which is displayed publicly.{/t}</h3>
 	
 {/if}
-{include file='footer.tpl'}
+{include file='mini-footer.tpl'}
