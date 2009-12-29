@@ -2,14 +2,6 @@
 <html>
 <head>
 <title>Libre.fm</title>
-<literal>
-<style type="text/css">
-
-html, body{padding: 0; margin: 0; background-color: #eee;}
-
-body{width: 500px; margin: 0 auto; font-family: sans-serif; font-size: 130%; color: #333;}
-
-</style>
-</literal>
+<link rel="stylesheet" href="http://s.libre.fm/mini.css" />
 </head>
 <body>
