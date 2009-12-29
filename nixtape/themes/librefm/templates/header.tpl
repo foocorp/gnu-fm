@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	{if !($pagetitle)}
 	<title>Libre.fm &mdash; {t}discover new music{/t}</title>
 	{else}
