@@ -2,17 +2,19 @@
 
 {if isset($activated)}
 
-	<h3>Your account has been activated! You may now <a href="/login.php">login!</a></h3>
+        <h2>You're in!</h2>
+
+	<p>Your account has been activated! You may now <a href="/login.php">login!</a></p>
 
 {elseif isset($registered) }
 
-	<h2><img src="http://s.libre.fm/librefm/img/check-mail.png" alt="Go! Go! Go! Check your email now" /></h2>
+	<h2>Go! Go! Go! Check your email now</h2>
 
-	<h3>{t}Please follow the link in your email to activate your account!{/t}</h3>
+	<p>{t}Please follow the link in your email to activate your account!{/t}</p>
 	
 {else}
 
-<h2><img src="http://s.libre.fm/librefm/img/look-awesome.png" alt="You look awesome today by the way" /></h2>
+<h2>You look awesome today, by the way</h2>
 
 	{if isset($errors) }
 		<p id='errors'>{$errors}</p>
@@ -41,7 +43,7 @@
 
 	</form>
 
-	<h3 class="disclaimer">{t}We won't sell, swap or give away your email address. You can optionally include personal data on your profile, which is displayed publicly.{/t}</h3>
+	<p><small>{t}We won't sell, swap or give away your email address. You can optionally include personal data on your profile, which is displayed publicly.{/t}</small></p>
 	
 {/if}
 {include file='mini-footer.tpl'}
