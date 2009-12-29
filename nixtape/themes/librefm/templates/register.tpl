@@ -34,12 +34,14 @@
 
 			<h3>
 			<label for='password-repeat'>{t}Your password again{/t}</label></h3>
-			<p><small>Who said repeating yourself was bad thing?</small></p>
+			<p><small>Who said repeating yourself was a bad thing?</small></p>
 			<div><input id='password-repeat' name='password-repeat' type='password' value=''/></div>
 
 			<h3><label for='email'>{t}Your e-mail:{/t}</label></h3>
-			<p><small>We're going to email you here to confirm this account, first.</small></p>
+			<p><small>We're going to email you here to confirm this account.</small></p>
 			<div><input id='email' name='email' type='text' value='{$email}' maxlength='64' /></div>
+
+			<p><label><input type="checkbox" name="foo-check" /> I read this form carefully, and double-checked my email address first, honest.</label></p>
 
 		</fieldset>
 
