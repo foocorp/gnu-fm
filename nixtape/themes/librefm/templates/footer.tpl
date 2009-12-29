@@ -4,6 +4,8 @@
 
     {include file='menu.tpl'}
 
+    {include file='popular.html'}
+
 	    </div>
 </div>
 </div>
