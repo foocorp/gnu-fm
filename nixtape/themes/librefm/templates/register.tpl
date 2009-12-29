@@ -23,19 +23,19 @@
 	<form action='' method='post'>
 		<fieldset>
 
-			<div><label for='username'>{t}Your username:{/t}<span>{t}(no more than 16 chars.){/t}</span></label>
-			<input id='username' name='username' type='text' value='{$username}' maxlength='16' /></div>
+			<h3><label for='username'>{t}Your username:{/t}<span>{t}(no more than 16 chars.){/t}</span></label></h3>
+			<div><input id='username' name='username' type='text' value='{$username}' maxlength='16' /></div>
 
-			<div>
-			<label for='password'>{t}Your password:{/t}<span>{t}(make it hard to guess){/t}</span></label>
-			<input id='password' name='password' type='password' value=''/></div>
+			<h3>
+			<label for='password'>{t}Your password:{/t}<span>{t}(make it hard to guess){/t}</span></label></h3>
+			<div><input id='password' name='password' type='password' value=''/></div>
 
-			<div>
-			<label for='password-repeat'>{t}Your password again{/t}<span>{t}(you should repeat it.){/t}</span></label>
-			<input id='password-repeat' name='password-repeat' type='password' value=''/></div>
+			<h3>
+			<label for='password-repeat'>{t}Your password again{/t}<span>{t}(you should repeat it.){/t}</span></label></h3>
+			<div><input id='password-repeat' name='password-repeat' type='password' value=''/></div>
 
-			<div><label for='email'>{t}Your e-mail:{/t}<span>{t}(must be valid!){/t}</span></label>
-			<input id='email' name='email' type='text' value='{$email}' maxlength='64' /></div>
+			<h3><label for='email'>{t}Your e-mail:{/t}<span>{t}(must be valid!){/t}</span></label></h3>
+			<div><input id='email' name='email' type='text' value='{$email}' maxlength='64' /></div>
 
 		</fieldset>
 
