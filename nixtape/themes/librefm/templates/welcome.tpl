@@ -12,13 +12,24 @@
 
 {else}
 
-<h2 id="txt-a-lot-more-fun-if-youre-logged-in">A lot more fun if you're logged in.</h2>
+       <h2><img src="http://s.libre.fm/librefm/img/better-deal.png" alt="A better deal for artists and fans" /></h2>
 
-<form action="{$base_url}/login.php" method="post">
-{include file='login-form.tpl'}
-</form>
+       <h3 style="text-align: center; color #aaa;">Libre.fm allows you to share your listening habits and discover new music.</h3>
 
-<p>No account? No problem, <a href="/register.php">sign up now</a>.</p>
+       <ul id="benefits">
+	 <li>100% indie artists.<ul><li>Libre.fm actively supports the creation of music by independent artists.</li></ul></li>
+
+	 <li>You own your own listening data.<ul><li>Everything you put into Libre.fm is yours, not ours. Take it away and do cool things!</li></ul></li>
+	 <li>Legally download and share any track.<ul><li>Every song on Libre.fm is made by musicians who <b>want</b> you to share their music.</li></ul></li>
+	 <li>Your privacy, taken care of.<ul><li>Our <a href="http://libre.fm/more.html#privacy">privacy policy</a> is awesome. We don't even log your IP address! Privacy is important.</li></ul></li>
+
+       </ul>
+
+       <ul id="buttons">
+	 <li><a href="http://alpha.libre.fm/register.php"><img src="http://s.libre.fm/librefm/img/signup-button.png" alt="Sign up now" /></a></li>
+	 </ul>
+
+       <h4>That's not all! The code that powers Libre.fm is <a href="http://www.gnu.org/philosophy/free-sw.html">free software</a> &mdash; <a href="http://bzr.savannah.gnu.org/lh/librefm/">take it</a>, run your own site and <a href="http://lists.autonomo.us/mailman/listinfo/libre-fm">join the development community!</a></h4>
 
 {/if}
 
