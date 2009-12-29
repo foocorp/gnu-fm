@@ -23,18 +23,22 @@
 	<form action='' method='post'>
 		<fieldset>
 
-			<h3><label for='username'>{t}Your username:{/t}<span>{t}(no more than 16 chars.){/t}</span></label></h3>
-			<div><input id='username' name='username' type='text' value='{$username}' maxlength='16' /></div>
+			<h3><label for='username'>{t}Your username:{/t}</label></h3>
+			<p><small>{t}No more than 16 characters, please.{/t}</small></p>
+			<div><input id='username' name='username' type='text' value='{$username}' maxlength='16' size='16' /></div>
 
 			<h3>
-			<label for='password'>{t}Your password:{/t}<span>{t}(make it hard to guess){/t}</span></label></h3>
+			<label for='password'>{t}Your password:{/t}</label></h3>
+			<p><small>{t}Try and make it hard to guess! Don't use the same password for everything!{/t}</small></p>
 			<div><input id='password' name='password' type='password' value=''/></div>
 
 			<h3>
-			<label for='password-repeat'>{t}Your password again{/t}<span>{t}(you should repeat it.){/t}</span></label></h3>
+			<label for='password-repeat'>{t}Your password again{/t}</label></h3>
+			<p><small>Who said repeating yourself was bad thing?</small></p>
 			<div><input id='password-repeat' name='password-repeat' type='password' value=''/></div>
 
-			<h3><label for='email'>{t}Your e-mail:{/t}<span>{t}(must be valid!){/t}</span></label></h3>
+			<h3><label for='email'>{t}Your e-mail:{/t}</label></h3>
+			<p><small>We're going to email you here to confirm this account, first.</small></p>
 			<div><input id='email' name='email' type='text' value='{$email}' maxlength='64' /></div>
 
 		</fieldset>
