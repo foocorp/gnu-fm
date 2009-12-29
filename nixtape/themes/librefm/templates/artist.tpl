@@ -9,24 +9,15 @@
 		{/if}
 	</div>
 
-	<ul id="albums" rel="foaf:made" rev="foaf:maker">
+	<ul>
 		{section name=i loop=$albums}
 		<li about="{$albums[i]->id}" property="dc:title" content="{$albums[i]->name|escape:'html':'UTF-8'}" typeof="mo:Record" class="haudio">
-					<a rel="foaf:page" href="{$albums[i]->getURL()}">
-						<span{if $albums[i]->image != false} about="{$albums[i]->id}" rel="foaf:depiction"{/if}>
-							<img class="album photo" {if $albums[i]->image == false} src="http://s.libre.fm/librefm/img/qm160.png"{else}src="{$albums[i]->image}"{/if}
-							alt="{$albums[i]->name|escape:'html':'UTF-8'}"
-							title="{$albums[i]->name|escape:'html':'UTF-8'}" width="160" />
-						</span>
-					</a>
+					<a rel="foaf:page" href="{$albums[i]->getURL()}">{$albums[i]->name|escape:'html':'UTF-8'}</a>
 		</li>
 		{/section}
 	</ul>
 
 </div>
-
-
-<div class="cleaner">&nbsp;</div>
 
 {include file='footer.tpl'}
 
