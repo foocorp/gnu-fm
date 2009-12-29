@@ -21,7 +21,7 @@
 
 	 <li>You own your own listening data.<ul><li>Everything you put into Libre.fm is yours, not ours. Take it away and do cool things!</li></ul></li>
 	 <li>Legally download and share any track.<ul><li>Every song on Libre.fm is made by musicians who <b>want</b> you to share their music.</li></ul></li>
-	 <li>Your privacy, taken care of.<ul><li>Our <a href="more.html#privacy">privacy policy</a> is awesome. We don't even log your IP address! Privacy is important.</li></ul></li>
+	 <li>Your privacy, taken care of.<ul><li>Our <a href="http://libre.fm/more.html#privacy">privacy policy</a> is awesome. We don't even log your IP address! Privacy is important.</li></ul></li>
 
        </ul>
 
