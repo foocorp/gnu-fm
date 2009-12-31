@@ -31,5 +31,3 @@
    <div id="bd">
 <div class="yui-ge">
     <div class="yui-u first">
-
-<p><b>We're doing some work on the site, regular design will return shortly.</b></p>
