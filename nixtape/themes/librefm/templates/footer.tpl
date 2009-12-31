@@ -10,7 +10,7 @@
 
    <p><b>Libre.fm &mdash; you own your own data.</b></p>
 
-   <p><a href="http://bugs.libre.fm/newticket">Report a bug</a> | <a href="http://bugs.libre.fm/wiki/">Wiki</a> | <a href="http://turtle.libre.fm/">Recent tracks</a></p>
+   <p><a href="http://libre.fm/developers/">Developer info</a> | <a href="http://bugs.libre.fm/newticket">Report a bug</a> | <a href="http://bugs.libre.fm/wiki/">Wiki</a> | <a href="http://turtle.libre.fm/">Recent tracks</a></p>
 
 	    </div>
 </div>
