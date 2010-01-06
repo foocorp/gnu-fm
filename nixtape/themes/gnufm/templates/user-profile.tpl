@@ -13,10 +13,6 @@
     {/section}
 {/if}
 
-<p><small>If this list is looking a little funky, we
-apologise... we're working on it! It may appear that we didn't get
-your scrobbles, <b>we probably did</b>.</small></p>
-
 	<h3>{t plays=$scrobbles|@count}Latest %1 Plays:{/t}</h3>
 
 <ol class="gobbles" about="{$me->id|escape:'html':'UTF-8'}" rev="gob:user">

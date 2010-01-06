@@ -2,7 +2,7 @@
 <lfm status="ok">
 <playlist version="1" xmlns="http://xspf.org/ns/0/">
 <title>{$title}</title>
-<creator>libre.fm</creator>
+<creator>GNU FM</creator>
 <date>{$date}</date>
 <link rel="http://www.last.fm/expiry">3600</link>
 <trackList>
@@ -16,7 +16,7 @@
 	    <creator>{$radiotracks[rt].creator|escape:"html":"UTF-8"}</creator>
 	    <duration>{$radiotracks[rt].duration|escape:"html":"UTF-8"}</duration>
 	    <image>{$radiotracks[rt].image|escape:"html":"UTF-8"}</image>
-	    <extension application="http://alpha.libre.fm/">
+	    <extension application="/">
 		<trackauth>00000</trackauth>
 		<albumid>00000</albumid>
 		<artistid>00000</artistid>

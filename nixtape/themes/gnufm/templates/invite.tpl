@@ -14,7 +14,7 @@
 
 	<form action='' method='post'>
 		<fieldset>
-	        <p>{t escape=no}Do you have an awesome friend you'd like to share <a href='http://libre.fm' rel='bookmark' class='vcard fn org url'>libre.fm</a> with? Just enter his/her email address and we'll sort them out with an invitation code.{/t}</p>
+	        <p>{t escape=no}Do you have an awesome friend you'd like to share with? Just enter his/her email address and we'll sort them out with an invitation code.{/t}</p>
 
 			<label for='email'>{t}Invitee's E-mail:{/t}<span>{t}must be valid!{/t}</span></label>
 			<input id='email' name='email' type='text' value='' />

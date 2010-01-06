@@ -25,7 +25,7 @@
 	</dl>
 
 	{if $track->licenseurl && $track->license}
-	<p><a rel=":license" href="{$track->licenseurl}"><img src="{$base_url}/themes/librefm/images/licenses/{$track->license}.png" /></a></p>
+	<p><a rel=":license" href="{$track->licenseurl}"><img src="{$base_url}/themes/images/licenses/{$track->license}.png" /></a></p>
 	{/if}
 
 	<ul>

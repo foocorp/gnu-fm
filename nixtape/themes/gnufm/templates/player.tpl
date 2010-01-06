@@ -13,7 +13,7 @@
 	</audio>
 	<div id="interface">
 		<div id="trackinfo">
-			<span id="artistname"></span> - <span id="trackname"></span> <span id="showplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$media_url}/{$default_theme}/img/player/show-playlist.png" alt="Show playlist" title="Show playlist" /></a></span><span id="hideplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$media_url}/{$default_theme}/librefm/img/player/hide-playlist.png" alt="Hide playlist" title="Hide playlist" /></a></span>
+			<span id="artistname"></span> - <span id="trackname"></span> <span id="showplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$media_url}/{$default_theme}/img/player/show-playlist.png" alt="Show playlist" title="Show playlist" /></a></span><span id="hideplaylist"><a href="#" onclick="togglePlaylist()"><img src="{$media_url}/{$default_theme}/img/player/hide-playlist.png" alt="Hide playlist" title="Hide playlist" /></a></span>
 			<div id="playlist">
 				<hr />
 				<strong><u>{t}Playlist{/t}</u></strong>
@@ -36,20 +36,3 @@
 		</div>
 	</div>
 </div>
-
-		{if !$track->streamurl}
-		
-		<p>Sorry, this track doesn't offer you the ability to
-		<a href="http://freedomdefined.org/">legally share
-		this song</a>, so we're unable to bring you a
-		stream/download.</p>
-
-		<p>If you feel this is a mistake, please <a href="http://bugs.libre.fm/newticket?summary={$track->name} by {$track->artist_name} is a free track&description=Please update the database/website&component=website-alpha">let us know</a>.</p>
-
-		{else}
-
-		<p><a href="http://freedomdefined.org/"><img
-		src="http://freedomdefined.org/upload/b/bf/Mfalzon-freecontent_logo01--wikilogo.png"
-		alt="Free music" /></a></p>
-
-		{/if}

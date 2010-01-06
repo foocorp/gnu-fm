@@ -13,7 +13,7 @@
 	{/if}
 </script>
 {else}
-<h3>Listen to 100% libre music right here in your web browser!</h3>
+<h3>Listen to music right here in your web browser!</h3>
 
 <p>To get started, simply enter the type of music you'd like to hear
 or select one of the common tags below:</p>
