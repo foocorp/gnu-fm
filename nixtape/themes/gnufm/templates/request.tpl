@@ -7,14 +7,13 @@
 {/if}
 
 {if isset($reg)}
-	<p>{t}Your request for an invitation has been registered. Thank you for your interest in libre.fm!{/t}</p>
+	<p>{t}Your request for an invitation has been registered. Thank you for your interest!{/t}</p>
 {else}
 
 <div id='invite'>
 
 	<form action='' method='post'>
 		<fieldset>
-	        <p>{t escape=no}<a href='http://libre.fm' rel='bookmark' class='vcard fn org url'>libre.fm</a> is now in alpha. We're slowly adding new users, so if you're interested, type in your email address and you'll receive an invitation in a few days time.{/t}</p>
 
 			<label for='email'>{t}Email{/t} <span>{t}must be valid!{/t}</span></label>
 			<input id='email' name='email' type='text' value='' />

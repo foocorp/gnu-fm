@@ -8,9 +8,4 @@
 {include file='login-form.tpl'}
 </form>
 
-	<p>Join us in #libre.fm on irc.freenode.net to help shape
-	that, or <a
-	href="http://lists.autonomo.us/mailman/listinfo/libre-fm">join
-	our mailing list</a> and have your say!</p>
-
 {include file='mini-footer.tpl'}

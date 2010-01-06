@@ -12,7 +12,7 @@
 	</h2>
 
 	<div{if $album->image != false} rel="foaf:depiction"{/if}>
-		<img {if $album->image == false} src="{$base_url}/themes/librefm/images/qm160.png"{else} class="photo" src="{$album->image}"{/if}
+		<img {if $album->image == false} src="{$base_url}/images/qm160.png"{else} class="photo" src="{$album->image}"{/if}
 			alt="{$album->name|escape:'html':'UTF-8'}" title="{$album->name|escape:'html':'UTF-8'}" width="160" />
 	</div>
 

@@ -10,11 +10,6 @@
 <label for="new">{t}Address for the group:{/t}</label><br />
 <b>{$base_url}/group/</b><input id="new" name="new" size="12" /></p>
 
-<p>Please remember that Libre.fm is focused on freedom, so try to
-create groups that can help that goal. Also be mindful of the power of
-words and the importance of framing the issues we discuss and work on
-in the best possible terms.</p>
-
 <p>
 <input name="group" value="new" type="hidden" />
 <input type="submit" value=" {t}Create{/t} " />
@@ -78,7 +73,7 @@ in the best possible terms.</p>
 <h3>Help</h3>
 <dl>
 	<dt id="dfn_avatar_uri">Logo URL</dt>
-	<dd>{t}The web address for a picture to represent your group on libre.fm. It should
+	<dd>{t}The web address for a picture to represent your group on. It should
 	not be more than 80x80 pixels. (64x64 is best.){/t}</dd>
 
 	<dt id="dfn_owner">Leader</dt>
