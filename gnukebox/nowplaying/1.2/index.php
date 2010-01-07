@@ -43,7 +43,12 @@ if(isset($_POST['b'])) {
 }
 $track = $adodb->qstr($_POST['t']);
 if(isset($_POST['l']) && is_numeric($_POST['l'])) {
-	$expires = time() + (int) $_POST['l'];
+	$length = (int) $_POST['l'];
+	if($length > 5400) {
+		$expires = time() + 600;
+	} else {
+		$expires = time() + (int) $_POST['l'];
+	}
 } else {
 	$expires = time() + 250; //Expire in 5 minutes if we don't know the track length
 }
