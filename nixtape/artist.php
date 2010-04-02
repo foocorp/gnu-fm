@@ -44,6 +44,13 @@ if ($aArtistAlbums) {
 	$smarty->assign('albums', $aArtistAlbums);
 }
 
+try {  
+	$tagCloud = TagCloud::generateTagCloud('tags', 'tag', 10, $artist->name, "artist");
+	$smarty->assign('tagcloud', $tagCloud);
+} catch (exception $ex) {
+	$tagCloud = array();
+}
+
 /* $smarty->assign('extra_head_links', array( */
 /* 		array( */
 /* 			'rel' => 'meta', */
