@@ -34,7 +34,7 @@ if(!$res) {
         die("BADSESSION\n");
 }
 
-if(ereg('^(globaltags|artist)/[^:]+$', $url, $regs)) {
+if(ereg('^(globaltags|artist|user)/[^:]+$', $url, $regs)) {
 	$url = 'librefm://' . $url; // compensate for shell-fm sending incomplete urls
 }
 
