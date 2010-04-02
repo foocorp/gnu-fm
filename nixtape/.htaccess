@@ -17,4 +17,5 @@ RewriteRule ^country/([^/]+)/?$					location.php?country=$1			[B,NC]
 RewriteRule ^logout 						login.php?action=logout			[B,NC]
 RewriteRule ^listen 						listen.php
 RewriteRule ^music 						popular.php
-RewriteRule ^users                                              users.php
+RewriteRule ^users						users.php
+RewriteRule ^tag/([^/]+)/?$					tag.php?tag=$1				[B,NC]
