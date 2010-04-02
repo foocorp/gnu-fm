@@ -412,8 +412,5 @@ $_GET['method'] = strtolower($_GET['method']);
 if (!isset($_GET['method']) || !isset($method_map[$_GET['method']]))
 	report_failure(LFM_INVALID_METHOD);
 
-if (!isset($_GET['api_key']) || !valid_api_key($_GET['api_key']))
-	report_failure(LFM_INVALID_APIKEY);
-
 $method = $method_map[$_GET['method']];
 $method();
