@@ -49,9 +49,14 @@ class Artist {
 		global $adodb;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$row = $adodb->CacheGetRow(1200, 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large FROM Artist WHERE '
-			. 'mbid = ' . $adodb->qstr($mbid) . ' OR '
-			. 'name = ' . $adodb->qstr($name));
+		if($mbid) {
+			$row = $adodb->CacheGetRow(1200, 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large FROM Artist WHERE '
+				. 'mbid = ' . $adodb->qstr($mbid) . ' OR '
+				. 'name = ' . $adodb->qstr($name));
+		} else {
+			$row = $adodb->CacheGetRow(1200, 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large FROM Artist WHERE '
+				. 'name = ' . $adodb->qstr($name));
+		}
 		if(!$row) {
 			throw new Exception('No such artist' . $name);
 		} else {
