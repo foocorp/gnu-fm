@@ -437,8 +437,8 @@ function get_userid() {
 	}
 
 	$username = $adodb->GetOne('SELECT username FROM Auth WHERE '
-		. 'token = ' . $adodb->qstr($_GET['token']) . ' AND '
-		. 'username IS NOT NULL AND sk = '.$adodb->qstr($_GET['sk']));
+		. 'sk = ' . $adodb->qstr($_GET['sk']) . ' AND '
+		. 'username IS NOT NULL');
 
 	if (!$username) {
 		report_failure(LFM_INVALID_SESSION);
