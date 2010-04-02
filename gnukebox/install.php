@@ -216,7 +216,7 @@ if (isset($_POST['install'])) {
 		PRIMARY KEY(code))");
 
 	$adodb->Execute("CREATE TABLE Tags(
-		username VARCHAR(64) REFERENCES Users(username),
+		userid INTEGER REFERENCES Users(uniqueid),
 		tag VARCHAR(64),
 		artist VARCHAR(255) REFERENCES Artist(name),
 		album VARCHAR(255),
