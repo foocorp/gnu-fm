@@ -25,6 +25,7 @@ require_once('xml.php');
 class TrackXML {
 
 	public static function getTopTags($artist, $name) {
+		global $base_url;
 
 		$track = new Track($name, $artist);
 		$tags = $track->getTopTags();
@@ -39,6 +40,7 @@ class TrackXML {
 			$tag_node = $root->addChild('tag', null);
 			$tag_node->addChild('name', repamp($tag['tag']));
 			$tag_node->addChild('count', repamp($tag['freq']));
+			$tag_node->addChild('url', repamp($base_url . '/tag/' . $tag['tag']));
 		}
 
 		return($xml);
@@ -47,6 +49,7 @@ class TrackXML {
 
 
 	public static function getTags($artist, $name, $userid) {
+		global $base_url;
 
 		$track = new Track($name, $artist);
 		$tags = $track->getTags($userid);
@@ -60,6 +63,7 @@ class TrackXML {
 		foreach($tags as $tag) {
 			$tag_node = $root->addChild('tag', null);
 			$tag_node->addChild('name', repamp($tag));
+			$tag_node->addChild('url', repamp($base_url . '/tag/' . $tag['tag']));
 		}
 
 		return($xml);
