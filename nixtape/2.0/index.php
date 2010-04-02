@@ -437,7 +437,7 @@ function get_userid() {
 	}
 
 	$username = $adodb->GetOne('SELECT username FROM Auth WHERE '
-		. 'sk = ' . $adodb->qstr($_GET['sk']) . ' AND '
+		. 'sk = ' . $adodb->qstr($_REQUEST['sk']) . ' AND '
 		. 'username IS NOT NULL');
 
 	if (!$username) {
