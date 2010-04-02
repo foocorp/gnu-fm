@@ -269,6 +269,12 @@ if (isset($_POST['install'])) {
 		artist varchar(255), 
 		UNIQUE(userid, track, artist))");
 
+	$adodb->Execute("CREATE TABLE Loved_Tracks (
+		userid INTEGER REFERENCES Users(uniqueid) ON DELETE CASCADE,
+		track varchar(255),
+		artist varchar(255), 
+		UNIQUE(userid, track, artist))");
+
 	$adodb->Execute("CREATE TABLE User_Relationships (
 		uid1 INTEGER REFERENCES Users(uniqueid) ON DELETE CASCADE,
 		uid2 INTEGER REFERENCES Users(uniqueid) ON DELETE CASCADE,
