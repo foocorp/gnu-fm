@@ -80,6 +80,7 @@ $method_map = array(
 	'track.gettoptags'		=> method_track_getTopTags,
 	'track.gettags'			=> method_track_getTags,
 	'track.ban'			=> method_track_ban,
+	'track.love'			=> method_track_love,
 );
 
 function method_user_getrecenttracks() {
@@ -428,6 +429,16 @@ function method_track_ban() {
 	print(XML::prettyXML(TrackXML::ban($_POST['artist'], $_POST['track'], $userid)));
 }
 
+function method_track_love() {
+	if (!isset($_POST['artist']) || !isset($_POST['track'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$userid = get_userid();
+
+	header('Content-Type: text/xml');
+	print(XML::prettyXML(TrackXML::love($_POST['artist'], $_POST['track'], $userid)));
+}
 
 function get_userid() {
 	global $adodb;

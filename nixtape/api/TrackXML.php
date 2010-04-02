@@ -82,5 +82,20 @@ class TrackXML {
 		return $xml;
 	}
 
+	public static function love($artist, $name, $userid) {
+		global $adodb;
+
+		try {
+			$res = $adodb->Execute("INSERT INTO loved_tracks VALUES ("
+				. $userid . ", "
+				. $adodb->qstr($name) . ', '
+				. $adodb->qstr($artist) . ")");
+		} catch (exception $ex) {}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+
+		return $xml;
+	}
+
 }
 ?>
