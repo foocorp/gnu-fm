@@ -432,7 +432,7 @@ function method_track_ban() {
 function get_userid() {
 	global $adodb;
 
-	if (!isset($_GET['sk']) || !isset($_GET['token'])) {
+	if (!isset($_GET['sk'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
