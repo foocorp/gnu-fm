@@ -43,10 +43,8 @@ class TrackXML {
 			$tag_node->addChild('url', repamp($base_url . '/tag/' . $tag['tag']));
 		}
 
-		return($xml);
-
+		return $xml;
 	}
-
 
 	public static function getTags($artist, $name, $userid) {
 		global $base_url;
@@ -66,8 +64,22 @@ class TrackXML {
 			$tag_node->addChild('url', repamp($base_url . '/tag/' . $tag['tag']));
 		}
 
-		return($xml);
+		return $xml;
+	}
 
+	public static function ban($artist, $name, $userid) {
+		global $adodb;
+
+		try {
+			$res = $adodb->Execute("INSERT INTO banned_tracks VALUES ("
+				. $userid . ', '
+				. $adodb->qstr($name) . ', '
+				. $adodb->qstr($artist) . ")");
+		} catch (exception $ex) {}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+
+		return $xml;
 	}
 
 }
