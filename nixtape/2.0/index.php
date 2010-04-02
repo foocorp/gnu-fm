@@ -418,21 +418,21 @@ function method_track_getTags() {
 }
 
 function method_track_ban() {
-	if (!isset($_GET['artist']) || !isset($_GET['track'])) {
+	if (!isset($_POST['artist']) || !isset($_POST['track'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
 	$userid = get_userid();
 
 	header('Content-Type: text/xml');
-	print(XML::prettyXML(TrackXML::ban($_GET['artist'], $_GET['track'], $userid)));
+	print(XML::prettyXML(TrackXML::ban($_POST['artist'], $_POST['track'], $userid)));
 }
 
 
 function get_userid() {
 	global $adodb;
 
-	if (!isset($_GET['sk'])) {
+	if (!isset($_REQUEST['sk'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
@@ -466,9 +466,9 @@ function report_failure($code) {
 	die();
 }
 
-$_GET['method'] = strtolower($_GET['method']);
-if (!isset($_GET['method']) || !isset($method_map[$_GET['method']]))
+$_REQUEST['method'] = strtolower($_REQUEST['method']);
+if (!isset($_REQUEST['method']) || !isset($method_map[$_REQUEST['method']]))
 	report_failure(LFM_INVALID_METHOD);
 
-$method = $method_map[$_GET['method']];
+$method = $method_map[$_REQUEST['method']];
 $method();
