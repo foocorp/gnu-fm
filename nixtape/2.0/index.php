@@ -74,6 +74,7 @@ $method_map = array(
 	'user.getinfo'			=> method_user_getinfo,
 	'user.gettoptracks'		=> method_user_gettoptracks,
 	'user.getrecenttracks'		=> method_user_getrecenttracks,
+	'user.gettoptags'		=> method_user_gettoptags,
 	'radio.tune'			=> method_radio_tune,
 	'radio.getplaylist'		=> method_radio_getPlaylist,
 	'track.gettoptags'		=> method_track_getTopTags,
@@ -88,6 +89,16 @@ function method_user_getrecenttracks() {
 	header('Content-Type: text/xml');
 	print(XML::prettyXML(UserXML::getRecentTracks($_GET['user'], $_GET['limit'])));
 }
+
+function method_user_gettoptags() {
+	if (!isset($_GET['user'])) {
+		report_failure(LFM_INVALID_SIGNATURE);
+	}
+
+        header('Content-Type: text/xml');
+        print(XML::prettyXML(UserXML::getTopTags($_GET['user'])));
+}
+
 
 function method_user_gettoptracks() {
 	if (!isset($_GET['user'])) {

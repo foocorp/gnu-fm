@@ -285,4 +285,21 @@ class User {
 
 		return $tracks;
 	}
+
+	/**
+	 * Get a user's most used tags
+	 *
+	 * @param int $limit The number of tags to return (default to 10)
+	 * @return An array of tag details
+	 */
+	function getTopTags($limit=10) {
+		global $adodb;
+
+		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM tags WHERE ' 
+			. ' userid = ' . $this->uniqueid
+			. ' GROUP BY tag '
+			. ' LIMIT ' . $limit);
+
+		return $res;
+	}
 }
