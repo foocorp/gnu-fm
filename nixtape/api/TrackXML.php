@@ -32,7 +32,7 @@ class TrackXML {
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 
-		$root = $xml->addChild('tags', null);
+		$root = $xml->addChild('toptags', null);
 		$root->addAttribute('artist', $artist);
 		$root->addAttribute('track', $name);
 
