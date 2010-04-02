@@ -22,6 +22,7 @@
 require_once('../database.php');
 require_once('../api/ArtistXML.php');
 require_once('../api/UserXML.php');
+require_once('../api/TrackXML.php');
 
 # Error constants
 define('LFM_INVALID_SERVICE',	2);
@@ -75,7 +76,7 @@ $method_map = array(
 	'user.getrecenttracks'		=> method_user_getrecenttracks,
 	'radio.tune'			=> method_radio_tune,
 	'radio.getplaylist'		=> method_radio_getPlaylist,
-
+	'track.gettags'			=> method_track_getTags,
 );
 
 function method_user_getrecenttracks() {
@@ -375,6 +376,19 @@ $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	print("</playlist>\n");
 	print("</lfm>\n");
 
+}
+
+/**
+ * Track methods
+ */
+
+function method_track_getTags() {
+	if (!isset($_GET['artist']) || !isset($_GET['track'])) {
+		report_failure(LFM_INVALID_SIGNATURE);
+	}
+
+	header('Content-Type: text/xml');
+	print(XML::prettyXML(TrackXML::getTags($_GET['artist'], $_GET['track'])));
 }
 
 

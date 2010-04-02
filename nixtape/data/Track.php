@@ -149,4 +149,24 @@ class Track {
 		return Server::getTrackURL($this->artist_name, $this->album_name, $this->name);
 	}
 
+	/**
+	 * Retrieve the tags for this track.
+	 *
+	 * @return An array of tag names
+	 */
+	function getTags() {
+		global $adodb;
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+
+		$res = $adodb->CacheGetAll(600, 'SELECT COUNT(track) AS freq, tag FROM tags WHERE'
+			. ' artist = ' . $adodb->qstr($this->artist_name)
+			. ' AND track = ' . $adodb->qstr($this->name)
+			. ' GROUP BY tag ORDER BY freq DESC');
+		foreach($res as &$row) {
+			$tags[] = $row['tag'];
+		}
+
+		return $tags;
+	}
+
 }
