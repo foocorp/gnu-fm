@@ -45,5 +45,26 @@ class TrackXML {
 
 	}
 
+
+	public static function getTags($artist, $name, $userid) {
+
+		$track = new Track($name, $artist);
+		$tags = $track->getTags($userid);
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+
+		$root = $xml->addChild('tags', null);
+		$root->addAttribute('artist', $artist);
+		$root->addAttribute('track', $name);
+
+		foreach($tags as $tag) {
+			$tag_node = $root->addChild('tag', null);
+			$tag_node->addChild('name', repamp($tag));
+		}
+
+		return($xml);
+
+	}
+
 }
 ?>

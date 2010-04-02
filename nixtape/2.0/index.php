@@ -77,6 +77,7 @@ $method_map = array(
 	'radio.tune'			=> method_radio_tune,
 	'radio.getplaylist'		=> method_radio_getPlaylist,
 	'track.gettoptags'		=> method_track_getTopTags,
+	'track.gettags'			=> method_track_getTags,
 );
 
 function method_user_getrecenttracks() {
@@ -389,6 +390,28 @@ function method_track_getTopTags() {
 
 	header('Content-Type: text/xml');
 	print(XML::prettyXML(TrackXML::getTopTags($_GET['artist'], $_GET['track'])));
+}
+
+function method_track_getTags() {
+	global $adodb;
+
+	if (!isset($_GET['artist']) || !isset($_GET['track']) || !isset($_GET['sk']) || !isset($_GET['token'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$username = $adodb->GetOne('SELECT username FROM Auth WHERE '
+		. 'token = ' . $adodb->qstr($_GET['token']) . ' AND '
+		. 'username IS NOT NULL AND sk = '.$adodb->qstr($_GET['sk']));	
+
+	if (!$username) {
+		report_failure(LFM_INVALID_SESSION);
+	}
+
+	$userid = $adodb->GetOne('SELECT uniqueid FROM Users WHERE '
+		. 'username = ' . $adodb->qstr($username));
+
+	header('Content-Type: text/xml');
+	print(XML::prettyXML(TrackXML::getTags($_GET['artist'], $_GET['track'], $userid)));
 }
 
 

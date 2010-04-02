@@ -158,12 +158,33 @@ class Track {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
-		$res = $adodb->CacheGetAll(600, 'SELECT COUNT(track) AS freq, tag FROM tags WHERE'
+		$res = $adodb->CacheGetAll(600, 'SELECT COUNT(tag) AS freq, tag FROM tags WHERE'
 			. ' artist = ' . $adodb->qstr($this->artist_name)
 			. ' AND track = ' . $adodb->qstr($this->name)
 			. ' GROUP BY tag ORDER BY freq DESC');
 		
 		return $res;
+	}
+
+	/**
+	 * Retrieve a specific user's tags for this track.
+	 *
+	 * @return An array of tag names.
+	 */
+	function getTags($userid) {
+		global $adodb;
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+
+		$res = $adodb->GetAll('SELECT tag FROM tags WHERE'
+			. ' artist = ' . $adodb->qstr($this->artist_name)
+			. ' AND track = ' . $adodb->qstr($this->name)
+			. ' AND userid = ' . $userid);
+
+		foreach($res as &$row) {
+			$tags[] = $row['tag'];
+		}
+
+		return $tags;
 	}
 
 }
