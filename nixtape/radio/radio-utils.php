@@ -28,7 +28,7 @@ function radio_title_from_url($url) {
 		$artist = $regs[2];
 		return 'Libre.fm ' . $artist . ' Artist Radio';
 	}
-	if(ereg('l(ast|ibre)fm://user/(.*)/loved', $url, $regs) {
+	if(ereg('l(ast|ibre)fm://user/(.*)/loved', $url, $regs)) {
 		$user = $regs[2];
 		return 'Libre.fm ' . $user . '\'s Loved Radio';
 	}
