@@ -138,5 +138,30 @@ class UserXML {
 
 		return($xml);
 	}
+
+	public static function getTopTags($u, $limit=10) {
+		global $base_url;
+
+		try {
+			$user = new User($u);
+			$res = $user->getTopTags($limit);
+		} catch (exception $ex) {
+			return XML::error('error', '7', 'Invalid resource specified');
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('toptags');
+		$root->addAttribute('user', $user->name);
+
+		foreach($res as &$row) {
+			$tag = $root->addChild('tag', null);
+			$tag->addChild('name', repamp($row['tag']));
+			$tag->addChild('count', repamp($row['freq']));
+			$tag->addChild('url', repamp($base_url . '/tag/' . $row['tag']));
+		}
+
+		return $xml;
+	}
+
 }
 ?>
