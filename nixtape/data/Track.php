@@ -152,9 +152,9 @@ class Track {
 	/**
 	 * Retrieve the tags for this track.
 	 *
-	 * @return An array of tag names
+	 * @return An array of tag names and how frequent they are
 	 */
-	function getTags() {
+	function getTopTags() {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
@@ -162,11 +162,8 @@ class Track {
 			. ' artist = ' . $adodb->qstr($this->artist_name)
 			. ' AND track = ' . $adodb->qstr($this->name)
 			. ' GROUP BY tag ORDER BY freq DESC');
-		foreach($res as &$row) {
-			$tags[] = $row['tag'];
-		}
-
-		return $tags;
+		
+		return $res;
 	}
 
 }
