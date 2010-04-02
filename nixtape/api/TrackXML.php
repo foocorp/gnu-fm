@@ -24,10 +24,10 @@ require_once('xml.php');
 
 class TrackXML {
 
-	public static function getTags($artist, $name) {
+	public static function getTopTags($artist, $name) {
 
 		$track = new Track($name, $artist);
-		$tags = $track->getTags();
+		$tags = $track->getTopTags();
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 
@@ -35,9 +35,10 @@ class TrackXML {
 		$root->addAttribute('artist', $artist);
 		$root->addAttribute('track', $name);
 
-		foreach($tags as $tag) {
+		foreach($tags as &$tag) {
 			$tag_node = $root->addChild('tag', null);
-			$tag_node->addChild('name', repamp($tag));
+			$tag_node->addChild('name', repamp($tag['tag']));
+			$tag_node->addChild('count', repamp($tag['freq']));
 		}
 
 		return($xml);
