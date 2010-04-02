@@ -50,7 +50,7 @@ if(ereg('l(ast|ibre)fm://globaltags/(.*)', $url, $regs)) {
 	$res = $adodb->Execute('SELECT name, artist_name, album_name FROM Track WHERE streamurl<>\'\' AND streamable=1 AND lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist, 'UTF-8')));
 } elseif(ereg('l(ast|ibre)fm://user/(.*)/loved', $url, $regs)) {
 	$user = new User($regs[2]);
-	$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.track_name=Loved_Tracks.name WHERE Loved_Tracks.userid=' . $user->uniqueid . ' AND Track.streamurl<>\'\' AND Track.streamable=1');
+	$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.name WHERE Loved_Tracks.userid=' . $user->uniqueid . ' AND Track.streamurl<>\'\' AND Track.streamable=1');
 } else {
 	die("FAILED\n"); // this should return a blank dummy playlist instead
 }
