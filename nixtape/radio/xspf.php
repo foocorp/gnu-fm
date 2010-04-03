@@ -33,9 +33,9 @@ if(!isset($_GET['sk']) || !isset($_GET['desktop'])) {
 
 $session = $_GET['sk'];
 
-$res = $adodb->GetRow('SELECT username, url FROM Radio_Sessions WHERE session = ' . $adodb->qstr($session));
+$row = $adodb->GetRow('SELECT username, url FROM Radio_Sessions WHERE session = ' . $adodb->qstr($session));
 
-if(!$res) {
+if(!$row) {
 	die("BADSESSION\n"); // this should return a blank dummy playlist instead
 }
 
