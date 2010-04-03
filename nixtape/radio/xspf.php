@@ -39,6 +39,11 @@ if(!$res) {
 	die("BADSESSION\n"); // this should return a blank dummy playlist instead
 }
 
+$username = $adodb->GetOne('SELECT username FROM Radio_Sessions WHERE '
+	. 'sk = ' . $adodb->qstr($_REQUEST['sk']) . ' AND '
+	. 'username IS NOT NULL');
+$user = new User($username);
+
 $url = $res;
 
 $title = radio_title_from_url($url);
@@ -51,8 +56,8 @@ if(ereg('l(ast|ibre)fm://globaltags/(.*)', $url, $regs)) {
 	$artist = $regs[2];
 	$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamurl<>\'\' AND streamable=1 AND lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist, 'UTF-8')));
 } elseif(ereg('l(ast|ibre)fm://user/(.*)/loved', $url, $regs)) {
-	$user = new User($regs[2]);
-	$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Loved_Tracks.userid=' . $user->uniqueid . ' AND Track.streamurl<>\'\' AND Track.streamable=1');
+	$requser = new User($regs[2]);
+	$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Loved_Tracks.userid=' . $requser->uniqueid . ' AND Track.streamurl<>\'\' AND Track.streamable=1');
 } else {
 	die("FAILED\n"); // this should return a blank dummy playlist instead
 }
@@ -74,6 +79,16 @@ for($i=0; $i<count($tr); $i++) {
 
 	$res->Move($tr[$i]);
 	$row = $res->FetchRow();
+
+	$banres = $adodb->Execute('SELECT COUNT(*) FROM Banned_Tracks WHERE '
+		. 'artist = ' . $adodb->qstr($row['artist_name'])
+		. 'AND track = ' . $adodb->qstr($row['name'])
+		. 'AND userid = ' . $user->uniqueid);
+	if ($banres->RecordCount() > 0) {
+		// This track has been banned by the user, so select another one
+		$i--;
+		continue;
+	}
 
 	$album = new Album($row['album_name'], $row['artist_name']);
 
