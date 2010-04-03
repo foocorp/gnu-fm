@@ -91,7 +91,7 @@ $method_map = array(
 
 function method_user_getrecenttracks() {
 	if (!isset($_GET['user'])) {
-		report_failure(LFM_INVALID_SIGNATURE);
+		report_failure(LFM_INVALID_PARAMS);
 	}
 
 	header('Content-Type: text/xml');
@@ -100,7 +100,7 @@ function method_user_getrecenttracks() {
 
 function method_user_gettoptags() {
 	if (!isset($_GET['user'])) {
-		report_failure(LFM_INVALID_SIGNATURE);
+		report_failure(LFM_INVALID_PARAMS);
 	}
 
         header('Content-Type: text/xml');
@@ -110,7 +110,7 @@ function method_user_gettoptags() {
 
 function method_user_gettoptracks() {
 	if (!isset($_GET['user'])) {
-		report_failure(LFM_INVALID_SIGNATURE);
+		report_failure(LFM_INVALID_PARAMS);
 	}
 
 	header('Content-Type: text/xml');
@@ -119,7 +119,7 @@ function method_user_gettoptracks() {
 
 function method_user_getinfo() {
 	if (!isset($_GET['user'])) {
-		report_failure(LFM_INVALID_SIGNATURE);
+		report_failure(LFM_INVALID_PARAMS);
 	}
 	header('Content-Type: text/xml');
 	print(XML::prettyXML(UserXML::getInfo($_GET['user'])));
@@ -147,10 +147,9 @@ function method_user_getLovedTracks() {
  * Artist methods
  */
 
-
 function method_artist_getinfo() {
 	if (!isset($_GET['artist'])) {
-		report_failure(LFM_INVALID_SIGNATURE);
+		report_failure(LFM_INVALID_PARAMS);
 	}
 	header('Content-Type: text/xml');
 	print(XML::prettyXML(ArtistXML::getInfo($_GET['artist'])));
@@ -158,7 +157,7 @@ function method_artist_getinfo() {
 
 function method_artist_gettoptracks() {
 	if (!isset($_GET['artist'])) {
-	report_failure(LFM_INVALID_SIGNATURE);
+	report_failure(LFM_INVALID_PARAMS);
 	}
 	header('Content-Type: text/xml');
 	print(XML::prettyXML(ArtistXML::getTopTracks($_GET['artist'])));
@@ -169,7 +168,7 @@ function method_auth_gettoken() {
 	global $adodb;
 
 	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
-		report_failure(LFM_INVALID_SIGNATURE);
+		report_failure(LFM_INVALID_PARAMS);
 
 	$key = md5(time() . rand());
 
@@ -427,7 +426,7 @@ $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
 function method_track_getTopTags() {
 	if (!isset($_GET['artist']) || !isset($_GET['track'])) {
-		report_failure(LFM_INVALID_SIGNATURE);
+		report_failure(LFM_INVALID_PARAMS);
 	}
 
 	header('Content-Type: text/xml');
