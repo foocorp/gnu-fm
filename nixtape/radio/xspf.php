@@ -33,18 +33,15 @@ if(!isset($_GET['sk']) || !isset($_GET['desktop'])) {
 
 $session = $_GET['sk'];
 
-$res = $adodb->GetOne('SELECT url FROM Radio_Sessions WHERE session = ' . $adodb->qstr($session));
+$res = $adodb->GetRow('SELECT username, url FROM Radio_Sessions WHERE session = ' . $adodb->qstr($session));
 
 if(!$res) {
 	die("BADSESSION\n"); // this should return a blank dummy playlist instead
 }
 
-$username = $adodb->GetOne('SELECT username FROM Radio_Sessions WHERE '
-	. 'sk = ' . $adodb->qstr($_REQUEST['sk']) . ' AND '
-	. 'username IS NOT NULL');
-$user = new User($username);
+$user = new User($row['username']);
 
-$url = $res;
+$url = $row['url'];
 
 $title = radio_title_from_url($url);
 $smarty->assign('title', $title);
