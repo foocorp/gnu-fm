@@ -83,6 +83,7 @@ for($i=0; $i<count($tr); $i++) {
 		. 'AND userid = ' . $user->uniqueid);
 	if ($banned) {
 		// This track has been banned by the user, so select another one
+		$tr[$i] = rand(0, $avail-1);
 		$i--;
 		continue;
 	}
