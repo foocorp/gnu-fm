@@ -289,7 +289,7 @@ class User {
 	/**
 	 * Get a user's most used tags
 	 *
-	 * @param int $limit The number of tags to return (default to 10)
+	 * @param int $limit The number of tags to return (defaults to 10)
 	 * @return An array of tag details
 	 */
 	function getTopTags($limit=10) {
@@ -298,6 +298,22 @@ class User {
 		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM tags WHERE ' 
 			. ' userid = ' . $this->uniqueid
 			. ' GROUP BY tag '
+			. ' LIMIT ' . $limit);
+
+		return $res;
+	}
+
+	/**
+	 * Get a user's loved tracks
+	 *
+	 * @param int $limit The number of tracks to return (defaults to 50)
+	 * @return An array of track details
+	 */
+	function getLovedTracks($limit=50) {
+		global $adodb;
+
+		$res = $adodb->CacheGetAll(600, 'SELECT * FROM Loved_Tracks WHERE '
+			. ' userid = ' . $this->uniqueid
 			. ' LIMIT ' . $limit);
 
 		return $res;

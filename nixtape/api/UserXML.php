@@ -163,5 +163,35 @@ class UserXML {
 		return $xml;
 	}
 
+	public static function getLovedTracks($u, $limit=50) {
+		
+		try {
+			$user = new User($u);
+			$res = $user->getLovedTracks($limit);
+		} catch (exception $ex) {
+			return XML::error('error', '7', 'Invalid resource specified');
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('lovedtracks');
+		$root->addAttribute('user', $user->name);
+
+		foreach($res as &$row) {
+			$track = new Track($row['track'], $row['artist']);
+			$artist = new Artist($row['artist']);
+			$track_node = $root->addChild('track', null);
+			$track_node->addChild('name', $track->name);
+			$track_node->addChild('mbid', $track->mbid);
+			$track_node->addChild('url', $track->getURL());
+			$artist_node = $track_node->addChild('artist', null);
+			$artist_node->addChild('name', $artist->name);
+			$artist_node->addChild('mbid', $artist->mbid);
+			$artist_node->addChild('url', $artist->getURL);
+		}
+
+		return $xml;
+
+	}
+
 }
 ?>
