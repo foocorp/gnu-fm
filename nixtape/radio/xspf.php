@@ -22,6 +22,7 @@ require_once('../database.php');
 require_once('../templating.php');
 require_once('../data/Track.php');
 require_once('../data/Server.php');
+require_once('../utils/resolve-external.php');
 require_once('radio-utils.php');
 
 // These deaths should probably just return an empty playlist
@@ -82,7 +83,7 @@ for($i=0; $i<count($tr); $i++) {
 		$duration = $row['duration'] * 1000;
 	}
 
-	$radiotracks[$i]['location'] = $row['streamurl'];
+	$radiotracks[$i]['location'] = resolve_external_url($row['streamurl']);
 	$radiotracks[$i]['title'] = $row['name'];
 	$radiotracks[$i]['id'] = "0000";
 	$radiotracks[$i]['album'] = $album->name;
