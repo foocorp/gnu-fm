@@ -75,6 +75,7 @@ $method_map = array(
 	'user.gettoptracks'		=> method_user_gettoptracks,
 	'user.getrecenttracks'		=> method_user_getrecenttracks,
 	'user.gettoptags'		=> method_user_gettoptags,
+	'user.getlovedtracks'		=> method_user_getLovedTracks,
 	'radio.tune'			=> method_radio_tune,
 	'radio.getplaylist'		=> method_radio_getPlaylist,
 	'track.gettoptags'		=> method_track_getTopTags,
@@ -82,6 +83,11 @@ $method_map = array(
 	'track.ban'			=> method_track_ban,
 	'track.love'			=> method_track_love,
 );
+
+
+/**
+ * User methods
+ */
 
 function method_user_getrecenttracks() {
 	if (!isset($_GET['user'])) {
@@ -118,6 +124,29 @@ function method_user_getinfo() {
 	header('Content-Type: text/xml');
 	print(XML::prettyXML(UserXML::getInfo($_GET['user'])));
 }
+
+function method_user_getLovedTracks() {
+	if (!isset($_GET['user'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$user = $_GET['user'];
+	if (isset($_GET['limit'])) {
+		$limit = $_GET['limit'];
+	} else {
+		$limit = 50;
+	}
+
+	header('Content-Type: text/xml');
+	print(XML::prettyXML(UserXML::getLovedTracks($user, $limit)));
+}
+
+
+
+/**
+ * Artist methods
+ */
+
 
 function method_artist_getinfo() {
 	if (!isset($_GET['artist'])) {
