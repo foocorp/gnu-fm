@@ -186,7 +186,7 @@ class UserXML {
 			$artist_node = $track_node->addChild('artist', null);
 			$artist_node->addChild('name', $artist->name);
 			$artist_node->addChild('mbid', $artist->mbid);
-			$artist_node->addChild('url', $artist->getURL);
+			$artist_node->addChild('url', $artist->getURL());
 		}
 
 		return $xml;
