@@ -24,9 +24,13 @@ function radio_title_from_url($url) {
 		$tag = $regs[2];
 		return 'Libre.fm ' . ucwords($tag) . ' Tag Radio';
 	}
-	if(ereg('l(ast|ibre)fm://artist/(.*)/similarartists', $url, $regs)) {
+	if(ereg('l(ast|ibre)fm://artist/(.*)', $url, $regs)) {
 		$artist = $regs[2];
 		return 'Libre.fm ' . $artist . ' Artist Radio';
+	}
+	if(ereg('l(ast|ibre)fm://artist/(.*)/similarartists', $url, $regs)) {
+		$artist = $regs[2];
+		return 'Libre.fm ' . $artist . ' Similar Artist Radio';
 	}
 	if(ereg('l(ast|ibre)fm://user/(.*)/loved', $url, $regs)) {
 		$user = $regs[2];
