@@ -77,11 +77,11 @@ for($i=0; $i<count($tr); $i++) {
 	$res->Move($tr[$i]);
 	$row = $res->FetchRow();
 
-	$banres = $adodb->Execute('SELECT COUNT(*) FROM Banned_Tracks WHERE '
+	$banned = $adodb->GetOne('SELECT COUNT(*) FROM Banned_Tracks WHERE '
 		. 'artist = ' . $adodb->qstr($row['artist_name'])
 		. 'AND track = ' . $adodb->qstr($row['name'])
 		. 'AND userid = ' . $user->uniqueid);
-	if ($banres->RecordCount() > 0) {
+	if ($banned) {
 		// This track has been banned by the user, so select another one
 		$i--;
 		continue;
