@@ -21,6 +21,7 @@
 require_once('../database.php');
 require_once('../templating.php');
 require_once('../data/Track.php');
+require_once('../data/Server.php');
 require_once('radio-utils.php');
 
 // These deaths should probably just return an empty playlist
@@ -44,13 +45,13 @@ $smarty->assign('title', $title);
 
 if(ereg('l(ast|ibre)fm://globaltags/(.*)', $url, $regs)) {
 	$tag = $regs[2];
-	$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist AND Track.album_name=Tags.album WHERE streamurl<>\'\' AND streamable=1 AND lower(tag) = ' . $adodb->qstr(mb_strtolower($tag, 'UTF-8')));
+	$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist AND Track.album_name=Tags.album WHERE streamurl<>\'\' AND streamable=1 AND lower(tag) = ' . $adodb->qstr(mb_strtolower($tag, 'UTF-8')));
 } elseif(ereg('l(ast|ibre)fm://artist/(.*)/similarartists', $url, $regs)) {
 	$artist = $regs[2];
-	$res = $adodb->Execute('SELECT name, artist_name, album_name FROM Track WHERE streamurl<>\'\' AND streamable=1 AND lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist, 'UTF-8')));
+	$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamurl<>\'\' AND streamable=1 AND lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist, 'UTF-8')));
 } elseif(ereg('l(ast|ibre)fm://user/(.*)/loved', $url, $regs)) {
 	$user = new User($regs[2]);
-	$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Loved_Tracks.userid=' . $user->uniqueid . ' AND Track.streamurl<>\'\' AND Track.streamable=1');
+	$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Loved_Tracks.userid=' . $user->uniqueid . ' AND Track.streamurl<>\'\' AND Track.streamable=1');
 } else {
 	die("FAILED\n"); // this should return a blank dummy playlist instead
 }
@@ -68,34 +69,32 @@ $tr = array_unique($tr);
 $radiotracks = array();
 $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
-	for($i=0; $i<count($tr); $i++) {
+for($i=0; $i<count($tr); $i++) {
 
 	$res->Move($tr[$i]);
 	$row = $res->FetchRow();
 
-	$track = new Track($row['name'], $row['artist_name']);
 	$album = new Album($row['album_name'], $row['artist_name']);
-	$artist = new Artist($row['artist_name']);
 
-	if($track->duration == 0) {
+	if($row['duration'] == 0) {
 		$duration = 180000;
 	} else {
-		$duration = $track->duration * 1000;
+		$duration = $row['duration'] * 1000;
 	}
 
-	$radiotracks[$i]['location'] = $track->streamurl;
-	$radiotracks[$i]['title'] = $track->name;
+	$radiotracks[$i]['location'] = $row['streamurl'];
+	$radiotracks[$i]['title'] = $row['name'];
 	$radiotracks[$i]['id'] = "0000";
 	$radiotracks[$i]['album'] = $album->name;
-	$radiotracks[$i]['creator'] = $artist->name;
+	$radiotracks[$i]['creator'] = $row['artist_name'];
 	$radiotracks[$i]['duration'] = $duration;
 	$radiotracks[$i]['image'] = $album->image;
-	$radiotracks[$i]['artisturl'] = $artist->getURL();
+	$radiotracks[$i]['artisturl'] = Server::getArtistURL($row['artist_name']);
 	$radiotracks[$i]['albumurl'] = $album->getURL();
-	$radiotracks[$i]['trackurl'] = $track->getURL();
-	$radiotracks[$i]['downloadurl'] = $track->getURL();
+	$radiotracks[$i]['trackurl'] = Server::getTrackURL($row['artist_name'], $album->name, $row['track_name']);
+	$radiotracks[$i]['downloadurl'] = Server::getTrackURL($row['artist_name'], $album->name, $row['track_name']);
 
-	}
+}
 
 $smarty->assign('radiotracks', $radiotracks);
 
