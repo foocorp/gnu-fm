@@ -66,15 +66,15 @@ $error_text = array(
 
 # Resolves method= parameters to handler functions
 $method_map = array(
-	'auth.gettoken'			=> method_auth_gettoken,
-	'auth.getsession'		=> method_auth_getsession,
-	'auth.getmobilesession'		=> method_auth_getmobilesession,
-	'artist.getinfo'		=> method_artist_getinfo,
-	'artist.gettoptracks'		=> method_artist_gettoptracks,
-	'user.getinfo'			=> method_user_getinfo,
-	'user.gettoptracks'		=> method_user_gettoptracks,
-	'user.getrecenttracks'		=> method_user_getrecenttracks,
-	'user.gettoptags'		=> method_user_gettoptags,
+	'auth.gettoken'			=> method_auth_getToken,
+	'auth.getsession'		=> method_auth_getSession,
+	'auth.getmobilesession'		=> method_auth_getMobileSession,
+	'artist.getinfo'		=> method_artist_getInfo,
+	'artist.gettoptracks'		=> method_artist_getTopTracks,
+	'user.getinfo'			=> method_user_getInfo,
+	'user.gettoptracks'		=> method_user_getTopTracks,
+	'user.getrecenttracks'		=> method_user_getRecentTracks,
+	'user.gettoptags'		=> method_user_getTopTags,
 	'user.getlovedtracks'		=> method_user_getLovedTracks,
 	'radio.tune'			=> method_radio_tune,
 	'radio.getplaylist'		=> method_radio_getPlaylist,
@@ -89,7 +89,7 @@ $method_map = array(
  * User methods
  */
 
-function method_user_getrecenttracks() {
+function method_user_getRecentTracks() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
@@ -98,7 +98,7 @@ function method_user_getrecenttracks() {
 	print(XML::prettyXML(UserXML::getRecentTracks($_GET['user'], $_GET['limit'])));
 }
 
-function method_user_gettoptags() {
+function method_user_getTopTags() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
@@ -108,7 +108,7 @@ function method_user_gettoptags() {
 }
 
 
-function method_user_gettoptracks() {
+function method_user_getTopTracks() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
@@ -117,7 +117,7 @@ function method_user_gettoptracks() {
 	print(XML::prettyXML(UserXML::getTopTracks($_GET['user'], $_GET['period'])));
 }
 
-function method_user_getinfo() {
+function method_user_getInfo() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
@@ -147,7 +147,7 @@ function method_user_getLovedTracks() {
  * Artist methods
  */
 
-function method_artist_getinfo() {
+function method_artist_getInfo() {
 	if (!isset($_GET['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
@@ -155,7 +155,7 @@ function method_artist_getinfo() {
 	print(XML::prettyXML(ArtistXML::getInfo($_GET['artist'])));
 }
 
-function method_artist_gettoptracks() {
+function method_artist_getTopTracks() {
 	if (!isset($_GET['artist'])) {
 	report_failure(LFM_INVALID_PARAMS);
 	}
@@ -164,7 +164,7 @@ function method_artist_gettoptracks() {
 
 }
 
-function method_auth_gettoken() {
+function method_auth_getToken() {
 	global $adodb;
 
 	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
@@ -186,7 +186,7 @@ function method_auth_gettoken() {
 	print("	<token>{$key}</token></lfm>");
 }
 
-function method_auth_getmobilesession() {
+function method_auth_getMobileSession() {
 	global $adodb;
 
 	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
@@ -238,7 +238,7 @@ function method_auth_getmobilesession() {
 	print("</lfm>");
 }
 
-function method_auth_getsession() {
+function method_auth_getSession() {
 	global $adodb;
 
 	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
