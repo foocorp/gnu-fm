@@ -105,8 +105,8 @@ class ArtistXML {
 		$tags = $artist->getTopTags();
 		foreach($tags as $tag) {
 			$tag_node = $root->addChild('tag', null);
-			$tag_node->addChild('name', $tag);
-			$tag_node->addChild('url', repamp($base_url . '/tag/' . $tag));
+			$tag_node->addChild('name', repamp($tag));
+			$tag_node->addChild('url', Server::getTagURL($tag));
 		}
 
 		return $xml;

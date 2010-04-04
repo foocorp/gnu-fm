@@ -349,6 +349,15 @@ class Server {
 		}
 	}
 
+	static function getTagURL($tag) {
+		global $friendly_urls, $base_url;
+		if ($friendly_urls) {
+			return $base_url . '/tag/' . rawurlencode($tag);
+		} else {
+			return $base_url . '/tag.php?tag=' . rawurlencode($tag);
+		}
+	}
+
 	static function getLocationDetails($name) {
 		global $adodb;
 

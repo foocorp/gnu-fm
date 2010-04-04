@@ -39,8 +39,8 @@ class TrackXML {
 		foreach($tags as &$tag) {
 			$tag_node = $root->addChild('tag', null);
 			$tag_node->addChild('name', repamp($tag['tag']));
-			$tag_node->addChild('count', repamp($tag['freq']));
-			$tag_node->addChild('url', repamp($base_url . '/tag/' . $tag['tag']));
+			$tag_node->addChild('count', $tag['freq']);
+			$tag_node->addChild('url', Server::getTagURL($row['tag']));
 		}
 
 		return $xml;
@@ -61,7 +61,7 @@ class TrackXML {
 		foreach($tags as $tag) {
 			$tag_node = $root->addChild('tag', null);
 			$tag_node->addChild('name', repamp($tag));
-			$tag_node->addChild('url', repamp($base_url . '/tag/' . $tag['tag']));
+			$tag_node->addChild('url', Server::getTagURL($row['tag']));
 		}
 
 		return $xml;
