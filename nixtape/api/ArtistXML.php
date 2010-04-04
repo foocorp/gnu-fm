@@ -98,7 +98,7 @@ class ArtistXML {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
-		$xml = new SimpleXMLElement('<lfm statis="ok"></lfm>');
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$root = $xml->addChild('toptags', null);
 		$root->addAttribute('artist', $artist->name);
 
