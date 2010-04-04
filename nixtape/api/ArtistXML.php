@@ -59,7 +59,7 @@ class ArtistXML {
 		$bio->addChild('summary', $artist->bio_summary);
 		$bio->addChild('content', $artist->bio_content);
 
-		return($xml);
+		return $xml;
 	}
 
 	public static function getTopTracks($artistName) {
@@ -86,7 +86,30 @@ class ArtistXML {
 			$track->addChild('listeners', $tracks[$i]->getListenerCount());
 		}
 
-		return($xml);
+		return $xml;
+	}
+
+	public static function getTopTags($artistName) {
+		global $base_url;
+
+		$artist = new Artist($artistName);
+
+		if (!$artist) {
+			return(XML::error('failed', '7', 'Invalid resource specified'));
+		}
+
+		$xml = new SimpleXMLElement('<lfm statis="ok"></lfm>');
+		$root = $xml->addChild('toptags', null);
+		$root->addAttribute('artist', $artist->name);
+
+		$tags = $artist->getTopTags();
+		foreach($tags as $tag) {
+			$tag_node = $root->addChild('tag', null);
+			$tag_node->addChild('name', $tag);
+			$tag_node->addChild('url', repamp($base_url . '/tag/' . $tag));
+		}
+
+		return $xml;
 	}
 
 }

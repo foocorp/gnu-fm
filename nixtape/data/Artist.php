@@ -139,4 +139,26 @@ class Artist {
 		return Server::getArtistURL($this->name);
 	}
 
+	/**
+	 * Get an artist's most used tags
+	 *
+	 * @param int $limit The number of tags to return (defaults to 10)
+	 * @return An array of tags
+	 */
+	function getTopTags($limit=10) {
+		global $adodb;
+
+		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM tags WHERE '
+			. ' artist = ' . $adodb->qstr($this->name)
+			. ' GROUP BY tag ORDER BY freq DESC '
+			. ' LIMIT ' . $limit);
+
+		$tags = array();
+		foreach($res as &$row) {
+			$tags[] = $row['tag'];
+		}
+
+		return $tags;
+	}
+
 }
