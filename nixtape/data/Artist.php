@@ -153,12 +153,7 @@ class Artist {
 			. ' GROUP BY tag ORDER BY freq DESC '
 			. ' LIMIT ' . $limit);
 
-		$tags = array();
-		foreach($res as &$row) {
-			$tags[] = $row['tag'];
-		}
-
-		return $tags;
+		return $res;
 	}
 
 }
