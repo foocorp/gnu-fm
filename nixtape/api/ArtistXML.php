@@ -90,7 +90,6 @@ class ArtistXML {
 	}
 
 	public static function getTopTags($artistName) {
-		global $base_url;
 
 		$artist = new Artist($artistName);
 

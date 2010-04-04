@@ -23,6 +23,7 @@ require_once('../database.php');
 require_once('../api/ArtistXML.php');
 require_once('../api/UserXML.php');
 require_once('../api/TrackXML.php');
+require_once('../api/AlbumXML.php');
 
 # Error constants
 define('LFM_INVALID_SERVICE',	2);
@@ -72,6 +73,7 @@ $method_map = array(
 	'artist.getinfo'		=> method_artist_getInfo,
 	'artist.gettoptracks'		=> method_artist_getTopTracks,
 	'artist.gettoptags'		=> method_artist_getTopTags,
+	'album.gettoptags'		=> method_album_getTopTags,
 	'user.getinfo'			=> method_user_getInfo,
 	'user.gettoptracks'		=> method_user_getTopTracks,
 	'user.getrecenttracks'		=> method_user_getRecentTracks,
@@ -171,6 +173,20 @@ function method_artist_getTopTags() {
 	header('Content-Type: text/xml');
 	print(XML::prettyXML(ArtistXML::getTopTags($_GET['artist'])));
 }
+
+
+/**
+ * Album methods
+ */
+
+function method_album_getTopTags() {
+	if (!isset($_GET['artist']) || !isset($_GET['album'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+	header('Content-Type: text/xml');
+	print(XML::prettyXML(AlbumXML::getTopTags($_GET['artist'], $_GET['album'])));
+}
+
 
 /**
  * Authentication methods
