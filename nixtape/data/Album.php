@@ -122,6 +122,25 @@ class Album {
 		return Server::getAlbumURL($this->artist_name, $this->name);
 	}
 
+	/**
+	 * Get an albums's most used tags
+	 * 
+	 * @param int $limit The number of tags to return (defaults to 10)
+	 * @return An array of tags
+	 */
+	function getTopTags($limit=10) {
+		global $adodb;
+
+		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM tags WHERE '
+			. ' artist = ' . $adodb->qstr($this->artist_name)
+			. ' AND album = ' . $adodb->qstr($this->name)
+			. ' GROUP BY tag ORDER BY freq DESC '
+			. ' LIMIT ' . $limit);
+
+		return $res;
+	}
+
+
     /*
      * Return Album Art URL from Wikipedia
      * @param string Album
