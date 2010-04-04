@@ -71,6 +71,7 @@ $method_map = array(
 	'auth.getmobilesession'		=> method_auth_getMobileSession,
 	'artist.getinfo'		=> method_artist_getInfo,
 	'artist.gettoptracks'		=> method_artist_getTopTracks,
+	'artist.gettoptags'		=> method_artist_getTopTags,
 	'user.getinfo'			=> method_user_getInfo,
 	'user.gettoptracks'		=> method_user_getTopTracks,
 	'user.getrecenttracks'		=> method_user_getRecentTracks,
@@ -157,12 +158,23 @@ function method_artist_getInfo() {
 
 function method_artist_getTopTracks() {
 	if (!isset($_GET['artist'])) {
-	report_failure(LFM_INVALID_PARAMS);
+		report_failure(LFM_INVALID_PARAMS);
 	}
 	header('Content-Type: text/xml');
 	print(XML::prettyXML(ArtistXML::getTopTracks($_GET['artist'])));
-
 }
+
+function method_artist_getTopTags() {
+	if (!isset($_GET['artist'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+	header('Content-Type: text/xml');
+	print(XML::prettyXML(ArtistXML::getTopTags($_GET['artist'])));
+}
+
+/**
+ * Authentication methods
+ */
 
 function method_auth_getToken() {
 	global $adodb;
