@@ -216,11 +216,12 @@ if (isset($_POST['install'])) {
 		PRIMARY KEY(code))");
 
 	$adodb->Execute("CREATE TABLE Tags(
-		userid INTEGER REFERENCES Users(uniqueid),
 		tag VARCHAR(64),
 		artist VARCHAR(255) REFERENCES Artist(name),
 		album VARCHAR(255),
-		track VARCHAR(255))");
+		track VARCHAR(255),
+		userid INTEGER REFERENCES Users(uniqueid),
+		UNIQUE(tag, artist, album, track, userid))");
 
 	$adodb->Execute("CREATE TABLE Error(
 			id SERIAL PRIMARY KEY,
