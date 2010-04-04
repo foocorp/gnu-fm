@@ -24,8 +24,27 @@ require_once('xml.php');
 
 class TrackXML {
 
+	public static function addTags($userid, $artist, $album, $track, $tags) {
+		global $adodb;
+
+		$tags = split(",", $tags);
+		foreach($tags as $tag) {
+			$tag = trim($tag);
+			try {
+				$adodb->Execute('INSERT INTO tags VALUES ('
+					. $adodb->qstr($tag) . ', '
+					. $adodb->qstr($artist) . ', '
+					. $adodb->qstr($album) . ', '
+					. $adodb->qstr($track) . ', '
+					. $userid . ')');
+			} catch (exception $ex) {}
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		return $xml;
+	}
+
 	public static function getTopTags($artist, $name) {
-		global $base_url;
 
 		$track = new Track($name, $artist);
 		$tags = $track->getTopTags();
@@ -47,7 +66,6 @@ class TrackXML {
 	}
 
 	public static function getTags($artist, $name, $userid) {
-		global $base_url;
 
 		$track = new Track($name, $artist);
 		$tags = $track->getTags($userid);
@@ -71,7 +89,7 @@ class TrackXML {
 		global $adodb;
 
 		try {
-			$res = $adodb->Execute("INSERT INTO banned_tracks VALUES ("
+			$res = $adodb->Execute('INSERT INTO banned_tracks VALUES ('
 				. $userid . ', '
 				. $adodb->qstr($name) . ', '
 				. $adodb->qstr($artist) . ")");
@@ -86,8 +104,8 @@ class TrackXML {
 		global $adodb;
 
 		try {
-			$res = $adodb->Execute("INSERT INTO loved_tracks VALUES ("
-				. $userid . ", "
+			$res = $adodb->Execute('INSERT INTO loved_tracks VALUES ('
+				. $userid . ', '
 				. $adodb->qstr($name) . ', '
 				. $adodb->qstr($artist) . ")");
 		} catch (exception $ex) {}

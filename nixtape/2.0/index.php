@@ -81,6 +81,7 @@ $method_map = array(
 	'user.getlovedtracks'		=> method_user_getLovedTracks,
 	'radio.tune'			=> method_radio_tune,
 	'radio.getplaylist'		=> method_radio_getPlaylist,
+	'track.addtags'			=> method_track_addTags,
 	'track.gettoptags'		=> method_track_getTopTags,
 	'track.gettags'			=> method_track_getTags,
 	'track.ban'			=> method_track_ban,
@@ -451,6 +452,17 @@ $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 /**
  * Track methods
  */
+
+function method_track_addTags() {
+	if (!isset($_POST['artist']) || !isset($_POST['track']) || !isset($_POST['tags'])) {
+		report_failurE(LFM_INVALID_PARAMS);
+	}
+
+	$userid = get_userid();
+
+	header('Content-Type: text/xml');
+	print(XML::prettyXML(TrackXML::addTags($userid, $_POST['artist'], $_POST['album'], $_POST['track'], $_POST['tags'])));
+}
 
 function method_track_getTopTags() {
 	if (!isset($_GET['artist']) || !isset($_GET['track'])) {
