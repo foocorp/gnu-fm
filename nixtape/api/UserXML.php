@@ -157,7 +157,7 @@ class UserXML {
 			$tag = $root->addChild('tag', null);
 			$tag->addChild('name', repamp($row['tag']));
 			$tag->addChild('count', repamp($row['freq']));
-			$tag->addChild('url', repamp($base_url . '/tag/' . $row['tag']));
+			$tag->addChild('url', Server::getTagURL($row['tag']));
 		}
 
 		return $xml;
