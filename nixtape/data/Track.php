@@ -180,6 +180,7 @@ class Track {
 			. ' AND track = ' . $adodb->qstr($this->name)
 			. ' AND userid = ' . $userid);
 
+		$tags = array();
 		foreach($res as &$row) {
 			$tags[] = $row['tag'];
 		}
