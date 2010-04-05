@@ -196,9 +196,6 @@ function method_album_getTopTags() {
 function method_auth_getToken() {
 	global $adodb;
 
-	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
-		report_failure(LFM_INVALID_PARAMS);
-
 	$key = md5(time() . rand());
 
 	try {
@@ -217,9 +214,6 @@ function method_auth_getToken() {
 
 function method_auth_getMobileSession() {
 	global $adodb;
-
-	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
-		report_failure(LFM_INVALID_SIGNATURE);
 
 	if (!isset($_GET['authToken']))
 		report_failure(LFM_INVALID_TOKEN);
@@ -270,9 +264,6 @@ function method_auth_getMobileSession() {
 function method_auth_getSession() {
 	global $adodb;
 
-	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
-		report_failure(LFM_INVALID_SIGNATURE);
-
 	if (!isset($_GET['token']))
 		report_failure(LFM_INVALID_TOKEN);
 
@@ -312,9 +303,6 @@ function method_auth_getSession() {
 
 function method_radio_tune() {
 	global $adodb;
-
-	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
-		report_failure(LFM_INVALID_SIGNATURE);
 
 	if (!isset($_GET['station']))
 		report_failure(LFM_INVALID_PARAMS);
@@ -359,12 +347,6 @@ function method_radio_tune() {
 
 function method_radio_getPlaylist() {
 	global $adodb;
-
-	if (!isset($_GET['api_sig']) || !valid_api_sig($_GET['api_sig']))
-		report_failure(LFM_INVALID_SIGNATURE);
-
-	if (!isset($_GET['api_key']))
-		report_failure(LFM_INVALID_PARAMS);
 
 	if (!isset($_GET['sk']))
 		report_failure(LFM_INVALID_PARAMS);
