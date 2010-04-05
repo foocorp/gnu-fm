@@ -109,8 +109,11 @@ class UserXML {
 		$err = 0;
 		try {
 			$user = new User($u);
-			$res = $user->getScrobbles($limit);
 			$npres = $user->getNowPlaying(1);
+			if($npres) {
+				$limit--;
+			}
+			$res = $user->getScrobbles($limit);
 		} catch (exception $e) {
 			$err = 1;
 		}
