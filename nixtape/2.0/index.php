@@ -70,6 +70,7 @@ $method_map = array(
 	'auth.gettoken'			=> method_auth_getToken,
 	'auth.getsession'		=> method_auth_getSession,
 	'auth.getmobilesession'		=> method_auth_getMobileSession,
+	'artist.addtags'		=> method_artist_addTags,
 	'artist.getinfo'		=> method_artist_getInfo,
 	'artist.gettoptracks'		=> method_artist_getTopTracks,
 	'artist.gettoptags'		=> method_artist_getTopTags,
@@ -150,6 +151,15 @@ function method_user_getLovedTracks() {
 /**
  * Artist methods
  */
+
+function method_artist_addTags() {
+	if (!isset($_POST['artist']) || !isset($_POST['tags'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+	$userid = get_userid();
+	header('Content-Type: text/xml');
+	print(XML::prettyXML(TrackXML::addTags($userid, $_POST['artist'], '', '', $_POST['tags'])));
+}
 
 function method_artist_getInfo() {
 	if (!isset($_GET['artist'])) {
