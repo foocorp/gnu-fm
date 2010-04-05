@@ -100,8 +100,14 @@ function method_user_getRecentTracks() {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
+	if (isset($_GET['page'])) {
+		$page = $_GET['page'];
+	} else {
+		$page = 1;
+	}
+
 	header('Content-Type: text/xml');
-	print(XML::prettyXML(UserXML::getRecentTracks($_GET['user'], $_GET['limit'])));
+	print(XML::prettyXML(UserXML::getRecentTracks($_GET['user'], $_GET['limit'], $page)));
 }
 
 function method_user_getTopTags() {
