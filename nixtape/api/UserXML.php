@@ -110,6 +110,7 @@ class UserXML {
 		try {
 			$user = new User($u);
 			$res = $user->getScrobbles($limit);
+			$npres = $user->getNowPlaying(1);
 		} catch (exception $e) {
 			$err = 1;
 		}
@@ -122,21 +123,33 @@ class UserXML {
 		$root = $xml->addChild('recenttracks', null);
 		$root->addAttribute('user', $user->name);
 
-		foreach($res as &$row) {
-			$track = $root->addChild('track', null);
-			$artist = $track->addChild('artist', repamp($row['artist']));
-			$artist->addAttribute('mbid', $row['artist_mbid']);
-			$name = $track->addChild('name', repamp($row['track']));
-			$track->addChild('mbid', $row['track_mbid']);
-			$album = $track->addChild('album', repamp($row['album']));
-			$album->addAttribute('mbid', $row['album_mbid']);
-			$track->addChild('url', null);
-			$date = $track->addChild('date', gmdate("d M Y H:i",$row['time']) . " GMT");
-			$date->addAttribute('uts', $row['time']);
-			$track->addChild('streamable', null);
+		if($npres) {
+			foreach($npres as &$row) {
+				$track = $root->addChild('track');
+				$track->addAttribute('nowplaying', 'true');
+				UserXML::_addTrackDetails($track, $row);
+			}
 		}
 
-		return($xml);
+		foreach($res as &$row) {
+			$track = $root->addChild('track', null);
+			UserXML::_addTrackDetails($track, $row);
+		}
+
+		return $xml;
+	}
+
+	private static function _addTrackDetails($track, $row) {
+		$artist = $track->addChild('artist', repamp($row['artist']));
+		$artist->addAttribute('mbid', $row['artist_mbid']);
+		$name = $track->addChild('name', repamp($row['track']));
+		$track->addChild('mbid', $row['track_mbid']);
+		$album = $track->addChild('album', repamp($row['album']));
+		$album->addAttribute('mbid', $row['album_mbid']);
+		$track->addChild('url', Server::getTrackURL($row['artist'], $row['album'], $row['track']));
+		$date = $track->addChild('date', gmdate("d M Y H:i",$row['time']) . " GMT");
+		$date->addAttribute('uts', $row['time']);
+		$track->addChild('streamable', null);
 	}
 
 	public static function getTopTags($u, $limit=10) {
