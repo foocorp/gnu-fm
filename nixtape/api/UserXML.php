@@ -130,6 +130,7 @@ class UserXML {
 			foreach($npres as &$row) {
 				$track = $root->addChild('track');
 				$track->addAttribute('nowplaying', 'true');
+				$row['time'] = time();
 				UserXML::_addTrackDetails($track, $row);
 			}
 		}
