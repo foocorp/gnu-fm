@@ -161,11 +161,12 @@ class User {
 	 * Get a user's scrobbles ordered by time
 	 *
 	 * @param int $number The number of scrobbles to return
+	 * @param int $offset The position of the first scrobble to return
 	 * @return An array of scrobbles with human time
 	 */
-	function getScrobbles($number) {
+	function getScrobbles($number, $offset) {
 		try {
-			$data = Server::getRecentScrobbles($number, $this->uniqueid);
+			$data = Server::getRecentScrobbles($number, $this->uniqueid, $offset);
 		} catch (exception $e) {
 			throw (new Exception('Breakage while getting recent scrobbles'));
 		}

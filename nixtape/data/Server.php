@@ -44,7 +44,7 @@ class Server {
 	 * @param int $number The number of scrobbles to return
 	 * @return An array of scrobbles or null in case of failure
 	 */
-	static function getRecentScrobbles($number=10, $userid=false) {
+	static function getRecentScrobbles($number=10, $userid=false, $offset=0) {
 		global $adodb;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -53,7 +53,7 @@ class Server {
 			$res = $adodb->CacheGetAll(60,
 				'SELECT * 
 				FROM Scrobbles
-				WHERE userid = ' . ($userid) . ' ORDER BY time DESC LIMIT ' . (int)($number));
+				WHERE userid = ' . ($userid) . ' ORDER BY time DESC LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
 
 			/**
 
@@ -90,7 +90,7 @@ class Server {
 			$res = $adodb->CacheGetAll(60,
 				'SELECT * 
 				FROM Scrobbles ORDER BY time DESC
-				LIMIT ' . (int)($number));
+				LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
 
 
 			/**

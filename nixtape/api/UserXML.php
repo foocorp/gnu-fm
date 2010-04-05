@@ -99,21 +99,21 @@ class UserXML {
 
 	}
 
-	public static function getRecentTracks($u, $limit) {
+	public static function getRecentTracks($u, $limit, $page) {
 		global $adodb;
 
 		if (!isset($limit)) {
 			$limit = 10;
 		}
 
+		$offset = ($page - 1) * $limit;
 		$err = 0;
 		try {
 			$user = new User($u);
-			$npres = $user->getNowPlaying(1);
-			if($npres) {
-				$limit--;
+			if($page == 1) {
+				$npres = $user->getNowPlaying(1);
 			}
-			$res = $user->getScrobbles($limit);
+			$res = $user->getScrobbles($limit, $offset);
 		} catch (exception $e) {
 			$err = 1;
 		}
@@ -122,9 +122,15 @@ class UserXML {
 			return(XML::error('error', '7', 'Invalid resource specified'));
 		}
 
+		$totalPages = $adodb->GetOne('SELECT COUNT(track) FROM scrobbles WHERE userid = ' . $user->uniqueid);
+		$totalPages = ceil($totalPages / $limit);
+
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$root = $xml->addChild('recenttracks', null);
 		$root->addAttribute('user', $user->name);
+		$root->addAttribute('page', $page);
+		$root->addAttribute('perPage', $limit);
+		$root->addAttribute('totalPages', $totalPages);
 
 		if($npres) {
 			foreach($npres as &$row) {
