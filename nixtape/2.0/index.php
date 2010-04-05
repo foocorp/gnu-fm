@@ -74,6 +74,7 @@ $method_map = array(
 	'artist.getinfo'		=> method_artist_getInfo,
 	'artist.gettoptracks'		=> method_artist_getTopTracks,
 	'artist.gettoptags'		=> method_artist_getTopTags,
+	'album.addtags'			=> method_album_addTags,
 	'album.gettoptags'		=> method_album_getTopTags,
 	'user.getinfo'			=> method_user_getInfo,
 	'user.gettoptracks'		=> method_user_getTopTracks,
@@ -189,6 +190,16 @@ function method_artist_getTopTags() {
 /**
  * Album methods
  */
+
+function method_album_addTags() {
+	if (!isset($_POST['artist']) || !isset($_POST['album']) || !isset($_POST['tags'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$userid = get_userid();
+	header('Content-Type: text/xml');
+	print(XML::prettyXML(TrackXML::addTags($userid, $_POST['artist'], $_POST['album'], '', $_POST['tags'])));
+}
 
 function method_album_getTopTags() {
 	if (!isset($_GET['artist']) || !isset($_GET['album'])) {
