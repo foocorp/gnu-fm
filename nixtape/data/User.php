@@ -164,7 +164,7 @@ class User {
 	 * @param int $offset The position of the first scrobble to return
 	 * @return An array of scrobbles with human time
 	 */
-	function getScrobbles($number, $offset) {
+	function getScrobbles($number, $offset=0) {
 		try {
 			$data = Server::getRecentScrobbles($number, $this->uniqueid, $offset);
 		} catch (exception $e) {
