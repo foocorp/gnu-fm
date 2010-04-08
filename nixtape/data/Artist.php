@@ -54,7 +54,7 @@ class Artist {
 		if($mbid) {
 			$mbidquery = 'mbid = ' . $adodb->qstr($mbid) . ' OR ';
 		}
-		$this->query = 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large FROM Artist WHERE '
+		$this->query = 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large, homepage FROM Artist WHERE '
 			. $mbidquery
 			. 'name = ' . $adodb->qstr($name);
 		$row = $adodb->CacheGetRow(1200, $this->query);
@@ -70,6 +70,7 @@ class Artist {
 			$this->image_small = $row['image_small'];
 			$this->image_medium = $row['image_medium'];
 			$this->image_large = $row['image_large'];
+			$this->homepage = $row['homepage'];
 
 			$this->id = identifierArtist(null, $this->name, null, null, null, null, $this->mbid, null);
 		}
@@ -191,4 +192,15 @@ class Artist {
 		$adodb->CacheFlush($this->query);
 	}
 
+	/**
+	 * Set an artist's homepage
+	 *
+	 * @param string $homepage The artist's homepage
+	 */
+	function setHomepage($homepage) {
+		global $adodb;
+		$adodb->Execute("UPDATE Artist SET homepage = " . $adodb->qstr($homepage) . " WHERE name = " . $adodb->qstr($this->name));
+		$this->homepage = $homepage;
+		$adodb->CacheFlush($this->query);
+	}
 }
