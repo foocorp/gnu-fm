@@ -329,6 +329,11 @@ class User {
 	function manages($artist) {
 		global $adodb;
 
+		if($userlevel >= 2) {
+			// Let admins edit all artists
+			return true;
+		}
+
 		$res = $adodb->GetOne('SELECT COUNT(*) FROM Manages WHERE '
 			. ' userid = ' . $this->uniqueid
 			. ' AND artist = ' . $adodb->qstr($artist)
