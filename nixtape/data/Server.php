@@ -329,6 +329,15 @@ class Server {
 		}
 	}
 
+	static function getArtistManagementURL($artist) {
+		global $friendly_urls, $base_url;
+		if($friendly_urls) {
+			return Server::getArtistURL($artist) . "/manage";
+		} else {
+			return $base_url . '/artist-manage.php?artist=' . rawurlencode($artist);
+		}
+	}
+
 	static function getAlbumURL($artist, $album) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
