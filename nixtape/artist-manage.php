@@ -35,7 +35,7 @@ try {
 	die();
 }
 
-if(!$this_user->manages($artist->name)) {
+if(!isset($this_user) || !$this_user->manages($artist->name)) {
 	$smarty->assign('error', 'Permission denied');
 	$smarty->assign('error', 'You don\'t have permission to edit this artist\'s details.');
 	die();

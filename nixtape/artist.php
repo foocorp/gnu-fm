@@ -44,7 +44,7 @@ if ($aArtistAlbums) {
 	$smarty->assign('albums', $aArtistAlbums);
 }
 
-if($this_user->manages($artist->name)) {
+if(isset($this_user) && $this_user->manages($artist->name)) {
 	$smarty->assign('manage_link', $artist->getManagementURL());
 }
 
