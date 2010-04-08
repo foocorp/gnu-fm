@@ -38,6 +38,7 @@ class Artist {
 
 	public $name, $mbid, $streamable, $bio_content, $bio_published, $bio_summary, $image_small, $image_medium, $image_large;
 	public $id;
+	private $query;
 
 	/**
 	 * Artist constructor
@@ -53,9 +54,10 @@ class Artist {
 		if($mbid) {
 			$mbidquery = 'mbid = ' . $adodb->qstr($mbid) . ' OR ';
 		}
-		$row = $adodb->CacheGetRow(1200, 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large FROM Artist WHERE '
+		$this->query = 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large FROM Artist WHERE '
 			. $mbidquery
-			. 'name = ' . $adodb->qstr($name));
+			. 'name = ' . $adodb->qstr($name);
+		$row = $adodb->CacheGetRow(1200, $this->query);
 		if(!$row) {
 			throw new Exception('No such artist' . $name);
 		} else {
@@ -163,6 +165,18 @@ class Artist {
 			. ' LIMIT ' . $limit);
 
 		return $res;
+	}
+
+	/**
+	 * Set an artist's biography summary
+	 *
+	 * @param string $bio_summary The new biography summary to enter into the database.
+	 */
+	function setBiographySummary($bio_summary) {
+		global $adodb;
+		$adodb->Execute("UPDATE Artist SET bio_summary = " . $adodb->qstr($bio_summary) . " WHERE name = " . $adodb->qstr($this->name));
+		$this->bio_summary = $bio_summary;
+		$adodb->CacheFlush($this->query);
 	}
 
 }

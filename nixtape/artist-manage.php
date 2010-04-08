@@ -41,6 +41,10 @@ if(!$this_user->manages($artist->name)) {
 	die();
 }
 
+if (isset($_POST['submit'])) {
+	$artist->setBiographySummary($_POST['bio_summary']);
+}
+
 $smarty->assign('name', $artist->name);
 $smarty->assign('id', $artist->id);
 $smarty->assign('bio_summary', $artist->bio_summary);
