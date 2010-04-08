@@ -329,7 +329,7 @@ class User {
 	function manages($artist) {
 		global $adodb;
 
-		if($userlevel >= 2) {
+		if($this->userlevel >= 2) {
 			// Let admins edit all artists
 			return true;
 		}
