@@ -44,12 +44,27 @@ if(!isset($this_user) || !$this_user->manages($artist->name)) {
 if (isset($_POST['submit'])) {
 	$artist->setBiographySummary($_POST['bio_summary']);
 	$artist->setBiography($_POST['bio_content']);
+	if (!preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['homepage'])) {
+		$errors[] = 'Home page must be a valid URL';
+	} elseif (preg_match('/\s/', $_POST['homepage'])) {
+		$errors[] = 'Home page must be a URL, as such it cannot contain whitespace.';
+	} else {
+		$artist->setHomepage($_POST['homepage']);
+	}
+	
+	if($errors) {
+		$smarty->assign('errors', $errors);
+	} else {
+		// If the editing was successful send the user back to the view page
+		header('Location: ' . $artist->getURL());
+	}
 }
 
 $smarty->assign('name', $artist->name);
 $smarty->assign('id', $artist->id);
 $smarty->assign('bio_summary', $artist->bio_summary);
 $smarty->assign('bio_content', $artist->bio_content);
+$smarty->assign('homepage', $artist->homepage);
 
 $smarty->display("artist-manage.tpl");
 ?>

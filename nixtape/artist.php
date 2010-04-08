@@ -39,6 +39,7 @@ $smarty->assign('name', $artist->name);
 $smarty->assign('id', $artist->id);
 $smarty->assign('bio_summary', $artist->bio_summary);
 $smarty->assign('bio_content', $artist->bio_content);
+$smarty->assign('homepage', $artist->homepage);
 
 $aArtistAlbums = $artist->getAlbums();
 if ($aArtistAlbums) {
