@@ -35,34 +35,15 @@ try {
 	die();
 }
 
+if(!$this_user->manages($artist->name)) {
+	$smarty->assign('error', 'Permission denied');
+	$smarty->assign('error', 'You don\'t have permission to edit this artist\'s details.');
+	die();
+}
+
 $smarty->assign('name', $artist->name);
 $smarty->assign('id', $artist->id);
 $smarty->assign('bio_summary', $artist->bio_summary);
 
-$aArtistAlbums = $artist->getAlbums();
-if ($aArtistAlbums) {
-	$smarty->assign('albums', $aArtistAlbums);
-}
-
-if($this_user->manages($artist->name)) {
-	$smarty->assign('manage_link', $artist->getManagementURL());
-}
-
-try {  
-	$tagCloud = TagCloud::generateTagCloud('tags', 'tag', 10, $artist->name, "artist");
-	$smarty->assign('tagcloud', $tagCloud);
-} catch (exception $ex) {
-	$tagCloud = array();
-}
-
-/* $smarty->assign('extra_head_links', array( */
-/* 		array( */
-/* 			'rel' => 'meta', */
-/* 			'type' => 'application/rdf+xml' , */
-/* 			'title' => 'FOAF', */
-/* 			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $artist->getURL())) */
-/* 			) */
-/* 	)); */
-
-$smarty->display("artist.tpl");
+$smarty->display("artist-manage.tpl");
 ?>

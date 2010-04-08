@@ -140,6 +140,15 @@ class Artist {
 	}
 
 	/**
+	 * Gives the URL to the management interface for this artist
+	 *
+	 * @return A String containing the URL for this artist's management interface
+	 */
+	function getManagementURL() {
+		return Server::getArtistManagementURL($this->name);
+	}
+
+	/**
 	 * Get an artist's most used tags
 	 *
 	 * @param int $limit The number of tags to return (defaults to 10)

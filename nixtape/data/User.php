@@ -319,4 +319,21 @@ class User {
 
 		return $res;
 	}
+
+	/**
+	 * Determines whether a user has permission to manage an artist
+	 *
+	 * @oaram string $artist The name of the artist to check
+	 * @return Boolean indicating whether this user can edit the artist or not.
+	 */
+	function manages($artist) {
+		global $adodb;
+
+		$res = $adodb->GetOne('SELECT COUNT(*) FROM Manages WHERE '
+			. ' userid = ' . $this->uniqueid
+			. ' AND artist = ' . $adodb->qstr($artist)
+			. ' AND authorised = 1');
+
+		return $res != 0;
+	}
 }

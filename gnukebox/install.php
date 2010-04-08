@@ -223,6 +223,11 @@ if (isset($_POST['install'])) {
 		userid INTEGER REFERENCES Users(uniqueid),
 		UNIQUE(tag, artist, album, track, userid))");
 
+	$adodb->Execute("CREATE TABLE Manages(
+		userid INTEGER REFERENCES Users(uniqueid),
+		artist VARCHAR(255) REFERENCES Artist(name),
+		authorised INTEGER)");
+
 	$adodb->Execute("CREATE TABLE Error(
 			id SERIAL PRIMARY KEY,
 			msg TEXT,
