@@ -179,4 +179,16 @@ class Artist {
 		$adodb->CacheFlush($this->query);
 	}
 
+	/**
+	 * Set an artist's full biography
+	 *
+	 * @param string $bio The new biography to enter into the database.
+	 */
+	function setBiography($bio) {
+		global $adodb;
+		$adodb->Execute("UPDATE Artist SET bio_content = " . $adodb->qstr($bio) . " WHERE name = " . $adodb->qstr($this->name));
+		$this->bio_content = $bio;
+		$adodb->CacheFlush($this->query);
+	}
+
 }
