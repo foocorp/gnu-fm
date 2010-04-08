@@ -43,11 +43,13 @@ if(!isset($this_user) || !$this_user->manages($artist->name)) {
 
 if (isset($_POST['submit'])) {
 	$artist->setBiographySummary($_POST['bio_summary']);
+	$artist->setBiography($_POST['bio_content']);
 }
 
 $smarty->assign('name', $artist->name);
 $smarty->assign('id', $artist->id);
 $smarty->assign('bio_summary', $artist->bio_summary);
+$smarty->assign('bio_content', $artist->bio_content);
 
 $smarty->display("artist-manage.tpl");
 ?>
