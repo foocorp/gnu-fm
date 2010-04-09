@@ -44,9 +44,9 @@ if(!isset($this_user) || !$this_user->manages($artist->name)) {
 if (isset($_POST['submit'])) {
 	$artist->setBiographySummary($_POST['bio_summary']);
 	$artist->setBiography($_POST['bio_content']);
-	if (!preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['homepage'])) {
+	if (!empty($_POST['homepage']) && !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['homepage'])) {
 		$errors[] = 'Home page must be a valid URL';
-	} elseif (preg_match('/\s/', $_POST['homepage'])) {
+	} elseif (!empty($_POST['homepage']) && preg_match('/\s/', $_POST['homepage'])) {
 		$errors[] = 'Home page must be a URL, as such it cannot contain whitespace.';
 	} else {
 		$artist->setHomepage($_POST['homepage']);
