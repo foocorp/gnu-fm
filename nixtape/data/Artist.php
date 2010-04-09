@@ -38,7 +38,7 @@ class Artist {
 
 	public $name, $mbid, $streamable, $bio_content, $bio_published, $bio_summary, $image_small, $image_medium, $image_large;
 	public $id;
-	private $query;
+	private $query, $album_query;
 
 	/**
 	 * Artist constructor
@@ -73,6 +73,7 @@ class Artist {
 			$this->homepage = $row['homepage'];
 
 			$this->id = identifierArtist(null, $this->name, null, null, null, null, $this->mbid, null);
+			$this->album_query = 'SELECT name, image FROM Album WHERE artist_name = '. $adodb->qstr($this->name);
 		}
 	}
 
@@ -84,13 +85,20 @@ class Artist {
 	function getAlbums() {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$res = $adodb->CacheGetAll(600, 'SELECT name, image FROM Album WHERE artist_name = '
-			. $adodb->qstr($this->name));
+		$res = $adodb->CacheGetAll(600, $this->album_query);
 		foreach($res as &$row) {
 			$albums[] = new Album($row['name'], $this->name);
 		}
 
 		return $albums;
+	}
+
+	/**
+	 * Clear the album cache, should be called after creating a new album
+	 */
+	function clearAlbumCache() {
+		global $adodb;
+		$adodb->CacheFlush($this->album_query);
 	}
 
 	/**
@@ -145,10 +153,19 @@ class Artist {
 	/**
 	 * Gives the URL to the management interface for this artist
 	 *
-	 * @return A String containing the URL for this artist's management interface
+	 * @return A string containing the URL for this artist's management interface
 	 */
 	function getManagementURL() {
 		return Server::getArtistManagementURL($this->name);
+	}
+
+	/**
+	 * Gives the URL for manages to add a new album to this artist
+	 *
+	 * @return A string containing the URL for adding albums to this artist
+	 */
+	function getAddAlbumURL() {
+		return Server::getAddAlbumURL($this->name);
 	}
 
 	/**

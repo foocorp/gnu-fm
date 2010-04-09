@@ -74,6 +74,28 @@ class Album {
 
 	}
 
+	/**
+	 * Create a new Album
+	 *
+	 * @param string $name The name of the album
+	 * @param string $artist_name The name of the artist who recorded this album
+	 * @param string $image The URL to this album's cover image (optional)
+	 * @return An Album object corresponding to the newly created album
+	 */
+	public static function create($name, $artist_name, $image='') {
+		global $adodb;
+
+		$adodb->Execute('INSERT INTO Album (name, artist_name, image) VALUES ('
+			. $adodb->qstr($name) . ', '
+			. $adodb->qstr($artist_name) . ', '
+			. $adodb->qstr($image) . ')');
+
+		$artist = new Artist($artist_name);
+		$artist->clearAlbumCache();
+
+		return new Album($name, $artist_name);
+	}
+
 	function getPlayCount() {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);

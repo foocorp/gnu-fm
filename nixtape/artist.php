@@ -48,6 +48,7 @@ if ($aArtistAlbums) {
 
 if(isset($this_user) && $this_user->manages($artist->name)) {
 	$smarty->assign('manage_link', $artist->getManagementURL());
+	$smarty->assign('add_album_link', $artist->getAddAlbumURL());
 }
 
 try {  

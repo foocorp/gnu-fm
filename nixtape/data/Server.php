@@ -338,6 +338,15 @@ class Server {
 		}
 	}
 
+	static function getAddAlbumURL($artist) {
+		global $friendly_urls, $base_url;
+		if($friendly_urls) {
+			return Server::getArtistURL($artist) . "/album/add";
+		} else {
+			return $base_url . '/album-add.php?artist=' . rawurlencode($artist);
+		}
+	}
+
 	static function getAlbumURL($artist, $album) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
