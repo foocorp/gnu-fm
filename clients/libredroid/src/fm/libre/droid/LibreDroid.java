@@ -28,18 +28,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -53,23 +48,22 @@ import org.apache.http.params.CoreProtocolPNames;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaPlayer;
 import android.media.MediaScannerConnection;
-import android.media.MediaPlayer.OnBufferingUpdateListener;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaScannerConnection.MediaScannerConnectionClient;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
+import android.os.IBinder;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -85,22 +79,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
-public class LibreDroid extends Activity implements OnBufferingUpdateListener, OnCompletionListener {
-	private Playlist playlist;
-	private String sessionKey;
-	private String scrobbleKey;
-	private int currentSong;
-	private MediaPlayer mp;
-	private boolean playing;
-	private boolean buffering;
+public class LibreDroid extends Activity {
+	private LibreServiceConnection libreServiceConn;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.registerReceiver(new MediaButtonReceiver(), new IntentFilter(Intent.ACTION_MEDIA_BUTTON));
+        libreServiceConn = new LibreServiceConnection();
+		bindService(new Intent(this, LibreService.class), libreServiceConn, Context.BIND_AUTO_CREATE);
+    	
+    	this.registerReceiver(new MediaButtonReceiver(), new IntentFilter(Intent.ACTION_MEDIA_BUTTON));
+    	this.registerReceiver(new UIUpdateReceiver(), new IntentFilter("LibreDroidNewSong"));
         setContentView(R.layout.main);
-        this.mp = new MediaPlayer();
         
         // Load settings
         final SharedPreferences settings = getSharedPreferences("LibreDroid", MODE_PRIVATE);
@@ -122,9 +113,6 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
         		LibreDroid.this.login();
         	}
         });
-        this.currentSong = 0;
-        this.playlist = new Playlist();
-        this.sessionKey = "";
         
         // Setup buttons
         String radioButtons[] = {"Folk", "Rock", "Metal", "Classical", "Pop", "Punk", "Jazz", "Blues", "Rap", "Ambient"};
@@ -136,7 +124,8 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
         	button.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                 	Button b = (Button) v;
-                    LibreDroid.this.tuneStation("globaltags", b.getText().toString().toLowerCase());
+                    LibreDroid.this.libreServiceConn.service.tuneStation("globaltags", b.getText().toString().toLowerCase());
+                    LibreDroid.this.nextPage();
                 }
             });
         	row.addView(button);
@@ -149,13 +138,13 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
         final ImageButton nextButton = (ImageButton) findViewById(R.id.nextButton);
         nextButton.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		LibreDroid.this.next();
+        		LibreDroid.this.libreServiceConn.service.next();
         	}
         });
         final ImageButton prevButton = (ImageButton) findViewById(R.id.prevButton);
         prevButton.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		LibreDroid.this.prev();
+        		LibreDroid.this.libreServiceConn.service.prev();
         	}
         });
         final ImageButton playPauseButton = (ImageButton) findViewById(R.id.playPauseButton);
@@ -173,21 +162,38 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
     }
     
     @Override
-    public void onResume() {
-    	super.onResume();
-    	// Return to the correct page when resuming
-    	final ViewAnimator view = (ViewAnimator) findViewById(R.id.viewAnimator);
-    	if (this.mp.isPlaying()) {
-    		view.setDisplayedChild(2);
-    	} else if (this.sessionKey.length() > 0) {
-    		view.setDisplayedChild(1);
+    public void onDestroy() {
+    	super.onDestroy();	
+    }
+    
+    public void updateSong() {
+    	Song song = libreServiceConn.service.getSong();
+    	final TextView titleText = (TextView) findViewById(R.id.titleText);
+    	final TextView artistText = (TextView) findViewById(R.id.artistText);
+    	final TextView stationText = (TextView) findViewById(R.id.stationNameText);
+    	final ImageView albumImage = (ImageView) findViewById(R.id.albumImage);
+    	final ImageButton playPauseButton = (ImageButton) findViewById(R.id.playPauseButton);
+    	playPauseButton.setImageResource(R.drawable.pause);
+    	titleText.setText(song.title);
+    	artistText.setText(song.artist);
+    	stationText.setText(libreServiceConn.service.getStationName());
+    	if (song.imageURL.length() > 0) {
+    		new AlbumImageTask().execute(song.imageURL);
+    	} else {
+    		albumImage.setImageResource(R.drawable.album);
     	}
     }
     
     @Override
-    public void onDestroy() {
-    	super.onDestroy();
-    	this.mp.release();
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+        	if (this.libreServiceConn.service.getCurrentPage() > 0) {
+        		LibreDroid.this.libreServiceConn.service.stop();
+        		this.prevPage();
+        		return true;
+        	}
+        }
+        return super.onKeyDown(keyCode, event);
     }
     
     public String httpGet(String url) throws URISyntaxException, ClientProtocolException, IOException {
@@ -215,174 +221,56 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
     	res.getEntity().writeTo(outstream);
     	return outstream.toString();
     }
-    
-    public void tuneStation(String type, String station) {
-    	Toast.makeText(this, "Tuning in...", Toast.LENGTH_LONG).show();
-    	new TuneStationTask().execute(type, station);
-    }
-    
-    public void play() {
-    	if (this.currentSong >= this.playlist.size()) {
-    		this.getPlaylist();
-    	}
-    	this.playing = true;
-    	this.buffering = true;
-    	Song song = this.playlist.getSong(currentSong);
-    	Log.d("libredroid", "Song: " + this.playlist);
-    	final TextView titleText = (TextView) findViewById(R.id.titleText);
-    	final TextView artistText = (TextView) findViewById(R.id.artistText);
-    	final ImageView albumImage = (ImageView) findViewById(R.id.albumImage);
-    	final ImageButton playPauseButton = (ImageButton) findViewById(R.id.playPauseButton);
-    	playPauseButton.setImageResource(R.drawable.pause);
-    	titleText.setText(song.title);
-    	artistText.setText(song.artist);
-    	if (song.imageURL.length() > 0) {
-    		new AlbumImageTask().execute(song.imageURL);
-    	} else {
-    		albumImage.setImageResource(R.drawable.album);
-    	}
-    	try {
-    		this.mp.reset();
-    		// Hack to get Jamendo MP3 stream instead of OGG because MediaPlayer
-    		// doesn't support streaming OGG at the moment
-    		this.mp.setDataSource(song.location.replace("ogg2", "mp31"));
-    		this.mp.setOnBufferingUpdateListener(this);
-            this.mp.setOnCompletionListener(this);
-    		this.mp.prepareAsync();
-    		// Send now playing data
-    		this.httpPost("http://turtle.libre.fm/nowplaying/1.2/", "s", this.scrobbleKey, "a", song.artist, "t", song.title);
-    	} catch (Exception ex) {
-    		Log.d("libredroid", "Couldn't play " + song.title + ": " + ex.getMessage());
-    		this.next();
-    	}
-    	
-    }
-    
-    public void next() {
-    	mp.stop();
-    	this.currentSong++;
-    	this.play();
-    }
-    
-    public void prev() {
-    	if (this.currentSong > 0) {
-    		mp.stop();
-    		this.currentSong--;
-    		this.play();
-    	}
-    }
-    
+        
     public void togglePause() {
     	final ImageButton playPauseButton = (ImageButton) findViewById(R.id.playPauseButton);
-    	if (mp.isPlaying()) {
-    		mp.pause();
+    	if (libreServiceConn.service.isPlaying()) {
     		playPauseButton.setImageResource(R.drawable.play);
     	} else {
-    		mp.start();
     		playPauseButton.setImageResource(R.drawable.pause);
     	}
-    	this.playing = !this.playing;
-    }
-    
-    public void getPlaylist() {
-    	try {
-    		String xspf = this.httpGet("http://alpha.libre.fm/radio/xspf.php?sk=" + this.sessionKey + "&desktop=1.0");
-    		this.playlist.parse(xspf);
-    	} catch (Exception ex) {
-    		Log.w("libredroid", "Unable to process playlist: " + ex.getMessage());
-    		Toast.makeText(this, "Unable to process playlist: " + ex.getMessage(), Toast.LENGTH_LONG).show();
-    	}
+    	libreServiceConn.service.togglePause();
     }
     
     public void login() {
     	final EditText usernameEntry = (EditText) findViewById(R.id.usernameEntry);
     	final EditText passwordEntry = (EditText) findViewById(R.id.passwordEntry);
-    	final ViewAnimator view = (ViewAnimator) findViewById(R.id.viewAnimator);
     	String username = usernameEntry.getText().toString();
     	String password = passwordEntry.getText().toString();
-    	String passMD5 = "";
-    	String token = "";
-    	long timestamp = new Date().getTime() / 1000;
-    	try {
-    		MessageDigest md = MessageDigest.getInstance("MD5");
-    		md.update(password.getBytes(), 0, password.length());
-    		passMD5 = new BigInteger(1, md.digest()).toString(16);
-    		if (passMD5.length() == 31) {
-    			passMD5 = "0" + passMD5; 
-    		}
-    		token = passMD5 + Long.toString(timestamp);
-    		md.update(token.getBytes(), 0, token.length());
-    		token = new BigInteger(1, md.digest()).toString(16);
-    		if (token.length() == 31) {
-    			token = "0" + token;
-    		}
-    	} catch (NoSuchAlgorithmException ex) {
-    		Toast.makeText(this, "MD5 hashing unavailable, unable to login.", Toast.LENGTH_LONG);
-    	}
-    	
-    	try {
-    		// Login for streaming
-    		String output = this.httpGet("http://alpha.libre.fm/radio/handshake.php?username=" + username + "&passwordmd5=" + passMD5);
-    		if (output.trim().equals("BADAUTH")) {
-    			Toast.makeText(this, "Incorrect username or password", Toast.LENGTH_SHORT).show();
-    		} else {
-    		    String[] result = output.split("[=\n]");
-    		    for (int x=0; x<result.length; x++)  {
-    		    	if (result[x].trim().equals("session")) {
-    		    		this.sessionKey = result[x+1].trim();
-    		    	}
-    		    }
-    			view.showNext();
-    		}
-    		// Login for scrobbling
-    		output = this.httpGet("http://turtle.libre.fm/?hs=true&p=1.2&u=" + username + "&t=" + Long.toString(timestamp) + "&a=" + token + "&c=ldr" );    		
-    		if (output.split("\n")[0].equals("OK")) {
-    			this.scrobbleKey = output.split("\n")[1].trim();
-    		}    		
-    	} catch (Exception ex) {
-    		Toast.makeText(this, "Unable to connect to libre.fm server: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+    	boolean loggedIn = libreServiceConn.service.login(username, password);
+    	if(loggedIn) {
+    		nextPage();
     	}
     }
     
+    public void nextPage() {
+    	final ViewAnimator view = (ViewAnimator) findViewById(R.id.viewAnimator);
+    	view.showNext();
+		libreServiceConn.service.setCurrentPage(view.getDisplayedChild());	
+    }
+    
+    public void prevPage() {
+    	final ViewAnimator view = (ViewAnimator) findViewById(R.id.viewAnimator);
+    	view.showPrevious();
+		libreServiceConn.service.setCurrentPage(view.getDisplayedChild());	
+    }
+    
     public void save() {
-    	Song song = this.playlist.getSong(this.currentSong);
+    	Song song = this.libreServiceConn.service.getSong();
     	Toast.makeText(LibreDroid.this, "Downloading \"" + song.title + "\" to your SD card.", Toast.LENGTH_LONG).show();
     	new DownloadTrackTask().execute(song);
     }
-
-	public void onBufferingUpdate(MediaPlayer mp, int percent) {
-		if (percent > 2 && !mp.isPlaying() && this.playing) {
-			this.mp.start();
-		}
-		if (percent > 99) {
-			this.buffering = false;
-		}
-	}
-
-	public void onCompletion(MediaPlayer mp) {
-		if(!this.buffering) { // We get spurious complete messages if we're still buffering
-			// Scrobble
-			Song song = this.playlist.getSong(this.currentSong);
-			try { 
-				String time = Long.toString(new Date().getTime() / 1000);
-				this.httpPost("http://turtle.libre.fm/submissions/1.2/", "s", this.scrobbleKey, "a[0]", song.artist, "t[0]", song.title, "b[0]", song.album, "i[0]", time);
-			} catch (Exception ex) {
-				Log.d("libredroid", "Couldn't scrobble: " + ex.getMessage());
-			}
-			
-			this.next();			
-		}
-	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuItem changeStation = menu.add(0, Menu.FIRST, 0, "Change Station").setIcon(R.drawable.back);
+		MenuItem quit = menu.add(0, 2, 0, "Quit").setIcon(R.drawable.quit);
 		changeStation.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
 				final ViewAnimator view = (ViewAnimator) findViewById(R.id.viewAnimator);
 				if (view.getDisplayedChild() == 2) {
-					LibreDroid.this.mp.stop();
-					view.showPrevious();
+					LibreDroid.this.libreServiceConn.service.stop();
+					LibreDroid.this.prevPage();
 					return true;
 				} else {
 					return false;
@@ -390,49 +278,17 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
 			}
         });
 		
+		quit.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			public boolean onMenuItemClick(MenuItem item) {
+				LibreDroid.this.libreServiceConn.service.stop();
+				LibreDroid.this.finish();
+				return true;
+			}
+        });
+		
 		return super.onCreateOptionsMenu(menu);
 	}
-	
-	
-	private class TuneStationTask extends AsyncTask<String,String,String> {
-	     
-		protected String doInBackground(String... params) {
-	    	 String type = params[0];
-	    	 String station = params[1];
-	    	 String result = "";
-	    	 try {
-	    		 result = LibreDroid.this.httpGet("http://alpha.libre.fm/radio/adjust.php?session=" + LibreDroid.this.sessionKey + "&url=librefm://" + type + "/" + station);
-	    	 } catch (Exception ex) {
-	    		 Log.w("libredroid", "Unable to tune station: " + ex.getMessage());
-	    	 }
-	    	 return result;
-	     }
 
-	     protected void onPostExecute(String output) {
-	    	
-	    	 if (output.length() == 0) {
-	    		 return;
-	    	 }
-	    	 
-	    	 LibreDroid.this.playlist = new Playlist();
-	    	 
-	    	 if (output.split(" ")[0].equals("FAILED")) {
-	    		 Toast.makeText(LibreDroid.this, output.substring(7), Toast.LENGTH_LONG).show();
-	    	 } else {
-	    		 final ViewAnimator view = (ViewAnimator) findViewById(R.id.viewAnimator);
-	    		 String[] result = output.split("[=\n]");
-	    		 for (int x=0; x<result.length; x++)  {
-	    			 if (result[x].trim().equals("stationname")) {
-	    				 final TextView stationNameText = (TextView) findViewById(R.id.stationNameText);
-	    				 stationNameText.setText(result[x+1].trim());
-	    			 }
-	    		 }
-	    		 view.showNext();
-	    		 LibreDroid.this.play();
-	    	 }
-	     }
-	}
-	
 	
 	private class AlbumImageTask extends AsyncTask<String, String, Bitmap> {
 		
@@ -539,6 +395,19 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
 	}
 	
 	
+	private class UIUpdateReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			LibreDroid.this.runOnUiThread(new Runnable() {
+				public void run() {
+					LibreDroid.this.updateSong();
+				}
+			});
+		}
+		
+	}
+	
 	private class MediaButtonReceiver extends BroadcastReceiver {
 
 		@Override
@@ -550,11 +419,11 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
 			}
 			switch(ev.getKeyCode()) {
 				case KeyEvent.KEYCODE_MEDIA_NEXT:
-					LibreDroid.this.next();
+					LibreDroid.this.libreServiceConn.service.next();
 					this.abortBroadcast();
 					break;
 				case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-					LibreDroid.this.prev();
+					LibreDroid.this.libreServiceConn.service.prev();
 					this.abortBroadcast();
 					break;
 				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
@@ -565,4 +434,30 @@ public class LibreDroid extends Activity implements OnBufferingUpdateListener, O
 		}
 		
 	}
+	
+	
+	private class LibreServiceConnection implements ServiceConnection {
+		
+		public ILibreService service = null;
+
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			this.service = (ILibreService) service;
+			LibreDroid.this.runOnUiThread(new Runnable() {
+				public void run() {
+					final ViewAnimator view = (ViewAnimator) LibreDroid.this.findViewById(R.id.viewAnimator);
+					view.setDisplayedChild(LibreServiceConnection.this.service.getCurrentPage());
+					if(LibreServiceConnection.this.service.getCurrentPage() == 2) {
+						LibreDroid.this.updateSong();
+					}
+				}
+			});
+
+		}
+
+		public void onServiceDisconnected(ComponentName name) {
+			
+		}
+
+	}
+
 }
