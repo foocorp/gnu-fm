@@ -37,6 +37,7 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 	private Playlist playlist;
 	private String sessionKey;
 	private String scrobbleKey;
+	private String serviceToken; 
 	private String stationName;
 	private int currentSong;
 	private int currentPage = 0;
@@ -94,6 +95,7 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 		loggedIn = false;
     	String passMD5 = "";
     	String token = "";
+    	String wsToken = "";
     	long timestamp = new Date().getTime() / 1000;
     	try {
     		MessageDigest md = MessageDigest.getInstance("MD5");
@@ -107,6 +109,12 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
     		token = new BigInteger(1, md.digest()).toString(16);
     		if (token.length() == 31) {
     			token = "0" + token;
+    		}
+    		wsToken = username + passMD5;
+    		md.update(wsToken.getBytes(), 0, wsToken.length());
+    		wsToken = new BigInteger(1, md.digest()).toString(16);
+    		if (wsToken.length() == 31) {
+    			wsToken = "0" + wsToken;
     		}
     	} catch (NoSuchAlgorithmException ex) {
     		Toast.makeText(this, "MD5 hashing unavailable, unable to login.", Toast.LENGTH_LONG);
@@ -130,7 +138,12 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
     		output = this.httpGet("http://turtle.libre.fm/?hs=true&p=1.2&u=" + username + "&t=" + Long.toString(timestamp) + "&a=" + token + "&c=ldr" );    		
     		if (output.split("\n")[0].equals("OK")) {
     			this.scrobbleKey = output.split("\n")[1].trim();
-    		}    		
+    		}
+    		// Login for web services
+    		output = this.httpGet("http://alpha.libre.fm/2.0/?method=auth.getmobilesession&username=" + username + "&authToken=" + wsToken);
+    		WSParser wsp = new WSParser();
+    		wsp.parse(output);
+    		this.serviceToken = wsp.getKey();
     	} catch (Exception ex) {
     		Toast.makeText(this, "Unable to connect to libre.fm server: " + ex.getMessage(), Toast.LENGTH_LONG).show();
     	}
@@ -206,6 +219,27 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
     
     public void stop() {
     	mp.stop();
+    }
+    
+    public void love() {
+    	Song song = this.getSong();
+    	try {
+    		this.httpPost("http://alpha.libre.fm/2.0/", "method", "track.love", "sk", this.serviceToken, "artist", song.artist, "track", song.title);
+    		Toast.makeText(this, "Loved", Toast.LENGTH_SHORT).show();
+    	} catch (Exception ex) {
+    		Log.d("libredroid", "Couldn't love " + song.title + ": " + ex.getMessage()); 
+    	}    	
+    }
+    
+    public void ban() {
+    	Song song = this.getSong();
+    	try {
+    		this.httpPost("http://alpha.libre.fm/2.0/", "method", "track.ban", "sk", this.serviceToken, "artist", song.artist, "track", song.title);
+    		Toast.makeText(this, "Banned", Toast.LENGTH_SHORT).show();
+    	} catch (Exception ex) {
+    		Log.d("libredroid", "Couldn't ban " + song.title + ": " + ex.getMessage()); 
+    	}
+    	this.next();
     }
     
     public Song getSong() {
@@ -314,6 +348,14 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 		
 		public void prev() {
 			LibreService.this.prev();
+		}
+		
+		public void love() {
+			LibreService.this.love();
+		}
+		
+		public void ban() {
+			LibreService.this.ban();
 		}
 		
 		public Song getSong() {

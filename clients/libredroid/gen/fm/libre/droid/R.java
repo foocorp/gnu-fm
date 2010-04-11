@@ -13,14 +13,16 @@ public final class R {
     public static final class drawable {
         public static final int album=0x7f020000;
         public static final int back=0x7f020001;
-        public static final int icon=0x7f020002;
-        public static final int logo=0x7f020003;
-        public static final int next=0x7f020004;
-        public static final int pause=0x7f020005;
-        public static final int play=0x7f020006;
-        public static final int prev=0x7f020007;
-        public static final int quit=0x7f020008;
-        public static final int save=0x7f020009;
+        public static final int ban=0x7f020002;
+        public static final int icon=0x7f020003;
+        public static final int logo=0x7f020004;
+        public static final int love=0x7f020005;
+        public static final int next=0x7f020006;
+        public static final int pause=0x7f020007;
+        public static final int play=0x7f020008;
+        public static final int prev=0x7f020009;
+        public static final int quit=0x7f02000a;
+        public static final int save=0x7f02000b;
     }
     public static final class id {
         public static final int ImageView01=0x7f050004;
@@ -41,12 +43,14 @@ public final class R {
         public static final int TextView07=0x7f050006;
         public static final int albumImage=0x7f050014;
         public static final int artistText=0x7f050016;
+        public static final int banButton=0x7f050018;
         public static final int loginButton=0x7f05000b;
-        public static final int nextButton=0x7f05001a;
+        public static final int loveButton=0x7f05001d;
+        public static final int nextButton=0x7f05001b;
         public static final int passwordEntry=0x7f05000a;
-        public static final int playPauseButton=0x7f050019;
-        public static final int prevButton=0x7f050018;
-        public static final int saveButton=0x7f05001b;
+        public static final int playPauseButton=0x7f05001a;
+        public static final int prevButton=0x7f050019;
+        public static final int saveButton=0x7f05001c;
         public static final int stationNameText=0x7f050013;
         public static final int titleText=0x7f050015;
         public static final int usernameEntry=0x7f050008;

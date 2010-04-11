@@ -34,11 +34,14 @@
 
 
 
-<TableRow android:id="@+id/TableRow03" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="10px" android:layout_gravity="center_horizontal" android:gravity="center_horizontal"><ImageButton android:layout_height="wrap_content" android:id="@+id/prevButton" android:src="@drawable/prev" android:layout_width="fill_parent"></ImageButton>
+<TableRow android:id="@+id/TableRow03" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="10px" android:layout_gravity="center_horizontal" android:gravity="center_horizontal">
+<ImageButton android:layout_height="wrap_content" android:id="@+id/banButton" android:src="@drawable/ban" android:layout_width="fill_parent" android:layout_marginRight="1px"></ImageButton>
+<ImageButton android:layout_height="wrap_content" android:id="@+id/prevButton" android:src="@drawable/prev" android:layout_width="fill_parent"></ImageButton>
 
-<ImageButton android:layout_height="wrap_content" android:src="@drawable/pause" android:id="@+id/playPauseButton" android:layout_width="fill_parent" android:layout_marginLeft="20px" android:layout_marginRight="20px"></ImageButton><ImageButton android:layout_height="wrap_content" android:id="@+id/nextButton" android:src="@drawable/next" android:layout_width="fill_parent" android:layout_marginRight="20px"></ImageButton>
+<ImageButton android:layout_height="wrap_content" android:src="@drawable/pause" android:id="@+id/playPauseButton" android:layout_width="fill_parent"></ImageButton><ImageButton android:layout_height="wrap_content" android:id="@+id/nextButton" android:src="@drawable/next" android:layout_width="fill_parent"></ImageButton>
 
 <ImageButton android:layout_height="wrap_content" android:id="@+id/saveButton" android:src="@drawable/save" android:layout_width="fill_parent"></ImageButton>
+<ImageButton android:layout_height="wrap_content" android:id="@+id/loveButton" android:src="@drawable/love" android:layout_width="fill_parent"></ImageButton>
 </TableRow>
 </TableLayout>
 
