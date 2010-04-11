@@ -11,6 +11,8 @@ public interface ILibreService {
 	public void play();
 	public void next();
 	public void prev();
+	public void love();
+	public void ban();
 	public Song getSong();
 	public Song getSong(int songNumber);
 	public void tuneStation(String type, String station);

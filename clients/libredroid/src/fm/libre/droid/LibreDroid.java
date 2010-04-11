@@ -159,6 +159,18 @@ public class LibreDroid extends Activity {
         		LibreDroid.this.save();
         	}
         });
+        final ImageButton loveButton = (ImageButton) findViewById(R.id.loveButton);
+        loveButton.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v) {
+        		LibreDroid.this.libreServiceConn.service.love();
+        	}
+        });
+        final ImageButton banButton = (ImageButton) findViewById(R.id.banButton);
+        banButton.setOnClickListener(new OnClickListener() {
+        	public void onClick(View v) {
+        		LibreDroid.this.libreServiceConn.service.ban();
+        	}
+        });
     }
     
     @Override
