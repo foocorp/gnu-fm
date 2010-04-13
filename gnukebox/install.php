@@ -81,6 +81,7 @@ if (isset($_POST['install'])) {
 		location_uri VARCHAR(255) REFERENCES Places(location_uri),
 		laconica_profile VARCHAR(255),
 		created INTEGER DEFAULT 0,
+		modified INTEGER DEFAULT 0,
 		journal_rss VARCHAR(255))");
 
 	$adodb->Execute("CREATE TABLE Groups (
