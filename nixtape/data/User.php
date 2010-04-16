@@ -263,7 +263,7 @@ class User {
 
 		if ($maxcount > 0) {
 			foreach($result as &$row) {
-				$row['width']=(int)(100 * ($row['freq']/$maxcount));
+				$row['width']=(int)(300 * ($row['freq']/$maxcount));
 			}
 		}
 
