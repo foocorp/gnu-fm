@@ -468,13 +468,85 @@ class Server {
 			return null;
 		}
 
+		$result = array();
 		foreach($res as &$i) {
 			$row = sanitize($i);
 
 			$row['artisturl'] = Server::getArtistURL($row['name']);
+			$result[] = $row;
 		}
 
-		return $res;
+		return $result;
+	}
+
+
+	static function search($search_term, $search_type, $limit=40) {
+		global $adodb;
+		$search_term = strtolower($search_term);
+		switch($search_type) {
+			case 'artist':
+				$table = 'Artist';
+				$search_fields[] = 'name';
+				$data_fields[] = 'name';
+				$data_fields[] = 'bio_summary';
+				break;
+			case 'user':
+				$table = 'Users';
+				$search_fields[] = 'username';
+				$search_fields[] = 'fullname';
+				$data_fields[] = 'username';
+				$data_fields[] = 'fullname';
+				$data_fields[] = 'bio';
+				break;
+			case 'tag':
+				$table = 'Tags';
+				$search_fields[] = 'tag';
+				$data_fields[] = 'tag';
+				break;
+			default:
+				return array();
+		}
+
+		$sql = 'SELECT DISTINCT ';
+
+		for($i = 0; $i < count($data_fields); $i++) {
+			$sql .= $data_fields[$i];
+			if($i < count($data_fields)-1) {
+				$sql .= ', ';
+			}
+		}
+
+		$sql .= ' FROM ' . $table . ' WHERE ';
+
+		for($i = 0; $i < count($search_fields); $i++ ) {
+			if ($i > 0) {
+				$sql .= ' OR ';
+			}
+			$sql .= 'LOWER(' . $search_fields[$i] . ') LIKE ' . $adodb->qstr('%' . $search_term . '%');
+		}
+
+		$sql .= 'LIMIT ' . $limit;
+
+		$res = $adodb->CacheGetAll(600, $sql);
+
+		$result = array();
+		foreach($res as &$i) {
+			$row = sanitize($i);
+			switch($search_type) {
+				case 'artist':
+					$row['url'] = Server::getArtistURL($row['name']);
+					break;
+				case 'user':
+					$row['url'] = Server::getUserURL($row['username']);
+					break;
+				case 'tag':
+					$row['url'] = Server::getTagURL($row['tag']);
+					break;
+			}
+			$result[] = $row;
+		}
+
+		return $result;
 	}
 
 }
