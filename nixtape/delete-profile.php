@@ -22,7 +22,6 @@
 require_once ('templating.php');
 require_once ('data/User.php');
 require_once ('utils/random_code_generator.php');
-require_once($install_path . '/../turtle/temp-utils.php'); // this is extremely dodgy and shameful
 
 if ($logged_in == false) {
 	$smarty->assign('error', 'Error!');
@@ -59,6 +58,8 @@ catch (exception $e) {
 		$adodb->Execute('DELETE FROM User_Relationship_Flags WHERE uid2 = ' . (int)($this_user->uniqueid));
 		$adodb->Execute('DELETE FROM User_Relationships WHERE uid1 = ' . (int)($this_user->uniqueid));
 		$adodb->Execute('DELETE FROM User_Relationships WHERE uid2 = ' . (int)($this_user->uniqueid));
+		$adodb->Execute('DELETE FROM Banned_Tracks WHERE userid = ' . $adodb->qstr($this_user->uniqueid));
+		$adodb->Execute('DELETE FROM Loved_Tracks WHERE userid = ' . $adodb->qstr($this_user->uniqueid));
 		$adodb->Execute('DELETE FROM Users WHERE uniqueid = ' . ($this_user->uniqueid));
 		} catch (exception $e) {
 			$smarty->assign('error', 'Error!');
@@ -67,7 +68,7 @@ catch (exception $e) {
 			die ();
 		}
 		session_destroy();
-		header('Location: index.php');
+		$smarty->display('account-deleted.tpl');
 	}
 } else {
 	$code = generateCode();

@@ -46,6 +46,12 @@ if ($_POST['submit'])
 			$errors[] = 'WebID must be a URI. Valid URIs cannot contain whitespace.';
 	}
 
+	if (!empty($_POST['delete_account']))
+	{
+		header('Location: ' . $base_url . '/delete-profile.php');
+		die();
+	}
+
 	if (!empty($_POST['homepage']))
 	{
 		# Need better URI validation, but this will do for now. I think
