@@ -47,20 +47,20 @@ catch (exception $e) {
 		die ();
 	} else {
 		try {
-		$adodb->Execute('DELETE FROM Scrobble_Sessions WHERE userid = ' . $adodb->qstr($this_user->uniqueid));
+		$adodb->Execute('DELETE FROM Scrobble_Sessions WHERE userid = ' . $this_user->uniqueid);
 		$adodb->Execute('DELETE FROM Delete_Request WHERE username = ' . $adodb->qstr($username));
 		$adodb->Execute('DELETE FROM Auth WHERE username = ' . $adodb->qstr($username));
-		$adodb->Execute('DELETE FROM Group_Members WHERE member = ' . (int)($this_user->uniqueid));
+		$adodb->Execute('DELETE FROM Group_Members WHERE member = ' . $this_user->uniqueid);
 		$adodb->Execute('DELETE FROM Radio_Sessions WHERE username = ' . $adodb->qstr($username));
 		$adodb->Execute('DELETE FROM Recovery_Request WHERE username = ' . $adodb->qstr($username));
-		$adodb->Execute('DELETE FROM Scrobbles WHERE userid = ' . username_to_uniqueid($username));
-		$adodb->Execute('DELETE FROM User_Relationship_Flags WHERE uid1 = ' . (int)($this_user->uniqueid));
-		$adodb->Execute('DELETE FROM User_Relationship_Flags WHERE uid2 = ' . (int)($this_user->uniqueid));
-		$adodb->Execute('DELETE FROM User_Relationships WHERE uid1 = ' . (int)($this_user->uniqueid));
-		$adodb->Execute('DELETE FROM User_Relationships WHERE uid2 = ' . (int)($this_user->uniqueid));
-		$adodb->Execute('DELETE FROM Banned_Tracks WHERE userid = ' . $adodb->qstr($this_user->uniqueid));
-		$adodb->Execute('DELETE FROM Loved_Tracks WHERE userid = ' . $adodb->qstr($this_user->uniqueid));
-		$adodb->Execute('DELETE FROM Users WHERE uniqueid = ' . ($this_user->uniqueid));
+		$adodb->Execute('DELETE FROM Scrobbles WHERE userid = ' . $this_user->uniqueid);
+		$adodb->Execute('DELETE FROM User_Relationship_Flags WHERE uid1 = ' . $this_user->uniqueid);
+		$adodb->Execute('DELETE FROM User_Relationship_Flags WHERE uid2 = ' . $this_user->uniqueid);
+		$adodb->Execute('DELETE FROM User_Relationships WHERE uid1 = ' . $this_user->uniqueid);
+		$adodb->Execute('DELETE FROM User_Relationships WHERE uid2 = ' . $this_user->uniqueid);
+		$adodb->Execute('DELETE FROM Banned_Tracks WHERE userid = ' . $this_user->uniqueid);
+		$adodb->Execute('DELETE FROM Loved_Tracks WHERE userid = ' . $this_user->uniqueid);
+		$adodb->Execute('DELETE FROM Users WHERE uniqueid = ' . $this_user->uniqueid);
 		} catch (exception $e) {
 			$smarty->assign('error', 'Error!');
 			$smarty->assign('details', 'Something went amiss.');
