@@ -40,7 +40,7 @@ if(!$row) {
 }
 
 $user = false;
-if(!empty($row['username']) {
+if(!empty($row['username'])) {
 	$user = new User($row['username']);
 }
 
