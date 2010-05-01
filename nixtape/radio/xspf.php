@@ -39,7 +39,10 @@ if(!$row) {
 	die("BADSESSION\n"); // this should return a blank dummy playlist instead
 }
 
-$user = new User($row['username']);
+$user = false;
+if(!empty($row['username']) {
+	$user = new User($row['username']);
+}
 
 $url = $row['url'];
 
@@ -77,15 +80,17 @@ for($i=0; $i<count($tr); $i++) {
 	$res->Move($tr[$i]);
 	$row = $res->FetchRow();
 
-	$banned = $adodb->GetOne('SELECT COUNT(*) FROM Banned_Tracks WHERE '
-		. 'artist = ' . $adodb->qstr($row['artist_name'])
-		. 'AND track = ' . $adodb->qstr($row['name'])
-		. 'AND userid = ' . $user->uniqueid);
-	if ($banned) {
-		// This track has been banned by the user, so select another one
-		$tr[$i] = rand(0, $avail-1);
-		$i--;
-		continue;
+	if($user) {
+		$banned = $adodb->GetOne('SELECT COUNT(*) FROM Banned_Tracks WHERE '
+			. 'artist = ' . $adodb->qstr($row['artist_name'])
+			. 'AND track = ' . $adodb->qstr($row['name'])
+			. 'AND userid = ' . $user->uniqueid);
+		if ($banned) {
+			// This track has been banned by the user, so select another one
+			$tr[$i] = rand(0, $avail-1);
+			$i--;
+			continue;
+		}
 	}
 
 	$album = new Album($row['album_name'], $row['artist_name']);
