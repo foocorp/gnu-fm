@@ -135,12 +135,14 @@ function updateProgress() {
 	var audio = document.getElementById("audio");
 	if (audio.duration > 0) {
 		$("#progressbar").progressbar('option', 'value', (audio.currentTime / audio.duration) * 100);
+		$("#duration").text(friendlyTime(audio.duration));
+	} else {
+		$("#duration").text(friendlyTime(0));
 	}
 	if (!scrobbled && audio.currentTime > audio.duration / 2) {
 		scrobble();
 	}
 	$("#currenttime").text(friendlyTime(audio.currentTime));
-	$("#duration").text(friendlyTime(audio.duration));
 	setTimeout("updateProgress()", 900)
 }
 
