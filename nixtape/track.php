@@ -59,12 +59,14 @@ foreach($res as &$trow) {
 	}
 }
 
-// Give the duration in MM:SS
-$mins = floor($track->duration / 60);
-$sec = floor($track->duration % 60);
-if (strlen($sec) == 1) { $sec = "0" . $sec; }
-$duration = $mins . ":" . $sec;
-$smarty->assign('duration', $duration);
+if($track->duration) {
+	// Give the duration in MM:SS
+	$mins = floor($track->duration / 60);
+	$sec = floor($track->duration % 60);
+	if (strlen($sec) == 1) { $sec = "0" . $sec; }
+	$duration = $mins . ":" . $sec;
+	$smarty->assign('duration', $duration);
+}
 
 $smarty->assign('albums', $aOtherAlbums);
 
