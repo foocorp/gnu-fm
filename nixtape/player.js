@@ -24,7 +24,7 @@
 */
 
 var scrobbled, now_playing;
-var artist, album, track, session_key, radio_key;
+var artist, album, track, session_key, radio_key, ws_key;
 var playlist = [], current_song = 0;
 var player_ready = false;
 var playable_songs = false;
@@ -37,7 +37,7 @@ var streaming = false;
  * @param string sk Scrobble session key or false if the user isn't logged in
  * @param string rk Radio session key or false if streaming isn't required
  */
-function playerInit(list, sk, rk) {
+function playerInit(list, sk, ws, rk) {
 	var audio = document.getElementById("audio");
 	if (!list) {
 		// We're playing a stream instead of a playlist
@@ -45,6 +45,7 @@ function playerInit(list, sk, rk) {
 	}
 
 	session_key = sk;
+	ws_key = ws;
 	radio_key = rk;
 
 	if(typeof audio.duration == "undefined") {
@@ -80,6 +81,8 @@ function playerReady() {
 	audio.addEventListener("ended", songEnded, false);
 	updateProgress();
 	$("#play").fadeTo("normal", 1);
+	$("#ban").fadeTo("normal", 1);
+	$("#love").fadeTo("normal", 1);
 	$("#progressbar").progressbar({ value: 0 });
 	$("#player > #interface").show();
 	player_ready = true;

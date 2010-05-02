@@ -456,6 +456,24 @@ class Server {
 		return $session_id;
 	}
 
+	/**
+	 * Log in to web services
+	 *
+	 * @param string $username The user to create a session for
+	 * @return A string containing the web service session key
+	 */
+	static function getWebServiceSession($username) {
+		global $adodb;
+		$sk = md5(mt_rand() . time());
+		$token = md5(mt_rand() . time());
+		$adodb->Execute('INSERT INTO Auth(token, sk, expires, username) VALUES ('
+			. $adodb->qstr($token) . ', '
+			. $adodb->qstr($sk) . ', '
+			. (int)(time() + 86400) . ', '
+			. $adodb->qstr($username) . ')');
+		return $sk;
+	}
+
 
 	static function getAllArtists() {
 		global $adodb;

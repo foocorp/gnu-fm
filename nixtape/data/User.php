@@ -231,6 +231,15 @@ class User {
 	}
 
 	/**
+	 * Log in to the web services
+	 *
+	 * @return A string containing the web session key
+	 */
+	function getWebServiceSession() {
+		return Server::getWebServiceSession($this->name);
+	}
+
+	/**
 	 * get user's top 20 tracks
 	 *
 	 * @return user's top 20 tracks
