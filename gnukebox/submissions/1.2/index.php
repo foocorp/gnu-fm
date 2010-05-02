@@ -150,7 +150,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 
 		for($j = 0; $j < $actualcount; $j++) {
 
-	// Scrobble!
+		// Scrobble!
 		$sql = "INSERT INTO Scrobbles (userid, artist, album, track, time, mbid, source, rating, length, stid) VALUES " . $rowvalues[$j];
 		try {
 		$res =& $adodb->Execute($sql);
@@ -179,8 +179,6 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		}
 	}
 
-	        // Destroy now_playing since it is almost certainly obsolescent
-	        $adodb->Execute("DELETE FROM Now_Playing WHERE sessionid = " . $adodb->qstr($session_id));
 }
 
 die("OK\n");
