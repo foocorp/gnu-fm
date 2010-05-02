@@ -284,6 +284,8 @@ function loadSong(song) {
 
 	$("#trackinfo > #artistname").text(artist);
 	$("#trackinfo > #trackname").text(track);
+	$("#ban").fadeTo("normal", 1);
+	$("#love").fadeTo("normal", 1);
 }
 
 /**
