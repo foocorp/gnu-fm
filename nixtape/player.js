@@ -343,3 +343,15 @@ function friendlyTime(timestamp) {
 	if(sec.length == 1) { sec = "0" + sec }
 	return mins + ":" + sec
 }
+
+function love() {
+	$.post("/2.0/", {'method' : 'track.love', 'artist' : artist, 'track' : track, 'sk' : ws_key}, function(data) {
+		$("#love").fadeTo("normal", 0.5);
+	}, "text");
+}
+
+function ban() {
+	$.post("/2.0/", {'method' : 'track.ban', 'artist' : artist, 'track' : track, 'sk' : ws_key}, function(data) {}, "text");
+	$("#ban").fadeTo("normal", 0.5);
+	skipForward();
+}
