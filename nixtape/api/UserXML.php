@@ -153,7 +153,7 @@ class UserXML {
 		$artist = $track->addChild('artist', repamp($row['artist']));
 		$artist->addAttribute('mbid', $row['artist_mbid']);
 		$name = $track->addChild('name', repamp($row['track']));
-		$track->addChild('mbid', $row['track_mbid']);
+		$track->addChild('mbid', $row['mbid']);
 		$album = $track->addChild('album', repamp($row['album']));
 		$album->addAttribute('mbid', $row['album_mbid']);
 		$track->addChild('url', Server::getTrackURL($row['artist'], $row['album'], $row['track']));
