@@ -208,6 +208,7 @@ function scrobble() {
 	$.post("/scrobble-proxy.php?method=scrobble", { "a[0]" : artist, "b[0]" : album, "t[0]" : track, "i[0]" : timestamp, "s" : session_key },
 		      	function(data){
 				if(data.substring(0, 2) == "OK") {
+					$("#scrobbled").text("Scrobbled");
 					$("#scrobbled").fadeIn(5000, function() { $("#scrobbled").fadeOut(5000) } );
 				} else {
 					$("#scrobbled").text(data);
@@ -347,9 +348,10 @@ function friendlyTime(timestamp) {
 }
 
 function love() {
-	$.post("/2.0/", {'method' : 'track.love', 'artist' : artist, 'track' : track, 'sk' : ws_key}, function(data) {
-	}, "text");
+	$.post("/2.0/", {'method' : 'track.love', 'artist' : artist, 'track' : track, 'sk' : ws_key}, function(data) {}, "text");
 	$("#love").fadeTo("normal", 0.5);
+	$("#scrobbled").text("Loved");
+	$("#scrobbled").fadeIn(5000, function() { $("#scrobbled").fadeOut(5000) } );
 }
 
 function ban() {
