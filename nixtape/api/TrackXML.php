@@ -30,6 +30,9 @@ class TrackXML {
 		$tags = split(",", $tags);
 		foreach($tags as $tag) {
 			$tag = trim($tag);
+			if (strlen($tag) == 0) {
+				continue;
+			}
 			try {
 				$adodb->Execute('INSERT INTO tags VALUES ('
 					. $adodb->qstr($tag) . ', '
