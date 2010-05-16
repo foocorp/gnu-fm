@@ -83,6 +83,8 @@ function playerReady() {
 	$("#play").fadeTo("normal", 1);
 	$("#ban").fadeTo("normal", 1);
 	$("#love").fadeTo("normal", 1);
+	$("#open_tag").fadeTo("normal", 1);
+	$("#close_tag").fadeTo("normal", 1);
 	$("#progressbar").progressbar({ value: 0 });
 	$("#player > #interface").show();
 	player_ready = true;
@@ -358,4 +360,17 @@ function ban() {
 	$.post("/2.0/", {'method' : 'track.ban', 'artist' : artist, 'track' : track, 'sk' : ws_key}, function(data) {}, "text");
 	$("#ban").fadeTo("normal", 0.5);
 	skipForward();
+}
+
+function toggleTag() {
+	$("#tag_input").toggle(500);	
+	$("#open_tag").toggle();
+	$("#close_tag").toggle();
+}
+
+function tag() {
+	var tags = $("#tags").val();
+	$.post("/2.0/", {'method' : 'track.addtags', 'artist' : artist, 'track' : track, 'tags' : tags, 'sk' : ws_key}, function(data) {}, "text");
+	toggleTag();
+	$("#tags").val("");
 }
