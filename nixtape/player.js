@@ -348,8 +348,8 @@ function friendlyTime(timestamp) {
 
 function love() {
 	$.post("/2.0/", {'method' : 'track.love', 'artist' : artist, 'track' : track, 'sk' : ws_key}, function(data) {
-		$("#love").fadeTo("normal", 0.5);
 	}, "text");
+	$("#love").fadeTo("normal", 0.5);
 }
 
 function ban() {
