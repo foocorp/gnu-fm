@@ -464,7 +464,7 @@ $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
 function method_track_addTags() {
 	if (!isset($_POST['artist']) || !isset($_POST['track']) || !isset($_POST['tags'])) {
-		report_failurE(LFM_INVALID_PARAMS);
+		report_failure(LFM_INVALID_PARAMS);
 	}
 
 	$userid = get_userid();
