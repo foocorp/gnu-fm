@@ -51,7 +51,7 @@ $smarty->assign('title', $title);
 
 if(ereg('l(ast|ibre)fm://globaltags/(.*)', $url, $regs)) {
 	$tag = $regs[2];
-	$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist AND Track.album_name=Tags.album WHERE streamurl<>\'\' AND streamable=1 AND lower(tag) = ' . $adodb->qstr(mb_strtolower($tag, 'UTF-8')));
+	$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist WHERE streamurl<>\'\' AND streamable=1 AND lower(tag) = ' . $adodb->qstr(mb_strtolower($tag, 'UTF-8')));
 } elseif(ereg('l(ast|ibre)fm://artist/(.*)/similarartists', $url, $regs) || ereg('l(ast|ibre)fm://artist/(.*)', $url, $regs)) {
 	$artist = $regs[2];
 	$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamurl<>\'\' AND streamable=1 AND lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist, 'UTF-8')));
