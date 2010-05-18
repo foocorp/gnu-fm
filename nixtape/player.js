@@ -29,6 +29,7 @@ var playlist = [], current_song = 0;
 var player_ready = false;
 var playable_songs = false;
 var streaming = false;
+var example_tags = "e.g. guitar, violin, female vocals, piano";
 
 /**
  * Initialises the javascript player (player.tpl must also be included on the target page)
@@ -87,6 +88,7 @@ function playerReady() {
 	$("#close_tag").fadeTo("normal", 1);
 	$("#progressbar").progressbar({ value: 0 });
 	$("#player > #interface").show();
+	$("#tags").placeholdr({placeholderText: example_tags});
 	player_ready = true;
 }
 
@@ -370,7 +372,9 @@ function toggleTag() {
 
 function tag() {
 	var tags = $("#tags").val();
-	$.post("/2.0/", {'method' : 'track.addtags', 'artist' : artist, 'track' : track, 'tags' : tags, 'sk' : ws_key}, function(data) {}, "text");
-	toggleTag();
-	$("#tags").val("");
+	if (tags != example_tags && tags != "") {
+		$.post("/2.0/", {'method' : 'track.addtags', 'artist' : artist, 'track' : track, 'tags' : tags, 'sk' : ws_key}, function(data) {}, "text");
+		toggleTag();
+		$("#tags").val("");
+	}
 }
