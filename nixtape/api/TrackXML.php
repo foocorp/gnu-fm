@@ -27,7 +27,7 @@ class TrackXML {
 	public static function addTags($userid, $artist, $album, $track, $tags) {
 		global $adodb;
 
-		$tags = split(",", $tags);
+		$tags = split(",", strtolower($tags));
 		foreach($tags as $tag) {
 			$tag = trim($tag);
 			if (strlen($tag) == 0) {
