@@ -296,9 +296,9 @@ function method_auth_getSession() {
 
 	// Check for a token that (1) is bound to a user, and (2) is not bound to a session
 	try {
-	$username = $adodb->GetOne('SELECT username FROM Auth WHERE '
-		. 'token = ' . $adodb->qstr($_GET['token']) . ' AND '
-		. 'username IS NOT NULL AND sk IS NULL');
+		$username = $adodb->GetOne('SELECT username FROM Auth WHERE '
+			. 'token = ' . $adodb->qstr($_GET['token']) . ' AND '
+			. 'username IS NOT NULL AND sk IS NULL');
 	}
 	catch (exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
@@ -311,9 +311,9 @@ function method_auth_getSession() {
 
 	// Update the Auth record with the new session key
 	try {
-	$result = $adodb->Execute('UPDATE Auth SET '
-		. 'sk = ' . $adodb->qstr($session) . ' WHERE '
-		. 'token = ' . $adodb->qstr($_GET['token']));
+		$result = $adodb->Execute('UPDATE Auth SET '
+			. 'sk = ' . $adodb->qstr($session) . ' WHERE '
+			. 'token = ' . $adodb->qstr($_GET['token']));
 	}
 	catch (exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
