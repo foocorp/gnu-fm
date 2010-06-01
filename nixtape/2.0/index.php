@@ -247,9 +247,9 @@ function method_auth_getMobileSession() {
 
 	// Check for a token that is bound to a user
 	try {
-	$result = $adodb->GetRow('SELECT username, password FROM Users WHERE '
-		. 'username = ' . $adodb->qstr($_GET['username']));
-	}
+		$result = $adodb->GetRow('SELECT username, password FROM Users WHERE '
+			. 'username = ' . $adodb->qstr($_GET['username']));
+		}
 	catch (exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
@@ -267,13 +267,13 @@ function method_auth_getMobileSession() {
 
 	// Update the Auth record with the new session key
 	try {
-	$result = $adodb->Execute('INSERT INTO Auth (token, sk, expires, username) '
-		. 'VALUES ('
-		. $adodb->qstr($key) . ', '
-		. $adodb->qstr($session) . ', '
-		. (int)(time() + 3600) . ', '
-		. $adodb->qstr($username)
-		. ')');
+		$result = $adodb->Execute('INSERT INTO Auth (token, sk, expires, username) '
+			. 'VALUES ('
+			. $adodb->qstr($key) . ', '
+			. $adodb->qstr($session) . ', '
+			. (int)(time() + 3600) . ', '
+			. $adodb->qstr($username)
+			. ')');
 	}
 	catch (exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
