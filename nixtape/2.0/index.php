@@ -115,8 +115,8 @@ function method_user_getTopTags() {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-        header('Content-Type: text/xml');
-        print(XML::prettyXML(UserXML::getTopTags($_GET['user'])));
+	header('Content-Type: text/xml');
+	print(XML::prettyXML(UserXML::getTopTags($_GET['user'])));
 }
 
 
@@ -388,7 +388,7 @@ function method_radio_getPlaylist() {
  * by xspf.php.
  */
 
-        $res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name FROM Track INNER JOIN Tags ON Track.name=Tags.track 
+	$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name FROM Track INNER JOIN Tags ON Track.name=Tags.track 
 AND Track.artist_name=Tags.artist AND Track.album_name=Tags.album WHERE streamurl<>\'\' AND streamable=1 AND lower(tag) = \'folk\'');
 
 $avail = $res->RecordCount();
@@ -404,34 +404,34 @@ $tr = array_unique($tr);
 $radiotracks = array();
 $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
-        for($i=0; $i<count($tr); $i++) {
+	for($i=0; $i<count($tr); $i++) {
 
-        $res->Move($tr[$i]);
-        $row = $res->FetchRow();
+	$res->Move($tr[$i]);
+	$row = $res->FetchRow();
 
-        $track = new Track($row['name'], $row['artist_name']);
-        $album = new Album($row['album_name'], $row['artist_name']);
-        $artist = new Artist($row['artist_name']);
+	$track = new Track($row['name'], $row['artist_name']);
+	$album = new Album($row['album_name'], $row['artist_name']);
+	$artist = new Artist($row['artist_name']);
 
-        if($track->duration == 0) {
-                $duration = 180000;
-        } else {
-                $duration = $track->duration * 1000;
-        }
+	if($track->duration == 0) {
+		$duration = 180000;
+	} else {
+		$duration = $track->duration * 1000;
+	}
 
-        $radiotracks[$i]['location'] = $track->streamurl;
-        $radiotracks[$i]['title'] = $track->name;
-        $radiotracks[$i]['id'] = "0000";
-        $radiotracks[$i]['album'] = $album->name;
-        $radiotracks[$i]['creator'] = $artist->name;
-        $radiotracks[$i]['duration'] = $duration;
-        $radiotracks[$i]['image'] = $album->image;
-        $radiotracks[$i]['artisturl'] = $artist->getURL();
-        $radiotracks[$i]['albumurl'] = $album->getURL();
-        $radiotracks[$i]['trackurl'] = $track->getURL();
-        $radiotracks[$i]['downloadurl'] = $track->getURL();
+	$radiotracks[$i]['location'] = $track->streamurl;
+	$radiotracks[$i]['title'] = $track->name;
+	$radiotracks[$i]['id'] = "0000";
+	$radiotracks[$i]['album'] = $album->name;
+	$radiotracks[$i]['creator'] = $artist->name;
+	$radiotracks[$i]['duration'] = $duration;
+	$radiotracks[$i]['image'] = $album->image;
+	$radiotracks[$i]['artisturl'] = $artist->getURL();
+	$radiotracks[$i]['albumurl'] = $album->getURL();
+	$radiotracks[$i]['trackurl'] = $track->getURL();
+	$radiotracks[$i]['downloadurl'] = $track->getURL();
 
-        }
+	}
 
 	print("<lfm status=\"ok\">\n");
 	print("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n");
@@ -440,16 +440,16 @@ $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	print("<link rel=\"http://libre.fm/expiry\">9999</link>\n");
 	print("<trackList>\n");
 
-        for($i=0; $i<count($tr); $i++) {
-        print("<track>\n");
-        print("<location>".urlencode($radiotracks[$i]['location'])."</location>\n");
-        print("<title>".urlencode($radiotracks[$i]['title'])."</title>\n");
-        print("<id>".urlencode($radiotracks[$i]['id'])."</id>\n");
-        print("<album>".urlencode($radiotracks[$i]['album'])."</album>\n");
-        print("<creator>".urlencode($radiotracks[$i]['creator'])."</creator>\n");
-        print("<duration>".urlencode($radiotracks[$i]['duration'])."</duration>\n");
-        print("<image>".urlencode($radiotracks[$i]['image'])."</image>\n");
-        print("</track>\n");
+	for($i=0; $i<count($tr); $i++) {
+	print("<track>\n");
+	print("<location>".urlencode($radiotracks[$i]['location'])."</location>\n");
+	print("<title>".urlencode($radiotracks[$i]['title'])."</title>\n");
+	print("<id>".urlencode($radiotracks[$i]['id'])."</id>\n");
+	print("<album>".urlencode($radiotracks[$i]['album'])."</album>\n");
+	print("<creator>".urlencode($radiotracks[$i]['creator'])."</creator>\n");
+	print("<duration>".urlencode($radiotracks[$i]['duration'])."</duration>\n");
+	print("<image>".urlencode($radiotracks[$i]['image'])."</image>\n");
+	print("</track>\n");
 	}
 
 	print("</trackList>\n");
