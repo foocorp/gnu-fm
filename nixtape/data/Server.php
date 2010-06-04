@@ -303,29 +303,29 @@ class Server {
 				$component = '';
 			else
 				$component = "/{$component}";
-			return $base_url . '/user/' . rawurlencode($username) . $component;
+			return $base_url . '/user/' . urlencode($username) . $component;
 		}
 		else
 		{
-			return $base_url . "/user-{$component}.php?user=" . rawurlencode($username);
+			return $base_url . "/user-{$component}.php?user=" . urlencode($username);
 		}
 	}
 
 	static function getGroupURL($groupname) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . '/group/' . rawurlencode($groupname);
+			return $base_url . '/group/' . urlencode($groupname);
 		} else {
-			return $base_url . '/group.php?group=' . rawurlencode($groupname);
+			return $base_url . '/group.php?group=' . urlencode($groupname);
 		}
 	}
 
 	static function getArtistURL($artist) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . '/artist/' . rawurlencode($artist);
+			return $base_url . '/artist/' . urlencode($artist);
 		} else {
-			return $base_url . '/artist.php?artist=' . rawurlencode($artist);
+			return $base_url . '/artist.php?artist=' . urlencode($artist);
 		}
 	}
 
@@ -334,7 +334,7 @@ class Server {
 		if($friendly_urls) {
 			return Server::getArtistURL($artist) . "/manage";
 		} else {
-			return $base_url . '/artist-manage.php?artist=' . rawurlencode($artist);
+			return $base_url . '/artist-manage.php?artist=' . urlencode($artist);
 		}
 	}
 
@@ -343,36 +343,36 @@ class Server {
 		if($friendly_urls) {
 			return Server::getArtistURL($artist) . "/album/add";
 		} else {
-			return $base_url . '/album-add.php?artist=' . rawurlencode($artist);
+			return $base_url . '/album-add.php?artist=' . urlencode($artist);
 		}
 	}
 
 	static function getAlbumURL($artist, $album) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . '/artist/' . rawurlencode($artist) . '/album/' . rawurlencode($album);
+			return $base_url . '/artist/' . urlencode($artist) . '/album/' . urlencode($album);
 		} else {
-			return $base_url . '/album.php?artist=' . rawurlencode($artist) . '&album=' . rawurlencode($album);
+			return $base_url . '/album.php?artist=' . urlencode($artist) . '&album=' . urlencode($album);
 		}
 	}
 
 	static function getTrackURL($artist, $album, $track) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls && $album) {
-			return $base_url . '/artist/' . rawurlencode($artist) . '/album/' . rawurlencode($album) . '/track/' . rawurlencode($track);
+			return $base_url . '/artist/' . urlencode($artist) . '/album/' . urlencode($album) . '/track/' . urlencode($track);
 		} elseif ($friendly_urls) {
-			return $base_url . '/artist/' . rawurlencode($artist) . '/track/' . rawurlencode($track);
+			return $base_url . '/artist/' . urlencode($artist) . '/track/' . urlencode($track);
 		} else {
-			return $base_url . '/track.php?artist=' . rawurlencode($artist) . '&album=' . rawurlencode($album) . '&track=' . rawurlencode($track);
+			return $base_url . '/track.php?artist=' . urlencode($artist) . '&album=' . urlencode($album) . '&track=' . urlencode($track);
 		}
 	}
 
 	static function getTagURL($tag) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
-			return $base_url . '/tag/' . rawurlencode($tag);
+			return $base_url . '/tag/' . urlencode($tag);
 		} else {
-			return $base_url . '/tag.php?tag=' . rawurlencode($tag);
+			return $base_url . '/tag.php?tag=' . urlencode($tag);
 		}
 	}
 

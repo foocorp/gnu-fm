@@ -34,7 +34,7 @@ if(!isset($_GET['user']) && $logged_in == false) {
         die();
 }
 
-$user = new User($_GET['user']);
+$user = new User(urldecode($_GET['user']));
 
 if(! $user->journal_rss ) {
         $smarty->assign('error', 'Error!');
