@@ -32,7 +32,7 @@ if(!isset($_GET['user']) && $logged_in == false) {
 	die();
 }
 
-$user = new User($_GET['user']);
+$user = new User(urldecode($_GET['user']));
 $scrobbleCount = (int)$_GET['count'];
 if ($scobbleCount >= 1200)
 	$scrobbleCount = 1200;

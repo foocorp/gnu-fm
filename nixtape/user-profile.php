@@ -33,7 +33,7 @@ if(!isset($_GET['user']) && $logged_in == false) {
 }
 
 try {
-	$user = new User($_GET['user']);
+	$user = new User(urldecode($_GET['user']));
 } catch (exception $e) {
 	$error = 'User not found';
 }
