@@ -68,7 +68,7 @@ class UserXML {
 
 		$err = 0;
 		try {
-			$user = new User($user);
+			$user = new User($username);
 			$res = $user->getTopTracks(20, $timestamp);
 		}
 		catch (exception $e) {
