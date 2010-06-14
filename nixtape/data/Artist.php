@@ -65,8 +65,8 @@ class Artist {
 			$this->mbid = $row['mbid'];
 			$this->streamable = $row['streamable'];
 			$this->bio_published = $row['bio_published'];
-			$this->bio_content = $row['bio_content'];
-			$this->bio_summary = $row['bio_summary'];
+			$this->bio_content = strip_tags($row['bio_content'], "<p><a><li><ul><ol><br><b><em><strong><i>");
+			$this->bio_summary = strip_tags($row['bio_summary']. "<p><a><li><ul><ol><br><b><em><strong><i>");
 			$this->image_small = $row['image_small'];
 			$this->image_medium = $row['image_medium'];
 			$this->image_large = $row['image_large'];
