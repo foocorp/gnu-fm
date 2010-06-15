@@ -221,6 +221,18 @@ class Artist {
 		$adodb->CacheFlush($this->query);
 	}
 
+	/**
+	 * Set a URL to an image of this artist
+	 *
+	 * @param string $image_url A URL linking directly to an image file
+	 */
+	function setImage($image_url) {
+		global $adodb;
+		$adodb->Execute("UPDATE Artist SET image_medium = " . $adodb->qstr($image_url) . " WHERE name = " . $adodb->qstr($this->name));
+		$this->image_medium = $image_url;
+		$adodb->CacheFlush($this->query);
+	}
+
 	function isStreamable() {
 		global $adodb;
 		$streamable = $adodb->CacheGetOne(600, 'SELECT count(*) AS streamable from TRACK WHERE artist_name = ' . $adodb->qstr($this->name) . ' AND streamable = 1');
