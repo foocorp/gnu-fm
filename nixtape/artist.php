@@ -49,6 +49,7 @@ $smarty->assign('bio_summary', $artist->bio_summary);
 $smarty->assign('bio_content', $artist->bio_content);
 $smarty->assign('homepage', $artist->homepage);
 $smarty->assign('streamable', $artist->isStreamable());
+$smarty->assign('image', $artist->image_medium);
 
 $aArtistAlbums = $artist->getAlbums();
 if ($aArtistAlbums) {

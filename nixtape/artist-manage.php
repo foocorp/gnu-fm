@@ -51,6 +51,15 @@ if (isset($_POST['submit'])) {
 	} else {
 		$artist->setHomepage($_POST['homepage']);
 	}
+
+	if (!empty($_POST['image']) && !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['image'])) {
+		$errors[] = 'Image must be a valid URL';
+	} elseif (!empty($_POST['image']) && preg_match('/\s/', $_POST['image'])) {
+		$errors[] = 'Image must be a URL, as such it cannot contain whitespace.';
+	} else {
+		$artist->setImage($_POST['image']);
+	}
+
 	
 	if($errors) {
 		$smarty->assign('errors', $errors);
@@ -65,6 +74,7 @@ $smarty->assign('id', $artist->id);
 $smarty->assign('bio_summary', $artist->bio_summary);
 $smarty->assign('bio_content', $artist->bio_content);
 $smarty->assign('homepage', $artist->homepage);
+$smarty->assign('image', $artist->image_medium);
 
 $smarty->display("artist-manage.tpl");
 ?>
