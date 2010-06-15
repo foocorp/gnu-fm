@@ -35,11 +35,20 @@ try {
 	die();
 }
 
+$station = 'librefm://artist/' . $artist->name;
+if(isset($this_user)) {
+	$radio_session = $this_user->getRadioSession($station);
+} else {
+	$radio_session = Server::getRadioSession($station);
+}
+$smarty->assign('radio_session', $radio_session);
+
 $smarty->assign('name', $artist->name);
 $smarty->assign('id', $artist->id);
 $smarty->assign('bio_summary', $artist->bio_summary);
 $smarty->assign('bio_content', $artist->bio_content);
 $smarty->assign('homepage', $artist->homepage);
+$smarty->assign('streamable', $artist->isStreamable());
 
 $aArtistAlbums = $artist->getAlbums();
 if ($aArtistAlbums) {
