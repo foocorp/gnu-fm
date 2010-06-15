@@ -50,6 +50,7 @@ $smarty->assign('bio_content', $artist->bio_content);
 $smarty->assign('homepage', $artist->homepage);
 $smarty->assign('streamable', $artist->isStreamable());
 $smarty->assign('image', $artist->image_medium);
+$smarty->assign('hashtag', $artist->hashtag);
 
 $aArtistAlbums = $artist->getAlbums();
 if ($aArtistAlbums) {

@@ -54,7 +54,7 @@ class Artist {
 		if($mbid) {
 			$mbidquery = 'mbid = ' . $adodb->qstr($mbid) . ' OR ';
 		}
-		$this->query = 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large, homepage FROM Artist WHERE '
+		$this->query = 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large, homepage, hashtag FROM Artist WHERE '
 			. $mbidquery
 			. 'name = ' . $adodb->qstr($name);
 		$row = $adodb->CacheGetRow(1200, $this->query);
@@ -71,6 +71,7 @@ class Artist {
 			$this->image_medium = $row['image_medium'];
 			$this->image_large = $row['image_large'];
 			$this->homepage = $row['homepage'];
+			$this->hashtag = $row['hashtag'];
 
 			$this->id = identifierArtist(null, $this->name, null, null, null, null, $this->mbid, null);
 			$this->album_query = 'SELECT name, image FROM Album WHERE artist_name = '. $adodb->qstr($this->name);
@@ -224,7 +225,7 @@ class Artist {
 	/**
 	 * Set a URL to an image of this artist
 	 *
-	 * @param string $image_url A URL linking directly to an image file
+	 * @param string $image_url A URL linking directly to an image file.
 	 */
 	function setImage($image_url) {
 		global $adodb;
@@ -232,6 +233,19 @@ class Artist {
 		$this->image_medium = $image_url;
 		$adodb->CacheFlush($this->query);
 	}
+
+	/**
+	 * Set an identi.ca hashtag, used to display dents from on the artist page
+	 *
+	 * @param string $hashtag An identi.ca hashtag.
+	 */
+	function setHashtag($hashtag) {
+		global $adodb;
+		$adodb->Execute("UPDATE Artist SET hashtag = " . $adodb->qstr($hashtag) . " WHERE name = " . $adodb->qstr($this->name));
+		$this->hashtag = $hashtag;
+		$adodb->CacheFlush($this->query);
+	}
+
 
 	function isStreamable() {
 		global $adodb;
