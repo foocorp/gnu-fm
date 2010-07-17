@@ -131,6 +131,11 @@ class Server {
 			$row['id_track']  = identifierTrack(uniqueid_to_username($row['userid']), $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 			$row['id_album']  = identifierAlbum(uniqueid_to_username($row['userid']), $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 
+			if($userid) {
+				$row['loved'] = $adodb->CacheGetOne(60, 'SELECT Count(*) FROM Loved_Tracks WHERE artist='
+						. $adodb->qstr($row['artist'])
+						. ' AND track=' . $adodb->qstr($row['track']));
+			}
 			if (!$row['album_image']) {
 				$row['album_image'] = false;
 			} else {
