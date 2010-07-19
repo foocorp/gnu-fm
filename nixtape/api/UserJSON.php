@@ -38,7 +38,7 @@ class UserJSON {
 							'profile_create' => strftime('%c', $user->created)));
 
 		if (isset($user->modified))
-			$json_data['profile_updated'] = strftime('%c', $user->modified);
+			$json_data['user']['profile_updated'] = strftime('%c', $user->modified);
 
 		return json_encode($json_data);
 	}
