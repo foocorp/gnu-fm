@@ -22,6 +22,7 @@
 require_once('../database.php');
 require_once('../api/ArtistXML.php');
 require_once('../api/UserXML.php');
+require_once('../api/UserJSON.php');
 require_once('../api/TrackXML.php');
 require_once('../api/AlbumXML.php');
 
@@ -133,8 +134,13 @@ function method_user_getInfo() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(UserXML::getInfo($_GET['user'])));
+	if ($_GET['format'] == 'json') {
+		header('Content-Type: text/javascript');
+		print(UserJSON::getInfo($_GET['user']));
+	} else {
+		header('Content-Type: text/xml');
+		print(XML::prettyXML(UserXML::getInfo($_GET['user'])));
+	}
 }
 
 function method_user_getLovedTracks() {
