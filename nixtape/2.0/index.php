@@ -367,7 +367,7 @@ function method_radio_tune() {
 		report_failure(LFM_INVALID_TOKEN);
 	}
 
-	Server::getRadioSession($_POST['station'], $username);
+	Server::getRadioSession($_POST['station'], $username, $_POST['sk']);
 	$stationtype = 'globaltag';
 	$stationname = radio_title_from_url($_POST['station']);
 	$stationurl = 'http://libre.fm';

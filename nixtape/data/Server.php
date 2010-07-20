@@ -440,11 +440,14 @@ class Server {
 	 *
 	 * @param string $station The station to be played
 	 * @param string $username The user to associate this session with (optional)
+	 * @param string $session_id Allows for a custom session id to be set, allowing for compatibility with webservices
 	 * @return A string containing the session key to be used for streaming
 	 */
-	static function getRadioSession($station, $username = false) {
+	static function getRadioSession($station, $username = false, $session_id = false) {
 		global $adodb;
-		$session_id = md5(mt_rand() . time());
+		if(!$session_id) {
+			$session_id = md5(mt_rand() . time());
+		}
 		if($username) {
 			$sql = 'INSERT INTO Radio_Sessions(username, session, url, expires) VALUES ('
 				. $adodb->qstr($username) . ','
