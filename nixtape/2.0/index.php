@@ -392,7 +392,7 @@ function method_radio_tune() {
 function method_radio_getPlaylist() {
 	global $adodb;
 
-	if (!isset($_GET['sk']))
+	if (!isset($_REQUEST['sk']))
 		report_failure(LFM_INVALID_PARAMS);
 
 /*
