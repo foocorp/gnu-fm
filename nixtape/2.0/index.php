@@ -107,8 +107,13 @@ function method_user_getRecentTracks() {
 		$page = 1;
 	}
 
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(UserXML::getRecentTracks($_GET['user'], $_GET['limit'], $page)));
+	if ($_GET['format'] == 'json') {
+		header('Content-Type: text/javascript');
+		print(UserJSON::getRecentTracks($_GET['user'], $_GET['limit'], $page));
+	} else {
+		header('Content-Type: text/xml');
+		print(XML::prettyXML(UserXML::getRecentTracks($_GET['user'], $_GET['limit'], $page)));
+	}
 }
 
 function method_user_getTopTags() {
