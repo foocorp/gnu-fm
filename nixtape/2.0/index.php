@@ -350,9 +350,6 @@ function method_radio_tune() {
 	if (!isset($_POST['station']))
 		report_failure(LFM_INVALID_PARAMS);
 
-	if (!isset($_POST['api_key']))
-		report_failure(LFM_INVALID_PARAMS);
-
 	if (!isset($_POST['sk']))
 		report_failure(LFM_INVALID_PARAMS);
 
