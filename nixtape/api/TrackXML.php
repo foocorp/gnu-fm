@@ -95,7 +95,8 @@ class TrackXML {
 			$res = $adodb->Execute('INSERT INTO banned_tracks VALUES ('
 				. $userid . ', '
 				. $adodb->qstr($name) . ', '
-				. $adodb->qstr($artist) . ")");
+				. $adodb->qstr($artist) . ', '
+				. time() . ")");
 		} catch (exception $ex) {}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
@@ -110,7 +111,8 @@ class TrackXML {
 			$res = $adodb->Execute('INSERT INTO loved_tracks VALUES ('
 				. $userid . ', '
 				. $adodb->qstr($name) . ', '
-				. $adodb->qstr($artist) . ")");
+				. $adodb->qstr($artist) . ', '
+				. time() . ")");
 		} catch (exception $ex) {}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
