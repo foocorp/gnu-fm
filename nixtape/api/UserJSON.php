@@ -108,4 +108,36 @@ class UserJSON {
 		return $track;
 	}
 
+
+	public static function getLovedTracks($u, $limit=50) {
+
+		try {  
+			$user = new User($u);
+			$res = $user->getLovedTracks($limit);
+		} catch (exception $ex) {
+			$json_data = array('error' => 6, 'message' => 'No user with that name was found');
+			return json_encode($json_data);
+		}
+
+		$json_data['lovedtracks'] = array('@attrib' => array('user' => $user->name, 'perPage' => $limit));
+		$json_data['lovedtracks']['track'] = array();
+
+		foreach($res as &$row) {
+			$track = new Track($row['track'], $row['artist']);
+			$artist = new Artist($row['artist']);
+			$track_json = array();
+			$track_json['name'] = $track->name;
+			$track_json['mbid'] = $track->mbid;
+			$track_json['url'] = $track->getURL();
+			$track_json['artist'] = array();
+			$track_json['artist']['name'] = $artist->name;
+			$track_json['artist']['mbid'] = $artist->mbid;
+			$track_json['artist']['url'] = $artist->getURL();
+			$json_data['lovedtracks']['track'][] = $track_json;
+		}
+
+		return json_encode($json_data);
+
+	}
+
 }
