@@ -355,7 +355,7 @@ function method_radio_tune() {
 
 	try {
 	$username = $adodb->GetOne('SELECT username FROM Auth WHERE '
-		. 'token = ' . $adodb->qstr($_GET['token']) . ' AND '
+		. 'token = ' . $adodb->qstr($_POST['token']) . ' AND '
 		. 'username IS NOT NULL AND sk = '.$adodb->qstr($_POST['sk']));
 	}
 	catch (exception $e) {
