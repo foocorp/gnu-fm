@@ -103,7 +103,7 @@ class UserJSON {
 		$track['mbid'] = $row['mbid'];
 		$track['album'] = array('#text' => $row['album'], 'mbid' => $row['album_mbid']);
 		$track['url'] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
-		$track['date'] = array('#text' => gmdate("d M Y H:i",$row['time']) . " GMT", 'uts' => $row['time']);
+		$track['date'] = array('#text' => gmdate("d M Y H:i", $row['time']) . " GMT", 'uts' => $row['time']);
 		$track['streamable'] = 0;
 		return $track;
 	}
@@ -129,6 +129,7 @@ class UserJSON {
 			$track_json['name'] = $track->name;
 			$track_json['mbid'] = $track->mbid;
 			$track_json['url'] = $track->getURL();
+			$track_json['date'] = array('#text' => gmdate("d M Y H:i", $row['time']) . " GMT", 'uts' => $row['time']);
 			$track_json['artist'] = array();
 			$track_json['artist']['name'] = $artist->name;
 			$track_json['artist']['mbid'] = $artist->mbid;
