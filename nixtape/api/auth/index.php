@@ -30,7 +30,7 @@ require_once('../../database.php');
 	// Authenticate the user using the submitted password
 	try {
 		$result = $adodb->GetOne('SELECT username FROM Users WHERE '
-				. 'username = ' . $adodb->qstr($_POST['username']) . ' AND '
+				. 'lower(username) = ' . $adodb->qstr(strtolower($_POST['username'])) . ' AND '
 				. 'password = ' . $adodb->qstr(md5($_POST['password'])));
 	}
 	catch (exception $e) {
