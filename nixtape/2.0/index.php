@@ -160,8 +160,13 @@ function method_user_getLovedTracks() {
 		$limit = 50;
 	}
 
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(UserXML::getLovedTracks($user, $limit)));
+	if ($_GET['format'] == 'json') {
+		header('Content-Type: text/javascript');
+		print(UserJSON::getLovedTracks($user, $limit));
+	} else {
+		header('Content-Type: text/xml');
+		print(XML::prettyXML(UserXML::getLovedTracks($user, $limit)));
+	}
 }
 
 
