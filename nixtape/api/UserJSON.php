@@ -99,7 +99,7 @@ class UserJSON {
 	private static function _getTrack($row) {
 		$track = array();
 		$track['artist'] = array('#text' => $row['artist'], 'mbid' => $row['artist_mbid']);
-		$track['name'] = $row['name'];
+		$track['name'] = $row['track'];
 		$track['mbid'] = $row['mbid'];
 		$track['album'] = array('#text' => $row['album'], 'mbid' => $row['album_mbid']);
 		$track['url'] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
