@@ -323,7 +323,7 @@ class User {
 		global $adodb;
 
 		$res = $adodb->CacheGetAll(600, 'SELECT * FROM Loved_Tracks WHERE '
-			. ' userid = ' . $this->uniqueid
+			. ' userid = ' . $this->uniqueid . ' ORDER BY time DESC'
 			. ' LIMIT ' . $limit);
 
 		return $res;
