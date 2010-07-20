@@ -35,6 +35,8 @@ class UserJSON {
 							'homepage' => $user->homepage,
 							'location' => $user->location,
 							'bio' => $user->bio,
+							'url' => $user->getURL(),
+							'playcount' => $user->getTotalTracks(),
 							'profile_create' => strftime('%c', $user->created)));
 
 		if (isset($user->modified))

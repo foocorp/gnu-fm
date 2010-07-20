@@ -38,6 +38,8 @@ class UserXML {
 		$user_node->addChild('homepage', $user->homepage);
 		$user_node->addChild('location', $user->location);
 		$user_node->addChild('bio', $user->bio);
+		$user_node->addChild('url', $user->getURL());
+		$user_node->addChild('playcount', $user->getTotalTracks());
 		$user_node->addChild('profile_created', strftime('%c', $user->created));
 		if (isset($user->modified))
 			$user_node->addChild('profile_updated', strftime('%c', $user->modified));
