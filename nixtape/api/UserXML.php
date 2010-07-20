@@ -208,6 +208,8 @@ class UserXML {
 			$track_node->addChild('name', $track->name);
 			$track_node->addChild('mbid', $track->mbid);
 			$track_node->addChild('url', $track->getURL());
+			$date = $track_node->addChild('date', gmdate("d M Y H:i",$row['time']) . " GMT");
+			$date->addAttribute('uts', $row['time']);
 			$artist_node = $track_node->addChild('artist', null);
 			$artist_node->addChild('name', $artist->name);
 			$artist_node->addChild('mbid', $artist->mbid);
