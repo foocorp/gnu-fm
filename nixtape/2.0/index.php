@@ -347,13 +347,13 @@ function method_auth_getSession() {
 function method_radio_tune() {
 	global $adodb;
 
-	if (!isset($_GET['station']))
+	if (!isset($_POST['station']))
 		report_failure(LFM_INVALID_PARAMS);
 
-	if (!isset($_GET['api_key']))
+	if (!isset($_POST['api_key']))
 		report_failure(LFM_INVALID_PARAMS);
 
-	if (!isset($_GET['sk']))
+	if (!isset($_POST['sk']))
 		report_failure(LFM_INVALID_PARAMS);
 
 	try {
@@ -368,24 +368,24 @@ function method_radio_tune() {
 		report_failure(LFM_INVALID_TOKEN);
 	}
 
-/*
- * Here we should tune the station.  The immediate problem is that
- * without radio handshake, the user will not necessarily have a
- * session in Radio_Sessions.
- *
- * After that's solved, we should either set $stationtype,
- * $stationname, $stationurl, or report_failure.
- */
-	report_failure(LFM_SUBSCRIPTION_REQD);
+	Server::getRadioSession($_POST['station'], $username);
+	$stationtype = 'globaltag';
+	$stationname = radio_title_from_url($_POST['station']);
+	$stationurl = 'http://libre.fm';
 
-	print("<lfm status=\"ok\">\n");
-	print("	<station>\n");
-	print("		<type>{$stationtype}</type>\n");
-	print("		<name>{$stationname}</name>\n");
-	print("		<url>{$stationurl}</url>\n");
-	print("		<supportsdiscovery>0</supportsdiscovery>\n");
-	print("	</station>\n");
-	print("</lfm>");
+	if ($_GET['format'] == 'json') {
+		$json_data = array('station' => array('type' => $stationtype, 'name' => $stationname, 'url' => $stationurl, 'supportsdiscovery' => 1));
+		print(json_encode($json_data));
+	} else {
+		print('<lfm status="ok">\n');
+		print('	<station>\n');
+		print('		<type>' . $stationtype . '</type>\n');
+		print('		<name>' .$stationname . '</name>\n');
+		print('		<url>' . $stationurl . '</url>\n');
+		print('		<supportsdiscovery>1</supportsdiscovery>\n');
+		print('	</station>\n');
+		print('</lfm>');
+	}
 }
 
 function method_radio_getPlaylist() {
