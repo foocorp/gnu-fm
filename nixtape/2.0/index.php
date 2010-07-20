@@ -371,9 +371,11 @@ function method_radio_tune() {
 	$stationurl = 'http://libre.fm';
 
 	if ($_GET['format'] == 'json') {
+		header('Content-Type: text/javascript');
 		$json_data = array('station' => array('type' => $stationtype, 'name' => $stationname, 'url' => $stationurl, 'supportsdiscovery' => 1));
 		print(json_encode($json_data));
 	} else {
+		header('Content-Type: text/xml');
 		print('<lfm status="ok">\n');
 		print('	<station>\n');
 		print('		<type>' . $stationtype . '</type>\n');
