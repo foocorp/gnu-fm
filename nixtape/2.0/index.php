@@ -25,6 +25,8 @@ require_once('../api/UserXML.php');
 require_once('../api/UserJSON.php');
 require_once('../api/TrackXML.php');
 require_once('../api/AlbumXML.php');
+require_once('../data/Server.php');
+require_once('../radio/radio-utils.php');
 
 # Error constants
 define('LFM_INVALID_SERVICE',	2);
@@ -355,8 +357,8 @@ function method_radio_tune() {
 
 	try {
 	$username = $adodb->GetOne('SELECT username FROM Auth WHERE '
-		. 'token = ' . $adodb->qstr($_POST['token']) . ' AND '
-		. 'username IS NOT NULL AND sk = '.$adodb->qstr($_POST['sk']));
+		. 'sk = ' . $adodb->qstr($_POST['sk']) . ' AND '
+		. 'username IS NOT NULL');
 	}
 	catch (exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
