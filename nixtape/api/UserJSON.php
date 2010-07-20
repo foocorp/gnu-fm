@@ -44,4 +44,66 @@ class UserJSON {
 	}
 
 
+	public static function getRecentTracks($u, $limit, $page) {
+		global $adodb;
+
+		if (!isset($limit)) {
+			$limit = 10;
+		}
+
+		$offset = ($page - 1) * $limit;
+		$err = 0;
+		try {  
+			$user = new User($u);
+			if($page == 1) {
+				$npres = $user->getNowPlaying(1);
+			}
+			$res = $user->getScrobbles($limit, $offset);
+		} catch (exception $e) {
+			$err = 1;
+		}
+
+		if ($err || !$res) {
+			$json_data = array('error' => 7, 'message' => 'Invalid resource specified');
+			json_encode($json_data);
+		}
+
+		$totalPages = $adodb->GetOne('SELECT COUNT(track) FROM scrobbles WHERE userid = ' . $user->uniqueid);
+		$totalPages = ceil($totalPages / $limit);
+
+		$json_data = array();
+		$json_data['recenttracks'] = array();
+		$json_data['recenttracks']['@attr'] = array('user' => $user->name, 'page' => $page, 'perPage' => $limit, 'totalPages' => $totalPages);
+		$json_data['recenttracks']['track'] = array();
+
+		if($npres) {
+			foreach($npres as &$row) {
+				$track = UserJSON::_getTrack($row);
+				$track['nowplaying'] = true;
+				$track['time'] = time();
+				$json_data['recenttracks']['track'][] = $track;
+			}
+		}
+
+		foreach($res as &$row) {
+			$track = UserJSON::_getTrack($row);
+			$json_data['recenttracks']['track'][] = $track;
+		}
+
+		return json_encode($json_data);
+	}
+
+
+	private static function _getTrack($row) {
+		$track = array();
+		$track['artist'] = array('#text' => $row['artist'], 'mbid' => $row['artist_mbid']);
+		$track['name'] = $row['name'];
+		$track['mbid'] = $row['mbid'];
+		$track['album'] = array('#text' => $row['album'], 'mbid' => $row['album_mbid']);
+		$track['url'] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
+		$track['data'] = array('#text' => gmdate("d M Y H:i",$row['time']) . " GMT", 'uts' => $row['time']);
+		$track['streamable'] = 0;
+		return $track;
+	}
+
 }
