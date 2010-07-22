@@ -110,8 +110,7 @@ function method_user_getRecentTracks() {
 	}
 
 	if ($_GET['format'] == 'json') {
-		header('Content-Type: text/javascript');
-		print(UserJSON::getRecentTracks($_GET['user'], $_GET['limit'], $page));
+		json_response(UserJSON::getRecentTracks($_GET['user'], $_GET['limit'], $page));
 	} else {
 		header('Content-Type: text/xml');
 		print(XML::prettyXML(UserXML::getRecentTracks($_GET['user'], $_GET['limit'], $page)));
@@ -142,8 +141,7 @@ function method_user_getInfo() {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 	if ($_GET['format'] == 'json') {
-		header('Content-Type: text/javascript');
-		print(UserJSON::getInfo($_GET['user']));
+		json_response(UserJSON::getInfo($_GET['user']));
 	} else {
 		header('Content-Type: text/xml');
 		print(XML::prettyXML(UserXML::getInfo($_GET['user'])));
@@ -163,8 +161,7 @@ function method_user_getLovedTracks() {
 	}
 
 	if ($_GET['format'] == 'json') {
-		header('Content-Type: text/javascript');
-		print(UserJSON::getLovedTracks($user, $limit));
+		json_response(UserJSON::getLovedTracks($user, $limit));
 	} else {
 		header('Content-Type: text/xml');
 		print(XML::prettyXML(UserXML::getLovedTracks($user, $limit)));
@@ -492,6 +489,15 @@ function report_failure($code) {
 	print("<lfm status=\"failed\">\n");
 	print("	<error code=\"{$code}\">".$error_text[$code]."</error></lfm>");
 	die();
+}
+
+function json_response($data) {
+	header('Content-Type: text/javascript');
+	if($_REQUEST['callback']) {
+		print($_REQUEST['callback'] . '(' . $data . ');');
+	} else {
+		print($data);
+	}
 }
 
 $_REQUEST['method'] = strtolower($_REQUEST['method']);
