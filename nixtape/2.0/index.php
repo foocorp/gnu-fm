@@ -250,8 +250,13 @@ function method_auth_getToken() {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 
-	print("<lfm status=\"ok\">\n");
-	print("	<token>{$key}</token></lfm>");
+	if ($_GET['format'] == 'json') {
+		$json_data = array('token' => $key);
+		json_response($json_data);
+	} else {
+		print("<lfm status=\"ok\">\n");
+		print("	<token>{$key}</token></lfm>");
+	}
 }
 
 function method_auth_getMobileSession() {
