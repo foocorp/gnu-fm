@@ -496,8 +496,13 @@ function valid_api_sig($sig) {
 function report_failure($code) {
 	global $error_text;
 
-	print("<lfm status=\"failed\">\n");
-	print("	<error code=\"{$code}\">".$error_text[$code]."</error></lfm>");
+	if($_REQUEST['format'] == 'json') {
+		$json_data = array('error' => $code, 'message' => $error_text[$code]);
+		json_response(json_encode($json_data));
+	} else {
+		print("<lfm status=\"failed\">\n");
+		print("	<error code=\"{$code}\">".$error_text[$code]."</error></lfm>");
+	}
 	die();
 }
 
