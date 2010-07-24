@@ -41,6 +41,7 @@ define('LFM_INVALID_APIKEY',	10);
 define('LFM_SERVICE_OFFLINE',	11);
 define('LFM_SUBSCRIPTION_ERROR',12);
 define('LFM_INVALID_SIGNATURE',	13);
+define('LFM_TOKEN_UNAUTHORISED', 14);
 define('LFM_SUBSCRIPTION_REQD',	18);
 define('LFM_NOT_ENOUGH_CONTENT',	20);
 define('LFM_NOT_ENOUGH_MEMBERS',	21);
@@ -61,6 +62,7 @@ $error_text = array(
 	LFM_SERVICE_OFFLINE		=> 'Service Offline - This service is temporarily offline. Try again later.',
 	LFM_SUBSCRIPTION_ERROR		=> 'Subscription Error - The user needs to be subscribed in order to do that',
 	LFM_INVALID_SIGNATURE		=> 'Invalid method signature supplied',
+	LFM_TOKEN_UNAUTHORISED		=> 'This token has not yet been authorised',
 	LFM_SUBSCRIPTION_REQD		=> 'This user has no free radio plays left. Subscription required.',
 	LFM_NOT_ENOUGH_CONTENT		=> 'There is not enough content to play this station',
 	LFM_NOT_ENOUGH_MEMBERS		=> 'This group does not have enough members for radio',
@@ -324,7 +326,7 @@ function method_auth_getSession() {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 	if (!$username) {
-		report_failure(LFM_INVALID_TOKEN);
+		report_failure(LFM_TOKEN_UNAUTHORISED);
 	}
 
 	$session = md5(time() . rand());
