@@ -252,7 +252,7 @@ function method_auth_getToken() {
 
 	if ($_GET['format'] == 'json') {
 		$json_data = array('token' => $key);
-		json_response($json_data);
+		json_response(json_encode($json_data));
 	} else {
 		print("<lfm status=\"ok\">\n");
 		print("	<token>{$key}</token></lfm>");
@@ -341,7 +341,7 @@ function method_auth_getSession() {
 
 	if($_GET['format'] == 'json') {
 		$json_data = array('session' => array('name' => $username, 'key' => $session, 'subscriber' => 0));
-		json_response($json_data);
+		json_response(json_encode($json_data));
 	} else {
 		print("<lfm status=\"ok\">\n");
 		print("	<session>\n");
