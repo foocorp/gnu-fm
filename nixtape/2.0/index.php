@@ -334,13 +334,18 @@ function method_auth_getSession() {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 
-	print("<lfm status=\"ok\">\n");
-	print("	<session>\n");
-	print("		<name>{$username}</name>\n");
-	print("		<key>{$session}</key>\n");
-	print("		<subscriber>0</subscriber>\n");
-	print("	</session>\n");
-	print("</lfm>");
+	if($_GET['format'] == 'json') {
+		$json_data = array('session' => array('name' => $username, 'key' => $session, 'subscriber' => 0));
+		json_response($json_data);
+	} else {
+		print("<lfm status=\"ok\">\n");
+		print("	<session>\n");
+		print("		<name>{$username}</name>\n");
+		print("		<key>{$session}</key>\n");
+		print("		<subscriber>0</subscriber>\n");
+		print("	</session>\n");
+		print("</lfm>");
+	}
 }
 
 function method_radio_tune() {
