@@ -380,14 +380,14 @@ function method_radio_tune() {
 		print(json_encode($json_data));
 	} else {
 		header('Content-Type: text/xml');
-		print('<lfm status="ok">\n');
-		print('	<station>\n');
-		print('		<type>' . $stationtype . '</type>\n');
-		print('		<name>' .$stationname . '</name>\n');
-		print('		<url>' . $stationurl . '</url>\n');
-		print('		<supportsdiscovery>1</supportsdiscovery>\n');
-		print('	</station>\n');
-		print('</lfm>');
+		print("<lfm status=\"ok\">\n");
+		print("	<station>\n");
+		print("		<type>" . $stationtype . "</type>\n");
+		print("		<name>" .$stationname . "</name>\n");
+		print("		<url>" . $stationurl . "</url>\n");
+		print("		<supportsdiscovery>1</supportsdiscovery>\n");
+		print("	</station>\n");
+		print("</lfm>");
 	}
 }
 
