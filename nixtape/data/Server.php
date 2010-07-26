@@ -448,6 +448,8 @@ class Server {
 		if(!$session_id) {
 			$session_id = md5(mt_rand() . time());
 		}
+		// Remove any previous station for this session id
+		$adodb->Execute('DELETE FROM Radio_Sessions WHERE session = ' . $adodb->qstr($session_id));
 		if($username) {
 			$sql = 'INSERT INTO Radio_Sessions(username, session, url, expires) VALUES ('
 				. $adodb->qstr($username) . ','
