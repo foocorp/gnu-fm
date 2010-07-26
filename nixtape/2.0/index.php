@@ -301,6 +301,11 @@ function method_auth_getMobileSession() {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 
+	// Tune to the user's loved station by default
+	$_POST['sk'] = $session;
+	$_POST['station'] = 'librefm://' . $username . '/loved';
+	method_radio_tune();
+	
 	if ($_GET['format'] == 'json') {
 		$json_data = array('session' => array('name' => $username, 'key' => $session, 'subscriber' => 0));
 		json_response(json_encode($json_data));
@@ -345,6 +350,11 @@ function method_auth_getSession() {
 	catch (exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
+
+	// Tune to the user's loved station by default
+	$_POST['sk'] = $session;
+	$_POST['station'] = 'librefm://' . $username . '/loved';
+	method_radio_tune();
 
 	if ($_GET['format'] == 'json') {
 		$json_data = array('session' => array('name' => $username, 'key' => $session, 'subscriber' => 0));
