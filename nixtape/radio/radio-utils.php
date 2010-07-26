@@ -73,7 +73,7 @@ function make_playlist($session, $old_format=false) {
 	} elseif(ereg('l(ast|ibre)fm://artist/(.*)/similarartists', $url, $regs) || ereg('l(ast|ibre)fm://artist/(.*)', $url, $regs)) {
 		$artist = $regs[2];
 		$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamurl<>\'\' AND streamable=1 AND lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist, 'UTF-8')));
-	} elseif(ereg('l(ast|ibre)fm://user/(.*)/loved', $url, $regs)) {
+	} elseif(ereg('l(ast|ibre)fm://user/(.*)/(loved|library)', $url, $regs)) {
 		$requser = new User($regs[2]);
 		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Loved_Tracks.userid=' . $requser->uniqueid . ' AND Track.streamurl<>\'\' AND Track.streamable=1');
 	} else {
