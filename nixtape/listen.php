@@ -24,6 +24,11 @@ require_once('templating.php');
 
 if(isset($_GET['tag'])) {
 	$station = 'librefm://globaltags/' . $_GET['tag'];
+} else if(isset($_GET['station'])) {
+	$station = $_GET['station'];
+}
+
+if(isset($station)) {
 	if(isset($this_user)) {
 		$radio_session = $this_user->getRadioSession($station);
 	} else {
