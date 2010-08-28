@@ -43,6 +43,9 @@ function radio_title_from_url($url) {
 		$user = $regs[2];
 		return 'Libre.fm ' . ucwords($user) . '\'s Loved Radio';
 	}
+	if(ereg('l(ast|ibre)fm://community/loved', $url, $regs)) {
+		return 'Libre.fm Community\'s Loved Radio';
+	}
 
 	return 'FAILED';
 }
@@ -76,6 +79,8 @@ function make_playlist($session, $old_format=false) {
 	} elseif(ereg('l(ast|ibre)fm://user/(.*)/(loved|library)', $url, $regs)) {
 		$requser = new User($regs[2]);
 		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Loved_Tracks.userid=' . $requser->uniqueid . ' AND Track.streamurl<>\'\' AND Track.streamable=1');
+	} elseif(ereg('l(ast|ibre)fm://community/loved', $url, $regs)) {
+		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Track.streamurl<>\'\' AND Track.streamable=1');
 	} else {
 		die("FAILED\n"); // this should return a blank dummy playlist instead
 	}
