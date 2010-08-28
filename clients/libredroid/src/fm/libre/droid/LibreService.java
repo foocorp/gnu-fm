@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
+import java.net.URL;
+import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -60,7 +62,7 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 		return serviceBinder;
 	}
 
-	@Override
+	@Override 
 	public void onDestroy() {
 		this.mp.release();
 	}
@@ -189,8 +191,21 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
     	try {
     		this.mp.reset();
     		// Hack to get Jamendo MP3 stream instead of OGG because MediaPlayer
-    		// doesn't support streaming OGG at the moment
-    		this.mp.setDataSource(song.location.replace("ogg2", "mp31"));
+    		// doesn't support streaming OGG at the moment.
+    		URL url = new URL(song.location.replace("ogg2", "mp31"));
+    		// Hack2: Froyo's new streaming mechanism is massively broken and fails
+    		// when presented with a HTTP redirection message so we have to resolve
+    		// it first.
+    		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    		conn.setInstanceFollowRedirects(false);
+    		conn.connect();
+    		if(conn.getResponseCode() == 307) {
+    			Log.d("libredroid", "Got a HTTP redirection for " + url.toString() + ". Resolves to: " + conn.getHeaderField("Location") + " (resolving it ourselves to avoid Froyo's incomplete HTTP streaming implementation)");
+    			this.mp.setDataSource(conn.getHeaderField("Location"));
+    		} else  {
+    			this.mp.setDataSource(url.toString());
+    		}
+    		conn.disconnect();
     		this.mp.setOnBufferingUpdateListener(this);
             this.mp.setOnCompletionListener(this);
     		this.mp.prepareAsync();
