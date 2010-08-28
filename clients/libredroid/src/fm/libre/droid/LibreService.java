@@ -290,12 +290,14 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 	
     public void tuneStation(String type, String station) {
     	Toast.makeText(this, "Tuning in...", Toast.LENGTH_LONG).show();
+    	Log.d("librefm", "Tuning to librefm://" + type + "/" + station);
     	new TuneStationTask().execute(type, station);
     }
 
     
     private class TuneStationTask extends AsyncTask<String,String,String> {
-	     
+	    
+    	
 		protected String doInBackground(String... params) {
 	    	 String type = params[0];
 	    	 String station = params[1];
