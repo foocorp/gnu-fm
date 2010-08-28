@@ -134,7 +134,8 @@ class Server {
 			if($userid) {
 				$row['loved'] = $adodb->CacheGetOne(60, 'SELECT Count(*) FROM Loved_Tracks WHERE artist='
 						. $adodb->qstr($row['artist'])
-						. ' AND track=' . $adodb->qstr($row['track']));
+						. ' AND track=' . $adodb->qstr($row['track'])
+						. ' AND userid=' . $userid);
 			}
 			if (!$row['album_image']) {
 				$row['album_image'] = false;
