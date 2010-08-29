@@ -90,18 +90,14 @@ public class LibreDroid extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		libreServiceConn = new LibreServiceConnection();
-		bindService(new Intent(this, LibreService.class), libreServiceConn,
-				Context.BIND_AUTO_CREATE);
+		bindService(new Intent(this, LibreService.class), libreServiceConn,	Context.BIND_AUTO_CREATE);
 
-		this.registerReceiver(new MediaButtonReceiver(), new IntentFilter(
-				Intent.ACTION_MEDIA_BUTTON));
-		this.registerReceiver(new UIUpdateReceiver(), new IntentFilter(
-				"LibreDroidNewSong"));
+		this.registerReceiver(new MediaButtonReceiver(), new IntentFilter(Intent.ACTION_MEDIA_BUTTON));
+		this.registerReceiver(new UIUpdateReceiver(), new IntentFilter("LibreDroidNewSong"));
 		setContentView(R.layout.main);
 
 		// Load settings
-		final SharedPreferences settings = getSharedPreferences("LibreDroid",
-				MODE_PRIVATE);
+		final SharedPreferences settings = getSharedPreferences("LibreDroid", MODE_PRIVATE);
 		username = settings.getString("Username", "");
 		password = settings.getString("Password", "");
 
@@ -133,8 +129,7 @@ public class LibreDroid extends Activity {
 			button.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					Button b = (Button) v;
-					LibreDroid.this.libreServiceConn.service.tuneStation(
-							"globaltags", b.getText().toString().toLowerCase());
+					LibreDroid.this.libreServiceConn.service.tuneStation("globaltags", b.getText().toString().toLowerCase());
 					LibreDroid.this.nextPage();
 				}
 			});
@@ -385,9 +380,7 @@ public class LibreDroid extends Activity {
 				if (!Environment.getExternalStorageState().equals(
 						Environment.MEDIA_MOUNTED)) {
 					res.add(false);
-					res
-							.add("Please ensure an SD card is inserted before attempting to download songs. "
-									+ Environment.getExternalStorageState());
+					res.add("Please ensure an SD card is inserted before attempting to download songs. " + Environment.getExternalStorageState());
 					return res;
 				}
 				File musicDir = new File(root, "Music");
@@ -395,17 +388,14 @@ public class LibreDroid extends Activity {
 					musicDir.mkdir();
 				}
 
-				File f = new File(musicDir, song.artist + " - " + song.title
-						+ ".ogg");
+				File f = new File(musicDir, song.artist + " - " + song.title + ".ogg");
 				this.path = f.getAbsolutePath();
 				FileOutputStream fo = new FileOutputStream(f);
 				URL aURL = new URL(song.location);
 				HttpURLConnection conn = (HttpURLConnection) aURL
 						.openConnection();
 				conn.connect();
-				if (conn.getResponseCode() == 301
-						|| conn.getResponseCode() == 302
-						|| conn.getResponseCode() == 307) {
+				if (conn.getResponseCode() == 301 || conn.getResponseCode() == 302 || conn.getResponseCode() == 307) {
 					// Redirected
 					aURL = new URL(conn.getHeaderField("Location"));
 					conn = (HttpURLConnection) aURL.openConnection();
@@ -502,10 +492,8 @@ public class LibreDroid extends Activity {
 			this.service = (ILibreService) service;
 			LibreDroid.this.runOnUiThread(new Runnable() {
 				public void run() {
-					final ViewAnimator view = (ViewAnimator) LibreDroid.this
-							.findViewById(R.id.viewAnimator);
-					view.setDisplayedChild(LibreServiceConnection.this.service
-							.getCurrentPage());
+					final ViewAnimator view = (ViewAnimator) LibreDroid.this.findViewById(R.id.viewAnimator);
+					view.setDisplayedChild(LibreServiceConnection.this.service.getCurrentPage());
 					if (LibreServiceConnection.this.service.getCurrentPage() == 2) {
 						LibreDroid.this.updateSong();
 					}
