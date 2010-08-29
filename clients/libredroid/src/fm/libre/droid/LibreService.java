@@ -199,7 +199,7 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
     		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
     		conn.setInstanceFollowRedirects(false);
     		conn.connect();
-    		if(conn.getResponseCode() == 307) {
+    		if(conn.getResponseCode() == 301 || conn.getResponseCode() == 302 || conn.getResponseCode() == 307) {
     			Log.d("libredroid", "Got a HTTP redirection for " + url.toString() + ". Resolves to: " + conn.getHeaderField("Location") + " (resolving it ourselves to avoid Froyo's incomplete HTTP streaming implementation)");
     			this.mp.setDataSource(conn.getHeaderField("Location"));
     		} else  {
