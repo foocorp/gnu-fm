@@ -392,8 +392,7 @@ public class LibreDroid extends Activity {
 				this.path = f.getAbsolutePath();
 				FileOutputStream fo = new FileOutputStream(f);
 				URL aURL = new URL(song.location);
-				HttpURLConnection conn = (HttpURLConnection) aURL
-						.openConnection();
+				HttpURLConnection conn = (HttpURLConnection) aURL.openConnection();
 				conn.connect();
 				if (conn.getResponseCode() == 301 || conn.getResponseCode() == 302 || conn.getResponseCode() == 307) {
 					// Redirected
