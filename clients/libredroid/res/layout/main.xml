@@ -21,7 +21,9 @@
 	</TableLayout>
 </ScrollView>
 
-<ListView android:id="@android:id/list" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+<LinearLayout android:id="@+id/LinearLayout02" android:layout_width="fill_parent" android:layout_height="fill_parent">
+	<ListView android:id="@android:id/list" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+</LinearLayout>
 
 <ScrollView android:id="@+id/ScrollView03" android:layout_height="fill_parent" android:layout_width="fill_parent">
 	<TableLayout android:id="@+id/TableLayout02" android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center_horizontal" android:layout_gravity="center_horizontal"><ImageView android:id="@+id/ImageView01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="10px" android:src="@drawable/logo"></ImageView><TextView android:layout_height="wrap_content" android:id="@+id/stationNameText" android:textStyle="bold" android:layout_gravity="center_horizontal" android:layout_width="fill_parent" android:gravity="center_horizontal"></TextView><ImageView android:layout_height="wrap_content" android:id="@+id/albumImage" android:src="@drawable/album" android:layout_width="fill_parent" android:layout_marginTop="10px"></ImageView><TextView android:layout_height="wrap_content" android:id="@+id/titleText" style="bold" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_gravity="center_horizontal" android:layout_marginTop="5px" android:textSize="7pt" android:maxLines="2"></TextView><TextView android:layout_height="wrap_content" android:id="@+id/artistText" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_gravity="center_horizontal" android:maxLines="2"></TextView>

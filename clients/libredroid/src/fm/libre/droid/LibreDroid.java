@@ -46,7 +46,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -76,11 +75,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
@@ -199,6 +194,13 @@ public class LibreDroid extends ListActivity {
 	@Override
 	public void onListItemClick(ListView l, View v, int pos, long id) {
 		super.onListItemClick(l, v, pos, id);
+		String selection = l.getItemAtPosition(pos).toString();
+		if(selection.equals("Add A Custom Station...")) {			
+			
+		} else {
+			LibreDroid.this.libreServiceConn.service.tuneStation("globaltags", selection);
+			LibreDroid.this.nextPage();
+		}
 	}
 
 	public void updateSong() {
