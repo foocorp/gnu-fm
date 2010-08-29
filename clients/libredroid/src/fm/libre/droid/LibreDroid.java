@@ -195,6 +195,11 @@ public class LibreDroid extends ListActivity {
 	public void onDestroy() {
 		super.onDestroy();
 	}
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int pos, long id) {
+		super.onListItemClick(l, v, pos, id);
+	}
 
 	public void updateSong() {
 		Song song = libreServiceConn.service.getSong();

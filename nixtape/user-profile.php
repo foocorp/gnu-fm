@@ -52,6 +52,14 @@ if(isset($user->name)) {
 	$smarty->assign('isme', ($this_user->name == $user->name));
 	$smarty->assign('me', $user);
 
+	$station = 'librefm://user/' . $user->name . '/loved';
+	if(isset($this_user)) {
+		        $radio_session = $this_user->getRadioSession($station);
+	} else {
+		        $radio_session = Server::getRadioSession($station);
+	}
+	$smarty->assign('radio_session', $radio_session);
+
 	$smarty->assign('extra_head_links', array(
 				array(
 					'rel'=>'alternate',
