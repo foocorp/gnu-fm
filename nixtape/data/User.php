@@ -350,4 +350,19 @@ class User {
 
 		return $res != 0;
 	}
+
+	/**
+	 * Checks whether this user has any loved tracks
+	 *
+	 * @return Boolean indicating whether this user has marked any tracks as being loved in the past.
+	 */
+	function hasLoved() {
+		global $adodb;
+
+		$res = $adodb->GetOne('SELECT COUNT(*) FROM Loved_Tracks WHERE '
+			. ' userid = ' . $this->uniqueid);
+
+		return $res != 0;
+	}
+
 }
