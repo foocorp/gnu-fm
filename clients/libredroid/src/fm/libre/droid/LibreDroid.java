@@ -114,12 +114,8 @@ public class LibreDroid extends Activity {
 		loginButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Editor editor = settings.edit();
-				editor
-						.putString("Username", usernameEntry.getText()
-								.toString());
-				editor
-						.putString("Password", passwordEntry.getText()
-								.toString());
+				editor.putString("Username", usernameEntry.getText().toString());
+				editor.putString("Password", passwordEntry.getText().toString());
 				editor.commit();
 
 				LibreDroid.this.login();
