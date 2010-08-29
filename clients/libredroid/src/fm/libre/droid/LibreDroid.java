@@ -47,6 +47,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -70,17 +71,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
-public class LibreDroid extends Activity {
+public class LibreDroid extends ListActivity {
 	private LibreServiceConnection libreServiceConn;
 	private String username;
 	private String password;
@@ -95,7 +100,7 @@ public class LibreDroid extends Activity {
 		this.registerReceiver(new MediaButtonReceiver(), new IntentFilter(Intent.ACTION_MEDIA_BUTTON));
 		this.registerReceiver(new UIUpdateReceiver(), new IntentFilter("LibreDroidNewSong"));
 		setContentView(R.layout.main);
-
+		
 		// Load settings
 		final SharedPreferences settings = getSharedPreferences("LibreDroid", MODE_PRIVATE);
 		username = settings.getString("Username", "");
@@ -120,45 +125,33 @@ public class LibreDroid extends Activity {
 
 		// Setup buttons
 		String radioButtons[] = { "Folk", "Rock", "Metal", "Classical", "Pop",
-				"Punk", "Jazz", "Blues", "Rap", "Ambient" };
-		int i = 0;
-		TableRow row = (TableRow) findViewById(R.id.TableRow01);
-		for (String buttonStr : radioButtons) {
-			Button button = new Button(this);
-			button.setText(buttonStr);
-			button.setOnClickListener(new OnClickListener() {
-				public void onClick(View v) {
-					Button b = (Button) v;
-					LibreDroid.this.libreServiceConn.service.tuneStation("globaltags", b.getText().toString().toLowerCase());
-					LibreDroid.this.nextPage();
-				}
-			});
-			row.addView(button);
-			i++;
-			if (i == 5) {
-				row = (TableRow) findViewById(R.id.TableRow02);
+				"Punk", "Jazz", "Blues", "Rap", "Ambient", "Add A Custom Station..." };
+		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, radioButtons));
+		
+		Button tagStation = (Button) findViewById(R.id.tagStationButton);
+		tagStation.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				LibreDroid.this.nextPage();
 			}
-		}
-
-		TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);		
-		Button loveStation = new Button(this);
-		loveStation.setText("Your Loved Tracks");
+		});
+		
+		Button loveStation = (Button) findViewById(R.id.loveStationButton);
 		loveStation.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				LibreDroid.this.libreServiceConn.service.tuneStation("user", username + "/loved");
 				LibreDroid.this.nextPage();
+				LibreDroid.this.nextPage();
 			}
 		});
-		table.addView(loveStation);
-		Button communityLoveStation = new Button(this);
-		communityLoveStation.setText("Community's Loved Tracks");
+		
+		Button communityLoveStation = (Button) findViewById(R.id.communityStationButton);
 		communityLoveStation.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				LibreDroid.this.libreServiceConn.service.tuneStation("community", "loved");
 				LibreDroid.this.nextPage();
+				LibreDroid.this.nextPage();
 			}
 		});
-		table.addView(communityLoveStation);
 
 		final ImageButton nextButton = (ImageButton) findViewById(R.id.nextButton);
 		nextButton.setOnClickListener(new OnClickListener() {
@@ -225,8 +218,12 @@ public class LibreDroid extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
 			if (this.libreServiceConn.service.getCurrentPage() > 0) {
-				LibreDroid.this.libreServiceConn.service.stop();
+				if(this.libreServiceConn.service.getCurrentPage() == 3) {
+					// Back two pages if we're on the player page to get back to the main menu
+					this.prevPage();
+				}
 				this.prevPage();
+				LibreDroid.this.libreServiceConn.service.stop();
 				return true;
 			}
 		}

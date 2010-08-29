@@ -3,41 +3,36 @@
 
 
 <LinearLayout android:id="@+id/LinearLayout01" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+<ViewAnimator android:layout_height="fill_parent" android:id="@+id/viewAnimator" android:layout_width="fill_parent">
 
+<ScrollView android:id="@+id/ScrollView01" android:layout_height="fill_parent" android:layout_width="fill_parent">
+	<TableLayout android:id="@+id/TableLayout03" android:layout_height="wrap_content" android:layout_width="fill_parent"><ImageView android:id="@+id/ImageView01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="10px" android:src="@drawable/logo"></ImageView><TextView android:id="@+id/TextView06" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Libre.fm account details:" android:textStyle="bold" android:layout_marginTop="10px" android:layout_marginBottom="0px"></TextView><TextView android:id="@+id/TextView07" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="(This is not the same as your Google account)" android:layout_marginBottom="10px"></TextView><TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Username:"></TextView><EditText android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/usernameEntry" android:singleLine="true"></EditText><TextView android:id="@+id/TextView03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Password:" android:layout_marginTop="10px"></TextView><EditText android:layout_width="wrap_content" android:layout_height="wrap_content" android:password="true" android:id="@+id/passwordEntry" android:singleLine="true"></EditText>
+		<Button android:layout_width="wrap_content" android:id="@+id/loginButton" android:text="Login" android:layout_height="wrap_content" android:layout_marginTop="20px"></Button>
+		<TextView android:id="@+id/TextView05" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Don't have an account?" android:layout_marginTop="20px" android:textStyle="bold"></TextView><TextView android:id="@+id/TextView04" android:layout_width="wrap_content" android:layout_height="wrap_content" android:autoLink="web" android:clickable="true" android:text="Visit www.libre.fm to sign up for a free account."></TextView>
+	</TableLayout>
+</ScrollView>
 
+<ScrollView android:id="@+id/ScrollView02" android:layout_height="fill_parent" android:layout_width="fill_parent">
+	<TableLayout android:id="@+id/StationLayout" android:orientation="vertical" android:layout_height="fill_parent" android:layout_width="fill_parent" android:visibility="visible">
+		<ImageView android:id="@+id/ImageView01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="10px" android:layout_marginBottom="10px" android:src="@drawable/tower"></ImageView>
+		<Button android:layout_width="wrap_content" android:id="@+id/tagStationButton" android:text="Tag Stations" android:layout_height="wrap_content"></Button>
+		<Button android:layout_width="wrap_content" android:id="@+id/loveStationButton" android:text="Your Loved Tracks" android:layout_height="wrap_content"></Button>
+		<Button android:layout_width="wrap_content" android:id="@+id/communityStationButton" android:text="Community's Loved Tracks" android:layout_height="wrap_content"></Button>
+	</TableLayout>
+</ScrollView>
 
+<ListView android:id="@android:id/list" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
 
-
-
-
-
-<ScrollView android:id="@+id/ScrollView01" android:layout_height="wrap_content" android:layout_width="fill_parent"><ViewAnimator android:layout_height="wrap_content" android:id="@+id/viewAnimator" android:layout_width="fill_parent"><TableLayout android:id="@+id/TableLayout03" android:layout_height="wrap_content" android:layout_width="fill_parent"><ImageView android:id="@+id/ImageView01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="5px" android:src="@drawable/logo"></ImageView><TextView android:id="@+id/TextView06" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Libre.fm account details:" android:textStyle="bold" android:layout_marginTop="10px" android:layout_marginBottom="0px"></TextView><TextView android:id="@+id/TextView07" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="(This is not the same as your Google account)" android:layout_marginBottom="10px"></TextView><TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Username:"></TextView><EditText android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/usernameEntry" android:singleLine="true"></EditText><TextView android:id="@+id/TextView03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Password:" android:layout_marginTop="10px"></TextView><EditText android:layout_width="wrap_content" android:layout_height="wrap_content" android:password="true" android:id="@+id/passwordEntry" android:singleLine="true"></EditText>
-<Button android:layout_width="wrap_content" android:id="@+id/loginButton" android:text="Login" android:layout_height="wrap_content" android:layout_marginTop="20px"></Button>
-
-<TextView android:id="@+id/TextView05" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Don't have an account?" android:layout_marginTop="20px" android:textStyle="bold"></TextView><TextView android:id="@+id/TextView04" android:layout_width="wrap_content" android:layout_height="wrap_content" android:autoLink="web" android:clickable="true" android:text="Visit www.libre.fm to sign up for a free account."></TextView>
-
-
-
-</TableLayout>
-<TableLayout android:id="@+id/TableLayout01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:visibility="visible"><ImageView android:id="@+id/ImageView01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="5px" android:src="@drawable/logo"></ImageView><TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Stations Tagged With:" android:textStyle="bold"></TextView><TableRow android:id="@+id/TableRow01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="10px" android:gravity="center_horizontal"></TableRow>
-<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_horizontal"></TableRow>
-<TableRow android:id="@+id/TableRow03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_horizontal"></TableRow>
-</TableLayout>
-
-<TableLayout android:id="@+id/TableLayout02" android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center_horizontal" android:layout_gravity="center_horizontal"><ImageView android:id="@+id/ImageView01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="5px" android:src="@drawable/logo"></ImageView><TextView android:layout_height="wrap_content" android:id="@+id/stationNameText" android:textStyle="bold" android:layout_gravity="center_horizontal" android:layout_width="fill_parent" android:gravity="center_horizontal"></TextView><ImageView android:layout_height="wrap_content" android:id="@+id/albumImage" android:src="@drawable/album" android:layout_width="fill_parent" android:layout_marginTop="10px"></ImageView><TextView android:layout_height="wrap_content" android:id="@+id/titleText" style="bold" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_gravity="center_horizontal" android:layout_marginTop="5px" android:textSize="7pt" android:maxLines="2"></TextView><TextView android:layout_height="wrap_content" android:id="@+id/artistText" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_gravity="center_horizontal" android:maxLines="2"></TextView>
-
-
-
-<TableRow android:id="@+id/TableRow04" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="10px" android:layout_gravity="center_horizontal" android:gravity="center_horizontal">
-<ImageButton android:layout_height="wrap_content" android:id="@+id/banButton" android:src="@drawable/ban" android:layout_width="fill_parent" android:layout_marginRight="1px"></ImageButton>
-<ImageButton android:layout_height="wrap_content" android:id="@+id/prevButton" android:src="@drawable/prev" android:layout_width="fill_parent"></ImageButton>
-
-<ImageButton android:layout_height="wrap_content" android:src="@drawable/pause" android:id="@+id/playPauseButton" android:layout_width="fill_parent"></ImageButton><ImageButton android:layout_height="wrap_content" android:id="@+id/nextButton" android:src="@drawable/next" android:layout_width="fill_parent"></ImageButton>
-
-<ImageButton android:layout_height="wrap_content" android:id="@+id/saveButton" android:src="@drawable/save" android:layout_width="fill_parent"></ImageButton>
-<ImageButton android:layout_height="wrap_content" android:id="@+id/loveButton" android:src="@drawable/love" android:layout_width="fill_parent"></ImageButton>
-</TableRow>
-</TableLayout>
-
-</ViewAnimator></ScrollView>
+<ScrollView android:id="@+id/ScrollView03" android:layout_height="fill_parent" android:layout_width="fill_parent">
+	<TableLayout android:id="@+id/TableLayout02" android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center_horizontal" android:layout_gravity="center_horizontal"><ImageView android:id="@+id/ImageView01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="10px" android:src="@drawable/logo"></ImageView><TextView android:layout_height="wrap_content" android:id="@+id/stationNameText" android:textStyle="bold" android:layout_gravity="center_horizontal" android:layout_width="fill_parent" android:gravity="center_horizontal"></TextView><ImageView android:layout_height="wrap_content" android:id="@+id/albumImage" android:src="@drawable/album" android:layout_width="fill_parent" android:layout_marginTop="10px"></ImageView><TextView android:layout_height="wrap_content" android:id="@+id/titleText" style="bold" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_gravity="center_horizontal" android:layout_marginTop="5px" android:textSize="7pt" android:maxLines="2"></TextView><TextView android:layout_height="wrap_content" android:id="@+id/artistText" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_gravity="center_horizontal" android:maxLines="2"></TextView>
+		<TableRow android:id="@+id/TableRow02" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="10px" android:layout_gravity="center_horizontal" android:gravity="center_horizontal">
+			<ImageButton android:layout_height="wrap_content" android:id="@+id/banButton" android:src="@drawable/ban" android:layout_width="fill_parent" android:layout_marginRight="1px"></ImageButton>
+			<ImageButton android:layout_height="wrap_content" android:id="@+id/prevButton" android:src="@drawable/prev" android:layout_width="fill_parent"></ImageButton>
+			<ImageButton android:layout_height="wrap_content" android:src="@drawable/pause" android:id="@+id/playPauseButton" android:layout_width="fill_parent"></ImageButton><ImageButton android:layout_height="wrap_content" android:id="@+id/nextButton" android:src="@drawable/next" android:layout_width="fill_parent"></ImageButton>
+			<ImageButton android:layout_height="wrap_content" android:id="@+id/saveButton" android:src="@drawable/save" android:layout_width="fill_parent"></ImageButton>
+			<ImageButton android:layout_height="wrap_content" android:id="@+id/loveButton" android:src="@drawable/love" android:layout_width="fill_parent"></ImageButton>
+		</TableRow>
+	</TableLayout>
+</ScrollView>
+</ViewAnimator>
 </LinearLayout>
