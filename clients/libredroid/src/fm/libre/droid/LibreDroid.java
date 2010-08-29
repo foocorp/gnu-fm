@@ -136,6 +136,7 @@ public class LibreDroid extends ListActivity {
 				LibreDroid.this.libreServiceConn.service.tuneStation("user", username + "/loved");
 				LibreDroid.this.nextPage();
 				LibreDroid.this.nextPage();
+				LibreDroid.this.nextPage();
 			}
 		});
 		
@@ -143,6 +144,7 @@ public class LibreDroid extends ListActivity {
 		communityLoveStation.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				LibreDroid.this.libreServiceConn.service.tuneStation("community", "loved");
+				LibreDroid.this.nextPage();
 				LibreDroid.this.nextPage();
 				LibreDroid.this.nextPage();
 			}
@@ -196,9 +198,10 @@ public class LibreDroid extends ListActivity {
 		super.onListItemClick(l, v, pos, id);
 		String selection = l.getItemAtPosition(pos).toString();
 		if(selection.equals("Add A Custom Station...")) {			
-			
+			LibreDroid.this.nextPage();
 		} else {
 			LibreDroid.this.libreServiceConn.service.tuneStation("globaltags", selection);
+			LibreDroid.this.nextPage();
 			LibreDroid.this.nextPage();
 		}
 	}
@@ -225,8 +228,9 @@ public class LibreDroid extends ListActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
 			if (this.libreServiceConn.service.getCurrentPage() > 0) {
-				if(this.libreServiceConn.service.getCurrentPage() == 3) {
-					// Back two pages if we're on the player page to get back to the main menu
+				if(this.libreServiceConn.service.getCurrentPage() == 4) {
+					// Back three pages if we're on the player page to get back to the main menu
+					this.prevPage();
 					this.prevPage();
 				}
 				this.prevPage();
