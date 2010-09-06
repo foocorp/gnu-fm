@@ -42,6 +42,8 @@ try {
 
 $smarty->assign('artist', $artist);
 
+$smarty->assign('pagetitle', $artist->name . ' : ' . $track->name);
+
 // no idea how this would be track-relevant
 try {
 $aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
