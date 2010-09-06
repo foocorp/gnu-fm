@@ -44,6 +44,7 @@ if(isset($this_user)) {
 $smarty->assign('radio_session', $radio_session);
 
 $smarty->assign('name', $artist->name);
+$smarty->assign('pagetitle', $artist->name);
 $smarty->assign('id', $artist->id);
 $smarty->assign('bio_summary', $artist->bio_summary);
 $smarty->assign('bio_content', $artist->bio_content);
