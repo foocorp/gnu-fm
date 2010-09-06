@@ -50,8 +50,8 @@ class Track {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$res = $adodb->CacheGetRow(600, 'SELECT name, artist_name, album_name, duration, streamable, license, downloadurl, streamurl, mbid FROM Track WHERE '
-			. 'name = ' . $adodb->qstr($name) . ' AND '
-			. 'artist_name = ' . $adodb->qstr($artist));
+			. 'lower(name) = ' . strtolower($adodb->qstr($name)) . ' AND '
+			. 'lower(artist_name) = ' . strtolower($adodb->qstr($artist)));
 		if(!$res) {
 			$this->name = 'No such track: ' . $name;
 		} else {
