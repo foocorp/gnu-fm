@@ -44,12 +44,6 @@ $smarty->assign('artist', $artist);
 
 $smarty->assign('pagetitle', $artist->name . ' : ' . $track->name);
 
-// no idea how this would be track-relevant
-try {
-$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
-        $smarty->assign('tagcloud', $aTagCloud);
-} catch (exception $e) {}
-
 $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 $res = $adodb->GetAll('SELECT * FROM Track WHERE lower(artist_name) = ' . $adodb->qstr(mb_strtolower($track->artist_name, 'UTF-8')) . ' AND lower(name) = ' . $adodb->qstr(mb_strtolower($track->name, 'UTF-8')));
 
