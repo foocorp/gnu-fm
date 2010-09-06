@@ -25,6 +25,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +35,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -64,6 +66,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -84,6 +87,7 @@ public class LibreDroid extends ListActivity {
 	private LibreServiceConnection libreServiceConn;
 	private String username;
 	private String password;
+	private ArrayList<String> customStations;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -118,10 +122,20 @@ public class LibreDroid extends ListActivity {
 			}
 		});
 
-		// Setup buttons
-		String radioButtons[] = { "Folk", "Rock", "Metal", "Classical", "Pop",
-				"Punk", "Jazz", "Blues", "Rap", "Ambient", "Add A Custom Station..." };
-		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, radioButtons));
+		customStations = new ArrayList<String>();
+		try {
+			FileInputStream stationFile = openFileInput("libredroid-custom-stations.conf");
+			
+		} catch (IOException ex) {
+			Log.d("libredroid", ex.getMessage());
+		}
+		// Add default stations if empty
+		if(customStations.isEmpty()) {
+			String radioButtons[] = { "Folk", "Rock", "Metal", "Classical", "Pop",
+					"Punk", "Jazz", "Blues", "Rap", "Ambient", "Add A Custom Station..." };
+			customStations.addAll(Arrays.asList(radioButtons));
+		}
+		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, customStations));
 		
 		Button tagStation = (Button) findViewById(R.id.tagStationButton);
 		tagStation.setOnClickListener(new OnClickListener() {
