@@ -51,6 +51,7 @@ if(isset($user->name)) {
 	} catch (exception $e) {}
 	$smarty->assign('isme', ($this_user->name == $user->name));
 	$smarty->assign('me', $user);
+	$smarty->assign('pagetitle', $user->name);
 
 	$station = 'librefm://user/' . $user->name . '/loved';
 	if(isset($this_user)) {
