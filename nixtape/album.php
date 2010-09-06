@@ -31,6 +31,7 @@ $smarty->assign('name', $album->name);
 $smarty->assign('id', $album->id);
 $smarty->assign('artist', $artist);
 $smarty->assign('album', $album);
+$smarty->assign('pagetitle', $artist->name . ' : ' . $album->name);
 $aAlbumTracks = $album->getTracks();
 if ($aAlbumTracks) {
 	$smarty->assign('tracks', $aAlbumTracks);
