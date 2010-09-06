@@ -74,6 +74,7 @@ try {
 	$smarty->assign('me', $user);
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
 	$smarty->assign('isme', ($this_user->name == $user->name));
+	$smarty->assign('pagetitle', $user->name . '\'s stats');
 
 	$smarty->assign('extra_head_links', array(
 			array(
