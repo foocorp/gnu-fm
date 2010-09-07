@@ -203,6 +203,12 @@ public class LibreDroid extends ListActivity {
 				LibreDroid.this.libreServiceConn.service.ban();
 			}
 		});
+		final Button addStationButton = (Button) findViewById(R.id.addStationButton);
+		addStationButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				LibreDroid.this.addStation();
+			}
+		});
 	}
 
 	@Override
@@ -239,6 +245,13 @@ public class LibreDroid extends ListActivity {
 		} else {
 			albumImage.setImageResource(R.drawable.album);
 		}
+	}
+	
+	public void addStation() {
+		final EditText stationEntry = (EditText) findViewById(R.id.stationEntry);
+		stations.add(0, stationEntry.getText().toString());
+		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, stations));
+		this.prevPage();
 	}
 
 	@Override
