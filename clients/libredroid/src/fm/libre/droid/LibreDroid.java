@@ -23,12 +23,14 @@ package fm.libre.droid;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -87,7 +89,7 @@ public class LibreDroid extends ListActivity {
 	private LibreServiceConnection libreServiceConn;
 	private String username;
 	private String password;
-	private ArrayList<String> customStations;
+	private ArrayList<String> stations;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -122,20 +124,21 @@ public class LibreDroid extends ListActivity {
 			}
 		});
 
-		customStations = new ArrayList<String>();
+		stations = new ArrayList<String>();
 		try {
-			FileInputStream stationFile = openFileInput("libredroid-custom-stations.conf");
-			
+			BufferedReader stationReader = new BufferedReader(new InputStreamReader(openFileInput("libredroid-custom-stations.conf")));
+			String station;
+			while((station = stationReader.readLine()) != null) {
+				stations.add(station);
+			}
 		} catch (IOException ex) {
 			Log.d("libredroid", ex.getMessage());
 		}
 		// Add default stations if empty
-		if(customStations.isEmpty()) {
-			String radioButtons[] = { "Folk", "Rock", "Metal", "Classical", "Pop",
-					"Punk", "Jazz", "Blues", "Rap", "Ambient", "Add A Custom Station..." };
-			customStations.addAll(Arrays.asList(radioButtons));
-		}
-		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, customStations));
+		String radioButtons[] = { "Folk", "Rock", "Metal", "Classical", "Pop",
+				"Punk", "Jazz", "Blues", "Rap", "Ambient", "Add A Custom Station..." };
+		stations.addAll(Arrays.asList(radioButtons));
+		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, stations));
 		
 		Button tagStation = (Button) findViewById(R.id.tagStationButton);
 		tagStation.setOnClickListener(new OnClickListener() {
