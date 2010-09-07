@@ -2,11 +2,13 @@ package fm.libre.droid;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -296,41 +298,41 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 
     
     private class TuneStationTask extends AsyncTask<String,String,String> {
-	    
     	
-		protected String doInBackground(String... params) {
-	    	 String type = params[0];
-	    	 String station = params[1];
-	    	 String result = "";
-	    	 try {
-	    		 result = LibreService.this.httpGet("http://alpha.libre.fm/radio/adjust.php?session=" + LibreService.this.sessionKey + "&url=librefm://" + type + "/" + station);
-	    	 } catch (Exception ex) {
-	    		 Log.w("libredroid", "Unable to tune station: " + ex.getMessage());
-	    	 }
-	    	 return result;
-	     }
+    	protected String doInBackground(String... params) {
+    		String type = params[0];
+    		String result = "";
+    		String station;
+    		try {
+    			station = URLEncoder.encode(params[1], "UTF-8");
+    			result = LibreService.this.httpGet("http://alpha.libre.fm/radio/adjust.php?session=" + LibreService.this.sessionKey + "&url=librefm://" + type + "/" + station);
+    		} catch (Exception ex) {
+    			Log.w("libredroid", "Unable to tune station: " + ex.getMessage());
+			}
+			return result;
+		}
 
-	     protected void onPostExecute(String output) {
-	    	
-	    	 if (output.length() == 0) {
-	    		 return;
-	    	 }
-	    	 
-	    	 LibreService.this.playlist = new Playlist();
-	    	 
-	    	 if (output.split(" ")[0].equals("FAILED")) {
-	    		 Toast.makeText(LibreService.this, output.substring(7), Toast.LENGTH_LONG).show();
-	    	 } else {
-	    		 String[] result = output.split("[=\n]");
-	    		 for (int x=0; x<result.length; x++)  {
-	    			 if (result[x].trim().equals("stationname")) {
-	    				 LibreService.this.stationName = result[x+1].trim();
-	    			 }
-	    		 }
-	    		 LibreService.this.play();
-	    	 }
-	     }
-	}
+    	protected void onPostExecute(String output) {
+    		
+    		if (output.length() == 0) {
+    			return;
+    		}
+    		
+    		LibreService.this.playlist = new Playlist();
+    		
+    		if (output.split(" ")[0].equals("FAILED")) {
+    			Toast.makeText(LibreService.this, output.substring(7), Toast.LENGTH_LONG).show();
+    		} else {
+    			String[] result = output.split("[=\n]");
+    			for (int x=0; x<result.length; x++)  {
+    				if (result[x].trim().equals("stationname")) {
+    					LibreService.this.stationName = result[x+1].trim();
+    				}
+    			}
+    			LibreService.this.play();
+    		}
+    	}
+    }
     
     public String getStationName() {
     	return LibreService.this.stationName;
