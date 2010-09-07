@@ -135,9 +135,11 @@ public class LibreDroid extends ListActivity {
 			Log.d("libredroid", ex.getMessage());
 		}
 		// Add default stations if empty
-		String radioButtons[] = { "Folk", "Rock", "Metal", "Classical", "Pop",
-				"Punk", "Jazz", "Blues", "Rap", "Ambient", "Add A Custom Station..." };
-		stations.addAll(Arrays.asList(radioButtons));
+		if(stations.isEmpty()) {
+			String radioButtons[] = { "Folk", "Rock", "Metal", "Classical", "Pop",
+					"Punk", "Jazz", "Blues", "Rap", "Ambient", "Add A Custom Station..." };
+			stations.addAll(Arrays.asList(radioButtons));
+		}
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, stations));
 		
 		Button tagStation = (Button) findViewById(R.id.tagStationButton);
