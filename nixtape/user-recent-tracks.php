@@ -21,6 +21,7 @@
 
 require_once('database.php');
 require_once('templating.php');
+require_once('user-menu.php');
 require_once('data/User.php');
 require_once('data/TagCloud.php');
 require_once('data/Server.php');
@@ -69,6 +70,10 @@ if(isset($user->name)) {
 				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL()))
 				)
 		));
+
+	$submenu = user_menu($user, 'Recent Tracks');
+	$smarty->assign('submenu', $submenu);
+	$smarty->assign('pageheader', 'maxiprofile.tpl');
 
 	$smarty->display('user-recent-tracks.tpl');
 } else {

@@ -6,6 +6,7 @@ RewriteRule ^user/([^/]+)/journal/?$                            user-journal.php
 RewriteRule ^user/([^/]+)/groups/?$                             user-groups.php?user=$1                 [B,NC]
 RewriteRule ^user/([^/]+)/recent-tracks/?$                      user-recent-tracks.php?user=$1          [B,NC,QSA]
 RewriteRule ^user/([^/]+)/stats/?$                              user-stats.php?user=$1                  [B,NC]
+RewriteRule ^user/([^/]+)/station/?$				user-station.php?user=$1		[B,NC]
 RewriteRule ^artist/([^/]+)/track/([^/]+)/?$			track.php?artist=$1&track=$2		[B,NC]
 RewriteRule ^artist/([^/]+)/album/([^/]+)/track/([^/]+)/?$	track.php?artist=$1&album=$2&track=$3	[B,NC]
 RewriteRule ^artist/([^/]+)/album/add/?$			album-add.php?artist=$1			[B,NC]

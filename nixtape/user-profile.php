@@ -20,6 +20,7 @@
 */
 
 require_once('database.php');
+require_once('user-menu.php');
 require_once('templating.php');
 require_once('data/User.php');
 require_once('data/TagCloud.php');
@@ -53,14 +54,6 @@ if(isset($user->name)) {
 	$smarty->assign('me', $user);
 	$smarty->assign('pagetitle', $user->name);
 
-	$station = 'librefm://user/' . $user->name . '/loved';
-	if(isset($this_user)) {
-		        $radio_session = $this_user->getRadioSession($station);
-	} else {
-		        $radio_session = Server::getRadioSession($station);
-	}
-	$smarty->assign('radio_session', $radio_session);
-
 	$smarty->assign('extra_head_links', array(
 				array(
 					'rel'=>'alternate',
@@ -81,6 +74,11 @@ if(isset($user->name)) {
 					'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL()))
 				     )
 				));
+
+	$submenu = user_menu($user, 'Overview');
+
+	$smarty->assign('submenu', $submenu);
+	$smarty->assign('pageheader', 'maxiprofile.tpl');
 
 	$smarty->display('user-profile.tpl');
 } else {
