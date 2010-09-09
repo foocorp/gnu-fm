@@ -88,7 +88,7 @@ try {
 
 	$submenu = user_menu($user, 'Stats');
         $smarty->assign('submenu', $submenu);
-	$smarty->assign('pageheader', 'maxiprofile.tpl');
+	$smarty->assign('headerfile', 'maxiprofile.tpl');
 
 	$smarty->assign('stats', true);
 	$smarty->display('user-stats.tpl');

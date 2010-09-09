@@ -185,7 +185,7 @@ if(isset($this_user->name))
 	$submenu = user_menu($this_user, 'Edit Profile');
 	$smarty->assign('submenu', $submenu);
 	$smarty->assign('me', $this_user);
-	$smarty->assign('pageheader', 'maxiprofile.tpl');
+	$smarty->assign('headerfile', 'maxiprofile.tpl');
 
 	$smarty->assign('errors', $errors);
 	$smarty->display('user-edit.tpl');

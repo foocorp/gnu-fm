@@ -73,7 +73,7 @@ if(isset($user->name)) {
 
 	$submenu = user_menu($user, 'Recent Tracks');
 	$smarty->assign('submenu', $submenu);
-	$smarty->assign('pageheader', 'maxiprofile.tpl');
+	$smarty->assign('headerfile', 'maxiprofile.tpl');
 
 	$smarty->display('user-recent-tracks.tpl');
 } else {
