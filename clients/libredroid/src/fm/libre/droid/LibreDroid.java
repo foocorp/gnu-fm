@@ -131,6 +131,7 @@ public class LibreDroid extends ListActivity {
 			while((station = stationReader.readLine()) != null) {
 				stations.add(station);
 			}
+			stationReader.close();
 		} catch (IOException ex) {
 			Log.d("libredroid", ex.getMessage());
 		}
@@ -252,6 +253,16 @@ public class LibreDroid extends ListActivity {
 	public void addStation() {
 		final EditText stationEntry = (EditText) findViewById(R.id.stationEntry);
 		stations.add(0, stationEntry.getText().toString());
+		try{
+			FileOutputStream stationFile = openFileOutput("libredroid-custom-stations.conf", Context.MODE_PRIVATE);
+			for (String station : stations) {
+				stationFile.write(station.getBytes());
+				stationFile.write('\n');
+			}
+			stationFile.close();
+		} catch (IOException ex) {
+			Log.w("libredroid", ex.getMessage());
+		}
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, stations));
 		this.prevPage();
 	}
