@@ -31,6 +31,7 @@ $search_type = $_GET['search_type'];
 
 $results = Server::search($search_term, $search_type);
 
+$smarty->assign('pageheading', 'Results for: ' . $search_term);
 $smarty->assign('search_term', $search_term);
 $smarty->assign('search_type', $search_type);
 $smarty->assign('results', $results);
