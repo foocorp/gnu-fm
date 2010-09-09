@@ -79,5 +79,6 @@ try {
 /* 			) */
 /* 	)); */
 
+$smarty->assign('headerfile', 'artist-header.tpl');
 $smarty->display("artist.tpl");
 ?>
