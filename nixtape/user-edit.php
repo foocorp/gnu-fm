@@ -21,6 +21,7 @@
 
 require_once('database.php');
 require_once('templating.php');
+require_once('user-menu.php');
 require_once('data/User.php');
 require_once('data/TagCloud.php');
 
@@ -180,6 +181,12 @@ if(isset($this_user->name))
 		$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $this_user->uniqueid, "userid");
 		$smarty->assign('tagcloud', $aTagCloud);
 	} catch (exception $e) {}
+
+	$submenu = user_menu($this_user, 'Edit Profile');
+	$smarty->assign('submenu', $submenu);
+	$smarty->assign('me', $this_user);
+	$smarty->assign('pageheader', 'maxiprofile.tpl');
+
 	$smarty->assign('errors', $errors);
 	$smarty->display('user-edit.tpl');
 }
