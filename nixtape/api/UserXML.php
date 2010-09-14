@@ -89,7 +89,7 @@ class UserXML {
 		foreach($res as &$row) {
 			$track = $root->addChild('track', null);
 			$track->addAttribute('rank', $i);
-			$track->addChild('name', repamp($row['name']));
+			$track->addChild('name', repamp($row['track']));
 
 			$track->addChild('playcount', $row['freq']);
 			$artist = $track->addChild('artist', repamp($row['artist']));
