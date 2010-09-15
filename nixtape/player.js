@@ -123,16 +123,20 @@ function pause() {
  * Seeks backwards 10 seconds in the current song
  */
 function seekBack() {
-	var audio = document.getElementById("audio");
-	audio.currentTime = audio.currentTime - 10;
+	try {
+		var audio = document.getElementById("audio");
+		audio.currentTime = audio.currentTime - 10;
+	} catch (e) {}
 }
 
 /**
  * Seeks forwards 10 seconds in the current song
  */
 function seekForward() {
-	var audio = document.getElementById("audio");
-	audio.currentTime = audio.currentTime + 10;
+	try {
+		var audio = document.getElementById("audio");
+		audio.currentTime = audio.currentTime + 10;
+	} catch (e) {}
 }
 
 /**
@@ -181,7 +185,7 @@ function populatePlaylist() {
 		} else {
 			playable_songs = true;
 		}
-		$("#playlist > #songs").append("<li id='song-" + i + "'><a href='#' onclick='playSong(" + i + ")'>" + playlist[i]["artist"] + " - " + playlist[i]["track"] + "</li>");
+		$("#playlist > #songs").append("<li id='song-" + i + "'><a href='#' onclick='playSong(" + i + "); return false;'>" + playlist[i]["artist"] + " - " + playlist[i]["track"] + "</li>");
 	}
 	$("#song-" + current_song).css({fontWeight : "bold"});
 }
