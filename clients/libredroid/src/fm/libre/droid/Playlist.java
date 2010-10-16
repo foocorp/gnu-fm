@@ -62,7 +62,7 @@ public class Playlist extends DefaultHandler {
 	}
 
 	public void endElement(String uri, String name, String qName) throws SAXException {
-		if (name.equals("track")) {
+		if (name.equals("track") && !this.processingSong.location.equals("")) {
 			this.playlist.add(this.processingSong);
 		}
 	}
