@@ -185,6 +185,11 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 	public void play() {
     	if (this.currentSong >= this.playlist.size()) {
     		this.getPlaylist();
+    		if(this.playlist.size() == 0) {
+    			Toast.makeText(this, "Sorry, this station doesn't appear to have any more content.", Toast.LENGTH_LONG).show();
+    			this.stop();
+    			return;
+    		}
     	}
     	this.playing = true;
     	this.buffering = true;
@@ -279,6 +284,7 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
     public void getPlaylist() {
     	try {
     		String xspf = this.httpGet("http://alpha.libre.fm/radio/xspf.php?sk=" + this.sessionKey + "&desktop=1.0");
+    		Log.d("libredroid", "Fetching playlist from: http://alpha.libre.fm/radio/xspf.php?sk=" + this.sessionKey + "&desktop=1.0");
     		this.playlist.parse(xspf);
     	} catch (Exception ex) {
     		Log.w("libredroid", "Unable to process playlist: " + ex.getMessage());
