@@ -20,8 +20,9 @@ password. All passwords are encrypted in our database.</p>
 		<fieldset>
 
 			<h3><label for='username'>{t}Username{/t}</span></label></h3>
-			<div><input id='username' name='user' type='text' value='' /></div>
-
+			<div><input id='username' name='user' type='text' value='' /></div><br/>
+			or:<br/>
+			<div><input id='email' name='email' type='text' value='' />
 			<p><input type='submit' name='recover' value='{t}Reset my password!{/t}'/></p>
 		</fieldset>
 

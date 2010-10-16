@@ -19,8 +19,6 @@
 
  */
 
-// TODO: Check if the request has expired before changing.
-
 require_once('database.php');
 require_once('templating.php');
 require_once('utils/EmailAddressValidator.php');
@@ -36,7 +34,9 @@ function sendEmail($text, $email) {
 
 if (isset($_GET['code'])) {
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-	$row = $adodb->GetRow('SELECT * FROM Recovery_Request WHERE code=' . $adodb->qstr($_GET['code']));
+	$sql = 'SELECT * FROM Recovery_Request WHERE code=' . $adodb->qstr($_GET['code']) 
+		. ' AND expires > ' . $adodb->qstr(time());
+	$row = $adodb->GetRow($sql);
 	if (!$row) {
 		$errors .= "Invalid reset token.\n";
 		$smarty->assign('errors', $errors);
@@ -65,15 +65,20 @@ if (isset($_GET['code'])) {
 	$smarty->assign('changed', true);
 }
 
-else if (isset($_POST['user'])) {
-	$username = $_POST['user'];
+else if (isset($_POST['user']) || isset($_POST['email']) {
+	if (isset$_POST['email']) {
+		$field = 'email';
+		$value = $_POST['email'];
+	} else {
+		$field = 'username';
+		$value = $_POST['user'];
+	}
 
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	$err = 0;
 
 	try {
-		$row = $adodb->GetRow('SELECT * FROM Users WHERE username='
-				. $adodb->qstr($username));
+		$row = $adodb->GetRow("SELECT * FROM Users WHERE {$field} = '{$adodb->qstr($value)}'");
 	}
 	catch (exception $e) {
 		$err = 1;
@@ -122,9 +127,11 @@ else if (isset($_POST['user'])) {
 
 	$url = $base_url . '/reset.php?code=' . $code;
 	// TODO: Read names from variable
-	$content = "Hi!\n\nSomeone entered your username "
-		. "in the password reset form at libre.fm. To reset your password, please visit\n\n"
-		. $url . "\n\n- The Libre.fm Team";
+	$content = "Hi!\n\nSomeone requested a password reset on your account.\n\n"
+		. "Username: {$username}\n\n"
+		. "To reset your password, please visit\n\n"
+		. $url . "\n\nIf you do not wish to reset your password, simply "
+		. "disregard this email.\n\n- The Libre.fm Team";
 
 	$status = sendEmail($content, $row['email']);
 	if (!$status) {
