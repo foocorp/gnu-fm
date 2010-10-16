@@ -309,6 +309,7 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
     		String type = params[0];
     		String result = "";
     		String station;
+    		
     		try {
     			station = URLEncoder.encode(params[1], "UTF-8");
     			result = LibreService.this.httpGet("http://alpha.libre.fm/radio/adjust.php?session=" + LibreService.this.sessionKey + "&url=librefm://" + type + "/" + station);
@@ -324,6 +325,7 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
     			return;
     		}
     		
+    		LibreService.this.currentSong = 0;
     		LibreService.this.playlist = new Playlist();
     		
     		if (output.split(" ")[0].equals("FAILED")) {
