@@ -125,6 +125,7 @@ if (isset($_POST['install'])) {
 		image_medium VARCHAR(255),
 		image_large VARCHAR(255),
 		homepage VARCHAR(255),
+		hashtag VARCHAR(255),
 		origin VARCHAR(255) REFERENCES Places(location_uri))");
 
 	$adodb->Execute("CREATE TABLE Album(
