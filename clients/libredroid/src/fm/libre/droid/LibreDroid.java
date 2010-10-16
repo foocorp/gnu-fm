@@ -367,8 +367,10 @@ public class LibreDroid extends ListActivity {
 		changeStation.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
 				final ViewAnimator view = (ViewAnimator) findViewById(R.id.viewAnimator);
-				if (view.getDisplayedChild() == 2) {
+				if (view.getDisplayedChild() == 4) {
 					LibreDroid.this.libreServiceConn.service.stop();
+					LibreDroid.this.prevPage();
+					LibreDroid.this.prevPage();
 					LibreDroid.this.prevPage();
 					return true;
 				} else {
