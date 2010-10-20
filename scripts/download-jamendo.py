@@ -101,7 +101,7 @@ class DownloadJamendo:
 					trackfile = os.path.join(self.destination, "%s-%s-%s.ogg" % (artist["name"].replace("/", ""), album["name"].replace("/", ""), track["name"].replace("/", " ")))
 					trackfile = trackfile.encode('utf-8')
 					if os.path.exists(trackfile):
-						print "Already downloaded track %d" % track_id
+						print "Already downloaded track %s" % trackfile
 					else:
 						while running_threads > MAX_THREADS:
 							time.sleep(5)
