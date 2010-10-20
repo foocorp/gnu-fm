@@ -3,7 +3,24 @@
 # Jamendo database dumps can be fetched from: http://img.jamendo.com/data/dbdump_artistalbumtrack.xml.gz
 
 import xml.etree.cElementTree as ElementTree
-import sys, gzip, time, os.path, urllib
+import sys, gzip, time, os.path, urllib, threading
+
+MAX_THREADS = 10
+running_threads = 0
+
+class Downloader(threading.Thread):
+
+	def __init__(self, filename, url):
+		global running_threads
+		threading.Thread.__init__(self)
+		self.filename = filename
+		self.url = url
+		running_threads += 1
+
+	def run(self):
+		global running_threads
+		urllib.urlretrieve(self.url, self.filename)
+		running_threads -= 1
 
 
 class DownloadJamendo:
@@ -36,6 +53,7 @@ class DownloadJamendo:
 
 
 	def proc_track(self, elem):
+		global running_threads
 		track_id = None
 		track_license = None
 
@@ -54,8 +72,13 @@ class DownloadJamendo:
 				if os.path.exists(trackfile):
 					print "Already downloaded track %d" % track_id
 				else:
+					while running_threads > MAX_THREADS:
+						time.sleep(5)
 					print "Downloading %s to %s" % (trackurl, trackfile)
-					urllib.urlretrieve(trackurl, trackfile)
+					d = Downloader(trackfile, trackurl)
+					d.start()
+
+
 
 
 	def free_license(self, license):
