@@ -3,7 +3,7 @@
 # Jamendo database dumps can be fetched from: http://img.jamendo.com/data/dbdump_artistalbumtrack.xml.gz
 
 import xml.etree.cElementTree as ElementTree
-import sys, gzip, time, os.path, urllib, threading
+import sys, gzip, time, os, os.path, urllib, threading
 
 MAX_THREADS = 10
 running_threads = 0
@@ -35,48 +35,84 @@ class DownloadJamendo:
 	def parse(self, dump):
 		for event, elem in ElementTree.iterparse(dump):
 			if elem.tag == "artist":
-				self.proc_artist(elem)
+				artist = self.proc_artist(elem)
+				self.download_artist(artist)
 
 
 	def proc_artist(self, elem):
+		artist = {}
+		artist["albums"] = []
+
 		for artist_e in elem.getchildren():
+
+			if artist_e.tag == "name":
+				artist["name"] = artist_e.text
+
 			if artist_e.tag == "Albums":
 				for album_e in artist_e.getchildren():
-					self.proc_album(album_e)
+					artist["albums"].append(self.proc_album(album_e))
+
+		return artist
 
 
 	def proc_album(self, elem):
+
+		album = {}
+		album["tracks"] = []
+		album["name"] = None
+
 		for album_e in elem.getchildren():
+
+			if album_e.tag == "name":
+				album["name"] = album_e.text
+
 			if album_e.tag == "Tracks":
 				for track_e in album_e.getchildren():
-					self.proc_track(track_e)
+					album["tracks"].append(self.proc_track(track_e))
 
-
+		return album
 	def proc_track(self, elem):
-		global running_threads
-		track_id = None
-		track_license = None
+		track = {}
+		track["id"] = None
+		track["name"] = None
+		track["license"] = None
 
 		for track_e in elem.getchildren():
+		
 			if track_e.tag == "id":
-				track_id = int(track_e.text)
+				track["id"] = int(track_e.text)
+
+			if track_e.tag == "name":
+				track["name"] = track_e.text
 
 			if track_e.tag == "license":
-				track_license = track_e.text
-		
+				track["license"] = track_e.text
 
-		if track_id and track_license:
-			if self.free_license(track_license):
-				trackurl = "http://api.jamendo.com/get2/stream/track/redirect/?id=%d&streamencoding=ogg2" % track_id
-				trackfile = os.path.join(self.destination, "%d.ogg" % track_id)
-				if os.path.exists(trackfile):
-					print "Already downloaded track %d" % track_id
-				else:
-					while running_threads > MAX_THREADS:
-						time.sleep(5)
-					print "Downloading %s to %s" % (trackurl, trackfile)
-					d = Downloader(trackfile, trackurl)
-					d.start()
+		return track
+
+
+	def download_artist(self, artist):
+		global running_threads
+
+		for album in artist["albums"]:
+			for track in album["tracks"]:
+				if track["id"] and track["name"] and album["name"] and artist["name"] and self.free_license(track["license"]):
+					trackurl = "http://api.jamendo.com/get2/stream/track/redirect/?id=%d&streamencoding=ogg2" % track["id"]
+					artistdir = os.path.join(self.destination, artist["name"].replace("/", " "))
+					if not os.path.exists(artistdir):
+						os.mkdir(artistdir)
+					albumdir = os.path.join(artistdir, album["name"].replace("/", " "))
+					if not os.path.exists(albumdir):
+						os.mkdir(albumdir)
+					trackfile = os.path.join(albumdir, "%s.ogg" % (track["name"].replace("/", " ")))
+					if os.path.exists(trackfile):
+						print "Already downloaded track %d" % track_id
+					else:
+						while running_threads > MAX_THREADS:
+							time.sleep(5)
+						print "Downloading %s to %s" % (trackurl, trackfile)
+						d = Downloader(trackfile, trackurl)
+						d.start()
 
 
 
