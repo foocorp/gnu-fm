@@ -98,13 +98,7 @@ class DownloadJamendo:
 			for track in album["tracks"]:
 				if track["id"] and track["name"] and album["name"] and artist["name"] and self.free_license(track["license"]):
 					trackurl = "http://api.jamendo.com/get2/stream/track/redirect/?id=%d&streamencoding=ogg2" % track["id"]
-					artistdir = os.path.join(self.destination, artist["name"].replace("/", " "))
-					if not os.path.exists(artistdir):
-						os.mkdir(artistdir)
-					albumdir = os.path.join(artistdir, album["name"].replace("/", " "))
-					if not os.path.exists(albumdir):
-						os.mkdir(albumdir)
-					trackfile = os.path.join(albumdir, "%s.ogg" % (track["name"].replace("/", " ")))
+					trackfile = os.path.join(self.destination, "%s-%s-%s.ogg" % (artist["name"].replace("/", ""), album["name"].replace("/", ""), track["name"].replace("/", " ")))
 					if os.path.exists(trackfile):
 						print "Already downloaded track %d" % track_id
 					else:
