@@ -111,11 +111,11 @@ function method_user_getRecentTracks() {
 		$page = 1;
 	}
 
+	$xml = UserXML::getRecentTracks($_GET['user'], $_GET['limit'], $page);
 	if ($_GET['format'] == 'json') {
 		json_response(UserJSON::getRecentTracks($_GET['user'], $_GET['limit'], $page));
 	} else {
-		header('Content-Type: text/xml');
-		print(XML::prettyXML(UserXML::getRecentTracks($_GET['user'], $_GET['limit'], $page)));
+		xml_response($xml);
 	}
 }
 
@@ -124,8 +124,8 @@ function method_user_getTopTags() {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(UserXML::getTopTags($_GET['user'])));
+	$xml = UserXML::getTopTags($_GET['user']);
+	xml_response($xml);
 }
 
 
@@ -134,19 +134,20 @@ function method_user_getTopTracks() {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(UserXML::getTopTracks($_GET['user'], $_GET['period'])));
+	$xml = UserXML::getTopTracks($_GET['user'], $_GET['period']);
+	xml_response($xml);
 }
 
 function method_user_getInfo() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
+
+	$xml = UserXML::getInfo($_GET['user']);
 	if ($_GET['format'] == 'json') {
 		json_response(UserJSON::getInfo($_GET['user']));
 	} else {
-		header('Content-Type: text/xml');
-		print(XML::prettyXML(UserXML::getInfo($_GET['user'])));
+		xml_response($xml);
 	}
 }
 
@@ -162,11 +163,11 @@ function method_user_getLovedTracks() {
 		$limit = 50;
 	}
 
+	$xml = UserXML::getLovedTracks($user, $limit);
 	if ($_GET['format'] == 'json') {
 		json_response(UserJSON::getLovedTracks($user, $limit));
 	} else {
-		header('Content-Type: text/xml');
-		print(XML::prettyXML(UserXML::getLovedTracks($user, $limit)));
+		xml_response($xml);
 	}
 }
 
@@ -180,33 +181,37 @@ function method_artist_addTags() {
 	if (!isset($_POST['artist']) || !isset($_POST['tags'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
+	
 	$userid = get_userid();
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(TrackXML::addTags($userid, $_POST['artist'], '', '', $_POST['tags'])));
+	$xml = TrackXML::addTags($userid, $_POST['artist'], '', '', $_POST['tags']);
+	xml_response($xml);
 }
 
 function method_artist_getInfo() {
 	if (!isset($_GET['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(ArtistXML::getInfo($_GET['artist'])));
+	
+	$xml = ArtistXML::getInfo($_GET['artist']);
+	xml_response($xml);
 }
 
 function method_artist_getTopTracks() {
 	if (!isset($_GET['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(ArtistXML::getTopTracks($_GET['artist'])));
+
+	$xml = ArtistXML::getTopTracks($_GET['artist']);
+	xml_response($xml);
 }
 
 function method_artist_getTopTags() {
 	if (!isset($_GET['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(ArtistXML::getTopTags($_GET['artist'])));
+
+	$xml = ArtistXML::getTopTags($_GET['artist']);
+	xml_response($xml);
 }
 
 
@@ -220,16 +225,17 @@ function method_album_addTags() {
 	}
 
 	$userid = get_userid();
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(TrackXML::addTags($userid, $_POST['artist'], $_POST['album'], '', $_POST['tags'])));
+	$xml = TrackXML::addTags($userid, $_POST['artist'], $_POST['album'], '', $_POST['tags']);
+	xml_response($xml);
 }
 
 function method_album_getTopTags() {
 	if (!isset($_GET['artist']) || !isset($_GET['album'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(AlbumXML::getTopTags($_GET['artist'], $_GET['album'])));
+
+	$xml = AlbumXML::getTopTags($_GET['artist'], $_GET['album']);
+	xml_response($xml);
 }
 
 
@@ -252,12 +258,12 @@ function method_auth_getToken() {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 
+	$xml = '<lfm status="ok"><token>' . $key . '</token></lfm>';
 	if ($_GET['format'] == 'json') {
 		$json_data = array('token' => $key);
 		json_response(json_encode($json_data));
 	} else {
-		print("<lfm status=\"ok\">\n");
-		print("	<token>{$key}</token></lfm>");
+		xml_response($xml);
 	}
 }
 
@@ -422,9 +428,8 @@ function method_track_addTags() {
 	}
 
 	$userid = get_userid();
-
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(TrackXML::addTags($userid, $_POST['artist'], $_POST['album'], $_POST['track'], $_POST['tags'])));
+	$xml = TrackXML::addTags($userid, $_POST['artist'], $_POST['album'], $_POST['track'], $_POST['tags']);
+	xml_response($xml);
 }
 
 function method_track_getTopTags() {
@@ -432,8 +437,8 @@ function method_track_getTopTags() {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(TrackXML::getTopTags($_GET['artist'], $_GET['track'])));
+	$xml = TrackXML::getTopTags($_GET['artist'], $_GET['track']);
+	xml_response($xml);
 }
 
 function method_track_getTags() {
@@ -444,9 +449,8 @@ function method_track_getTags() {
 	}
 
 	$userid = get_userid();
-
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(TrackXML::getTags($_GET['artist'], $_GET['track'], $userid)));
+	$xml = TrackXML::getTags($_GET['artist'], $_GET['track'], $userid);
+	xml_response($xml);
 }
 
 function method_track_ban() {
@@ -455,9 +459,8 @@ function method_track_ban() {
 	}
 
 	$userid = get_userid();
-
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(TrackXML::ban($_POST['artist'], $_POST['track'], $userid)));
+	$xml = TrackXML::ban($_POST['artist'], $_POST['track'], $userid);
+	xml_response($xml);
 }
 
 function method_track_love() {
@@ -466,9 +469,8 @@ function method_track_love() {
 	}
 
 	$userid = get_userid();
-
-	header('Content-Type: text/xml');
-	print(XML::prettyXML(TrackXML::love($_POST['artist'], $_POST['track'], $userid)));
+	$xml = TrackXML::love($_POST['artist'], $_POST['track'], $userid);
+	xml_response($xml);
 }
 
 function get_userid() {
@@ -511,6 +513,11 @@ function report_failure($code) {
 		print("	<error code=\"{$code}\">".$error_text[$code]."</error></lfm>");
 	}
 	die();
+}
+
+function xml_response($xml) {
+	header('Content-Type: text/xml');
+	print(XML::prettyXML($xml));
 }
 
 function json_response($data) {
