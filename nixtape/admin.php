@@ -57,7 +57,7 @@ function sendEmail($email) {
 }
 
 if ($userlevel < 2) {
-	$smarty->assign('error', 'Error!');
+	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'Invalid privileges.');
 	$smarty->display('error.tpl');
 	die();
@@ -66,7 +66,7 @@ if ($userlevel < 2) {
 	if (isset($action)) {
 		if ($action == 'invite') {
 			if (!isset($_GET['email'])) {
-				$smarty->assign('error', 'Error!');
+				$smarty->assign('pageheading', 'Error!');
 				$smarty->assign('details', 'Missing email.');
 				$smarty->display('error.tpl');
 				die();
@@ -78,8 +78,8 @@ if ($userlevel < 2) {
 				$adodb->Execute($sql);
 			}
 		} else {
-			$smarty->assign('error', 'Error!');
-			$smarty->assign('error', 'Missing argument!');
+			$smarty->assign('pageheading', 'Error!');
+			$smarty->assign('details', 'Missing argument!');
 			$smarty->display('error.tpl');
 			die();
 		}

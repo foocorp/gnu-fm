@@ -63,7 +63,7 @@ if(isset($_GET['auth'])) {
 	catch (exception $e) {
 		$errors = 'An error occurred.';
 		$details =  $e->getMessage();
-		$smarty->assign('error', $errors);
+		$smarty->assign('pageheading', $errors);
 		$smarty->assign('details', $details);
 		$smarty->display('error.tpl');
 	    	die();
@@ -130,7 +130,7 @@ if(isset($_POST['register'])) {
 		    reportError('Create user, insert, register.php', $e->getMessage());
 		    $errors .= 'An error occurred.'; 
 		    $details = $e->getMessage();
-		    $smarty->assign('error', $errors);
+		    $smarty->assign('pageheading', $errors);
 		    $smarty->assign('details', $details);
 		    $smarty->display('error.tpl');
 		    die();
@@ -148,7 +148,7 @@ if(isset($_POST['register'])) {
 		    reportError('AccountActivation, insert, register.php', $e->getMessage());
 		    $errors .= 'An error occurred.';
 		    $details = $e->getMessage();
-		    $smarty->assign('error', $errors);
+		    $smarty->assign('pageheading', $errors);
 		    $smarty->assign('details', $details);
 		    $smarty->display('error.tpl');
 		    die();

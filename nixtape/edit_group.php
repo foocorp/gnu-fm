@@ -27,7 +27,7 @@ require_once('data/TagCloud.php');
 
 if($logged_in == false)
 {
-	$smarty->assign('error', 'Error!');
+	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'Not logged in! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
 	die();
@@ -40,7 +40,7 @@ if ($_REQUEST['group']=='new')
 		try {
 			$result = Group::create(strtolower($_REQUEST['new']), $this_user);
 		} catch (exception $e) {
-			$smarty->assign('error', 'Error!');
+			$smarty->assign('pageheading', 'Error!');
 			$smarty->assign('details', $e->getMessage());
 			$smarty->display('error.tpl');
 			die();
@@ -66,7 +66,7 @@ $group = new Group($_REQUEST['group']);
 
 if ($group->owner->name != $this_user->name)
 {
-	$smarty->assign('error', 'Error!');
+	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'You don\'t own this group!');
 	$smarty->display('error.tpl');
 	die();
@@ -104,7 +104,7 @@ if ($_POST['submit'])
 
 			if (! $group->memberCheck($new_owner))
 			{
-				$smarty->assign('error', 'Error!');
+				$smarty->assign('pageheading', 'Error!');
 				$smarty->assign('details', 'Cannot assign group ownership to someone who is not a member!');
 				$smarty->display('error.tpl');
 				die();
@@ -158,7 +158,7 @@ if(isset($group->name))
 	$smarty->assign('owner',   $group->owner);
 
 	# And display the page.
-	$smarty->assign('errors', $errors);
+	$smarty->assign('pageheading', $errors);
 	$smarty->assign('newform', false);
 	try {
 		$aUserTagCloud = $group->tagCloudData();
@@ -169,7 +169,7 @@ if(isset($group->name))
 
 else
 {
-	$smarty->assign('error', 'Group not found');
+	$smarty->assign('pageheading', 'Group not found');
 	$smarty->assign('details', 'Shall I call in a missing peoples report? This shouldn\'t happen.');
 	$smarty->display('error.tpl');
 }

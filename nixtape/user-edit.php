@@ -27,7 +27,7 @@ require_once('data/TagCloud.php');
 
 if($logged_in == false)
 {
-	$smarty->assign('error', 'Error!');
+	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'Not logged in! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
 	die();
@@ -193,7 +193,7 @@ if(isset($this_user->name))
 
 else
 {
-	$smarty->assign('error', 'User not found');
+	$smarty->assign('pageheading', 'User not found');
 	$smarty->assign('details', 'Shall I call in a missing persons report? This shouldn\'t happen.');
 	$smarty->display('error.tpl');
 }

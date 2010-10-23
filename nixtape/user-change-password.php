@@ -26,7 +26,7 @@ require_once('data/TagCloud.php');
 
 if($logged_in == false)
 {
-	$smarty->assign('error', 'Error!');
+	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'Not logged in! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
 	die();

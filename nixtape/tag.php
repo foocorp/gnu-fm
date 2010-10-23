@@ -27,7 +27,7 @@ require_once('data/Server.php');
 require_once('data/TagCloud.php');
 
 if(!isset($_GET['tag'])) {
-        $smarty->assign('error', 'No tag specified');
+        $smarty->assign('pageheading', 'No tag specified');
         $smarty->assign('details', 'You need to specify what tag you wish to view details for.');
 	$smarty->display('error.tpl');
 	die();
@@ -40,7 +40,7 @@ try {
 	$tagCloud = TagCloud::generateTagCloud('tags', 'artist', 40, $tag, "tag");
 	$smarty->assign('tagcloud', $tagCloud);
 } catch (exception $ex) {
-	$smarty->assign('error', 'No artists found');
+	$smarty->assign('pageheading', 'No artists found');
 	$smarty->assign('details', 'No artists could be found that have been tagged with "' . $tag . '"');
 	$smarty->display('error.tpl');
 	die();
