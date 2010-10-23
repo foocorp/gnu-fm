@@ -112,11 +112,7 @@ function method_user_getRecentTracks() {
 	}
 
 	$xml = UserXML::getRecentTracks($_GET['user'], $_GET['limit'], $page);
-	if ($_GET['format'] == 'json') {
-		json_response(JSONEncoder::encodeXML($xml));
-	} else {
-		xml_response($xml);
-	}
+	respond($xml);
 }
 
 function method_user_getTopTags() {
@@ -125,7 +121,7 @@ function method_user_getTopTags() {
 	}
 
 	$xml = UserXML::getTopTags($_GET['user']);
-	xml_response($xml);
+	respond($xml);
 }
 
 
@@ -135,7 +131,7 @@ function method_user_getTopTracks() {
 	}
 
 	$xml = UserXML::getTopTracks($_GET['user'], $_GET['period']);
-	xml_response($xml);
+	respond($xml);
 }
 
 function method_user_getInfo() {
@@ -144,11 +140,7 @@ function method_user_getInfo() {
 	}
 
 	$xml = UserXML::getInfo($_GET['user']);
-	if ($_GET['format'] == 'json') {
-		json_response(JSONEncoder::encodeXML($xml));
-	} else {
-		xml_response($xml);
-	}
+	respond($xml);
 }
 
 function method_user_getLovedTracks() {
@@ -164,11 +156,7 @@ function method_user_getLovedTracks() {
 	}
 
 	$xml = UserXML::getLovedTracks($user, $limit);
-	if ($_GET['format'] == 'json') {
-		json_response(UserJSON::getLovedTracks($user, $limit));
-	} else {
-		xml_response($xml);
-	}
+	respond($xml);
 }
 
 
@@ -184,7 +172,7 @@ function method_artist_addTags() {
 	
 	$userid = get_userid();
 	$xml = TrackXML::addTags($userid, $_POST['artist'], '', '', $_POST['tags']);
-	xml_response($xml);
+	respond($xml);
 }
 
 function method_artist_getInfo() {
@@ -193,7 +181,7 @@ function method_artist_getInfo() {
 	}
 	
 	$xml = ArtistXML::getInfo($_GET['artist']);
-	xml_response($xml);
+	respond($xml);
 }
 
 function method_artist_getTopTracks() {
@@ -202,7 +190,7 @@ function method_artist_getTopTracks() {
 	}
 
 	$xml = ArtistXML::getTopTracks($_GET['artist']);
-	xml_response($xml);
+	respond($xml);
 }
 
 function method_artist_getTopTags() {
@@ -211,7 +199,7 @@ function method_artist_getTopTags() {
 	}
 
 	$xml = ArtistXML::getTopTags($_GET['artist']);
-	xml_response($xml);
+	respond($xml);
 }
 
 
@@ -226,7 +214,7 @@ function method_album_addTags() {
 
 	$userid = get_userid();
 	$xml = TrackXML::addTags($userid, $_POST['artist'], $_POST['album'], '', $_POST['tags']);
-	xml_response($xml);
+	respond($xml);
 }
 
 function method_album_getTopTags() {
@@ -235,7 +223,7 @@ function method_album_getTopTags() {
 	}
 
 	$xml = AlbumXML::getTopTags($_GET['artist'], $_GET['album']);
-	xml_response($xml);
+	respond($xml);
 }
 
 
@@ -259,12 +247,7 @@ function method_auth_getToken() {
 	}
 
 	$xml = '<lfm status="ok"><token>' . $key . '</token></lfm>';
-	if ($_GET['format'] == 'json') {
-		$json_data = array('token' => $key);
-		json_response(json_encode($json_data));
-	} else {
-		xml_response($xml);
-	}
+	respond($xml);
 }
 
 function method_auth_getMobileSession() {
@@ -429,7 +412,7 @@ function method_track_addTags() {
 
 	$userid = get_userid();
 	$xml = TrackXML::addTags($userid, $_POST['artist'], $_POST['album'], $_POST['track'], $_POST['tags']);
-	xml_response($xml);
+	respond($xml);
 }
 
 function method_track_getTopTags() {
@@ -438,7 +421,7 @@ function method_track_getTopTags() {
 	}
 
 	$xml = TrackXML::getTopTags($_GET['artist'], $_GET['track']);
-	xml_response($xml);
+	respond($xml);
 }
 
 function method_track_getTags() {
@@ -450,7 +433,7 @@ function method_track_getTags() {
 
 	$userid = get_userid();
 	$xml = TrackXML::getTags($_GET['artist'], $_GET['track'], $userid);
-	xml_response($xml);
+	respond($xml);
 }
 
 function method_track_ban() {
@@ -460,7 +443,7 @@ function method_track_ban() {
 
 	$userid = get_userid();
 	$xml = TrackXML::ban($_POST['artist'], $_POST['track'], $userid);
-	xml_response($xml);
+	respond($xml);
 }
 
 function method_track_love() {
@@ -470,7 +453,7 @@ function method_track_love() {
 
 	$userid = get_userid();
 	$xml = TrackXML::love($_POST['artist'], $_POST['track'], $userid);
-	xml_response($xml);
+	respond($xml);
 }
 
 function get_userid() {
@@ -513,6 +496,14 @@ function report_failure($code) {
 		print("	<error code=\"{$code}\">".$error_text[$code]."</error></lfm>");
 	}
 	die();
+}
+
+function respond($xml) {
+	if ($_REQUEST['format'] == 'json') {
+		json_response(JSONEncoder::encodeXML($xml));
+	} else {
+		xml_response($xml);
+	}
 }
 
 function xml_response($xml) {
