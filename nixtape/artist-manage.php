@@ -75,6 +75,7 @@ $smarty->assign('bio_summary', $artist->bio_summary);
 $smarty->assign('bio_content', $artist->bio_content);
 $smarty->assign('homepage', $artist->homepage);
 $smarty->assign('image', $artist->image_medium);
+$smarty->assign('pageheading', 'Managing ' . $artist->name);
 
 $smarty->display("artist-manage.tpl");
 ?>
