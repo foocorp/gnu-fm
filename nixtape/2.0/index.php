@@ -246,7 +246,7 @@ function method_auth_getToken() {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 
-	$xml = '<lfm status="ok"><token>' . $key . '</token></lfm>';
+	$xml = simplexml_load_string('<lfm status="ok"><token>' . $key . '</token></lfm>');
 	respond($xml);
 }
 
