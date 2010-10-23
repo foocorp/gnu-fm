@@ -22,7 +22,7 @@
 require_once('../database.php');
 require_once('../api/ArtistXML.php');
 require_once('../api/UserXML.php');
-require_once('../api/UserJSON.php');
+require_once('../api/JSONEncoder.php');
 require_once('../api/TrackXML.php');
 require_once('../api/AlbumXML.php');
 require_once('../data/Server.php');
@@ -113,7 +113,7 @@ function method_user_getRecentTracks() {
 
 	$xml = UserXML::getRecentTracks($_GET['user'], $_GET['limit'], $page);
 	if ($_GET['format'] == 'json') {
-		json_response(UserJSON::getRecentTracks($_GET['user'], $_GET['limit'], $page));
+		json_response(JSONEncoder::encodeXML($xml));
 	} else {
 		xml_response($xml);
 	}
@@ -145,7 +145,7 @@ function method_user_getInfo() {
 
 	$xml = UserXML::getInfo($_GET['user']);
 	if ($_GET['format'] == 'json') {
-		json_response(UserJSON::getInfo($_GET['user']));
+		json_response(JSONEncoder::encodeXML($xml));
 	} else {
 		xml_response($xml);
 	}
