@@ -24,7 +24,7 @@ require_once ('data/User.php');
 require_once ('utils/random_code_generator.php');
 
 if ($logged_in == false) {
-	$smarty->assign('error', 'Error!');
+	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'Not logged in! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
 	die ();
@@ -40,9 +40,8 @@ catch (exception $e) {
 		exit;
 	}
 	if (!$res) {
-		$error = 'Invalid code.';
-		$smarty->assign('error', 'Error!');
-		$smarty->assign('details', $error);
+		$smarty->assign('pageheading', 'Error!');
+		$smarty->assign('details', 'Invalid code.');
 		$smarty->display('error.tpl');
 		die ();
 	} else {

@@ -29,14 +29,14 @@ require_once('data/TagCloud.php');
 try {
 	$artist = new Artist(urldecode($_GET['artist']));
 } catch (exception $e) {
-        $smarty->assign('error', 'Artist not found.');
+        $smarty->assign('pageheading', 'Artist not found.');
         $smarty->assign('details', 'The artist '.($_GET['artist']).' was not found in the database.');
 	$smarty->display('error.tpl');
 	die();
 }
 
 if(!isset($this_user) || !$this_user->manages($artist->name)) {
-	$smarty->assign('error', 'Permission denied');
+	$smarty->assign('pageheading', 'Permission denied');
 	$smarty->assign('error', 'You don\'t have permission to edit this artist\'s details.');
 	die();
 }

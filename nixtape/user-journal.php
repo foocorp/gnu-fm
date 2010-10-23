@@ -28,7 +28,7 @@ require_once('utils/arc/ARC2.php');
 require_once('utils/human-time.php');
 
 if(!isset($_GET['user']) && $logged_in == false) {
-        $smarty->assign('error', 'Error!');
+        $smarty->assign('pageheading', 'Error!');
         $smarty->assign('details', 'User not set! You shouldn\'t be here!');
         $smarty->display('error.tpl');
         die();
@@ -37,7 +37,7 @@ if(!isset($_GET['user']) && $logged_in == false) {
 $user = new User(urldecode($_GET['user']));
 
 if(! $user->journal_rss ) {
-        $smarty->assign('error', 'Error!');
+        $smarty->assign('pageheading', 'Error!');
         $smarty->assign('details', 'You need an RSS feed set up for your account.');
         $smarty->display('error.tpl');
         die();

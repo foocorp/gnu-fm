@@ -27,7 +27,7 @@ require_once('data/TagCloud.php');
 require_once('data/Statistic.php');
 
 if(!isset($_GET['user']) && $logged_in == false) {
-	$smarty->assign('error', 'Error!');
+	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'User not set! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
 	die();
@@ -65,7 +65,7 @@ try {
 	try {
 		$smarty->assign('toptracks', $user->getTopTracks(40));
 	} catch (exception $e) {
-		$smarty->assign('error', 'Couldn\'t get users top tracks!');
+		$smarty->assign('pageheading', 'Couldn\'t get users top tracks!');
 		$smarty->assign('details', 'User ' . $user->name . ' doesn\'t seem to have scrobbled anything yet.');
 		$smarty->display('error.tpl');
 		die();
@@ -93,7 +93,7 @@ try {
 	$smarty->assign('stats', true);
 	$smarty->display('user-stats.tpl');
 } else {
-	$smarty->assign('error', 'User not found');
+	$smarty->assign('pageheading', 'User not found');
 	$smarty->assign('details', 'Shall I call in a missing persons report?');
 	$smarty->display('error.tpl');
 }

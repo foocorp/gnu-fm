@@ -29,7 +29,7 @@ require_once('data/TagCloud.php');
 try {
 	$artist = new Artist(urldecode($_GET['artist']));
 } catch (exception $e) {
-        $smarty->assign('error', 'Artist not found.');
+        $smarty->assign('pageheading', 'Artist not found.');
         $smarty->assign('details', 'The artist '.($_GET['artist']).' was not found in the database.');
 	$smarty->display('error.tpl');
 	die();

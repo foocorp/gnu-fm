@@ -28,7 +28,7 @@ require_once('data/Server.php');
 
 
 if(!isset($_GET['user']) && $logged_in == false) {
-	$smarty->assign('error', 'Error!');
+	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'User not set! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
 	die();
@@ -60,7 +60,7 @@ if(isset($user->name)) {
 
 	$smarty->display('user-groups.tpl');
 } else {
-	$smarty->assign('error', 'User not found');
+	$smarty->assign('pageheading', 'User not found');
 	$smarty->assign('details', 'Shall I call in a missing persons report?');
 	$smarty->display('error.tpl');
 }

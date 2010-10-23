@@ -34,7 +34,7 @@ $smarty->assign('album', $album);
 try {
 	$artist = new Artist($track->artist_name);
 } catch (exception $e) {
-	$smarty->assign('error', 'Artist not found.');
+	$smarty->assign('pageheading', 'Artist not found.');
 	$smarty->assign('details', 'The artist ' . $track->artist_name . ' was not found in the database.');
 	$smarty->display('error.tpl');
 	die();
