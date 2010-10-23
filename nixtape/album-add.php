@@ -27,6 +27,7 @@ require_once('data/Album.php');
 $artist = new Artist(urldecode($_GET['artist']));
 
 $smarty->assign('artist', $artist);
+$smarty->assign('pageheading', '<a href="' . $artist->getURL() . '">' . $artist->name . '</a> &mdash; Add Album');
 
 if (isset($_POST['submit'])) {
 
