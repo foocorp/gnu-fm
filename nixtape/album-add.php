@@ -24,7 +24,7 @@ require_once('database.php');
 require_once('templating.php');
 require_once('data/Album.php');
 
-$artist = new Artist($_GET['artist']);
+$artist = new Artist(urldecode($_GET['artist']));
 
 $smarty->assign('artist', $artist);
 
