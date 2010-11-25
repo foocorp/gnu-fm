@@ -252,4 +252,92 @@ class Artist {
 		$streamable = $adodb->CacheGetOne(600, 'SELECT count(*) AS streamable from TRACK WHERE artist_name = ' . $adodb->qstr($this->name) . ' AND streamable = 1');
 		return $streamable;
 	}
+
+	/**
+	 * Retrieves a list of similar artist names
+	 *
+	 * @return An array of artists and their similarity measure (between 0 and 1), sorted from most to least similar
+	 */
+	function getSimilar($limit = 10) {
+		global $adodb;
+
+		$similarArtists = array();
+
+		// Find this artist's tags
+		$tmpTags = $adodb->CacheGetAll(86400, 'SELECT lower(tag) as ltag, count(tag) as num FROM Tags WHERE artist = ' . $adodb->qstr($this->name) . ' GROUP BY ltag ORDER BY num DESC');
+		$tagCount = $adodb->CacheGetOne(86400, 'SELECT count(artist) FROM Tags WHERE artist = ' . $adodb->qstr($this->name));
+		// Narrow down similar artists to ones that at least share the most common tag and get hold of their other tags
+		$otherArtists = $adodb->CacheGetAll(86400, 'SELECT artist, lower(tag) as ltag, count(tag) as num FROM Tags WHERE artist in '
+			. '(SELECT distinct(artist) FROM Tags WHERE lower(tag) = ' . $adodb->qstr($tmpTags[0]['ltag']) . ') '
+			. 'GROUP BY artist, ltag ORDER BY num DESC');
+
+
+		$totalTags = array();
+		// Normalise tag proportions
+		foreach($otherArtists as &$commonArtist) {
+			if(!array_key_exists($commonArtist['artist'], $totalTags)) {
+				$totalTags[$commonArtist['artist']] = $commonArtist['num'];
+			}
+
+			$totalTags[$commonArtist['artist']] += $commonArtist['num'];
+		}
+		foreach($otherArtists as &$commonArtist) {
+			$commonArtist['num'] /= $totalTags[$commonArtist['artist']];
+		}
+		$tags = array();
+		foreach($tmpTags as &$tag) {
+			$tags[$tag['ltag']] = $tag['num'] / $tagCount;
+		}
+
+		$mostSimilar = 1;
+		// Calculate similarity
+		foreach($otherArtists as &$commonArtist) {
+			if(!array_key_exists($commonArtist['artist'], $similarArtists)) {
+				$similarArtists[$commonArtist['artist']] = array('artist' => $commonArtist['artist'], 'similarity' => 0);
+			}
+
+			if(array_key_exists($commonArtist['ltag'], $tags)) {
+				$sdiff = (1 - abs($tags[$commonArtist['ltag']] - $commonArtist['num'])) * $tags[$commonArtist['ltag']];
+			} else {
+				$sdiff = 0;
+			}
+
+			$similarArtists[$commonArtist['artist']]['similarity'] += $sdiff;
+
+			if ($similarArtists[$commonArtist['artist']]['similarity'] > $mostSimilar) {
+				$mostSimilar = $similarArtists[$commonArtist['artist']]['similarity'];
+			}
+		}
+
+		// Normalise similarity metric
+		foreach($similarArtists as &$artist) {
+			$artist['similarity'] /= $mostSimilar;
+		}
+
+		// Sort artists by similarity
+		$tmp = array();
+		foreach($similarArtists as &$ar) {
+			$tmp[] = &$ar["similarity"];
+		}
+		array_multisort($tmp, SORT_DESC, $similarArtists);
+
+		$similarWithMeta = array();
+		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
+		$i = 0;
+		foreach($similarArtists as $artist) {
+			if($artist['artist'] != $this->name) {
+				$similarWithMeta[$i]['artist'] = $artist['artist'];
+				$similarWithMeta[$i]['similarity'] = $artist['similarity'];
+				$similarWithMeta[$i]['url'] = Server::getArtistURL($artist['artist']);
+				$similarWithMeta[$i]['size'] = $sizes[(int) ($i/($limit/count($sizes)))];
+				$i++;
+				if($i >= $limit) {
+					break;
+				}
+			}
+		}
+		sort($similarWithMeta);
+		return $similarWithMeta;
+	}
+
 }
