@@ -249,8 +249,7 @@ class Artist {
 
 	function isStreamable() {
 		global $adodb;
-		$streamable = $adodb->CacheGetOne(600, 'SELECT count(*) AS streamable from TRACK WHERE artist_name = ' . $adodb->qstr($this->name) . ' AND streamable = 1');
-		return $streamable;
+		return $this->streamable;
 	}
 
 	/**
