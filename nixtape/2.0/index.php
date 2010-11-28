@@ -86,6 +86,7 @@ $method_map = array(
 	'user.getrecenttracks'		=> method_user_getRecentTracks,
 	'user.gettoptags'		=> method_user_getTopTags,
 	'user.getlovedtracks'		=> method_user_getLovedTracks,
+	'user.getbannedtracks'		=> method_user_getBannedTracks,
 	'radio.tune'			=> method_radio_tune,
 	'radio.getplaylist'		=> method_radio_getPlaylist,
 	'track.addtags'			=> method_track_addTags,
@@ -93,6 +94,8 @@ $method_map = array(
 	'track.gettags'			=> method_track_getTags,
 	'track.ban'			=> method_track_ban,
 	'track.love'			=> method_track_love,
+	'track.unlove'			=> method_track_unlove,
+	'track.unban'			=> method_track_unban,
 );
 
 
@@ -156,6 +159,22 @@ function method_user_getLovedTracks() {
 	}
 
 	$xml = UserXML::getLovedTracks($user, $limit);
+	respond($xml);
+}
+
+function method_user_getBannedTracks() {
+	if (!isset($_GET['user'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$user = $_GET['user'];
+	if (isset($_GET['limit'])) {
+		$limit = $_GET['limit'];
+	} else {
+		$limit = 50;
+	}
+
+	$xml = UserXML::getBannedTracks($user, $limit);
 	respond($xml);
 }
 
@@ -455,6 +474,28 @@ function method_track_love() {
 	$xml = TrackXML::love($_POST['artist'], $_POST['track'], $userid);
 	respond($xml);
 }
+
+function method_track_unlove() {
+	if (!isset($_POST['artist']) || !isset($_POST['track'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$userid = get_userid();
+	$xml = TrackXML::unlove($_POST['artist'], $_POST['track'], $userid);
+	respond($xml);
+}
+
+function method_track_unban() {
+	if (!isset($_POST['artist']) || !isset($_POST['track'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$userid = get_userid();
+	$xml = TrackXML::unban($_POST['artist'], $_POST['track'], $userid);
+	respond($xml);
+}
+
+
 
 function get_userid() {
 	global $adodb;

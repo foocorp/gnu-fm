@@ -330,6 +330,23 @@ class User {
 	}
 
 	/**
+	 * Get a user's banned tracks
+	 *
+	 * @param int $limit The number of tracks to return (defaults to 50)
+	 * @return An array of track details
+	 */
+	function getBannedTracks($limit=50) {
+		global $adodb;
+
+		$res = $adodb->CacheGetAll(600, 'SELECT * FROM Banned_Tracks WHERE '
+			. ' userid = ' . $this->uniqueid . ' ORDER BY time DESC'
+			. ' LIMIT ' . $limit);
+
+		return $res;
+	}
+
+
+	/**
 	 * Determines whether a user has permission to manage an artist
 	 *
 	 * @oaram string $artist The name of the artist to check
