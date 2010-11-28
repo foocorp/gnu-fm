@@ -19,9 +19,7 @@ class SetArtistStreamable:
 			name = artist[0]
 			print "marking %s as streamable... " % name
 			self.cursor.execute("UPDATE artist SET streamable = 1 WHERE name = %s", (name,))
-		print "Applying changes... ",
-		self.conn.commit()
-		print "done."
+			self.conn.commit()
 
 if __name__ == '__main__':
 	sas = SetArtistStreamable()
