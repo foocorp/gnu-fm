@@ -34,7 +34,6 @@ class UserXML {
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$user_node = $xml->addChild('user', null);
 		$user_node->addChild('name', $user->name);
-//		$user_node->addChild('email', $user->email); // should this be public
 		$user_node->addChild('homepage', $user->homepage);
 		$user_node->addChild('location', $user->location);
 		$user_node->addChild('bio', $user->bio);
@@ -219,6 +218,7 @@ class UserXML {
 		return $xml;
 
 	}
+
 	public static function getBannedTracks($u, $limit=50) {
 		
 		try {
