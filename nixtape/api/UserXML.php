@@ -34,7 +34,6 @@ class UserXML {
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$user_node = $xml->addChild('user', null);
 		$user_node->addChild('name', $user->name);
-//		$user_node->addChild('email', $user->email); // should this be public
 		$user_node->addChild('homepage', $user->homepage);
 		$user_node->addChild('location', $user->location);
 		$user_node->addChild('bio', $user->bio);
@@ -202,23 +201,48 @@ class UserXML {
 		$root->addAttribute('user', $user->name);
 
 		foreach($res as &$row) {
-			$track = new Track($row['track'], $row['artist']);
-			$artist = new Artist($row['artist']);
 			$track_node = $root->addChild('track', null);
-			$track_node->addChild('name', repamp($track->name));
-			$track_node->addChild('mbid', $track->mbid);
-			$track_node->addChild('url', $track->getURL());
-			$date = $track_node->addChild('date', gmdate("d M Y H:i",$row['time']) . " GMT");
-			$date->addAttribute('uts', $row['time']);
-			$artist_node = $track_node->addChild('artist', null);
-			$artist_node->addChild('name', repamp($artist->name));
-			$artist_node->addChild('mbid', $artist->mbid);
-			$artist_node->addChild('url', $artist->getURL());
+			UserXML::_addLBTrackDetails($track_node, $row);
 		}
 
 		return $xml;
-
 	}
+
+	public static function getBannedTracks($u, $limit=50) {
+		
+		try {
+			$user = new User($u);
+			$res = $user->getBannedTracks($limit);
+		} catch (exception $ex) {
+			return XML::error('error', '7', 'Invalid resource specified');
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('bannedtracks');
+		$root->addAttribute('user', $user->name);
+
+		foreach($res as &$row) {
+			$track_node = $root->addChild('track', null);
+			UserXML::_addLBTrackDetails($track_node, $row);
+		}
+
+		return $xml;
+	}
+
+	private static function _addLBTrackDetails($track_node, $row) {
+		$track = new Track($row['track'], $row['artist']);
+		$artist = new Artist($row['artist']);
+		$track_node->addChild('name', repamp($track->name));
+		$track_node->addChild('mbid', $track->mbid);
+		$track_node->addChild('url', $track->getURL());
+		$date = $track_node->addChild('date', gmdate("d M Y H:i",$row['time']) . " GMT");
+		$date->addAttribute('uts', $row['time']);
+		$artist_node = $track_node->addChild('artist', null);
+		$artist_node->addChild('name', repamp($artist->name));
+		$artist_node->addChild('mbid', $artist->mbid);
+		$artist_node->addChild('url', $artist->getURL());
+	}
+
 
 }
 ?>
