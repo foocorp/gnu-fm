@@ -324,7 +324,8 @@ class Artist {
 		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
 		$i = 0;
 		foreach($similarArtists as $artist) {
-			if($artist['artist'] != $this->name) {
+			$streamable = $adodb->cacheGetOne(86400, 'SELECT streamable FROM Artist WHERE name = ' . $adodb->qstr($artist['artist']));
+			if($artist['artist'] != $this->name && $streamable) {
 				$similarWithMeta[$i]['artist'] = $artist['artist'];
 				$similarWithMeta[$i]['similarity'] = $artist['similarity'];
 				$similarWithMeta[$i]['url'] = Server::getArtistURL($artist['artist']);
