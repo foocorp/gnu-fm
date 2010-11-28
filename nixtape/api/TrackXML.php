@@ -120,5 +120,31 @@ class TrackXML {
 		return $xml;
 	}
 
+	public static function unban($artist, $name, $userid) {
+		global $adodb;
+
+		try {
+			$res = $adodb->Execute('DELETE FROM banned_tracks WHERE userid=' . $userid . ' AND track=' . $adodb->qstr($name) . ' AND artist=' . $adodb->qstr($artist) );
+		} catch (exception $ex) {}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+
+		return $xml;
+	}
+
+
+	public static function unlove($artist, $name, $userid) {
+		global $adodb;
+
+		try {
+			$res = $adodb->Execute('DELETE FROM loved_tracks WHERE userid='	. $userid . ' AND track=' . $adodb->qstr($name) . ' AND artist=' . $adodb->qstr($artist) );
+		} catch (exception $ex) {}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+
+		return $xml;
+	}
+
+
 }
 ?>
