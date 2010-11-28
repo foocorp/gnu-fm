@@ -161,6 +161,7 @@ class JamendoImport:
 						self.conn.rollback()
 						print 'ia', e
 
+				any_streamable_tracks = 0
 				for album in artist["albums"]:
 					if self.album_exists(artist["name"], album["name"]):
 						try:
@@ -196,6 +197,7 @@ class JamendoImport:
 							streamable = 0
 						else:
 							streamable = 1
+							any_streamable_tracks = 1
 
 						try:
 							duration = int(track["duration"])
@@ -233,6 +235,15 @@ class JamendoImport:
 								except Exception,  e:
 									self.conn.rollback()
 									print 'ig2', e
+
+
+				if any_streamable_tracks:
+					try:
+						self.cursor.execute("UPDATE Artist SET streamable = 1 WHERE name = %s", (artist["name"],))
+						self.conn.commit()
+					except Exception,  e:
+						self.conn.rollback()
+						print 'ua', e
 
 
 
