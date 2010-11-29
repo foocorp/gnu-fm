@@ -76,10 +76,14 @@ function make_playlist($session, $old_format=false) {
 	} elseif(ereg('l(ast|ibre)fm://artist/(.*)/similarartists', $url, $regs)) {
 		$artist = new Artist($regs[2]);
 		$similarArtists = $artist->getSimilar(20);
-		$artistsClause = 'lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist->name, 'UTF-8'));
-		for($i = 0; $i < 4; $i++) {
+		$similarArtists[]['name'] = $artist->name;
+		$artistsClause;
+		for($i = 0; $i < 5; $i++) {
 			$r = rand(0, count($similarArtists) - 1);
-			$artistsClause .= ' OR lower(artist_name) = ' . $adodb->qstr(mb_strtolower($similarArtists[$r]['artist'], 'UTF-8'));
+			if($i > 0) {
+				$artistsClause .= ' OR ';
+			}
+			$artistsClause .= 'lower(artist_name) = ' . $adodb->qstr(mb_strtolower($similarArtists[$r]['artist'], 'UTF-8'));
 		}
 		$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND ' . $artistsClause);
 	} elseif(ereg('l(ast|ibre)fm://artist/(.*)', $url, $regs)) {
