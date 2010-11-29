@@ -77,7 +77,7 @@ function make_playlist($session, $old_format=false) {
 		$artist = new Artist($regs[2]);
 		$similarArtists = $artist->getSimilar(20);
 		$artistsClause = 'lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist->name, 'UTF-8'));
-		for($i = 0; $i < 4; $i++) {
+		for($i = 0; $i < 8; $i++) {
 			$r = rand(0, count($similarArtists) - 1);
 			$artistsClause .= ' OR lower(artist_name) = ' . $adodb->qstr(mb_strtolower($similarArtists[$r]['artist'], 'UTF-8'));
 		}
