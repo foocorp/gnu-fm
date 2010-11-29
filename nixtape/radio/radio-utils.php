@@ -31,13 +31,13 @@ function radio_title_from_url($url) {
 		$tag = $regs[2];
 		return 'Libre.fm ' . ucwords($tag) . ' Tag Radio';
 	}
-	if(ereg('l(ast|ibre)fm://artist/(.*)', $url, $regs)) {
-		$artist = $regs[2];
-		return 'Libre.fm ' . ucwords($artist) . ' Artist Radio';
-	}
 	if(ereg('l(ast|ibre)fm://artist/(.*)/similarartists', $url, $regs)) {
 		$artist = $regs[2];
 		return 'Libre.fm ' . ucwords($artist) . ' Similar Artist Radio';
+	}
+	if(ereg('l(ast|ibre)fm://artist/(.*)', $url, $regs)) {
+		$artist = $regs[2];
+		return 'Libre.fm ' . ucwords($artist) . ' Artist Radio';
 	}
 	if(ereg('l(ast|ibre)fm://user/(.*)/loved', $url, $regs)) {
 		$user = $regs[2];
@@ -72,15 +72,24 @@ function make_playlist($session, $old_format=false) {
 
 	if(ereg('l(ast|ibre)fm://globaltags/(.*)', $url, $regs)) {
 		$tag = $regs[2];
-		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist WHERE streamurl<>\'\' AND streamable=1 AND lower(tag) = ' . $adodb->qstr(mb_strtolower($tag, 'UTF-8')));
-	} elseif(ereg('l(ast|ibre)fm://artist/(.*)/similarartists', $url, $regs) || ereg('l(ast|ibre)fm://artist/(.*)', $url, $regs)) {
+		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist WHERE streamable=1 AND lower(tag) = ' . $adodb->qstr(mb_strtolower($tag, 'UTF-8')));
+	} elseif(ereg('l(ast|ibre)fm://artist/(.*)/similarartists', $url, $regs)) {
+		$artist = new Artist($regs[2]);
+		$similarArtists = $artist->getSimilar(20);
+		$artistsClause = 'lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist->name, 'UTF-8'));
+		for($i = 0; $i < 4; $i++) {
+			$r = rand(0, count($similarArtists) - 1);
+			$artistsClause .= ' OR lower(artist_name) = ' . $adodb->qstr(mb_strtolower($similarArtists[$r]['artist'], 'UTF-8'));
+		}
+		$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND ' . $artistsClause);
+	} elseif(ereg('l(ast|ibre)fm://artist/(.*)', $url, $regs)) {
 		$artist = $regs[2];
-		$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamurl<>\'\' AND streamable=1 AND lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist, 'UTF-8')));
+		$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist, 'UTF-8')));
 	} elseif(ereg('l(ast|ibre)fm://user/(.*)/(loved|library)', $url, $regs)) {
 		$requser = new User($regs[2]);
-		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Loved_Tracks.userid=' . $requser->uniqueid . ' AND Track.streamurl<>\'\' AND Track.streamable=1');
+		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Loved_Tracks.userid=' . $requser->uniqueid . ' AND Track.streamable=1');
 	} elseif(ereg('l(ast|ibre)fm://community/loved', $url, $regs)) {
-		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Track.streamurl<>\'\' AND Track.streamable=1');
+		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Track.streamable=1');
 	} else {
 		die("FAILED\n"); // this should return a blank dummy playlist instead
 	}
