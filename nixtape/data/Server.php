@@ -201,13 +201,13 @@ class Server {
 	 * @param int $number The maximum number of tracks to return
 	 * @return An array of now playing data or null in case of failure
 	 */
-	static function getNowPlaying($number, $username=false) {
+	static function getNowPlaying($number=1, $username=false) {
 		global $adodb;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
 		if($username) {
-			$data = $adodb->CacheGetAll(60, 'SELECT
+			$data = $adodb->CacheGetAll(1, 'SELECT
 						ss.userid,
 						n.artist,
 						n.track,
