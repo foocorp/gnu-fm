@@ -76,18 +76,17 @@ function make_playlist($session, $old_format=false) {
 	} elseif(ereg('l(ast|ibre)fm://artist/(.*)/similarartists', $url, $regs)) {
 		$artist = new Artist($regs[2]);
 		$similarArtists = $artist->getSimilar(20);
-		$artistsClause = 'lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist->name, 'UTF-8'));
-		for($i = 0; $i < 8; $i++) {
-			$r = rand(0, count($similarArtists) - 1);
-			$artistsClause .= ' OR lower(artist_name) = ' . $adodb->qstr(mb_strtolower($similarArtists[$r]['artist'], 'UTF-8'));
-		}
-		$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND ' . $artistsClause);
+		$res = get_artist_selection($similarArtists, $artist);
 	} elseif(ereg('l(ast|ibre)fm://artist/(.*)', $url, $regs)) {
 		$artist = $regs[2];
 		$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist, 'UTF-8')));
 	} elseif(ereg('l(ast|ibre)fm://user/(.*)/(loved|library)', $url, $regs)) {
 		$requser = new User($regs[2]);
 		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Loved_Tracks.userid=' . $requser->uniqueid . ' AND Track.streamable=1');
+	} elseif(ereg('l(ast|ibre)fm://user/(.*)/recommended', $url, $regs)) {
+		$requser = new User($regs[2]);
+		$recommendedArtists = $requser->getRecommended(8, true);
+		$res = get_artist_selection($recommendedArtists);
 	} elseif(ereg('l(ast|ibre)fm://community/loved', $url, $regs)) {
 		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Track.streamable=1');
 	} else {
@@ -154,6 +153,23 @@ function make_playlist($session, $old_format=false) {
 	} else {
 		$smarty->display('radio_xspf.tpl');
 	}
+}
+
+
+function get_artist_selection($artists, $artist=false) {
+	global $adodb;
+
+	if($artist) {
+		$artistsClause = 'lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist->name, 'UTF-8'));
+	}
+	for($i = 0; $i < 8; $i++) {
+		$r = rand(0, count($artists) - 1);
+		if($i != 0 || $artist) {
+			$artistsClause .= ' OR ';
+		}
+		$artistsClause .= 'lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artists[$r]['artist'], 'UTF-8'));
+	}
+	return $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND ' . $artistsClause);
 }
 
 ?>
