@@ -50,6 +50,10 @@ if(isset($user->name)) {
 	$aUserNowPlaying = $user->getNowPlaying(10);
 		$smarty->assign('nowplaying', $aUserNowPlaying);
 	} catch (exception $e) {}
+	if($user->hasLoved()) {
+		$recommendedArtists = $user->getRecommended(10);
+		$smarty->assign('recommendedArtists', $recommendedArtists);
+	}
 	$smarty->assign('isme', ($this_user->name == $user->name));
 	$smarty->assign('me', $user);
 	$smarty->assign('pagetitle', $user->name);
