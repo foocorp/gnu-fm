@@ -74,7 +74,7 @@ class User {
 			$this->avatar_uri   = $row['avatar_uri'];
 			$this->laconica_profile = $row['laconica_profile'];
 			$this->journal_rss  = $row['journal_rss'];
-			$this->acctid       = $this->getURL() . '#acct';
+			$THIS->acctid       = $this->getURL() . '#acct';
 			$this->created	    = $row['created'];
 			$this->modified     = $row['modified'];
 			$this->uniqueid     = $row['uniqueid'];
@@ -328,6 +328,40 @@ class User {
 
 		return $res;
 	}
+
+	/**
+	 * Get a user's loved artists
+	 *
+	 * @param int $limit The number of artists to return (defaults to 10)
+	 * @return An array of artist details
+	 */
+	function getLovedArtists($limit=10) {
+		global $adodb;
+
+		$res = $adodb->CacheGetAll(600, 'SELECT artist, count(artist) as num FROM Loved_Tracks WHERE '
+			. ' userid = ' . $this->uniqueid . ' GROUP BY artist ORDER BY num DESC');
+
+		// Add meta data (url, tag size, etc.)
+		$i = 0;
+		$lovedWithMeta = array();
+		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
+		foreach($res as $artist) {
+			$streamable = $adodb->cacheGetOne(86400, 'SELECT streamable FROM Artist WHERE name = ' . $adodb->qstr($artist['artist']));
+			if($streamable) {
+				$lovedWithMeta[$i]['artist'] = $artist['artist'];
+				$lovedWithMeta[$i]['numLoved'] = $artist['num'];
+				$lovedWithMeta[$i]['url'] = Server::getArtistURL($artist['artist']);
+				$lovedWithMeta[$i]['size'] = $sizes[(int) ($i/($limit/count($sizes)))];
+				$i++;
+				if($i >= $limit) {
+					break;
+				}
+			}
+		}
+		sort($lovedWithMeta);
+		return $lovedWithMeta;
+	}
+
 
 	/**
 	 * Get a user's banned tracks
