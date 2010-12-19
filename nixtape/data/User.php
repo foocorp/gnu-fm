@@ -392,9 +392,9 @@ class User {
 
 		$loved = $this->getLovedTracks(50);
 		$artists = array();
-		for($i = 0; $i < $limit; $i++) {
+		for($i = 0; $i < min($limit, count($loved) - 1); $i++) {
 			if($random) {
-				$n = rand(0, count($loved));
+				$n = rand(0, count($loved) - 1);
 			} else {
 				$n = $i;
 			}
