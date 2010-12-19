@@ -347,6 +347,48 @@ class User {
 
 
 	/**
+	 * Get artists recommended for this yser
+	 *
+	 * @param int $limit The number of artists to return (defaults to 10)
+	 * @param bool $randomised Pick artists at random
+	 * @return An array of artist details
+	 */
+	function getRecommended($limit=10, $random=false) {
+		global $adodb;
+
+		$loved = $this->getLovedTracks(50);
+		$artists = array();
+		for($i = 0; $i < $limit; $i++) {
+			if($random) {
+				$n = rand(0, count($loved));
+			} else {
+				$n = $i;
+			}
+			$artists[] = $loved[$n]['artist'];
+		}
+		
+		$recommendedArtists = array();
+		foreach($artists as $artist_name) {
+			$artist = new Artist($artist_name);
+			$similar = $artist->getSimilar(5);
+			foreach($similar as $sa) {
+				$recommendedArtists[] = $sa;
+			}
+		}
+
+		if($random) {
+			$randomArtists = array();
+			for($i = 0; $i < $limit; $i++) {
+				$randomArtists[] = $recommendedArtists[rand(0, count($recommendedArtists) - 1)];
+
+			}
+			return $randomArtists;
+		} else {
+			return array_slice($recommendedArtists, 0, $limit);
+		}
+	}
+
+	/**
 	 * Determines whether a user has permission to manage an artist
 	 *
 	 * @oaram string $artist The name of the artist to check
