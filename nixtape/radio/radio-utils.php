@@ -43,6 +43,10 @@ function radio_title_from_url($url) {
 		$user = $regs[2];
 		return 'Libre.fm ' . ucwords($user) . '\'s Loved Radio';
 	}
+	if(ereg('l(ast|ibre)fm://user/(.*)/recommended', $url, $regs)) {
+		$user = $regs[2];
+		return 'Libre.fm ' . ucwords($user) . '\'s Recommended Radio';
+	}
 	if(ereg('l(ast|ibre)fm://community/loved', $url, $regs)) {
 		return 'Libre.fm Community\'s Loved Radio';
 	}
