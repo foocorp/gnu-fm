@@ -406,7 +406,9 @@ class User {
 			$artist = new Artist($artist_name);
 			$similar = $artist->getSimilar(5);
 			foreach($similar as $sa) {
-				$recommendedArtists[] = $sa;
+				if(!array_key_exists($sa['artist'], $recommendedArtists)) {
+					$recommendedArtists[$sa['artist']] = $sa;
+				}
 			}
 		}
 
