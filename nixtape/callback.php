@@ -52,7 +52,7 @@ if($_GET['token'] && $_GET['webservice_url'] && $logged_in == true) {
 	// Delete any old connection to this service
 	$adodb->Execute('DELETE FROM Service_Connections WHERE '
 		. 'userid = ' . $this_user->uniqueid . ' AND '
-		. 'webservice_url = ' . $webservice_url);
+		. 'webservice_url = ' . $adodb->qstr($webservice_url));
 
 	// Create our new connection
 	$adodb->Execute('INSERT INTO Service_Connections VALUES('
