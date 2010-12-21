@@ -34,9 +34,9 @@ if($_GET['token'] && $_GET['webservice_url'] && $logged_in == true) {
 		if($child == 'session') {
 			foreach($value->children() as $child2 => $value2) {
 				if($child2 == 'name') {
-					$remote_username = $value;
+					$remote_username = $value2;
 				} elseif($child2 == 'key') {
-					$remote_key = $key;
+					$remote_key = $value2;
 				}
 			}
 		}
