@@ -58,8 +58,8 @@ if($_GET['token'] && $_GET['webservice_url'] && $logged_in == true) {
 	$adodb->Execute('INSERT INTO Service_Connections VALUES('
 		. $this_user->uniqueid . ', '
 		. $adodb->qstr($webservice_url) . ', '
-		. $adodb->qstr($remote_username) . ', '
-		. $adodb->qstr($remote_key) . ')');
+		. $adodb->qstr($remote_key) . ', '
+		. $adodb->qstr($remote_username) . ')');
 
 	$smarty->assign('pageheading', 'Account connected');
 	$smarty->display('account-connected.tpl');
