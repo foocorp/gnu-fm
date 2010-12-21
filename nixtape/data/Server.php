@@ -326,12 +326,16 @@ class Server {
 		}
 	}
 
-	static function getArtistURL($artist) {
+	static function getArtistURL($artist, $component='') {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . '/artist/' . urlencode($artist);
+			return $base_url . '/artist/' . urlencode($artist) . '/' . $component;
 		} else {
-			return $base_url . '/artist.php?artist=' . urlencode($artist);
+			if($component) {
+				return $base_url . '/artist-' . $component . '.php?artist=' . urlencode($artist);
+			} else {
+				return $base_url . '/artist.php?artist=' . urlencode($artist);
+			}
 		}
 	}
 
