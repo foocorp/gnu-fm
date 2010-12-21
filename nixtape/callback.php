@@ -25,12 +25,50 @@ require_once('templating.php');
 require_once('data/sanitize.php');
 require_once('data/Server.php');
 
-if($_GET['token'] && $_GET['webservice_url']) {
+if($_GET['token'] && $_GET['webservice_url'] && $logged_in == true) {
 	$token = $_GET['token'];
 	$webservice_url = $_GET['webservice_url'];
 	$sig = md5('api_key' . $lastfm_key . 'methodauth.getSession' . 'token' . $token  . $lastfm_secret);
 	$xmlresponse = simplexml_load_file($webservice_url . '?method=auth.getSession&token=' . $token . '&api_key=' . $lastfm_key . '&api_sig=' . $sig);
-	print_r($xmlresponse);
+	foreach($xmlresponse->children() as $child => $value) {
+		if($child == 'session') {
+			foreach($child->children() as $child2 => $value2) {
+				if($child2 == 'name') {
+					$remote_username = $value;
+				} elseif($child2 == 'key') {
+					$remote_key = $key;
+				}
+			}
+		}
+	}
+
+	if(!isset($remote_username) || !isset($remote_key)) {
+		$smarty->assign('pageheading', 'Error!');
+		$smarty->assign('details', 'Sorry, we weren\'t able to authenticate your account.');
+		$smarty->display('error.tpl');
+		die();
+	}
+
+	// Delete any old connection to this service
+	$adodb->Execute('DELETE FROM Service_Connections WHERE '
+		. 'userid = ' . $this_user->uniqueid . ' AND '
+		. 'webservice_url = ' . $webservice_url);
+
+	// Create our new connection
+	$adodb->Execute('INSERT INTO Service_Connections VALUES('
+		. $this_user->uniqueid . ', '
+		. $adodb->qstr($webservice_url) . ', '
+		. $adodb->qstr($remote_username) . ', '
+		. $adodb->qstr($remote_key) . ')');
+
+	$smarty->assign('pageheading', 'Account connected');
+	$smarty->display('account-connected.tpl');
+
+} else {
+	$smarty->assign('pageheading', 'Error!');
+	$smarty->assign('details', 'Sorry, we weren\'t able to authenticate your account.');
+	$smarty->display('error.tpl');
+	die();
 }
 
 ?>
