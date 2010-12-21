@@ -314,6 +314,23 @@ class User {
 	}
 
 	/**
+	 * Get a user's tags for a specific artist
+	 *
+	 * @param string $artist The name of the artist to fetch tags for
+	 * @return An array of tag details
+	 */
+	function getTagsForArtist($artist) {
+		global $adodb;
+
+		$res = $adodb->GetAll('SELECT tag, COUNT(tag) AS freq FROM tags WHERE '
+			. ' userid = ' . $this->uniqueid
+			. ' AND artist = ' . $adodb->qstr($artist)
+			. ' GROUP BY tag ');
+
+		return $res;
+	}
+
+	/**
 	 * Get a user's loved tracks
 	 *
 	 * @param int $limit The number of tracks to return (defaults to 50)

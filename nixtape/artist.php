@@ -25,6 +25,7 @@ require_once('templating.php');
 require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/TagCloud.php');
+require_once('artist-menu.php');
 
 try {
 	$artist = new Artist(urldecode($_GET['artist']));
@@ -71,14 +72,8 @@ try {
 	$tagCloud = array();
 }
 
-/* $smarty->assign('extra_head_links', array( */
-/* 		array( */
-/* 			'rel' => 'meta', */
-/* 			'type' => 'application/rdf+xml' , */
-/* 			'title' => 'FOAF', */
-/* 			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $artist->getURL())) */
-/* 			) */
-/* 	)); */
+$submenu = artist_menu($artist, 'Overview');
+$smarty->assign('submenu', $submenu);
 
 $smarty->assign('headerfile', 'artist-header.tpl');
 $smarty->display("artist.tpl");
