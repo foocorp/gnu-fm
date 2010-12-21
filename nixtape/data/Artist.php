@@ -147,8 +147,8 @@ class Artist {
 	 *
 	 * @return A string containing the URL of this artist
 	 */
-	function getURL() {
-		return Server::getArtistURL($this->name);
+	function getURL($component='') {
+		return Server::getArtistURL($this->name, $component);
 	}
 
 	/**
@@ -167,6 +167,30 @@ class Artist {
 	 */
 	function getAddAlbumURL() {
 		return Server::getAddAlbumURL($this->name);
+	}
+
+	/**
+	 * Add a list of tags to an artist
+	 *
+	 * @param string $tags A comma seperated list of tags
+	 * @param int $userid The user adding these tags
+	 */
+	function addTags($tags, $userid) {
+		global  $adodb;
+
+		$tags = split(",", strtolower($tags));
+		foreach($tags as $tag) {
+			$tag = trim($tag);
+			if (strlen($tag) == 0) {
+				continue;
+			}
+			try {
+				$adodb->Execute('INSERT INTO tags (tag, artist, userid) VALUES ('
+					. $adodb->qstr($tag) . ', '
+					. $adodb->qstr($this->name) . ', '
+					. $userid . ')');
+			} catch (exception $ex) {}
+		}
 	}
 
 	/**
