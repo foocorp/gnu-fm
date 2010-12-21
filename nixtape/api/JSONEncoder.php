@@ -29,7 +29,7 @@ class JSONEncoder {
 	 * @return A JSON formatted string
 	 */
 	public static function encodeXML($xml) {
-		if($xml->getName() == 'lfm') {
+		if($xml->getName() == 'lfm' && count($xml->children())) {
 			$xml = $xml->children();
 		}
 		$json_data[$xml->getName()] = JSONEncoder::recursivelyEncodeXML($xml);
