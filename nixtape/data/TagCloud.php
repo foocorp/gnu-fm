@@ -40,8 +40,14 @@ class TagCloud {
 		if (!is_string($table))          return false;
 		if (!is_integer($limit))         return false;
 		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
-		$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table;
-		$query .= (!is_null($constraint)) ? ' WHERE ' : null;
+		if($field == 'artist') {
+			$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table . ' INNER JOIN artist ON ' . $table . '.' . $field . ' = artist.name '
+				. ' WHERE artist.streamable = 1';
+			$query .= (!is_null($constraint)) ? ' AND ' : null;
+		} else {
+			$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table;
+			$query .= (!is_null($constraint)) ? ' WHERE ' : null;	
+		}
 		if ($constrained_field) {
 			$query .= (!is_null($constraint)) ? $constrained_field  . ' = ' . $adodb->qstr($constraint) : null;
 		} elseif ($field == 'track') {
