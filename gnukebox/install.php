@@ -125,6 +125,7 @@ if (isset($_POST['install'])) {
 		image_medium VARCHAR(255),
 		image_large VARCHAR(255),
 		homepage VARCHAR(255),
+		hashtag VARCHAR(255),
 		origin VARCHAR(255) REFERENCES Places(location_uri))");
 
 	$adodb->Execute("CREATE TABLE Album(
@@ -344,9 +345,9 @@ if (isset($_POST['install'])) {
 
 	// Test user configuration
 	$adodb->Execute("INSERT INTO Users
-		(username, password)
+		(username, password, active)
 		VALUES
-		('testuser', '" . md5('password') . "');");
+		('testuser', '" . md5('password') . "', 1);");
 
 	$adodb->Close();
 
