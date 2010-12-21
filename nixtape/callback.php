@@ -32,7 +32,7 @@ if($_GET['token'] && $_GET['webservice_url'] && $logged_in == true) {
 	$xmlresponse = simplexml_load_file($webservice_url . '?method=auth.getSession&token=' . $token . '&api_key=' . $lastfm_key . '&api_sig=' . $sig);
 	foreach($xmlresponse->children() as $child => $value) {
 		if($child == 'session') {
-			foreach($child->children() as $child2 => $value2) {
+			foreach($value->children() as $child2 => $value2) {
 				if($child2 == 'name') {
 					$remote_username = $value;
 				} elseif($child2 == 'key') {
