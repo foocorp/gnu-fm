@@ -285,6 +285,12 @@ if (isset($_POST['install'])) {
 		time varchar(255),
 		UNIQUE(userid, track, artist))");
 
+	$adodb->Execute("CREATE TABLE Service_Connections (
+		userid INTEGER REFERENCES Users(uniqueid) ON DELETE CASCADE, 
+		webservice_url VARCHAR(255),
+		remote_key VARCHAR(255),
+		remote_username VARCHAR(255))");
+
 	$adodb->Execute("CREATE TABLE User_Relationships (
 		uid1 INTEGER REFERENCES Users(uniqueid) ON DELETE CASCADE,
 		uid2 INTEGER REFERENCES Users(uniqueid) ON DELETE CASCADE,
