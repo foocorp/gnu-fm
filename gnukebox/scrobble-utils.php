@@ -238,4 +238,59 @@ function validateMBID ($input) {
 
 }
 
+/**
+ * Sends a scrobble on to any other services the user has connected to their account
+ */
+function forwardScrobble($userid, $artist, $album, $track, $time, $mbid, $source, $rating, $length) {
+	global $adodb, $lastfm_key, $lastfm_secret;
+
+	// Strip database quoting from details and urlencode
+	$artist = urlencode(substr($artist, 1, strlen($artist) - 2));
+	$track = urlencode(substr($track, 1, strlen($track) - 2));
+	$album == 'NULL' ? $album = false : $album = urlencode(substr($album, 1, strlen($album) - 2));
+	$mbid == 'NULL' ? $mbid = false : $mbid = urlencode(substr($mbid, 1, strlen($mbid) - 2));
+	$source == 'NULL' ? $source = false : $source = urlencode(substr($source, 1, strlen($source) - 2));
+	$rating == '\'0\'' ? $rating = false : 0;
+	$length == 'NULL' ? $length = false : 0;
+
+	$res = $adodb->CacheGetAll(600, 'SELECT * FROM Service_Connections WHERE userid = ' . $userid . ' AND forward = 1');
+	foreach($res as &$row) {
+		$remote_key = $row['remote_key'];
+		$ws_url = $row['webservice_url'];
+		$curl_session = curl_init($ws_url);
+
+		$post_vars = '';
+		if($album) {
+			$post_vars .= 'album[0]=' . $album . '&';
+		}
+		$post_vars .= 'api_key=' . $lastfm_key . '&artist[0]=' . $artist;
+		if($length) {
+			$post_vars .= '&length[0]=' . $length;
+		}
+		if($mbid) {
+			$post_vars .= '&mbid[0]=' . $mbid;
+		}
+		$post_vars .= '&method=track.scrobble';
+		if($rating) {
+			$post_vars .= '&rating[0]=' . $rating;
+		}
+		$post_vars .= '&sk=' . $remote_key;
+		if($source) {
+			$post_vars .= '&source[0]='. $source;
+		}
+		$post_vars .= '&timestamp[0]=' . $time . '&track[0]=' . $track;
+
+		$sig = str_replace('&', '', urldecode($post_vars));
+		$sig = str_replace('=', '', $sig);
+		$sig = md5($sig . $lastfm_secret);
+
+		$post_vars .= '&api_sig=' . $sig;
+		curl_setopt ($curl_session, CURLOPT_POST, true);
+		curl_setopt ($curl_session, CURLOPT_POSTFIELDS, $post_vars);
+		$response = curl_exec($curl_session);
+
+		curl_close($curl_session);
+	}
+}
+
 ?>
