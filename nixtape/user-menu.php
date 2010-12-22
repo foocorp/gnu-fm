@@ -27,8 +27,7 @@ function user_menu($user, $active_page) {
 		array('name' => 'Recent Tracks', 'url' => $user->getURL('recent-tracks'))
 	);
 	if($user->hasLoved()) {
-		$submenu[] = array('name' => 'Radio Station', 'url' => $user->getURL('station'));
-		$submenu[] = array('name' => 'Recommended', 'url' => $user->getURL('recommended'));
+		$submenu[] = array('name' => 'Radio Stations', 'url' => $user->getURL('station'));
 	}
 	if($user->name == $this_user->name) {
 		$submenu[] = array('name' => 'Edit', 'url' => $user->getURL('edit'));

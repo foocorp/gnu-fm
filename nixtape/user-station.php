@@ -40,10 +40,15 @@ try {
 }
 
 if(isset($user->name)) {
+	if(isset($_GET['type'])) {
+		$type = $_GET['type'];
+	} else {
+		$type = 'loved';
+	}
 	$smarty->assign('me', $user);
-	$smarty->assign('pagetitle', $user->name . '\'s Radio Station');
+	$smarty->assign('pagetitle', $user->name . '\'s Radio ' . ucfirst($type) . ' Station');
 
-	$station = 'librefm://user/' . $user->name . '/loved';
+	$station = 'librefm://user/' . $user->name . '/' . $type;
 	if(isset($this_user)) {
 		        $radio_session = $this_user->getRadioSession($station);
 	} else {
@@ -53,6 +58,7 @@ if(isset($user->name)) {
 
 	$submenu = user_menu($user, 'Radio Station');
 	$smarty->assign('submenu', $submenu);
+	$smarty->assign('type', $type);
 	$smarty->assign('headerfile', 'maxiprofile.tpl');
 
 	$smarty->display('user-station.tpl');
