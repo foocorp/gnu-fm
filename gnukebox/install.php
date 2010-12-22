@@ -289,7 +289,8 @@ if (isset($_POST['install'])) {
 		userid INTEGER REFERENCES Users(uniqueid) ON DELETE CASCADE, 
 		webservice_url VARCHAR(255),
 		remote_key VARCHAR(255),
-		remote_username VARCHAR(255))");
+		remote_username VARCHAR(255),
+		forward INTEGER DEFAULT 1)");
 
 	$adodb->Execute("CREATE TABLE User_Relationships (
 		uid1 INTEGER REFERENCES Users(uniqueid) ON DELETE CASCADE,
