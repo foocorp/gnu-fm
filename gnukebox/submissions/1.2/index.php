@@ -63,18 +63,18 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	}
 
 	if (!isset($_POST['t'][$i]) || !isset($_POST['a'][$i]) || !isset($_POST['i'][$i])) {
-	    $f = isset($_POST['t'][$i]) ? "T({$_POST['t'][$i]})" : 't';
-	    $f .= isset($_POST['a'][$i]) ? "A({$_POST['a'][$i]})" : 'a';
-	    $f .= isset($_POST['i'][$i]) ? "I({$_POST['i'][$i]})" : 'i';
+		$f = isset($_POST['t'][$i]) ? "T({$_POST['t'][$i]})" : 't';
+		$f .= isset($_POST['a'][$i]) ? "A({$_POST['a'][$i]})" : 'a';
+		$f .= isset($_POST['i'][$i]) ? "I({$_POST['i'][$i]})" : 'i';
 
-	    die("FAILED Track $i was submitted with empty mandatory field(s): {$f}\n");
+		die("FAILED Track $i was submitted with empty mandatory field(s): {$f}\n");
 	}
 
 	switch (mb_detect_encoding($_POST['t'][$i])) {
 		case "ASCII":
 		case "UTF-8":
-		    $track = $adodb->qstr(trim($_POST['t'][$i]));
-		    break;
+			$track = $adodb->qstr(trim($_POST['t'][$i]));
+			break;
 		default:
 			die("FAILED Bad encoding in title submission $i\n");
 	}
@@ -114,11 +114,11 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	}
 
 	if(($time - time()) > 300) {
-	    die("FAILED Submitted track has timestamp in the future\n"); // let's try a 5-minute tolerance
+		die("FAILED Submitted track has timestamp in the future\n"); // let's try a 5-minute tolerance
 	}
 
 	if($time <= 1009000000) {
-	    $timeisstupid = 1;
+		$timeisstupid = 1;
 	}
 
 	createArtistIfNew($artist);
@@ -172,7 +172,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 				$adodb->CompleteTrans();
 			}
 			catch (exception $e) {
-			    die("FAILED " . $e->getMessage() . "\n");
+				die("FAILED " . $e->getMessage() . "\n");
 			}
 
 		} else {
