@@ -287,6 +287,7 @@ function forwardScrobble($userid, $artist, $album, $track, $time, $mbid, $source
 		$post_vars .= '&api_sig=' . $sig;
 		curl_setopt ($curl_session, CURLOPT_POST, true);
 		curl_setopt ($curl_session, CURLOPT_POSTFIELDS, $post_vars);
+		curl_setopt ($curl_session, CURLOPT_RETURNTRANSFER, true);
 		$response = curl_exec($curl_session);
 
 		curl_close($curl_session);
