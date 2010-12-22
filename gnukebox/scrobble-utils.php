@@ -282,7 +282,6 @@ function forwardScrobble($userid, $artist, $album, $track, $time, $mbid, $source
 
 		$sig = str_replace('&', '', urldecode($post_vars));
 		$sig = str_replace('=', '', $sig);
-		
 		$sig = md5($sig . $lastfm_secret);
 
 		$post_vars .= '&api_sig=' . $sig;
