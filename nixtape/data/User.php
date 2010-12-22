@@ -429,10 +429,12 @@ class User {
 			}
 		}
 
+		$limit = min($limit, count($recommendedArtists) - 1);
 		if($random) {
 			$randomArtists = array();
+			$keys = array_keys($recommendedArtists);
 			for($i = 0; $i < $limit; $i++) {
-				$randomArtists[] = $recommendedArtists[rand(0, count($recommendedArtists) - 1)];
+				$randomArtists[] = $recommendedArtists[$keys[rand(0, count($recommendedArtists) - 1)]];
 
 			}
 			return $randomArtists;
