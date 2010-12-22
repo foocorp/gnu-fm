@@ -40,14 +40,15 @@ $actualcount = 0;
 $timeisstupid = 0;
 
 for($i = 0; $i < count($_POST['a']); $i++) {
-		switch (mb_detect_encoding($_POST['a'][$i])) {
+	switch (mb_detect_encoding($_POST['a'][$i])) {
 		case "ASCII":
 		case "UTF-8":
 			$artist = $adodb->qstr(trim($_POST['a'][$i]));
 			break;
 		default:
 			die("FAILED Bad encoding in artist submission $i\n");
-		}
+	}
+
 	if(isset($_POST['b'][$i]) && !empty($_POST['b'][$i])) {
 		switch (mb_detect_encoding($_POST['b'][$i])) {
 		case "ASCII":
@@ -77,6 +78,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		default:
 			die("FAILED Bad encoding in title submission $i\n");
 	}
+
 	if(is_numeric($_POST['i'][$i])) {
 		$time = (int) $_POST['i'][$i];
 	} else {
@@ -98,11 +100,13 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	} else {
 		$source = 'NULL';
 	}
+
 	if(!empty($_POST['r'][$i])) {
 		$rating = $adodb->qstr($_POST['r'][$i]);
 	} else {
 		$rating = $adodb->qstr("0"); // use the fake rating code 0 for now
 	}
+
 	if(isset($_POST['l'][$i])) {
 		$length = (int)($_POST['l'][$i]);
 	} else {
@@ -110,11 +114,11 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	}
 
 	if(($time - time()) > 300) {
-            die("FAILED Submitted track has timestamp in the future\n"); // let's try a 5-minute tolerance
+	    die("FAILED Submitted track has timestamp in the future\n"); // let's try a 5-minute tolerance
 	}
 
 	if($time <= 1009000000) {
-            $timeisstupid = 1;
+	    $timeisstupid = 1;
 	}
 
 	createArtistIfNew($artist);
@@ -127,55 +131,54 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	$exists = scrobbleExists($userid, $artist, $track, $time);
 
 	if((!$exists) && $rating<>'S') {
-	// Scrobble!
-	$rowvalues[$actualcount] = "("
-		. $userid . ", "
-		. $artist . ", "
-		. $album . ", "
-		. $track . ", "
-		. $time . ", "
-		. $mbid . ", "
-		. $source . ","
-		. $rating . ","
-		. $length . ","
-		. $stid . ")";
+		$rowvalues[$actualcount] = "("
+			. $userid . ", "
+			. $artist . ", "
+			. $album . ", "
+			. $track . ", "
+			. $time . ", "
+			. $mbid . ", "
+			. $source . ","
+			. $rating . ","
+			. $length . ","
+			. $stid . ")";
 
-	$actualcount++;
+		$actualcount++;
 	}
 
 	if(($i+1) == count($_POST['a'])) {
 		if($actualcount>0) {
 
-		$adodb->StartTrans();
+			$adodb->StartTrans();
+	
+			for($j = 0; $j < $actualcount; $j++) {
 
-		for($j = 0; $j < $actualcount; $j++) {
+				// Scrobble!
+				$sql = "INSERT INTO Scrobbles (userid, artist, album, track, time, mbid, source, rating, length, stid) VALUES " . $rowvalues[$j];
+				try {
+					$res =& $adodb->Execute($sql);
+				}
+				catch (exception $e) {
+					$msg = $e->getMessage();
+					$adodb->FailTrans();
+					$adodb->CompleteTrans();
+					reportError($msg, $sql);
+					die("FAILED " . $msg . "\nError has been reported to site administrators.\n");
+				}
 
-		// Scrobble!
-		$sql = "INSERT INTO Scrobbles (userid, artist, album, track, time, mbid, source, rating, length, stid) VALUES " . $rowvalues[$j];
-		try {
-		$res =& $adodb->Execute($sql);
-		}
-		catch (exception $e) {
-		    $msg = $e->getMessage();
-		    $adodb->FailTrans();
-		    $adodb->CompleteTrans();
-		    reportError($msg, $sql);
-                    die("FAILED " . $msg . "\nError has been reported to site administrators.\n");
-        	}
+			}
 
-		}
-
-		try {
-			$adodb->CompleteTrans();
-		}
-		catch (exception $e) {
-                    die("FAILED " . $e->getMessage() . "\n");
-		}
+			try {
+				$adodb->CompleteTrans();
+			}
+			catch (exception $e) {
+			    die("FAILED " . $e->getMessage() . "\n");
+			}
 
 		} else {
-		if($timeisstupid == 1) {
-			die("FAILED Too many submitted tracks with invalid timestamps\n");
-		}
+			if($timeisstupid == 1) {
+				die("FAILED Too many submitted tracks with invalid timestamps\n");
+			}
 		}
 	}
 
