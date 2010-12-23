@@ -33,10 +33,6 @@ if($logged_in == false)
 	die();
 }
 
-if(isset($lastfm_key)) {
-	$smarty->assign('lastfm_key', $lastfm_key);
-}
-
 $errors = array();
 
 if ($_POST['submit'])
@@ -181,12 +177,7 @@ if(isset($this_user->name))
 	}
 
 	# And display the page.
-	try {
-		$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $this_user->uniqueid, "userid");
-		$smarty->assign('tagcloud', $aTagCloud);
-	} catch (exception $e) {}
-
-	$submenu = user_menu($this_user, 'Edit Profile');
+	$submenu = user_menu($this_user, 'Edit');
 	$smarty->assign('submenu', $submenu);
 	$smarty->assign('me', $this_user);
 	$smarty->assign('headerfile', 'maxiprofile.tpl');
