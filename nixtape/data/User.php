@@ -398,6 +398,20 @@ class User {
 
 
 	/**
+	 * Get details of any connections this user has setup to other services.
+	 *
+	 * @return An array of service connection details
+	 */
+	function getConnections() {
+		global $adodb;
+
+		$res = $adodb->GetAll('SELECT * FROM Service_Connections WHERE '
+			. ' userid = ' . $this->uniqueid);
+
+		return $res;
+	}
+
+	/**
 	 * Get artists recommended for this yser
 	 *
 	 * @param int $limit The number of artists to return (defaults to 10)

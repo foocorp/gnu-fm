@@ -19,13 +19,22 @@
 
 */
 
-
 require_once('database.php');
 require_once('templating.php');
-require_once('data/sanitize.php');
-require_once('data/Server.php');
+require_once('user-menu.php');
+require_once('data/User.php');
+require_once('data/TagCloud.php');
 
-if($_GET['token'] && $_GET['webservice_url'] && $logged_in == true) {
+if($logged_in == false)
+{
+	$smarty->assign('pageheading', 'Error!');
+	$smarty->assign('details', 'Not logged in! You shouldn\'t be here!');
+	$smarty->display('error.tpl');
+	die();
+}
+
+if(isset($_GET['token']) && isset($_GET['webservice_url'])) {
+	// Handle authentication callback from a foreign service
 	$token = $_GET['token'];
 	$webservice_url = $_GET['webservice_url'];
 	$sig = md5('api_key' . $lastfm_key . 'methodauth.getSession' . 'token' . $token  . $lastfm_secret);
@@ -61,14 +70,25 @@ if($_GET['token'] && $_GET['webservice_url'] && $logged_in == true) {
 		. $adodb->qstr($remote_key) . ', '
 		. $adodb->qstr($remote_username) . ')');
 
-	$smarty->assign('pageheading', 'Account connected');
-	$smarty->display('account-connected.tpl');
-
-} else {
-	$smarty->assign('pageheading', 'Error!');
-	$smarty->assign('details', 'Sorry, we weren\'t able to authenticate your account.');
-	$smarty->display('error.tpl');
-	die();
+	$smarty->assign('connection_added', true);
 }
 
-?>
+if(isset($_GET['forward']) && isset($_GET['service'])) {
+	// Update the user's forwarding preferences
+	$adodb->Execute('UPDATE Service_Connections SET forward = ' . (int) ($_GET['forward'])
+		. ' WHERE userid = ' . $this_user->uniqueid
+		. ' AND webservice_url = ' . $adodb->qstr($_GET['service']));
+}
+
+if(isset($lastfm_key)) {
+	$smarty->assign('lastfm_key', $lastfm_key);
+}
+
+$smarty->assign('connections', $this_user->getConnections());
+
+$submenu = user_menu($this_user, 'Edit');
+$smarty->assign('submenu', $submenu);
+
+$smarty->assign('me', $this_user);
+$smarty->assign('headerfile', 'maxiprofile.tpl');
+$smarty->display('user-connections.tpl');
