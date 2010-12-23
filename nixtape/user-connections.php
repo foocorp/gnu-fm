@@ -33,7 +33,7 @@ if($logged_in == false)
 	die();
 }
 
-if($_GET['token'] && $_GET['webservice_url'] && $logged_in == true) {
+if(isset($_GET['token']) && isset($_GET['webservice_url'])) {
 	// Handle authentication callback from a foreign service
 	$token = $_GET['token'];
 	$webservice_url = $_GET['webservice_url'];
@@ -73,9 +73,18 @@ if($_GET['token'] && $_GET['webservice_url'] && $logged_in == true) {
 	$smarty->assign('connection_added', true);
 }
 
+if(isset($_GET['forward']) && isset($_GET['service'])) {
+	// Update the user's forwarding preferences
+	$adodb->Execute('UPDATE Service_Connections SET forward = ' . (int) ($_GET['forward'])
+		. ' WHERE userid = ' . $this_user->uniqueid
+		. ' AND webservice_url = ' . $adodb->qstr($_GET['service']));
+}
+
 if(isset($lastfm_key)) {
 	$smarty->assign('lastfm_key', $lastfm_key);
 }
+
+$smarty->assign('connections', $this_user->getConnections());
 
 $submenu = user_menu($this_user, 'Edit');
 $smarty->assign('submenu', $submenu);
