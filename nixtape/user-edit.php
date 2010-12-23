@@ -182,7 +182,7 @@ if(isset($this_user->name))
 		$smarty->assign('tagcloud', $aTagCloud);
 	} catch (exception $e) {}
 
-	$submenu = user_menu($this_user, 'Edit Profile');
+	$submenu = user_menu($this_user, 'Edit');
 	$smarty->assign('submenu', $submenu);
 	$smarty->assign('me', $this_user);
 	$smarty->assign('headerfile', 'maxiprofile.tpl');
