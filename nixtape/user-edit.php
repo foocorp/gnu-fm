@@ -33,10 +33,6 @@ if($logged_in == false)
 	die();
 }
 
-if(isset($lastfm_key)) {
-	$smarty->assign('lastfm_key', $lastfm_key);
-}
-
 $errors = array();
 
 if ($_POST['submit'])
