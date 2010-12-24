@@ -34,7 +34,7 @@ class TagCloud {
 	 * inaccurate @param float $max_font_size maximum font size (px, em, %, etc)
 	 * @return array tagcloud
 	 */
-	static function generateTagCloud($table, $field, $limit = 40, $constraint = null, $constrained_field = false) {
+	static function generateTagCloud($table, $field, $limit = 40, $constraint = null, $constrained_field = false, $cache_period = 7200) {
 		global $adodb;
 		if (!is_string($field))          return false;
 		if (!is_string($table))          return false;
@@ -57,7 +57,7 @@ class TagCloud {
 		}
 		$query .= ' GROUP BY ' . $field . ' ORDER BY count DESC LIMIT ' . $limit;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$res = $adodb->CacheGetAll(7200,$query);
+		$res = $adodb->CacheGetAll($cache_period, $query);
 		if (!$res) {
 			throw new Exception('ERROR ' . $query);
 		} else {
