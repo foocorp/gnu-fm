@@ -51,7 +51,7 @@ $smarty->assign('bio_summary', $artist->bio_summary);
 $smarty->assign('bio_content', $artist->bio_content);
 $smarty->assign('homepage', $artist->homepage);
 $smarty->assign('streamable', $artist->isStreamable());
-$smarty->assign('image', $artist->image_medium);
+$smarty->assign('image', $artist->image_medium ? $artist->image_medium : $artist->image_small);
 $smarty->assign('hashtag', $artist->hashtag);
 $smarty->assign('similarArtists', $artist->getSimilar());
 
