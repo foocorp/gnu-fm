@@ -65,8 +65,8 @@ if (isset($_GET['code'])) {
 	$smarty->assign('changed', true);
 }
 
-else if (isset($_POST['user']) || isset($_POST['email']) {
-	if (isset$_POST['email']) {
+elseif (isset($_POST['user']) || isset($_POST['email'])) {
+	if (isset($_POST['email'])) {
 		$field = 'email';
 		$value = $_POST['email'];
 	} else {
