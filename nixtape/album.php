@@ -37,6 +37,10 @@ if ($aAlbumTracks) {
 	$smarty->assign('tracks', $aAlbumTracks);
 }
 
+if(isset($this_user) && $this_user->manages($artist->name)) {
+	$smarty->assign('add_track_link', $album->getAddTrackURL());
+}
+
 $smarty->assign('extra_head_links', array(
 		array(
 			'rel' => 'meta',

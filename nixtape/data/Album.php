@@ -61,11 +61,9 @@ class Album {
 
 			$this->id = identifierAlbum(null, $this->artist_name, null, $this->name, null, null, null, $this->mbid);
 
-			// this	hack brought to	you by	mattl
-			//if ($row['image'] == ''){
-			//go_get_album_art($this->artist_name, $this->name);
-			//}
-			// mattl hack ovar
+			$this->track_query = 'SELECT name, artist_name FROM Track WHERE artist_name = '
+				. $adodb->qstr($this->artist_name) . ' AND album_name = '
+				. $adodb->qstr($this->name);
 
 			if($this->image == '') {
 				$this->image = false;
@@ -94,6 +92,14 @@ class Album {
 		$artist->clearAlbumCache();
 
 		return new Album($name, $artist_name);
+	}
+
+	/**
+	 * Clears the track cache
+	 */
+	function clearTrackCache() {
+		global $adodb;
+		$adodb->CacheFlush($this->track_query);
 	}
 
 	function getPlayCount() {
@@ -125,9 +131,7 @@ class Album {
 	function getTracks() {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$res = $adodb->CacheGetAll(600, 'SELECT name, artist_name FROM Track WHERE artist_name = '
-			. $adodb->qstr($this->artist_name) . ' AND album_name = '
-			. $adodb->qstr($this->name));
+		$res = $adodb->CacheGetAll(600, $this->track_query);
 		foreach($res as &$row) {
 			$tracks[] = new Track($row['name'], $row['artist_name']);
 		}
@@ -142,6 +146,15 @@ class Album {
 	 */
 	function getURL() {
 		return Server::getAlbumURL($this->artist_name, $this->name);
+	}
+
+	/**
+	 * Gives the URL for managers to add a new track to this album
+	 *
+	 * @return A string containing the URL for adding tracks to this album
+	 */
+	function getAddTrackURL() {
+		return Server::getAddTrackURL($this->artist_name, $this->name);
 	}
 
 	/**

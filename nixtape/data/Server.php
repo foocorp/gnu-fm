@@ -342,7 +342,7 @@ class Server {
 	static function getArtistManagementURL($artist) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return Server::getArtistURL($artist) . "/manage";
+			return Server::getArtistURL($artist) . '/manage';
 		} else {
 			return $base_url . '/artist-manage.php?artist=' . urlencode($artist);
 		}
@@ -351,7 +351,7 @@ class Server {
 	static function getAddAlbumURL($artist) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return Server::getArtistURL($artist) . "/album/add";
+			return Server::getArtistURL($artist) . '/album/add';
 		} else {
 			return $base_url . '/album-add.php?artist=' . urlencode($artist);
 		}
@@ -365,6 +365,16 @@ class Server {
 			return $base_url . '/album.php?artist=' . urlencode($artist) . '&album=' . urlencode($album);
 		}
 	}
+	
+	static function getAddTrackURL($artist, $album) {
+		global $friendly_urls, $base_url;
+		if($friendly_urls) {
+			return Server::getAlbumURL($artist, $album) . '/track/add';
+		} else {
+			return $base_url . '/track-add.php?artist=' . urlencode($artist) . '&album=' . urlencode($album);
+		}
+	}
+
 
 	static function getTrackURL($artist, $album, $track) {
 		global $friendly_urls, $base_url;

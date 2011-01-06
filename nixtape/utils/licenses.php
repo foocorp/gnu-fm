@@ -39,3 +39,23 @@ function simplify_license($license) {
 
 	return 0;
 }
+
+/**
+ * Returns true if the supplied license is one that we accept as being free
+ *
+ * @param $license string containing a license URL
+ * @return bool whether this license is free or not
+ */
+function is_free_license($license) {
+	global $licenses;
+
+	foreach ($licenses as $key => $l) {
+		foreach ($l as $urlschema) {
+			if (ereg($urlschema, $license)) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}

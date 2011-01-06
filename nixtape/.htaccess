@@ -9,6 +9,7 @@ RewriteRule ^user/([^/]+)/stats/?$                              user-stats.php?u
 RewriteRule ^user/([^/]+)/station/?$				user-station.php?user=$1		[B,NC,QSA]
 RewriteRule ^user/([^/]+)/recommended/?$			user-recommended.php?user=$1		[B,NC]
 RewriteRule ^artist/([^/]+)/track/([^/]+)/?$			track.php?artist=$1&track=$2		[B,NC]
+RewriteRule ^artist/([^/]+)/album/([^/]+)/track/add/?$		track-add.php?artist=$1&album=$2	[B,NC]
 RewriteRule ^artist/([^/]+)/album/([^/]+)/track/([^/]+)/?$	track.php?artist=$1&album=$2&track=$3	[B,NC]
 RewriteRule ^artist/([^/]+)/album/add/?$			album-add.php?artist=$1			[B,NC]
 RewriteRule ^artist/([^/]+)/album/([^/]+)/?$			album.php?artist=$1&album=$2 		[B,NC]
