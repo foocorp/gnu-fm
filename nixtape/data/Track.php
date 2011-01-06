@@ -73,6 +73,35 @@ class Track {
 	}
 
 	/**
+	 * Add a new track to the database.
+	 *
+	 * @param string $name
+	 * @param string $artist_name
+	 * @param string $album_name
+	 * @param string $streaming_url
+	 * @param string $download_url
+	 * @param string $license
+	 * @return A newly created track object
+	 */
+	public static function create($name, $artist_name, $album_name, $streamurl, $downloadurl, $license) {
+		global $adodb;
+
+		$adodb->Execute('INSERT INTO Track (name, artist_name, album_name, streamurl, downloadurl, license, streamable) VALUES ('
+			. $adodb->qstr($name) . ', '
+			. $adodb->qstr($artist_name) . ', '
+			. $adodb->qstr($album_name) . ', '
+			. $adodb->qstr($streamurl) . ', '
+			. $adodb->qstr($downloadurl) . ', '
+			. $adodb->qstr($license) . ', '
+			. '1' . ')');
+
+		$album = new Album($album_name, $artist_name);
+		$album->clearTrackCache();
+
+		return new Track($name, $artist_name);
+	}
+
+	/**
 	 * Sets the playcount
 	 *
 	 * @param int $playcount The number of plays this track has received
