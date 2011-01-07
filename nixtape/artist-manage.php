@@ -60,9 +60,7 @@ if (isset($_POST['submit'])) {
 		$artist->setImage($_POST['image']);
 	}
 
-	if (!empty($_POST['flattr_uid'])) {
-		$artist->setFlattr($_POST['flattr_uid']);
-	}
+	$artist->setFlattr($_POST['flattr_uid']);
 	
 	if($errors) {
 		$smarty->assign('errors', $errors);
