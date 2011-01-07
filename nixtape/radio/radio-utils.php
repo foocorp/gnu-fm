@@ -154,8 +154,8 @@ function make_playlist($session, $old_format=false) {
 		$radiotracks[$i]['image'] = $album->image;
 		$radiotracks[$i]['artisturl'] = Server::getArtistURL($row['artist_name']);
 		$radiotracks[$i]['albumurl'] = $album->getURL();
-		$radiotracks[$i]['trackurl'] = Server::getTrackURL($row['artist_name'], $album->name, $row['track_name']);
-		$radiotracks[$i]['downloadurl'] = Server::getTrackURL($row['artist_name'], $album->name, $row['track_name']);
+		$radiotracks[$i]['trackurl'] = Server::getTrackURL($row['artist_name'], $album->name, $row['name']);
+		$radiotracks[$i]['downloadurl'] = Server::getTrackURL($row['artist_name'], $album->name, $row['name']);
 
 	}
 
