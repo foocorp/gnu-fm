@@ -126,7 +126,8 @@ if (isset($_POST['install'])) {
 		image_large VARCHAR(255),
 		homepage VARCHAR(255),
 		hashtag VARCHAR(255),
-		origin VARCHAR(255) REFERENCES Places(location_uri))");
+		origin VARCHAR(255) REFERENCES Places(location_uri),
+		flattr_uid VARCHAR(255))");
 
 	$adodb->Execute("CREATE TABLE Album(
 		id SERIAL PRIMARY KEY,

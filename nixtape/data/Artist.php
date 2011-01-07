@@ -36,7 +36,7 @@ require_once($install_path . '/utils/linkeddata.php');
 class Artist {
 
 
-	public $name, $mbid, $streamable, $bio_content, $bio_published, $bio_summary, $image_small, $image_medium, $image_large;
+	public $name, $mbid, $streamable, $bio_content, $bio_published, $bio_summary, $image_small, $image_medium, $image_large, $flattr_uid;
 	public $id;
 	private $query, $album_query;
 
@@ -54,7 +54,7 @@ class Artist {
 		if($mbid) {
 			$mbidquery = 'mbid = ' . $adodb->qstr($mbid) . ' OR ';
 		}
-		$this->query = 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large, homepage, hashtag FROM Artist WHERE '
+		$this->query = 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large, homepage, hashtag, flattr_uid FROM Artist WHERE '
 			. $mbidquery
 			. 'lower(name) = ' . strtolower($adodb->qstr($name));
 		$row = $adodb->CacheGetRow(1200, $this->query);
@@ -72,6 +72,7 @@ class Artist {
 			$this->image_large = $row['image_large'];
 			$this->homepage = $row['homepage'];
 			$this->hashtag = $row['hashtag'];
+			$this->flattr_uid = $row['flattr_uid'];
 
 			$this->id = identifierArtist(null, $this->name, null, null, null, null, $this->mbid, null);
 			$this->album_query = 'SELECT name, image FROM Album WHERE artist_name = '. $adodb->qstr($this->name);
@@ -270,6 +271,17 @@ class Artist {
 		$adodb->CacheFlush($this->query);
 	}
 
+	/**
+	 * Set a flattr user id for to allow this artist to be tipped
+	 *
+	 * @param string $flattr_uid A flattr username to associate with this artist
+	 */
+	function setFlattr($flattr_uid) {
+		global $adodb;
+		$adodb->Execute("UPDATE Artist SET flattr_uid = " . $adodb->qstr($flattr_uid) . " WHERE name = " . $adodb->qstr($this->name));
+		$this->flattr_uid = $flattr_uid;
+		$adodb->CacheFlush($this->query);
+	}
 
 	function isStreamable() {
 		global $adodb;

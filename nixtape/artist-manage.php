@@ -60,6 +60,9 @@ if (isset($_POST['submit'])) {
 		$artist->setImage($_POST['image']);
 	}
 
+	if (!empty($_POST['flattr_uid'])) {
+		$artist->setFlattr($_POST['flattr_uid']);
+	}
 	
 	if($errors) {
 		$smarty->assign('errors', $errors);
@@ -75,6 +78,7 @@ $smarty->assign('bio_summary', $artist->bio_summary);
 $smarty->assign('bio_content', $artist->bio_content);
 $smarty->assign('homepage', $artist->homepage);
 $smarty->assign('image', $artist->image_medium);
+$smarty->assign('flattr_uid', $artist->flattr_uid);
 $smarty->assign('pageheading', 'Managing ' . $artist->name);
 
 $smarty->display("artist-manage.tpl");
