@@ -41,7 +41,8 @@ try {
 }
 
 $smarty->assign('artist', $artist);
-
+$smarty->assign('flattr_uid', $artist->flattr_uid);
+$smarty->assign('url', $track->getURL());
 $smarty->assign('pagetitle', $artist->name . ' : ' . $track->name);
 
 $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
