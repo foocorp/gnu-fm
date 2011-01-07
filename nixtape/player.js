@@ -24,7 +24,7 @@
 */
 
 var scrobbled, now_playing;
-var artist, album, track, session_key, radio_key, ws_key;
+var artist, album, track, trackpage, session_key, radio_key, ws_key;
 var playlist = [], current_song = 0;
 var player_ready = false;
 var playable_songs = false;
@@ -34,7 +34,7 @@ var example_tags = "e.g. guitar, violin, female vocals, piano";
 /**
  * Initialises the javascript player (player.tpl must also be included on the target page)
  *
- * @param array list A playlist in the form ([artist, album, track, trackurl], [...]) or false if playing a radio stream
+ * @param array list A playlist in the form ([artist, album, track, trackurl, trackpage], [...]) or false if playing a radio stream
  * @param string sk Scrobble session key or false if the user isn't logged in
  * @param string rk Radio session key or false if streaming isn't required
  */
@@ -263,6 +263,7 @@ function loadSong(song) {
 	artist = playlist[song]["artist"];
 	album = playlist[song]["album"];
 	track = playlist[song]["track"];
+	trackpage = playlist[song]["trackpage"];
 
 	// Highlight current song in the playlist
 	$("#song-" + current_song).css({fontWeight : "normal"});
@@ -295,6 +296,21 @@ function loadSong(song) {
 	$("#trackinfo > #trackname").text(track);
 	$("#ban").fadeTo("normal", 1);
 	$("#love").fadeTo("normal", 1);
+
+	if($("#flattrstream")) {
+		$.getJSON('/2.0/', {'method' : 'artist.getflattr', 'artist' : artist, 'format' : 'json'}, updateFlattr);
+	}
+}
+
+function updateFlattr(data) {
+	var flattr_uid = data.flattr.flattr_uid;
+	if (flattr_uid) {
+		$("#flattr").replaceWith('<a class="FlattrButton" style="display:none;" title=' + artist + ' - ' + track + '" rev="flattr;uid:' + flattr_uid + ';category:audio;tags:music,creative commons,free,libre.fm;" href="' + trackpage + '">' + artist + ' is making ' + track + ' freely available on Libre.fm for you to listen to, share and remix however you like.</a>');
+		FlattrLoader.setup();
+		$("#flattrstream").show(1000);
+	} else {
+		$("#flattrstream").hide(1000);
+	}
 }
 
 /**
@@ -303,8 +319,8 @@ function loadSong(song) {
  * the play for this to work.
  */
 function getRadioPlaylist() {
-	var tracks, artist, album, title, url, i;
-	$.get("/radio/xspf.php", {'sk' : radio_key, 'desktop' : 0}, function(data) {
+	var tracks, artist, album, title, url, extension, trackpage_url, i;
+	$.get("/2.0/", {'method' : 'radio.getPlaylist', 'sk' : radio_key}, function(data) {
 			parser=new DOMParser();
 		      	xmlDoc=parser.parseFromString(data,"text/xml");
 			tracks = xmlDoc.getElementsByTagName("track")
@@ -314,7 +330,8 @@ function getRadioPlaylist() {
 					title = tracks[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
 					album = tracks[i].getElementsByTagName("album")[0].childNodes[0].nodeValue;
 					url = tracks[i].getElementsByTagName("location")[0].childNodes[0].nodeValue;
-					playlist.push({"artist" : artist, "album" : album, "track" : title, "url" : url});
+					trackpage_url = tracks[i].getElementsByTagName("trackpage")[0].childNodes[0].nodeValue;
+					playlist.push({"artist" : artist, "album" : album, "track" : title, "url" : url, "trackpage" : trackpage_url});
 				} catch(err) {
 				}
 			}

@@ -36,7 +36,6 @@ if(isset($station)) {
 	}
 	$smarty->assign('radio_session', $radio_session);
 }
-
 $smarty->assign('pageheading', 'Go ahead, listen all you want');
 $smarty->display('listen.tpl');
 ?>
