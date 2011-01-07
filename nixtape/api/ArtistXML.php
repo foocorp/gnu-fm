@@ -112,6 +112,23 @@ class ArtistXML {
 		return $xml;
 	}
 
+	public static function getFlattr($artistName) {
+
+		$artist = new Artist($artistName);
+
+		if(!$artist) {
+			return(XML::error('failed', '7', 'Invalid resource specified'));
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('flattr', null);
+		$root->addAttribute('artist', $artist->name);
+		$root->addChild('flattr_uid', $artist->flattr_uid);
+
+		return $xml;
+	}
+
+
 }
 
 ?>
