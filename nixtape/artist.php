@@ -53,6 +53,8 @@ $smarty->assign('homepage', $artist->homepage);
 $smarty->assign('streamable', $artist->isStreamable());
 $smarty->assign('image', $artist->image_medium ? $artist->image_medium : $artist->image_small);
 $smarty->assign('hashtag', $artist->hashtag);
+$smarty->assign('flattr_uid', $artist->flattr_uid);
+$smarty->assign('url', $artist->getURL());
 $smarty->assign('similarArtists', $artist->getSimilar());
 
 $aArtistAlbums = $artist->getAlbums();
