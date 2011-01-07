@@ -79,6 +79,7 @@ $method_map = array(
 	'artist.getinfo'		=> method_artist_getInfo,
 	'artist.gettoptracks'		=> method_artist_getTopTracks,
 	'artist.gettoptags'		=> method_artist_getTopTags,
+	'artist.getflattr'		=> method_artist_getFlattr,
 	'album.addtags'			=> method_album_addTags,
 	'album.gettoptags'		=> method_album_getTopTags,
 	'user.getinfo'			=> method_user_getInfo,
@@ -221,6 +222,14 @@ function method_artist_getTopTags() {
 	respond($xml);
 }
 
+function method_artist_getFlattr() {
+	if (!isset($_GET['artist'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$xml = ArtistXML::getFlattr($_GET['artist']);
+	respond($xml);
+}
 
 /**
  * Album methods
