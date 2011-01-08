@@ -57,7 +57,6 @@ $smarty->cache_dir = $install_path. '/cache/';
 $smarty->assign('current_lang', 'en');
 /* $smarty->assign('lang_selector_array', array(($current_lang) => 1)); */
 $smarty->assign('base_url', $base_url);
-$smarty->assign('media_url', $media_url);
 $smarty->assign('default_theme', $default_theme);
 $smarty->assign('img_url', $base_url . '/themes/' . $default_theme . '/img/');
 $smarty->assign('this_page', $_SERVER['REQUEST_URI']);
