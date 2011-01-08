@@ -85,7 +85,6 @@ function playerReady() {
 	$("#ban").fadeTo("normal", 1);
 	$("#love").fadeTo("normal", 1);
 	$("#open_tag").fadeTo("normal", 1);
-	$("#close_tag").fadeTo("normal", 1);
 	$("#progressbar").progressbar({ value: 0 });
 	$("#player > #interface").show();
 	$("#tags").placeholdr({placeholderText: example_tags});
