@@ -305,7 +305,7 @@ function loadSong(song) {
 function updateFlattr(data) {
 	var flattr_uid = data.flattr.flattr_uid;
 	if (flattr_uid) {
-		$("#flattr").replaceWith('<a class="FlattrButton" style="display:none;" title=' + artist + ' - ' + track + '" rev="flattr;uid:' + flattr_uid + ';category:audio;tags:music,creative commons,free,libre.fm;" href="' + trackpage + '">' + artist + ' is making ' + track + ' freely available on Libre.fm for you to listen to, share and remix however you like.</a>');
+		$("#flattr").replaceWith('<a id="flattr" class="FlattrButton" style="display:none;" title=' + artist + ' - ' + track + '" rev="flattr;uid:' + flattr_uid + ';category:audio;tags:music,creative commons,free,libre.fm;" href="' + trackpage + '">' + artist + ' is making ' + track + ' freely available on Libre.fm for you to listen to, share and remix however you like.</a>');
 		FlattrLoader.setup();
 		$("#flattrstream").show(1000);
 	} else {
