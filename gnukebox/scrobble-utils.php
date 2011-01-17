@@ -52,33 +52,18 @@ function createArtistIfNew($artist) {
 
 	$artist = NoSpamTracks($artist);
 
-	try {
-		$res = $adodb->GetOne('SELECT name FROM Artist WHERE lower(name) = lower(' . ($artist) . ')');
-	}
-	catch (exception $e) {
-		die('FAILED art ' . $e->getMessage() . '\n');
-	}
+	$res = $adodb->GetOne('SELECT name FROM Artist WHERE lower(name) = lower(' . ($artist) . ')');
 
 	if(!$res) {
 		// Artist doesn't exist, so we create them
-		try {
-			$res = $adodb->Execute('INSERT INTO Artist (name) VALUES (' . ($artist) . ')');
-		}
-		catch (exception $e) {
-			die('FAILED artc ' . $e->getMessage() . '\n');
-		}
+		$res = $adodb->Execute('INSERT INTO Artist (name) VALUES (' . ($artist) . ')');
 	}
 }
 
 function createAlbumIfNew($artist, $album) {
 	global $adodb;
 
-	try {
-		$name = $adodb->GetOne('SELECT name FROM Album WHERE lower(name) = lower(' . ($album) . ') AND lower(artist_name) = lower(' . ($artist) . ')');
-	}
-	catch (exception $e) {
-		die('FAILED alb ' . $e->getMessage() . '\n');
-	}
+	$name = $adodb->GetOne('SELECT name FROM Album WHERE lower(name) = lower(' . ($album) . ') AND lower(artist_name) = lower(' . ($artist) . ')');
 
 	if(!$name) {
 		// Album doesn't exist, so create it
@@ -93,11 +78,7 @@ function createAlbumIfNew($artist, $album) {
 		} else {
 			$sql = 'INSERT INTO Album (name, artist_name) VALUES (' . ($album) . ', ' . ($artist) . ')';
 		}
-		try {
-			$adodb->Execute($sql);
-		} catch (exception $e) {
-			die('FAILED albc ' . $e->getMessage() . '\n');
-		}
+		$adodb->Execute($sql);
 	}
 }
 
@@ -107,28 +88,19 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	$track = NoSpamTracks($track);
 	$artist = NoSpamTracks($artist);
 
-	try {
-		if($album != 'NULL') {
-			$res = $adodb->GetOne('SELECT id FROM Track WHERE lower(name) = lower(' . ($track) . ') AND lower(artist_name) = lower(' . ($artist) . ') AND lower(album_name) = lower(' . ($album) . ')');
-		} else {
-			$res = $adodb->GetOne('SELECT id FROM Track WHERE lower(name) = lower(' . ($track) . ') AND lower(artist_name) = lower(' . ($artist) . ') AND album_name IS NULL');
-		}
-	}
-	catch (exception $e) {
-		die('FAILED trk ' . $e->getMessage() . '\n');
+	if($album != 'NULL') {
+		$res = $adodb->GetOne('SELECT id FROM Track WHERE lower(name) = lower(' . ($track) . ') AND lower(artist_name) = lower(' . ($artist) . ') AND lower(album_name) = lower(' . ($album) . ')');
+	} else {
+		$res = $adodb->GetOne('SELECT id FROM Track WHERE lower(name) = lower(' . ($track) . ') AND lower(artist_name) = lower(' . ($artist) . ') AND album_name IS NULL');
 	}
 
 	if(!$res) {
 		// Create new track
-		try {
-			$res = $adodb->Execute('INSERT INTO Track (name, artist_name, album_name, mbid) VALUES ('
-				. ($track) . ', '
-				. ($artist) . ', '
-				. ($album) . ', '
-				. ($mbid) . ')');
-		} catch (exception $e) {
-			die('FAILED trkc ' . $e->getMessage() . '\n');
-		}
+		$res = $adodb->Execute('INSERT INTO Track (name, artist_name, album_name, mbid) VALUES ('
+			. ($track) . ', '
+			. ($artist) . ', '
+			. ($album) . ', '
+			. ($mbid) . ')');
 		return getTrackCreateIfNew($artist, $album, $track, $mbid);
 	} else {
 		return $res;
@@ -138,14 +110,10 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 	global $adodb;
 
-	try {
-		$res = $adodb->GetOne('SELECT id FROM Scrobble_Track WHERE name = lower('
-			. ($track) . ') AND artist = lower(' . ($artist) . ') AND album '
-			. (($album == 'NULL') ? 'IS NULL' : ('= lower(' . ($album) . ')')) . ' AND mbid '
-			. (($mbid == 'NULL') ? 'IS NULL' : ('= lower(' . ($mbid) . ')')));
-	} catch (exception $e) {
-		die('FAILED st ' . $e->getMessage() . '\n');
-	}
+	$res = $adodb->GetOne('SELECT id FROM Scrobble_Track WHERE name = lower('
+		. ($track) . ') AND artist = lower(' . ($artist) . ') AND album '
+		. (($album == 'NULL') ? 'IS NULL' : ('= lower(' . ($album) . ')')) . ' AND mbid '
+		. (($mbid == 'NULL') ? 'IS NULL' : ('= lower(' . ($mbid) . ')')));
 
 	if(!$res) {
 		$sql = 'INSERT INTO Scrobble_Track (name, artist, album, mbid, track) VALUES ('
@@ -154,14 +122,7 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 			. (($album == 'NULL') ? 'NULL' : 'lower(' . ($album) . ')') . ', '
 			. (($mbid == 'NULL') ? 'NULL' : 'lower(' . ($mbid) . ')') . ', '
 			. ($tid) . ')';
-		try {
-			$res = $adodb->Execute($sql);
-		}
-		catch (exception $e) {
-			$msg = $e->getMessage();
-			reportError($msg, $sql);
-			die('FAILED stc ' . $res->getMessage() . '\n');
-		}
+		$res = $adodb->Execute($sql);
 		return getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid);
 	} else {
 		return $res;
@@ -171,11 +132,7 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 function scrobbleExists($userid, $artist, $track, $time) {
 	global $adodb;
 
-	try {
-		$res = $adodb->GetOne('SELECT time FROM Scrobbles WHERE userid = ' . ($userid) . ' AND artist = ' . ($artist) . ' AND track = ' . ($track) . ' AND time = ' . ($time));
-	} catch (exception $e) {
-		die('FAILED se ' . $e->getMessage() . '\n');
-	}
+	$res = $adodb->GetOne('SELECT time FROM Scrobbles WHERE userid = ' . ($userid) . ' AND artist = ' . ($artist) . ' AND track = ' . ($track) . ' AND time = ' . ($time));
 
 	if(!$res) {
 		return false;
