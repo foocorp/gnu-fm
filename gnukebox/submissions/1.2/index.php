@@ -121,16 +121,22 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		$timeisstupid = 1;
 	}
 
-	createArtistIfNew($artist);
-	if($album != 'NULL') {
-		createAlbumIfNew($artist, $album);
+	$failed = false;
+	try {
+		createArtistIfNew($artist);
+		if($album != 'NULL') {
+			createAlbumIfNew($artist, $album);
+		}
+		$tid = getTrackCreateIfNew($artist, $album, $track, $mbid);
+		$stid = getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid);
+
+		$exists = scrobbleExists($userid, $artist, $track, $time);
+	} catch (exception $ex) {
+		$failed = true;
+		reportError($ex->getMessage(), '');
 	}
-	$tid = getTrackCreateIfNew($artist, $album, $track, $mbid);
-	$stid = getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid);
 
-	$exists = scrobbleExists($userid, $artist, $track, $time);
-
-	if((!$exists) && $rating<>'S') {
+	if((!$exists) && $rating<>'S' && !$failed) {
 		$rowvalues[$actualcount] = "("
 			. $userid . ", "
 			. $artist . ", "
@@ -166,7 +172,6 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 					$adodb->FailTrans();
 					$adodb->CompleteTrans();
 					reportError($msg, $sql);
-					die("FAILED " . $msg . "\nError has been reported to site administrators.\n");
 				}
 
 			}

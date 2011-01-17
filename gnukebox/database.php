@@ -36,9 +36,13 @@ try {
 }
 
 // To keep functionality with existing code
-// TODO: Log to disk with __FILE__, __FUNCTION__, __LINE__ ?
 function reportError($msg, $sql) {
+	global $adodb;
 
+	$adodb->Execute('INSERT INTO error(msg, data, time) VALUES('
+		. $adodb->qstr($msg) . ', '
+		. $adodb->qstr($sql) . ', '
+		. time() . ')');
 }
 
 ?>
