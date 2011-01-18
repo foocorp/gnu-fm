@@ -387,6 +387,17 @@ class Server {
 		}
 	}
 
+	static function getTrackEditURL($artist, $album, $track) {
+		global $friendly_urls, $base_url;
+		if ($friendly_urls && $album) {
+			return $base_url . '/artist/' . urlencode($artist) . '/album/' . urlencode($album) . '/track/' . urlencode($track) . '/edit';
+		} elseif ($friendly_urls) {
+			return $base_url . '/artist/' . urlencode($artist) . '/track/' . urlencode($track) . '/edit';
+		} else {
+			return $base_url . '/track-add.php?artist=' . urlencode($artist) . '&album=' . urlencode($album) . '&track=' . urlencode($track);
+		}
+	}
+
 	static function getTagURL($tag) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {

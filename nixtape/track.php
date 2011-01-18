@@ -56,6 +56,11 @@ foreach($res as &$trow) {
 	}
 }
 
+if(isset($this_user) && $this_user->manages($artist->name)) {
+	$smarty->assign('edit_link', $track->getEditURL());
+}
+
+
 if($track->duration) {
 	// Give the duration in MM:SS
 	$mins = floor($track->duration / 60);

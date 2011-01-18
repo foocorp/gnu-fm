@@ -49,10 +49,11 @@ class Track {
 	function __construct($name, $artist) {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$res = $adodb->CacheGetRow(600, 'SELECT name, artist_name, album_name, duration, streamable, license, downloadurl, streamurl, mbid FROM Track WHERE '
+		$this->query = 'SELECT name, artist_name, album_name, duration, streamable, license, downloadurl, streamurl, mbid FROM Track WHERE '
 			. 'lower(name) = ' . strtolower($adodb->qstr($name)) . ' AND '
 			. 'lower(artist_name) = ' . strtolower($adodb->qstr($artist))
-			. 'ORDER BY streamable DESC');
+			. 'ORDER BY streamable DESC';
+		$res = $adodb->CacheGetRow(600, $this->query);
 		if(!$res) {
 			$this->name = 'No such track: ' . $name;
 		} else {
@@ -102,6 +103,11 @@ class Track {
 		return new Track($name, $artist_name);
 	}
 
+	function clearCache() {
+		global $adodb;
+		$adodb->CacheFlush($this->query);
+	}
+
 	/**
 	 * Sets the playcount
 	 *
@@ -119,6 +125,60 @@ class Track {
 	function setListenerCount($listeners) {
 		$this->_listenercount = $listeners;
 	}
+
+	/**
+	 * Sets the streaming URL
+	 *
+	 * @param string $streamurl The URL pointing to a streamable file
+	 */
+	function setStreamURL($streamurl) {
+		global $adodb;
+
+		$adodb->Execute('UPDATE Track SET streamurl=' . $adodb->qstr($streamurl) .
+			' WHERE artist_name=' . $adodb->qstr($this->artist_name) . ' AND ' .
+			' name=' . $adodb->qstr($this->name));
+		$this->clearCache();
+	}
+
+	/**
+	 * Sets the download URL
+	 *
+	 * @param string $downloadurl The URL pointing to a downloadable file
+	 */
+	function setDownloadURL($downloadurl) {
+		global $adodb;
+
+		$adodb->Execute('UPDATE Track SET downloadurl=' . $adodb->qstr($downloadurl) .
+			' WHERE artist_name=' . $adodb->qstr($this->artist_name) . ' AND ' .
+			' name=' . $adodb->qstr($this->name));
+		$this->clearCache();
+	}
+
+	/**
+	 * Sets the license
+	 *
+	 * @param string $license A license URL
+	 */
+	function setLicense($license) {
+		global $adodb;
+
+		$streamable = 0;
+		if(is_free_license($license)) {
+			$streamable = 1;
+		}
+
+		$adodb->Execute('UPDATE Track SET license=' . $adodb->qstr($license) . ', streamable=' . $streamable .
+			' WHERE artist_name=' . $adodb->qstr($this->artist_name) . ' AND ' .
+			' name=' . $adodb->qstr($this->name));
+
+		if($streamable) {
+			$adodb->Execute('UPDATE Artist SET streamable=1 WHERE name=' . $adodb->qstr($this->artist_name));
+			$artist = new Artist($this->artist_name);
+			$artist->clearCache();
+		}
+		$this->clearCache();
+	}
+
 
 	/**
 	 *
@@ -177,6 +237,10 @@ class Track {
 
 	function getURL() {
 		return Server::getTrackURL($this->artist_name, $this->album_name, $this->name);
+	}
+
+	function getEditURL() {
+		return Server::getTrackEditURL($this->artist_name, $this->album_name, $this->name);
 	}
 
 	/**
