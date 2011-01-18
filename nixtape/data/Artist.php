@@ -211,6 +211,11 @@ class Artist {
 		return $res;
 	}
 
+	function clearCache() {
+		global $adodb;
+		$adodb->CacheFlush($this->query);
+	}
+
 	/**
 	 * Set an artist's biography summary
 	 *

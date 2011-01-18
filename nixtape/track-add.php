@@ -29,15 +29,31 @@ require_once('utils/licenses.php');
 $artist = new Artist(urldecode($_GET['artist']));
 $album = new Album(urldecode($_GET['album']), $artist->name);
 
+$edit = false;
+if(isset($_GET['track'])) {
+	$edit = true;
+	$track = new Track(urldecode($_GET['track']), $artist->name);
+}
+
 $smarty->assign('artist', $artist);
-$smarty->assign('pageheading', '<a href="' . $artist->getURL() . '">' . $artist->name . '</a> &mdash; Add Track');
+$smarty->assign('edit', $edit);
+if($edit) {
+	$name = $track->name;
+	$smarty->assign('name', $name);
+	$smarty->assign('streaming_url', $track->streamurl);
+	$smarty->assign('pageheading', '<a href="' . $artist->getURL() . '">' . $artist->name . '</a> &mdash; Edit Track');
+} else {
+	$smarty->assign('pageheading', '<a href="' . $artist->getURL() . '">' . $artist->name . '</a> &mdash; Add Track');
+}
 
 if (isset($_POST['submit'])) {
 
-	if (empty($_POST['name'])) {
-		$errors[] = 'A track name must be specified.';
+	if(!$edit) {
+		if (empty($_POST['name'])) {
+			$errors[] = 'A track name must be specified.';
+		}
+		$name = $_POST['name'];
 	}
-	$name = $_POST['name'];
 
 	if (empty($_POST['streaming_url'])) {
 		$errors[] = 'A streaming URL must be specified.';
@@ -75,12 +91,17 @@ if (isset($_POST['submit'])) {
 
 	if($errors) {
 		$smarty->assign('errors', $errors);
-		$smarty->assign('image', $image);
 		$smarty->assign('name', $name);
 		$smarty->assign('streaming_url', $streaming_url);
 	} else {
 		// If the creation was successful send the user back to the view page
-		$track = Track::create($name, $artist->name, $album->name, $streaming_url, $streaming_url, $license);
+		if($edit) {
+			$track->setStreamURL($streaming_url);
+			$track->setDownloadURL($streaming_url);
+			$track->setLicense($license);
+		} else {
+			$track = Track::create($name, $artist->name, $album->name, $streaming_url, $streaming_url, $license);
+		}
 		header('Location: ' . $track->getURL());
 	}
 }
