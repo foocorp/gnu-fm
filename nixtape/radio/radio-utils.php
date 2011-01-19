@@ -27,31 +27,31 @@ require_once('../utils/resolve-external.php');
 
 function radio_title_from_url($url) {
 
-	if(ereg('l(ast|ibre)fm://globaltags/(.*)', $url, $regs)) {
+	if(preg_match('@l(ast|ibre)fm://globaltags/(.*)@', $url, $regs)) {
 		$tag = $regs[2];
 		return 'Libre.fm ' . ucwords($tag) . ' Tag Radio';
 	}
-	if(ereg('l(ast|ibre)fm://artist/(.*)/similarartists', $url, $regs)) {
+	if(preg_match('@l(ast|ibre)fm://artist/(.*)/similarartists@', $url, $regs)) {
 		$artist = $regs[2];
 		return 'Libre.fm ' . ucwords($artist) . ' Similar Artist Radio';
 	}
-	if(ereg('l(ast|ibre)fm://artist/(.*)', $url, $regs)) {
+	if(preg_match('@l(ast|ibre)fm://artist/(.*)@', $url, $regs)) {
 		$artist = $regs[2];
 		return 'Libre.fm ' . ucwords($artist) . ' Artist Radio';
 	}
-	if(ereg('l(ast|ibre)fm://user/(.*)/loved', $url, $regs)) {
+	if(preg_match('@l(ast|ibre)fm://user/(.*)/loved@', $url, $regs)) {
 		$user = $regs[2];
 		return 'Libre.fm ' . ucwords($user) . '\'s Loved Radio';
 	}
-	if(ereg('l(ast|ibre)fm://user/(.*)/recommended', $url, $regs)) {
+	if(preg_match('@l(ast|ibre)fm://user/(.*)/recommended@', $url, $regs)) {
 		$user = $regs[2];
 		return 'Libre.fm ' . ucwords($user) . '\'s Recommended Radio';
 	}
-	if(ereg('l(ast|ibre)fm://user/(.*)/mix', $url, $regs)) {
+	if(preg_match('@l(ast|ibre)fm://user/(.*)/mix@', $url, $regs)) {
 		$user = $regs[2];
 		return 'Libre.fm ' . ucwords($user) . '\'s Mix Radio';
 	}
-	if(ereg('l(ast|ibre)fm://community/loved', $url, $regs)) {
+	if(preg_match('@l(ast|ibre)fm://community/loved@', $url, $regs)) {
 		return 'Libre.fm Community\'s Loved Radio';
 	}
 
@@ -78,20 +78,20 @@ function make_playlist($session, $old_format=false) {
 	$title = radio_title_from_url($url);
 	$smarty->assign('title', $title);
 
-	if(ereg('l(ast|ibre)fm://globaltags/(.*)', $url, $regs)) {
+	if(preg_match('@l(ast|ibre)fm://globaltags/(.*)@', $url, $regs)) {
 		$tag = $regs[2];
 		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist WHERE streamable=1 AND lower(tag) = ' . $adodb->qstr(mb_strtolower($tag, 'UTF-8')));
-	} elseif(ereg('l(ast|ibre)fm://artist/(.*)/similarartists', $url, $regs)) {
+	} elseif(preg_match('@l(ast|ibre)fm://artist/(.*)/similarartists@', $url, $regs)) {
 		$artist = new Artist($regs[2]);
 		$similarArtists = $artist->getSimilar(20);
 		$res = get_artist_selection($similarArtists, $artist);
-	} elseif(ereg('l(ast|ibre)fm://artist/(.*)', $url, $regs)) {
+	} elseif(preg_match('@l(ast|ibre)fm://artist/(.*)@', $url, $regs)) {
 		$artist = $regs[2];
 		$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist, 'UTF-8')));
-	} elseif(ereg('l(ast|ibre)fm://user/(.*)/(loved|library|mix)', $url, $regs)) {
+	} elseif(preg_match('@l(ast|ibre)fm://user/(.*)/(loved|library|mix)@', $url, $regs)) {
 		$requser = new User($regs[2]);
 		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Loved_Tracks.userid=' . $requser->uniqueid . ' AND Track.streamable=1');
-	} elseif(ereg('l(ast|ibre)fm://user/(.*)/recommended', $url, $regs) || ereg('l(ast|ibre)fm://user/(.*)/mix', $url, $regs)) {
+	} elseif(preg_match('@l(ast|ibre)fm://user/(.*)/recommended@', $url, $regs) || preg_match('@l(ast|ibre)fm://user/(.*)/mix@', $url, $regs)) {
 		$requser = new User($regs[2]);
 		$recommendedArtists = $requser->getRecommended(8, true);
 		if($res) {
@@ -100,7 +100,7 @@ function make_playlist($session, $old_format=false) {
 		} else {
 			$res = get_artist_selection($recommendedArtists);
 		}
-	} elseif(ereg('l(ast|ibre)fm://community/loved', $url, $regs)) {
+	} elseif(preg_match('@l(ast|ibre)fm://community/loved@', $url, $regs)) {
 		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Track.streamable=1');
 	} else {
 		die("FAILED\n"); // this should return a blank dummy playlist instead
