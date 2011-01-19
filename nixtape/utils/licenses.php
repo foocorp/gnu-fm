@@ -33,7 +33,7 @@ function simplify_license($license) {
 
 	foreach ($licenses as $key => $l) {
 		foreach ($l as $urlschema) {
-			if (ereg($urlschema, $license))		return $key;
+			if (preg_match("|$urlschema|", $license))		return $key;
 		}
 	}
 
@@ -51,7 +51,7 @@ function is_free_license($license) {
 
 	foreach ($licenses as $key => $l) {
 		foreach ($l as $urlschema) {
-			if (ereg($urlschema, $license)) {
+			if (preg_match("|$urlschema|", $license)) {
 				return true;
 			}
 		}
