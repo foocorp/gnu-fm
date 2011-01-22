@@ -239,6 +239,8 @@ function forwardScrobble($userid, $artist, $album, $track, $time, $mbid, $source
 		curl_setopt ($curl_session, CURLOPT_POST, true);
 		curl_setopt ($curl_session, CURLOPT_POSTFIELDS, $post_vars);
 		curl_setopt ($curl_session, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt ($curl_session, CURLOPT_CONNECTTIMEOUT, 1);
+		curl_setopt ($curl_session, CURLOPT_TIMEOUT, 1);
 		$response = curl_exec($curl_session);
 
 		curl_close($curl_session);
