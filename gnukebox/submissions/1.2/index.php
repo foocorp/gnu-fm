@@ -43,7 +43,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	switch (mb_detect_encoding($_POST['a'][$i])) {
 		case "ASCII":
 		case "UTF-8":
-			$artist = $adodb->qstr(trim(substr($_POST['a'][$i], 0, 255)));
+			$artist = $adodb->qstr(trim(mb_strcut($_POST['a'][$i], 0, 255, "UTF-8")));
 			break;
 		default:
 			die("FAILED Bad encoding in artist submission $i\n");
@@ -53,7 +53,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 		switch (mb_detect_encoding($_POST['b'][$i])) {
 		case "ASCII":
 		case "UTF-8":
-			$album = $adodb->qstr(trim(substr($_POST['b'][$i], 0, 255)));
+			$album = $adodb->qstr(trim(mb_strcut($_POST['b'][$i], 0, 255, "UTF-8")));
 			break;
 		default:
 			die("FAILED Bad encoding in album submission $i\n");
@@ -73,7 +73,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 	switch (mb_detect_encoding($_POST['t'][$i])) {
 		case "ASCII":
 		case "UTF-8":
-			$track = $adodb->qstr(trim(substr($_POST['t'][$i], 0, 255)));
+			$track = $adodb->qstr(trim(mb_strcut($_POST['t'][$i], 0, 255, "UTF-8")));
 			break;
 		default:
 			die("FAILED Bad encoding in title submission $i\n");
