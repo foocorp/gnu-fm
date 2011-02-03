@@ -26,6 +26,14 @@ require_once('data/Album.php');
 
 $artist = new Artist(urldecode($_GET['artist']));
 
+if(!isset($this_user) || !$this_user->manages($artist->name)) {
+	$smarty->assign('pageheading', 'Permission denied');
+	$smarty->assign('error', 'You don\'t have permission to edit this artist\'s details.');
+	$smarty->display('error.tpl');
+	die();
+}
+
+
 $smarty->assign('artist', $artist);
 $smarty->assign('pageheading', '<a href="' . $artist->getURL() . '">' . $artist->name . '</a> &mdash; Add Album');
 

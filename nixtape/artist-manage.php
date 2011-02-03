@@ -38,6 +38,7 @@ try {
 if(!isset($this_user) || !$this_user->manages($artist->name)) {
 	$smarty->assign('pageheading', 'Permission denied');
 	$smarty->assign('error', 'You don\'t have permission to edit this artist\'s details.');
+	$smarty->display('error.tpl');
 	die();
 }
 
