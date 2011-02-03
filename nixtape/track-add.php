@@ -29,6 +29,12 @@ require_once('utils/licenses.php');
 $artist = new Artist(urldecode($_GET['artist']));
 $album = new Album(urldecode($_GET['album']), $artist->name);
 
+if(!isset($this_user) || !$this_user->manages($artist->name)) {
+	$smarty->assign('pageheading', 'Permission denied');
+	$smarty->assign('error', 'You don\'t have permission to edit this artist\'s details.');
+	die();
+}
+
 $edit = false;
 if(isset($_GET['track'])) {
 	$edit = true;
