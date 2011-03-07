@@ -66,7 +66,7 @@ if (isset($_GET['code'])) {
 }
 
 elseif (isset($_POST['user']) || isset($_POST['email'])) {
-	if (isset($_POST['email'])) {
+	if (isset($_POST['email']) && !empty($_POST['email'])) {
 		$field = 'email';
 		$value = $_POST['email'];
 	} else {
@@ -78,7 +78,7 @@ elseif (isset($_POST['user']) || isset($_POST['email'])) {
 	$err = 0;
 
 	try {
-		$row = $adodb->GetRow("SELECT * FROM Users WHERE {$field} = '{$adodb->qstr($value)}'");
+		$row = $adodb->GetRow('SELECT * FROM Users WHERE ' . $field . ' = ' . $adodb->qstr($value));
 	}
 	catch (exception $e) {
 		$err = 1;
@@ -90,6 +90,7 @@ elseif (isset($_POST['user']) || isset($_POST['email'])) {
 		$smarty->display('error.tpl');
 		die();
 	}
+	$username = $row['username'];
 	$code = md5($username . $row['email'] . time());
 	
 	// If a recovery_request already exists, delete it from the database
