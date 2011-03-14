@@ -22,15 +22,15 @@ function user_menu($user, $active_page) {
 	global $this_user;
 
 	$submenu = array(
-		array('name' => 'Overview', 'url' => $user->getURL()),
-		array('name' => 'Stats', 'url' => $user->getURL('stats')),
-		array('name' => 'Recent Tracks', 'url' => $user->getURL('recent-tracks'))
+		array('name' => _('Overview'), 'url' => $user->getURL()),
+		array('name' => _('Stats'), 'url' => $user->getURL('stats')),
+		array('name' => _('Recent Tracks'), 'url' => $user->getURL('recent-tracks'))
 	);
 	if($user->hasLoved()) {
-		$submenu[] = array('name' => 'Radio Stations', 'url' => $user->getURL('station'));
+		$submenu[] = array('name' => _('Radio Stations'), 'url' => $user->getURL('station'));
 	}
 	if($user->name == $this_user->name) {
-		$submenu[] = array('name' => 'Edit', 'url' => $user->getURL('edit'));
+		$submenu[] = array('name' => _('Edit'), 'url' => $user->getURL('edit'));
 	}
 
 	foreach ($submenu as &$item) {
