@@ -32,66 +32,66 @@
 
 		switch ($unix_timestamp) {
 			case ($now < $unix_timestamp):
-				return 'in the future (?)';
+				return _('in the future (?)');
 				break;
 			case ($diff == 1):
 				# one second
-				return 'a second ago';
+				return _('a second ago');
 				break;
 			case ($diff < 60):
 				# less than a minute
-				return $diff . ' seconds ago';
+				return sprintf('%d seconds ago', $diff);
 				break;
 			case ($diff < 120):
 				# between a minute and two
-				return 'about a minute ago';
+				return _('about a minute ago');
 				break;
 			case ($diff < 3600):
 				# less than an hour
-				return round($diff / 60) . ' minutes ago';
+				return sprintf(_('%d minutes ago'), round($diff / 60));
 				break;
 			case ($diff < 7200):
 				# between an hour and two
-				return 'about an hour ago';
+				return _('about an hour ago');
 				break;
 			case ($diff < 86400):
 				# less than a day
-				return round($diff / 3600) . ' hours ago';
+				return sprintf(_('%d hours ago'), round($diff / 3600));
 				break;
 			case ($diff < 172800):
 				# less than two days
-				return 'about a day ago';
+				return _('about a day ago');
 				break;
 			case ($diff < 604800):
 				# less than a week
 				if (round($diff / 86400) == 7)
-					return 'about a week ago';
-				return round($diff / 86400) . ' days ago';
+					return _('about a week ago');
+				return sprintf(_('%d days ago'), round($diff / 86400));
 				break;
 			case ($diff < 691200):
 				# a week an a day
-				return 'about a week ago';
+				return _('about a week ago');
 				break;
 			case ($diff < 2764800):
 				# less than a month
 				if (round($diff / 691200) == 1)
-					return 'about a week ago';
-				return round($diff / 691200) . ' weeks ago';
+					return _('about a week ago');
+				return sprintf(_('%d weeks ago'), round($diff / 691200));
 				break;
 			case ($diff < 4579200):
 				# a month and three weeks
-				return 'about a month ago';
+				return _('about a month ago');
 				break;
 			case ($diff < 33177600);
 				# less than a year
-				return round($diff / 2764800) . ' months ago';
+				return sprintf(_('%d months ago'), round($diff / 2764800));
 				break;
 			case ($diff < 35942400):
 				# a year and a month
-				return 'about a year ago';
+				return _('about a year ago');
 				break;
 			case ($diff > 35942400):
-				return 'more than a year ago';
+				return _('more than a year ago');
 				break;
 		}
 	}
