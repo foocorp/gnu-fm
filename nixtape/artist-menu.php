@@ -22,8 +22,8 @@ function artist_menu($artist, $active_page) {
 	global $this_user;
 
 	$submenu = array(
-		array('name' => 'Overview', 'url' => $artist->getURL()),
-		array('name' => 'Tag', 'url' => $artist->getURL('tag')),
+		array('name' => _('Overview'), 'url' => $artist->getURL()),
+		array('name' => _('Tag'), 'url' => $artist->getURL('tag')),
 	);
 
 	foreach ($submenu as &$item) {
