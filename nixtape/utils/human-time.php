@@ -30,16 +30,6 @@
 
 		$diff = $now - $unix_timestamp;
 
-		# ugly!
-		$number_to_alpha = array(
-			'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
-			'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',
-			'twenty-one', 'twenty-two', 'twenty-three', 'twenty-four', 'twenty-six', 'twenty-seven', 'twenty-eight', 'twenty-nine', 'thirty',
-			'thirty-one', 'thirty-two', 'thirty-three', 'thirty-four', 'thirty-five', 'thirty-six', 'thirty-seven', 'thirty-eight', 'thirty-nine',
-			'fourty-one', 'fourty-two', 'fourty-three', 'fourty-four', 'fourty-five', 'fourty-six', 'fourty-seven', 'fourty-eight', 'fourty-nine',
-			'fifty-one', 'fifty-two', 'fifty-three', 'fifty-four', 'fifty-five', 'fifty-six', 'fifty-seven', 'fifty-eight', 'fifty-nine'
-		);
-
 		switch ($unix_timestamp) {
 			case ($now < $unix_timestamp):
 				return 'in the future (?)';
