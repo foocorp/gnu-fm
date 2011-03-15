@@ -184,7 +184,7 @@ class User {
 		if (!empty($this->avatar_uri))
 			return $this->avatar_uri;
 
-		return 'http://www.gravatar.com/avatar/' . md5($this->email) . '?s=' . $size . '&d=monsterid';
+		return 'http://www.gravatar.com/avatar/' . md5(strtolower($this->email)) . '?s=' . $size . '&d=monsterid';
 	}
 
 	function getURL($component='profile') {
