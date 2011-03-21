@@ -11,17 +11,17 @@ $n=$_GET['n'];
 $n=(int)$n;
 
 if ($n < 1) {
-
-$n=1000000;
-
+	$n=1000000;
 }
 
-	try {
-		$aTagCloud = TagCloud::GenerateTagCloud('free_scrobbles', 'artist', $n);
+try {
+	$aTagCloud = TagCloud::GenerateTagCloud('free_scrobbles', 'artist', $n);
 	$smarty->assign('tagcloud', $aTagCloud);		
-	} catch (exception $e) {}
-
+} catch (exception $e) {
 	$smarty->assign('errors', $errors);
-	$smarty->display('tagcloud.tpl');
+	$smarty->display('error.tpl');
+	die();
+}
 
+$smarty->display('tagcloud.tpl');
 ?>
