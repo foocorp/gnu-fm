@@ -46,4 +46,3 @@ if (isset($_POST['request'])) {
 }
 
 $smarty->display("request.tpl");
-?>

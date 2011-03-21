@@ -173,4 +173,3 @@ else
 	$smarty->assign('details', 'Shall I call in a missing peoples report? This shouldn\'t happen.');
 	$smarty->display('error.tpl');
 }
-

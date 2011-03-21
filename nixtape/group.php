@@ -101,4 +101,3 @@ require_once('data/Server.php');
 // 	$smarty->display('error.tpl');
 // }
 
-?>

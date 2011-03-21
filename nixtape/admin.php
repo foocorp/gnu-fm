@@ -91,4 +91,3 @@ $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 $data = $adodb->GetAll('SELECT email,status FROM Invitation_Request ORDER BY time ASC');
 $smarty->assign('emails', $data);
 $smarty->display('admin.tpl');
-?>

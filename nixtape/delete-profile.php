@@ -82,4 +82,3 @@ catch (exception $e) {
 	mail($email, $subject, $content, $headers);
 	$smarty->display('delete-profile.tpl');
 }
-?>

@@ -19,7 +19,6 @@
 
 */
 
-
 require_once('database.php');
 require_once('templating.php');
 require_once('data/sanitize.php');
@@ -81,4 +80,3 @@ $smarty->assign('flattr_uid', $artist->flattr_uid);
 $smarty->assign('pageheading', 'Managing ' . $artist->name);
 
 $smarty->display("artist-manage.tpl");
-?>

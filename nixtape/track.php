@@ -83,4 +83,3 @@ $smarty->assign('extra_head_links', array(
 
 $smarty->assign('headerfile', 'track-header.tpl');
 $smarty->display('track.tpl');
-?>

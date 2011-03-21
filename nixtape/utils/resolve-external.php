@@ -26,5 +26,3 @@ function process_jamendo_url($url) {
 	// We don't know what this is
 	return $url;
 }
-
-?>

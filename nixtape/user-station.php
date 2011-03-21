@@ -67,5 +67,3 @@ if(isset($user->name)) {
 	$smarty->assign('details', 'Shall I call in a missing persons report?');
 	$smarty->display('error.tpl');
 }
-
-?>

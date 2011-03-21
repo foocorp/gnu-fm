@@ -39,4 +39,3 @@ while (!$recordSet->EOF) {
 $smarty->assign('entries', $aEntries);
 
 $smarty->display('mbid-mismatch-report.tpl');
-?>

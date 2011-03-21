@@ -1,4 +1,4 @@
-<?
+<?php
 /* GNU FM -- a free network service for sharing your music listening habits
 
    Copyright (C) 2009 Free Software Foundation, Inc
@@ -39,4 +39,3 @@ function user_menu($user, $active_page) {
 
 	return $submenu;
 }
-?>

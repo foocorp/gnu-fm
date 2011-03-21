@@ -181,4 +181,3 @@ if(isset($_POST['register'])) {
 
 $smarty->display('register.tpl');
 }
-?>

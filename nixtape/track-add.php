@@ -114,5 +114,3 @@ if (isset($_POST['submit'])) {
 }
 
 $smarty->display('track-add.tpl');
-
-?>

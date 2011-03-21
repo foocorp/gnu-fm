@@ -84,4 +84,3 @@ elseif (function_exists('parse_url'))
 	// Remove HTTP header.
 	echo substr(strstr($output, "\r\n\r\n"), 4);
 }
-

@@ -147,4 +147,3 @@ elseif (isset($_POST['user']) || isset($_POST['email'])) {
 }
 
 $smarty->display('reset.tpl');
-?>

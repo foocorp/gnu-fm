@@ -42,5 +42,3 @@ echo $users;
 $smarty->assign('userlist', $users);
 
 $smarty->display('user-list.tpl');
-
-?>

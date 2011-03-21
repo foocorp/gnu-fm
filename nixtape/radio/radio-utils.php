@@ -185,4 +185,3 @@ function get_artist_selection($artists, $artist=false) {
 	return $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND ' . $artistsClause);
 }
 
-?>

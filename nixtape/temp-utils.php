@@ -48,5 +48,3 @@ function uniqueid_to_username($uniqueid) {
 
 	return $username;
 }
-
-?>

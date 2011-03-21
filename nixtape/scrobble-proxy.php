@@ -50,4 +50,3 @@ $response = curl_exec($session);
 echo $response;
 
 curl_close($session);
-?>
