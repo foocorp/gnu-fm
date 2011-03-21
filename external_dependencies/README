@@ -1,7 +1,3 @@
-Other external dependencies which SHOULD BE HERE:
-
-	- PHP ADODB
-
 Other external dependencies which are currently bundled within the nixtape source tree:
 
 	- jQuery 1.3.2
