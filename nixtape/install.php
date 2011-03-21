@@ -43,7 +43,7 @@ if (isset($_POST['install'])) {
 
 	// Check the connection
 	try {
-	$adodb =& NewADOConnection($connect_string);
+		$adodb =& NewADOConnection($connect_string);
 	}
 	catch (exception $e) {
 		die($e->getMessage());
@@ -94,7 +94,7 @@ if (isset($_POST['install'])) {
 
 		<form method="post">
 			<h2>Database</h2>
-			Database Management System: <br />
+			Database Management System (these should be the same connection details as the gnukebox database): <br />
 			<input type="radio" name="dbms" value="sqlite" onclick='showSqlite()' checked>SQLite (use an absolute path)</input><br />
 			<input type="radio" name="dbms" value="mysql" onclick='showNetworkDBMS()'>MySQL</input><br />
 			<input type="radio" name="dbms" value="pgsql" onclick='showNetworkDBMS()'>PostgreSQL</input><br />
@@ -126,5 +126,7 @@ if (isset($_POST['install'])) {
 			<br /><br />
 			<input type="submit" value="Install" name="install" />
 		</form>
+		<br />
+		<div align="center"><a href="http://docs.jurg.no/gnufm_install.txt">Help</a></div>
 	</body>
 </html>
