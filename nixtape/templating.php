@@ -25,7 +25,7 @@ require_once('smarty/Smarty.class.php');
 
 if($_GET['lang']) {
 	$languages = array($_GET['lang'] . '.UTF-8');
- 	setcookie('lang', $_GET['lang'] . '.UTF-8', time() + 31536000);
+ 	setcookie('lang', $_GET['lang'] . '.UTF-8', time() + 31536000, '/');
 } elseif (isset($_COOKIE['lang'])) {
  	$languages = array($_COOKIE['lang']);
 } else {
