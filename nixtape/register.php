@@ -27,15 +27,6 @@ if($logged_in == true){
 	header('Location: index.php');
 } else {
 
-// Moving to open alpha
-/*$authcode = $_GET["authcode"];
-
-$res = $adodb->GetRow('SELECT inviter FROM Invitations WHERE code = ' . $adodb->qstr($authcode));
-if(!$res) {
-	$invalid_authcode = true;
-} else {
-	$invalid_authcode = false;
-}*/
 function sendEmail($text, $email) {
         $headers = 'From: Libre.fm Account Activation <account@libre.fm>';
 	$subject = 'Libre.fm Account Activation - Action needed!';
@@ -162,10 +153,6 @@ if(isset($_POST['register'])) {
 		    . "please disregard this email.\n\n" . $url . "\n\n- The Libre.fm Team";
 		sendEmail($content, $email);
 
-		// Remove auth code and set their username as the invitee
-		//$adodb->Execute("UPDATE Invitations SET code = NULL, invitee = " . $adodb->qstr($username) . " WHERE code = " . $adodb->qstr($authcode));
-		//$removesql = "DELETE FROM Invitation_Request WHERE email=" . $adodb->qstr($email);
-		//$adodb->Execute($removesql);
 		$smarty->assign('registered', true);
 	} else {
 		$smarty->assign('username', $username);
@@ -176,8 +163,6 @@ if(isset($_POST['register'])) {
 		$smarty->assign('errors', $errors);
 	}
 }
-//$smarty->assign("invalid_authcode", $invalid_authcode);
-//$smarty->assign("authcode", $authcode);
 
 $smarty->display('register.tpl');
 }
