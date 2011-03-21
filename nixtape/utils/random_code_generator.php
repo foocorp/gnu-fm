@@ -28,4 +28,3 @@
         $code = md5(uniqid(mt_rand(rand(), rand()), true));
    	    return $code;
 	}
-?>

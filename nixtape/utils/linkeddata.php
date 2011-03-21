@@ -76,5 +76,3 @@ function identifierTrack ($username, $artist, $track, $album, $time, $mbid=NULL,
 
 	return sprintf('%s#track', Server::getTrackURL($artist, $album, $track));
 }
-
-

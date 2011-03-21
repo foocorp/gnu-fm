@@ -38,5 +38,3 @@ if (!PEAR::isError ($aTopArtists)) {
 }
 $smarty->assign('explore', true);
 $smarty->display('explore-artists.tpl');
-
-?>

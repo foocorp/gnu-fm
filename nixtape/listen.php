@@ -38,4 +38,3 @@ if(isset($station)) {
 }
 $smarty->assign('pageheading', 'Go ahead, listen all you want');
 $smarty->display('listen.tpl');
-?>

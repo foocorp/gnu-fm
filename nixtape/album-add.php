@@ -19,7 +19,6 @@
 
 */
 
-
 require_once('database.php');
 require_once('templating.php');
 require_once('data/Album.php');
@@ -64,5 +63,3 @@ if (isset($_POST['submit'])) {
 	}
 }
 $smarty->display('album-add.tpl');
-
-?>

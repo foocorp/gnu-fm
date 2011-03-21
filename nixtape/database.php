@@ -39,5 +39,3 @@ try {
 function reportError($title, $msg) {
 
 }
-
-?>

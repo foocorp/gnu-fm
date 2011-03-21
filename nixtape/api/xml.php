@@ -41,4 +41,3 @@ function repamp($input) {
 	$input = str_replace('&', '&amp;', $input);
 	return($input);
 }
-?>

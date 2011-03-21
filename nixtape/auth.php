@@ -46,4 +46,3 @@ if(isset($_COOKIE['session_id'])) {
 		$this_user = new User($username);
 	}
 }
-?>

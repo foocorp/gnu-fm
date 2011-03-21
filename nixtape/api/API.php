@@ -49,5 +49,3 @@ class API {
         return (XML::error('failed', $error, $this->api_error[$error]));
     }
 }
-
-?>

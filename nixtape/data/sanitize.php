@@ -27,5 +27,3 @@ function sanitize($data) {
 	}
 	return $sane;
 }
-
-?>

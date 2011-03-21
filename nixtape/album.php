@@ -52,5 +52,3 @@ $smarty->assign('extra_head_links', array(
 
 $smarty->assign('headerfile', 'album-header.tpl');
 $smarty->display('album.tpl');
-
-?>

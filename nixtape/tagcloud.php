@@ -1,4 +1,4 @@
-<?
+<?php
 
 require_once('database.php');
 require_once('templating.php');
@@ -24,4 +24,3 @@ try {
 }
 
 $smarty->display('tagcloud.tpl');
-?>

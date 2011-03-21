@@ -80,4 +80,3 @@ print $ser->getSerializedIndex($index);
 if ($_GET['callback']) {
 	print ');';
 }
-

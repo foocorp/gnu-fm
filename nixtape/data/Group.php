@@ -386,4 +386,3 @@ class Group {
 	}
 
 }
-

@@ -27,4 +27,3 @@ function getAbsoluteURL() {
    	$string = (implode("/", $path).'/');
    	return "http://".$server.$string;
 }
-?>
