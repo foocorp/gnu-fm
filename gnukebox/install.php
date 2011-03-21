@@ -413,6 +413,8 @@ if (isset($_POST['install'])) {
 			<br />
 			<input type="submit" value="Install" name="install" />
 		</form>
+		<br />
+		<div align="center"><a href="http://docs.jurg.no/gnufm_install.txt">Help</a></div>
 	</body>
 </html>
 
