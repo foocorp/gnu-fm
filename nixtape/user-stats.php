@@ -46,11 +46,6 @@ try {
 
 if(isset($user->name)) {
 
-#	$aUserTagCloud =  TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->uniqueid);
-#	if (!PEAR::isError ($aUserTagCloud)) {
-#		$smarty->assign('user_tagcloud',$aUserTagCloud);
-#	}
-
 	$smarty->assign('stat_barwidth', 320);
 try {
 	$aUserPlayStat =  Statistic::GeneratePlayStats('Scrobbles', 'artist', 40, $user->uniqueid, 300);
