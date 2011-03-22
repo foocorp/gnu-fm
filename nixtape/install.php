@@ -121,7 +121,7 @@ if (isset($_POST['install'])) {
 				}
 			?>
 			</select><br />
-			Base URL: <input type="text" name="base_url" value="<?php echo getAbsoluteURL(); ?>" /><br />
+			Base URL: <input type="text" name="base_url" value="<?php echo substr(getAbsoluteURL(), 0, -1); ?>" /><br />
 			Submissions Server: <input type="text" name="submissions_server" /> (URL to your gnukebox install)<br />
 			<br /><br />
 			<input type="submit" value="Install" name="install" />
