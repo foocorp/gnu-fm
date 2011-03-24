@@ -54,6 +54,11 @@ if (isset($_POST['install'])) {
 
 	$default_theme = $_POST['default_theme'];
 	$base_url = $_POST['base_url'];
+
+	if($base_url[strlen($base_url)-1] === '/') {
+		$base_url = substr($base_url, 0, -1);
+	}
+
 	$submissions_server = $_POST['submissions_server'];
 
 	//Write out the configuration
@@ -121,7 +126,7 @@ if (isset($_POST['install'])) {
 				}
 			?>
 			</select><br />
-			Base URL: <input type="text" name="base_url" value="<?php echo substr(getAbsoluteURL(), 0, -1); ?>" /><br />
+			Base URL: <input type="text" name="base_url" value="<?php echo getAbsoluteURL(); ?>" /><br />
 			Submissions Server: <input type="text" name="submissions_server" /> (URL to your gnukebox install)<br />
 			<br /><br />
 			<input type="submit" value="Install" name="install" />
