@@ -60,7 +60,7 @@ class Statistic {
 
 			foreach($res as &$i){
 				$i['pageurl'] = Server::getArtistURL($i['artist']);
-				$i['size'] = $i['count'] / $max * $maxwidth;
+				$i['size'] = round($i['count'] / $max * $maxwidth);
 			}
 
 			return $res;
@@ -100,7 +100,7 @@ class Statistic {
 			}
 
 			foreach($res as &$i){
-				$i['size'] = $i['count'] / $max * $maxwidth;
+				$i['size'] = round($i['count'] / $max * $maxwidth);
 			}
 
 			return $res;
