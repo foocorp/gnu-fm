@@ -353,15 +353,14 @@ if (isset($_POST['install'])) {
 			}
 		}
 	} else {
-		try {
-			$adodb->Execute($query);
-		} catch(Exception $e) {
-			die("Database Error: " . $adodb->ErrorMsg());
+		foreach($stage_two_queries_other as $query) {
+			try {
+				$adodb->Execute($query);
+			} catch(Exception $e) {
+				die("Database Error: " . $adodb->ErrorMsg());
+			}
 		}
 	}
-
-
-
 
 	foreach($stage_three_queries as $query) {
 		try {
