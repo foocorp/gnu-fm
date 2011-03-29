@@ -25,10 +25,9 @@ require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/TagCloud.php');
 
-$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
+$aTagCloud = TagCloud::GenerateTagCloud('loved_tracks', 'artist');
 if ($aTagCloud) {
-        $smarty->assign('tagcloud', $aTagCloud);
+	$smarty->assign('tagcloud', $aTagCloud);
 }
-
 
 $smarty->display("popular.tpl");
