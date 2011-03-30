@@ -119,6 +119,7 @@ if (isset($_POST['install'])) {
 		id SERIAL PRIMARY KEY,
 		name VARCHAR(255) unique,
 		mbid VARCHAR(36),
+		imbid INTEGER,
 		streamable INTEGER,
 		bio_published INTEGER,
 		bio_content TEXT,
