@@ -274,6 +274,12 @@ class Server {
 			$row['userurl'] = Server::getUserURL($row['username']);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
 			$row['trackurl'] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
+			if($username) {
+				$row['loved'] = $adodb->CacheGetOne(60, 'SELECT Count(*) FROM Loved_Tracks WHERE artist='
+					. $adodb->qstr($row['artist'])
+					. ' AND track=' . $adodb->qstr($row['track'])
+					. ' AND userid=' . $row['userid']);
+			}
 
 			// We really want to get an image URI from the database and only fall back to qm50.png if we can't find an image.
 			$row['albumart'] = $base_url . 'themes/' . $default_theme . '/images/qm50.png';
