@@ -47,7 +47,7 @@ if(isset($user->name)) {
 		$smarty->assign('scrobbles', $aUserScrobbles);
 	} catch (exception $e) {}
 	try {
-	$aUserNowPlaying = $user->getNowPlaying(10);
+		$aUserNowPlaying = $user->getNowPlaying(10);
 		$smarty->assign('nowplaying', $aUserNowPlaying);
 	} catch (exception $e) {}
 	if($user->hasLoved()) {
