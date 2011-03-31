@@ -179,7 +179,7 @@ class Artist {
 	function addTags($tags, $userid) {
 		global  $adodb;
 
-		$tags = split(",", strtolower($tags));
+		$tags = explode(",", strtolower($tags));
 		foreach($tags as $tag) {
 			$tag = trim($tag);
 			if (strlen($tag) == 0) {
