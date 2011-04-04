@@ -41,10 +41,10 @@ if(isset($_POST['login'])) {
 
 	if(empty($errors)) {
 		try {
-		$sql = 'SELECT uniqueid FROM Users WHERE '
-			. ' lower(username) = ' . $adodb->qstr(strtolower($username))
-		  . ' AND password = ' . $adodb->qstr(md5($password)) . ' AND active = 1';
-		$userid = $adodb->GetOne($sql);
+			$sql = 'SELECT uniqueid FROM Users WHERE '
+				. ' lower(username) = ' . $adodb->qstr(strtolower($username))
+			  . ' AND password = ' . $adodb->qstr(md5($password)) . ' AND active = 1';
+			$userid = $adodb->GetOne($sql);
 		}
 		catch (exception $e) {
 			$errors .= 'A database error happened.';
