@@ -41,16 +41,21 @@ if(isset($_POST['login'])) {
 
 	if(empty($errors)) {
 		try {
-			$sql = 'SELECT uniqueid FROM Users WHERE '
+			$sql = 'SELECT uniqueid, active FROM Users WHERE '
 				. ' lower(username) = ' . $adodb->qstr(strtolower($username))
-			  . ' AND password = ' . $adodb->qstr(md5($password)) . ' AND active = 1';
-			$userid = $adodb->GetOne($sql);
+			  . ' AND password = ' . $adodb->qstr(md5($password));
+			$row = $adodb->GetRow($sql);
+			$userid = $row['uniqueid'];
+			$active = $row['active'];
 		}
 		catch (exception $e) {
 			$errors .= 'A database error happened.';
 		}
 		if(!$userid) {
 			$errors .= 'Invalid username or password. Would you like to <a href="' . $base_url . '/reset.php">recover your password?</a>';
+			$smarty->assign('invalid', true);
+		} elseif (!$active) {
+			$errors .= 'This account hasn\'t been activated. Please follow the link in the e-mail you received when you signed up to activate your account.</a>';
 			$smarty->assign('invalid', true);
 		} else {
 			// Give the user a session id, like any other client
