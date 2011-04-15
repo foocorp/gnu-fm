@@ -162,7 +162,7 @@ class User {
 	 *
 	 * @param int $number The number of scrobbles to return
 	 * @param int $offset The position of the first scrobble to return
-	 * @return An array of scrobbles with human time
+	 * @return array An array of scrobbles with human time
 	 */
 	function getScrobbles($number, $offset=0) {
 		try {
@@ -178,7 +178,7 @@ class User {
 	 * Retrieve a user's avatar via the gravatar service
 	 *
 	 * @param int $size The desired size of the avatar (between 1 and 512 pixels)
-	 * @return A URL to the user's avatar image
+	 * @return array A URL to the user's avatar image
 	 */
 	function getAvatar($size=64) {
 		if (!empty($this->avatar_uri))
@@ -194,7 +194,7 @@ class User {
 	/**
 	 * Get a user's now-playing tracks
 	 *
-	 * @return An array of nowplaying data
+	 * @return array An array of nowplaying data
 	 */
 	function getNowPlaying($number) {
 		return Server::getNowPlaying($number, $this->name);
@@ -203,7 +203,7 @@ class User {
 	/**
 	 * Log in to the gnukebox server
 	 *
-	 * @return A string containing the session key to be used for scrobbling
+	 * @return array A string containing the session key to be used for scrobbling
 	 */
 	function getScrobbleSession() {
 		global $adodb;
@@ -224,7 +224,7 @@ class User {
 	 * Log in to the radio server
 	 *
 	 * @param string $station The station to be played
-	 * @return A string containing the session key to be used for streaming
+	 * @return array A string containing the session key to be used for streaming
 	 */
 	function getRadioSession($station) {
 		return Server::getRadioSession($station, $this->name);
@@ -233,16 +233,16 @@ class User {
 	/**
 	 * Log in to the web services
 	 *
-	 * @return A string containing the web session key
+	 * @return array A string containing the web session key
 	 */
 	function getWebServiceSession() {
 		return Server::getWebServiceSession($this->name);
 	}
 
 	/**
-	 * get user's top 20 tracks
+	 * Get this user's top 20 tracks
 	 *
-	 * @return user's top 20 tracks
+	 * @return array This user's top 20 tracks
 	 */
 	function getTopTracks($number=20, $since=null) {
 		global $adodb;
@@ -300,7 +300,7 @@ class User {
 	 * Get a user's most used tags
 	 *
 	 * @param int $limit The number of tags to return (defaults to 10)
-	 * @return An array of tag details
+	 * @return array An array of tag details
 	 */
 	function getTopTags($limit=10) {
 		global $adodb;
@@ -317,7 +317,7 @@ class User {
 	 * Get a user's tags for a specific artist
 	 *
 	 * @param string $artist The name of the artist to fetch tags for
-	 * @return An array of tag details
+	 * @return array An array of tag details
 	 */
 	function getTagsForArtist($artist) {
 		global $adodb;
@@ -334,7 +334,7 @@ class User {
 	 * Get a user's loved tracks
 	 *
 	 * @param int $limit The number of tracks to return (defaults to 50)
-	 * @return An array of track details
+	 * @return array An array of track details
 	 */
 	function getLovedTracks($limit=50) {
 		global $adodb;
@@ -350,7 +350,7 @@ class User {
 	 * Get a user's loved artists
 	 *
 	 * @param int $limit The number of artists to return (defaults to 10)
-	 * @return An array of artist details
+	 * @return array An array of artist details
 	 */
 	function getLovedArtists($limit=10) {
 		global $adodb;
@@ -384,7 +384,7 @@ class User {
 	 * Get a user's banned tracks
 	 *
 	 * @param int $limit The number of tracks to return (defaults to 50)
-	 * @return An array of track details
+	 * @return array An array of track details
 	 */
 	function getBannedTracks($limit=50) {
 		global $adodb;
@@ -400,7 +400,7 @@ class User {
 	/**
 	 * Get details of any connections this user has setup to other services.
 	 *
-	 * @return An array of service connection details
+	 * @return array An array of service connection details
 	 */
 	function getConnections() {
 		global $adodb;
@@ -412,11 +412,11 @@ class User {
 	}
 
 	/**
-	 * Get artists recommended for this yser
+	 * Get artists recommended for this user
 	 *
 	 * @param int $limit The number of artists to return (defaults to 10)
 	 * @param bool $randomised Pick artists at random
-	 * @return An array of artist details
+	 * @return array An array of artist details
 	 */
 	function getRecommended($limit=10, $random=false) {
 		global $adodb;
@@ -461,7 +461,7 @@ class User {
 	 * Determines whether a user has permission to manage an artist
 	 *
 	 * @oaram string $artist The name of the artist to check
-	 * @return Boolean indicating whether this user can edit the artist or not.
+	 * @return bool Boolean indicating whether this user can edit the artist or not.
 	 */
 	function manages($artist) {
 		global $adodb;
@@ -482,7 +482,7 @@ class User {
 	/**
 	 * Checks whether this user has any loved tracks
 	 *
-	 * @return Boolean indicating whether this user has marked any tracks as being loved in the past.
+	 * @return bool Boolean indicating whether this user has marked any tracks as being loved in the past.
 	 */
 	function hasLoved() {
 		global $adodb;
