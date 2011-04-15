@@ -25,7 +25,15 @@ require_once('templating.php');
 require_once('data/Album.php');
 
 $album = new Album(urldecode($_GET['album']), urldecode($_GET['artist']));
-$artist = new Artist($album->artist_name);
+
+try {
+	$artist = new Artist($album->artist_name);
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Artist not found.');
+	$smarty->assign('details', 'The artist ' . $track->artist_name . ' was not found in the database.');
+	$smarty->display('error.tpl');
+	die();
+}
 
 $smarty->assign('name', $album->name);
 $smarty->assign('id', $album->id);

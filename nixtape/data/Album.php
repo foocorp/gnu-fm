@@ -88,8 +88,12 @@ class Album {
 			. $adodb->qstr($artist_name) . ', '
 			. $adodb->qstr($image) . ')');
 
-		$artist = new Artist($artist_name);
-		$artist->clearAlbumCache();
+		try {
+			$artist = new Artist($artist_name);
+			$artist->clearAlbumCache();
+		} catch (Exception $e) {
+			// No such artist.
+		}
 
 		return new Album($name, $artist_name);
 	}

@@ -40,10 +40,10 @@ class ArtistXML {
 			return;
 		}
 
-		$artist = new Artist($artistName, $mbid);
-
-		if (!$artist) {
-			return(XML::error('failed', '7', 'Invalid resource specified'));
+		try {
+			$artist = new Artist($artistName, $mbid);
+		} catch (Exception $e) {
+			return XML::error('failed', '7', 'Invalid resource specified');
 		}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
@@ -64,9 +64,9 @@ class ArtistXML {
 
 	public static function getTopTracks($artistName) {
 
-		$artist = new Artist($artistName);
-
-		if (!$artist) {
+		try {
+			$artist = new Artist($artistName);
+		} catch (Exception $e) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
@@ -91,9 +91,9 @@ class ArtistXML {
 
 	public static function getTopTags($artistName) {
 
-		$artist = new Artist($artistName);
-
-		if (!$artist) {
+		try {
+			$artist = new Artist($artistName);
+		} catch (Exception $e) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
@@ -114,9 +114,9 @@ class ArtistXML {
 
 	public static function getFlattr($artistName) {
 
-		$artist = new Artist($artistName);
-
-		if(!$artist) {
+		try {
+			$artist = new Artist($artistName);
+		} catch (Exception $e) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
