@@ -48,15 +48,14 @@ class User {
 
 		if (is_array($data)) {
 			$row = $data;
-		}
-		else {
+		} else {
 			global $adodb;
 			$query = 'SELECT * FROM Users WHERE lower(username) = ' . $adodb->qstr(strtolower($name)) . ' LIMIT 1';
 			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-	                $row = $adodb->CacheGetRow(7200,$query);
+			$row = $adodb->CacheGetRow(7200,$query);
 			if (!$row) {
 				throw new Exception('EUSER', 22);
-	                }
+			}
 		}
 
 		if (is_array($row)) {
@@ -82,35 +81,34 @@ class User {
 
 			$this->has_identica = preg_match('#^http://identi\.ca/#i', $this->laconica_profile);
 
-			if (! preg_match('/\:/', $this->id))
+			if (! preg_match('/\:/', $this->id)) {
 				$this->id = $this->getURL() . '#me';
+			}
 		}
 	}
 
-
-	public static function new_from_uniqueid_number ($uid)
-	{
+	public static function new_from_uniqueid_number($uid) {
 		global $adodb;
 		$query = sprintf('SELECT * FROM Users WHERE uniqueid = %d', (int)$uid);
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$row = $adodb->CacheGetRow(7200,$query);
+		$row = $adodb->CacheGetRow(7200, $query);
 
-		if($row) {
+		if ($row) {
 			return new User($row['username'], $row);
 		} else {
 			return false;
 		}
 	}
 
-	function save ()
-	{
+	function save() {
 		global $adodb;
 
 		// It appears we just discard this data, but this is here for a reason!
 		// getLocationDetails will fill in latitude,longitude details into the Places table in the database
 		// if it's not already there. This is important as the location_uri field is a foreign key.
-		if (!empty($this->location_uri))
+		if (!empty($this->location_uri)) {
 			$dummy = Server::getLocationDetails($this->location_uri);
+		}
 
 		$q = sprintf('UPDATE Users SET '
 				. 'email=%s, '     # Send a confirmation email first??
@@ -146,7 +144,7 @@ class User {
 
 		try {
 			$res = $adodb->Execute($q);
-		} catch (exception $e) {
+		} catch (Exception $e) {
 			header('Content-Type: text/plain');
 			exit;
 		}
@@ -167,10 +165,14 @@ class User {
 	function getScrobbles($number, $offset=0) {
 		try {
 			$data = Server::getRecentScrobbles($number, $this->uniqueid, $offset);
-		} catch (exception $e) {
+		} catch (Exception $e) {
 			throw (new Exception('Breakage while getting recent scrobbles'));
 		}
-		if(!isset($data)) { return array(); }
+
+		if (!isset($data)) {
+			return array();
+		}
+
 		return $data;
 	}
 
@@ -181,8 +183,9 @@ class User {
 	 * @return array A URL to the user's avatar image
 	 */
 	function getAvatar($size=64) {
-		if (!empty($this->avatar_uri))
+		if (!empty($this->avatar_uri)) {
 			return $this->avatar_uri;
+		}
 
 		return 'http://www.gravatar.com/avatar/' . md5(strtolower($this->email)) . '?s=' . $size . '&d=monsterid';
 	}
@@ -213,7 +216,7 @@ class User {
 			. $adodb->qstr($session_id) . ','
 			. '\'lfm\','
 			. (time() + 86400) . ')';
-		if($adodb->Execute($sql)) {
+		if ($adodb->Execute($sql)) {
 			return $session_id;
 		} else {
 			return false;
@@ -260,7 +263,7 @@ class User {
 
 		$maxcount = 0;
 
-		foreach($data as &$i) {
+		foreach ($data as &$i) {
 			$row = sanitize($i);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
 			$row['trackurl'] = Server::getTrackURL($row['artist'],$row['album'],$row['track']);
@@ -289,7 +292,7 @@ class User {
 		}
 		try {
 			$tracks = $adodb->CacheGetOne(200, $query);
-		} catch (exception $e) {
+		} catch (Exception $e) {
 			$tracks = 0;
 		}
 
@@ -362,15 +365,15 @@ class User {
 		$i = 0;
 		$lovedWithMeta = array();
 		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
-		foreach($res as $artist) {
+		foreach ($res as $artist) {
 			$streamable = $adodb->cacheGetOne(86400, 'SELECT streamable FROM Artist WHERE name = ' . $adodb->qstr($artist['artist']));
-			if($streamable) {
+			if ($streamable) {
 				$lovedWithMeta[$i]['artist'] = $artist['artist'];
 				$lovedWithMeta[$i]['numLoved'] = $artist['num'];
 				$lovedWithMeta[$i]['url'] = Server::getArtistURL($artist['artist']);
 				$lovedWithMeta[$i]['size'] = $sizes[(int) ($i/($limit/count($sizes)))];
 				$i++;
-				if($i >= $limit) {
+				if ($i >= $limit) {
 					break;
 				}
 			}
@@ -423,8 +426,8 @@ class User {
 
 		$loved = $this->getLovedTracks(50);
 		$artists = array();
-		for($i = 0; $i < min($limit, count($loved) - 1); $i++) {
-			if($random) {
+		for ($i = 0; $i < min($limit, count($loved) - 1); $i++) {
+			if ($random) {
 				$n = rand(0, count($loved) - 1);
 			} else {
 				$n = $i;
@@ -433,27 +436,26 @@ class User {
 		}
 		
 		$recommendedArtists = array();
-		foreach($artists as $artist_name) {
+		foreach ($artists as $artist_name) {
 			try {
 				$artist = new Artist($artist_name);
 			} catch (Exception $e) {
 				continue;
 			}
 			$similar = $artist->getSimilar(5);
-			foreach($similar as $sa) {
-				if(!array_key_exists($sa['artist'], $recommendedArtists)) {
+			foreach ($similar as $sa) {
+				if (!array_key_exists($sa['artist'], $recommendedArtists)) {
 					$recommendedArtists[$sa['artist']] = $sa;
 				}
 			}
 		}
 
 		$limit = min($limit, count($recommendedArtists) - 1);
-		if($random) {
+		if ($random) {
 			$randomArtists = array();
 			$keys = array_keys($recommendedArtists);
-			for($i = 0; $i < $limit; $i++) {
+			for ($i = 0; $i < $limit; $i++) {
 				$randomArtists[] = $recommendedArtists[$keys[rand(0, count($recommendedArtists) - 1)]];
-
 			}
 			return $randomArtists;
 		} else {
@@ -470,7 +472,7 @@ class User {
 	function manages($artist) {
 		global $adodb;
 
-		if($this->userlevel >= 2) {
+		if ($this->userlevel >= 2) {
 			// Let admins edit all artists
 			return true;
 		}
