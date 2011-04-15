@@ -434,7 +434,11 @@ class User {
 		
 		$recommendedArtists = array();
 		foreach($artists as $artist_name) {
-			$artist = new Artist($artist_name);
+			try {
+				$artist = new Artist($artist_name);
+			} catch (Exception $e) {
+				continue;
+			}
 			$similar = $artist->getSimilar(5);
 			foreach($similar as $sa) {
 				if(!array_key_exists($sa['artist'], $recommendedArtists)) {
