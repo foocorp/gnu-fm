@@ -26,7 +26,15 @@ require_once('data/Album.php');
 require_once('data/Track.php');
 require_once('utils/licenses.php');
 
-$artist = new Artist(urldecode($_GET['artist']));
+try {
+	$artist = new Artist(urldecode($_GET['artist']));
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Artist not found.');
+	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');
+	$smarty->display('error.tpl');
+	die();
+}
+
 $album = new Album(urldecode($_GET['album']), $artist->name);
 
 if(!isset($this_user) || !$this_user->manages($artist->name)) {

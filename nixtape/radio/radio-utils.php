@@ -82,7 +82,11 @@ function make_playlist($session, $old_format=false) {
 		$tag = $regs[2];
 		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist WHERE streamable=1 AND lower(tag) = ' . $adodb->qstr(mb_strtolower($tag, 'UTF-8')));
 	} elseif(preg_match('@l(ast|ibre)fm://artist/(.*)/similarartists@', $url, $regs)) {
-		$artist = new Artist($regs[2]);
+		try {
+			$artist = new Artist($regs[2]);
+		} catch (Exception $e) {
+			die("FAILED\n"); // this should return a blank dummy playlist instead
+		}
 		$similarArtists = $artist->getSimilar(20);
 		$res = get_artist_selection($similarArtists, $artist);
 	} elseif(preg_match('@l(ast|ibre)fm://artist/(.*)@', $url, $regs)) {

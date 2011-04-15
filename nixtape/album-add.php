@@ -23,7 +23,14 @@ require_once('database.php');
 require_once('templating.php');
 require_once('data/Album.php');
 
-$artist = new Artist(urldecode($_GET['artist']));
+try {
+	$artist = new Artist(urldecode($_GET['artist']));
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Artist not found.');
+	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');
+	$smarty->display('error.tpl');
+	die();
+}
 
 if(!isset($this_user) || !$this_user->manages($artist->name)) {
 	$smarty->assign('pageheading', 'Permission denied');

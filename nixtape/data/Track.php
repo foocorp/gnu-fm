@@ -173,8 +173,12 @@ class Track {
 
 		if($streamable) {
 			$adodb->Execute('UPDATE Artist SET streamable=1 WHERE name=' . $adodb->qstr($this->artist_name));
-			$artist = new Artist($this->artist_name);
-			$artist->clearCache();
+			try {
+				$artist = new Artist($this->artist_name);
+				$artist->clearCache();
+			} catch (Exception $e) {
+				// No such artist.
+			}
 		}
 		$this->clearCache();
 	}
@@ -232,7 +236,11 @@ class Track {
 	 * @return An artist object
 	 */
 	function getArtist() {
-		return new Artist($this->artist_name);
+		try {
+			return new Artist($this->artist_name);
+		} catch (Exception $e) {
+			throw $e;
+		}
 	}
 
 	function getURL() {
