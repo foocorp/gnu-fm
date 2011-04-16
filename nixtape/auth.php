@@ -43,6 +43,10 @@ if(isset($_COOKIE['session_id'])) {
 	} else {
 		$logged_in = true;
 		$username = uniqueid_to_username($row['userid']);
-		$this_user = new User($username);
+		try {
+			$this_user = new User($username);
+		} catch (Exception $e) {
+			$err = 1;
+		}
 	}
 }

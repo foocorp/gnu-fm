@@ -100,7 +100,14 @@ if ($_POST['submit'])
 	{
 		if ($_POST['owner'] != $group->owner->username)
 		{
-			$new_owner = new User($_POST['owner']);
+			try {
+				$new_owner = new User($_POST['owner']);
+			} catch (Exception $e) {
+				$smarty->assign('pageheading', 'Error!');
+				$smarty->assign('details', 'Cannot assign group ownership to someone who does not exist!');
+				$smarty->display('error.tpl');
+				die();
+			}
 
 			if (! $group->memberCheck($new_owner))
 			{

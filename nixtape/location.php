@@ -42,7 +42,9 @@ if ($_REQUEST['country'])
 	$res = $adodb->GetAll($q);
 
 	foreach($res as &$row) {
-		$userlist[] = new User($row['username'], $row);
+		try {
+			$userlist[] = new User($row['username'], $row);
+		} catch (Exception $e) {}
 	}
 
 	$smarty->assign('country', strtoupper($_REQUEST['country']));
