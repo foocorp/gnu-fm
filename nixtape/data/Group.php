@@ -379,12 +379,16 @@ class Group {
 	}
 
 	function tagCloudData () {
-		return TagCloud::generateTagCloud(
-				TagCloud::scrobblesTable('group').' s LEFT JOIN Users u ON s.userid=u.uniqueid LEFT JOIN Group_Members gm ON u.uniqueid=gm.member LEFT JOIN Groups g ON gm.grp=g.id',
-				'artist',
-				40,
-				$this->name,
-				'groupname');
+		try {
+			return TagCloud::generateTagCloud(
+					TagCloud::scrobblesTable('group').' s LEFT JOIN Users u ON s.userid=u.uniqueid LEFT JOIN Group_Members gm ON u.uniqueid=gm.member LEFT JOIN Groups g ON gm.grp=g.id',
+					'artist',
+					40,
+					$this->name,
+					'groupname');
+		} catch (Exception $e) {
+			return false;
+		}
 	}
 
 }
