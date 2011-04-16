@@ -15,7 +15,12 @@ if (! $username)
 	die("Must provide a username.\n");
 }
 
-$user = new User($username);
+try {
+	$user = new User($username);
+} catch (Exception $e) {
+	die("No such user.\n");
+}
+
 $scrobbles = $user->getScrobbles(10000);
 
 print "<rdf:RDF
