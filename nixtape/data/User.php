@@ -94,7 +94,11 @@ class User {
 		$row = $adodb->CacheGetRow(7200, $query);
 
 		if ($row) {
-			return new User($row['username'], $row);
+			try { 
+				return new User($row['username'], $row);
+			} catch (Exception $e) {
+				return false;
+			}
 		} else {
 			return false;
 		}
