@@ -70,7 +70,12 @@ function make_playlist($session, $old_format=false) {
 
 	$user = false;
 	if(!empty($row['username'])) {
-		$user = new User($row['username']);
+		try {
+			$user = new User($row['username']);
+		} catch (Exception $e) {
+			// No such user.
+			// This shouldn't happen; but if it does, banned tracks won't be filtered.
+		}
 	}
 
 	$url = $row['url'];
@@ -93,10 +98,18 @@ function make_playlist($session, $old_format=false) {
 		$artist = $regs[2];
 		$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist, 'UTF-8')));
 	} elseif(preg_match('@l(ast|ibre)fm://user/(.*)/(loved|library|mix)@', $url, $regs)) {
-		$requser = new User($regs[2]);
+		try {
+			$requser = new User($regs[2]);
+		} catch (Exception $e) {
+			die("FAILED\n"); // this should return a blank dummy playlist instead
+		}
 		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Loved_Tracks.userid=' . $requser->uniqueid . ' AND Track.streamable=1');
 	} elseif(preg_match('@l(ast|ibre)fm://user/(.*)/recommended@', $url, $regs) || preg_match('@l(ast|ibre)fm://user/(.*)/mix@', $url, $regs)) {
-		$requser = new User($regs[2]);
+		try {
+			$requser = new User($regs[2]);
+		} catch (Exception $e) {
+			die("FAILED\n"); // this should return a blank dummy playlist instead
+		}
 		$recommendedArtists = $requser->getRecommended(8, true);
 		if($res) {
 			// If we already have some results then we're adding these to the loved tracks for mix radio
