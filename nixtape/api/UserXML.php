@@ -26,9 +26,10 @@ class UserXML {
 
 	public static function getInfo($username) {
 
-		$user = new User($username);
-		if (!$user) {
-			return(XML::error('failed', '7', 'Invalid resource specified'));
+		try {
+			$user = new User($username);
+		} catch (Exception $e) {
+			return XML::error('failed', '7', 'Invalid resource specified');
 		}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
