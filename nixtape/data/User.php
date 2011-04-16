@@ -167,13 +167,9 @@ class User {
 	 * @return array An array of scrobbles with human time
 	 */
 	function getScrobbles($number, $offset=0) {
-		try {
-			$data = Server::getRecentScrobbles($number, $this->uniqueid, $offset);
-		} catch (Exception $e) {
-			throw (new Exception('Breakage while getting recent scrobbles'));
-		}
+		$data = Server::getRecentScrobbles($number, $this->uniqueid, $offset);
 
-		if (!isset($data)) {
+		if ($data == null) {
 			return array();
 		}
 
