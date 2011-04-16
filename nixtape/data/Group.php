@@ -316,7 +316,9 @@ class Group {
 			if ($res)
 			{
 				foreach($res as &$row) {
-					$this->users[ $row['username'] ] = new User($row['username'], $row);
+					try {
+						$this->users[$row['username']] = new User($row['username'], $row);
+					} catch (Exception $e) {}
 				}
 			}
 
