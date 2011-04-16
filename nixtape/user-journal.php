@@ -34,7 +34,14 @@ if(!isset($_GET['user']) && $logged_in == false) {
         die();
 }
 
-$user = new User(urldecode($_GET['user']));
+try {
+	$user = new User(urldecode($_GET['user']));
+} catch (Exception $e) {
+	$smarty->assign('pageheading', $error);
+	$smarty->assign('details', 'Shall I call in a missing persons report?');
+	$smarty->display('error.tpl');
+	die();
+}
 
 if(! $user->journal_rss ) {
         $smarty->assign('pageheading', 'Error!');

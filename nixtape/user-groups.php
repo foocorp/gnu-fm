@@ -34,33 +34,33 @@ if(!isset($_GET['user']) && $logged_in == false) {
 	die();
 }
 
-$user = new User(urldecode($_GET['user']));
-
-if(isset($user->name)) {
-
-	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
-	try {
-		$aUserTagCloud =  TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->uniqueid);
-		$smarty->assign('user_tagcloud',$aUserTagCloud);
-	} catch (exception $e) {}
-	$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
-	$smarty->assign('me', $user);
-	$smarty->assign('profile', true);
-
-	$smarty->assign('groups', Group::groupList($user));
-
-	$smarty->assign('extra_head_links', array(
-				array(
-					'rel' => 'meta',
-					'type' => 'application/rdf+xml' ,
-					'title' => 'FOAF',
-					'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL('groups')))
-				     )
-				));
-
-	$smarty->display('user-groups.tpl');
-} else {
+try {
+	$user = new User(urldecode($_GET['user']));
+} catch (Exception $e) {
 	$smarty->assign('pageheading', 'User not found');
 	$smarty->assign('details', 'Shall I call in a missing persons report?');
 	$smarty->display('error.tpl');
+	die();
 }
+
+$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
+try {
+	$aUserTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->uniqueid);
+	$smarty->assign('user_tagcloud',$aUserTagCloud);
+} catch (exception $e) {}
+$smarty->assign('isme', ($_SESSION['user']->name == $user->name));
+$smarty->assign('me', $user);
+$smarty->assign('profile', true);
+
+$smarty->assign('groups', Group::groupList($user));
+
+$smarty->assign('extra_head_links', array(
+			array(
+				'rel' => 'meta',
+				'type' => 'application/rdf+xml' ,
+				'title' => 'FOAF',
+				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL('groups')))
+			     )
+			));
+
+$smarty->display('user-groups.tpl');
