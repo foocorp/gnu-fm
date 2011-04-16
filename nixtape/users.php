@@ -35,9 +35,11 @@ if(!isset($_GET['alpha'])) {
 
  }
 
-$users = Server::getUserList($alpha);
-
-echo $users;
+try {
+	$users = Server::getUserList($alpha);
+} catch (Exception $e) {
+	$users = array();
+}
 
 $smarty->assign('userlist', $users);
 
