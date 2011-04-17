@@ -387,7 +387,7 @@ class Group {
 					$this->name,
 					'groupname');
 		} catch (Exception $e) {
-			return false;
+			throw $e;
 		}
 	}
 
