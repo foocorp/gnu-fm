@@ -34,7 +34,7 @@ if($logged_in == false) {
 }
 
 try {
-	$artist = new Artist(urldecode($_GET['artist']));
+	$artist = new Artist($_GET['artist']);
 } catch (exception $e) {
         $smarty->assign('pageheading', 'Artist not found.');
         $smarty->assign('details', 'The artist '.($_GET['artist']).' was not found in the database.');

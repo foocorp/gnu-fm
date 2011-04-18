@@ -32,7 +32,7 @@ if(!isset($_GET['tag'])) {
 	die();
 }
 
-$tag = urldecode($_GET['tag']);
+$tag = $_GET['tag'];
 $smarty->assign('tag', $tag);
 
 try {
