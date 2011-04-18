@@ -27,7 +27,7 @@ require_once('data/Track.php');
 require_once('utils/licenses.php');
 
 try {
-	$artist = new Artist(urldecode($_GET['artist']));
+	$artist = new Artist($_GET['artist']);
 } catch (Exception $e) {
 	$smarty->assign('pageheading', 'Artist not found.');
 	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');
@@ -35,7 +35,7 @@ try {
 	die();
 }
 
-$album = new Album(urldecode($_GET['album']), $artist->name);
+$album = new Album($_GET['album'], $artist->name);
 
 if(!isset($this_user) || !$this_user->manages($artist->name)) {
 	$smarty->assign('pageheading', 'Permission denied');
@@ -47,7 +47,7 @@ if(!isset($this_user) || !$this_user->manages($artist->name)) {
 $edit = false;
 if(isset($_GET['track'])) {
 	$edit = true;
-	$track = new Track(urldecode($_GET['track']), $artist->name);
+	$track = new Track($_GET['track'], $artist->name);
 }
 
 $smarty->assign('artist', $artist);
