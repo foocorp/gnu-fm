@@ -27,44 +27,43 @@ if ($logged_in == false) {
 	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'Not logged in! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
-	die ();
-} elseif ( isset ($_GET['code'])) {
+	die();
+} else if (isset($_GET['code'])) {
 	$adodb->Execute('DELETE FROM Delete_Request WHERE expires < ' . (int)(time()));
 
 	$username = $this_user->name;
 	$code = $_GET['code'];
-try {
-	$res = $adodb->GetRow('SELECT * FROM Delete_Request WHERE username = ' . $adodb->qstr($username) . ' AND code = ' . $adodb->qstr($code));
-}
-catch (exception $e) {
+	try {
+		$res = $adodb->GetRow('SELECT * FROM Delete_Request WHERE username = ' . $adodb->qstr($username) . ' AND code = ' . $adodb->qstr($code));
+	} catch (Exception $e) {
 		exit;
 	}
 	if (!$res) {
 		$smarty->assign('pageheading', 'Error!');
 		$smarty->assign('details', 'Invalid code.');
 		$smarty->display('error.tpl');
-		die ();
+		die();
 	} else {
 		try {
-		$adodb->Execute('DELETE FROM Scrobble_Sessions WHERE userid = ' . $this_user->uniqueid);
-		$adodb->Execute('DELETE FROM Delete_Request WHERE username = ' . $adodb->qstr($username));
-		$adodb->Execute('DELETE FROM Auth WHERE username = ' . $adodb->qstr($username));
-		$adodb->Execute('DELETE FROM Group_Members WHERE member = ' . $this_user->uniqueid);
-		$adodb->Execute('DELETE FROM Radio_Sessions WHERE username = ' . $adodb->qstr($username));
-		$adodb->Execute('DELETE FROM Recovery_Request WHERE username = ' . $adodb->qstr($username));
-		$adodb->Execute('DELETE FROM Scrobbles WHERE userid = ' . $this_user->uniqueid);
-		$adodb->Execute('DELETE FROM User_Relationship_Flags WHERE uid1 = ' . $this_user->uniqueid);
-		$adodb->Execute('DELETE FROM User_Relationship_Flags WHERE uid2 = ' . $this_user->uniqueid);
-		$adodb->Execute('DELETE FROM User_Relationships WHERE uid1 = ' . $this_user->uniqueid);
-		$adodb->Execute('DELETE FROM User_Relationships WHERE uid2 = ' . $this_user->uniqueid);
-		$adodb->Execute('DELETE FROM Banned_Tracks WHERE userid = ' . $this_user->uniqueid);
-		$adodb->Execute('DELETE FROM Loved_Tracks WHERE userid = ' . $this_user->uniqueid);
-		$adodb->Execute('DELETE FROM Users WHERE uniqueid = ' . $this_user->uniqueid);
-		} catch (exception $e) {
+			$adodb->Execute('DELETE FROM Scrobble_Sessions WHERE userid = ' . $this_user->uniqueid);
+			$adodb->Execute('DELETE FROM Delete_Request WHERE username = ' . $adodb->qstr($username));
+			$adodb->Execute('DELETE FROM Auth WHERE username = ' . $adodb->qstr($username));
+			$adodb->Execute('DELETE FROM Group_Members WHERE member = ' . $this_user->uniqueid);
+			$adodb->Execute('DELETE FROM Radio_Sessions WHERE username = ' . $adodb->qstr($username));
+			$adodb->Execute('DELETE FROM Recovery_Request WHERE username = ' . $adodb->qstr($username));
+			$adodb->Execute('DELETE FROM Scrobbles WHERE userid = ' . $this_user->uniqueid);
+			$adodb->Execute('DELETE FROM User_Relationship_Flags WHERE uid1 = ' . $this_user->uniqueid);
+			$adodb->Execute('DELETE FROM User_Relationship_Flags WHERE uid2 = ' . $this_user->uniqueid);
+			$adodb->Execute('DELETE FROM User_Relationships WHERE uid1 = ' . $this_user->uniqueid);
+			$adodb->Execute('DELETE FROM User_Relationships WHERE uid2 = ' . $this_user->uniqueid);
+			$adodb->Execute('DELETE FROM Banned_Tracks WHERE userid = ' . $this_user->uniqueid);
+			$adodb->Execute('DELETE FROM Loved_Tracks WHERE userid = ' . $this_user->uniqueid);
+			$adodb->Execute('DELETE FROM Users WHERE uniqueid = ' . $this_user->uniqueid);
+		} catch (Exception $e) {
 			$smarty->assign('error', 'Error!');
 			$smarty->assign('details', 'Something went amiss.');
 			$smarty->display('error.tpl');
-			die ();
+			die();
 		}
 		session_destroy();
 		$smarty->display('account-deleted.tpl');
@@ -74,7 +73,7 @@ catch (exception $e) {
 	$username = $this_user->name;
 	$email = $this_user->email;
 	$expire = time()+86400;
-	$adodb->Execute('INSERT INTO Delete_Request (code, expires, username) VALUES (' . $adodb->qstr($code) . ', ' . $adodb->qstr($expire) . "," .  $adodb->qstr($username) . ')');
+	$adodb->Execute('INSERT INTO Delete_Request (code, expires, username) VALUES (' . $adodb->qstr($code) . ', ' . $adodb->qstr($expire) . ',' . $adodb->qstr($username) . ')');
 	$url = $base_url . '/delete-profile.php?code=' . $code;
 	$content = "Hi!\n\nSomeone from the IP address " . $_SERVER['REMOTE_ADDR'] . " requested account deletion at libre.fm.  To remove this account click: \n\n" . $url . "\n\n- The Libre.fm Team";
 	$headers = 'From: Libre.fm <account@libre.fm>';

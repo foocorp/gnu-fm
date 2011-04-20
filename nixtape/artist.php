@@ -28,15 +28,15 @@ require_once('artist-menu.php');
 
 try {
 	$artist = new Artist(urldecode($_GET['artist']));
-} catch (exception $e) {
-        $smarty->assign('pageheading', 'Artist not found.');
-        $smarty->assign('details', 'The artist '.($_GET['artist']).' was not found in the database.');
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Artist not found.');
+	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');
 	$smarty->display('error.tpl');
 	die();
 }
 
 $station = 'librefm://artist/' . $artist->name;
-if(isset($this_user)) {
+if (isset($this_user)) {
 	$radio_session = $this_user->getRadioSession($station);
 } else {
 	$radio_session = Server::getRadioSession($station);
@@ -61,15 +61,15 @@ if ($aArtistAlbums) {
 	$smarty->assign('albums', $aArtistAlbums);
 }
 
-if(isset($this_user) && $this_user->manages($artist->name)) {
+if (isset($this_user) && $this_user->manages($artist->name)) {
 	$smarty->assign('manage_link', $artist->getManagementURL());
 	$smarty->assign('add_album_link', $artist->getAddAlbumURL());
 }
 
-try {  
-	$tagCloud = TagCloud::generateTagCloud('tags', 'tag', 10, $artist->name, "artist");
+try {
+	$tagCloud = TagCloud::generateTagCloud('tags', 'tag', 10, $artist->name, 'artist');
 	$smarty->assign('tagcloud', $tagCloud);
-} catch (exception $ex) {
+} catch (Exception $ex) {
 	$tagCloud = array();
 }
 
@@ -77,4 +77,4 @@ $submenu = artist_menu($artist, 'Overview');
 $smarty->assign('submenu', $submenu);
 
 $smarty->assign('headerfile', 'artist-header.tpl');
-$smarty->display("artist.tpl");
+$smarty->display('artist.tpl');

@@ -22,14 +22,14 @@
 require_once('database.php');
 require_once('templating.php');
 
-if(isset($_GET['tag'])) {
+if (isset($_GET['tag'])) {
 	$station = 'librefm://globaltags/' . $_GET['tag'];
-} else if(isset($_GET['station'])) {
+} else if (isset($_GET['station'])) {
 	$station = $_GET['station'];
 }
 
-if(isset($station)) {
-	if(isset($this_user)) {
+if (isset($station)) {
+	if (isset($this_user)) {
 		$radio_session = $this_user->getRadioSession($station);
 	} else {
 		$radio_session = Server::getRadioSession($station);

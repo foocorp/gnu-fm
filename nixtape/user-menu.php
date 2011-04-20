@@ -26,10 +26,10 @@ function user_menu($user, $active_page) {
 		array('name' => _('Stats'), 'url' => $user->getURL('stats')),
 		array('name' => _('Recent Tracks'), 'url' => $user->getURL('recent-tracks'))
 	);
-	if($user->hasLoved()) {
+	if ($user->hasLoved()) {
 		$submenu[] = array('name' => _('Radio Stations'), 'url' => $user->getURL('station'));
 	}
-	if($user->name == $this_user->name) {
+	if ($user->name == $this_user->name) {
 		$submenu[] = array('name' => _('Edit'), 'url' => $user->getURL('edit'));
 	}
 

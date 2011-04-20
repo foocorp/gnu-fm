@@ -24,18 +24,17 @@ require_once('data/User.php');
 require_once($install_path . '/temp-utils.php'); // this is extremely dodgy and shameful
 
 session_start();
-if(isset($_COOKIE['session_id'])) {
+if (isset($_COOKIE['session_id'])) {
 	$err = 0;
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	try {
 		$row = $adodb->GetRow('SELECT userid FROM Scrobble_Sessions WHERE '
 				. 'sessionid = ' . $adodb->qstr($_COOKIE['session_id'])
 				. ' AND expires > ' . (int)(time()));
-	}
-	catch (exception $e) {
+	} catch (Exception $e) {
 		$err = 1;
 	}
-	if($err || !$row) {
+	if ($err || !$row) {
 		// Session is invalid
 		setcookie('session_id', '', time() - 3600);
 		session_unset();
