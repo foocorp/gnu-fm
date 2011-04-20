@@ -29,6 +29,7 @@ require_once($install_path . '/utils/linkeddata.php');
 require_once($install_path . '/utils/arc/ARC2.php');
 require_once($install_path . '/utils/resolve-external.php');
 require_once($install_path . '/utils/licenses.php');
+require_once($install_path . '/utils/rewrite-encode.php');
 require_once($install_path . '/temp-utils.php'); // this is extremely dodgy and shameful
 
 /**
@@ -315,7 +316,7 @@ class Server {
 				$component = '';
 			else
 				$component = "/{$component}";
-			return $base_url . '/user/' . urlencode($username) . $component;
+			return $base_url . '/user/' . rewrite_encode($username) . $component;
 		}
 		else
 		{
@@ -326,7 +327,7 @@ class Server {
 	static function getGroupURL($groupname) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . '/group/' . urlencode($groupname);
+			return $base_url . '/group/' . rewrite_encode($groupname);
 		} else {
 			return $base_url . '/group.php?group=' . urlencode($groupname);
 		}
@@ -335,7 +336,7 @@ class Server {
 	static function getArtistURL($artist, $component='') {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . '/artist/' . urlencode($artist) . '/' . $component;
+			return $base_url . '/artist/' . rewrite_encode($artist) . '/' . $component;
 		} else {
 			if($component) {
 				return $base_url . '/artist-' . $component . '.php?artist=' . urlencode($artist);
@@ -366,7 +367,7 @@ class Server {
 	static function getAlbumURL($artist, $album) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . '/artist/' . urlencode($artist) . '/album/' . urlencode($album);
+			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . urlencode($album);
 		} else {
 			return $base_url . '/album.php?artist=' . urlencode($artist) . '&album=' . urlencode($album);
 		}
@@ -385,9 +386,9 @@ class Server {
 	static function getTrackURL($artist, $album, $track) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls && $album) {
-			return $base_url . '/artist/' . urlencode($artist) . '/album/' . urlencode($album) . '/track/' . urlencode($track);
+			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . rewrite_encode($album) . '/track/' . rewrite_encode($track);
 		} elseif ($friendly_urls) {
-			return $base_url . '/artist/' . urlencode($artist) . '/track/' . urlencode($track);
+			return $base_url . '/artist/' . rewrite_encode($artist) . '/track/' . rewrite_encode($track);
 		} else {
 			return $base_url . '/track.php?artist=' . urlencode($artist) . '&album=' . urlencode($album) . '&track=' . urlencode($track);
 		}
@@ -396,9 +397,9 @@ class Server {
 	static function getTrackEditURL($artist, $album, $track) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls && $album) {
-			return $base_url . '/artist/' . urlencode($artist) . '/album/' . urlencode($album) . '/track/' . urlencode($track) . '/edit';
+			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . rewrite_encode($album) . '/track/' . rewrite_encode($track) . '/edit';
 		} elseif ($friendly_urls) {
-			return $base_url . '/artist/' . urlencode($artist) . '/track/' . urlencode($track) . '/edit';
+			return $base_url . '/artist/' . rewrite_encode($artist) . '/track/' . rewrite_encode($track) . '/edit';
 		} else {
 			return $base_url . '/track-add.php?artist=' . urlencode($artist) . '&album=' . urlencode($album) . '&track=' . urlencode($track);
 		}
@@ -407,7 +408,7 @@ class Server {
 	static function getTagURL($tag) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
-			return $base_url . '/tag/' . urlencode($tag);
+			return $base_url . '/tag/' . rewrite_encode($tag);
 		} else {
 			return $base_url . '/tag.php?tag=' . urlencode($tag);
 		}
