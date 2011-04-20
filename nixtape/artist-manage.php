@@ -27,14 +27,14 @@ require_once('data/TagCloud.php');
 
 try {
 	$artist = new Artist(urldecode($_GET['artist']));
-} catch (exception $e) {
-        $smarty->assign('pageheading', 'Artist not found.');
-        $smarty->assign('details', 'The artist '.($_GET['artist']).' was not found in the database.');
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Artist not found.');
+	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');
 	$smarty->display('error.tpl');
 	die();
 }
 
-if(!isset($this_user) || !$this_user->manages($artist->name)) {
+if (!isset($this_user) || !$this_user->manages($artist->name)) {
 	$smarty->assign('pageheading', 'Permission denied');
 	$smarty->assign('error', 'You don\'t have permission to edit this artist\'s details.');
 	$smarty->display('error.tpl');
@@ -46,7 +46,7 @@ if (isset($_POST['submit'])) {
 	$artist->setBiography($_POST['bio_content']);
 	if (!empty($_POST['homepage']) && !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['homepage'])) {
 		$errors[] = 'Home page must be a valid URL';
-	} elseif (!empty($_POST['homepage']) && preg_match('/\s/', $_POST['homepage'])) {
+	} else if (!empty($_POST['homepage']) && preg_match('/\s/', $_POST['homepage'])) {
 		$errors[] = 'Home page must be a URL, as such it cannot contain whitespace.';
 	} else {
 		$artist->setHomepage($_POST['homepage']);
@@ -54,15 +54,15 @@ if (isset($_POST['submit'])) {
 
 	if (!empty($_POST['image']) && !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['image'])) {
 		$errors[] = 'Image must be a valid URL';
-	} elseif (!empty($_POST['image']) && preg_match('/\s/', $_POST['image'])) {
+	} else if (!empty($_POST['image']) && preg_match('/\s/', $_POST['image'])) {
 		$errors[] = 'Image must be a URL, as such it cannot contain whitespace.';
 	} else {
 		$artist->setImage($_POST['image']);
 	}
 
 	$artist->setFlattr($_POST['flattr_uid']);
-	
-	if($errors) {
+
+	if ($errors) {
 		$smarty->assign('errors', $errors);
 	} else {
 		// If the editing was successful send the user back to the view page
@@ -79,4 +79,4 @@ $smarty->assign('image', $artist->image_medium);
 $smarty->assign('flattr_uid', $artist->flattr_uid);
 $smarty->assign('pageheading', 'Managing ' . $artist->name);
 
-$smarty->display("artist-manage.tpl");
+$smarty->display('artist-manage.tpl');

@@ -23,44 +23,43 @@ require_once('database.php');
 require_once('templating.php');
 require_once($install_path . '/data/User.php');
 
-if(isset($_COOKIE['session_id']) && $_GET['action'] == 'logout') {
+if (isset($_COOKIE['session_id']) && $_GET['action'] == 'logout') {
 	setcookie('session_id', '', time() - 3600);
 	header('Location: index.php');
 }
 
-if(isset($_POST['login'])) {
+if (isset($_POST['login'])) {
 
 	$errors = '';
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 	$remember = $_POST['remember'];
 
-	if(empty($username)) {
+	if (empty($username)) {
 		$errors .= 'You must enter a username.<br />';
 	}
 
-	if(empty($errors)) {
+	if (empty($errors)) {
 		try {
 			$sql = 'SELECT uniqueid, active FROM Users WHERE '
 				. ' lower(username) = ' . $adodb->qstr(strtolower($username))
-			  . ' AND password = ' . $adodb->qstr(md5($password));
+				. ' AND password = ' . $adodb->qstr(md5($password));
 			$row = $adodb->GetRow($sql);
 			$userid = $row['uniqueid'];
 			$active = $row['active'];
-		}
-		catch (exception $e) {
+		} catch (Exception $e) {
 			$errors .= 'A database error happened.';
 		}
-		if(!$userid) {
+		if (!$userid) {
 			$errors .= 'Invalid username or password. Would you like to <a href="' . $base_url . '/reset.php">recover your password?</a>';
 			$smarty->assign('invalid', true);
-		} elseif (!$active) {
+		} else if (!$active) {
 			$errors .= 'This account hasn\'t been activated. Please follow the link in the e-mail you received when you signed up to activate your account.</a>';
 			$smarty->assign('invalid', true);
 		} else {
 			// Give the user a session id, like any other client
 			$session_id = md5(md5($password) . time());
-			if(isset($remember)){
+			if (isset($remember)) {
 				$session_time = time() + 31536000; // 1 year
 			} else {
 				$session_time = time() + 86400; // 1 day
@@ -76,16 +75,15 @@ if(isset($_POST['login'])) {
 	}
 }
 
-if(isset($logged_in) && $logged_in) {
+if (isset($logged_in) && $logged_in) {
 	// Check that return URI is on this server. Prevents possible phishing uses.
-	if ( substr($_POST['return'], 0, 1) == '/' ) {
+	if (substr($_POST['return'], 0, 1) == '/') {
 		header(sprintf('Location: http://%s%s', $_SERVER['SERVER_NAME'], $_POST['return']));
 	} else {
 		header('Location: ' . $base_url);
 	}
-
 } else {
-	if ( substr($_REQUEST['return'], 0, 1) == '/' ) {
+	if (substr($_REQUEST['return'], 0, 1) == '/') {
 		$smarty->assign('return', $_REQUEST['return']);
 	} else {
 		$smarty->assign('return', '');
