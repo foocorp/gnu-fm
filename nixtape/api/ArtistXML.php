@@ -77,7 +77,7 @@ class ArtistXML {
 		$tracks = $artist->getTopTracks(50);
 
 		// Loop over every result and add as children to "toptracks".
-		for($i = 1; $i < count($tracks); $i++) {
+		for ($i = 1; $i < count($tracks); $i++) {
 			$track = $root->addChild('track', null);
 			$track->addAttribute('rank', $i);
 			$track->addChild('name', $tracks[$i]->name);
@@ -102,7 +102,7 @@ class ArtistXML {
 		$root->addAttribute('artist', $artist->name);
 
 		$tags = $artist->getTopTags();
-		foreach($tags as &$tag) {
+		foreach ($tags as &$tag) {
 			$tag_node = $root->addChild('tag', null);
 			$tag_node->addChild('name', repamp($tag['tag']));
 			$tag_node->addChild('count', $tag['freq']);
