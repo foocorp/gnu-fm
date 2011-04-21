@@ -93,4 +93,10 @@ want your patches accepted and modules included in supported releases.
 	(e.g. {t}Translate me!{/t}). See the smarty gettext documentation for more
 	advanced usage.
 
-19)	If you see code which doesn't comply with the above, please fix it :)
+19)	When comparing strings in lower-case always use the DBMS lower() function
+	where possible. strtolower() doesn't handle multi-byte characters and
+	and mb_strtolower is typically much less efficient. Since this is typically
+	used when comparing against a lower()'d database field it also ensures
+	consistency in the comparison.
+
+20)	If you see code which doesn't comply with the above, please fix it :)
