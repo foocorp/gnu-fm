@@ -22,7 +22,7 @@
 require_once($install_path . '/database.php');
 require_once($install_path . '/data/Artist.php');
 require_once($install_path . '/data/Track.php');
-require_once($install_path . "/utils/resolve-external.php");
+require_once($install_path . '/utils/resolve-external.php');
 require_once($install_path . '/utils/linkeddata.php');
 
 /**
@@ -49,7 +49,7 @@ class Album {
 			'SELECT name, artist_name, mbid, image, releasedate FROM Album WHERE '
 			. 'lower(name) = ' . strtolower($adodb->qstr($name)) . ' AND '
 			. 'lower(artist_name) = ' . strtolower($adodb->qstr($artist)));
-		if(!$r) {
+		if (!$r) {
 			$this->name = 'No such album: ' . $name;
 		} else {
 			$row = sanitize($r);
@@ -65,7 +65,7 @@ class Album {
 				. $adodb->qstr($this->artist_name) . ' AND album_name = '
 				. $adodb->qstr($this->name);
 
-			if($this->image == '') {
+			if ($this->image == '') {
 				$this->image = false;
 			}
 		}
@@ -80,7 +80,7 @@ class Album {
 	 * @param string $image The URL to this album's cover image (optional)
 	 * @return An Album object corresponding to the newly created album
 	 */
-	public static function create($name, $artist_name, $image='') {
+	public static function create($name, $artist_name, $image = '') {
 		global $adodb;
 
 		$adodb->Execute('INSERT INTO Album (name, artist_name, image) VALUES ('
@@ -114,8 +114,7 @@ class Album {
 			'SELECT COUNT(*) AS scrobbles FROM Scrobbles JOIN Track ON Scrobbles.track = Track.name WHERE Scrobbles.artist = '
 			. $adodb->qstr($this->artist_name) . ' AND Track.album_name ='
 			. $adodb->qstr($this->name));
-		}
-		catch (exception $e) {
+		} catch (Exception $e) {
 			reportError($res->getMessage());
 			$c = 0;
 		}
@@ -136,7 +135,7 @@ class Album {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$res = $adodb->CacheGetAll(600, $this->track_query);
-		foreach($res as &$row) {
+		foreach ($res as &$row) {
 			$tracks[] = new Track($row['name'], $row['artist_name']);
 		}
 
@@ -163,11 +162,11 @@ class Album {
 
 	/**
 	 * Get an albums's most used tags
-	 * 
+	 *
 	 * @param int $limit The number of tags to return (defaults to 10)
 	 * @return An array of tags
 	 */
-	function getTopTags($limit=10) {
+	function getTopTags($limit = 10) {
 		global $adodb;
 
 		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM tags WHERE '
@@ -203,24 +202,29 @@ class Album {
 			'srsearch'  => "$album_name $artist_name album",
 			'srlimit'   => 10
 		);
-	
+
 		try {
-			if (is_null($album_name)) throw new Exception('No album name provided.');
-	    
+			if (is_null($album_name)) {
+				throw new Exception('No album name provided.');
+			}
+
 			$search_url = $api_url . '?' . http_build_query($get_params);
-	    
+
 			$open = fopen($search_url, 'r');
 
-			if ($open == false) throw new Exception('Can\'t open Search URL');
-	    
+			if ($open == false) {
+				throw new Exception('Can\'t open Search URL');
+			}
+
 			$search_results = unserialize(stream_get_contents($open));
 			fclose($open);
-	    
-			if (!isset($search_results['query']['search']) || count($search_results['query']['search']) == 0)
+
+			if (!isset($search_results['query']['search']) || count($search_results['query']['search']) == 0) {
 				return false;
-	    
+			}
+
 			$results = array();
-	    
+
 			foreach ($search_results['query']['search'] as $id => $page) {
 				switch ($page['title']) {
 				case ($album_name):
@@ -235,18 +239,19 @@ class Album {
 				default:
 					$weight = 0;
 				}
-		
-				if ($weight > 0)
+
+				if ($weight > 0) {
 					$results[$page['title']] = $weight;
+				}
 			}
-	     
+
 			if (count($results) > 0) {
 				# order by weight
 				# highest gets on bottom
 				asort($results);
 				end($results);
 				$possible_cover = key($results);
-		
+
 				# Cover search query string
 				$cover_params = array(
 					'action'    => 'query',
@@ -257,26 +262,29 @@ class Album {
 					'prop'      => 'imageinfo',
 					'iiprop'    => 'url'
 				);
-		
+
 				$cover_search_url = $api_url . '?' . http_build_query($cover_params);
 				$open_cover_url   = fopen($cover_search_url, 'r');
-		
-				if ($open_cover_url == false) throw new Exception ('Can\'t open Cover Search URL');
+
+				if ($open_cover_url == false) {
+					throw new Exception ('Can\'t open Cover Search URL');
+				}
 				$cover_search_results = unserialize(stream_get_contents($open_cover_url));
 				fclose($open_cover_url);
-		
-				if (!isset($cover_search_results['query']['pages']) || count($cover_search_results['query']['pages']) == 0)
+
+				if (!isset($cover_search_results['query']['pages']) || count($cover_search_results['query']['pages']) == 0) {
 					return false;
-		
+				}
+
 				foreach ($cover_search_results['query']['pages'] as $image_id => $image) {
-		    			# Wikipedia covers are mostly JPEG images.
+					# Wikipedia covers are mostly JPEG images.
 					# Gets the first image (hard guess!)
 					if (preg_match('/\.jpg$/i', $image['title']) == 1) {
 						$cover = $image['imageinfo'][0];
 						break;
 					}
 				}
-		
+
 				/*
 				 * Save the info if $save = true
 				 */
@@ -286,26 +294,26 @@ class Album {
 					$artist  = $adodb->qstr($artist_name);
 					$license = $adodb->qstr($cover['descriptionurl']);
 					$image   = $adodb->qstr($cover['url']);
-	    
+
 					$sql = ('UPDATE Album SET image = '
-		       				. ($image) . ', '
+						. ($image) . ', '
 						. ' artwork_license = '
 						. ($license) . ' WHERE artist_name = '. ($artist)
 						. ' AND name = '	. ($album));
-		    
+
 					$res = $adodb->Execute($sql);
 				}
-		
-				return $cover['url'];    
+
+				return $cover['url'];
 			} else {
 				return false;
 			}
 
-	
-		} catch (exception $e) {
+
+		} catch (Exception $e) {
 			reportError($e->getMessage());
 		}
-	
+
 		return $album_art_url;
 	}
 
@@ -318,12 +326,12 @@ function go_get_album_art($artist, $album){
 
 	$Access_Key_ID = '1EST86JB355JBS3DFE82'; // this is mattl's personal key :)
 
-	$SearchIndex='Music';
-	$Keywords=urlencode($artist.' '.$album);
+	$SearchIndex = 'Music';
+	$Keywords = urlencode($artist . ' ' . $album);
 	$Operation = 'ItemSearch';
 	$Version = '2007-07-16';
 	$ResponseGroup = 'ItemAttributes,Images';
-	$request=
+	$request =
 		'http://ecs.amazonaws.com/onca/xml'
 		. '?Service=AWSECommerceService'
 		. '&AssociateTag=' . $Associate_tag
@@ -341,7 +349,9 @@ function go_get_album_art($artist, $album){
 
 	if ($image) {
 
-		if ($license == '') { $license = 'amazon'; }
+		if ($license == '') {
+			$license = 'amazon';
+		}
 
 		$license = $adodb->qstr($license);
 		$image = $adodb->qstr($image);
@@ -356,8 +366,7 @@ function go_get_album_art($artist, $album){
 
 		try {
 			$res = $adodb->Execute($sql);
-		}
-		catch (exception $e) {
+		} catch (Exception $e) {
 			die('FAILED ' . $e->getMessage() . ' query was :' . $sql);
 		}
 	}

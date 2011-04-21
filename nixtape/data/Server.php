@@ -44,75 +44,74 @@ class Server {
 	 * @param int $number The number of scrobbles to return
 	 * @return An array of scrobbles or null in case of failure
 	 */
-	static function getRecentScrobbles($number=10, $userid=false, $offset=0) {
+	static function getRecentScrobbles($number = 10, $userid = false, $offset = 0) {
 		global $adodb;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
-		if($userid) {
-			$res = $adodb->CacheGetAll(60,
-				'SELECT * 
-				FROM Scrobbles
-				WHERE userid = ' . ($userid) . ' ORDER BY time DESC LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
+			if ($userid) {
+				$res = $adodb->CacheGetAll(60,
+					'SELECT *
+					FROM Scrobbles
+					WHERE userid = ' . ($userid) . ' ORDER BY time DESC LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
 
-			/**
-
-
-					s.userid,
-					s.artist,
-					s.track,
-					s.album,
-					s.time,
-					s.mbid,
-					a.mbid AS artist_mbid,
-					l.mbid AS album_mbid,
-					l.image AS album_image,
-					l.artwork_license,
-					t.license,
-					t.mbid AS track_mbid
-
-                                removed this.
-
-				LEFT JOIN Artist a
-					ON s.artist=a.name
-				LEFT JOIN Album l
-					ON l.artist_name=s.artist
-					AND l.name=s.album
-				LEFT JOIN Scrobble_Track st
-					ON s.stid = st.id
-				LEFT JOIN Track t
-					ON st.track = t.id
-
-			*/
+				/**
 
 
-		} else {
-			$res = $adodb->CacheGetAll(60,
-				'SELECT * 
-				FROM Scrobbles ORDER BY time DESC
-				LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
+						s.userid,
+						s.artist,
+						s.track,
+						s.album,
+						s.time,
+						s.mbid,
+						a.mbid AS artist_mbid,
+						l.mbid AS album_mbid,
+						l.image AS album_image,
+						l.artwork_license,
+						t.license,
+						t.mbid AS track_mbid
+
+	                                removed this.
+
+					LEFT JOIN Artist a
+						ON s.artist=a.name
+					LEFT JOIN Album l
+						ON l.artist_name=s.artist
+						AND l.name=s.album
+					LEFT JOIN Scrobble_Track st
+						ON s.stid = st.id
+					LEFT JOIN Track t
+						ON st.track = t.id
+
+				*/
 
 
-			/**
+			} else {
+				$res = $adodb->CacheGetAll(60,
+					'SELECT *
+					FROM Scrobbles ORDER BY time DESC
+					LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
 
-				LEFT JOIN Artist a
-					ON s.artist=a.name
-				LEFT JOIN Album l
-					ON l.artist_name=s.artist
-					AND l.name=s.album
-				LEFT JOIN Scrobble_Track st
-					ON s.stid = st.id
-				LEFT JOIN Track t
-					ON st.track = t.id
 
-			 */
-		}
-		}
-		catch (exception $e) {
+				/**
+
+					LEFT JOIN Artist a
+						ON s.artist=a.name
+					LEFT JOIN Album l
+						ON l.artist_name=s.artist
+						AND l.name=s.album
+					LEFT JOIN Scrobble_Track st
+						ON s.stid = st.id
+					LEFT JOIN Track t
+						ON st.track = t.id
+
+				 */
+			}
+		} catch (Exception $e) {
 			return null;
 		}
 
-		foreach($res as &$i) {
+		foreach ($res as &$i) {
 			$row = sanitize($i);
 
 			$row['username'] = uniqueid_to_username($row['userid']);
@@ -131,7 +130,7 @@ class Server {
 			$row['id_track']  = identifierTrack(uniqueid_to_username($row['userid']), $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 			$row['id_album']  = identifierAlbum(uniqueid_to_username($row['userid']), $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 
-			if($userid) {
+			if ($userid) {
 				$row['loved'] = $adodb->CacheGetOne(60, 'SELECT Count(*) FROM Loved_Tracks WHERE artist='
 						. $adodb->qstr($row['artist'])
 						. ' AND track=' . $adodb->qstr($row['track'])
@@ -144,7 +143,7 @@ class Server {
 			}
 
 			if ($row['artwork_license'] == 'amazon') {
-				$row['album_image'] = str_replace('SL160','SL50',$row['album_image']);
+				$row['album_image'] = str_replace('SL160', 'SL50', $row['album_image']);
 			}
 
 			$row['licenseurl'] = $row['license'];
@@ -161,19 +160,18 @@ class Server {
 	 *
 	 * @param int $number The number of artists to return
 	 * @return An array of artists or null in case of failure
-	*/
-	static function getTopArtists($number=20) {
+	 */
+	static function getTopArtists($number = 20) {
 		global $adodb;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
-		$data = $adodb->CacheGetAll(720, 'SELECT COUNT(artist) as c, artist FROM Scrobbles GROUP BY artist ORDER BY c DESC LIMIT 20');
-		}
-		catch (exception $e) {
+			$data = $adodb->CacheGetAll(720, 'SELECT COUNT(artist) as c, artist FROM Scrobbles GROUP BY artist ORDER BY c DESC LIMIT 20');
+		} catch (Exception $e) {
 			return null;
 		}
 
-		foreach($data as &$i) {
+		foreach ($data as &$i) {
 			$row = sanitize($i);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
 			$result[] = $row;
@@ -185,13 +183,13 @@ class Server {
 	static function getUserList($alpha) {
 		global $adodb;
 
-		$query = "SELECT username from users where username LIKE '" . $alpha . "%'";
+		$query = 'SELECT username from users where username LIKE \'' . $alpha . '%\'';
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$data = $adodb->CacheGetAll(7200,$query);
+		$data = $adodb->CacheGetAll(7200, $query);
 		if (!$data) {
 			throw new Exception('ERROR ' . $query);
-		} 
+		}
 
 	}
 
@@ -201,70 +199,69 @@ class Server {
 	 * @param int $number The maximum number of tracks to return
 	 * @return An array of now playing data or null in case of failure
 	 */
-	static function getNowPlaying($number=1, $username=false) {
+	static function getNowPlaying($number = 1, $username = false) {
 		global $adodb;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
-		if($username) {
-			$data = $adodb->CacheGetAll(1, 'SELECT
-						ss.userid,
-						n.artist,
-						n.track,
-						n.album,
-						client,
-						ClientCodes.name,
-						ClientCodes.url,
-						ClientCodes.free,
-						n.mbid,
-						t.license
-					FROM Now_Playing n
-					LEFT OUTER JOIN Scrobble_Sessions ss
-						ON n.sessionid=ss.sessionid
-					LEFT OUTER JOIN ClientCodes
-						ON ss.client=ClientCodes.code
-					LEFT OUTER JOIN Track t
-						ON lower(n.artist) = lower(t.artist_name)
-						AND lower(n.album) = lower(t.album_name)
-						AND lower(n.track) = lower(t.name)
-						AND lower(n.mbid) = lower(t.mbid)
-					WHERE ss.userid= ' . username_to_uniqueid($username) . '
-					ORDER BY t.streamable DESC, n.expires DESC LIMIT ' . (int)($number));
-		} else {
-			$data = $adodb->CacheGetAll(60, 'SELECT
-						ss.userid,
-						n.artist,
-						n.track,
-						n.album,
-						client,
-						ClientCodes.name,
-						ClientCodes.url,
-						ClientCodes.free,
-						n.mbid,
-						t.license
-					FROM Now_Playing n
-					LEFT OUTER JOIN Scrobble_Sessions ss
-						ON n.sessionid=ss.sessionid
-					LEFT OUTER JOIN ClientCodes
-						ON ss.client=ClientCodes.code
-					LEFT OUTER JOIN Track t
-						ON lower(n.artist) = lower(t.artist_name)
-						AND lower(n.album) = lower(t.album_name)
-						AND lower(n.track) = lower(t.name)
-						AND lower(n.mbid) = lower(t.mbid)
-					ORDER BY t.streamable DESC, n.expires DESC LIMIT ' . (int)($number));
-		}
-		}
-		catch (exception $e) {
+			if ($username) {
+				$data = $adodb->CacheGetAll(1, 'SELECT
+							ss.userid,
+							n.artist,
+							n.track,
+							n.album,
+							client,
+							ClientCodes.name,
+							ClientCodes.url,
+							ClientCodes.free,
+							n.mbid,
+							t.license
+						FROM Now_Playing n
+						LEFT OUTER JOIN Scrobble_Sessions ss
+							ON n.sessionid=ss.sessionid
+						LEFT OUTER JOIN ClientCodes
+							ON ss.client=ClientCodes.code
+						LEFT OUTER JOIN Track t
+							ON lower(n.artist) = lower(t.artist_name)
+							AND lower(n.album) = lower(t.album_name)
+							AND lower(n.track) = lower(t.name)
+							AND lower(n.mbid) = lower(t.mbid)
+						WHERE ss.userid= ' . username_to_uniqueid($username) . '
+						ORDER BY t.streamable DESC, n.expires DESC LIMIT ' . (int)($number));
+			} else {
+				$data = $adodb->CacheGetAll(60, 'SELECT
+							ss.userid,
+							n.artist,
+							n.track,
+							n.album,
+							client,
+							ClientCodes.name,
+							ClientCodes.url,
+							ClientCodes.free,
+							n.mbid,
+							t.license
+						FROM Now_Playing n
+						LEFT OUTER JOIN Scrobble_Sessions ss
+							ON n.sessionid=ss.sessionid
+						LEFT OUTER JOIN ClientCodes
+							ON ss.client=ClientCodes.code
+						LEFT OUTER JOIN Track t
+							ON lower(n.artist) = lower(t.artist_name)
+							AND lower(n.album) = lower(t.album_name)
+							AND lower(n.track) = lower(t.name)
+							AND lower(n.mbid) = lower(t.mbid)
+						ORDER BY t.streamable DESC, n.expires DESC LIMIT ' . (int)($number));
+			}
+		} catch (Exception $e) {
 			return null;
 		}
 
-		foreach($data as &$i) {
+		foreach ($data as &$i) {
 			$row = sanitize($i);
 			// this logic should be cleaned up and the free/nonfree decision be moved into the smarty templates
-			if($row['name'] == '') {
+			if ($row['name'] == '') {
 				$clientstr = strip_tags(stripslashes($row['client'])) . ' (unknown, <a href="http://ideas.libre.fm/index.php/Client_Codes">please tell us what this is</a>)';
-			} elseif($row["free"] == "Y") {
+			} else if ($row['free'] == 'Y') {
 				$clientstr = '<a href="' . strip_tags(stripslashes($row['url'])) . '">' . strip_tags(stripslashes($row['name'])) . '</a>';
 			} else {
 				$clientstr = '<a href="http://en.wikipedia.org/wiki/Category:Free_media_players">' . strip_tags(stripslashes($row['name'])) . '</a>';
@@ -274,7 +271,7 @@ class Server {
 			$row['userurl'] = Server::getUserURL($row['username']);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
 			$row['trackurl'] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
-			if($username) {
+			if ($username) {
 				$row['loved'] = $adodb->CacheGetOne(60, 'SELECT Count(*) FROM Loved_Tracks WHERE artist='
 					. $adodb->qstr($row['artist'])
 					. ' AND track=' . $adodb->qstr($row['track'])
@@ -300,44 +297,39 @@ class Server {
 	 * @param string $username The username we want a URL for
 	 * @return A string containing URL to the user's profile
 	 */
-	static function getUserURL ($username, $component='profile')
-	{
+	static function getUserURL ($username, $component = 'profile') {
 		global $friendly_urls, $base_url;
-		if ($component == 'edit')
-		{
+		if ($component == 'edit') {
 			return $base_url . '/user-edit.php';
-		} elseif ($component == 'delete') {
+		} else if ($component == 'delete') {
 			return $base_url . '/delete-profile.php';
-		}
-		elseif($friendly_urls)
-		{
-			if ($component == 'profile')
+		} else if ($friendly_urls) {
+			if ($component == 'profile') {
 				$component = '';
-			else
+			} else {
 				$component = "/{$component}";
+			}
 			return $base_url . '/user/' . urlencode($username) . $component;
-		}
-		else
-		{
+		} else {
 			return $base_url . "/user-{$component}.php?user=" . urlencode($username);
 		}
 	}
 
 	static function getGroupURL($groupname) {
 		global $friendly_urls, $base_url;
-		if($friendly_urls) {
+		if ($friendly_urls) {
 			return $base_url . '/group/' . urlencode($groupname);
 		} else {
 			return $base_url . '/group.php?group=' . urlencode($groupname);
 		}
 	}
 
-	static function getArtistURL($artist, $component='') {
+	static function getArtistURL($artist, $component = '') {
 		global $friendly_urls, $base_url;
-		if($friendly_urls) {
+		if ($friendly_urls) {
 			return $base_url . '/artist/' . urlencode($artist) . '/' . $component;
 		} else {
-			if($component) {
+			if ($component) {
 				return $base_url . '/artist-' . $component . '.php?artist=' . urlencode($artist);
 			} else {
 				return $base_url . '/artist.php?artist=' . urlencode($artist);
@@ -347,7 +339,7 @@ class Server {
 
 	static function getArtistManagementURL($artist) {
 		global $friendly_urls, $base_url;
-		if($friendly_urls) {
+		if ($friendly_urls) {
 			return Server::getArtistURL($artist) . '/manage';
 		} else {
 			return $base_url . '/artist-manage.php?artist=' . urlencode($artist);
@@ -356,7 +348,7 @@ class Server {
 
 	static function getAddAlbumURL($artist) {
 		global $friendly_urls, $base_url;
-		if($friendly_urls) {
+		if ($friendly_urls) {
 			return Server::getArtistURL($artist) . '/album/add';
 		} else {
 			return $base_url . '/album-add.php?artist=' . urlencode($artist);
@@ -365,16 +357,16 @@ class Server {
 
 	static function getAlbumURL($artist, $album) {
 		global $friendly_urls, $base_url;
-		if($friendly_urls) {
+		if ($friendly_urls) {
 			return $base_url . '/artist/' . urlencode($artist) . '/album/' . urlencode($album);
 		} else {
 			return $base_url . '/album.php?artist=' . urlencode($artist) . '&album=' . urlencode($album);
 		}
 	}
-	
+
 	static function getAddTrackURL($artist, $album) {
 		global $friendly_urls, $base_url;
-		if($friendly_urls) {
+		if ($friendly_urls) {
 			return Server::getAlbumURL($artist, $album) . '/track/add';
 		} else {
 			return $base_url . '/track-add.php?artist=' . urlencode($artist) . '&album=' . urlencode($album);
@@ -386,7 +378,7 @@ class Server {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls && $album) {
 			return $base_url . '/artist/' . urlencode($artist) . '/album/' . urlencode($album) . '/track/' . urlencode($track);
-		} elseif ($friendly_urls) {
+		} else if ($friendly_urls) {
 			return $base_url . '/artist/' . urlencode($artist) . '/track/' . urlencode($track);
 		} else {
 			return $base_url . '/track.php?artist=' . urlencode($artist) . '&album=' . urlencode($album) . '&track=' . urlencode($track);
@@ -397,7 +389,7 @@ class Server {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls && $album) {
 			return $base_url . '/artist/' . urlencode($artist) . '/album/' . urlencode($album) . '/track/' . urlencode($track) . '/edit';
-		} elseif ($friendly_urls) {
+		} else if ($friendly_urls) {
 			return $base_url . '/artist/' . urlencode($artist) . '/track/' . urlencode($track) . '/edit';
 		} else {
 			return $base_url . '/track-add.php?artist=' . urlencode($artist) . '&album=' . urlencode($album) . '&track=' . urlencode($track);
@@ -416,8 +408,9 @@ class Server {
 	static function getLocationDetails($name) {
 		global $adodb;
 
-		if (!$name)
+		if (!$name) {
 			return array();
+		}
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$rv = $adodb->GetRow('SELECT p.latitude, p.longitude, p.country, c.country_name, c.wikipedia_en '
@@ -425,9 +418,9 @@ class Server {
 			. 'LEFT JOIN Countries c ON p.country=c.country '
 			. 'WHERE p.location_uri=' . $adodb->qstr($name, 'text'));
 
-		if($rv) {
+		if ($rv) {
 
-			if (! ($rv['latitude'] && $rv['longitude'] && $rv['country'])) {
+			if (!($rv['latitude'] && $rv['longitude'] && $rv['country'])) {
 
 				$parser = ARC2::getRDFXMLParser();
 				$parser->parse($name);
@@ -445,8 +438,7 @@ class Server {
 					$adodb->qstr($rv['country']),
 					$adodb->qstr($name)));
 			}
-		}
-		else {
+		} else {
 			$parser = ARC2::getRDFXMLParser();
 			$parser->parse($name);
 			$index = $parser->getSimpleIndex();
@@ -477,12 +469,12 @@ class Server {
 	 */
 	static function getRadioSession($station, $username = false, $session_id = false) {
 		global $adodb;
-		if(!$session_id) {
+		if (!$session_id) {
 			$session_id = md5(mt_rand() . time());
 		}
 		// Remove any previous station for this session id
 		$adodb->Execute('DELETE FROM Radio_Sessions WHERE session = ' . $adodb->qstr($session_id));
-		if($username) {
+		if ($username) {
 			$sql = 'INSERT INTO Radio_Sessions(username, session, url, expires) VALUES ('
 				. $adodb->qstr($username) . ','
 				. $adodb->qstr($session_id) . ','
@@ -523,13 +515,13 @@ class Server {
 		$sql = 'SELECT * from Artist ORDER by name';
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
-			$res = $adodb->CacheGetAll(86400,$sql);
-		} catch (exception $e) {
+			$res = $adodb->CacheGetAll(86400, $sql);
+		} catch (Exception $e) {
 			return null;
 		}
 
 		$result = array();
-		foreach($res as &$i) {
+		foreach ($res as &$i) {
 			$row = sanitize($i);
 
 			$row['artisturl'] = Server::getArtistURL($row['name']);
@@ -540,10 +532,10 @@ class Server {
 	}
 
 
-	static function search($search_term, $search_type, $limit=40) {
+	static function search($search_term, $search_type, $limit = 40) {
 		global $adodb;
 		$search_term = strtolower($search_term);
-		switch($search_type) {
+		switch ($search_type) {
 			case 'artist':
 				$table = 'Artist';
 				$search_fields[] = 'name';
@@ -569,16 +561,16 @@ class Server {
 
 		$sql = 'SELECT DISTINCT ';
 
-		for($i = 0; $i < count($data_fields); $i++) {
+		for ($i = 0; $i < count($data_fields); $i++) {
 			$sql .= $data_fields[$i];
-			if($i < count($data_fields)-1) {
+			if ($i < count($data_fields) - 1) {
 				$sql .= ', ';
 			}
 		}
 
 		$sql .= ' FROM ' . $table . ' WHERE ';
 
-		for($i = 0; $i < count($search_fields); $i++ ) {
+		for ($i = 0; $i < count($search_fields); $i++) {
 			if ($i > 0) {
 				$sql .= ' OR ';
 			}
@@ -590,9 +582,9 @@ class Server {
 		$res = $adodb->CacheGetAll(600, $sql);
 
 		$result = array();
-		foreach($res as &$i) {
+		foreach ($res as &$i) {
 			$row = sanitize($i);
-			switch($search_type) {
+			switch ($search_type) {
 				case 'artist':
 					$row['url'] = Server::getArtistURL($row['name']);
 					break;

@@ -35,7 +35,6 @@ require_once($install_path . '/utils/linkeddata.php');
  */
 class Artist {
 
-
 	public $name, $mbid, $streamable, $bio_content, $bio_published, $bio_summary, $image_small, $image_medium, $image_large, $flattr_uid;
 	public $id;
 	private $query, $album_query;
@@ -46,27 +45,27 @@ class Artist {
 	 * @param string $name The name of the artist to load
 	 * @param string $mbid The mbid of the artist (optional)
 	 */
-	function __construct($name, $mbid=false) {
+	function __construct($name, $mbid = false) {
 		global $adodb;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$mbidquery = "";
-		if($mbid) {
+		$mbidquery = '';
+		if ($mbid) {
 			$mbidquery = 'mbid = ' . $adodb->qstr($mbid) . ' OR ';
 		}
 		$this->query = 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large, homepage, hashtag, flattr_uid FROM Artist WHERE '
 			. $mbidquery
 			. 'lower(name) = ' . strtolower($adodb->qstr($name));
 		$row = $adodb->CacheGetRow(1200, $this->query);
-		if(!$row) {
+		if (!$row) {
 			throw new Exception('No such artist' . $name);
 		} else {
 			$this->name = $row['name'];
 			$this->mbid = $row['mbid'];
 			$this->streamable = $row['streamable'];
 			$this->bio_published = $row['bio_published'];
-			$this->bio_content = strip_tags($row['bio_content'], "<p><a><li><ul><ol><br><b><em><strong><i>");
-			$this->bio_summary = strip_tags($row['bio_summary']. "<p><a><li><ul><ol><br><b><em><strong><i>");
+			$this->bio_content = strip_tags($row['bio_content'], '<p><a><li><ul><ol><br><b><em><strong><i>');
+			$this->bio_summary = strip_tags($row['bio_summary']. '<p><a><li><ul><ol><br><b><em><strong><i>');
 			$this->image_small = $row['image_small'];
 			$this->image_medium = $row['image_medium'];
 			$this->image_large = $row['image_large'];
@@ -88,7 +87,7 @@ class Artist {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$res = $adodb->CacheGetAll(600, $this->album_query);
-		foreach($res as &$row) {
+		foreach ($res as &$row) {
 			$albums[] = new Album($row['name'], $this->name);
 		}
 
@@ -113,7 +112,7 @@ class Artist {
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$res = $adodb->CacheGetAll(600, 'SELECT name FROM Track WHERE artist_name = '
 			. $adodb->qstr($this->name));
-		foreach($res as &$row) {
+		foreach ($res as &$row) {
 			$tracks[] = new Track($row['name'], $this->name);
 		}
 
@@ -133,7 +132,7 @@ class Artist {
 			'SELECT track, COUNT(track) AS freq, COUNT(DISTINCT userid) AS listeners FROM Scrobbles WHERE'
 			. ' artist = ' . $adodb->qstr($this->name)
 			. ' GROUP BY track ORDER BY freq DESC LIMIT ' . (int)($number));
-		foreach($res as &$row) {
+		foreach ($res as &$row) {
 			$track = new Track($row['track'], $this->name);
 			$track->setPlayCount($row['freq']);
 			$track->setListenerCount($row['listeners']);
@@ -148,7 +147,7 @@ class Artist {
 	 *
 	 * @return A string containing the URL of this artist
 	 */
-	function getURL($component='') {
+	function getURL($component = '') {
 		return Server::getArtistURL($this->name, $component);
 	}
 
@@ -177,10 +176,10 @@ class Artist {
 	 * @param int $userid The user adding these tags
 	 */
 	function addTags($tags, $userid) {
-		global  $adodb;
+		global $adodb;
 
-		$tags = explode(",", strtolower($tags));
-		foreach($tags as $tag) {
+		$tags = explode(',', strtolower($tags));
+		foreach ($tags as $tag) {
 			$tag = trim($tag);
 			if (strlen($tag) == 0) {
 				continue;
@@ -190,7 +189,7 @@ class Artist {
 					. $adodb->qstr($tag) . ', '
 					. $adodb->qstr($this->name) . ', '
 					. $userid . ')');
-			} catch (exception $ex) {}
+			} catch (Exception $ex) {}
 		}
 	}
 
@@ -200,7 +199,7 @@ class Artist {
 	 * @param int $limit The number of tags to return (defaults to 10)
 	 * @return An array of tags
 	 */
-	function getTopTags($limit=10) {
+	function getTopTags($limit = 10) {
 		global $adodb;
 
 		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM tags WHERE '
@@ -223,7 +222,7 @@ class Artist {
 	 */
 	function setBiographySummary($bio_summary) {
 		global $adodb;
-		$adodb->Execute("UPDATE Artist SET bio_summary = " . $adodb->qstr($bio_summary) . " WHERE name = " . $adodb->qstr($this->name));
+		$adodb->Execute('UPDATE Artist SET bio_summary = ' . $adodb->qstr($bio_summary) . ' WHERE name = ' . $adodb->qstr($this->name));
 		$this->bio_summary = $bio_summary;
 		$adodb->CacheFlush($this->query);
 	}
@@ -235,7 +234,7 @@ class Artist {
 	 */
 	function setBiography($bio) {
 		global $adodb;
-		$adodb->Execute("UPDATE Artist SET bio_content = " . $adodb->qstr($bio) . " WHERE name = " . $adodb->qstr($this->name));
+		$adodb->Execute('UPDATE Artist SET bio_content = ' . $adodb->qstr($bio) . ' WHERE name = ' . $adodb->qstr($this->name));
 		$this->bio_content = $bio;
 		$adodb->CacheFlush($this->query);
 	}
@@ -247,7 +246,7 @@ class Artist {
 	 */
 	function setHomepage($homepage) {
 		global $adodb;
-		$adodb->Execute("UPDATE Artist SET homepage = " . $adodb->qstr($homepage) . " WHERE name = " . $adodb->qstr($this->name));
+		$adodb->Execute('UPDATE Artist SET homepage = ' . $adodb->qstr($homepage) . ' WHERE name = ' . $adodb->qstr($this->name));
 		$this->homepage = $homepage;
 		$adodb->CacheFlush($this->query);
 	}
@@ -259,7 +258,7 @@ class Artist {
 	 */
 	function setImage($image_url) {
 		global $adodb;
-		$adodb->Execute("UPDATE Artist SET image_medium = " . $adodb->qstr($image_url) . " WHERE name = " . $adodb->qstr($this->name));
+		$adodb->Execute('UPDATE Artist SET image_medium = ' . $adodb->qstr($image_url) . ' WHERE name = ' . $adodb->qstr($this->name));
 		$this->image_medium = $image_url;
 		$adodb->CacheFlush($this->query);
 	}
@@ -271,7 +270,7 @@ class Artist {
 	 */
 	function setHashtag($hashtag) {
 		global $adodb;
-		$adodb->Execute("UPDATE Artist SET hashtag = " . $adodb->qstr($hashtag) . " WHERE name = " . $adodb->qstr($this->name));
+		$adodb->Execute('UPDATE Artist SET hashtag = ' . $adodb->qstr($hashtag) . ' WHERE name = ' . $adodb->qstr($this->name));
 		$this->hashtag = $hashtag;
 		$adodb->CacheFlush($this->query);
 	}
@@ -283,7 +282,7 @@ class Artist {
 	 */
 	function setFlattr($flattr_uid) {
 		global $adodb;
-		$adodb->Execute("UPDATE Artist SET flattr_uid = " . $adodb->qstr($flattr_uid) . " WHERE name = " . $adodb->qstr($this->name));
+		$adodb->Execute('UPDATE Artist SET flattr_uid = ' . $adodb->qstr($flattr_uid) . ' WHERE name = ' . $adodb->qstr($this->name));
 		$this->flattr_uid = $flattr_uid;
 		$adodb->CacheFlush($this->query);
 	}
@@ -314,29 +313,29 @@ class Artist {
 
 		$totalTags = array();
 		// Normalise tag proportions
-		foreach($otherArtists as &$commonArtist) {
-			if(!array_key_exists($commonArtist['artist'], $totalTags)) {
+		foreach ($otherArtists as &$commonArtist) {
+			if (!array_key_exists($commonArtist['artist'], $totalTags)) {
 				$totalTags[$commonArtist['artist']] = $commonArtist['num'];
 			}
 
 			$totalTags[$commonArtist['artist']] += $commonArtist['num'];
 		}
-		foreach($otherArtists as &$commonArtist) {
+		foreach ($otherArtists as &$commonArtist) {
 			$commonArtist['num'] /= $totalTags[$commonArtist['artist']];
 		}
 		$tags = array();
-		foreach($tmpTags as &$tag) {
+		foreach ($tmpTags as &$tag) {
 			$tags[$tag['ltag']] = $tag['num'] / $tagCount;
 		}
 
 		$mostSimilar = 1;
 		// Calculate similarity
-		foreach($otherArtists as &$commonArtist) {
-			if(!array_key_exists($commonArtist['artist'], $similarArtists)) {
+		foreach ($otherArtists as &$commonArtist) {
+			if (!array_key_exists($commonArtist['artist'], $similarArtists)) {
 				$similarArtists[$commonArtist['artist']] = array('artist' => $commonArtist['artist'], 'similarity' => 0);
 			}
 
-			if(array_key_exists($commonArtist['ltag'], $tags)) {
+			if (array_key_exists($commonArtist['ltag'], $tags)) {
 				$sdiff = (1 - abs($tags[$commonArtist['ltag']] - $commonArtist['num'])) * $tags[$commonArtist['ltag']];
 			} else {
 				$sdiff = 0;
@@ -350,29 +349,29 @@ class Artist {
 		}
 
 		// Normalise similarity metric
-		foreach($similarArtists as &$artist) {
+		foreach ($similarArtists as &$artist) {
 			$artist['similarity'] /= $mostSimilar;
 		}
 
 		// Sort artists by similarity
 		$tmp = array();
-		foreach($similarArtists as &$ar) {
-			$tmp[] = &$ar["similarity"];
+		foreach ($similarArtists as &$ar) {
+			$tmp[] = &$ar['similarity'];
 		}
 		array_multisort($tmp, SORT_DESC, $similarArtists);
 
 		$similarWithMeta = array();
 		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
 		$i = 0;
-		foreach($similarArtists as $artist) {
+		foreach ($similarArtists as $artist) {
 			$streamable = $adodb->cacheGetOne(86400, 'SELECT streamable FROM Artist WHERE name = ' . $adodb->qstr($artist['artist']));
-			if($artist['artist'] != $this->name && $streamable) {
+			if ($artist['artist'] != $this->name && $streamable) {
 				$similarWithMeta[$i]['artist'] = $artist['artist'];
 				$similarWithMeta[$i]['similarity'] = $artist['similarity'];
 				$similarWithMeta[$i]['url'] = Server::getArtistURL($artist['artist']);
 				$similarWithMeta[$i]['size'] = $sizes[(int) ($i/($limit/count($sizes)))];
 				$i++;
-				if($i >= $limit) {
+				if ($i >= $limit) {
 					break;
 				}
 			}
