@@ -1,25 +1,22 @@
 <?php
-/*
-homepage: http://arc.semsol.org/
-license:  http://arc.semsol.org/license
-
-class:    ARC2 Web Reader
-author:   Benjamin Nowack
-version:  2009-02-18 (Tweak: Improved error message on empty file:// base)
+/**
+ * ARC2 Web Client
+ *
+ * @author Benjamin Nowack
+ * @license <http://arc.semsol.org/license>
+ * @homepage <http://arc.semsol.org/>
+ * @package ARC2
+ * @version 2010-11-16
 */
 
 ARC2::inc('Class');
 
 class ARC2_Reader extends ARC2_Class {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_Reader($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
   function __init() {/* inc_path, proxy_host, proxy_port, proxy_skip, http_accept_header, http_user_agent_header, max_redirects */
     parent::__init();
     $this->http_method = $this->v('http_method', 'GET', $this->a);
@@ -31,8 +28,10 @@ class ARC2_Reader extends ARC2_Class {
     $this->format = $this->v('format', false, $this->a);
     $this->redirects = array();
     $this->stream_id = '';
-    $this->timeout = $this->v('reader_timeout', 0, $this->a);;
-
+    $this->timeout = $this->v('reader_timeout', 30, $this->a);
+    $this->response_headers = array();
+    $this->digest_auth = 0;
+    $this->auth_infos = $this->v('reader_auth_infos', array(), $this->a);
   }
 
   /*  */
@@ -67,6 +66,11 @@ class ARC2_Reader extends ARC2_Class {
     $id = md5($path . ' ' . $data);
     if ($this->stream_id != $id) {
       $this->stream_id = $id;
+      /* data uri? */
+      if (!$data && preg_match('/^data\:([^\,]+)\,(.*)$/', $path, $m)) {
+        $path = '';
+        $data = preg_match('/base64/', $m[1]) ? base64_decode($m[2]) : rawurldecode($m[2]);
+      }
       $this->base = $this->calcBase($path);
       $this->uri = $this->calcURI($path, $this->base);
       $this->stream = ($data) ? $this->getDataStream($data) : $this->getSocketStream($this->base, $ping_only);
@@ -76,15 +80,87 @@ class ARC2_Reader extends ARC2_Class {
     }
   }
 
-  function setCredentials($path) {
-    if ($creds = $this->v('arc_reader_credentials', array(), $this->a)) {
-      foreach ($creds as $pattern => $cred) {
-        $regex = '/' . preg_replace('/([\:\/\.\?])/', '\\\\\1', $pattern) . '/';
-        if (preg_match($regex, $path)) {
-          $this->setCustomHeaders('Authorization: Basic ' . base64_encode($cred));
-        }
+  /*
+   * HTTP Basic/Digest + Proxy authorization can be defined in the
+   * arc_reader_credentials config setting:
+
+        'arc_reader_credentials' => array(
+          'http://basic.example.com/' => 'user:pass', // shortcut for type=basic
+          'http://digest.example.com/' => 'user::pass', // shortcut for type=digest
+          'http://proxy.example.com/' => array('type' => 'basic', 'proxy', 'user' => 'user', 'pass' => 'pass'),
+        ),
+
+   */
+
+  function setCredentials($url) {
+    if (!$creds = $this->v('arc_reader_credentials', array(), $this->a))  return 0;
+    foreach ($creds as $pattern => $creds) {
+      /* digest shortcut (user::pass) */
+      if (!is_array($creds) && preg_match('/^(.+)\:\:(.+)$/', $creds, $m)) {
+        $creds = array('type' => 'digest', 'user' => $m[1], 'pass' => $m[2]);
       }
+      /* basic shortcut (user:pass) */
+      if (!is_array($creds) && preg_match('/^(.+)\:(.+)$/', $creds, $m)) {
+        $creds = array('type' => 'basic', 'user' => $m[1], 'pass' => $m[2]);
+      }
+      if (!is_array($creds)) return 0;
+      $regex = '/' . preg_replace('/([\:\/\.\?])/', '\\\\\1', $pattern) . '/';
+      if (!preg_match($regex, $url)) continue;
+      $mthd = 'set' . $this->camelCase($creds['type']) . 'AuthCredentials';
+      if (method_exists($this, $mthd)) $this->$mthd($creds, $url);
     }
+  }
+
+  function setBasicAuthCredentials($creds) {
+    $auth = 'Basic ' . base64_encode($creds['user'] . ':' . $creds['pass']);
+    $h = in_array('proxy', $creds) ? 'Proxy-Authorization' : 'Authorization';
+    $this->addCustomHeaders($h . ': ' . $auth);
+    //echo $h . ': ' . $auth . print_r($creds, 1);
+  }
+
+  function setDigestAuthCredentials($creds, $url) {
+    $path = $this->v1('path', '/', parse_url($url));
+    $auth = '';
+    $hs = $this->getResponseHeaders();
+    /* initial 401 */
+    $h = $this->v('www-authenticate', '', $hs);
+    if ($h && preg_match('/Digest/i', $h)) {
+      $auth = 'Digest ';
+      /* Digest realm="$realm", nonce="$nonce", qop="auth", opaque="$opaque" */
+      $ks = array('realm', 'nonce', 'opaque');/* skipping qop, assuming "auth" */
+      foreach ($ks as $i => $k) {
+        $$k = preg_match('/' . $k . '=\"?([^\"]+)\"?/i', $h, $m) ? $m[1] : '';
+        $auth .= ($i ? ', ' : '') . $k . '="' . $$k . '"';
+        $this->auth_infos[$k] = $$k;
+      }
+      $this->auth_infos['auth'] = $auth;
+      $this->auth_infos['request_count'] = 1;
+    }
+    /* initial 401 or repeated request */
+    if ($this->v('auth', 0, $this->auth_infos)) {
+      $qop = 'auth';
+      $auth = $this->auth_infos['auth'];
+      $rc = $this->auth_infos['request_count'];
+      $realm = $this->auth_infos['realm'];
+      $nonce = $this->auth_infos['nonce'];
+      $ha1 = md5($creds['user'] . ':' . $realm . ':' . $creds['pass']);
+      $ha2 = md5($this->http_method . ':' . $path);
+      $nc = dechex($rc);
+      $cnonce = dechex($rc * 2);
+      $resp = md5($ha1 . ':' . $nonce . ':' . $nc . ':' . $cnonce . ':' . $qop . ':' . $ha2);
+      $auth .= ', username="' . $creds['user'] . '"' .
+        ', uri="' . $path . '"' .
+        ', qop=' . $qop . '' .
+        ', nc=' . $nc .
+        ', cnonce="' . $cnonce . '"' .
+        ', uri="' . $path . '"' .
+        ', response="' . $resp . '"' .
+      '';
+      $this->auth_infos['request_count'] = $rc + 1;
+    }
+    if (!$auth) return 0;
+    $h = in_array('proxy', $creds) ? 'Proxy-Authorization' : 'Authorization';
+    $this->addCustomHeaders($h . ': ' . $auth);
   }
 
   /*  */
@@ -133,11 +209,14 @@ class ARC2_Reader extends ARC2_Class {
     return array('type' => 'socket', 'socket' =>& $s, 'headers' => array(), 'pos' => 0, 'size' => filesize($parts['path']), 'buffer' => '');
   }
   
-  function getHTTPSocket($url, $redirs = 0) {
+  function getHTTPSocket($url, $redirs = 0, $prev_parts = '') {
     $parts = parse_url($url);
-    if (!isset($parts['scheme'])) {
-      return $this->addError('Socket error: No supported URI scheme detected.');
-    }
+    /* relative redirect */
+    if (!isset($parts['scheme']) && $prev_parts) $parts['scheme'] = $prev_parts['scheme'];
+    if (!isset($parts['host']) && $prev_parts) $parts['host'] = $prev_parts['host'];
+    /* no scheme */
+    if (!$this->v('scheme', '', $parts)) return $this->addError('Socket error: Missing URI scheme.');
+    /* port tweaks */
     $parts['port'] = ($parts['scheme'] == 'https') ? $this->v1('port', 443, $parts) : $this->v1('port', 80, $parts);
     $nl = "\r\n";
     $http_mthd = strtoupper($this->http_method);
@@ -147,8 +226,9 @@ class ARC2_Reader extends ARC2_Class {
     else {
       $h_code = $http_mthd . ' ' . $this->v1('path', '/', $parts) . (($v = $this->v1('query', 0, $parts)) ? '?' . $v : '') . (($v = $this->v1('fragment', 0, $parts)) ? '#' . $v : '');
     }
+    $port_code = ($parts['port'] != 80) ? ':' . $parts['port'] : '';
     $h_code .= ' HTTP/1.0' . $nl.
-      'Host: ' . $parts['host'] . $nl.
+      'Host: ' . $parts['host'] . $port_code . $nl .
       (($v = $this->http_accept_header) ? $v . $nl : '') .
       (($v = $this->http_user_agent_header) && !preg_match('/User\-Agent\:/', $this->http_custom_headers) ? $v . $nl : '') .
       (($http_mthd == 'POST') ? 'Content-Length: ' . strlen($this->message_body) . $nl : '') .
@@ -161,26 +241,41 @@ class ARC2_Reader extends ARC2_Class {
     }
     /* connect */
     if ($this->useProxy($url)) {
-      $s = @fsockopen($this->a['proxy_host'], $this->a['proxy_port']);
+      $s = @fsockopen($this->a['proxy_host'], $this->a['proxy_port'], $errno, $errstr, $this->timeout);
+    }
+    elseif (($parts['scheme'] == 'https') && function_exists('stream_socket_client')) {
+      // SSL options via config array, code by Hannes Muehleisen (muehleis@informatik.hu-berlin.de)
+  	  $context = stream_context_create();
+      foreach ($this->a as $k => $v) {
+        if (preg_match('/^arc_reader_ssl_(.+)$/', $k, $m)) {
+          stream_context_set_option($context, 'ssl', $m[1], $v);
+        }
+      }
+      $s = stream_socket_client('ssl://' . $parts['host'] . $port_code, $errno, $errstr, $this->timeout, STREAM_CLIENT_CONNECT, $context);
     }
     elseif ($parts['scheme'] == 'https') {
-      $s = @fsockopen('ssl://' . $parts['host'], $parts['port']);
+      $s = @fsockopen('ssl://' . $parts['host'], $parts['port'], $errno, $errstr, $this->timeout);
     }
     elseif ($parts['scheme'] == 'http') {
-      $s = @fsockopen($parts['host'], $parts['port']);
+      $s = @fsockopen($parts['host'], $parts['port'], $errno, $errstr, $this->timeout);
     }
     if (!$s) {
-      return $this->addError('Socket error: Could not connect to  "' . $url . '" (proxy: ' . ($this->useProxy($url) ? '1' : '0') . ')');
+      return $this->addError('Socket error: Could not connect to "' . $url . '" (proxy: ' . ($this->useProxy($url) ? '1' : '0') . '): ' . $errstr);
     }
     /* request */
     fwrite($s, $h_code);
     /* timeout */
-    if ($this->timeout) stream_set_timeout($s, $this->timeout);
+    if ($this->timeout) {
+      //stream_set_blocking($s, false);
+      stream_set_timeout($s, $this->timeout);
+    }
     /* response headers */
     $h = array();
+    $this->response_headers = $h;
     if (!$this->ping_only) {
       do {
-        $line = trim(fgets($s, 256));
+        $line = trim(fgets($s, 4096));
+        $info = stream_get_meta_data($s);
         if (preg_match("/^HTTP[^\s]+\s+([0-9]{1})([0-9]{2})(.*)$/i", $line, $m)) {/* response code */
           $error = in_array($m[1], array('4', '5')) ? $m[1] . $m[2] . ' ' . $m[3] : '';
           $error = ($m[1].$m[2] == '304') ? '304 '.$m[3] : $error;
@@ -189,17 +284,38 @@ class ARC2_Reader extends ARC2_Class {
           $h['redirect'] = ($m[1] == '3') ? true : false;
         }
         elseif (preg_match('/^([^\:]+)\:\s*(.*)$/', $line, $m)) {/* header */
-          $h[strtolower($m[1])] = trim($m[2]);
+          $h_name = strtolower($m[1]);
+          if (!isset($h[$h_name])) {/* 1st value */
+            $h[$h_name] = trim($m[2]);
+          }
+          elseif (!is_array($h[$h_name])) {/* 2nd value */
+            $h[$h_name] = array($h[$h_name], trim($m[2]));
+          }
+          else {/* more values */
+            $h[$h_name][] = trim($m[2]);
+          }
         }
-      } while(!feof($s) && $line);
+      } while(!$info['timed_out'] && !feof($s) && $line);
       $h['format'] = strtolower(preg_replace('/^([^\s]+).*$/', '\\1', $this->v('content-type', '', $h)));
       $h['encoding'] = preg_match('/(utf\-8|iso\-8859\-1|us\-ascii)/', $this->v('content-type', '', $h), $m) ? strtoupper($m[1]) : '';
       $h['encoding'] = preg_match('/charset=\s*([^\s]+)/si', $this->v('content-type', '', $h), $m) ? strtoupper($m[1]) : $h['encoding'];
+      $this->response_headers = $h;
       /* result */
-      if ($v = $this->v('error', 0, $h)) {
-        //return $this->addError($error);
-        return $this->addError($error . ' "' . (!feof($s) ? trim(strip_tags(fread($s, 64))) . '..."' : ''));
+      if ($info['timed_out']) {
+        return $this->addError('Connection timed out after ' . $this->timeout . ' seconds');
       }
+      /* error */
+      if ($v = $this->v('error', 0, $h)) {
+        /* digest auth */
+        /* 401 received */
+        if (preg_match('/Digest/i', $this->v('www-authenticate', '', $h)) && !$this->digest_auth) {
+          $this->setCredentials($url);
+          $this->digest_auth = 1;
+          return $this->getHTTPSocket($url);
+        }
+        return $this->addError($error . ' "' . (!feof($s) ? trim(strip_tags(fread($s, 128))) . '..."' : ''));
+      }
+      /* redirect */
       if ($this->v('redirect', 0, $h) && ($new_url = $this->v1('location', 0, $h))) {
         fclose($s);
         $this->redirects[$url] = $new_url;
@@ -207,8 +323,11 @@ class ARC2_Reader extends ARC2_Class {
         if ($redirs > $this->max_redirects) {
           return $this->addError('Max numbers of redirects exceeded.');
         }
-        return $this->getHTTPSocket($new_url, $redirs+1);
+        return $this->getHTTPSocket($new_url, $redirs+1, $parts);
       }
+    }
+    if ($this->timeout) {
+      stream_set_blocking($s, true);
     }
     return array('type' => 'socket', 'url' => $url, 'socket' =>& $s, 'headers' => $h, 'pos' => 0, 'size' => $this->v('content-length', 0, $h), 'buffer' => '');
   }
@@ -275,6 +394,13 @@ class ARC2_Reader extends ARC2_Class {
   }
     
   /*  */
+
+  function getResponseHeaders() {
+    if (isset($this->stream) && isset($this->stream['headers'])) {
+      return $this->stream['headers'];
+    }
+    return $this->response_headers;
+  }
   
   function getEncoding($default = 'UTF-8') {
     return $this->v1('encoding', $default, $this->stream['headers']);
@@ -282,6 +408,10 @@ class ARC2_Reader extends ARC2_Class {
 
   function getRedirects() {
     return $this->redirects;
+  }
+
+  function getAuthInfos() {
+    return $this->auth_infos;
   }
   
   /*  */

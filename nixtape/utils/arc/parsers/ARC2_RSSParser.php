@@ -5,21 +5,17 @@ license:  http://arc.semsol.org/license
 
 class:    ARC2 RSS Parser
 author:   Benjamin Nowack
-version:  2008-02-10
+version:  2010-11-16
 */
 
 ARC2::inc('LegacyXMLParser');
 
 class ARC2_RSSParser extends ARC2_LegacyXMLParser {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_RSSParser($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
   function __init() {/* reader */
     parent::__init();
     $this->triples = array();
@@ -42,7 +38,7 @@ class ARC2_RSSParser extends ARC2_LegacyXMLParser {
   /*  */
   
   function setReader(&$reader) {
-    $this->reader =& $reader;
+    $this->reader = $reader;
   }
   
   function createBnodeID(){
@@ -155,6 +151,7 @@ class ARC2_RSSParser extends ARC2_LegacyXMLParser {
       /* val */
       $v = $info['cdata'];
       if (!$v) $v = $this->v('url', '', $info['a']);
+      if (!$v) $v = $this->v('href', '', $info['a']);
       /* prop */
       if ($k) {
         /* enclosure handling */

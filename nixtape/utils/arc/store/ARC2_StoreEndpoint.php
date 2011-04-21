@@ -1,30 +1,28 @@
 <?php
-/*
-homepage: http://arc.semsol.org/
-license:  http://arc.semsol.org/license
-
-class:    ARC2 SPARQL Endpoint
-author:   Benjamin Nowack
-version:  2008-09-03 (Addition: support for "sql" and "infos" result formats (activate the former via "endpoint_enable_sql_output"))
+/**
+ * ARC2 SPARQL Endpoint
+ *
+ * @author Benjamin Nowack
+ * @license <http://arc.semsol.org/license>
+ * @homepage <http://arc.semsol.org/>
+ * @package ARC2
+ * @version 2010-11-16
 */
 
 ARC2::inc('Store');
 
 class ARC2_StoreEndpoint extends ARC2_Store {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_StoreEndpoint($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
   function __init() {
     parent::__init();
     $this->headers = array('http' => 'HTTP/1.1 200 OK', 'vary' => 'Vary: Accept');
     $this->read_key = $this->v('endpoint_read_key', '', $this->a);
     $this->write_key = $this->v('endpoint_write_key', '', $this->a);
+    $this->timeout = $this->v('endpoint_timeout', 0, $this->a);
     $this->a['store_allow_extension_functions'] = $this->v('store_allow_extension_functions', 0, $this->a);    
     $this->allow_sql = $this->v('endpoint_enable_sql_output', 0, $this->a);
     $this->result = '';
@@ -45,7 +43,7 @@ class ARC2_StoreEndpoint extends ARC2_Store {
     $mthd = strtolower($mthd);
     if($multi){
       $qs = $this->getQueryString($mthd);
-      if (preg_match_all('/\&' . $name . '=([^\&]*)/', $qs, $m)){
+      if (preg_match_all('/\&' . $name . '=([^\&]+)/', $qs, $m)){
         foreach ($m[1] as $i => $val) {
           $m[1][$i] = stripslashes($val);
         }
@@ -87,7 +85,7 @@ class ARC2_StoreEndpoint extends ARC2_Store {
     if (!$this->isSetUp()) {
       if ($auto_setup) {
         $this->setUp();
-        return $this->handleRequest();
+        return $this->handleRequest(0);
       }
       else {
         $this->setHeader('http', 'HTTP/1.1 400 Bad Request');
@@ -95,10 +93,10 @@ class ARC2_StoreEndpoint extends ARC2_Store {
         $this->result = 'Missing configuration or the endpoint store was not set up yet.';
       }
     }
-    elseif ($img = $this->p('img')) {
+    elseif (($img = $this->p('img'))) {
       $this->handleImgRequest($img);
     }
-    elseif ($q = $this->p('query')) {
+    elseif (($q = $this->p('query'))) {
       $this->checkProcesses();
       $this->handleQueryRequest($q);
       if ($this->p('show_inline')) {
@@ -107,7 +105,7 @@ class ARC2_StoreEndpoint extends ARC2_Store {
             ' . ($this->p('output') != 'htmltab' ? '<pre>' . htmlspecialchars($this->getResult()) . '</pre>' : $this->getResult()) . '
           </div>
         ';
-        $this->handleEmptyRequest();
+        $this->handleEmptyRequest(1);
       }
     }
     else {
@@ -136,15 +134,44 @@ class ARC2_StoreEndpoint extends ARC2_Store {
   
   /*  */
   
-  function handleEmptyRequest() {
-    $this->setHeader('content-type', 'Content-type: text/html; charset=utf-8');
-    $this->result = $this->getHTMLFormDoc();
+  function handleEmptyRequest($force = 0) {
+    /* service description */
+    $formats = array(
+      'rdfxml' => 'RDFXML', 'rdf+xml' => 'RDFXML', 'html' => 'HTML'
+    );
+    if (!$force && $this->getResultFormat($formats, 'html') != 'HTML') {
+      $this->handleServiceDescriptionRequest();
+    }
+    else {
+      $this->setHeader('content-type', 'Content-type: text/html; charset=utf-8');
+      $this->result = $this->getHTMLFormDoc();
+    }
   }
 
   /*  */
-  
+
+  function handleServiceDescriptionRequest() {
+    $q = '
+      PREFIX void: <http://rdfs.org/ns/void#>
+      CONSTRUCT {
+        <> void:sparqlEndpoint <> .
+      }
+      WHERE {
+        ?s ?p ?o .
+      } LIMIT 1
+    ';
+    $this->handleQueryRequest($q);
+  }
+
+  /*  */
+
   function checkProcesses() {
-    
+    if (method_exists($this->caller, 'checkSPARQLEndpointProcesses')) {
+      $sub_r = $this->caller->checkSPARQLEndpointProcesses();
+    }
+    elseif ($this->timeout) {
+      $this->killDBProcesses('', $this->timeout);
+    }
   }
   
   /*  */
@@ -156,7 +183,7 @@ class ARC2_StoreEndpoint extends ARC2_Store {
     }
     else {
       ARC2::inc('SPARQLPlusParser');
-      $p = & new ARC2_SPARQLPlusParser($this->a, $this);
+      $p = new ARC2_SPARQLPlusParser($this->a, $this);
       $p->parse($q);
       $infos = $p->getQueryInfos();
     }
@@ -269,7 +296,8 @@ class ARC2_StoreEndpoint extends ARC2_Store {
       $prefs[] = $v;
     }
     /* accept header */
-    if ($vals = explode(',', $_SERVER['HTTP_ACCEPT'])) {
+    $vals = explode(',', $_SERVER['HTTP_ACCEPT']);
+    if ($vals) {
       $o_vals = array();
       foreach ($vals as $val) {
         if (preg_match('/(rdf\+n3|x\-turtle|rdf\+xml|sparql\-results\+xml|sparql\-results\+json|json)/', $val, $m)) {
@@ -293,16 +321,17 @@ class ARC2_StoreEndpoint extends ARC2_Store {
     }
   }
 
-  /*  */
+  /* SELECT */
 
   function getSelectResultDoc($r) {
     $formats = array(
       'xml' => 'SPARQLXML', 'sparql-results+xml' => 'SPARQLXML', 
       'json' => 'SPARQLJSON', 'sparql-results+json' => 'SPARQLJSON',
       'php_ser' => 'PHPSER', 'plain' => 'Plain', 
-      'sql' => ($this->allow_sql ? 'SQL' : 'xSQL'), 
+      'sql' => ($this->allow_sql ? 'Plain' : 'xSQL'),
       'infos' => 'Plain',
       'htmltab' => 'HTMLTable',
+      'tsv' => 'TSV',
     );
     if ($f = $this->getResultFormat($formats, 'xml')) {
       $m = 'get' . $f . 'SelectResultDoc';
@@ -432,11 +461,6 @@ class ARC2_StoreEndpoint extends ARC2_Store {
     return serialize($r);
   }
 
-  function getSQLSelectResultDoc($r) {
-    $this->setHeader('content-type', 'Content-Type: text/plain');
-    return $r['result'];
-  }
-
   function getPlainSelectResultDoc($r) {
     $this->setHeader('content-type', 'Content-Type: text/plain');
     return print_r($r['result'], 1);
@@ -459,7 +483,7 @@ class ARC2_StoreEndpoint extends ARC2_Store {
       </html>
     ';
   }
-  
+
   function getHTMLTableRows($rows, $vars) {
     $r = '';
     foreach ($rows as $row) {
@@ -475,14 +499,41 @@ class ARC2_StoreEndpoint extends ARC2_Store {
     return $r ? $r : '<em>No results found</em>';
   }
 
-  /*  */
+  function getTSVSelectResultDoc($r) {
+    $this->setHeader('content-type', 'Content-Type: text/plain; charset=utf-8');
+    $vars = $r['result']['variables'];
+    $rows = $r['result']['rows'];
+    $dur = $r['query_time'];
+    return $this->getTSVRows($rows, $vars);
+  }
+
+  function getTSVRows($rows, $vars) {
+    $r = '';
+    $delim = "\t";
+    $esc_delim = "\\t";
+    foreach ($rows as $row) {
+      $hr = '';
+      $rr = '';
+      foreach ($vars as $var) {
+        $hr .= $r ? '' : ($hr ? $delim . $var : $var);
+        $val = isset($row[$var]) ? str_replace($delim, $esc_delim, $row[$var]) : '';
+        $rr .= $rr ? $delim . $val : $val;
+      }
+      $r .= $hr . "\n" . $rr;
+    }
+    return $r ? $r : 'No results found';
+  }
+
+  /* ASK */
   
   function getAskResultDoc($r) {
     $formats = array(
       'xml' => 'SPARQLXML', 'sparql-results+xml' => 'SPARQLXML', 
       'json' => 'SPARQLJSON', 'sparql-results+json' => 'SPARQLJSON',
       'plain' => 'Plain',
-      'php_ser' => 'PHPSER'
+      'php_ser' => 'PHPSER',
+      'sql' => ($this->allow_sql ? 'Plain' : 'xSQL'),
+      'infos' => 'Plain',
     );
     if ($f = $this->getResultFormat($formats, 'xml')) {
       $m = 'get' . $f . 'AskResultDoc';
@@ -535,14 +586,16 @@ class ARC2_StoreEndpoint extends ARC2_Store {
     return $r['result'] ? 'true' : 'false';
   }
 
-  /*  */
+  /* CONSTRUCT */
 
   function getConstructResultDoc($r) {
     $formats = array(
       'rdfxml' => 'RDFXML', 'rdf+xml' => 'RDFXML', 
       'json' => 'RDFJSON', 'rdf+json' => 'RDFJSON',
       'turtle' => 'Turtle', 'x-turtle' => 'Turtle', 'rdf+n3' => 'Turtle',
-      'php_ser' => 'PHPSER'
+      'php_ser' => 'PHPSER',
+      'sql' => ($this->allow_sql ? 'Plain' : 'xSQL'),
+      'infos' => 'Plain',
     );
     if ($f = $this->getResultFormat($formats, 'rdfxml')) {
       $m = 'get' . $f . 'ConstructResultDoc';
@@ -583,15 +636,22 @@ class ARC2_StoreEndpoint extends ARC2_Store {
     $this->setHeader('content-type', 'Content-Type: text/plain');
     return serialize($r);
   }
-  
-  /*  */
+
+  function getPlainConstructResultDoc($r) {
+    $this->setHeader('content-type', 'Content-Type: text/plain');
+    return print_r($r['result'], 1);
+  }
+
+  /* DESCRIBE */
   
   function getDescribeResultDoc($r) {
     $formats = array(
       'rdfxml' => 'RDFXML', 'rdf+xml' => 'RDFXML', 
       'json' => 'RDFJSON', 'rdf+json' => 'RDFJSON',
       'turtle' => 'Turtle', 'x-turtle' => 'Turtle', 'rdf+n3' => 'Turtle',
-      'php_ser' => 'PHPSER'
+      'php_ser' => 'PHPSER',
+      'sql' => ($this->allow_sql ? 'Plain' : 'xSQL'),
+      'infos' => 'Plain'
     );
     if ($f = $this->getResultFormat($formats, 'rdfxml')) {
       $m = 'get' . $f . 'DescribeResultDoc';
@@ -633,21 +693,28 @@ class ARC2_StoreEndpoint extends ARC2_Store {
     return serialize($r);
   }
   
-  /*  */
+  function getPlainDescribeResultDoc($r) {
+    $this->setHeader('content-type', 'Content-Type: text/plain');
+    return print_r($r['result'], 1);
+  }
+
+  /* DUMP */
   
   function getDumpResultDoc() {
     $this->headers = array();
     return '';
   }
   
-  /*  */
+  /* LOAD */
   
   function getLoadResultDoc($r) {
     $formats = array(
       'xml' => 'SPARQLXML', 'sparql-results+xml' => 'SPARQLXML', 
       'json' => 'SPARQLJSON', 'sparql-results+json' => 'SPARQLJSON',
       'plain' => 'Plain',
-      'php_ser' => 'PHPSER'
+      'php_ser' => 'PHPSER',
+      'sql' => ($this->allow_sql ? 'Plain' : 'xSQL'),
+      'infos' => 'Plain',
     );
     if ($f = $this->getResultFormat($formats, 'xml')) {
       $m = 'get' . $f . 'LoadResultDoc';
@@ -697,10 +764,10 @@ class ARC2_StoreEndpoint extends ARC2_Store {
 
   function getPlainLoadResultDoc($r) {
     $this->setHeader('content-type', 'Content-Type: text/plain');
-    return $r['result'] ? 'true' : 'false';
+    return print_r($r['result'], 1);
   }
 
-  /*  */  
+  /* DELETE */
   
   function getDeleteResultDoc($r) {
     $formats = array(
@@ -757,10 +824,10 @@ class ARC2_StoreEndpoint extends ARC2_Store {
 
   function getPlainDeleteResultDoc($r) {
     $this->setHeader('content-type', 'Content-Type: text/plain');
-    return $r['result'] ? 'true' : 'false';
+    return print_r($r['result'], 1);
   }
 
-  /*  */  
+  /* INSERT */
   
   function getInsertResultDoc($r) {
     $formats = array(
@@ -817,7 +884,7 @@ class ARC2_StoreEndpoint extends ARC2_Store {
 
   function getPlainInsertResultDoc($r) {
     $this->setHeader('content-type', 'Content-Type: text/plain');
-    return $r['result'] ? 'true' : 'false';
+    return print_r($r['result'], 1);
   }
 
   /*  */  
@@ -979,6 +1046,7 @@ class ARC2_StoreEndpoint extends ARC2_Store {
               <option value="infos" ' . ($sel == 'infos' ? $sel_code : '') . '>Query Structure</option>
               ' . ($this->allow_sql ? '<option value="sql" ' . ($sel == 'sql' ? $sel_code : '') . '>SQL</option>' : '') . '
               <option value="htmltab" ' . ($sel == 'htmltab' ? $sel_code : '') . '>HTML Table</option>
+              <option value="tsv" ' . ($sel == 'tsv' ? $sel_code : '') . '>TSV</option>
             </select>
           </dd>
           

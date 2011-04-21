@@ -5,21 +5,17 @@ license:  http://arc.semsol.org/license
 
 class:    ARC2 RDF Extractor
 author:   Benjamin Nowack
-version:  2008-11-18 (Fix: Skip comments. Thanks to Masahide Kanzaki)
+version:  2010-11-16
 */
 
 ARC2::inc('Class');
 
 class ARC2_RDFExtractor extends ARC2_Class {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_RDFExtractor($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
   function __init() {
     parent::__init();
     $this->nodes = $this->caller->getNodes();
@@ -34,14 +30,6 @@ class ARC2_RDFExtractor extends ARC2_Class {
   
   function x($re, $v, $options = 'si') {
     return ARC2::x($re, $v, $options);
-  }
-
-  function camelCase($v) {
-    $r = ucfirst($v);
-    while (preg_match('/^(.*)[\-\_ ](.*)$/', $r, $m)) {
-      $r = $m[1] . ucfirst($m[2]);
-    }
-    return $r;
   }
 
   function createBnodeID(){
@@ -153,7 +141,7 @@ class ARC2_RDFExtractor extends ARC2_Class {
   
   /*  */
   
-  function getPlainContent($n, $trim = 1, $rdfaStyle = 0) {
+  function getPlainContent($n, $trim = 1, $use_img_alt = 1) {
     if ($n['tag'] == 'comment') {
       $r = '';
     }
@@ -164,17 +152,17 @@ class ARC2_RDFExtractor extends ARC2_Class {
       $r = $n['cdata'];
       $sub_nodes = $this->getSubNodes($n);
       foreach ($sub_nodes as $sub_n) {
-        $r .= $this->getPlainContent($sub_n, 0);
+        $r .= $this->getPlainContent($sub_n, 0, $use_img_alt);
       }
     }
-    elseif (($n['tag'] == 'img') && isset($n['a']['alt']) && !$rdfaStyle) {
+    elseif (($n['tag'] == 'img') && $use_img_alt && isset($n['a']['alt'])) {
       $r = $n['a']['alt'];
     }
     else {
       $r = '';
       $sub_nodes = $this->getSubNodes($n);
       foreach ($sub_nodes as $sub_n) {
-        $r .= $this->getPlainContent($sub_n, 0);
+        $r .= $this->getPlainContent($sub_n, 0, $use_img_alt);
       }
     }
     $r = preg_replace('/\s/s', ' ', $r);

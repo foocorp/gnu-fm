@@ -1,25 +1,23 @@
 <?php
-/*
-homepage: http://arc.semsol.org/
-license:  http://arc.semsol.org/license
-
-class:    ARC2 JSON Parser
-author:   Benjamin Nowack
-version:  2009-02-12 Tweak: "null" is now supported by extractValue
+/**
+ * ARC2 JSON Parser
+ * Does not extract triples, needs sub-class for RDF extraction
+ *
+ * @author Benjamin Nowack <bnowack@semsol.com>
+ * @license http://arc.semsol.org/license
+ * @homepage <http://arc.semsol.org/>
+ * @package ARC2
+ * @version 2010-11-16
 */
 
 ARC2::inc('RDFParser');
 
 class ARC2_JSONParser extends ARC2_RDFParser {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_JSONParser($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
   function __init() {
     parent::__init();
   }
@@ -39,7 +37,7 @@ class ARC2_JSONParser extends ARC2_RDFParser {
     /* reader */
     if (!$this->v('reader')) {
       ARC2::inc('Reader');
-      $this->reader = & new ARC2_Reader($this->a, $this);
+      $this->reader = new ARC2_Reader($this->a, $this);
     }
     $this->reader->setAcceptHeader('Accept: application/json; q=0.9, */*; q=0.1');
     $this->reader->activate($path, $data);
@@ -50,6 +48,7 @@ class ARC2_JSONParser extends ARC2_RDFParser {
       $doc .= $d;
     }
     $this->reader->closeStream();
+    unset($this->reader);
     $doc = preg_replace('/^[^\{]*(.*\})[^\}]*$/is', '\\1', $doc);
     $this->unparsed_code = $doc;
     list($this->struct, $rest) = $this->extractObject($doc);
@@ -61,6 +60,7 @@ class ARC2_JSONParser extends ARC2_RDFParser {
   function extractObject($v) {
     if (function_exists('json_decode')) return array(json_decode($v, 1), '');
     $r = array();
+    /* sub-object */
     if ($sub_r = $this->x('\{', $v)) {
       $v = $sub_r[1];
       while ((list($sub_r, $v) = $this->extractEntry($v)) && $sub_r) {
@@ -68,14 +68,17 @@ class ARC2_JSONParser extends ARC2_RDFParser {
       }
       if ($sub_r = $this->x('\}', $v)) $v = $sub_r[1];
     }
+    /* sub-list */
     elseif ($sub_r = $this->x('\[', $v)) {
       $v = $sub_r[1];
-      while ((list($sub_r, $v) = $this->extractValue($v)) && $sub_r) {
+      while ((list($sub_r, $v) = $this->extractObject($v)) && $sub_r) {
         $r[] = $sub_r;
+        $v = ltrim($v, ',');
       }
       if ($sub_r = $this->x('\]', $v)) $v = $sub_r[1];
     }
-    elseif ((list($sub_r, $v) = $this->extractValue($v)) && $sub_r) {
+    /* sub-value */
+    elseif ((list($sub_r, $v) = $this->extractValue($v)) && ($sub_r !== false)) {
       $r = $sub_r;
     }
     return array($r, $v);
@@ -102,22 +105,33 @@ class ARC2_JSONParser extends ARC2_RDFParser {
     if ($sub_r = $this->x('null', $v)) {
       return array(null, $sub_r[1]);
     }
-    if ($sub_r = $this->x('([0-9\.]+)', $v)) {
+    if ($sub_r = $this->x('(true|false)', $v)) {
+      return array($sub_r[1], $sub_r[2]);
+    }
+    if ($sub_r = $this->x('([\-\+]?[0-9\.]+)', $v)) {
       return array($sub_r[1], $sub_r[2]);
     }
     if ($sub_r = $this->x('\"', $v)) {
       $rest = $sub_r[1];
       if (preg_match('/^([^\x5c]*|.*[^\x5c]|.*\x5c{2})\"(.*)$/sU', $rest, $m)) {
-        return array($m[1], $m[2]);
+        $val = $m[1];
+        /* unescape chars (single-byte) */
+        $val = preg_replace('/\\\u(.{4})/e', 'chr(hexdec("\\1"))', $val);
+        //$val = preg_replace('/\\\u00(.{2})/e', 'rawurldecode("%\\1")', $val);
+        /* other escaped chars */
+        $from = array('\\\\', '\r', '\t', '\n', '\"', '\b', '\f', '\/');
+        $to = array("\\", "\r", "\t", "\n", '"', "\b", "\f", "/");
+        $val = str_replace($from, $to, $val);
+        return array($val, $m[2]);
       }
     }
-    return array(0, $v);
+    return array(false, $v);
   }
   
   /*  */
 
   function getObject() {
-    return $this->v('struct', new stdClass());
+    return $this->v('struct', array());
   }
   
   function getTriples() {
@@ -129,6 +143,7 @@ class ARC2_JSONParser extends ARC2_RDFParser {
   }
 
   function addT($s = '', $p = '', $o = '', $s_type = '', $o_type = '', $o_dt = '', $o_lang = '') {
+    $o = $this->toUTF8($o);
     //echo str_replace($this->base, '', "-----\n adding $s / $p / $o\n-----\n");
     $t = array('s' => $s, 'p' => $p, 'o' => $o, 's_type' => $s_type, 'o_type' => $o_type, 'o_datatype' => $o_dt, 'o_lang' => $o_lang);
     if ($this->skip_dupes) {
