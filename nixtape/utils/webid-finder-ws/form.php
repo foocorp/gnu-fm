@@ -67,40 +67,36 @@ input.wide
 <h1>WebID Finder</h1>
 
 <?php
-	if ($_REQUEST['submit'])
-	{
+	if ($_REQUEST['submit']) {
 		require_once 'guts.php';
 
-		switch ($_REQUEST['source'])
-		{
-			case 'laconica' :
-				$info = getFromLaconica( $_REQUEST[ $_REQUEST['source'] ] );
+		switch ($_REQUEST['source']) {
+			case 'laconica':
+				$info = getFromLaconica($_REQUEST[$_REQUEST['source']]);
 				break;
-			case 'foaf' :
-				$info = getFromFOAF( $_REQUEST[ $_REQUEST['source'] ] );
+			case 'foaf':
+				$info = getFromFOAF($_REQUEST[$_REQUEST['source']]);
 				break;
-			case 'opera' :
-				$info = getFromMyOpera( $_REQUEST[ $_REQUEST['source'] ] );
+			case 'opera':
+				$info = getFromMyOpera($_REQUEST[$_REQUEST['source']]);
 				break;
-			case 'web' :
-				$info = getFromWebsite( $_REQUEST[ $_REQUEST['source'] ] );
+			case 'web':
+				$info = getFromWebsite($_REQUEST[$_REQUEST['source']]);
 				break;
-			case 'email' :
-				$info = getFromEmail( $_REQUEST[ $_REQUEST['source'] ] );
+			case 'email':
+				$info = getFromEmail($_REQUEST[$_REQUEST['source']]);
 				break;
-			default :
-				$info = getBestGuess( $_REQUEST[ $_REQUEST['source'] ] );
+			default:
+				$info = getBestGuess($_REQUEST[$_REQUEST['source']]);
 		}
 
-		if ($info['WebID'])
-		{
+		if ($info['WebID']) {
 			print "<div class=\"success\">\n";
 			printf("<p>Found a WebID%s:<br /><tt id=\"webid\" title=\"%s\">%s</tt></p>\n",
 				(empty($info['Name']) ? '' : (' for ' . htmlentities($info['Name']))),
 				htmlentities($info['WebID']),
 				htmlentities($info['WebID']));
-			if (!empty($_REQUEST['javascript']))
-			{
+			if (!empty($_REQUEST['javascript'])) {
 				print "<script type=\"text/javascript\">\n";
 				print "function UseIt() { window.opener.document.getElementById('"
 					. htmlentities($_REQUEST['javascript'])
@@ -112,10 +108,7 @@ input.wide
 			print "</body>\n";
 			print "</html>\n";
 			exit;
-		}
-
-		else
-		{
+		} else {
 			print "<p>Sorry, couldn't find your WebID that way. Try another method.</p>\n";
 		}
 	}
@@ -197,22 +190,21 @@ input.wide
 
 <script type="text/javascript" src="/js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript">
-function Initio ()
-{
+function Initio() {
 	var OptionsPanels = $(".options_panel");
 	OptionsPanels.hide();
-	$(".radio").each( function (i) {
+	$(".radio").each(function (i) {
 		this.onclick = Expando;
 	});
 }
 
-function Expando ()
-{
-	$(".radio").each( function (i) {
-		if (this.checked)
+function Expando() {
+	$(".radio").each(function (i) {
+		if (this.checked) {
 			$("#options_" + this.value).show();
-		else
+		} else {
 			$("#options_" + this.value).hide();
+		}
 	});
 }
 

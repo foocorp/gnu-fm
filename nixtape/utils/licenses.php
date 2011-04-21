@@ -16,10 +16,10 @@ define('LAL',   11);
 $by1 = array('http://creativecommons.org/licenses/by/1.0/?.*');
 $by2 = array('http://creativecommons.org/licenses/by/2.0/?.*');
 $by21 = array('http://creativecommons.org/licenses/by/2.1/?.*');
-$by25 =  array('http://creativecommons.org/licenses/by/2.5/?.*');
+$by25 = array('http://creativecommons.org/licenses/by/2.5/?.*');
 $by3 = array('http://creativecommons.org/licenses/by/3.0/?.*');
 $bysa1 = array('http://creativecommons.org/licenses/by-sa/1.0/?.*');
-$bysa2 =  array('http://creativecommons.org/licenses/by-sa/2.0/?.*');
+$bysa2 = array('http://creativecommons.org/licenses/by-sa/2.0/?.*');
 $bysa21 = array('http://creativecommons.org/licenses/by-sa/2.1/?.*');
 $bysa25 = array('http://creativecommons.org/licenses/by-sa/2.5/?.*');
 $bysa3 = array('http://creativecommons.org/licenses/by-sa/3.0/?.*');
@@ -33,7 +33,9 @@ function simplify_license($license) {
 
 	foreach ($licenses as $key => $l) {
 		foreach ($l as $urlschema) {
-			if (preg_match("|$urlschema|", $license))		return $key;
+			if (preg_match("|$urlschema|", $license)) {
+				return $key;
+			}
 		}
 	}
 
