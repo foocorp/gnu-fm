@@ -47,4 +47,4 @@ $adodb->Execute('UPDATE Radio_Sessions SET url = ' . $adodb->qstr($url) . ' WHER
 
 echo "response=OK\n";
 echo "url=http://libre.fm\n"; // Need to parse the station request and give a real URL
-echo "stationname=" . ($stationname) ."\n";
+echo 'stationname=' . $stationname ."\n";
