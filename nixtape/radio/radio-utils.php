@@ -85,7 +85,7 @@ function make_playlist($session, $old_format=false) {
 
 	if(preg_match('@l(ast|ibre)fm://globaltags/(.*)@', $url, $regs)) {
 		$tag = $regs[2];
-		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist WHERE streamable=1 AND lower(tag) = ' . $adodb->qstr(mb_strtolower($tag, 'UTF-8')));
+		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist WHERE streamable=1 AND lower(tag) = lower(' . $adodb->qstr($tag) . ')');
 	} elseif(preg_match('@l(ast|ibre)fm://artist/(.*)/similarartists@', $url, $regs)) {
 		try {
 			$artist = new Artist($regs[2]);
@@ -96,7 +96,7 @@ function make_playlist($session, $old_format=false) {
 		$res = get_artist_selection($similarArtists, $artist);
 	} elseif(preg_match('@l(ast|ibre)fm://artist/(.*)@', $url, $regs)) {
 		$artist = $regs[2];
-		$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist, 'UTF-8')));
+		$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND lower(artist_name) = lower(' . $adodb->qstr($artist) . ')');
 	} elseif(preg_match('@l(ast|ibre)fm://user/(.*)/(loved|library|mix)@', $url, $regs)) {
 		try {
 			$requser = new User($regs[2]);
@@ -190,14 +190,14 @@ function get_artist_selection($artists, $artist=false) {
 	global $adodb;
 
 	if($artist) {
-		$artistsClause = 'lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artist->name, 'UTF-8'));
+		$artistsClause = 'lower(artist_name) = lower(' . $adodb->qstr($artist->name) . ')';
 	}
 	for($i = 0; $i < 8; $i++) {
 		$r = rand(0, count($artists) - 1);
 		if($i != 0 || $artist) {
 			$artistsClause .= ' OR ';
 		}
-		$artistsClause .= 'lower(artist_name) = ' . $adodb->qstr(mb_strtolower($artists[$r]['artist'], 'UTF-8'));
+		$artistsClause .= 'lower(artist_name) = lower(' . $adodb->qstr($artists[$r]['artist']) . ')';
 	}
 	return $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND ' . $artistsClause);
 }
