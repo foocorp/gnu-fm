@@ -543,7 +543,6 @@ class Server {
 
 	static function search($search_term, $search_type, $limit=40) {
 		global $adodb;
-		$search_term = strtolower($search_term);
 		switch($search_type) {
 			case 'artist':
 				$table = 'Artist';
@@ -583,7 +582,7 @@ class Server {
 			if ($i > 0) {
 				$sql .= ' OR ';
 			}
-			$sql .= 'LOWER(' . $search_fields[$i] . ') LIKE ' . $adodb->qstr('%' . $search_term . '%');
+			$sql .= 'LOWER(' . $search_fields[$i] . ') LIKE LOWER(' . $adodb->qstr('%' . $search_term . '%') . ')';
 		}
 
 		$sql .= 'LIMIT ' . $limit;

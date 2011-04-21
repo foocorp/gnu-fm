@@ -42,7 +42,7 @@ if(isset($_POST['login'])) {
 	if(empty($errors)) {
 		try {
 			$sql = 'SELECT uniqueid, active FROM Users WHERE '
-				. ' lower(username) = ' . $adodb->qstr(strtolower($username))
+				. ' lower(username) = lower(' . $adodb->qstr($username) . ')'
 			  . ' AND password = ' . $adodb->qstr(md5($password));
 			$row = $adodb->GetRow($sql);
 			$userid = $row['uniqueid'];

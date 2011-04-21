@@ -95,7 +95,7 @@ if(isset($_POST['register'])) {
 
 	//Check this username is available
 	try {
-		$res = $adodb->GetOne('SELECT username FROM Users WHERE lower(username) = ' . $adodb->qstr(strtolower($username)));
+		$res = $adodb->GetOne('SELECT username FROM Users WHERE lower(username) = lower(' . $adodb->qstr($username) . ')');
 	}
 	catch (exception $e) {
 		$errors .= 'Database error.<br />';
