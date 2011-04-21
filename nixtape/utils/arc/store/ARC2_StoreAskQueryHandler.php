@@ -1,28 +1,25 @@
 <?php
-/*
-homepage: http://arc.semsol.org/
-license:  http://arc.semsol.org/license
-
-class:    ARC2 RDF Store ASK Query Handler
-author:   Benjamin Nowack
-version:  2007-09-18
+/**
+ * ARC2 SPARQL ASK query handler
+ *
+ * @author Benjamin Nowack
+ * @license <http://arc.semsol.org/license>
+ * @homepage <http://arc.semsol.org/>
+ * @package ARC2
+ * @version 2010-11-16
 */
 
 ARC2::inc('StoreSelectQueryHandler');
 
 class ARC2_StoreAskQueryHandler extends ARC2_StoreSelectQueryHandler {
 
-  function __construct($a = '', &$caller) {/* caller has to be a store */
+  function __construct($a, &$caller) {/* caller has to be a store */
     parent::__construct($a, $caller);
   }
   
-  function ARC2_StoreAskQueryHandler($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
   function __init() {/* db_con */
     parent::__init();
-    $this->store =& $this->caller;
+    $this->store = $this->caller;
   }
 
   /*  */
@@ -42,7 +39,7 @@ class ARC2_StoreAskQueryHandler extends ARC2_StoreSelectQueryHandler {
 
   /*  */
   
-  function getFinalQueryResult($q_sql, $vars, $tmp_tbl) {
+  function getFinalQueryResult($q_sql, $tmp_tbl) {
     $con = $this->store->getDBCon();
     $rs = mysql_query('SELECT success FROM ' . $tmp_tbl, $con);
     $r = ($row = mysql_fetch_array($rs)) ? $row['success'] : 0;

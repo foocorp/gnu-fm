@@ -5,21 +5,17 @@ license:  http://arc.semsol.org/license
 
 class:    ARC2 POSH RDF Serializer
 author:   Benjamin Nowack
-version:  2008-11-18 (Tweak: Updated to poshRDF spec draft)
+version:  2010-11-16
 */
 
 ARC2::inc('RDFSerializer');
 
 class ARC2_POSHRDFSerializer extends ARC2_RDFSerializer {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_POSHRDFSerializer($a = '', &$caller) {/* ns */
-    $this->__construct($a, $caller);
-  }
-
   function __init() {
     parent::__init();
     $this->content_header = 'text/html';
@@ -46,13 +42,13 @@ class ARC2_POSHRDFSerializer extends ARC2_RDFSerializer {
     foreach ($index as $s => $ps) {
       /* node */
       $r .= '
-        <div class="rdf-node dump">
+        <div class="rdf-view">
           <h3><a class="rdf-s" href="' . $s . '">' . $this->getLabel($s, $ps)  . '</a></h3>
       ';
       /* arcs */
       foreach ($ps as $p => $os) {
         $r .= '
-          <div class="rdf-arcs">
+          <div class="rdf-o-list">
             <a class="rdf-p" href="' . $p . '">' . ucfirst($this->getLabel($p)) . '</a>
         ';
         foreach ($os as $o) {
@@ -74,16 +70,35 @@ class ARC2_POSHRDFSerializer extends ARC2_RDFSerializer {
   function getObjectValue($o) {
     if ($o['type'] == 'uri') {
       if (preg_match('/(jpe?g|gif|png)$/i', $o['value'])) {
-        return '<img class="rdf-o" src="' . htmlspecialchars($o['value']) . '" alt="img" />';
+        return $this->getImageObjectValue($o);
       }
-      return '<a class="rdf-o" href="' . htmlspecialchars($o['value']) . '">' . preg_replace('/^https?\:\/\/(www\.)?/', '', $o['value']) . '</a>';
+      return $this->getURIObjectValue($o);
     }
     if ($o['type'] == "bnode") {
-      return '<div class="rdf-o" title="' . $o['value']. '">An unnamed resource</div>';
+      return $this->getBNodeObjectValue($o);
     }
-    return '<div class="rdf-o">' . $o['value'] . '</div>';
+    return $this->getLiteralObjectValue($o);
   }
   
+  function getImageObjectValue($o) {
+    return '<img class="rdf-o" src="' . htmlspecialchars($o['value']) . '" alt="img" />';
+  }
+  
+  function getURIObjectValue($o) {
+    $href = htmlspecialchars($o['value']);
+    $label = $o['value'];
+    $label = preg_replace('/^https?\:\/\/(www\.)?/', '', $label);
+    return '<a class="rdf-o" href="' . $href . '">' . $label . '</a>';
+  }
+
+  function getBNodeObjectValue($o) {
+    return '<div class="rdf-o" title="' . $o['value']. '">An unnamed resource</div>';
+  }
+
+  function getLiteralObjectValue($o) {
+    return '<div class="rdf-o">' . $o['value'] . '</div>';
+  }
+
   /*  */
 
 }

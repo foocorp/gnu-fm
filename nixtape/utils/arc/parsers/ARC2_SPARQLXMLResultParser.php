@@ -5,21 +5,17 @@ license:  http://arc.semsol.org/license
 
 class:    ARC2 SPARQL Result XML Parser
 author:   Benjamin Nowack
-version:  2008-08-28 (Addition: Support for "inserted" and "deleted")
+version:  2010-11-16
 */
 
 ARC2::inc('LegacyXMLParser');
 
 class ARC2_SPARQLXMLResultParser extends ARC2_LegacyXMLParser {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_SPARQLXMLResultParser($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
   function __init() {/* reader */
     parent::__init();
     $this->srx = 'http://www.w3.org/2005/sparql-results#';
