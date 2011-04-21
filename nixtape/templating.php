@@ -23,7 +23,7 @@ require_once('config.php');
 require_once('auth.php');
 require_once('smarty/Smarty.class.php');
 
-if($_GET['lang']) {
+if(isset($_GET['lang'])) {
 	$languages = array($_GET['lang'] . '.UTF-8');
  	setcookie('lang', $_GET['lang'] . '.UTF-8', time() + 31536000, '/');
 } elseif (isset($_COOKIE['lang'])) {
