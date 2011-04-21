@@ -367,7 +367,7 @@ class Server {
 	static function getAlbumURL($artist, $album) {
 		global $friendly_urls, $base_url;
 		if($friendly_urls) {
-			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . urlencode($album);
+			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . rewrite_encode($album);
 		} else {
 			return $base_url . '/album.php?artist=' . urlencode($artist) . '&album=' . urlencode($album);
 		}
