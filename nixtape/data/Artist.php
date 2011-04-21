@@ -56,7 +56,7 @@ class Artist {
 		}
 		$this->query = 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large, homepage, hashtag, flattr_uid FROM Artist WHERE '
 			. $mbidquery
-			. 'lower(name) = ' . strtolower($adodb->qstr($name));
+			. 'lower(name) = lower(' . $adodb->qstr($name) . ')';
 		$row = $adodb->CacheGetRow(1200, $this->query);
 		if(!$row) {
 			throw new Exception('No such artist' . $name);

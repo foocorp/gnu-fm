@@ -50,8 +50,8 @@ class Track {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$this->query = 'SELECT name, artist_name, album_name, duration, streamable, license, downloadurl, streamurl, mbid FROM Track WHERE '
-			. 'lower(name) = ' . strtolower($adodb->qstr($name)) . ' AND '
-			. 'lower(artist_name) = ' . strtolower($adodb->qstr($artist))
+			. 'lower(name) = lower(' . $adodb->qstr($name) . ') AND '
+			. 'lower(artist_name) = lower(' . $adodb->qstr($artist) . ')'
 			. 'ORDER BY streamable DESC';
 		$res = $adodb->CacheGetRow(600, $this->query);
 		if(!$res) {

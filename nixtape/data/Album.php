@@ -47,8 +47,8 @@ class Album {
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$r = $adodb->CacheGetRow(1200,
 			'SELECT name, artist_name, mbid, image, releasedate FROM Album WHERE '
-			. 'lower(name) = ' . strtolower($adodb->qstr($name)) . ' AND '
-			. 'lower(artist_name) = ' . strtolower($adodb->qstr($artist)));
+			. 'lower(name) = lower(' . $adodb->qstr($name) . ') AND '
+			. 'lower(artist_name) = lower(' . $adodb->qstr($artist) . ')');
 		if(!$r) {
 			$this->name = 'No such album: ' . $name;
 		} else {
