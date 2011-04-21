@@ -25,7 +25,7 @@ require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/TagCloud.php');
 
-$track = new Track(urldecode($_GET['track']), urldecode($_GET['artist']));
+$track = new Track($_GET['track'], $_GET['artist']);
 $smarty->assign('track', $track);
 
 $album = new Album($track->album_name, $track->artist_name);
@@ -46,7 +46,7 @@ $smarty->assign('url', $track->getURL());
 $smarty->assign('pagetitle', $artist->name . ' : ' . $track->name);
 
 $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-$res = $adodb->GetAll('SELECT * FROM Track WHERE lower(artist_name) = ' . $adodb->qstr(mb_strtolower($track->artist_name, 'UTF-8')) . ' AND lower(name) = ' . $adodb->qstr(mb_strtolower($track->name, 'UTF-8')));
+$res = $adodb->GetAll('SELECT * FROM Track WHERE lower(artist_name) = lower(' . $adodb->qstr($track->artist_name) . ') AND lower(name) = lower(' . $adodb->qstr($track->name) . ')');
 
 $aOtherAlbums = array();
 

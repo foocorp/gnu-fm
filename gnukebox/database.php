@@ -39,7 +39,7 @@ try {
 function reportError($msg, $sql) {
 	global $adodb;
 
-	$adodb->Execute('INSERT INTO error(msg, data, time) VALUES('
+	$adodb->Execute('INSERT INTO Error(msg, data, time) VALUES('
 		. $adodb->qstr($msg) . ', '
 		. $adodb->qstr($sql) . ', '
 		. time() . ')');

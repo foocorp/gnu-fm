@@ -26,7 +26,7 @@ require_once('data/Server.php');
 require_once('data/TagCloud.php');
 
 try {
-	$artist = new Artist(urldecode($_GET['artist']));
+	$artist = new Artist($_GET['artist']);
 } catch (Exception $e) {
 	$smarty->assign('pageheading', 'Artist not found.');
 	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');

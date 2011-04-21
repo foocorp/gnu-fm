@@ -5,27 +5,23 @@ license:  http://arc.semsol.org/license
 
 class:    ARC2 eRDF Extractor (w/o link title generation)
 author:   Benjamin Nowack
-version:  2009-02-09 (Tweak: getRootNode returns 1st node if html tag is not found)
+version:  2010-11-16
 */
 
 ARC2::inc('RDFExtractor');
 
 class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
-
-  function ARC2_ErdfExtractor($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
+  
   function __init() {
     parent::__init();
   }
 
   /*  */
-
+  
   function extractRDF() {
     if (!isset($this->caller->detected_formats['erdf'])) return 0;
     $root_node = $this->getRootNode();
@@ -40,9 +36,9 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
     );
     $this->processNode($root_node, $context);
   }
-
+  
   /*  */
-
+  
   function getRootNode() {
     foreach ($this->nodes as $id => $node) {
       if ($node['tag'] == 'html') {
@@ -51,7 +47,7 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
     }
     return $this->nodes[0];
   }
-
+  
   function getNamespaces() {
     $r = array(
       'rdf' => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
@@ -66,7 +62,7 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
   }
 
   /*  */
-
+  
   function processNode($n, $ct) {
     /* context */
     //$ct['lang'] = $this->v('xml:lang', $ct['lang'], $n['a']);
@@ -85,7 +81,7 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
           $t = array(
             's' => $ct['cur_res'],
             's_type' => 'uri',
-            'p' => $uri,
+            'p' => $uri, 
             'o' => $ct['cur_obj_literal']['value'],
             'o_type' => 'literal',
             'o_lang' => $ct['cur_obj_literal']['datatype'] ? '' : $ct['cur_obj_literal']['lang'],
@@ -101,7 +97,7 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
             $t = array(
               's' => $s,
               's_type' => 'uri',
-              'p' => $ct['ns']['rdf'] . 'type',
+              'p' => $ct['ns']['rdf'] . 'type', 
               'o' => trim($uri),
               'o_type' => 'uri',
               'o_lang' => '',
@@ -112,7 +108,7 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
             $t = array(
               's' => $ct['prev_res'],
               's_type' => 'uri',
-              'p' => $uri,
+              'p' => $uri, 
               'o' => $ct['cur_res'],
               'o_type' => 'uri',
               'o_lang' => '',
@@ -123,7 +119,7 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
             $t = array(
               's' => $ct['cur_res'],
               's_type' => 'uri',
-              'p' => $uri,
+              'p' => $uri, 
               'o' => $ct['cur_obj_literal']['value'],
               'o_type' => 'literal',
               'o_lang' => $ct['cur_obj_literal']['datatype'] ? '' : $ct['cur_obj_literal']['lang'],
@@ -146,7 +142,7 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
             $t = array(
               's' => $ct['cur_res'],
               's_type' => 'uri',
-              'p' => $uri,
+              'p' => $uri, 
               'o' => $o,
               'o_type' => 'uri',
               'o_lang' => '',
@@ -161,7 +157,7 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
             $t = array(
               's' => $s,
               's_type' => 'uri',
-              'p' => $uri,
+              'p' => $uri, 
               'o' => $ct['cur_res'],
               'o_type' => 'uri',
               'o_lang' => '',
@@ -178,7 +174,7 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
         $t = array(
           's' => $s,
           's_type' => 'uri',
-          'p' => $ct['ns']['rdfs'] . 'label',
+          'p' => $ct['ns']['rdfs'] . 'label', 
           'o' => $ct['cur_obj_literal']['value'],
           'o_type' => 'literal',
           'o_lang' => $ct['cur_obj_literal']['datatype'] ? '' : $ct['cur_obj_literal']['lang'],
@@ -193,7 +189,7 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
         $t = array(
           's' => $s,
           's_type' => 'uri',
-          'p' => $ct['ns']['rdfs'] . 'label',
+          'p' => $ct['ns']['rdfs'] . 'label', 
           'o' => $ct['cur_obj_literal']['value'],
           'o_type' => 'literal',
           'o_lang' => $ct['cur_obj_literal']['datatype'] ? '' : $ct['cur_obj_literal']['lang'],
@@ -213,7 +209,7 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
   }
 
   /*  */
-
+  
   function getPropertyURIs($n, $ct) {
     $r = array();
     foreach (array('rel', 'rev', 'class', 'name', 'src') as $type) {
@@ -237,7 +233,7 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
     }
     return $ct['cur_res'];
   }
-
+  
   function getCurrentObjectID($n, $ct) {
     foreach (array('href', 'src') as $a) {
       if (isset($n['a'][$a])) {
@@ -261,9 +257,9 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
     }
     return $r;
   }
-
+  
   /*  */
-
+  
   function xURI($v, $base, $ns, $attr_type = '') {
     if ((list($sub_r, $sub_v) = $this->xQname($v, $base, $ns)) && $sub_r) {
       return array($sub_r, $sub_v);
@@ -273,7 +269,7 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
     }
     return array($this->calcURI($v, $base), '');
   }
-
+  
   function xQname($v, $base, $ns) {
     if ($sub_r = $this->x('([a-z0-9\-\_]+)[\-\.]([a-z0-9\-\_]+)', $v)) {
       if (isset($ns[$sub_r[1]])) {
@@ -282,7 +278,7 @@ class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
     }
     return array(0, $v);
   }
-
+  
   /*  */
 
 }

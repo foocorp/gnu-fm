@@ -50,7 +50,7 @@ class User {
 			$row = $data;
 		} else {
 			global $adodb;
-			$query = 'SELECT * FROM Users WHERE lower(username) = ' . $adodb->qstr(strtolower($name)) . ' LIMIT 1';
+			$query = 'SELECT * FROM Users WHERE lower(username) = lower(' . $adodb->qstr($name) . ') LIMIT 1';
 			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 			$row = $adodb->CacheGetRow(7200, $query);
 			if (!$row) {
@@ -153,7 +153,7 @@ class User {
 			exit;
 		}
 
-		$query = 'SELECT * FROM Users WHERE lower(username) = ' . $adodb->qstr(strtolower($this->name)) . ' LIMIT 1';
+		$query = 'SELECT * FROM Users WHERE lower(username) = lower(' . $adodb->qstr($this->name) . ') LIMIT 1';
 		$adodb->CacheFlush($query);
 
 		return 1;

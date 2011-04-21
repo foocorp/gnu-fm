@@ -1,30 +1,24 @@
 <?php
-/*
-homepage: http://arc.semsol.org/
-license:  http://arc.semsol.org/license
-
-class:    ARC2 RDF Store Table Manager
-author:   Benjamin Nowack
-version:  2009-02-13 (Tweak: removed cid column
-                      Addition: store_indexes config option
-                      Addition: extendColumns() method, changes mediumint to int
-          )
+/**
+ * ARC2 RDF Store Table Manager
+ *
+ * @license   http://arc.semsol.org/license
+ * @author    Benjamin Nowack
+ * @version   2010-11-16
+ *
 */
 
 ARC2::inc('Store');
 
 class ARC2_StoreTableManager extends ARC2_Store {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_StoreTableManager($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
   function __init() {/* db_con */
     parent::__init();
+    $this->engine_type = $this->v('store_engine_type', 'MyISAM', $this->a);
   }
 
   /*  */
@@ -33,7 +27,7 @@ class ARC2_StoreTableManager extends ARC2_Store {
     $v = $this->getDBVersion();
     $r = "";
     $r .= (($v < '04-01-00') && ($v >= '04-00-18')) ? 'ENGINE' : (($v >= '04-01-02') ? 'ENGINE' : 'TYPE');
-    $r .= "=MyISAM";
+    $r .= "=" . $this->engine_type;
     $r .= ($v >= '04-00-00') ? " CHARACTER SET utf8" : "";
     $r .= ($v >= '04-01-00') ? " COLLATE utf8_unicode_ci" : "";
     $r .= " DELAY_KEY_WRITE = 1";
@@ -148,13 +142,16 @@ class ARC2_StoreTableManager extends ARC2_Store {
   /*  */
   
   function createS2ValTable() {
+    //$indexes = 'UNIQUE KEY (id), KEY vh (val_hash), KEY v (val(64))';
+    $indexes = 'UNIQUE KEY (id), KEY vh (val_hash)';
     $sql = "
       CREATE TABLE IF NOT EXISTS " . $this->getTablePrefix() . "s2val (
         id mediumint UNSIGNED NOT NULL,
         misc tinyint(1) NOT NULL default 0,
+        val_hash char(32) NOT NULL,
         val text NOT NULL,
-        UNIQUE KEY (id), KEY v (val(64))
-      ) ". $this->getTableOptionsCode() . "
+        " . $indexes . "
+      ) " . $this->getTableOptionsCode() . "
     ";
     return mysql_query($sql, $this->getDBCon());
   }  
@@ -170,12 +167,16 @@ class ARC2_StoreTableManager extends ARC2_Store {
   /*  */
   
   function createO2ValTable() {
+    /* object value index, e.g. "KEY v (val(64))" and/or "FULLTEXT KEY vft (val)" */
+    $val_index = $this->v('store_object_index', 'KEY v (val(64))', $this->a);
+    if ($val_index) $val_index = ', ' . ltrim($val_index, ',');
     $sql = "
       CREATE TABLE IF NOT EXISTS " . $this->getTablePrefix() . "o2val (
         id mediumint UNSIGNED NOT NULL,
         misc tinyint(1) NOT NULL default 0,
+        val_hash char(32) NOT NULL,
         val text NOT NULL,
-        UNIQUE KEY (id), KEY v (val(64))
+        UNIQUE KEY (id), KEY vh (val_hash)" . $val_index . "
       ) ". $this->getTableOptionsCode() . "
     ";
     return mysql_query($sql, $this->getDBCon());

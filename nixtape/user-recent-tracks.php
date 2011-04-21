@@ -34,7 +34,7 @@ if (!isset($_GET['user']) && $logged_in == false) {
 }
 
 try {
-	$user = new User(urldecode($_GET['user']));
+	$user = new User($_GET['user']);
 } catch (Exception $e) {
 	$smarty->assign('pageheading', 'User not found');
 	$smarty->assign('details', 'Shall I call in a missing persons report?');

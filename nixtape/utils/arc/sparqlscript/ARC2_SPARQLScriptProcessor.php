@@ -1,29 +1,27 @@
 <?php
-/*
-homepage: ARC or plugin homepage
-license:  http://arc.semsol.org/license
-
-class:    ARC2 SPARQLScript Processor
-author:   
-version:  2008-10-08 (Tweak: GET/POST placeholders have to be uppercase now)
+/**
+ * ARC2 SPARQLScript Processor
+ *
+ * @author Benjamin Nowack <bnowack@semsol.com>
+ * @license http://arc.semsol.org/license
+ * @package ARC2
+ * @version 2010-11-16
 */
 
 ARC2::inc('Class');
 
 class ARC2_SPARQLScriptProcessor extends ARC2_Class {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_SPARQLScriptProcessor ($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
   function __init() {
     parent::__init();
     $this->max_operations = $this->v('sparqlscript_max_operations', 0, $this->a);
     $this->max_queries = $this->v('sparqlscript_max_queries', 0, $this->a);
+    $this->return = 0;
+    $this->script_hash = '';
     $this->env = array(
       'endpoint' => '',
       'vars' => array(),
@@ -41,14 +39,24 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
   /*  */
   
   function processScript($s) {
-    $r = array();
+    $this->script_hash = abs(crc32($s));
     $parser = $this->getParser();
     $parser->parse($s);
     $blocks = $parser->getScriptBlocks();
     if ($parser->getErrors()) return 0;
     foreach ($blocks as $block) {
-      $sub_r = $this->processBlock($block);
+      $this->processBlock($block);
+      if ($this->return) return 0;
       if ($this->getErrors()) return 0;
+    }
+  }
+
+  function getResult() {
+    if ($this->return) {
+      return $this->getVarValue('__return_value__');
+    }
+    else {
+      return $this->env['output'];
     }
   }
 
@@ -61,35 +69,52 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
   
   /*  */
 
-  function setVar($name, $val, $type = 'literal') {
-    $this->env['vars'][$name] = array('value_type' => $type, 'value' => $val);
+  function setVar($name, $val, $type = 'literal', $meta = '') {
+    /* types: literal, var, rows, bool, doc, http_response, undefined, ? */
+    $this->env['vars'][$name] = array(
+      'value_type' => $type,
+      'value' => $val,
+      'meta' => $meta ? $meta : array()
+    );
+  }
+
+  function getVar($name) {
+    return isset($this->env['vars'][$name]) ? $this->env['vars'][$name] : '';
+  }
+
+  function getVarValue($name) {
+    return ($v = $this->getVar($name)) ? (isset($v['value']) ? $v['value'] : $v ) : '';
   }
 
   /*  */
 
-  function replacePlaceholders($val, $context = '') {
+  function replacePlaceholders($val, $context = '', $return_string = 1, $loop = 0) {
     do {
       $old_val = $val;
       if (preg_match_all('/(\{(?:[^{}]+|(?R))*\})/', $val, $m)) {
         foreach ($m[1] as $match) {
           if (strpos($val, '$' . $match) === false) {/* just some container brackets, recurse */
-            $val = str_replace($match, '{' . $this->replacePlaceholders(substr($match, 1, -1), $context) . '}', $val);
+            $val = str_replace($match, '{' . $this->replacePlaceholders(substr($match, 1, -1), $context, $return_string, $loop + 1) . '}', $val);
           }
           else {
             $ph = substr($match, 1, -1);
             $sub_val = $this->getPlaceholderValue($ph);
-            if (is_array($sub_val)) $sub_val = $this->getArraySerialization($sub_val, $context);
+            if (is_array($sub_val)) {
+              $sub_val = $this->getArraySerialization($sub_val, $context);
+            }
             $val = str_replace('${' . $ph . '}', $sub_val, $val);
           }
         }
       }
-    } while ($old_val != $val);
+    } while (($old_val != $val) && ($loop < 10));
     return $val;
   }
   
   function getPlaceholderValue($ph) {
     /* simple vars */
-    if (isset($this->env['vars'][$ph])) return $this->env['vars'][$ph]['value'];
+    if (isset($this->env['vars'][$ph])) {
+      return $this->v('value', $this->env['vars'][$ph], $this->env['vars'][$ph]);
+    }
     /* GET/POST */
     if (preg_match('/^(GET|POST)\.([^\.]+)(.*)$/', $ph, $m)) {
       $vals = strtoupper($m[1]) == 'GET' ? $_GET : $POST;
@@ -98,9 +123,10 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     }
     /* NOW */
     if (preg_match('/^NOW(.*)$/', $ph, $m)) {
+      $rest = $m[1];
       /* may have sub-phs */
-      $m[1] = $this->replacePlaceholders($m[1]);
-      $r = array(
+      $rest = $this->replacePlaceholders($rest);
+      $r_struct = array(
         'y' => date('Y'),
         'mo' => date('m'),
         'd' => date('d'),
@@ -108,12 +134,17 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
         'mi' => date('i'),
         's' => date('s')
       );
-      if (preg_match('/(\+|\-)\s*([0-9]+)(y|mo|d|h|mi|s)/is', trim($m[1]), $m2)) {
-        eval('$r[$m2[3]] ' . $m2[1] . '= (int)' . $m2[2] . ';');
+      if (preg_match('/(\+|\-)\s*([0-9]+)(y|mo|d|h|mi|s)[a-z]*(.*)/is', trim($rest), $m2)) {
+        eval('$r_struct[$m2[3]] ' . $m2[1] . '= (int)' . $m2[2] . ';');
+        $rest = $m2[4];
       }
-      $uts = mktime($r['h'], $r['mi'], $r['s'], $r['mo'], $r['d'], $r['y']);
+      $uts = mktime($r_struct['h'], $r_struct['mi'], $r_struct['s'], $r_struct['mo'], $r_struct['d'], $r_struct['y']);
       $uts -= date('Z', $uts); /* timezone offset */
-      return date('Y-m-d\TH:i:s\Z', $uts);
+      $r = date('Y-m-d\TH:i:s\Z', $uts);
+      if (preg_match('/^\.(.+)$/', $rest, $m)) {
+        return $this->getPropertyValue(array('value' => $r), $m[1]);
+      }
+      return $r;
     }
     /* property */
     if (preg_match('/^([^\.]+)\.(.+)$/', $ph, $m)) {
@@ -126,7 +157,8 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
   }
   
   function getPropertyValue($obj, $path) {
-    $val = $obj['value'];
+    $val = isset($obj['value']) ? $obj['value'] : $obj;
+    $path = $this->replacePlaceholders($path, 'property_value', 0);
     /* reserved */
     if ($path == 'size') {
       if ($obj['value_type'] == 'rows') return count($val);
@@ -141,24 +173,69 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     if (preg_match('/^urlencode\([\'\"]?(get|post|.*)[\'\"]?\)$/is', $path, $m)) {
       return (strtolower($m[1]) == 'post') ? rawurlencode($val) : urlencode($val);
     }
-    if ($path == 'wiki2html') {
-      $conf = array_merge($this->a, array('m4sh_item' => $val));
-      $item = Trice::getObject('M4SH_Item', $conf, $this);
-      return $item->getHTML();
+    if (preg_match('/^toDataURI\([^\)]*\)$/is', $path, $m)) {
+      return 'data:text/plain;charset=utf-8,' . rawurlencode($val);
+    }
+    if (preg_match('/^fromDataURI\([^\)]*\)$/is', $path, $m)) {
+      return rawurldecode(str_replace('data:text/plain;charset=utf-8,', '', $val));
+    }
+    if (preg_match('/^toPrettyDate\([^\)]*\)$/is', $path, $m)) {
+      $uts = strtotime(preg_replace('/(T|\+00\:00)/', ' ', $val));
+      return date('D j M H:i', $uts);
+    }
+    if (preg_match('/^render\(([^\)]*)\)$/is', $path, $m)) {
+      $src_format = trim($m[1], '"\'');
+      return $this->render($val, $src_format);
     }
     /* struct */
     if (is_array($val)) {
       if (isset($val[$path])) return $val[$path];
+      $exp_path = $this->expandPName($path);
+      if (isset($val[$exp_path])) return $val[$exp_path];
       if (preg_match('/^([^\.]+)\.(.+)$/', $path, $m)) {
         list($var, $path) = array($m[1], $m[2]);
         if (isset($val[$var])) {
           return $this->getPropertyValue(array('value' => $val[$var]), $path);
         }
+        /* qname */
+        $exp_var = $this->expandPName($var);
+        if (isset($val[$exp_var])) {
+          return $this->getPropertyValue(array('value' => $val[$exp_var]), $path);
+        }
         return '';
       }
     }
+    /* meta */
+    if (preg_match('/^\_/', $path) && isset($obj['meta']) && isset($obj['meta'][substr($path, 1)])) {
+      return $obj['meta'][substr($path, 1)];
+    }
     return '';
   }
+
+  function render($val, $src_format = '') {
+    if ($src_format) {
+      $mthd = 'render' . $this->camelCase($src_format);
+      if (method_exists($this, $mthd)) {
+        return $this->$mthd($val);
+      }
+      else {
+        return 'No rendering method found for "' . $src_format. '"';
+      }
+    }
+    /* try RDF */
+    return $this->getArraySerialization($val);
+  }
+  
+  function renderObjects($os) {
+    $r = '';
+    foreach ($os as $o) {
+      $r .= $r ? ', ' : '';
+      $r .= $o['value'];
+    }
+    return $r;
+  }
+
+  /*  */
   
   function getArraySerialization($v, $context) {
     $v_type = ARC2::getStructType($v);/* string|array|triples|index */
@@ -167,12 +244,14 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     if ($v_type == 'string') return $v;
     /* simple array (e.g. from SELECT) */
     if ($v_type == 'array') {
+      return join(', ', $v);
       $m = method_exists($this, 'toLegacy' . $pf) ? 'toLegacy' . $pf : 'toLegacyXML';
     }
     /* rdf */
     if (($v_type == 'triples') || ($v_type == 'index')) {
       $m = method_exists($this, 'to' . $pf) ? 'to' . $pf : ($context == 'query' ? 'toNTriples' : 'toRDFXML');
     }
+    /* else */
     return $this->$m($v);
   }
 
@@ -180,6 +259,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
 
   function processBlock($block) {
     if ($this->max_operations && ($this->env['operation_count'] >= $this->max_operations)) return $this->addError('Number of ' . $this->max_operations . ' allowed operations exceeded.');
+    if ($this->return) return 0;
     $this->env['operation_count']++;
     $type = $block['type'];
     $m = 'process' . $this->camelCase($type) . 'Block';
@@ -203,18 +283,11 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     $this->env['query_count']++;
     $ep_uri = $this->replacePlaceholders($this->env['endpoint'], 'endpoint');
     /* q */
-    $q = 'BASE <' . $block['base']. '>';
+    $prologue = 'BASE <' . $block['base']. '>';
+    $q = $this->replacePlaceholders($block['query'], 'query');
+    /* prefixes */
     $ns = isset($this->a['ns']) ? array_merge($this->a['ns'], $block['prefixes']) : $block['prefixes'];
-    $added_prefixes = array();
-    foreach ($ns as $k => $v) {
-      $k = rtrim($k, ':');
-      if (in_array($k, $added_prefixes)) continue;
-      $q .= (strpos($block['query'], $k . ':') !== false) ? "\n" . 'PREFIX ' . $k . ': <' . $v . '>' : '';
-      $added_prefixes[] = $k;
-    }
-    $q .= "\n" . $block['query'];
-    /* placeholders */
-    $q = $this->replacePlaceholders($q, 'query');
+    $q = $prologue . "\n" . $this->completeQuery($q, $ns);
     $this->env['query_log'][] = '(' . $ep_uri . ') ' . $q;
     if ($store = $this->getStore($ep_uri)) {
       $sub_r = $this->v('is_remote', '', $store) ? $store->query($q, '', $ep_uri) : $store->query($q);
@@ -227,7 +300,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
       return $sub_r;
     }
     else {
-      return $this->addError("no store");
+      return $this->addError("no store (" . $ep_uri . ")");
     }
   }
   
@@ -239,9 +312,8 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     }
     elseif ($ep_uri) {
       ARC2::inc('RemoteStore');
-      $conf = array_merge($this->a, array('remote_store_endpoint' => $ep_uri));
-      $store =& new ARC2_RemoteStore($conf, $this);
-      return $store;
+      $conf = array_merge($this->a, array('remote_store_endpoint' => $ep_uri, 'reader_timeout' => 10));
+      return new ARC2_RemoteStore($conf, $this);
     }
     return 0;
   }
@@ -262,7 +334,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     $vts = array('ask' => 'bool', 'select' => 'rows', 'desribe' => 'doc', 'construct' => 'doc');
     $r = array(
       'value_type' => isset($vts[$qt]) ? $vts[$qt] : $qt . ' result',
-      'value' => ($qt == 'select') ? $qr['result']['rows'] : $qr['result'],
+      'value' => ($qt == 'select') ? $this->v('rows', array(), $qr['result']) : $qr['result'],
     );
     $this->env['vars'][$block['var']['value']] = $r;
   }
@@ -301,6 +373,17 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     $sub_r = $this->processFunctionCallBlock($block['function_call']);
     if ($this->getErrors()) return 0;
     $this->env['vars'][$block['var']['value']] = $sub_r;
+  }
+
+  /*  */
+
+  function processReturnBlock($block) {
+    $sub_type = $block['sub_type'];
+    $m = 'process' . $this->camelCase($sub_type) . 'AssignmentBlock';
+    if (!method_exists($this, $m)) return $this->addError('Unknown method "' . $m . '"');
+    $sub_r = $this->$m($block);
+    $this->return = 1;
+    return $sub_r;
   }
 
   /*  */
@@ -381,12 +464,21 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
   
   function processForblockBlock($block) {
     $set = $this->v($block['set'], array('value' => array()), $this->env['vars']);
-    $entries = $set['value'];
+    $entries = isset($set['value']) ? $set['value'] : $set;
     $iterator = $block['iterator'];
     $blocks = $block['blocks'];
     if (!is_array($entries)) return 0;
-    foreach ($entries as $entry) {
-      $this->env['vars'][$iterator] = array('value' => $entry, 'value_type' => $set['value_type'] . ' entry');
+    $rc = count($entries);
+    foreach ($entries as $i => $entry) {
+      $val_type = $this->v('value_type', 'set', $set) . ' entry';
+      $this->env['vars'][$iterator] = array(
+        'value' => $entry,
+        'value_type' => $val_type,
+        'meta' => array(
+          'pos' => $i,
+          'odd_even' => ($i % 2) ? 'even' : 'odd'
+        )
+      );
       foreach ($blocks as $block) {
         $this->processBlock($block);
         if ($this->getErrors()) return 0;
@@ -403,21 +495,40 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
   /*  */
   
   function processFunctionCallBlock($block) {
-    $f_uri = $block['uri'];
-    /* sparqlscript built-ins */
-    if (strpos($f_uri, 'http://semsol.org/ns/sparqlscript#') === 0) {
-      $fnc = str_replace('http://semsol.org/ns/sparqlscript#', '', $f_uri);
-      if (preg_match('/^(get|post)$/i', $fnc, $m)) {
-        return $this->processHTTPCall($block, strtoupper($m[1]));
-      }
+    $uri = $this->replacePlaceholders($block['uri'], 'function_call');
+    /* built-ins */
+    if (strpos($uri, $this->a['ns']['sps']) === 0) {
+      return $this->processBuiltinFunctionCallBlock($block);
+    }
+    /* remote functions */
+  }
+
+  function processBuiltinFunctionCallBlock($block) {
+    $fnc_uri = $this->replacePlaceholders($block['uri'], 'function_call');
+    $fnc_name = substr($fnc_uri, strlen($this->a['ns']['sps']));
+    if (preg_match('/^(get|post)$/i', $fnc_name, $m)) {
+      return $this->processHTTPCall($block, strtoupper($m[1]));
+    }
+    if ($fnc_name == 'eval') {
+      return $this->processEvalCall($block);
     }
   }
+
+  function processEvalCall($block) {
+    if (!$block['args']) return 0;
+    $arg = $block['args'][0];
+    $script = '';
+    if ($arg['type'] == 'placeholder') $script = $this->getPlaceholderValue($arg['value']);
+    if ($arg['type'] == 'literal') $script = $arg['value'];
+    if ($arg['type'] == 'var') $script = $this->getVarValue($arg['value']);
+    //echo "\n" . $script . $arg['type'];
+    $this->processScript($script);
+  }
   
-  function processHTTPCall($block, $mthd) {
+  function processHTTPCall($block, $mthd = 'GET') {
     ARC2::inc('Reader');
-    $reader =& new ARC2_Reader($this->a, $this);
-    $url = $block['args'][0]['value'];
-    $url = $this->replacePlaceholders($url, 'function_call');
+    $reader = new ARC2_Reader($this->a, $this);
+    $url = $this->replacePlaceholders($block['args'][0]['value'], 'function_call');
     if ($mthd != 'GET') {
       $reader->setHTTPMethod($mthd);
       $reader->setCustomHeaders("Content-Type: application/x-www-form-urlencoded");
@@ -430,6 +541,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
       $resp .= $d;
     }
     $reader->closeStream();
+    unset($this->reader);
     return array('value_type' => 'http_response', 'value' => $resp);
   }
   
