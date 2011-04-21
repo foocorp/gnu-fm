@@ -73,7 +73,7 @@ switch ($fmt)
 		break;
 }
 
-if ($_GET['callback']) {
+if (isset($_GET['callback'])) {
 	print $_GET['callback'] . '(';
 }
 print $ser->getSerializedIndex($index);
