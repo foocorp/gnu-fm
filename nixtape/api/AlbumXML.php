@@ -37,7 +37,7 @@ class AlbumXML {
 		$root->addAttribute('album', $album->name);
 
 		$tags = $album->getTopTags();
-		foreach($tags as &$tag) {
+		foreach ($tags as &$tag) {
 			$tag_node = $root->addChild('tag', null);
 			$tag_node->addChild('name', repamp($tag['tag']));
 			$tag_node->addChild('count', $tag['freq']);

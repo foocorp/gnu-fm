@@ -29,21 +29,21 @@ class JSONEncoder {
 	 * @return A JSON formatted string
 	 */
 	public static function encodeXML($xml) {
-		if($xml->getName() == 'lfm' && count($xml->children())) {
+		if ($xml->getName() == 'lfm' && count($xml->children())) {
 			$xml = $xml->children();
 		}
 		$json_data[$xml->getName()] = JSONEncoder::recursivelyEncodeXML($xml);
 		return json_encode($json_data);
-	
+
 	}
 
 	public static function recursivelyEncodeXML($xml) {
 		$json_data = array();
 
-		if(count($xml->children())) {
-			foreach($xml->children() as $child) {
-				if(array_key_exists($child->getName(), $json_data)) {
-					if(!array_key_exists(0, $json_data[$child->getName()])) {
+		if (count($xml->children())) {
+			foreach ($xml->children() as $child) {
+				if (array_key_exists($child->getName(), $json_data)) {
+					if (!array_key_exists(0, $json_data[$child->getName()])) {
 						$a = array();
 						$a[] = $json_data[$child->getName()];
 						$json_data[$child->getName()] = $a;
@@ -53,17 +53,17 @@ class JSONEncoder {
 					$json_data[$child->getName()] = JSONEncoder::recursivelyEncodeXML($child);
 				}
 			}
-			if(count($xml->attributes())) {
+			if (count($xml->attributes())) {
 				$json_data['@attr'] = array();
-				foreach($xml->attributes() as $k => $v) {
+				foreach ($xml->attributes() as $k => $v) {
 					$json_data['@attr'][$k] = (string) $v;
 				}
 			}
 		} else {
 			// Leaf node
-			if(count($xml->attributes())) {
+			if (count($xml->attributes())) {
 				$json_data['#text'] = (string) $xml;
-				foreach($xml->attributes() as $k => $v) {
+				foreach ($xml->attributes() as $k => $v) {
 					$json_data[$k] = (string) $v;
 				}
 			} else {

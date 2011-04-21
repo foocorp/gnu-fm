@@ -26,7 +26,7 @@ require_once('data/User.php');
 require_once('data/TagCloud.php');
 require_once('data/Server.php');
 
-if(!isset($_GET['user']) && $logged_in == false) {
+if (!isset($_GET['user']) && $logged_in == false) {
 	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'User not set! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
@@ -35,12 +35,12 @@ if(!isset($_GET['user']) && $logged_in == false) {
 
 try {
 	$user = new User($_GET['user']);
-} catch (exception $e) {
+} catch (Exception $e) {
 	$error = 'User not found';
 }
 
-if(isset($user->name)) {
-	if(isset($_GET['type'])) {
+if (isset($user->name)) {
+	if (isset($_GET['type'])) {
 		$type = $_GET['type'];
 	} else {
 		$type = 'loved';
@@ -49,10 +49,10 @@ if(isset($user->name)) {
 	$smarty->assign('pagetitle', $user->name . '\'s Radio ' . ucfirst($type) . ' Station');
 
 	$station = 'librefm://user/' . $user->name . '/' . $type;
-	if(isset($this_user)) {
-		        $radio_session = $this_user->getRadioSession($station);
+	if (isset($this_user)) {
+		$radio_session = $this_user->getRadioSession($station);
 	} else {
-		        $radio_session = Server::getRadioSession($station);
+		$radio_session = Server::getRadioSession($station);
 	}
 	$smarty->assign('radio_session', $radio_session);
 

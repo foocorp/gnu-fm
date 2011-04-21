@@ -25,8 +25,12 @@ require_once 'utils/arc/ARC2.php';
 $page = $_GET['page'];
 $fmt  = $_GET['fmt'];
 
-if (empty($fmt)) $fmt = 'xml';
-if (empty($page)) die('Required parameter \'page\' not provided.');
+if (empty($fmt)) {
+	$fmt = 'xml';
+}
+if (empty($page)) {
+	die('Required parameter \'page\' not provided.');
+}
 
 $parser = ARC2::getSemHTMLParser(array('sem_html_formats' => 'rdfa'));
 $parser->parse($base_url . $page);
@@ -37,7 +41,7 @@ $conf = array(
 		'xhv' => 'http://www.w3.org/1999/xhtml/vocab#',
 		'dc' => 'http://purl.org/dc/terms/',
 		'foaf' => 'http://xmlns.com/foaf/0.1/',
-		'bio' => 'http://purl.org/vocab/bio/0.1/' ,
+		'bio' => 'http://purl.org/vocab/bio/0.1/',
 		'sioc' => 'http://rdfs.org/sioc/ns#',
 		'rdfs' => 'http://www.w3.org/2000/01/rdf-schema#',
 		'gob' => 'http://purl.org/ontology/last-fm/',
@@ -46,8 +50,7 @@ $conf = array(
 		)
 	);
 
-switch ($fmt)
-{
+switch ($fmt) {
 	case 'xml' :
 		header('Content-Type: application/rdf+xml');
 		$ser = ARC2::getRDFXMLSerializer($conf);
@@ -61,10 +64,11 @@ switch ($fmt)
 		$ser = ARC2::getRSS10Serializer($conf);
 		break;
 	case 'json' :
-		if ($_GET['callback'])
-			{ header('Content-Type: text/javascript'); }
-		else
-			{ header('Content-Type: application/json'); }
+		if ($_GET['callback']) {
+			header('Content-Type: text/javascript');
+		} else {
+			header('Content-Type: application/json');
+		}
 		$ser = ARC2::getRDFJSONSerializer($conf);
 		break;
 	case 'nt' :
