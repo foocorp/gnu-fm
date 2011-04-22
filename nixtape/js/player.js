@@ -1,5 +1,5 @@
 /*
-   GNU FM -- a free network service for sharing your music listening hab""s
+   GNU FM -- a free network service for sharing your music listening habits
 
    Copyright (C) 2009 Free Software Foundation, Inc
 
@@ -218,7 +218,7 @@ function scrobble() {
 	}
 	timestamp = Math.round(new Date().getTime() / 1000);
 	$.post("/scrobble-proxy.php?method=scrobble", { "a[0]" : artist, "b[0]" : album, "t[0]" : track, "i[0]" : timestamp, "s" : session_key },
-		      	function(data){
+			function(data){
 				if(data.substring(0, 2) == "OK") {
 					$("#scrobbled").text("Scrobbled");
 					$("#scrobbled").fadeIn(5000, function() { $("#scrobbled").fadeOut(5000) } );
@@ -226,7 +226,7 @@ function scrobble() {
 					$("#scrobbled").text(data);
 					$("#scrobbled").fadeIn(1000);
 				}
-		      	}, "text");
+			}, "text");
 }
 
 /**
@@ -327,7 +327,7 @@ function getRadioPlaylist() {
 	var tracks, artist, album, title, url, extension, trackpage_url, i;
 	$.get("/2.0/", {'method' : 'radio.getPlaylist', 'sk' : radio_key}, function(data) {
 			parser=new DOMParser();
-		      	xmlDoc=parser.parseFromString(data,"text/xml");
+			xmlDoc=parser.parseFromString(data,"text/xml");
 			tracks = xmlDoc.getElementsByTagName("track")
 			for(i = 0; i < tracks.length; i++) {
 				try {
