@@ -82,6 +82,8 @@ function playerReady() {
 	audio.addEventListener("ended", songEnded, false);
 	updateProgress();
 	$("#play").fadeTo("normal", 1);
+	$("#pause").fadeTo("normal", 1);
+	$("#pause").hide();
 	$("#ban").fadeTo("normal", 1);
 	$("#love").fadeTo("normal", 1);
 	$("#open_tag").fadeTo("normal", 1);
@@ -100,8 +102,8 @@ function play() {
 	if(!now_playing) {
 		nowPlaying();
 	}
-	$("#play").fadeTo("normal", 0.5);
-	$("#pause").fadeTo("normal", 1);
+	$("#play").hide();
+	$("#pause").show();
 	$("#seekforward").fadeTo("normal", 1);
 	$("#seekback").fadeTo("normal", 1);
 }
@@ -112,8 +114,8 @@ function play() {
 function pause() {
 	var audio = document.getElementById("audio");
 	audio.pause();
-	$("#play").fadeTo("normal", 1);
-	$("#pause").fadeTo("normal", 0.5);
+	$("#play").show();
+	$("#pause").hide();
 	$("#seekforward").fadeTo("normal", 0.5);
 	$("#seekback").fadeTo("normal", 0.5);
 }
