@@ -499,4 +499,21 @@ class User {
 		return $res != 0;
 	}
 
+	/**
+	 * Find the neighbours of this user based on the number of loved artists shared between them and other users.
+	 *
+	 * @param int The number of neighbours to return (defaults to 10).
+	 * @return array An array of userids and the number of loved artists shared with this user.
+	 */
+	function getNeighbours($limit=10) {
+		global $adodb;
+		if(!$this->hasLoved()) {
+			return array();
+		}
+
+		$res = $adodb->CacheGetAll(7200, 'SELECT Loved_Tracks.userid, count(Loved_Tracks.userid) AS shared_artists FROM Loved_Tracks INNER JOIN (SELECT DISTINCT(artist) AS artist FROM Loved_Tracks WHERE userid=' . $this->uniqueid . ') AS Loved_Artists ON Loved_Tracks.artist = Loved_Artists.artist WHERE userid != ' . $this->uniqueid . ' GROUP BY Loved_Tracks.userid ORDER BY shared_artists DESC LIMIT ' . $limit);
+
+		return $res;
+	}
+
 }
