@@ -424,7 +424,11 @@ function setVolume(event, vol) {
  * Load the player volume from a cookie
  */
 function loadVolume() {
-	volume = parseFloat(getCookie('volume'));
+	volume = getCookie('volume');
+	if(volume == undefined) {
+		return;
+	}
+	volume = parseFloat(volume);
 	$("#volume-slider").slider('value', volume * 100);
 	audio.volume = volume;
 }
