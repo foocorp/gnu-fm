@@ -246,5 +246,35 @@ class UserXML {
 		} catch (Exception $e) {}
 	}
 
+	public static function getNeighbours($u, $limit=50) {
+		try {
+			$user = new User($u);
+			$res = $user->getNeighbours($limit);
+		} catch (Exception $e) {
+			return XML::error('error', '7', 'Invalid resource specified');
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('neighbours');
+		$root->addAttribute('user', $user->name);
+
+		if (empty($res)) {
+			return $xml;
+		}
+
+		$highest_match = $res[0]['shared_artists'];
+
+		foreach($res as $row) {
+			$neighbour = $row['user'];
+			$user_node = $root->addChild('user', null);
+			$user_node->addChild('name', repamp($neighbour->name));
+			$user_node->addChild('fullname', repamp($neighbour->fullname));
+			$user_node->addChild('url', repamp($neighbour->getURL()));
+			// Give a normalised value
+			$user_node->addChild('match', $row['shared_artists'] / $highest_match);
+		}
+
+		return $xml;
+	}
 
 }
