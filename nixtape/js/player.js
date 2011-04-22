@@ -87,9 +87,12 @@ function playerReady() {
 	$("#ban").fadeTo("normal", 1);
 	$("#love").fadeTo("normal", 1);
 	$("#open_tag").fadeTo("normal", 1);
+	$("#volume").fadeTo("normal", 1);
 	$("#progressbar").progressbar({ value: 0 });
 	$("#player > #interface").show();
 	$("#tags").placeholdr({placeholderText: example_tags});
+	$("#volume-slider").slider({range: "min", min: 0, max: 100, value: 60, slide: setVolume});
+	loadVolume();
 	player_ready = true;
 }
 
@@ -399,5 +402,47 @@ function tag() {
 		$.post("/2.0/", {'method' : 'track.addtags', 'artist' : artist, 'track' : track, 'tags' : tags, 'sk' : ws_key}, function(data) {}, "text");
 		toggleTag();
 		$("#tags").val("");
+	}
+}
+
+/**
+ * Toggle visibility of the volume slider
+ */
+function toggleVolume() {
+	$("#volume-box").toggle(500);
+}
+
+/**
+ * Set the player volume and store it in a cookie for future sessions
+ */
+function setVolume(event, vol) {
+	audio.volume = parseFloat(vol.value / 100);
+	document.cookie='volume=' + audio.volume;
+}
+
+/**
+ * Load the player volume from a cookie
+ */
+function loadVolume() {
+	volume = parseFloat(getCookie('volume'));
+	$("#volume-slider").slider('value', volume * 100);
+	audio.volume = volume;
+}
+
+/**
+ * Retrieve the contents of a cookie
+ */
+function getCookie(c_name)
+{
+	var i,x,y,ARRcookies=document.cookie.split(";");
+	for (i=0;i<ARRcookies.length;i++)
+	{
+		x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+		y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+		x=x.replace(/^\s+|\s+$/g,"");
+		if (x==c_name)
+		{
+			return unescape(y);
+		}
 	}
 }
