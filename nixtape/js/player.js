@@ -23,6 +23,7 @@
    for the JavaScript code in this page.
 */
 
+var audio;
 var scrobbled, now_playing;
 var artist, album, track, trackpage, session_key, radio_key, ws_key;
 var playlist = [], current_song = 0;
@@ -39,7 +40,7 @@ var example_tags = "e.g. guitar, violin, female vocals, piano";
  * @param string rk Radio session key or false if streaming isn't required
  */
 function playerInit(list, sk, ws, rk) {
-	var audio = document.getElementById("audio");
+	audio = document.getElementById("audio");
 	if (!list) {
 		// We're playing a stream instead of a playlist
 		streaming = true;
@@ -71,8 +72,6 @@ function playerInit(list, sk, ws, rk) {
  * Finishes the player initialisation when the playlist has been loaded
  */
 function playerReady() {
-	var audio = document.getElementById("audio");
-
 	populatePlaylist();
 	if(!playable_songs) {
 		return;
@@ -100,7 +99,6 @@ function playerReady() {
  * Begins playback
  */
 function play() {
-	var audio = document.getElementById("audio");
 	audio.play();
 	if(!now_playing) {
 		nowPlaying();
@@ -115,7 +113,6 @@ function play() {
  * Pauses playback
  */
 function pause() {
-	var audio = document.getElementById("audio");
 	audio.pause();
 	$("#play").show();
 	$("#pause").hide();
@@ -128,7 +125,6 @@ function pause() {
  */
 function seekBack() {
 	try {
-		var audio = document.getElementById("audio");
 		audio.currentTime = audio.currentTime - 10;
 	} catch (e) {}
 }
@@ -138,7 +134,6 @@ function seekBack() {
  */
 function seekForward() {
 	try {
-		var audio = document.getElementById("audio");
 		audio.currentTime = audio.currentTime + 10;
 	} catch (e) {}
 }
@@ -147,7 +142,6 @@ function seekForward() {
  * Updates the progress bar every 900 milliseconds
  */
 function updateProgress() {
-	var audio = document.getElementById("audio");
 	if (audio.duration > 0) {
 		$("#progressbar").progressbar('option', 'value', (audio.currentTime / audio.duration) * 100);
 		$("#duration").text(friendlyTime(audio.duration));
@@ -165,7 +159,6 @@ function updateProgress() {
  * Called automatically when a song finished. Loads the next song if there is one
  */
 function songEnded() {
-	var audio = document.getElementById("audio");
 	if(current_song == playlist.length - 1) {
 		pause();
 	} else {
@@ -235,7 +228,6 @@ function scrobble() {
  */
 function nowPlaying() {
 	var timestamp;
-	var audio = document.getElementById("audio");
 	now_playing = true;
 	if(!session_key) {
 		//Not authenticated
@@ -251,7 +243,6 @@ function nowPlaying() {
  * @param int song The song number in the playlist that should be played
  */
 function playSong(song) {
-	var audio = document.getElementById("audio");
 	loadSong(song);
 	play();
 }
@@ -263,7 +254,6 @@ function playSong(song) {
  */
 function loadSong(song) {
 	var url = playlist[song]["url"];
-	var audio = document.getElementById("audio");
 	artist = playlist[song]["artist"];
 	album = playlist[song]["album"];
 	track = playlist[song]["track"];
