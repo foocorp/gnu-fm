@@ -244,7 +244,7 @@ function get_artist_selection($artists, $artist=false) {
  * Get the loved tracks for a list of users
  *
  * @param array An array of userids (integers).
- * @return ADO_RecordSet A set of track details.
+ * @return array An array of track details.
  */
 function get_loved_tracks($users) {
 	global $adodb;
