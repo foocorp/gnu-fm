@@ -407,7 +407,9 @@ function toggleVolume() {
  */
 function setVolume(event, vol) {
 	audio.volume = parseFloat(vol.value / 100);
-	document.cookie='volume=' + audio.volume + '; path=/';
+	var date = new Date();
+	date.setTime(date.getTime()+(315360000000)); // Remember for 10 years
+	document.cookie='volume=' + audio.volume + '; expires='+date.toGMTString()+ '; path=/';
 }
 
 /**
