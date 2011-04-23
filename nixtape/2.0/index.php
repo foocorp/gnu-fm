@@ -88,6 +88,7 @@ $method_map = array(
 	'user.gettoptags'		=> method_user_getTopTags,
 	'user.getlovedtracks'		=> method_user_getLovedTracks,
 	'user.getbannedtracks'		=> method_user_getBannedTracks,
+	'user.getneighbours'		=> method_user_getNeighbours,
 	'radio.tune'			=> method_radio_tune,
 	'radio.getplaylist'		=> method_radio_getPlaylist,
 	'track.addtags'			=> method_track_addTags,
@@ -179,7 +180,21 @@ function method_user_getBannedTracks() {
 	respond($xml);
 }
 
+function method_user_getNeighbours() {
+	if (!isset($_GET['user'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
 
+	$user = $_GET['user'];
+	if (isset($_GET['limit'])) {
+		$limit = $_GET['limit'];
+	} else {
+		$limit = 50;
+	}
+
+	$xml = UserXML::getNeighbours($user, $limit);
+	respond($xml);
+}
 
 /**
  * Artist methods

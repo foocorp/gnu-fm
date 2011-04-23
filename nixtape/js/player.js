@@ -1,5 +1,5 @@
 /*
-   GNU FM -- a free network service for sharing your music listening hab""s
+   GNU FM -- a free network service for sharing your music listening habits
 
    Copyright (C) 2009 Free Software Foundation, Inc
 
@@ -23,6 +23,7 @@
    for the JavaScript code in this page.
 */
 
+var audio;
 var scrobbled, now_playing;
 var artist, album, track, trackpage, session_key, radio_key, ws_key;
 var playlist = [], current_song = 0;
@@ -39,7 +40,7 @@ var example_tags = "e.g. guitar, violin, female vocals, piano";
  * @param string rk Radio session key or false if streaming isn't required
  */
 function playerInit(list, sk, ws, rk) {
-	var audio = document.getElementById("audio");
+	audio = document.getElementById("audio");
 	if (!list) {
 		// We're playing a stream instead of a playlist
 		streaming = true;
@@ -71,8 +72,6 @@ function playerInit(list, sk, ws, rk) {
  * Finishes the player initialisation when the playlist has been loaded
  */
 function playerReady() {
-	var audio = document.getElementById("audio");
-
 	populatePlaylist();
 	if(!playable_songs) {
 		return;
@@ -82,12 +81,17 @@ function playerReady() {
 	audio.addEventListener("ended", songEnded, false);
 	updateProgress();
 	$("#play").fadeTo("normal", 1);
+	$("#pause").fadeTo("normal", 1);
+	$("#pause").hide();
 	$("#ban").fadeTo("normal", 1);
 	$("#love").fadeTo("normal", 1);
 	$("#open_tag").fadeTo("normal", 1);
+	$("#volume").fadeTo("normal", 1);
 	$("#progressbar").progressbar({ value: 0 });
 	$("#player > #interface").show();
 	$("#tags").placeholdr({placeholderText: example_tags});
+	$("#volume-slider").slider({range: "min", min: 0, max: 100, value: 60, slide: setVolume});
+	loadVolume();
 	player_ready = true;
 }
 
@@ -95,13 +99,12 @@ function playerReady() {
  * Begins playback
  */
 function play() {
-	var audio = document.getElementById("audio");
 	audio.play();
 	if(!now_playing) {
 		nowPlaying();
 	}
-	$("#play").fadeTo("normal", 0.5);
-	$("#pause").fadeTo("normal", 1);
+	$("#play").hide();
+	$("#pause").show();
 	$("#seekforward").fadeTo("normal", 1);
 	$("#seekback").fadeTo("normal", 1);
 }
@@ -110,10 +113,9 @@ function play() {
  * Pauses playback
  */
 function pause() {
-	var audio = document.getElementById("audio");
 	audio.pause();
-	$("#play").fadeTo("normal", 1);
-	$("#pause").fadeTo("normal", 0.5);
+	$("#play").show();
+	$("#pause").hide();
 	$("#seekforward").fadeTo("normal", 0.5);
 	$("#seekback").fadeTo("normal", 0.5);
 }
@@ -123,7 +125,6 @@ function pause() {
  */
 function seekBack() {
 	try {
-		var audio = document.getElementById("audio");
 		audio.currentTime = audio.currentTime - 10;
 	} catch (e) {}
 }
@@ -133,7 +134,6 @@ function seekBack() {
  */
 function seekForward() {
 	try {
-		var audio = document.getElementById("audio");
 		audio.currentTime = audio.currentTime + 10;
 	} catch (e) {}
 }
@@ -142,7 +142,6 @@ function seekForward() {
  * Updates the progress bar every 900 milliseconds
  */
 function updateProgress() {
-	var audio = document.getElementById("audio");
 	if (audio.duration > 0) {
 		$("#progressbar").progressbar('option', 'value', (audio.currentTime / audio.duration) * 100);
 		$("#duration").text(friendlyTime(audio.duration));
@@ -160,7 +159,6 @@ function updateProgress() {
  * Called automatically when a song finished. Loads the next song if there is one
  */
 function songEnded() {
-	var audio = document.getElementById("audio");
 	if(current_song == playlist.length - 1) {
 		pause();
 	} else {
@@ -213,7 +211,7 @@ function scrobble() {
 	}
 	timestamp = Math.round(new Date().getTime() / 1000);
 	$.post("/scrobble-proxy.php?method=scrobble", { "a[0]" : artist, "b[0]" : album, "t[0]" : track, "i[0]" : timestamp, "s" : session_key },
-		      	function(data){
+			function(data){
 				if(data.substring(0, 2) == "OK") {
 					$("#scrobbled").text("Scrobbled");
 					$("#scrobbled").fadeIn(5000, function() { $("#scrobbled").fadeOut(5000) } );
@@ -221,7 +219,7 @@ function scrobble() {
 					$("#scrobbled").text(data);
 					$("#scrobbled").fadeIn(1000);
 				}
-		      	}, "text");
+			}, "text");
 }
 
 /**
@@ -230,7 +228,6 @@ function scrobble() {
  */
 function nowPlaying() {
 	var timestamp;
-	var audio = document.getElementById("audio");
 	now_playing = true;
 	if(!session_key) {
 		//Not authenticated
@@ -246,7 +243,6 @@ function nowPlaying() {
  * @param int song The song number in the playlist that should be played
  */
 function playSong(song) {
-	var audio = document.getElementById("audio");
 	loadSong(song);
 	play();
 }
@@ -258,7 +254,6 @@ function playSong(song) {
  */
 function loadSong(song) {
 	var url = playlist[song]["url"];
-	var audio = document.getElementById("audio");
 	artist = playlist[song]["artist"];
 	album = playlist[song]["album"];
 	track = playlist[song]["track"];
@@ -322,7 +317,7 @@ function getRadioPlaylist() {
 	var tracks, artist, album, title, url, extension, trackpage_url, i;
 	$.get("/2.0/", {'method' : 'radio.getPlaylist', 'sk' : radio_key}, function(data) {
 			parser=new DOMParser();
-		      	xmlDoc=parser.parseFromString(data,"text/xml");
+			xmlDoc=parser.parseFromString(data,"text/xml");
 			tracks = xmlDoc.getElementsByTagName("track")
 			for(i = 0; i < tracks.length; i++) {
 				try {
@@ -397,5 +392,51 @@ function tag() {
 		$.post("/2.0/", {'method' : 'track.addtags', 'artist' : artist, 'track' : track, 'tags' : tags, 'sk' : ws_key}, function(data) {}, "text");
 		toggleTag();
 		$("#tags").val("");
+	}
+}
+
+/**
+ * Toggle visibility of the volume slider
+ */
+function toggleVolume() {
+	$("#volume-box").toggle(500);
+}
+
+/**
+ * Set the player volume and store it in a cookie for future sessions
+ */
+function setVolume(event, vol) {
+	audio.volume = parseFloat(vol.value / 100);
+	document.cookie='volume=' + audio.volume + '; path=/';
+}
+
+/**
+ * Load the player volume from a cookie
+ */
+function loadVolume() {
+	volume = getCookie('volume');
+	if(volume == undefined) {
+		return;
+	}
+	volume = parseFloat(volume);
+	$("#volume-slider").slider('value', volume * 100);
+	audio.volume = volume;
+}
+
+/**
+ * Retrieve the contents of a cookie
+ */
+function getCookie(c_name)
+{
+	var i,x,y,ARRcookies=document.cookie.split(";");
+	for (i=0;i<ARRcookies.length;i++)
+	{
+		x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+		y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+		x=x.replace(/^\s+|\s+$/g,"");
+		if (x==c_name)
+		{
+			return unescape(y);
+		}
 	}
 }
