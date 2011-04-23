@@ -301,8 +301,8 @@ function method_auth_getMobileSession() {
 
 	// Check for a token that is bound to a user
 	try {
-		$result = $adodb->GetRow('SELECT username, password FROM Users WHERE '
-			. 'lower(username) = ' . strtolower($adodb->qstr($_GET['username'])));
+		$result = $adodb->GetRow('SELECT username, lower(username) AS lc_username, password FROM Users WHERE '
+			. 'lower(username) = lower(' . $adodb->qstr($_GET['username']) . ')');
 		}
 	catch (exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
@@ -311,8 +311,8 @@ function method_auth_getMobileSession() {
 		report_failure(LFM_INVALID_TOKEN);
 	}
 
-	list($username, $password) = $result;
-	if (md5($username . $password) != $_GET['authToken']) {
+	list($username, $lc_username, $password) = $result;
+	if (md5($lc_username . $password) != $_GET['authToken']) {
 		report_failure(LFM_INVALID_TOKEN);
 	}
 
