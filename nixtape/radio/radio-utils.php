@@ -51,6 +51,10 @@ function radio_title_from_url($url) {
 		$user = $regs[2];
 		return 'Libre.fm ' . ucwords($user) . '\'s Mix Radio';
 	}
+	if(preg_match('@l(ast|ibre)fm://user/(.*)/neighbours@', $url, $regs)) {
+		$user = $regs[2];
+		return 'Libre.fm ' . ucwords($user) . '\'s Neighbourhood radio';
+	}
 	if(preg_match('@l(ast|ibre)fm://community/loved@', $url, $regs)) {
 		return 'Libre.fm Community\'s Loved Radio';
 	}
@@ -85,7 +89,7 @@ function make_playlist($session, $old_format=false) {
 
 	if(preg_match('@l(ast|ibre)fm://globaltags/(.*)@', $url, $regs)) {
 		$tag = $regs[2];
-		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist WHERE streamable=1 AND lower(tag) = lower(' . $adodb->qstr($tag) . ')');
+		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist WHERE streamable=1 AND lower(tag) = lower(' . $adodb->qstr($tag) . ')');
 	} elseif(preg_match('@l(ast|ibre)fm://artist/(.*)/similarartists@', $url, $regs)) {
 		try {
 			$artist = new Artist($regs[2]);
@@ -96,65 +100,86 @@ function make_playlist($session, $old_format=false) {
 		$res = get_artist_selection($similarArtists, $artist);
 	} elseif(preg_match('@l(ast|ibre)fm://artist/(.*)@', $url, $regs)) {
 		$artist = $regs[2];
-		$res = $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND lower(artist_name) = lower(' . $adodb->qstr($artist) . ')');
-	} elseif(preg_match('@l(ast|ibre)fm://user/(.*)/(loved|library|mix)@', $url, $regs)) {
+		$res = $adodb->CacheGetAll(7200, 'SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND lower(artist_name) = lower(' . $adodb->qstr($artist) . ')');
+	} elseif(preg_match('@l(ast|ibre)fm://user/(.*)/(loved|library|personal)@', $url, $regs)) {
 		try {
 			$requser = new User($regs[2]);
 		} catch (Exception $e) {
 			die("FAILED\n"); // this should return a blank dummy playlist instead
 		}
-		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Loved_Tracks.userid=' . $requser->uniqueid . ' AND Track.streamable=1');
-	} elseif(preg_match('@l(ast|ibre)fm://user/(.*)/recommended@', $url, $regs) || preg_match('@l(ast|ibre)fm://user/(.*)/mix@', $url, $regs)) {
+		$res = get_loved_tracks(array($requser->uniqueid));
+	} elseif(preg_match('@l(ast|ibre)fm://user/(.*)/recommended@', $url, $regs)) {
 		try {
 			$requser = new User($regs[2]);
 		} catch (Exception $e) {
 			die("FAILED\n"); // this should return a blank dummy playlist instead
 		}
 		$recommendedArtists = $requser->getRecommended(8, true);
-		if($res) {
-			// If we already have some results then we're adding these to the loved tracks for mix radio
-			$res += get_artist_selection($recommendedArtists);
-		} else {
-			$res = get_artist_selection($recommendedArtists);
+		$res = get_artist_selection($recommendedArtists);
+	} elseif(preg_match('@l(ast|ibre)fm://user/(.*)/mix@', $url, $regs)) {
+		try {
+			$requser = new User($regs[2]);
+		} catch (Exception $e) {
+			die("FAILED\n"); // this should return a blank dummy playlist instead
 		}
+		$recommendedArtists = $requser->getRecommended(8, true);
+		$res = get_loved_tracks(array($requser->uniqueid)) + get_artist_selection($recommendedArtists);
+	} elseif(preg_match('@l(ast|ibre)fm://user/(.*)/neighbours@', $url, $regs)) {
+		try {
+			$requser = new User($regs[2]);
+		} catch (Exception $e) {
+			die("FAILED\n"); // this should return a blank dummy playlist instead
+		}
+
+		$neighbours = $requser->getNeighbours();
+		$userids = array();	
+		foreach($neighbours as $neighbour) {
+			$userids[] =  $neighbour['userid'];
+		}
+		$res = get_loved_tracks($userids);
 	} elseif(preg_match('@l(ast|ibre)fm://community/loved@', $url, $regs)) {
-		$res = $adodb->Execute('SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Track.streamable=1');
+		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Track.streamable=1');
 	} else {
 		die("FAILED\n"); // this should return a blank dummy playlist instead
 	}
 
-	$avail = $res->RecordCount();
+	$num_tracks = count($res) > 5 ? 5 : count($res);
 
-	$tr[0] = rand(0,$avail-1);
-	$tr[1] = rand(0,$avail-1);
-	$tr[2] = rand(0,$avail-1);
-	$tr[3] = rand(0,$avail-1);
-	$tr[4] = rand(0,$avail-1);
-	$tr = array_unique($tr);
-	// we should probably shuffle these here
-
+	$used_tracks = array();
 	$radiotracks = array();
-	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
-	for($i=0; $i<count($tr); $i++) {
+	for($i=0; $i<$num_tracks; $i++) {
 
-		$res->Move($tr[$i]);
-		$row = $res->FetchRow();
-
-		if($user) {
-			$banned = $adodb->GetOne('SELECT COUNT(*) FROM Banned_Tracks WHERE '
-				. 'artist = ' . $adodb->qstr($row['artist_name'])
-				. 'AND track = ' . $adodb->qstr($row['name'])
-				. 'AND userid = ' . $user->uniqueid);
-			if ($banned) {
-				// This track has been banned by the user, so select another one
-				$tr[$i] = rand(0, $avail-1);
-				$i--;
-				continue;
+		$tracks_left = true;
+		do {
+			$random_track = rand(0, count($res) - 1);
+			$banned = false;
+			$row = $res[$random_track];
+			if(count($res) == count($used_tracks)) {
+				// Ran out of unique, unbanned tracks
+				$tracks_left = false;
 			}
+			if ($user) {
+				// See if a track has been banned by the user, if so select another one
+				$banned = $adodb->GetOne('SELECT COUNT(*) FROM Banned_Tracks WHERE '
+					. 'artist = ' . $adodb->qstr($row['artist_name'])
+					. 'AND track = ' . $adodb->qstr($row['name'])
+					. 'AND userid = ' . $user->uniqueid);
+				if ($banned && !in_array($random_track, $used_tracks)) {
+					$used_tracks[] = $random_track;
+				}
+			}
+		} while ((in_array($random_track, $used_tracks) || $banned) && $tracks_left);
+		if (!$tracks_left) {
+			break;
 		}
 
-		$album = new Album($row['album_name'], $row['artist_name']);
+		$used_tracks[] = $random_track;
+
+		$album = false;
+		if(isset($row['album_name'])) {
+			$album = new Album($row['album_name'], $row['artist_name']);
+		}
 
 		if($row['duration'] == 0) {
 			$duration = 180000;
@@ -165,15 +190,28 @@ function make_playlist($session, $old_format=false) {
 		$radiotracks[$i]['location'] = resolve_external_url($row['streamurl']);
 		$radiotracks[$i]['title'] = $row['name'];
 		$radiotracks[$i]['id'] = "0000";
-		$radiotracks[$i]['album'] = $album->name;
+		if($album) { 
+			$radiotracks[$i]['album'] = $album->name;
+		} else {
+			$radiotracks[$i]['album'] = '';
+		}
 		$radiotracks[$i]['creator'] = $row['artist_name'];
 		$radiotracks[$i]['duration'] = $duration;
-		$radiotracks[$i]['image'] = $album->image;
+		if($album) {
+			$radiotracks[$i]['image'] = $album->image;
+		} else {
+			$radiotracks[$i]['image'] = '';
+		}
 		$radiotracks[$i]['artisturl'] = Server::getArtistURL($row['artist_name']);
-		$radiotracks[$i]['albumurl'] = $album->getURL();
-		$radiotracks[$i]['trackurl'] = Server::getTrackURL($row['artist_name'], $album->name, $row['name']);
-		$radiotracks[$i]['downloadurl'] = Server::getTrackURL($row['artist_name'], $album->name, $row['name']);
-
+		if($album) {
+			$radiotracks[$i]['albumurl'] = $album->getURL();
+			$radiotracks[$i]['trackurl'] = Server::getTrackURL($row['artist_name'], $album->name, $row['name']);
+			$radiotracks[$i]['downloadurl'] = Server::getTrackURL($row['artist_name'], $album->name, $row['name']);
+		} else {
+			$radiotracks[$i]['albumurl'] = '';
+			$radiotracks[$i]['trackurl'] = Server::getTrackURL($row['artist_name'], false, $row['name']);
+			$radiotracks[$i]['downloadurl'] = Server::getTrackURL($row['artist_name'], false, $row['name']);
+		}
 	}
 
 	$smarty->assign('radiotracks', $radiotracks);
@@ -199,6 +237,25 @@ function get_artist_selection($artists, $artist=false) {
 		}
 		$artistsClause .= 'lower(artist_name) = lower(' . $adodb->qstr($artists[$r]['artist']) . ')';
 	}
-	return $adodb->Execute('SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND ' . $artistsClause);
+	return $adodb->CacheGetAll(7200, 'SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND ' . $artistsClause);
+}
+
+/**
+ * Get the loved tracks for a list of users
+ *
+ * @param array An array of userids (integers).
+ * @return ADO_RecordSet A set of track details.
+ */
+function get_loved_tracks($users) {
+	global $adodb;
+	$userclause = '';
+	for ($i=0; $i<count($users); $i++) {
+		$userclause .= 'Loved_Tracks.userid = ' . $users[$i];
+		if ($i < count($users) -1) {
+			$userclause .= ' OR ';
+		}
+	}
+
+	return $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE ' . $userclause . ' AND Track.streamable=1');
 }
 
