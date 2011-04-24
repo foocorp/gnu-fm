@@ -230,7 +230,7 @@ function forwardScrobble($userid, $artist, $album, $track, $time, $mbid, $source
 		}
 		$post_vars .= '&timestamp[0]=' . $time . '&track[0]=' . $track;
 
-		$sig = str_replace('&', '', urldecode($post_vars));
+		$sig = urldecode(str_replace('&', '', $post_vars));
 		$sig = str_replace('=', '', $sig);
 		$sig = md5($sig . $lastfm_secret);
 
