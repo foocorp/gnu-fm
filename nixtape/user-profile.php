@@ -81,8 +81,13 @@ if (isset($user->name)) {
 					)
 				));
 
-	$submenu = user_menu($user, 'Overview');
+	$neighbours = $user->getNeighbours(9);
+	if(!empty($neighbours)) {
+		$smarty->assign('neighbours', $neighbours);
+		$smarty->assign('sideblocks', array('sidebar-neighbours.tpl'));
+	}
 
+	$submenu = user_menu($user, 'Overview');
 	$smarty->assign('submenu', $submenu);
 	$smarty->assign('headerfile', 'maxiprofile.tpl');
 
