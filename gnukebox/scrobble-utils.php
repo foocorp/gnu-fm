@@ -195,14 +195,13 @@ function validateMBID ($input) {
 function forwardScrobble($userid, $artist, $album, $track, $time, $mbid, $source, $rating, $length) {
 	global $adodb, $lastfm_key, $lastfm_secret;
 
-	// Strip database quoting from details and urlencode
-	$artist = urlencode(substr($artist, 1, strlen($artist) - 2));
-	$track = urlencode(substr($track, 1, strlen($track) - 2));
-	$album == 'NULL' ? $album = false : $album = urlencode(substr($album, 1, strlen($album) - 2));
-	$mbid == 'NULL' ? $mbid = false : $mbid = urlencode(substr($mbid, 1, strlen($mbid) - 2));
-	$source == 'NULL' ? $source = false : $source = urlencode(substr($source, 1, strlen($source) - 2));
-	$rating == '\'0\'' ? $rating = false : 0;
-	$length == 'NULL' ? $length = false : 0;
+	$artist = urlencode($artist);
+	$track = urlencode($track);
+	$album = urlencode($album);
+	$mbid = urlencode($mbid);
+	$source = urlencode($source);
+	$rating = urlencode($rating);
+	$length = urlencode($length);
 
 	$res = $adodb->CacheGetAll(600, 'SELECT * FROM Service_Connections WHERE userid = ' . $userid . ' AND forward = 1');
 	foreach($res as &$row) {
@@ -231,7 +230,7 @@ function forwardScrobble($userid, $artist, $album, $track, $time, $mbid, $source
 		}
 		$post_vars .= '&timestamp[0]=' . $time . '&track[0]=' . $track;
 
-		$sig = str_replace('&', '', urldecode($post_vars));
+		$sig = urldecode(str_replace('&', '', $post_vars));
 		$sig = str_replace('=', '', $sig);
 		$sig = md5($sig . $lastfm_secret);
 

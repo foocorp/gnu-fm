@@ -88,6 +88,7 @@ $method_map = array(
 	'user.gettoptags'       => method_user_getTopTags,
 	'user.getlovedtracks'   => method_user_getLovedTracks,
 	'user.getbannedtracks'  => method_user_getBannedTracks,
+	'user.getneighbours'    => method_user_getNeighbours,
 	'radio.tune'            => method_radio_tune,
 	'radio.getplaylist'     => method_radio_getPlaylist,
 	'track.addtags'         => method_track_addTags,
@@ -179,7 +180,21 @@ function method_user_getBannedTracks() {
 	respond($xml);
 }
 
+function method_user_getNeighbours() {
+	if (!isset($_GET['user'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
 
+	$user = $_GET['user'];
+	if (isset($_GET['limit'])) {
+		$limit = $_GET['limit'];
+	} else {
+		$limit = 50;
+	}
+
+	$xml = UserXML::getNeighbours($user, $limit);
+	respond($xml);
+}
 
 /**
  * Artist methods
@@ -269,8 +284,7 @@ function method_auth_getToken() {
 		. $adodb->qstr($key) . ', '
 		. (int)(time() + 3600)
 		. ')');
-	}
-	catch (Exception $e) {
+	} catch (Exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 
@@ -287,18 +301,17 @@ function method_auth_getMobileSession() {
 
 	// Check for a token that is bound to a user
 	try {
-		$result = $adodb->GetRow('SELECT username, password FROM Users WHERE '
-			. 'lower(username) = ' . strtolower($adodb->qstr($_GET['username'])));
-		}
-	catch (Exception $e) {
+		$result = $adodb->GetRow('SELECT username, lower(username) AS lc_username, password FROM Users WHERE '
+			. 'lower(username) = lower(' . $adodb->qstr($_GET['username']) . ')');
+	} catch (Exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 	if (is_null($result)) {
 		report_failure(LFM_INVALID_TOKEN);
 	}
 
-	list($username, $password) = $result;
-	if (md5($username . $password) != $_GET['authToken']) {
+	list($username, $lc_username, $password) = $result;
+	if (md5($lc_username . $password) != $_GET['authToken']) {
 		report_failure(LFM_INVALID_TOKEN);
 	}
 
@@ -314,8 +327,7 @@ function method_auth_getMobileSession() {
 			. (int)(time() + 3600) . ', '
 			. $adodb->qstr($username)
 			. ')');
-	}
-	catch (Exception $e) {
+	} catch (Exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 
@@ -345,8 +357,7 @@ function method_auth_getSession() {
 		$username = $adodb->GetOne('SELECT username FROM Auth WHERE '
 			. 'token = ' . $adodb->qstr($_GET['token']) . ' AND '
 			. 'username IS NOT NULL AND sk IS NULL');
-	}
-	catch (Exception $e) {
+	} catch (Exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 	if (!$username) {
@@ -360,8 +371,7 @@ function method_auth_getSession() {
 		$result = $adodb->Execute('UPDATE Auth SET '
 			. 'sk = ' . $adodb->qstr($session) . ' WHERE '
 			. 'token = ' . $adodb->qstr($_GET['token']));
-	}
-	catch (Exception $e) {
+	} catch (Exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 
@@ -394,8 +404,7 @@ function method_radio_tune() {
 	$username = $adodb->GetOne('SELECT username FROM Auth WHERE '
 		. 'sk = ' . $adodb->qstr($_POST['sk']) . ' AND '
 		. 'username IS NOT NULL');
-	}
-	catch (Exception $e) {
+	} catch (Exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 	if (!$username) {

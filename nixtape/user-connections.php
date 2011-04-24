@@ -69,6 +69,9 @@ if (isset($_GET['token']) && isset($_GET['webservice_url'])) {
 		. $adodb->qstr($remote_key) . ', '
 		. $adodb->qstr($remote_username) . ')');
 
+	// Flush cache so this change takes effect immediately
+	$adodb->CacheFlush('SELECT * FROM Service_Connections WHERE userid = ' . $this_user->uniqueid . ' AND forward = 1');
+
 	$smarty->assign('connection_added', true);
 }
 
@@ -77,6 +80,9 @@ if (isset($_GET['forward']) && isset($_GET['service'])) {
 	$adodb->Execute('UPDATE Service_Connections SET forward = ' . (int) ($_GET['forward'])
 		. ' WHERE userid = ' . $this_user->uniqueid
 		. ' AND webservice_url = ' . $adodb->qstr($_GET['service']));
+
+	// Flush cache so this change takes effect immediately
+	$adodb->CacheFlush('SELECT * FROM Service_Connections WHERE userid = ' . $this_user->uniqueid . ' AND forward = 1');
 }
 
 if (isset($lastfm_key)) {
