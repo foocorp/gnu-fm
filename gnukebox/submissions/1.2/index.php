@@ -164,7 +164,7 @@ for($i = 0; $i < count($_POST['a']); $i++) {
 				try {
 					$res =& $adodb->Execute($sql);
 					if(isset($lastfm_key)) {
-						forwardScrobble($userid, $artist, $album, $track, $time, $mbid, $source, $rating, $length);
+						forwardScrobble($userid, $_POST['a'][$i], $_POST['b'][$i], $_POST['t'][$i], $time, $_POST['m'][$i], $_POST['o'][$i], $_POST['r'][$i], $_POST['l'][$i]);
 					}
 				}
 				catch (exception $e) {
