@@ -248,13 +248,14 @@ function get_artist_selection($artists, $artist=false) {
  */
 function get_loved_tracks($users) {
 	global $adodb;
-	$userclause = '';
+	$userclause = '( ';
 	for ($i=0; $i<count($users); $i++) {
 		$userclause .= 'Loved_Tracks.userid = ' . $users[$i];
 		if ($i < count($users) -1) {
 			$userclause .= ' OR ';
 		}
 	}
+	$userclause .= ' )';
 
 	return $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE ' . $userclause . ' AND Track.streamable=1');
 }
