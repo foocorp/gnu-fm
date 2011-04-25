@@ -24,10 +24,10 @@ require_once('../../auth-utils.php');
 
 header("Content-Type: text/plain");
 
-if(!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t'])) {
+if (!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t'])) {
 	die("FAILED Required POST parameters are not set\n");
 }
-if(empty($_POST['s']) || empty($_POST['a']) || empty($_POST['t'])) {
+if (empty($_POST['s']) || empty($_POST['a']) || empty($_POST['t'])) {
 	die("FAILED Required POST parameters are empty\n");
 }
 
@@ -36,15 +36,15 @@ $session_id = $_POST['s'];
 $MQsess = $adodb->qstr($session_id);
 
 $artist = $adodb->qstr($_POST['a']);
-if(isset($_POST['b'])) {
+if (isset($_POST['b'])) {
 	$album = $adodb->qstr($_POST['b']);
 } else {
 	$album = 'NULL';
 }
 $track = $adodb->qstr($_POST['t']);
-if(isset($_POST['l']) && is_numeric($_POST['l'])) {
+if (isset($_POST['l']) && is_numeric($_POST['l'])) {
 	$length = (int) $_POST['l'];
-	if($length > 5400) {
+	if ($length > 5400) {
 		$expires = time() + 600;
 	} else {
 		$expires = time() + (int) $_POST['l'];
@@ -55,41 +55,38 @@ if(isset($_POST['l']) && is_numeric($_POST['l'])) {
 
 $mb = validateMBID($_POST['m']);
 
-if($mb) {
+if ($mb) {
 	$mbid = $adodb->qstr($mb);
 } else {
 	$mbid = 'NULL';
 }
 
 //Delete this user's last playing song (if any)
-$adodb->Execute("DELETE FROM Now_Playing WHERE sessionid = " . ($MQsess));
+$adodb->Execute('DELETE FROM Now_Playing WHERE sessionid = ' . ($MQsess));
 
 if (!check_session($MQsess)) {
 	die("BADSESSION\n");
 }
 
 try {
-	$adodb->Execute("INSERT INTO Now_Playing (sessionid, artist, album, track, expires, mbid) VALUES ("
-			. $MQsess . ", "
-			. $artist . ", "
-			. $album . ", "
-			. $track . ", "
-			. $expires . ", "
-			. $mbid . ")");
-}
-catch (exception $e) {
-	die("FAILED " . $e->getMessage() . "\n");
+	$adodb->Execute('INSERT INTO Now_Playing (sessionid, artist, album, track, expires, mbid) VALUES ('
+			. $MQsess . ', '
+			. $artist . ', '
+			. $album . ', '
+			. $track . ', '
+			. $expires . ', '
+			. $mbid . ')');
+} catch (Exception $e) {
+	die('FAILED ' . $e->getMessage() . "\n");
 }
 
 createArtistIfNew($artist);
-if($album != 'NULL') {
+if ($album != 'NULL') {
 	createAlbumIfNew($artist, $album);
 }
 getTrackCreateIfNew($artist, $album, $track, $mbid);
 
 //Expire old tracks
-$adodb->Execute("DELETE FROM Now_Playing WHERE expires < " . time());
+$adodb->Execute('DELETE FROM Now_Playing WHERE expires < ' . time());
 
 die("OK\n");
-
-?>
