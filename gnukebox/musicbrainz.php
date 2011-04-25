@@ -18,79 +18,76 @@
 
 */
 
-    @apache_setenv('no-gzip', 1);
-    @ini_set('zlib.output_compression', 0);
-    @ini_set('implicit_flush', 1);
-
+@apache_setenv('no-gzip', 1);
+@ini_set('zlib.output_compression', 0);
+@ini_set('implicit_flush', 1);
 
 header('Content-type: text/html; charset=utf-8');
 require_once('database.php');
 require_once('utils/human-time.php');
 
 $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-$res = $adodb->GetAll("SELECT artist, track from scrobbles where Album is null LIMIT 20;");
+$res = $adodb->GetAll('SELECT artist, track from scrobbles where Album is null LIMIT 20;');
 
-     echo "<ul>";
+echo '<ul>';
 
-			if(!$res) {
-				die("sql error");
-			}
-			foreach($res as &$row) {
+if (!$res) {
+	die('sql error');
+}
+foreach ($res as &$row) {
 
-			echo "<li>" . $row['artist'] . "&mdash;" . $row['track'] . "</li>";
+	echo '<li>' . $row['artist'] . '&mdash;' . $row['track'] . '</li>';
 
-			echo "Finding album...";
+	echo 'Finding album...';
 
-			echo doABunchOfShit($row['artist'], $row['track']);
+	echo doABunchOfShit($row['artist'], $row['track']);
 
-			   for ($i = 0; $i < ob_get_level(); $i++) { ob_end_flush(); }
-    ob_implicit_flush(1)  ;
-
-			}
-
-
-function doABunchOfShit($artist, $track){
-
-	 $album = ScrobbleLookup($artist, $track);
-
-	 if ($album){
-
-	 return $album;
-
-	 } else {
-
-	 $album = BrainzLookup ($artist, $track);
-
-	 return $album;}
+	for ($i = 0; $i < ob_get_level(); $i++) {
+		ob_end_flush();
+	}
+	ob_implicit_flush(1);
 
 }
 
-function ScrobbleLookup($artist, $track){
+function doABunchOfShit($artist, $track) {
+
+	 $album = ScrobbleLookup($artist, $track);
+
+	 if ($album) {
+		 return $album;
+	 } else {
+		 $album = BrainzLookup($artist, $track);
+		 return $album;
+	 }
+
+}
+
+function ScrobbleLookup($artist, $track) {
 	global $adodb;
 
-	$sql = "SELECT album from scrobbles where artist = " . $adodb->qstr($artist) . " and track = " . $adodb->qstr($track) . " LIMIT 1;";
+	$sql = 'SELECT album from scrobbles where artist = ' . $adodb->qstr($artist) . ' and track = ' . $adodb->qstr($track) . ' LIMIT 1;';
 
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	$album = $adodb->GetOne($sql);
 
-	if(!$album) {
-		die("sql error");
+	if (!$album) {
+		die('sql error');
 	}
 
 	return $album;
 }
 
-function BrainzLookup($artist, $track){
+function BrainzLookup($artist, $track) {
 
 	global $adodb;
 
-	$sql = "select a.name as artist,l.name as album, t.name as track,t.gid as mbid from brainz.track t left join brainz.artist a on t.artist=a.id left join brainz.albumjoin j on j.track=t.id left join brainz.album l on l.id=j.album  where lower(t.name) = lower(" . $adodb->qstr($track) . ") and lower(a.name) = lower(" . $adodb->qstr($artist) . ") LIMIT 1;";
+	$sql = 'select a.name as artist,l.name as album, t.name as track,t.gid as mbid from brainz.track t left join brainz.artist a on t.artist=a.id left join brainz.albumjoin j on j.track=t.id left join brainz.album l on l.id=j.album where lower(t.name) = lower(' . $adodb->qstr($track) . ') and lower(a.name) = lower(' . $adodb->qstr($artist) . ') LIMIT 1;';
 
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	$albumData = $adodb->GetRow($sql);
 
-	if(!$albumData)) {
-		die("sql error");
+	if (!$albumData)) {
+		die('sql error');
 	}
 
 	return $albumData['album'];
