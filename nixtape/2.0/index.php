@@ -165,7 +165,7 @@ function method_user_getBannedTracks() {
 	}
 
 	$user = $_GET['user'];
-	get_with_default('limit', 50);
+	$limit = get_with_default('limit', 50);
 
 	$xml = UserXML::getBannedTracks($user, $limit);
 	respond($xml);
