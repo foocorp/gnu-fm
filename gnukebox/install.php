@@ -318,23 +318,23 @@ if (isset($_POST['install'])) {
 		PRIMARY KEY (uid1, uid2, flag),
 		FOREIGN KEY (uid1, uid2) REFERENCES User_Relationships (uid1, uid2))',
 
-		'INSERT INTO Relationship_Flags VALUES (\'contact\')',
-		'INSERT INTO Relationship_Flags VALUES (\'acquaintance\')',
-		'INSERT INTO Relationship_Flags VALUES (\'friend\')',
-		'INSERT INTO Relationship_Flags VALUES (\'met\')',
-		'INSERT INTO Relationship_Flags VALUES (\'co-worker\')',
-		'INSERT INTO Relationship_Flags VALUES (\'colleague\')',
-		'INSERT INTO Relationship_Flags VALUES (\'co-resident\')',
-		'INSERT INTO Relationship_Flags VALUES (\'neighbor\')',
-		'INSERT INTO Relationship_Flags VALUES (\'child\')',
-		'INSERT INTO Relationship_Flags VALUES (\'parent\')',
-		'INSERT INTO Relationship_Flags VALUES (\'sibling\')',
-		'INSERT INTO Relationship_Flags VALUES (\'spouse\')',
-		'INSERT INTO Relationship_Flags VALUES (\'kin\')',
-		'INSERT INTO Relationship_Flags VALUES (\'muse\')',
-		'INSERT INTO Relationship_Flags VALUES (\'crush\')',
-		'INSERT INTO Relationship_Flags VALUES (\'date\')',
-		'INSERT INTO Relationship_Flags VALUES (\'sweetheart\')'
+		'INSERT INTO Relationship_Flags VALUES ("contact")',
+		'INSERT INTO Relationship_Flags VALUES ("acquaintance")',
+		'INSERT INTO Relationship_Flags VALUES ("friend")',
+		'INSERT INTO Relationship_Flags VALUES ("met")',
+		'INSERT INTO Relationship_Flags VALUES ("co-worker")',
+		'INSERT INTO Relationship_Flags VALUES ("colleague")',
+		'INSERT INTO Relationship_Flags VALUES ("co-resident")',
+		'INSERT INTO Relationship_Flags VALUES ("neighbor")',
+		'INSERT INTO Relationship_Flags VALUES ("child")',
+		'INSERT INTO Relationship_Flags VALUES ("parent")',
+		'INSERT INTO Relationship_Flags VALUES ("sibling")',
+		'INSERT INTO Relationship_Flags VALUES ("spouse")',
+		'INSERT INTO Relationship_Flags VALUES ("kin")',
+		'INSERT INTO Relationship_Flags VALUES ("muse")',
+		'INSERT INTO Relationship_Flags VALUES ("crush")',
+		'INSERT INTO Relationship_Flags VALUES ("date")',
+		'INSERT INTO Relationship_Flags VALUES ("sweetheart")'
 	);
 
 	foreach ($stage_one_queries as $query) {
@@ -392,7 +392,7 @@ if (isset($_POST['install'])) {
 		$adodb->Execute('INSERT INTO Users
 			(username, password, active)
 			VALUES
-			(\'testuser\', \'' . md5('password') . '\', 1);');
+			("testuser", "' . md5('password') . '", 1);');
 	} catch(Exception $e) {
 		die('Error testing database: ' . $adodb->ErrorMsg());
 	}
