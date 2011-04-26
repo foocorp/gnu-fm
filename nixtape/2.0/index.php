@@ -154,13 +154,11 @@ function method_user_getLovedTracks() {
 	}
 
 	$user = $_GET['user'];
-	if (isset($_GET['limit'])) {
-		$limit = $_GET['limit'];
-	} else {
-		$limit = 50;
-	}
 
-	$xml = UserXML::getLovedTracks($user, $limit);
+	$limit = get_with_default('limit', 50);
+	$page = get_with_default('page', 1);
+
+	$xml = UserXML::getLovedTracks($user, $limit, $page);
 	respond($xml);
 }
 
@@ -582,6 +580,14 @@ function json_response($data) {
 		print($_REQUEST['callback'] . '(' . $data . ');');
 	} else {
 		print($data);
+	}
+}
+
+function get_with_default($param, $default) {
+	if (isset($_GET[$param])) {
+		return $_GET[$param];
+	} else {
+		return $default;
 	}
 }
 
