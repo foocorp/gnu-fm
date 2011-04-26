@@ -26,9 +26,9 @@ function human_timestamp ($unix_timestamp, $now = null) {
 	if (is_null($now)) {
 		$now = time();
 	}
-	
+
 	$diff = $now - $unix_timestamp;
-	
+
 	# ugly!
 	$number_to_alpha = array(
 		'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',

@@ -27,7 +27,7 @@ require_once('version.php');
 $displaythings = true;
 
 if (!isset($config_version) || $config_version != $version) {
-	die("Configuration file is out of date. Please delete it (and associated database) and <a href='install.php'>reinstall</a>."); //TODO: Upgrade script for release versions
+	die('Configuration file is out of date. Please delete it (and associated database) and <a href="install.php">reinstall</a>.'); //TODO: Upgrade script for release versions
 }
 
 if (isset($_GET['hs']) && isset($_GET['p'])) {

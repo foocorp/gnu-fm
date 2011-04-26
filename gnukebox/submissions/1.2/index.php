@@ -160,7 +160,7 @@ for ($i = 0; $i < count($_POST['a']); $i++) {
 			for ($j = 0; $j < $actualcount; $j++) {
 
 				// Scrobble!
-				$sql = "INSERT INTO Scrobbles (userid, artist, album, track, time, mbid, source, rating, length, stid) VALUES " . $rowvalues[$j];
+				$sql = 'INSERT INTO Scrobbles (userid, artist, album, track, time, mbid, source, rating, length, stid) VALUES ' . $rowvalues[$j];
 				try {
 					$res =& $adodb->Execute($sql);
 					if (isset($lastfm_key)) {
