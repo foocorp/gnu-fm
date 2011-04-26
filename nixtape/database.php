@@ -20,7 +20,7 @@
 */
 
 
-if(!file_exists(dirname(__FILE__) . '/config.php')) {
+if (!file_exists(dirname(__FILE__) . '/config.php')) {
 	die('Please run the <a href=\'install.php\'>Install</a> script to configure your installation');
 }
 
@@ -30,7 +30,7 @@ require_once('adodb/adodb.inc.php');
 
 try {
 	$adodb =& NewADOConnection($connect_string);
-} catch (exception $e) {
+} catch (Exception $e) {
 	var_dump($e);
 	adodb_backtrace($e->gettrace());
 }

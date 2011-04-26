@@ -41,18 +41,20 @@ class UserXML {
 		$user_node->addChild('url', $user->getURL());
 		$user_node->addChild('playcount', $user->getTotalTracks());
 		$user_node->addChild('profile_created', strftime('%c', $user->created));
-		if (isset($user->modified))
+		if (isset($user->modified)) {
 			$user_node->addChild('profile_updated', strftime('%c', $user->modified));
+		}
 
-		return($xml);
+		return $xml;
 	}
 
 	public static function getTopTracks($username, $time) {
 		global $adodb;
 
 		$timestamp;
-		if (!isset($time))
+		if (!isset($time)) {
 			$time = 'overall';
+		}
 		//TODO: Do better, this is too ugly :\
 		if (strcmp($time, 'overall') == 0) {
 			$timestamp = 0;
@@ -73,7 +75,7 @@ class UserXML {
 			$user = new User($username);
 			$res = $user->getTopTracks(20, $timestamp);
 		}
-		catch (exception $e) {
+		catch (Exception $e) {
 			$err = 1;
 		}
 
@@ -86,7 +88,7 @@ class UserXML {
 		$root->addAttribute('user', $username);
 		$root->addAttribute('type', $time);
 		$i = 1;
-		foreach($res as &$row) {
+		foreach ($res as &$row) {
 			$track = $root->addChild('track', null);
 			$track->addAttribute('rank', $i);
 			$track->addChild('name', repamp($row['track']));
@@ -97,7 +99,7 @@ class UserXML {
 			$i++;
 		}
 
-		return($xml);
+		return $xml;
 
 	}
 
@@ -112,11 +114,11 @@ class UserXML {
 		$err = 0;
 		try {
 			$user = new User($u);
-			if($page == 1) {
+			if ($page == 1) {
 				$npres = $user->getNowPlaying(1);
 			}
 			$res = $user->getScrobbles($limit, $offset);
-		} catch (exception $e) {
+		} catch (Exception $e) {
 			$err = 1;
 		}
 
@@ -134,8 +136,8 @@ class UserXML {
 		$root->addAttribute('perPage', $limit);
 		$root->addAttribute('totalPages', $totalPages);
 
-		if($npres) {
-			foreach($npres as &$row) {
+		if ($npres) {
+			foreach ($npres as &$row) {
 				$track = $root->addChild('track');
 				$track->addAttribute('nowplaying', 'true');
 				$row['time'] = time();
@@ -143,7 +145,7 @@ class UserXML {
 			}
 		}
 
-		foreach($res as &$row) {
+		foreach ($res as &$row) {
 			$track = $root->addChild('track', null);
 			UserXML::_addTrackDetails($track, $row);
 		}
@@ -159,7 +161,7 @@ class UserXML {
 		$album = $track->addChild('album', repamp($row['album']));
 		$album->addAttribute('mbid', $row['album_mbid']);
 		$track->addChild('url', Server::getTrackURL($row['artist'], $row['album'], $row['track']));
-		$date = $track->addChild('date', gmdate("d M Y H:i",$row['time']) . " GMT");
+		$date = $track->addChild('date', gmdate("d M Y H:i", $row['time']) . " GMT");
 		$date->addAttribute('uts', $row['time']);
 		$track->addChild('streamable', null);
 	}
@@ -170,7 +172,7 @@ class UserXML {
 		try {
 			$user = new User($u);
 			$res = $user->getTopTags($limit);
-		} catch (exception $ex) {
+		} catch (Exception $e) {
 			return XML::error('error', '7', 'Invalid resource specified');
 		}
 
@@ -178,7 +180,7 @@ class UserXML {
 		$root = $xml->addChild('toptags');
 		$root->addAttribute('user', $user->name);
 
-		foreach($res as &$row) {
+		foreach ($res as &$row) {
 			$tag = $root->addChild('tag', null);
 			$tag->addChild('name', repamp($row['tag']));
 			$tag->addChild('count', repamp($row['freq']));
@@ -189,11 +191,11 @@ class UserXML {
 	}
 
 	public static function getLovedTracks($u, $limit=50) {
-		
+
 		try {
 			$user = new User($u);
 			$res = $user->getLovedTracks($limit);
-		} catch (exception $ex) {
+		} catch (Exception $e) {
 			return XML::error('error', '7', 'Invalid resource specified');
 		}
 
@@ -201,7 +203,7 @@ class UserXML {
 		$root = $xml->addChild('lovedtracks');
 		$root->addAttribute('user', $user->name);
 
-		foreach($res as &$row) {
+		foreach ($res as &$row) {
 			$track_node = $root->addChild('track', null);
 			UserXML::_addLBTrackDetails($track_node, $row);
 		}
@@ -210,11 +212,11 @@ class UserXML {
 	}
 
 	public static function getBannedTracks($u, $limit=50) {
-		
+
 		try {
 			$user = new User($u);
 			$res = $user->getBannedTracks($limit);
-		} catch (exception $ex) {
+		} catch (Exception $e) {
 			return XML::error('error', '7', 'Invalid resource specified');
 		}
 
@@ -222,7 +224,7 @@ class UserXML {
 		$root = $xml->addChild('bannedtracks');
 		$root->addAttribute('user', $user->name);
 
-		foreach($res as &$row) {
+		foreach ($res as &$row) {
 			$track_node = $root->addChild('track', null);
 			UserXML::_addLBTrackDetails($track_node, $row);
 		}
@@ -235,7 +237,7 @@ class UserXML {
 		$track_node->addChild('name', repamp($track->name));
 		$track_node->addChild('mbid', $track->mbid);
 		$track_node->addChild('url', $track->getURL());
-		$date = $track_node->addChild('date', gmdate("d M Y H:i",$row['time']) . " GMT");
+		$date = $track_node->addChild('date', gmdate("d M Y H:i", $row['time']) . " GMT");
 		$date->addAttribute('uts', $row['time']);
 		try {
 			$artist = new Artist($row['artist']);

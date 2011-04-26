@@ -24,57 +24,57 @@ require_once('auth-utils.php');
 require_once('config.php');
 require_once('temp-utils.php');
 
-$supported_protocols = array("1.2", "1.2.1");
+$supported_protocols = array('1.2', '1.2.1');
 
-
-if(!isset($_GET['p']) || !isset($_GET['u']) || !isset($_GET['t']) || !isset($_GET['a']) || !isset($_GET['c'])) {
+if (!isset($_GET['p']) || !isset($_GET['u']) || !isset($_GET['t']) || !isset($_GET['a']) || !isset($_GET['c'])) {
 	die("BADAUTH\n");
 }
 
-$protocol = $_GET['p']; $username = $_GET['u']; $timestamp = $_GET['t']; $auth_token = $_GET['a']; $client = $_GET['c'];
+$protocol = $_GET['p'];
+$username = $_GET['u'];
+$timestamp = $_GET['t'];
+$auth_token = $_GET['a'];
+$client = $_GET['c'];
 
-if($client == "import") {
+if ($client == 'import') {
 	die("FAILED Import scripts are broken\n"); // this should be removed or changed to check the version once import.php is fixed
 }
 
-if(!in_array($protocol, $supported_protocols))  {
+if (!in_array($protocol, $supported_protocols)) {
 	die("FAILED Unsupported protocol version\n");
 }
 
-if(abs($timestamp - time()) > 300) {
+if (abs($timestamp - time()) > 300) {
 	die("BADTIME\n"); // let's try a 5-minute tolerance
 }
 
-if(isset($_GET['api_key']) && isset($_GET['sk'])) {
+if (isset($_GET['api_key']) && isset($_GET['sk'])) {
 	$authed = check_web_auth($username, $auth_token, $timestamp, $_GET['api_key'], $_GET['sk']);
 } else {
 	$authed = check_standard_auth($username, $auth_token, $timestamp);
 }
 
-if(!$authed) {
+if (!$authed) {
 	die("BADAUTH\n");
 }
 
 $uniqueid = username_to_uniqueid($username);
 $session_id = md5($auth_token . time());
-$sql = "INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires) VALUES ("
-	. ($uniqueid) . ","
-	. $adodb->qstr($session_id) . ","
-	. $adodb->qstr($client) . ","
-	. (time() + 86400) . ")";
+$sql = 'INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires) VALUES ('
+	. $uniqueid . ','
+	. $adodb->qstr($session_id) . ','
+	. $adodb->qstr($client) . ','
+	. (time() + 86400) . ')';
 
 try {
-$res = $adodb->Execute($sql);
-}
-catch (exception $e) {
+	$res = $adodb->Execute($sql);
+} catch (Exception $e) {
 	$msg = $e->getMessage();
 	reportError($msg, $sql);
-	die("FAILED " . $msg . "\n");
+	die('FAILED ' . $msg . "\n");
 }
 
 echo "OK\n";
 echo $session_id . "\n";
 echo $submissions_server . "/nowplaying/1.2/\n";
 echo $submissions_server . "/submissions/1.2/\n";
-
-?>

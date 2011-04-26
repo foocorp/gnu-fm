@@ -40,22 +40,19 @@ require_once('temp-utils.php');
 
 	try {
 
-	$res = $adodb->CacheGetAll(60, "SELECT artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 25");
+	$res = $adodb->CacheGetAll(60, 'SELECT artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 25');
 
-	}
-
-	catch (exception $e)
-	{
+	} catch (Exception $e) {
 		die($e->getMessage());
 	}
 
 	echo "<ul>\n";
 
-			foreach($res as &$row){
+			foreach ($res as &$row){
 
 			echo "<li>" . $row['artist'] . "&mdash;" . $row['track'] . "</li>\n";
 
-			} 
+			}
 			?>
 
 	</ul>

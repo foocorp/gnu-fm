@@ -41,8 +41,7 @@ function sendEmail($email) {
 
 	try {
 		$adodb->Execute($sql);
-	}
-	catch (exception $e) {
+	} catch (Exception $e) {
 		die($e->getMessage());
 	}
 

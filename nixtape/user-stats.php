@@ -26,7 +26,7 @@ require_once('data/User.php');
 require_once('data/TagCloud.php');
 require_once('data/Statistic.php');
 
-if(!isset($_GET['user']) && $logged_in == false) {
+if (!isset($_GET['user']) && $logged_in == false) {
 	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'User not set! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
@@ -34,32 +34,32 @@ if(!isset($_GET['user']) && $logged_in == false) {
 }
 
 try {
-    $user = new User($_GET['user']);
+	$user = new User($_GET['user']);
 } catch (Exception $e) {
-    if ($e->getCode() == 22) {
-       echo('We had some trouble locating that user.  Are you sure you spelled it correctly?'."\n");
-    } else {
-    echo 'Caught exception: ',  $e->getMessage(), "\n";
-    }
-    $user = NULL;
+	if ($e->getCode() == 22) {
+		echo('We had some trouble locating that user.  Are you sure you spelled it correctly?'."\n");
+	} else {
+		echo 'Caught exception: ', $e->getMessage(), "\n";
+	}
+	$user = null;
 }
 
-if(isset($user->name)) {
+if (isset($user->name)) {
 
 	$smarty->assign('stat_barwidth', 320);
 	try {
-		$aUserPlayStat =  Statistic::GeneratePlayStats('Scrobbles', 'artist', 40, $user->uniqueid, 300);
-		$smarty->assign('user_playstats',$aUserPlayStat);
-	} catch (exception $e) {}
+		$aUserPlayStat = Statistic::GeneratePlayStats('Scrobbles', 'artist', 40, $user->uniqueid, 300);
+		$smarty->assign('user_playstats', $aUserPlayStat);
+	} catch (Exception $e) {}
 
 	try {
-		$aUserDayStat =  Statistic::generatePlayByDays('Scrobbles', 40, $user->uniqueid, 300);
-		$smarty->assign('user_daystats',$aUserDayStat);
-	} catch (exception $e) {}
+		$aUserDayStat = Statistic::generatePlayByDays('Scrobbles', 40, $user->uniqueid, 300);
+		$smarty->assign('user_daystats', $aUserDayStat);
+	} catch (Exception $e) {}
 
 	try {
 		$smarty->assign('toptracks', $user->getTopTracks(40));
-	} catch (exception $e) {
+	} catch (Exception $e) {
 		$smarty->assign('pageheading', 'Couldn\'t get users top tracks!');
 		$smarty->assign('details', 'User ' . $user->name . ' doesn\'t seem to have scrobbled anything yet.');
 		$smarty->display('error.tpl');
@@ -75,14 +75,14 @@ if(isset($user->name)) {
 	$smarty->assign('extra_head_links', array(
 			array(
 				'rel' => 'meta',
-				'type' => 'application/rdf+xml' ,
+				'type' => 'application/rdf+xml',
 				'title' => 'FOAF',
-				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL()))
+				'href' => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $user->getURL()))
 				)
 		));
 
 	$submenu = user_menu($user, 'Stats');
-        $smarty->assign('submenu', $submenu);
+	$smarty->assign('submenu', $submenu);
 	$smarty->assign('headerfile', 'maxiprofile.tpl');
 
 	$smarty->assign('stats', true);
