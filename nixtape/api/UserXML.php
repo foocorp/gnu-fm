@@ -188,18 +188,26 @@ class UserXML {
 		return $xml;
 	}
 
-	public static function getLovedTracks($u, $limit=50) {
-		
+	public static function getLovedTracks($u, $limit=50, $page=1) {
+		global $adodb;
+
+		$offset = ($page - 1) * $limit;
 		try {
 			$user = new User($u);
-			$res = $user->getLovedTracks($limit);
+			$res = $user->getLovedTracks($limit, $offset);
 		} catch (exception $ex) {
 			return XML::error('error', '7', 'Invalid resource specified');
 		}
 
+		$totalPages = $adodb->GetOne('SELECT COUNT(track) FROM Loved_Tracks WHERE userid = ' . $user->uniqueid);
+		$totalPages = ceil($totalPages / $limit);
+
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$root = $xml->addChild('lovedtracks');
 		$root->addAttribute('user', $user->name);
+		$root->addAttribute('page', $page);
+		$root->addAttribute('perPage', $limit);
+		$root->addAttribute('totalPages', $totalPages);
 
 		foreach($res as &$row) {
 			$track_node = $root->addChild('track', null);
@@ -209,18 +217,26 @@ class UserXML {
 		return $xml;
 	}
 
-	public static function getBannedTracks($u, $limit=50) {
-		
+	public static function getBannedTracks($u, $limit=50, $page=1) {
+		global $adodb;
+
+		$offset = ($page - 1) * $limit;	
 		try {
 			$user = new User($u);
-			$res = $user->getBannedTracks($limit);
+			$res = $user->getBannedTracks($limit, $offset);
 		} catch (exception $ex) {
 			return XML::error('error', '7', 'Invalid resource specified');
 		}
 
+		$totalPages = $adodb->GetOne('SELECT COUNT(track) FROM Banned_Tracks WHERE userid = ' . $user->uniqueid);
+		$totalPages = ceil($totalPages / $limit);
+
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$root = $xml->addChild('bannedtracks');
 		$root->addAttribute('user', $user->name);
+		$root->addAttribute('page', $page);
+		$root->addAttribute('perPage', $limit);
+		$root->addAttribute('totalPages', $totalPages);
 
 		foreach($res as &$row) {
 			$track_node = $root->addChild('track', null);
