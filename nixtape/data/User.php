@@ -389,12 +389,12 @@ class User {
 	 * @param int $limit The number of tracks to return (defaults to 50)
 	 * @return array An array of track details
 	 */
-	function getBannedTracks($limit=50) {
+	function getBannedTracks($limit=50, $offset=0) {
 		global $adodb;
 
 		$res = $adodb->CacheGetAll(600, 'SELECT * FROM Banned_Tracks WHERE '
 			. ' userid = ' . $this->uniqueid . ' ORDER BY time DESC'
-			. ' LIMIT ' . $limit);
+			. ' LIMIT ' . $limit . ' OFFSET ' . $offset);
 
 		return $res;
 	}
