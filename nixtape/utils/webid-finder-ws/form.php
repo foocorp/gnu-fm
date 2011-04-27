@@ -68,7 +68,7 @@ input.wide
 
 <?php
 	if ($_REQUEST['submit']) {
-		require_once 'guts.php';
+		require_once('guts.php');
 
 		switch ($_REQUEST['source']) {
 			case 'laconica':
