@@ -34,7 +34,9 @@ class API {
 		 * @param array $params parameters
 		 * @param array $required required params
 		 */
-		if (empty($required) || empty($params)) return false;
+		if (empty($required) || empty($params)) {
+			return false;
+		}
 		if (count(array_diff_key($params, $required) > 0)) {
 			$this->giveError(6);
 		}
@@ -46,6 +48,6 @@ class API {
 		 */
 
 		global $xml;
-		return (XML::error('failed', $error, $this->api_error[$error]));
+		return XML::error('failed', $error, $this->api_error[$error]);
 	}
 }

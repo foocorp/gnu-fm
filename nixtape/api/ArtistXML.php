@@ -32,7 +32,7 @@ class ArtistXML {
 	 * @param string $lang A 2 character ISO 639 alpha-2 code indicating the language to return the information in
 	 * @return A SimpleXMLElement containing the artist's information
 	 */
-	public static function getInfo($artistName, $api_key=false, $mbid=false, $lang='en') {
+	public static function getInfo($artistName, $api_key = false, $mbid = false, $lang = 'en') {
 		// We assume $api_key is valid and set at this point
 
 		if (!isset($artistName) && !isset($mbid)) {
