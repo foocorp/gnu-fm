@@ -227,13 +227,13 @@ class Album {
 
 			foreach ($search_results['query']['search'] as $id => $page) {
 				switch ($page['title']) {
-				case ($album_name):
+				case $album_name:
 					$weight = 0.5;
 					break;
-				case ("$album_name (album)"):
+				case "$album_name (album)":
 					$weight = 0.75;
 					break;
-				case ("$album_name ($artist_name album)"):
+				case "$album_name ($artist_name album)":
 					$weight = 1;
 					break;
 				default:
