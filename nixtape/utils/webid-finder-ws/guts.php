@@ -1,10 +1,10 @@
 <?php
 
-require '../arc/ARC2.php';
+require('../arc/ARC2.php');
 
 if (!function_exists('json_decode')) {
 	function json_decode($content, $assoc = false) {
-		require_once 'Services/JSON.php';
+		require_once('Services/JSON.php');
 
 		if ($assoc) {
 			$json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
@@ -18,7 +18,7 @@ if (!function_exists('json_decode')) {
 
 if (!function_exists('json_encode')) {
 	function json_encode($content) {
-		require_once 'Services/JSON.php';
+		require_once('Services/JSON.php');
 		$json = new Services_JSON;
 		return $json->encode($content);
 	}
@@ -159,7 +159,7 @@ function getFromFOAF($foaf, $knownHomepage = null, $data = null) {
 		$r = array(
 			'WebID' => $webid,
 			'Pages' => $index[$webid]['http://xmlns.com/foaf/0.1/homepage'],
-			'Name' => $index[$webid]['http://xmlns.com/foaf/0.1/name'][0]
+			'Name'  => $index[$webid]['http://xmlns.com/foaf/0.1/name'][0]
 			);
 
 		if (substr($r['WebID'], 0, 2) == '_:') {
@@ -214,7 +214,7 @@ function getFromGoogleSocialGraphAPI($url) {
 
 	if (substr($canon, 0, 3) == 'sgn') {
 		return array(
-			'WebID' => $canon,
+			'WebID'     => $canon,
 			'Homepages' => array($url)
 			);
 	}
