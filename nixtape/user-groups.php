@@ -56,10 +56,10 @@ $smarty->assign('groups', Group::groupList($user));
 
 $smarty->assign('extra_head_links', array(
 			array(
-				'rel' => 'meta',
-				'type' => 'application/rdf+xml',
+				'rel'   => 'meta',
+				'type'  => 'application/rdf+xml',
 				'title' => 'FOAF',
-				'href' => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $user->getURL('groups')))
+				'href'  => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $user->getURL('groups')))
 				)
 			));
 

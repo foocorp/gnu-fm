@@ -62,27 +62,27 @@ if (isset($user->name)) {
 
 	$smarty->assign('extra_head_links', array(
 				array(
-					'rel'=>'alternate',
-					'type' => 'application/rss+xml',
+					'rel'   => 'alternate',
+					'type'  => 'application/rss+xml',
 					'title' => 'RSS 1.0 Feed (Recent plays)',
-					'href' => $base_url . '/rdf.php?fmt=rss&page=' . urlencode(str_replace($base_url, '', $user->getURL('recent-tracks')))
+					'href'  => $base_url . '/rdf.php?fmt=rss&page=' . urlencode(str_replace($base_url, '', $user->getURL('recent-tracks')))
 					),
 				array(
-					'rel'=>'alternate',
-					'type' => 'application/rss+xml',
+					'rel'   => 'alternate',
+					'type'  => 'application/rss+xml',
 					'title' => 'RSS 1.0 Feed (Journal)',
-					'href' => $user->journal_rss
+					'href'  => $user->journal_rss
 					),
 				array(
-					'rel' => 'meta',
-					'type' => 'application/rdf+xml',
+					'rel'   => 'meta',
+					'type'  => 'application/rdf+xml',
 					'title' => 'FOAF',
-					'href' => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $user->getURL()))
+					'href'  => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $user->getURL()))
 					)
 				));
 
 	$neighbours = $user->getNeighbours(9);
-	if(!empty($neighbours)) {
+	if (!empty($neighbours)) {
 		$smarty->assign('neighbours', $neighbours);
 		$smarty->assign('sideblocks', array('sidebar-neighbours.tpl'));
 	}

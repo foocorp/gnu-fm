@@ -59,14 +59,14 @@ krsort($index); // Newest last.
 $items = array();
 foreach ($index as $subject => $data) {
 	if (in_array('http://purl.org/rss/1.0/item', $data['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'])) {
-		$ts = strtotime($data[ 'http://purl.org/dc/elements/1.1/date' ][0]);
+		$ts = strtotime($data['http://purl.org/dc/elements/1.1/date'][0]);
 		$items[] = array(
 			'subject_uri' => $subject,
-			'title' => $data['http://purl.org/rss/1.0/title'][0],
-			'link' => $data['http://purl.org/rss/1.0/link'][0],
-			'date_iso' => $data['http://purl.org/dc/elements/1.1/date'][0],
-			'date_unix' => $ts,
-			'date_human' => human_timestamp($ts)
+			'title'       => $data['http://purl.org/rss/1.0/title'][0],
+			'link'        => $data['http://purl.org/rss/1.0/link'][0],
+			'date_iso'    => $data['http://purl.org/dc/elements/1.1/date'][0],
+			'date_unix'   => $ts,
+			'date_human'  => human_timestamp($ts)
 			);
 	}
 }
@@ -82,16 +82,16 @@ $smarty->assign('profile', true);
 $smarty->assign('items', $items);
 $smarty->assign('extra_head_links', array(
 			array(
-				'rel'=>'alternate',
-				'type' => 'application/rss+xml',
+				'rel'   => 'alternate',
+				'type'  => 'application/rss+xml',
 				'title' => 'RSS 1.0 Feed (Journal)',
-				'href' => $user->journal_rss
+				'href'  => $user->journal_rss
 				),
 			array(
-				'rel' => 'meta',
-				'type' => 'application/rdf+xml',
+				'rel'   => 'meta',
+				'type'  => 'application/rdf+xml',
 				'title' => 'FOAF',
-				'href' => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $user->getURL()))
+				'href'  => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $user->getURL()))
 				)
 			));
 $smarty->display('user-journal.tpl');

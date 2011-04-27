@@ -63,7 +63,7 @@ $smarty->assign('this_page', $_SERVER['REQUEST_URI']);
 $smarty->assign('this_page_absolute',
 	  (empty($_SERVER['HTTPS']) ? 'http://' : 'http://')
 	. (empty($_SERVER['HOST']) ? $_SERVER['SERVER_NAME'] : $_SERVER['HOST'])
-	. (($_SERVER['SERVER_PORT']==80) ? '' : (':'.$_SERVER['SERVER_PORT']))
+	. (($_SERVER['SERVER_PORT'] == 80) ? '' : (':' . $_SERVER['SERVER_PORT']))
 	. $_SERVER['REQUEST_URI']);
 
 if (isset($logged_in)) {

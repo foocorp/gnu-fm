@@ -32,7 +32,7 @@ if ($logged_in == false) {
 	die();
 }
 
-if ($_REQUEST['group']=='new') {
+if ($_REQUEST['group'] == 'new') {
 	if ($_REQUEST['new']) {
 		try {
 			$result = Group::create(strtolower($_REQUEST['new']), $this_user);

@@ -129,7 +129,7 @@ if (isset($_POST['register'])) {
 		$sql = 'INSERT INTO AccountActivation (username, authcode, expires) VALUES('
 			. $adodb->qstr($username) . ', '
 			. $adodb->qstr($code) . ', '
-			. (time()+(86400*2)) . ')';
+			. (time() + (86400 * 2)) . ')';
 		try {
 			$res = $adodb->Execute($sql);
 		} catch (Exception $e) {
