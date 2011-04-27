@@ -74,8 +74,7 @@ class UserXML {
 		try {
 			$user = new User($username);
 			$res = $user->getTopTracks(20, $timestamp);
-		}
-		catch (Exception $e) {
+		} catch (Exception $e) {
 			$err = 1;
 		}
 
@@ -161,12 +160,12 @@ class UserXML {
 		$album = $track->addChild('album', repamp($row['album']));
 		$album->addAttribute('mbid', $row['album_mbid']);
 		$track->addChild('url', Server::getTrackURL($row['artist'], $row['album'], $row['track']));
-		$date = $track->addChild('date', gmdate("d M Y H:i", $row['time']) . " GMT");
+		$date = $track->addChild('date', gmdate('d M Y H:i', $row['time']) . ' GMT');
 		$date->addAttribute('uts', $row['time']);
 		$track->addChild('streamable', null);
 	}
 
-	public static function getTopTags($u, $limit=10) {
+	public static function getTopTags($u, $limit = 10) {
 		global $base_url;
 
 		try {
@@ -190,7 +189,7 @@ class UserXML {
 		return $xml;
 	}
 
-	public static function getLovedTracks($u, $limit=50) {
+	public static function getLovedTracks($u, $limit = 50) {
 
 		try {
 			$user = new User($u);
@@ -211,7 +210,7 @@ class UserXML {
 		return $xml;
 	}
 
-	public static function getBannedTracks($u, $limit=50) {
+	public static function getBannedTracks($u, $limit = 50) {
 
 		try {
 			$user = new User($u);
@@ -237,7 +236,7 @@ class UserXML {
 		$track_node->addChild('name', repamp($track->name));
 		$track_node->addChild('mbid', $track->mbid);
 		$track_node->addChild('url', $track->getURL());
-		$date = $track_node->addChild('date', gmdate("d M Y H:i", $row['time']) . " GMT");
+		$date = $track_node->addChild('date', gmdate('d M Y H:i', $row['time']) . ' GMT');
 		$date->addAttribute('uts', $row['time']);
 		try {
 			$artist = new Artist($row['artist']);
@@ -248,7 +247,7 @@ class UserXML {
 		} catch (Exception $e) {}
 	}
 
-	public static function getNeighbours($u, $limit=50) {
+	public static function getNeighbours($u, $limit = 50) {
 		try {
 			$user = new User($u);
 			$res = $user->getNeighbours($limit);
@@ -266,7 +265,7 @@ class UserXML {
 
 		$highest_match = $res[0]['shared_artists'];
 
-		foreach($res as $row) {
+		foreach ($res as $row) {
 			$neighbour = $row['user'];
 			$user_node = $root->addChild('user', null);
 			$user_node->addChild('name', repamp($neighbour->name));
