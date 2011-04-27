@@ -37,7 +37,7 @@ try {
 	$user = new User($_GET['user']);
 } catch (Exception $e) {
 	if ($e->getCode() == 22) {
-		echo('We had some trouble locating that user.  Are you sure you spelled it correctly?'."\n");
+		echo('We had some trouble locating that user.  Are you sure you spelled it correctly?' . "\n");
 	} else {
 		echo 'Caught exception: ', $e->getMessage(), "\n";
 	}
@@ -74,10 +74,10 @@ if (isset($user->name)) {
 
 	$smarty->assign('extra_head_links', array(
 			array(
-				'rel' => 'meta',
-				'type' => 'application/rdf+xml',
+				'rel'   => 'meta',
+				'type'  => 'application/rdf+xml',
 				'title' => 'FOAF',
-				'href' => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $user->getURL()))
+				'href'  => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $user->getURL()))
 				)
 		));
 

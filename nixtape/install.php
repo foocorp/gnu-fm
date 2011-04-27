@@ -54,7 +54,7 @@ if (isset($_POST['install'])) {
 	$default_theme = $_POST['default_theme'];
 	$base_url = $_POST['base_url'];
 
-	if ($base_url[strlen($base_url)-1] === '/') {
+	if ($base_url[strlen($base_url) - 1] === '/') {
 		$base_url = substr($base_url, 0, -1);
 	}
 

@@ -19,9 +19,9 @@
 
 */
 
-require_once ('templating.php');
-require_once ('data/User.php');
-require_once ('utils/random_code_generator.php');
+require_once('templating.php');
+require_once('data/User.php');
+require_once('utils/random_code_generator.php');
 
 if ($logged_in == false) {
 	$smarty->assign('pageheading', 'Error!');
@@ -72,7 +72,7 @@ if ($logged_in == false) {
 	$code = generateCode();
 	$username = $this_user->name;
 	$email = $this_user->email;
-	$expire = time()+86400;
+	$expire = time() + 86400;
 	$adodb->Execute('INSERT INTO Delete_Request (code, expires, username) VALUES (' . $adodb->qstr($code) . ', ' . $adodb->qstr($expire) . ',' . $adodb->qstr($username) . ')');
 	$url = $base_url . '/delete-profile.php?code=' . $code;
 	$content = "Hi!\n\nSomeone from the IP address " . $_SERVER['REMOTE_ADDR'] . " requested account deletion at libre.fm.  To remove this account click: \n\n" . $url . "\n\n- The Libre.fm Team";

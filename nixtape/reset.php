@@ -48,7 +48,7 @@ if (isset($_GET['code'])) {
 	$chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
 	for ($i = 0; $i < 8; $i++) {
-		$password .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
+		$password .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
 	}
 
 	$email = $row['email'];
