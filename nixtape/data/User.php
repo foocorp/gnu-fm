@@ -507,13 +507,13 @@ class User {
 	 */
 	function getNeighbours($limit=10) {
 		global $adodb;
-		if(!$this->hasLoved()) {
+		if (!$this->hasLoved()) {
 			return array();
 		}
 
 		$res = $adodb->CacheGetAll(7200, 'SELECT Loved_Tracks.userid AS userid, count(Loved_Tracks.userid) AS shared_artists FROM Loved_Tracks INNER JOIN (SELECT DISTINCT(artist) AS artist FROM Loved_Tracks WHERE userid=' . $this->uniqueid . ') AS Loved_Artists ON Loved_Tracks.artist = Loved_Artists.artist WHERE userid != ' . $this->uniqueid . ' GROUP BY Loved_Tracks.userid ORDER BY shared_artists DESC LIMIT ' . $limit);
 
-		foreach($res as &$neighbour) {
+		foreach ($res as &$neighbour) {
 			$neighbour['user'] = User::new_from_uniqueid_number($neighbour['userid']);
 		}
 

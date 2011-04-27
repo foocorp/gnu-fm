@@ -53,8 +53,7 @@ class Group {
 			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 			try {
 				$res = $adodb->GetRow('SELECT * FROM Groups WHERE lower(groupname) = lower(' . $adodb->qstr($name) . ')');
-			}
-			catch (Exception $e) {
+			} catch (Exception $e) {
 				header('Content-Type: text/plain');
 				exit;
 			}
