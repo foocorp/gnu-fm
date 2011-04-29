@@ -26,7 +26,7 @@ require_once('data/User.php');
 require_once('data/TagCloud.php');
 require_once('data/Server.php');
 
-if(!isset($_GET['user']) && $logged_in == false) {
+if (!isset($_GET['user']) && $logged_in == false) {
 	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'User not set! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
@@ -35,22 +35,22 @@ if(!isset($_GET['user']) && $logged_in == false) {
 
 try {
 	$user = new User($_GET['user']);
-} catch (exception $e) {
+} catch (Exception $e) {
 	$error = 'User not found';
 }
 
-if(isset($user->name)) {
+if (isset($user->name)) {
 
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
 	try {
 		$aUserScrobbles = $user->getScrobbles(10);
 		$smarty->assign('scrobbles', $aUserScrobbles);
-	} catch (exception $e) {}
+	} catch (Exception $e) {}
 	try {
 		$aUserNowPlaying = $user->getNowPlaying(10);
 		$smarty->assign('nowplaying', $aUserNowPlaying);
-	} catch (exception $e) {}
-	if($user->hasLoved()) {
+	} catch (Exception $e) {}
+	if ($user->hasLoved()) {
 		$recommendedArtists = $user->getRecommended(10);
 		$smarty->assign('recommendedArtists', $recommendedArtists);
 		$lovedArtists = $user->getLovedArtists(10);
@@ -62,27 +62,27 @@ if(isset($user->name)) {
 
 	$smarty->assign('extra_head_links', array(
 				array(
-					'rel'=>'alternate',
-					'type' => 'application/rss+xml' ,
+					'rel'   => 'alternate',
+					'type'  => 'application/rss+xml',
 					'title' => 'RSS 1.0 Feed (Recent plays)',
-					'href' => $base_url.'/rdf.php?fmt=rss&page='.urlencode(str_replace($base_url, '', $user->getURL('recent-tracks')))
-				     ),
+					'href'  => $base_url . '/rdf.php?fmt=rss&page=' . urlencode(str_replace($base_url, '', $user->getURL('recent-tracks')))
+					),
 				array(
-					'rel'=>'alternate',
-					'type' => 'application/rss+xml' ,
+					'rel'   => 'alternate',
+					'type'  => 'application/rss+xml',
 					'title' => 'RSS 1.0 Feed (Journal)',
-					'href' => $user->journal_rss
-				     ),
+					'href'  => $user->journal_rss
+					),
 				array(
-					'rel' => 'meta',
-					'type' => 'application/rdf+xml' ,
+					'rel'   => 'meta',
+					'type'  => 'application/rdf+xml',
 					'title' => 'FOAF',
-					'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL()))
-				     )
+					'href'  => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $user->getURL()))
+					)
 				));
 
 	$neighbours = $user->getNeighbours(9);
-	if(!empty($neighbours)) {
+	if (!empty($neighbours)) {
 		$smarty->assign('neighbours', $neighbours);
 		$smarty->assign('sideblocks', array('sidebar-neighbours.tpl'));
 	}

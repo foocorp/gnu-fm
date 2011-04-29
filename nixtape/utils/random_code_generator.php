@@ -18,13 +18,13 @@
 
 */
 
-	/**
-	 * Used for random code generation
-	 *
-	 * @author piotrszulawski
-	 * @return (String) code
-	 */
-	function generateCode() {
-        $code = md5(uniqid(mt_rand(rand(), rand()), true));
-   	    return $code;
-	}
+/**
+ * Used for random code generation
+ *
+ * @author piotrszulawski
+ * @return string code
+ */
+function generateCode() {
+	$code = md5(uniqid(mt_rand(rand(), rand()), true));
+	return $code;
+}

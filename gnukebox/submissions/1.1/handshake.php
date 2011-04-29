@@ -28,16 +28,15 @@ require_once('auth-utils.php');
 require_once('config.php');
 require_once('temp-utils.php');
 
-$supported_protocols = array("1.1");
+$supported_protocols = array('1.1');
 
-
-if(!isset($_GET['p']) || !isset($_GET['u']) || !isset($_GET['c'])) {
+if (!isset($_GET['p']) || !isset($_GET['u']) || !isset($_GET['c'])) {
 	die("FAILED\n");
 }
 
 $protocol = $_GET['p']; $username = $_GET['u']; $client = $_GET['c'];
 
-if(!in_array($protocol, $supported_protocols))  {
+if (!in_array($protocol, $supported_protocols)) {
 	die("FAILED Unsupported protocol version\n");
 }
 
@@ -45,31 +44,27 @@ $timestamp = time();
 
 $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 try {
-	$row = $adodb->GetRow('SELECT uniqueid,password FROM Users WHERE lower(username) = '. $adodb->qstr($username));
+	$row = $adodb->GetRow('SELECT uniqueid,password FROM Users WHERE lower(username) = ' . $adodb->qstr($username));
+} catch (Exception $e) {
+	die('FAILED ' . $e->getMessage() . "\n");
 }
-catch (exception $e) {
-	die("FAILED " . $e->getMessage() . "\n");
-}
-if(!$row) {
+if (!$row) {
 	die("BADUSER\n");
 }
 $password = $row['password'];
 $uniqueid = $row['uniqueid'];
 $session_id = md5($password . $timestamp);
 try {
-$res = $adodb->Execute("INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires) VALUES ("
-	. ($uniqueid) . ","
-	. $adodb->qstr($session_id, "text") . ","
-	. $adodb->qstr($client, "text") . ","
-	. $adodb->qstr(time() + 86400) . ")");
-}
-catch (exception $e) {
-        die("FAILED " . $e->getMessage() . "\n");
+$res = $adodb->Execute('INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires) VALUES ('
+	. ($uniqueid) . ','
+	. $adodb->qstr($session_id, 'text') . ','
+	. $adodb->qstr($client, 'text') . ','
+	. $adodb->qstr(time() + 86400) . ')');
+} catch (Exception $e) {
+	die('FAILED ' . $e->getMessage() . "\n");
 }
 
 echo "UPTODATE\n";
 echo $timestamp . "\n";
 echo $submissions_server . "/submissions/1.2/\n";
 echo "INTERVAL 1\n";
-
-?>

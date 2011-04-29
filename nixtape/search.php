@@ -36,4 +36,4 @@ $smarty->assign('search_term', $search_term);
 $smarty->assign('search_type', $search_type);
 $smarty->assign('results', $results);
 
-$smarty->display("search.tpl");
+$smarty->display('search.tpl');

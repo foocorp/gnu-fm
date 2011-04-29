@@ -29,12 +29,12 @@ $errors = '';
 function sendEmail($text, $email) {
 	$headers = 'From: Libre.fm Reset <recovery@libre.fm>';
 	$subject = 'Libre.fm Password Reset';
-	return(mail($email, $subject, $text, $headers));
+	return mail($email, $subject, $text, $headers);
 }
 
 if (isset($_GET['code'])) {
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-	$sql = 'SELECT * FROM Recovery_Request WHERE code=' . $adodb->qstr($_GET['code']) 
+	$sql = 'SELECT * FROM Recovery_Request WHERE code=' . $adodb->qstr($_GET['code'])
 		. ' AND expires > ' . $adodb->qstr(time());
 	$row = $adodb->GetRow($sql);
 	if (!$row) {
@@ -48,7 +48,7 @@ if (isset($_GET['code'])) {
 	$chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
 	for ($i = 0; $i < 8; $i++) {
-		$password .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
+		$password .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
 	}
 
 	$email = $row['email'];
@@ -63,9 +63,7 @@ if (isset($_GET['code'])) {
 	$sql = 'DELETE FROM Recovery_Request WHERE code=' . $adodb->qstr($email);
 	$adodb->Execute($sql);
 	$smarty->assign('changed', true);
-}
-
-elseif (isset($_POST['user']) || isset($_POST['email'])) {
+} else if (isset($_POST['user']) || isset($_POST['email'])) {
 	if (isset($_POST['email']) && !empty($_POST['email'])) {
 		$field = 'email';
 		$value = $_POST['email'];
@@ -79,8 +77,7 @@ elseif (isset($_POST['user']) || isset($_POST['email'])) {
 
 	try {
 		$row = $adodb->GetRow('SELECT * FROM Users WHERE ' . $field . ' = ' . $adodb->qstr($value));
-	}
-	catch (exception $e) {
+	} catch (Exception $e) {
 		$err = 1;
 	}
 
@@ -92,9 +89,9 @@ elseif (isset($_POST['user']) || isset($_POST['email'])) {
 	}
 	$username = $row['username'];
 	$code = md5($username . $row['email'] . time());
-	
+
 	// If a recovery_request already exists, delete it from the database
-	$sql = 'SELECT COUNT(*) as c FROM Recovery_Request WHERE username =' . 
+	$sql = 'SELECT COUNT(*) as c FROM Recovery_Request WHERE username =' .
 		$adodb->qstr($username);
 	try {
 		$res = $adodb->GetRow($sql);
@@ -103,7 +100,7 @@ elseif (isset($_POST['user']) || isset($_POST['email'])) {
 				$adodb->qstr($username);
 			$adodb->Execute($sql);
 		}
-	} catch (exception $e) {
+	} catch (Exception $e) {
 		$errors .= 'Error on: ' . $sql;
 		$smarty->assign('errors', $errors);
 		$smarty->display('error.tpl');
@@ -118,8 +115,7 @@ elseif (isset($_POST['user']) || isset($_POST['email'])) {
 
 	try {
 		$res = $adodb->Execute($sql);
-	}
-	catch (exception $e) {
+	} catch (Exception $e) {
 		$errors .= 'Error on: ' . $sql;
 		$smarty->assign('errors', $errors);
 		$smarty->display('error.tpl');

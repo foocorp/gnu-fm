@@ -26,18 +26,19 @@ require_once('../../database.php');
 
 <body>
 
-<?php if (isset($_POST['username'], $_POST['api_key'], $_POST['token'])) {
+<?php
+if (isset($_POST['username'], $_POST['api_key'], $_POST['token'])) {
 	// Authenticate the user using the submitted password
 	try {
 		$result = $adodb->GetOne('SELECT username FROM Users WHERE '
 				. 'lower(username) = ' . $adodb->qstr(strtolower($_POST['username'])) . ' AND '
 				. 'password = ' . $adodb->qstr(md5($_POST['password'])));
-	}
-	catch (exception $e) {
+	} catch (Exception $e) {
 		die('Database error');
 	}
-	if (!$result)
+	if (!$result) {
 		die('Authentication failed');
+	}
 
 	// Bind the user to the token and cancel the expiration rule
 	try {
@@ -46,8 +47,7 @@ require_once('../../database.php');
 				. 'expires = 0 '
 				. 'WHERE '
 				. 'token = ' . $adodb->qstr($_POST['token']));
-	}
-	catch (exception $e) {
+	} catch (Exception $e) {
 		die('Database error');
 	}
 	?>
@@ -56,25 +56,25 @@ require_once('../../database.php');
 
 		<p>You may now close the browser.</p>
 
-		<?php } elseif (!isset($_GET['api_key'], $_GET['token'])) { ?>
+<?php } else if (!isset($_GET['api_key'], $_GET['token'])) { ?>
 
 			<p>Must submit an api_key and token to proceed.</p>
 
-				<?php
-		} else {
+<?php
+} else {
 
-			// Ensures the token exists and is not already bound to a user
-			try {
-				$result = $adodb->GetRow('SELECT * FROM Auth WHERE '
-						. 'token = ' . $adodb->qstr($_GET['token']) . ' AND '
-						. 'username IS NULL');
-			}
-			catch (exception $e) {
-				die('Database error');
-			}
-			if (!$result)
-				die('Invalid token');
-			?>
+	// Ensures the token exists and is not already bound to a user
+	try {
+		$result = $adodb->GetRow('SELECT * FROM Auth WHERE '
+				. 'token = ' . $adodb->qstr($_GET['token']) . ' AND '
+				. 'username IS NULL');
+	} catch (Exception $e) {
+		die('Database error');
+	}
+	if (!$result) {
+		die('Invalid token');
+	}
+?>
 
 				<form method="post" action="">
 
@@ -90,7 +90,7 @@ require_once('../../database.php');
 
 				</form>
 
-				<?php } ?>
+<?php } ?>
 
 				</body>
 
