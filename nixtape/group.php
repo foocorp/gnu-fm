@@ -25,7 +25,7 @@ require_once('data/Group.php');
 require_once('data/TagCloud.php');
 require_once('data/Server.php');
 
-?><h1>Groups are disabled</h1><?php 
+?><h1>Groups are disabled</h1><?php
 
 // if (! $_GET['group'])
 // {

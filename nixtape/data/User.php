@@ -41,7 +41,7 @@ class User {
 	 *
 	 * @param string $name The name of the user to load
 	 */
-	function __construct($name, $data=null) {
+	function __construct($name, $data = null) {
 
 		global $base_url;
 		$base = preg_replace('#/$#', '', $base_url);
@@ -52,36 +52,36 @@ class User {
 			global $adodb;
 			$query = 'SELECT * FROM Users WHERE lower(username) = lower(' . $adodb->qstr($name) . ') LIMIT 1';
 			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-			$row = $adodb->CacheGetRow(7200,$query);
+			$row = $adodb->CacheGetRow(7200, $query);
 			if (!$row) {
 				throw new Exception('EUSER', 22);
 			}
 		}
 
 		if (is_array($row)) {
-			$this->name         = $row['username'];
-			$this->password     = $row['password'];
-			$this->email	    = $row['email'];
-			$this->fullname     = $row['fullname'];
-			$this->homepage     = $row['homepage'];
-			$this->bio	    = $row['bio'];
-			$this->location     = $row['location'];
-			$this->location_uri = $row['location_uri'];
-			$this->userlevel    = $row['userlevel'];
-			$this->id           = $row['webid_uri'];
-			$this->webid_uri    = $row['webid_uri'];
-			$this->avatar_uri   = $row['avatar_uri'];
+			$this->name             = $row['username'];
+			$this->password         = $row['password'];
+			$this->email            = $row['email'];
+			$this->fullname         = $row['fullname'];
+			$this->homepage         = $row['homepage'];
+			$this->bio              = $row['bio'];
+			$this->location         = $row['location'];
+			$this->location_uri     = $row['location_uri'];
+			$this->userlevel        = $row['userlevel'];
+			$this->id               = $row['webid_uri'];
+			$this->webid_uri        = $row['webid_uri'];
+			$this->avatar_uri       = $row['avatar_uri'];
 			$this->laconica_profile = $row['laconica_profile'];
-			$this->journal_rss  = $row['journal_rss'];
-			$THIS->acctid       = $this->getURL() . '#acct';
-			$this->created	    = $row['created'];
-			$this->modified     = $row['modified'];
-			$this->uniqueid     = $row['uniqueid'];
-			$this->anticommercial     = $row['anticommercial'];
+			$this->journal_rss      = $row['journal_rss'];
+			$this->acctid           = $this->getURL() . '#acct';
+			$this->created          = $row['created'];
+			$this->modified         = $row['modified'];
+			$this->uniqueid         = $row['uniqueid'];
+			$this->anticommercial   = $row['anticommercial'];
 
 			$this->has_identica = preg_match('#^http://identi\.ca/#i', $this->laconica_profile);
 
-			if (! preg_match('/\:/', $this->id)) {
+			if (!preg_match('/\:/', $this->id)) {
 				$this->id = $this->getURL() . '#me';
 			}
 		}
@@ -94,7 +94,7 @@ class User {
 		$row = $adodb->CacheGetRow(7200, $query);
 
 		if ($row) {
-			try { 
+			try {
 				return new User($row['username'], $row);
 			} catch (Exception $e) {
 				return false;
@@ -166,7 +166,7 @@ class User {
 	 * @param int $offset The position of the first scrobble to return
 	 * @return array An array of scrobbles with human time
 	 */
-	function getScrobbles($number, $offset=0) {
+	function getScrobbles($number, $offset = 0) {
 		$data = Server::getRecentScrobbles($number, $this->uniqueid, $offset);
 
 		if ($data == null) {
@@ -182,7 +182,7 @@ class User {
 	 * @param int $size The desired size of the avatar (between 1 and 512 pixels)
 	 * @return array A URL to the user's avatar image
 	 */
-	function getAvatar($size=64) {
+	function getAvatar($size = 64) {
 		if (!empty($this->avatar_uri)) {
 			return $this->avatar_uri;
 		}
@@ -190,7 +190,7 @@ class User {
 		return 'http://www.gravatar.com/avatar/' . md5(strtolower($this->email)) . '?s=' . $size . '&d=monsterid';
 	}
 
-	function getURL($component='profile') {
+	function getURL($component = 'profile') {
 		return Server::getUserURL($this->name, $component);
 	}
 
@@ -247,16 +247,16 @@ class User {
 	 *
 	 * @return array This user's top 20 tracks
 	 */
-	function getTopTracks($number=20, $since=null) {
+	function getTopTracks($number = 20, $since = null) {
 		global $adodb;
 
 		if ($since) {
-			$query = 'SELECT COUNT(track) as freq, artist, album, track FROM Scrobbles WHERE userid = '.($this->uniqueid).' AND time > '.(int)($since).' GROUP BY artist,album,track ORDER BY freq DESC LIMIT ' . ($number);
+			$query = 'SELECT COUNT(track) as freq, artist, album, track FROM Scrobbles WHERE userid = ' . ($this->uniqueid) . ' AND time > ' . (int)($since) . ' GROUP BY artist,album,track ORDER BY freq DESC LIMIT ' . ($number);
 		} else {
-			$query = 'SELECT COUNT(track) as freq, artist, album, track FROM Scrobbles WHERE userid = '.($this->uniqueid).' GROUP BY artist,album,track ORDER BY freq DESC LIMIT ' . ($number);
+			$query = 'SELECT COUNT(track) as freq, artist, album, track FROM Scrobbles WHERE userid = ' . ($this->uniqueid) . ' GROUP BY artist,album,track ORDER BY freq DESC LIMIT ' . ($number);
 		}
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$data = $adodb->CacheGetAll(7200,$query);
+		$data = $adodb->CacheGetAll(7200, $query);
 		if (!$data) {
 			throw new Exception('ERROR ' . $query);
 		}
@@ -266,7 +266,7 @@ class User {
 		foreach ($data as &$i) {
 			$row = sanitize($i);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
-			$row['trackurl'] = Server::getTrackURL($row['artist'],$row['album'],$row['track']);
+			$row['trackurl'] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
 			if ((int)$row['freq'] > $maxcount) {
 				$maxcount = (int)$row['freq'];
 			}
@@ -274,21 +274,21 @@ class User {
 		}
 
 		if ($maxcount > 0) {
-			foreach($result as &$row) {
-				$row['width']=(int)(300 * ($row['freq']/$maxcount));
+			foreach ($result as &$row) {
+				$row['width'] = (int)(300 * ($row['freq']/$maxcount));
 			}
 		}
 
 		return $result;
 	}
 
-	public function getTotalTracks($since=null) {
+	public function getTotalTracks($since = null) {
 		global $adodb;
 
 		if ($since) {
-			$query = 'SELECT COUNT(*) FROM Scrobbles WHERE userid = '.($this->uniqueid).' AND time > '.(int)($since);
+			$query = 'SELECT COUNT(*) FROM Scrobbles WHERE userid = ' . ($this->uniqueid) . ' AND time > ' . (int)($since);
 		} else {
-			$query = 'SELECT COUNT(*) FROM Scrobbles WHERE userid = '.($this->uniqueid);
+			$query = 'SELECT COUNT(*) FROM Scrobbles WHERE userid = ' . ($this->uniqueid);
 		}
 		try {
 			$tracks = $adodb->CacheGetOne(200, $query);
@@ -305,10 +305,10 @@ class User {
 	 * @param int $limit The number of tags to return (defaults to 10)
 	 * @return array An array of tag details
 	 */
-	function getTopTags($limit=10) {
+	function getTopTags($limit = 10) {
 		global $adodb;
 
-		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM tags WHERE ' 
+		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM tags WHERE '
 			. ' userid = ' . $this->uniqueid
 			. ' GROUP BY tag '
 			. ' LIMIT ' . $limit);
@@ -339,7 +339,7 @@ class User {
 	 * @param int $limit The number of tracks to return (defaults to 50)
 	 * @return array An array of track details
 	 */
-	function getLovedTracks($limit=50, $offset=0) {
+	function getLovedTracks($limit = 50, $offset = 0) {
 		global $adodb;
 
 		$res = $adodb->CacheGetAll(600, 'SELECT * FROM Loved_Tracks WHERE '
@@ -355,7 +355,7 @@ class User {
 	 * @param int $limit The number of artists to return (defaults to 10)
 	 * @return array An array of artist details
 	 */
-	function getLovedArtists($limit=10) {
+	function getLovedArtists($limit = 10) {
 		global $adodb;
 
 		$res = $adodb->CacheGetAll(600, 'SELECT artist, count(artist) as num FROM Loved_Tracks WHERE '
@@ -389,7 +389,7 @@ class User {
 	 * @param int $limit The number of tracks to return (defaults to 50)
 	 * @return array An array of track details
 	 */
-	function getBannedTracks($limit=50, $offset=0) {
+	function getBannedTracks($limit = 50, $offset = 0) {
 		global $adodb;
 
 		$res = $adodb->CacheGetAll(600, 'SELECT * FROM Banned_Tracks WHERE '
@@ -421,7 +421,7 @@ class User {
 	 * @param bool $randomised Pick artists at random
 	 * @return array An array of artist details
 	 */
-	function getRecommended($limit=10, $random=false) {
+	function getRecommended($limit = 10, $random = false) {
 		global $adodb;
 
 		$loved = $this->getLovedTracks(50);
@@ -434,7 +434,7 @@ class User {
 			}
 			$artists[] = $loved[$n]['artist'];
 		}
-		
+
 		$recommendedArtists = array();
 		foreach ($artists as $artist_name) {
 			try {
@@ -507,13 +507,13 @@ class User {
 	 */
 	function getNeighbours($limit=10) {
 		global $adodb;
-		if(!$this->hasLoved()) {
+		if (!$this->hasLoved()) {
 			return array();
 		}
 
 		$res = $adodb->CacheGetAll(7200, 'SELECT Loved_Tracks.userid AS userid, count(Loved_Tracks.userid) AS shared_artists FROM Loved_Tracks INNER JOIN (SELECT DISTINCT(artist) AS artist FROM Loved_Tracks WHERE userid=' . $this->uniqueid . ') AS Loved_Artists ON Loved_Tracks.artist = Loved_Artists.artist WHERE userid != ' . $this->uniqueid . ' GROUP BY Loved_Tracks.userid ORDER BY shared_artists DESC LIMIT ' . $limit);
 
-		foreach($res as &$neighbour) {
+		foreach ($res as &$neighbour) {
 			$neighbour['user'] = User::new_from_uniqueid_number($neighbour['userid']);
 		}
 

@@ -32,7 +32,7 @@ try {
 	die();
 }
 
-if(!isset($this_user) || !$this_user->manages($artist->name)) {
+if (!isset($this_user) || !$this_user->manages($artist->name)) {
 	$smarty->assign('pageheading', 'Permission denied');
 	$smarty->assign('error', 'You don\'t have permission to edit this artist\'s details.');
 	$smarty->display('error.tpl');
@@ -51,15 +51,15 @@ if (isset($_POST['submit'])) {
 
 	if (empty($_POST['image'])) {
 		$image = '';
-	} elseif (!preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['image'])) {
+	} else if (!preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['image'])) {
 		$errors[] = 'Cover image must be a valid URL';
-	} elseif (preg_match('/\s/', $_POST['homepage'])) {
+	} else if (preg_match('/\s/', $_POST['homepage'])) {
 		$errors[] = 'Cover image must be a URL, as such it cannot contain whitespace.';
 	} else {
 		$image = $_POST['image'];
 	}
 
-	if($errors) {
+	if ($errors) {
 		$smarty->assign('errors', $errors);
 		$smarty->assign('image', $image);
 		$smarty->assign('name', $_POST['name']);

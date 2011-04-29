@@ -36,21 +36,27 @@ class TagCloud {
 	 */
 	static function generateTagCloud($table, $field, $limit = 40, $constraint = null, $constrained_field = false, $cache_period = 7200) {
 		global $adodb;
-		if (!is_string($field))          return false;
-		if (!is_string($table))          return false;
-		if (!is_integer($limit))         return false;
+		if (!is_string($field)) {
+			return false;
+		}
+		if (!is_string($table)) {
+			return false;
+		}
+		if (!is_integer($limit)) {
+			return false;
+		}
 		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
-		if($field == 'artist') {
+		if ($field == 'artist') {
 			$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table . ' INNER JOIN artist ON ' . $table . '.' . $field . ' = artist.name '
 				. ' WHERE artist.streamable = 1';
 			$query .= (!is_null($constraint)) ? ' AND ' : null;
 		} else {
 			$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table;
-			$query .= (!is_null($constraint)) ? ' WHERE ' : null;	
+			$query .= (!is_null($constraint)) ? ' WHERE ' : null;
 		}
 		if ($constrained_field) {
-			$query .= (!is_null($constraint)) ? $constrained_field  . ' = ' . $adodb->qstr($constraint) : null;
-		} elseif ($field == 'track') {
+			$query .= (!is_null($constraint)) ? $constrained_field . ' = ' . $adodb->qstr($constraint) : null;
+		} else if ($field == 'track') {
 			$query .= (!is_null($constraint)) ? ' artist = ' . $adodb->qstr($constraint) : null;
 		} else {
 			$query .= (!is_null($constraint)) ? ' userid = ' . $adodb->qstr($constraint) : null;
@@ -61,10 +67,10 @@ class TagCloud {
 		if (!$res) {
 			throw new Exception('ERROR ' . $query);
 		} else {
-			foreach($res as $count => &$i) {
+			foreach ($res as $count => &$i) {
 				$i['size'] = $sizes[(int) ($count/(count($res)/7))];
 			}
-			foreach($res as &$i){
+			foreach ($res as &$i){
 				$i['pageurl'] = Server::getArtistURL($i['artist']);
 			}
 			sort($res);
@@ -79,18 +85,15 @@ class TagCloud {
 	 * @return string Usually 'Scrobbles' or 'Free_Scrobbles'.
 	 * @author tobyink
 	 */
-	static function scrobblesTable ($area = 'main')
-	{
+	static function scrobblesTable($area = 'main') {
 		// This array can be set up in config.php
-		global  $scrobblecloud_table;
+		global $scrobblecloud_table;
 
-		if (!empty($scrobblecloud_table[$area]))
-		{
+		if (!empty($scrobblecloud_table[$area])) {
 			return $scrobblecloud_table[$area];
 		}
 
-		if ($area == 'main')
-		{
+		if ($area == 'main') {
 			return 'Free_Scrobbles';
 		}
 

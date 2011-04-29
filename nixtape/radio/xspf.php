@@ -27,7 +27,7 @@ require_once('radio-utils.php');
 
 // These deaths should probably just return an empty playlist
 
-if(!isset($_GET['sk']) || !isset($_GET['desktop'])) {
+if (!isset($_GET['sk']) || !isset($_GET['desktop'])) {
 	die("BADSESSION\n"); // this should return a blank dummy playlist instead
 }
 

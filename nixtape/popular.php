@@ -30,4 +30,4 @@ try {
 	$smarty->assign('tagcloud', $aTagCloud);
 } catch (Exception $e) {}
 
-$smarty->display("popular.tpl");
+$smarty->display('popular.tpl');
