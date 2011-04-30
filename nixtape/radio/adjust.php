@@ -21,7 +21,7 @@
 require_once('../database.php');
 require_once('radio-utils.php');
 
-if(!isset($_GET['session']) || !isset($_GET['url'])) {
+if (!isset($_GET['session']) || !isset($_GET['url'])) {
 	die("FAILED\n");
 }
 
@@ -30,16 +30,16 @@ $url = $_GET['url'];
 
 $res = $adodb->GetOne('SELECT username FROM Radio_Sessions WHERE session = ' . $adodb->qstr($session));
 
-if(!$res) {
-        die("BADSESSION\n");
+if (!$res) {
+	die("BADSESSION\n");
 }
 
-if(preg_match('@^(globaltags|artist|user)/[^:]+$@', $url, $regs)) {
+if (preg_match('@^(globaltags|artist|user)/[^:]+$@', $url, $regs)) {
 	$url = 'librefm://' . $url; // compensate for shell-fm sending incomplete urls
 }
 
-$stationname=radio_title_from_url($url);
-if($stationname=="FAILED") {
+$stationname = radio_title_from_url($url);
+if ($stationname == 'FAILED') {
 	die("FAILED Unavailable station\n");
 }
 
@@ -47,4 +47,4 @@ $adodb->Execute('UPDATE Radio_Sessions SET url = ' . $adodb->qstr($url) . ' WHER
 
 echo "response=OK\n";
 echo "url=http://libre.fm\n"; // Need to parse the station request and give a real URL
-echo "stationname=" . ($stationname) ."\n";
+echo 'stationname=' . $stationname ."\n";

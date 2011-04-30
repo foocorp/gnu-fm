@@ -26,7 +26,7 @@ require_once('data/Server.php');
 require_once('data/TagCloud.php');
 require_once('artist-menu.php');
 
-if($logged_in == false) {
+if ($logged_in == false) {
 	$smarty->assign('pageheading', 'Log in required');
 	$smarty->assign('details', 'You need to log in to tag artists.');
 	$smarty->display('error.tpl');
@@ -35,9 +35,9 @@ if($logged_in == false) {
 
 try {
 	$artist = new Artist($_GET['artist']);
-} catch (exception $e) {
-        $smarty->assign('pageheading', 'Artist not found.');
-        $smarty->assign('details', 'The artist '.($_GET['artist']).' was not found in the database.');
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Artist not found.');
+	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');
 	$smarty->display('error.tpl');
 	die();
 }
@@ -49,10 +49,10 @@ if ($_POST['tag']) {
 $smarty->assign('name', $artist->name);
 $smarty->assign('pagetitle', $artist->name);
 
-try {  
-	$tagCloud = TagCloud::generateTagCloud('tags', 'tag', 10, $artist->name, "artist");
+try {
+	$tagCloud = TagCloud::generateTagCloud('tags', 'tag', 10, $artist->name, 'artist');
 	$smarty->assign('tagcloud', $tagCloud);
-} catch (exception $ex) {
+} catch (Exception $e) {
 	$tagCloud = array();
 }
 
@@ -62,4 +62,4 @@ $submenu = artist_menu($artist, 'Tag');
 $smarty->assign('submenu', $submenu);
 
 $smarty->assign('headerfile', 'artist-header.tpl');
-$smarty->display("artist-tag.tpl");
+$smarty->display('artist-tag.tpl');

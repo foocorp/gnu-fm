@@ -23,21 +23,21 @@ require_once('config.php');
 require_once('auth.php');
 require_once('smarty/Smarty.class.php');
 
-if(isset($_GET['lang'])) {
+if (isset($_GET['lang'])) {
 	$languages = array($_GET['lang'] . '.UTF-8');
  	setcookie('lang', $_GET['lang'] . '.UTF-8', time() + 31536000, '/');
-} elseif (isset($_COOKIE['lang'])) {
+} else if (isset($_COOKIE['lang'])) {
  	$languages = array($_COOKIE['lang']);
 } else {
 	// Attempt to mangle browser language strings in to valid gettext locales (needs a big lookup table to be 100% accurate)
 	$languages = preg_split('/,/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-	for($i = 0; $i < count($languages); $i++) {
+	for ($i = 0; $i < count($languages); $i++) {
 		$languages[$i] = preg_replace('/;q=\d\.\d/', '', $languages[$i]);
-		if(strlen($languages[$i]) == 2) {
+		if (strlen($languages[$i]) == 2) {
 			$languages[$i] = $languages[$i] . '_' . strtoupper($languages[$i]);
-		} elseif (stristr($languages[$i], '-')) {
+		} else if (stristr($languages[$i], '-')) {
 			$lcomponents = preg_split('/-/', $languages[$i]);
-			$languages[$i] = $lcomponents[0]  . '_' . strtoupper($lcomponents[1]);
+			$languages[$i] = $lcomponents[0] . '_' . strtoupper($lcomponents[1]);
 		}
 
 		$languages[$i] = $languages[$i] . '.UTF-8';
@@ -61,12 +61,12 @@ $smarty->assign('default_theme', $default_theme);
 $smarty->assign('img_url', $base_url . '/themes/' . $default_theme . '/img/');
 $smarty->assign('this_page', $_SERVER['REQUEST_URI']);
 $smarty->assign('this_page_absolute',
-	 (empty($_SERVER['HTTPS']) ? 'http://' : 'http://')
-	.(empty($_SERVER['HOST']) ? $_SERVER['SERVER_NAME'] : $_SERVER['HOST'])
-	.(($_SERVER['SERVER_PORT']==80) ? '' : (':'.$_SERVER['SERVER_PORT']))
+	  (empty($_SERVER['HTTPS']) ? 'http://' : 'http://')
+	. (empty($_SERVER['HOST']) ? $_SERVER['SERVER_NAME'] : $_SERVER['HOST'])
+	. (($_SERVER['SERVER_PORT'] == 80) ? '' : (':' . $_SERVER['SERVER_PORT']))
 	. $_SERVER['REQUEST_URI']);
 
-if(isset($logged_in)) {
+if (isset($logged_in)) {
 	$smarty->assign('logged_in', true);
 	// Pre-fix this user's details with 'this_' to avoid confusion with other users
 	$smarty->assign('this_user', $this_user);

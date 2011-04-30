@@ -48,7 +48,7 @@ function check_standard_auth($username, $token, $timestamp) {
 	global $adodb;
 
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC); // this query should get the uniqueid and then return it on success
-	$pass = $adodb->GetOne('SELECT password FROM Users WHERE lower(username) = lower(' . $adodb->qstr($username) . ')' );
+	$pass = $adodb->GetOne('SELECT password FROM Users WHERE lower(username) = lower(' . $adodb->qstr($username) . ')');
 	if (!$pass) {
 		// TODO: Log failures somewhere
 		return false;

@@ -26,7 +26,7 @@ require_once('data/User.php');
 require_once('data/TagCloud.php');
 require_once('data/Server.php');
 
-if(!isset($_GET['user']) && $logged_in == false) {
+if (!isset($_GET['user']) && $logged_in == false) {
 	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'User not set! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
@@ -43,20 +43,21 @@ try {
 }
 
 $scrobbleCount = (int)$_GET['count'];
-if ($scobbleCount >= 1200)
+if ($scobbleCount >= 1200) {
 	$scrobbleCount = 1200;
-elseif (!$scrobbleCount)
+} else if (!$scrobbleCount) {
 	$scrobbleCount = 100;
+}
 
 $smarty->assign('geo', Server::getLocationDetails($user->location_uri));
 try {
-	$aUserScrobbles = $user->getScrobbles( $scrobbleCount );
+	$aUserScrobbles = $user->getScrobbles($scrobbleCount);
 	$smarty->assign('scrobbles', $aUserScrobbles);
-} catch (exception $e) {}
+} catch (Exception $e) {}
 try {
-$aUserTagCloud =  TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->uniqueid);
-	$smarty->assign('user_tagcloud',$aUserTagCloud);
-} catch (exception $e) {}
+	$aUserTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->uniqueid);
+	$smarty->assign('user_tagcloud', $aUserTagCloud);
+} catch (Exception $e) {}
 $smarty->assign('isme', ($this_user->name == $user->name));
 $smarty->assign('me', $user);
 $smarty->assign('profile', true);
@@ -64,16 +65,16 @@ $smarty->assign('pagetitle', $user->name . '\'s recent tracks');
 
 $smarty->assign('extra_head_links', array(
 		array(
-			'rel'=>'alternate',
-			'type' => 'application/rss+xml' ,
+			'rel'   => 'alternate',
+			'type'  => 'application/rss+xml',
 			'title' => 'RSS 1.0 Feed (Recent plays)',
-			'href' => $base_url.'/rdf.php?fmt=rss&page='.urlencode(str_replace($base_url, '', $user->getURL('recent-tracks')))
+			'href'  => $base_url . '/rdf.php?fmt=rss&page=' . urlencode(str_replace($base_url, '', $user->getURL('recent-tracks')))
 			),
 		array(
-			'rel' => 'meta',
-			'type' => 'application/rdf+xml' ,
+			'rel'   => 'meta',
+			'type'  => 'application/rdf+xml',
 			'title' => 'FOAF',
-			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL()))
+			'href'  => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $user->getURL()))
 			)
 	));
 
