@@ -71,10 +71,7 @@ class Statistic {
 		global $adodb;
 		global $connect_string;
 
-		if (!is_string($table)) {
-			return false;
-		}
-		if (!is_integer($limit)) {
+		if (!is_string($table) || !is_integer($limit)) {
 			return false;
 		}
 
