@@ -36,13 +36,7 @@ class Statistic {
 	 */
 	static function generatePlayStats($table, $field, $limit = 40, $constraint = null, $maxwidth = 100) {
 		global $adodb;
-		if (!is_string($field)) {
-			return false;
-		}
-		if (!is_string($table)) {
-			return false;
-		}
-		if (!is_integer($limit)) {
+		if (!is_string($field) || !is_string($table) || !is_integer($limit)) {
 			return false;
 		}
 		$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table;
