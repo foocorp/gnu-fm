@@ -28,7 +28,7 @@ if (isset($_POST['request'])) {
 	$errors = '';
 	$email = $_POST['email'];
 
-$validator = new EmailAddressValidator();
+	$validator = new EmailAddressValidator();
 	if (!$validator->check_email_address($email)) {
 		$errors .= 'You must enter a valid e-mail address(' . $email . ').<br />';
 	}
