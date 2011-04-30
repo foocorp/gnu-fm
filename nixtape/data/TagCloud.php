@@ -36,13 +36,7 @@ class TagCloud {
 	 */
 	static function generateTagCloud($table, $field, $limit = 40, $constraint = null, $constrained_field = false, $cache_period = 7200) {
 		global $adodb;
-		if (!is_string($field)) {
-			return false;
-		}
-		if (!is_string($table)) {
-			return false;
-		}
-		if (!is_integer($limit)) {
+		if (!is_string($field) || !is_string($table) || !is_integer($limit)) {
 			return false;
 		}
 		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
