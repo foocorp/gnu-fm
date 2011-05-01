@@ -359,7 +359,7 @@ class Server {
 	static function getAlbumURL($artist, $album) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
-			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . urlencode($album);
+			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . rewrite_encode($album);
 		} else {
 			return $base_url . '/album.php?artist=' . urlencode($artist) . '&album=' . urlencode($album);
 		}
@@ -378,9 +378,9 @@ class Server {
 	static function getTrackURL($artist, $album, $track) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls && $album) {
-			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . urlencode($album) . '/track/' . urlencode($track);
+			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . rewrite_encode($album) . '/track/' . rewrite_encode($track);
 		} else if ($friendly_urls) {
-			return $base_url . '/artist/' . rewrite_encode($artist) . '/track/' . urlencode($track);
+			return $base_url . '/artist/' . rewrite_encode($artist) . '/track/' . rewrite_encode($track);
 		} else {
 			return $base_url . '/track.php?artist=' . urlencode($artist) . '&album=' . urlencode($album) . '&track=' . urlencode($track);
 		}
@@ -389,9 +389,9 @@ class Server {
 	static function getTrackEditURL($artist, $album, $track) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls && $album) {
-			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . urlencode($album) . '/track/' . rewrite_encode($track) . '/edit';
+			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . rewrite_encode($album) . '/track/' . rewrite_encode($track) . '/edit';
 		} else if ($friendly_urls) {
-			return $base_url . '/artist/' . rewrite_encode($artist) . '/track/' . urlencode($track) . '/edit';
+			return $base_url . '/artist/' . rewrite_encode($artist) . '/track/' . rewrite_encode($track) . '/edit';
 		} else {
 			return $base_url . '/track-add.php?artist=' . urlencode($artist) . '&album=' . urlencode($album) . '&track=' . urlencode($track);
 		}
