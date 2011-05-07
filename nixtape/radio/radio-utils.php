@@ -227,6 +227,7 @@ function make_playlist($session, $old_format = false) {
 function get_artist_selection($artists, $artist = false) {
 	global $adodb;
 
+	$artistsClause = '( ';
 	if ($artist) {
 		$artistsClause = 'lower(artist_name) = lower(' . $adodb->qstr($artist->name) . ')';
 	}
@@ -237,6 +238,8 @@ function get_artist_selection($artists, $artist = false) {
 		}
 		$artistsClause .= 'lower(artist_name) = lower(' . $adodb->qstr($artists[$r]['artist']) . ')';
 	}
+	$artistsClause .= ' )';
+
 	return $adodb->CacheGetAll(7200, 'SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND ' . $artistsClause);
 }
 
