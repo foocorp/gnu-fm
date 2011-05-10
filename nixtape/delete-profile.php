@@ -58,6 +58,7 @@ if ($logged_in == false) {
 			$adodb->Execute('DELETE FROM User_Relationships WHERE uid2 = ' . $this_user->uniqueid);
 			$adodb->Execute('DELETE FROM Banned_Tracks WHERE userid = ' . $this_user->uniqueid);
 			$adodb->Execute('DELETE FROM Loved_Tracks WHERE userid = ' . $this_user->uniqueid);
+			$adodb->Execute('DELETE FROM Service_Connections WHERE userid = ' . $this_user->uniqueid);
 			$adodb->Execute('DELETE FROM Users WHERE uniqueid = ' . $this_user->uniqueid);
 		} catch (Exception $e) {
 			$smarty->assign('error', 'Error!');
