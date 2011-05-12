@@ -28,15 +28,13 @@ require_once('data/TagCloud.php');
 
 // This should be contextual based on the mode= parameter?
 try {
-$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
-        $smarty->assign('tagcloud', $aTagCloud);
-} catch (exception $e) {}
+	$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
+	$smarty->assign('tagcloud', $aTagCloud);
+} catch (Exception $e) {}
 
 $aTopArtists = Server::getTopArtists(20);
 if (!PEAR::isError ($aTopArtists)) {
-    $smarty->assign('topartists', $aTopArtists);
+	$smarty->assign('topartists', $aTopArtists);
 }
 $smarty->assign('explore', true);
 $smarty->display('explore-artists.tpl');
-
-?>

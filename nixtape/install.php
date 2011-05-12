@@ -24,7 +24,7 @@ require_once('adodb/adodb.inc.php');
 require_once('version.php');
 require_once('utils/get_absolute_url.php');
 
-if(file_exists('config.php')) {
+if (file_exists('config.php')) {
 	die('A configuration file already exists. Please delete <i>config.php</i> if you wish to reinstall.');
 }
 
@@ -32,20 +32,19 @@ if (isset($_POST['install'])) {
 
 	//Get the database connection string
 	$dbms = $_POST['dbms'];
-	if($dbms == 'sqlite') {
-		$filename = $_POST['filename'];
-		$connect_string = 'sqlite:///' . $filename;
+	if ($dbms == 'sqlite') {
+		$filename = urlencode($_POST['filename']);
+		$connect_string = 'sqlite://' . $filename;
 	} else {
 		$connect_string = $dbms . '://' . $_POST['username'] . ':' . $_POST['password'] . '@' . $_POST['hostname'] . ':' . $_POST['port'] . '/' . $_POST['dbname'];
 	}
-	
-	$adodb_connect_string = str_replace('pgsql:', 'postgres:', $connect_string );
+
+	$adodb_connect_string = str_replace('pgsql:', 'postgres:', $connect_string);
 
 	// Check the connection
 	try {
-	$adodb =& NewADOConnection($connect_string);
-	}
-	catch (exception $e) {
+		$adodb =& NewADOConnection($connect_string);
+	} catch (Exception $e) {
 		die($e->getMessage());
 	}
 	$adodb->Close();
@@ -54,6 +53,11 @@ if (isset($_POST['install'])) {
 
 	$default_theme = $_POST['default_theme'];
 	$base_url = $_POST['base_url'];
+
+	if ($base_url[strlen($base_url) - 1] === '/') {
+		$base_url = substr($base_url, 0, -1);
+	}
+
 	$submissions_server = $_POST['submissions_server'];
 
 	//Write out the configuration
@@ -63,7 +67,7 @@ if (isset($_POST['install'])) {
 	$result = fwrite($conf_file, $config);
 	fclose($conf_file);
 
-	if(!$result) {
+	if (!$result) {
 		$print_config = str_replace('<', '&lt;', $config);
 		die('Unable to write to file \'<i>config.php</i>\'. Please create this file and copy the following in to it: <br /><pre>' . $print_config . '</pre>');
 	}
@@ -94,7 +98,7 @@ if (isset($_POST['install'])) {
 
 		<form method="post">
 			<h2>Database</h2>
-			Database Management System: <br />
+			Database Management System (these should be the same connection details as the gnukebox database): <br />
 			<input type="radio" name="dbms" value="sqlite" onclick='showSqlite()' checked>SQLite (use an absolute path)</input><br />
 			<input type="radio" name="dbms" value="mysql" onclick='showNetworkDBMS()'>MySQL</input><br />
 			<input type="radio" name="dbms" value="pgsql" onclick='showNetworkDBMS()'>PostgreSQL</input><br />
@@ -114,8 +118,8 @@ if (isset($_POST['install'])) {
 			Default Theme: <select name="default_theme">
 			<?php
 				$dir = opendir('themes');
-				while($theme = readdir($dir)) {
-					if(is_dir('themes/' . $theme) && $theme[0] != '.')  {
+				while ($theme = readdir($dir)) {
+					if (is_dir('themes/' . $theme) && $theme[0] != '.') {
 						echo '<option>' . $theme . '</option>';
 					}
 				}
@@ -126,5 +130,7 @@ if (isset($_POST['install'])) {
 			<br /><br />
 			<input type="submit" value="Install" name="install" />
 		</form>
+		<br />
+		<div align="center"><a href="http://docs.jurg.no/gnufm_install.txt">Help</a></div>
 	</body>
 </html>

@@ -28,8 +28,8 @@ function username_to_uniqueid($username) {
 
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	try {
-		$uniqueid = $adodb->GetOne('SELECT uniqueid from Users where lower(username) = lower('.$adodb->qstr($username).')');
-	} catch (exception $e) {
+		$uniqueid = $adodb->GetOne('SELECT uniqueid from Users where lower(username) = lower(' . $adodb->qstr($username) . ')');
+	} catch (Exception $e) {
 		return 0;
 	}
 
@@ -41,12 +41,10 @@ function uniqueid_to_username($uniqueid) {
 
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	try {
-		$username = $adodb->GetOne('SELECT username from Users where uniqueid = '.($uniqueid));
-	} catch (exception $e) {
+		$username = $adodb->GetOne('SELECT username from Users where uniqueid = ' . ($uniqueid));
+	} catch (Exception $e) {
 		return "BROKEN($uniqueid)";
 	}
 
 	return $username;
 }
-
-?>

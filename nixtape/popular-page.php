@@ -25,4 +25,3 @@ require_once('data/sanitize.php');
 require_once('data/Server.php');
 
 $smarty->display('popular-page.tpl');
-?>

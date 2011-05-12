@@ -1,4 +1,4 @@
-<?
+<?php
 /* GNU FM -- a free network service for sharing your music listening habits
 
    Copyright (C) 2009 Free Software Foundation, Inc
@@ -22,8 +22,8 @@ function artist_menu($artist, $active_page) {
 	global $this_user;
 
 	$submenu = array(
-		array('name' => 'Overview', 'url' => $artist->getURL()),
-		array('name' => 'Tag', 'url' => $artist->getURL('tag')),
+		array('name' => _('Overview'), 'url' => $artist->getURL()),
+		array('name' => _('Tag'), 'url' => $artist->getURL('tag')),
 	);
 
 	foreach ($submenu as &$item) {
@@ -32,4 +32,3 @@ function artist_menu($artist, $active_page) {
 
 	return $submenu;
 }
-?>

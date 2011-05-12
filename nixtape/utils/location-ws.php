@@ -25,47 +25,46 @@
 // The place being searched for.
 $query = $_GET['q'];
 
-if (!$query)
-{
-	header("Content-Type: text/plain");
+if (!$query) {
+	header('Content-Type: text/plain');
 	die("Must supply a query argument.\r\n");
 }
 
 // The number of results requested
 $num = $_GET['n'];
-if (! $num)
+if (!$num) {
 	$num = 10;
+}
 
 // When translated versions become available, should be able to calculate
 // the language code from the subdomain.
 $lang = 'en';
 
-$uri =  sprintf('http://ws.geonames.org/searchJSON?q=%s&maxRows=%d&lang=%s&style=full',
+$uri = sprintf('http://ws.geonames.org/searchJSON?q=%s&maxRows=%d&lang=%s&style=full',
 	urlencode($query),
 	$num,
 	urlencode($lang));
 
-# We'll try to use cURL if the extension is installed on this server.
-if (function_exists('curl_init'))
-{
-	header("Content-Type: application/json");
+if (function_exists('curl_init')) {
+	# We'll try to use cURL if the extension is installed on this server.
+
+	header('Content-Type: application/json');
 	$ch = curl_init($uri);
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	curl_setopt($ch, CURLOPT_USERAGENT, 'libre.fm');
 	curl_exec($ch);
 	curl_close($ch);
-}
 
-# Otherwise, we'll fall back to direct socket calls. Ugly.
-elseif (function_exists('parse_url'))
-{
+} else if (function_exists('parse_url')) {
+	# Otherwise, we'll fall back to direct socket calls. Ugly.
+
 	$_uri = parse_url($uri);
-	if (! $_uri['port'])
+	if (!$_uri['port']) {
 		$_uri['port'] = 80;
+	}
 
-	if (! ($nh = fsockopen($_uri['host'], $_uri['port'], $errno, $errstr, 20)) )
-	{
-		header("Content-Type: text/plain");
+	if (!($nh = fsockopen($_uri['host'], $_uri['port'], $errno, $errstr, 20))) {
+		header('Content-Type: text/plain');
 		die("Could not open network connection! ($errno - $errstr)\r\n");
 	}
 
@@ -74,9 +73,8 @@ elseif (function_exists('parse_url'))
 		. "User-Agent: libre.fm\r\n"
 		. "Connection: close\r\n\r\n"
 		);
-	header("Content-Type: application/json");
-	while (!feof($nh))
-	{
+	header('Content-Type: application/json');
+	while (!feof($nh)) {
 		$output .= fgets($nh, 128);
 	}
 	fclose($nh);
@@ -84,4 +82,3 @@ elseif (function_exists('parse_url'))
 	// Remove HTTP header.
 	echo substr(strstr($output, "\r\n\r\n"), 4);
 }
-

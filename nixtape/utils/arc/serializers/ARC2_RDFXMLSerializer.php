@@ -1,37 +1,28 @@
 <?php
-/*
-homepage: http://arc.semsol.org/
-license:  http://arc.semsol.org/license
-
-class:    ARC2 RDF/XML Serializer
-author:   Benjamin Nowack
-version:  2009-02-12 (Fix: scheme-detection: scheme must have at least 2 chars, thanks to Eric Schoonover)
+/**
+ * ARC2 RDF/XML Serializer
+ *
+ * @author    Benjamin Nowack
+ * @license   <http://arc.semsol.org/license>
+ * @homepage  <http://arc.semsol.org/>
+ * @package   ARC2
+ * @version   2010-11-16
 */
 
 ARC2::inc('RDFSerializer');
 
 class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_RDFXMLSerializer($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
-  function setDefaultNamespace ($ns) {
-    $this->__defaultPrefix = $ns;
-  }
-
-  function getDefaultNamespace () {
-    return $this->__defaultPrefix;
-  }
-
   function __init() {
     parent::__init();
     $this->content_header = 'application/rdf+xml';
     $this->pp_containers = $this->v('serializer_prettyprint_containers', 0, $this->a);
+    $this->default_ns = $this->v('serializer_default_ns', '', $this->a);
+    $this->type_nodes = $this->v('serializer_type_nodes', 0, $this->a);
   }
 
   /*  */
@@ -45,21 +36,13 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
         return ' rdf:about="' . htmlspecialchars($v) . '"';
       }
       if ($type == 'p') {
-        if ($pn = $this->getPName($v)) {
-          return $pn;
-        }
-        return 0;
+        $pn = $this->getPName($v);
+        return $pn ? $pn : 0;
       }
       if ($type == 'o') {
         $v = $this->expandPName($v);
         if (!preg_match('/^[a-z0-9]{2,}\:[^\s]+$/is', $v)) return $this->getTerm(array('value' => $v, 'type' => 'literal'), $type);
         return ' rdf:resource="' . htmlspecialchars($v) . '"';
-      }
-      if ($type == 'rdftype') {
-	if ($pn = $this->getPName($v)) {
-          return $pn;
-        }
-        return 0;
       }
       if ($type == 'datatype') {
         $v = $this->expandPName($v);
@@ -69,8 +52,8 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
         return ' xml:lang="' . htmlspecialchars($v) . '"';
       }
     }
-    if ($v['type'] != 'literal') {
-      return $this->getTerm($v['value'], $type);
+    if ($this->v('type', '', $v) != 'literal') {
+      return $this->getTerm($v['value'], 'o');
     }
     /* literal */
     $dt = isset($v['datatype']) ? $v['datatype'] : '';
@@ -84,7 +67,15 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
     elseif ($lang) {
       return $this->getTerm($lang, 'lang') . '>' . htmlspecialchars($v['value']);
     }
-    return '>' . htmlspecialchars($v['value']);
+    return '>' . htmlspecialchars($this->v('value', '', $v));
+  }
+
+  function getPName($v, $connector = ':') {
+    if ($this->default_ns && (strpos($v, $this->default_ns) === 0)) {
+      $pname = substr($v, strlen($this->default_ns));
+      if (!preg_match('/\//', $pname)) return $pname;
+    }
+    return parent::getPName($v, $connector);
   }
   
   function getHead() {
@@ -95,11 +86,17 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
     $first_ns = 1;
     foreach ($this->used_ns as $v) {
       $r .= $first_ns ? ' ' : $nl . '  ';
-      $r .= 'xmlns:' . $this->nsp[$v] . '="' .$v. '"';
+      foreach ($this->ns as $prefix => $ns) {
+        if ($ns != $v) continue;
+        $r .= 'xmlns:' . $prefix . '="' .$v. '"';
+        break;
+      }
       $first_ns = 0;
     }
-    if ($this->__defaultPrefix)
-      $r .= $nl . '  xmlns="' . htmlentities($this->__defaultPrefix) . '"';
+    if ($this->default_ns) {
+      $r .= $first_ns ? ' ' : $nl . '  ';
+      $r .= 'xmlns="' . $this->default_ns . '"';
+    }
     $r .= '>';
     return $r;
   }
@@ -118,54 +115,35 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
       $r .= $r ? $nl . $nl : '';
       $s = $this->getTerm($raw_s, 's');
       $tag = 'rdf:Description';
+      list($tag, $ps) = $this->getNodeTag($ps);
       $sub_ps = 0;
       /* pretty containers */
       if ($this->pp_containers && ($ctag = $this->getContainerTag($ps))) {
         $tag = 'rdf:' . $ctag;
         list($ps, $sub_ps) = $this->splitContainerEntries($ps);
       }
-      $innards = '';
-      $used_type = false;
+      $r .= '  <' . $tag . '' .$s . '>';
       $first_p = 1;
       foreach ($ps as $p => $os) {
         if (!$os) continue;
-        if ($p = $this->getTerm($p, 'p')) {
-          $innards .= $nl . str_pad('', 4);
+        $p = $this->getTerm($p, 'p');
+        if ($p) {
+          $r .= $nl . str_pad('', 4);
           $first_o = 1;
           if (!is_array($os)) {/* single literal o */
             $os = array(array('value' => $os, 'type' => 'literal'));
           }
-          foreach ($os as $o1) {
-            $o = $this->getTerm($o1, 'o');
-            $innards .= $first_o ? '' : $nl . '    ';
-            $innards .= '<' . $p;
-            $innards .= $o;
-            $innards .= preg_match('/\>/', $o) ? '</' . $p . '>' : '/>'; 
+          foreach ($os as $o) {
+            $o = $this->getTerm($o, 'o');
+            $r .= $first_o ? '' : $nl . '    ';
+            $r .= '<' . $p;
+            $r .= $o;
+            $r .= preg_match('/\>/', $o) ? '</' . $p . '>' : '/>'; 
             $first_o = 0;
-	    // This bit creates rdf:type element names instead of using <rdf:Description>.
-            if ($p == 'rdf:type') {
-	      $type = $this->getTerm($o1, 'rdftype');
-	      if (! $type) {
-	        // no-op
-	      }
-	      elseif ($tag=='rdf:Description') {
-	        $tag = $type;
-		$used_type = is_array($o1) ? $o1['value'] : $o1;
-	      }
-	      elseif (strpos($type, ':')===false) {
-	        $tag = $type;
-		$used_type = is_array($o1) ? $o1['value'] : $o1;
-	      }
-	    }
           }
           $first_p = 0;
         }
       }
-      // Prevent duplicated information. A little ugly perhaps.
-      if ($used_type !== false)
-        $innards = str_replace('    <rdf:type rdf:resource="'.$used_type."\"/>\n", '', $innards);
-      $r .= '  <' . $tag . '' .$s . '>';
-      $r .= $innards;
       $r .= $r ? $nl . '  </' . $tag . '>' : '';
       if ($sub_ps) $r .= $nl . $nl . $this->getSerializedIndex(array($raw_s => $sub_ps), 1);
     }
@@ -173,6 +151,17 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
       return $r;
     }
     return $this->getHead() . $nl . $nl . $r . $this->getFooter();
+  }
+
+  function getNodeTag($ps) {
+    if (!$this->type_nodes) return array('rdf:Description', $ps);
+    $rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+    $types = $this->v($rdf . 'type', array(), $ps);
+    if (!$types) return array('rdf:Description', $ps);
+    $type = array_shift($types);
+    $ps[$rdf . 'type'] = $types;
+    if (!is_array($type)) $type = array('value' => $type);
+    return array($this->getPName($type['value']), $ps);
   }
 
   /*  */

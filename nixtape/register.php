@@ -23,31 +23,23 @@ require_once('database.php');
 require_once('templating.php');
 require_once('utils/EmailAddressValidator.php');
 
-if($logged_in == true){
+if ($logged_in == true) {
 	header('Location: index.php');
-} else {
+	exit();
+}
 
-// Moving to open alpha
-/*$authcode = $_GET["authcode"];
-
-$res = $adodb->GetRow('SELECT inviter FROM Invitations WHERE code = ' . $adodb->qstr($authcode));
-if(!$res) {
-	$invalid_authcode = true;
-} else {
-	$invalid_authcode = false;
-}*/
 function sendEmail($text, $email) {
-        $headers = 'From: Libre.fm Account Activation <account@libre.fm>';
+	$headers = 'From: Libre.fm Account Activation <account@libre.fm>';
 	$subject = 'Libre.fm Account Activation - Action needed!';
 	mail($email, $subject, $text, $headers);
 }
-if(isset($_GET['auth'])) {
+
+if (isset($_GET['auth'])) {
 	$authcode = $_GET['auth'];
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	try {
-	$row = $adodb->GetRow('SELECT * FROM AccountActivation WHERE authcode = ' . $adodb->qstr($authcode));
-	}
-	catch (exception $e) {
+		$row = $adodb->GetRow('SELECT * FROM AccountActivation WHERE authcode = ' . $adodb->qstr($authcode));
+	} catch (Exception $e) {
 		$errors = 'Unknown activationcode.';
 		$smarty->assign('errors', $errors);
 		$smarty->display('error.tpl');
@@ -59,19 +51,18 @@ if(isset($_GET['auth'])) {
 	try {
 		$res = $adodb->Execute($sql_update);
 		$res = $adodb->Execute($sql_delete);
-	}
-	catch (exception $e) {
+	} catch (Exception $e) {
 		$errors = 'An error occurred.';
-		$details =  $e->getMessage();
+		$details = $e->getMessage();
 		$smarty->assign('pageheading', $errors);
 		$smarty->assign('details', $details);
 		$smarty->display('error.tpl');
-	    	die();
+		die();
 	}
 	$smarty->assign('activated', true);
 }
 
-if(isset($_POST['register'])) {
+if (isset($_POST['register'])) {
 
 	$errors = '';
 	$username = $_POST['username'];
@@ -84,36 +75,35 @@ if(isset($_POST['register'])) {
 
 
 	//Basic validation
-	if(!preg_match('/^[a-zA-Z0-9][a-zA-Z0-9_-]{1,14}[a-zA-Z0-9]$/', $username)) {
+	if (!preg_match('/^[a-zA-Z0-9][a-zA-Z0-9_-]{1,14}[a-zA-Z0-9]$/', $username)) {
 		$errors .= 'Your username must be at least 3 characters in length (max 16) and only consist of <i>a-z, A-Z, 0-9</i> and _ (underscore), and may not begin or end with an underscore.<br />';
 	}
-	if(empty($password)) {
+	if (empty($password)) {
 		$errors .= 'You must enter a password.<br />';
 	}
-	if($password != $passwordrepeat) {
+	if ($password != $passwordrepeat) {
 		$errors .= 'Your passwords do not match.<br />';
 	}
-	if(empty($email)) {
+	if (empty($email)) {
 		$errors .= 'You must enter an e-mail address.<br />';
 	} else {
-	    $validator = new EmailAddressValidator();
-	    if (!$validator->check_email_address($email)) {
-		$errors .= 'You must provide a valid email address!<br />';
-	    }
+		$validator = new EmailAddressValidator();
+		if (!$validator->check_email_address($email)) {
+			$errors .= 'You must provide a valid email address!<br />';
+		}
 	}
 
 	//Check this username is available
 	try {
-		$res = $adodb->GetOne('SELECT username FROM Users WHERE lower(username) = ' . $adodb->qstr(strtolower($username)));
-	}
-	catch (exception $e) {
+		$res = $adodb->GetOne('SELECT username FROM Users WHERE lower(username) = lower(' . $adodb->qstr($username) . ')');
+	} catch (Exception $e) {
 		$errors .= 'Database error.<br />';
 	}
-	if($res) {
+	if ($res) {
 		$errors .= 'Sorry, that username is already registered.<br />';
 	}
 
-	if(empty($errors)) {
+	if (empty($errors)) {
 		// Create the user
 		$sql = 'INSERT INTO Users (username, password, email, fullname, bio, location, created, active) VALUES ('
 			. $adodb->qstr($username) . ', '
@@ -121,51 +111,45 @@ if(isset($_POST['register'])) {
 			. $adodb->qstr($email) . ', '
 			. $adodb->qstr($fullname) . ', '
 			. $adodb->qstr($bio) . ', '
-			. $adodb->qstr($location) . ', ' 
+			. $adodb->qstr($location) . ', '
 			. time() . ', 0)';
 		try {
-		$insert = $adodb->Execute($sql);
-		}
-		catch (exception $e) {
-		    reportError('Create user, insert, register.php', $e->getMessage());
-		    $errors .= 'An error occurred.'; 
-		    $details = $e->getMessage();
-		    $smarty->assign('pageheading', $errors);
-		    $smarty->assign('details', $details);
-		    $smarty->display('error.tpl');
-		    die();
+			$insert = $adodb->Execute($sql);
+		} catch (Exception $e) {
+			reportError('Create user, insert, register.php', $e->getMessage());
+			$errors .= 'An error occurred.';
+			$details = $e->getMessage();
+			$smarty->assign('pageheading', $errors);
+			$smarty->assign('details', $details);
+			$smarty->display('error.tpl');
+			die();
 		}
 
 		$code = md5($username . time());
 		$sql = 'INSERT INTO AccountActivation (username, authcode, expires) VALUES('
 			. $adodb->qstr($username) . ', '
 			. $adodb->qstr($code) . ', '
-			. (time()+(86400*2)) . ')';
+			. (time() + (86400 * 2)) . ')';
 		try {
 			$res = $adodb->Execute($sql);
-		}
-		catch (exception $e) {
-		    reportError('AccountActivation, insert, register.php', $e->getMessage());
-		    $errors .= 'An error occurred.';
-		    $details = $e->getMessage();
-		    $smarty->assign('pageheading', $errors);
-		    $smarty->assign('details', $details);
-		    $smarty->display('error.tpl');
-		    die();
+		} catch (Exception $e) {
+			reportError('AccountActivation, insert, register.php', $e->getMessage());
+			$errors .= 'An error occurred.';
+			$details = $e->getMessage();
+			$smarty->assign('pageheading', $errors);
+			$smarty->assign('details', $details);
+			$smarty->display('error.tpl');
+			die();
 		}
 
 		$url = $base_url . '/register.php?auth=' . $code;
 		$content = "Hi!\n\nSomeone registered an account "
-		    . "at http://alpha.libre.fm. If this was you, please visit the webpage specified below to activate "
-		    . "your account within 48 hours, after which time all information provided by you and "
-		    . "your activation code will be permanently deleted from our database. If you do not want to activate your account, "
-		    . "please disregard this email.\n\n" . $url . "\n\n- The Libre.fm Team";
+			. "at http://alpha.libre.fm. If this was you, please visit the webpage specified below to activate "
+			. "your account within 48 hours, after which time all information provided by you and "
+			. "your activation code will be permanently deleted from our database. If you do not want to activate your account, "
+			. "please disregard this email.\n\n" . $url . "\n\n- The Libre.fm Team";
 		sendEmail($content, $email);
 
-		// Remove auth code and set their username as the invitee
-		//$adodb->Execute("UPDATE Invitations SET code = NULL, invitee = " . $adodb->qstr($username) . " WHERE code = " . $adodb->qstr($authcode));
-		//$removesql = "DELETE FROM Invitation_Request WHERE email=" . $adodb->qstr($email);
-		//$adodb->Execute($removesql);
 		$smarty->assign('registered', true);
 	} else {
 		$smarty->assign('username', $username);
@@ -176,9 +160,5 @@ if(isset($_POST['register'])) {
 		$smarty->assign('errors', $errors);
 	}
 }
-//$smarty->assign("invalid_authcode", $invalid_authcode);
-//$smarty->assign("authcode", $authcode);
 
 $smarty->display('register.tpl');
-}
-?>

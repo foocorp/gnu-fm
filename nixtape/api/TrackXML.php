@@ -27,8 +27,8 @@ class TrackXML {
 	public static function addTags($userid, $artist, $album, $track, $tags) {
 		global $adodb;
 
-		$tags = split(",", strtolower($tags));
-		foreach($tags as $tag) {
+		$tags = explode(',', strtolower($tags));
+		foreach ($tags as $tag) {
 			$tag = trim($tag);
 			if (strlen($tag) == 0) {
 				continue;
@@ -40,7 +40,7 @@ class TrackXML {
 					. $adodb->qstr($album) . ', '
 					. $adodb->qstr($track) . ', '
 					. $userid . ')');
-			} catch (exception $ex) {}
+			} catch (Exception $e) {}
 		}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
@@ -58,7 +58,7 @@ class TrackXML {
 		$root->addAttribute('artist', $artist);
 		$root->addAttribute('track', $name);
 
-		foreach($tags as &$tag) {
+		foreach ($tags as &$tag) {
 			$tag_node = $root->addChild('tag', null);
 			$tag_node->addChild('name', repamp($tag['tag']));
 			$tag_node->addChild('count', $tag['freq']);
@@ -79,7 +79,7 @@ class TrackXML {
 		$root->addAttribute('artist', $artist);
 		$root->addAttribute('track', $name);
 
-		foreach($tags as $tag) {
+		foreach ($tags as $tag) {
 			$tag_node = $root->addChild('tag', null);
 			$tag_node->addChild('name', repamp($tag));
 			$tag_node->addChild('url', Server::getTagURL($row['tag']));
@@ -96,8 +96,8 @@ class TrackXML {
 				. $userid . ', '
 				. $adodb->qstr($name) . ', '
 				. $adodb->qstr($artist) . ', '
-				. time() . ")");
-		} catch (exception $ex) {}
+				. time() . ')');
+		} catch (Exception $e) {}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 
@@ -112,8 +112,8 @@ class TrackXML {
 				. $userid . ', '
 				. $adodb->qstr($name) . ', '
 				. $adodb->qstr($artist) . ', '
-				. time() . ")");
-		} catch (exception $ex) {}
+				. time() . ')');
+		} catch (Exception $e) {}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 
@@ -124,8 +124,8 @@ class TrackXML {
 		global $adodb;
 
 		try {
-			$res = $adodb->Execute('DELETE FROM banned_tracks WHERE userid=' . $userid . ' AND track=' . $adodb->qstr($name) . ' AND artist=' . $adodb->qstr($artist) );
-		} catch (exception $ex) {}
+			$res = $adodb->Execute('DELETE FROM banned_tracks WHERE userid=' . $userid . ' AND track=' . $adodb->qstr($name) . ' AND artist=' . $adodb->qstr($artist));
+		} catch (Exception $e) {}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 
@@ -137,8 +137,8 @@ class TrackXML {
 		global $adodb;
 
 		try {
-			$res = $adodb->Execute('DELETE FROM loved_tracks WHERE userid='	. $userid . ' AND track=' . $adodb->qstr($name) . ' AND artist=' . $adodb->qstr($artist) );
-		} catch (exception $ex) {}
+			$res = $adodb->Execute('DELETE FROM loved_tracks WHERE userid='	. $userid . ' AND track=' . $adodb->qstr($name) . ' AND artist=' . $adodb->qstr($artist));
+		} catch (Exception $e) {}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 
@@ -147,4 +147,3 @@ class TrackXML {
 
 
 }
-?>

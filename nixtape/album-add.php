@@ -19,12 +19,26 @@
 
 */
 
-
 require_once('database.php');
 require_once('templating.php');
 require_once('data/Album.php');
 
-$artist = new Artist(urldecode($_GET['artist']));
+try {
+	$artist = new Artist($_GET['artist']);
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Artist not found.');
+	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');
+	$smarty->display('error.tpl');
+	die();
+}
+
+if (!isset($this_user) || !$this_user->manages($artist->name)) {
+	$smarty->assign('pageheading', 'Permission denied');
+	$smarty->assign('error', 'You don\'t have permission to edit this artist\'s details.');
+	$smarty->display('error.tpl');
+	die();
+}
+
 
 $smarty->assign('artist', $artist);
 $smarty->assign('pageheading', '<a href="' . $artist->getURL() . '">' . $artist->name . '</a> &mdash; Add Album');
@@ -37,15 +51,15 @@ if (isset($_POST['submit'])) {
 
 	if (empty($_POST['image'])) {
 		$image = '';
-	} elseif (!preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['image'])) {
+	} else if (!preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['image'])) {
 		$errors[] = 'Cover image must be a valid URL';
-	} elseif (preg_match('/\s/', $_POST['homepage'])) {
+	} else if (preg_match('/\s/', $_POST['homepage'])) {
 		$errors[] = 'Cover image must be a URL, as such it cannot contain whitespace.';
 	} else {
 		$image = $_POST['image'];
 	}
 
-	if($errors) {
+	if ($errors) {
 		$smarty->assign('errors', $errors);
 		$smarty->assign('image', $image);
 		$smarty->assign('name', $_POST['name']);
@@ -56,5 +70,3 @@ if (isset($_POST['submit'])) {
 	}
 }
 $smarty->display('album-add.tpl');
-
-?>

@@ -25,22 +25,18 @@ require_once('data/User.php');
 require_once('data/TagCloud.php');
 require_once('data/Server.php');
 
-if(!isset($_GET['alpha'])) {
+if (!isset($_GET['alpha'])) {
+	$alpha = 'a';
+} else {
+	$alpha = $_GET['alpha'];
+}
 
-  $alpha = 'a';
-
- } else {
-
-  $alpha = $_GET['alpha'];
-
- }
-
-$users = Server::getUserList($alpha);
-
-echo $users;
+try {
+	$users = Server::getUserList($alpha);
+} catch (Exception $e) {
+	$users = array();
+}
 
 $smarty->assign('userlist', $users);
 
 $smarty->display('user-list.tpl');
-
-?>

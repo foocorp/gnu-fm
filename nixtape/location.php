@@ -25,15 +25,15 @@ require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/User.php');
 
-if ( strtolower(substr($connect_string, 0, 5)) == 'mysql' )
+if (strtolower(substr($connect_string, 0, 5)) == 'mysql') {
 	$random = 'RAND';
-elseif ( strtolower(substr($connect_string, 0, 5)) == 'mssql' )
+} else if (strtolower(substr($connect_string, 0, 5)) == 'mssql') {
 	$random = 'NEWID';  // I don't think we try to support MSSQL, but here's how it's done theoretically anyway
-else
+} else {
 	$random = 'RANDOM';  // postgresql, sqlite, possibly others
+}
 
-if ($_REQUEST['country'])
-{
+if ($_REQUEST['country']) {
 	$q = sprintf('SELECT u.* FROM Users u INNER JOIN Places p ON u.location_uri=p.location_uri AND p.country=%s ORDER BY %s() LIMIT 100',
 		$adodb->qstr(strtoupper($_REQUEST['country'])),
 		$random);
@@ -41,14 +41,16 @@ if ($_REQUEST['country'])
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	$res = $adodb->GetAll($q);
 
-	foreach($res as &$row) {
-		$userlist[] = new User($row['username'], $row);
+	foreach ($res as &$row) {
+		try {
+			$userlist[] = new User($row['username'], $row);
+		} catch (Exception $e) {}
 	}
 
 	$smarty->assign('country', strtoupper($_REQUEST['country']));
 	$row = $adodb->GetRow(sprintf('SELECT * FROM Countries WHERE country=%s LIMIT 1',
 		$adodb->qstr(strtoupper($_REQUEST['country']))));
-	if ( $row ) {
+	if ($row) {
 		$smarty->assign('country_info', $row);
 	}
 
@@ -56,18 +58,15 @@ if ($_REQUEST['country'])
 
 	$smarty->assign('extra_head_links', array(
 			array(
-				'rel' => 'meta',
-				'type' => 'application/rdf+xml' ,
+				'rel'   => 'meta',
+				'type'  => 'application/rdf+xml',
 				'title' => 'FOAF',
-				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $_SERVER['REQUEST_URI']))
+				'href'  => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $_SERVER['REQUEST_URI']))
 				)
 		));
 
 	$smarty->display('location-country.tpl');
-}
-
-else
-{
+} else {
 	$smarty->assign('pageheading', 'Location not found');
 	$smarty->assign('details', 'Shall I call in a missing locations report?');
 	$smarty->display('error.tpl');

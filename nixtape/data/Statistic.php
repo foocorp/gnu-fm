@@ -22,22 +22,23 @@ require_once($install_path . '/database.php');
 require_once($install_path . '/data/Server.php');
 
 class Statistic {
+
 	/*
 	 * returns an array counting appareances of a given field and his corresponding bargraph size
 	 * @param string $table table name to be queried
 	 * @param string $field field name to count
 	 * @param integer $limit limit of the query
 	 * @param string $constraint username or artistname depending on field
-	 * @param integer $maxwidth bargraph max width ( to express visually the number of plays )
+	 * @param integer $maxwidth bargraph max width (to express visually the number of plays)
 	 * inaccurate @param integer $sizes quantity of possible sizes
 	 * inaccurate @param float $max_font_size maximum font size (px, em, %, etc)
 	 * @return array playstats
 	 */
-	static function generatePlayStats($table, $field, $limit = 40, $constraint = null, $maxwidth = 100 ) {
+	static function generatePlayStats($table, $field, $limit = 40, $constraint = null, $maxwidth = 100) {
 		global $adodb;
-		if (!is_string($field))          return false;
-		if (!is_string($table))          return false;
-		if (!is_integer($limit))         return false;
+		if (!is_string($field) || !is_string($table) || !is_integer($limit)) {
+			return false;
+		}
 		$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table;
 		$query .= (!is_null($constraint)) ? ' WHERE ' : null;
 		if ($field == 'track') {
@@ -49,8 +50,7 @@ class Statistic {
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
 			$res = $adodb->GetAll($query);
-		}
-		catch (exception $e) {
+		} catch (Exception $e) {
 			echo('ERROR' . $e->getMessage());
 		}
 		if (!$res) {
@@ -58,27 +58,30 @@ class Statistic {
 		} else {
 			$max = $res[0]['count'];
 
-			foreach($res as &$i){
+			foreach ($res as &$i){
 				$i['pageurl'] = Server::getArtistURL($i['artist']);
-				$i['size'] = $i['count'] / $max * $maxwidth;
+				$i['size'] = round($i['count'] / $max * $maxwidth);
 			}
 
 			return $res;
 		}
 	}
 
-	static function generatePlayByDays($table, $limit = 100, $constraint = null, $maxwidth = 100 ) {
+	static function generatePlayByDays($table, $limit = 100, $constraint = null, $maxwidth = 100) {
 		global $adodb;
 		global $connect_string;
 
-		if (!is_string($table))          return false;
-		if (!is_integer($limit))         return false;
+		if (!is_string($table) || !is_integer($limit)) {
+			return false;
+		}
 
 		/*
 		 * todo: completly remove this dirty db type check.
 		 */
 		$query = 'SELECT COUNT(*) as count, DATE(TO_TIMESTAMP(time)) as date FROM ' . $table;
-		if( strpos($connect_string , 'mysql' ) === 0 ) $query = 'SELECT COUNT(*) as count,DATE(FROM_UNIXTIME(time)) as date FROM ' .  $table;
+		if (strpos($connect_string, 'mysql') === 0) {
+			$query = 'SELECT COUNT(*) as count,DATE(FROM_UNIXTIME(time)) as date FROM ' . $table;
+		}
 
 		$query .= (!is_null($constraint)) ? ' WHERE ' : null;
 		$query .= (!is_null($constraint)) ? ' userid = ' . ($constraint) : null;
@@ -86,8 +89,7 @@ class Statistic {
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
 			$res = $adodb->GetAll($query);
-		}
-		catch (exception $e) {
+		} catch (Exception $e) {
 			echo('ERROR' . $e->getMessage());
 		}
 		if (!$res) {
@@ -95,16 +97,17 @@ class Statistic {
 		} else {
 			$max = 0;
 
-			foreach($res as &$i){
-				if( $i['count'] > $max ) $max =  $i['count'];
+			foreach ($res as &$i){
+				if ($i['count'] > $max) {
+					$max = $i['count'];
+				}
 			}
 
-			foreach($res as &$i){
-				$i['size'] = $i['count'] / $max * $maxwidth;
+			foreach ($res as &$i){
+				$i['size'] = round($i['count'] / $max * $maxwidth);
 			}
 
 			return $res;
 		}
 	}
 }
-?>

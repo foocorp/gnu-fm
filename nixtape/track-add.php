@@ -26,18 +26,33 @@ require_once('data/Album.php');
 require_once('data/Track.php');
 require_once('utils/licenses.php');
 
-$artist = new Artist(urldecode($_GET['artist']));
-$album = new Album(urldecode($_GET['album']), $artist->name);
+try {
+	$artist = new Artist($_GET['artist']);
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Artist not found.');
+	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');
+	$smarty->display('error.tpl');
+	die();
+}
+
+$album = new Album($_GET['album'], $artist->name);
+
+if (!isset($this_user) || !$this_user->manages($artist->name)) {
+	$smarty->assign('pageheading', 'Permission denied');
+	$smarty->assign('error', 'You don\'t have permission to edit this artist\'s details.');
+	$smarty->display('error.tpl');
+	die();
+}
 
 $edit = false;
-if(isset($_GET['track'])) {
+if (isset($_GET['track'])) {
 	$edit = true;
-	$track = new Track(urldecode($_GET['track']), $artist->name);
+	$track = new Track($_GET['track'], $artist->name);
 }
 
 $smarty->assign('artist', $artist);
 $smarty->assign('edit', $edit);
-if($edit) {
+if ($edit) {
 	$name = $track->name;
 	$smarty->assign('name', $name);
 	$smarty->assign('streaming_url', $track->streamurl);
@@ -48,7 +63,7 @@ if($edit) {
 
 if (isset($_POST['submit'])) {
 
-	if(!$edit) {
+	if (!$edit) {
 		if (empty($_POST['name'])) {
 			$errors[] = 'A track name must be specified.';
 		}
@@ -58,7 +73,7 @@ if (isset($_POST['submit'])) {
 	if (empty($_POST['streaming_url'])) {
 		$errors[] = 'A streaming URL must be specified.';
 	}
-	$streaming_url = $_POST['streaming_url'];	
+	$streaming_url = $_POST['streaming_url'];
 	if (substr($streaming_url, 0, 7) != 'http://') {
 		$streaming_url = 'http://' . $streaming_url;
 	}
@@ -69,7 +84,7 @@ if (isset($_POST['submit'])) {
 		// Check we've been given correct file types
 		$finfo = new finfo(FILEINFO_MIME_TYPE);
 		$type = $finfo->buffer(file_get_contents($streaming_url, false, null, -1, 12));
-		if($type != 'application/ogg') {
+		if ($type != 'application/ogg') {
 			$errors[] = 'File must be in Ogg Vorbis format.';
 		}
 
@@ -79,23 +94,23 @@ if (isset($_POST['submit'])) {
 		try {
 			$meta = simplexml_load_file($meta_url);
 			$license = $meta->licenseurl;
-			if(!is_free_license($license)) {
+			if (!is_free_license($license)) {
 				$errors[] = 'Sorry, we don\'t recognise the license that this item is under as being free enough. We currently support CC-0, CC-BY, CC-BY-SA and Art Libre, if you think we should add this license please get in touch.';
 			}
-		} catch (exception $e) {
+		} catch (Exception $e) {
 			$errors[] = 'This doesn\'t appear to be a valid archive.org item.';
 		}
 
 	}
 
 
-	if($errors) {
+	if ($errors) {
 		$smarty->assign('errors', $errors);
 		$smarty->assign('name', $name);
 		$smarty->assign('streaming_url', $streaming_url);
 	} else {
 		// If the creation was successful send the user back to the view page
-		if($edit) {
+		if ($edit) {
 			$track->setStreamURL($streaming_url);
 			$track->setDownloadURL($streaming_url);
 			$track->setLicense($license);
@@ -107,5 +122,3 @@ if (isset($_POST['submit'])) {
 }
 
 $smarty->display('track-add.tpl');
-
-?>

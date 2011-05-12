@@ -32,7 +32,7 @@ class ArtistXML {
 	 * @param string $lang A 2 character ISO 639 alpha-2 code indicating the language to return the information in
 	 * @return A SimpleXMLElement containing the artist's information
 	 */
-	public static function getInfo($artistName, $api_key=false, $mbid=false, $lang='en') {
+	public static function getInfo($artistName, $api_key = false, $mbid = false, $lang = 'en') {
 		// We assume $api_key is valid and set at this point
 
 		if (!isset($artistName) && !isset($mbid)) {
@@ -40,10 +40,10 @@ class ArtistXML {
 			return;
 		}
 
-		$artist = new Artist($artistName, $mbid);
-
-		if (!$artist) {
-			return(XML::error('failed', '7', 'Invalid resource specified'));
+		try {
+			$artist = new Artist($artistName, $mbid);
+		} catch (Exception $e) {
+			return XML::error('failed', '7', 'Invalid resource specified');
 		}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
@@ -64,9 +64,9 @@ class ArtistXML {
 
 	public static function getTopTracks($artistName) {
 
-		$artist = new Artist($artistName);
-
-		if (!$artist) {
+		try {
+			$artist = new Artist($artistName);
+		} catch (Exception $e) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
@@ -77,7 +77,7 @@ class ArtistXML {
 		$tracks = $artist->getTopTracks(50);
 
 		// Loop over every result and add as children to "toptracks".
-		for($i = 1; $i < count($tracks); $i++) {
+		for ($i = 1; $i < count($tracks); $i++) {
 			$track = $root->addChild('track', null);
 			$track->addAttribute('rank', $i);
 			$track->addChild('name', $tracks[$i]->name);
@@ -91,9 +91,9 @@ class ArtistXML {
 
 	public static function getTopTags($artistName) {
 
-		$artist = new Artist($artistName);
-
-		if (!$artist) {
+		try {
+			$artist = new Artist($artistName);
+		} catch (Exception $e) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
@@ -102,7 +102,7 @@ class ArtistXML {
 		$root->addAttribute('artist', $artist->name);
 
 		$tags = $artist->getTopTags();
-		foreach($tags as &$tag) {
+		foreach ($tags as &$tag) {
 			$tag_node = $root->addChild('tag', null);
 			$tag_node->addChild('name', repamp($tag['tag']));
 			$tag_node->addChild('count', $tag['freq']);
@@ -114,9 +114,9 @@ class ArtistXML {
 
 	public static function getFlattr($artistName) {
 
-		$artist = new Artist($artistName);
-
-		if(!$artist) {
+		try {
+			$artist = new Artist($artistName);
+		} catch (Exception $e) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
@@ -130,5 +130,3 @@ class ArtistXML {
 
 
 }
-
-?>

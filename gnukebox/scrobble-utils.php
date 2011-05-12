@@ -22,8 +22,7 @@
 require_once('database.php');	// include the database connection string
 require_once('temp-utils.php');
 
-function useridFromSID($session_id)
-{
+function useridFromSID($session_id) {
 	//derive the username from a session ID
 	global $adodb; 	   // include the Database connector
 
@@ -32,13 +31,12 @@ function useridFromSID($session_id)
 
 	try {
 		$res = $adodb->GetOne('SELECT userid FROM Scrobble_Sessions WHERE sessionid = ' . $adodb->qstr($session_id)); // get the username from the table
-	}
-	catch (exception $e) {
+	} catch (Exception $e) {
 		die('FAILED ufs ' . $e->getMessage() . '\n');
 		// die is there is an error, printing the error
 	}
 
-	if(!$res) {
+	if (!$res) {
 		die("BADSESSION\n");
 		// the user has no session
 	}
@@ -52,31 +50,31 @@ function createArtistIfNew($artist) {
 
 	$artist = NoSpamTracks($artist);
 
-	$res = $adodb->GetOne('SELECT name FROM Artist WHERE lower(name) = lower(' . ($artist) . ')');
+	$res = $adodb->GetOne('SELECT name FROM Artist WHERE lower(name) = lower(' . $artist . ')');
 
-	if(!$res) {
+	if (!$res) {
 		// Artist doesn't exist, so we create them
-		$res = $adodb->Execute('INSERT INTO Artist (name) VALUES (' . ($artist) . ')');
+		$res = $adodb->Execute('INSERT INTO Artist (name) VALUES (' . $artist . ')');
 	}
 }
 
 function createAlbumIfNew($artist, $album) {
 	global $adodb;
 
-	$name = $adodb->GetOne('SELECT name FROM Album WHERE lower(name) = lower(' . ($album) . ') AND lower(artist_name) = lower(' . ($artist) . ')');
+	$name = $adodb->GetOne('SELECT name FROM Album WHERE lower(name) = lower(' . $album . ') AND lower(artist_name) = lower(' . $artist . ')');
 
-	if(!$name) {
+	if (!$name) {
 		// Album doesn't exist, so create it
 
 		// Disable to fix scrobble breakage
 		//$art = $adodb->qstr(getAlbumArt($artist, $album));
-		$art = "";
+		$art = '';
 
-		if ($art !="") {
+		if ($art != '') {
 			$license = $adodb->qstr('amazon');
-			$sql = 'INSERT INTO Album (name, artist_name, image, artwork_license) VALUES (' . ($album) . ', ' . ($artist) . ', ' . ($art) . ', ' . ($license) .')';
+			$sql = 'INSERT INTO Album (name, artist_name, image, artwork_license) VALUES (' . $album . ', ' . $artist . ', ' . $art . ', ' . $license .')';
 		} else {
-			$sql = 'INSERT INTO Album (name, artist_name) VALUES (' . ($album) . ', ' . ($artist) . ')';
+			$sql = 'INSERT INTO Album (name, artist_name) VALUES (' . $album . ', ' . $artist . ')';
 		}
 		$adodb->Execute($sql);
 	}
@@ -88,19 +86,19 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	$track = NoSpamTracks($track);
 	$artist = NoSpamTracks($artist);
 
-	if($album != 'NULL') {
-		$res = $adodb->GetOne('SELECT id FROM Track WHERE lower(name) = lower(' . ($track) . ') AND lower(artist_name) = lower(' . ($artist) . ') AND lower(album_name) = lower(' . ($album) . ')');
+	if ($album != 'NULL') {
+		$res = $adodb->GetOne('SELECT id FROM Track WHERE lower(name) = lower(' . $track . ') AND lower(artist_name) = lower(' . $artist . ') AND lower(album_name) = lower(' . $album . ')');
 	} else {
-		$res = $adodb->GetOne('SELECT id FROM Track WHERE lower(name) = lower(' . ($track) . ') AND lower(artist_name) = lower(' . ($artist) . ') AND album_name IS NULL');
+		$res = $adodb->GetOne('SELECT id FROM Track WHERE lower(name) = lower(' . $track . ') AND lower(artist_name) = lower(' . $artist . ') AND album_name IS NULL');
 	}
 
-	if(!$res) {
+	if (!$res) {
 		// Create new track
 		$res = $adodb->Execute('INSERT INTO Track (name, artist_name, album_name, mbid) VALUES ('
-			. ($track) . ', '
-			. ($artist) . ', '
-			. ($album) . ', '
-			. ($mbid) . ')');
+			. $track . ', '
+			. $artist . ', '
+			. $album . ', '
+			. $mbid . ')');
 		return getTrackCreateIfNew($artist, $album, $track, $mbid);
 	} else {
 		return $res;
@@ -111,17 +109,17 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 	global $adodb;
 
 	$res = $adodb->GetOne('SELECT id FROM Scrobble_Track WHERE name = lower('
-		. ($track) . ') AND artist = lower(' . ($artist) . ') AND album '
-		. (($album == 'NULL') ? 'IS NULL' : ('= lower(' . ($album) . ')')) . ' AND mbid '
-		. (($mbid == 'NULL') ? 'IS NULL' : ('= lower(' . ($mbid) . ')')));
+		. $track . ') AND artist = lower(' . $artist . ') AND album '
+		. (($album == 'NULL') ? 'IS NULL' : ('= lower(' . $album . ')')) . ' AND mbid '
+		. (($mbid == 'NULL') ? 'IS NULL' : ('= lower(' . $mbid . ')')));
 
-	if(!$res) {
+	if (!$res) {
 		$sql = 'INSERT INTO Scrobble_Track (name, artist, album, mbid, track) VALUES ('
-			. 'lower(' . ($track) . '), '
-			. 'lower(' . ($artist) . '), '
-			. (($album == 'NULL') ? 'NULL' : 'lower(' . ($album) . ')') . ', '
-			. (($mbid == 'NULL') ? 'NULL' : 'lower(' . ($mbid) . ')') . ', '
-			. ($tid) . ')';
+			. 'lower(' . $track . '), '
+			. 'lower(' . $artist . '), '
+			. (($album == 'NULL') ? 'NULL' : 'lower(' . $album . ')') . ', '
+			. (($mbid == 'NULL') ? 'NULL' : 'lower(' . $mbid . ')') . ', '
+			. $tid . ')';
 		$res = $adodb->Execute($sql);
 		return getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid);
 	} else {
@@ -132,19 +130,19 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 function scrobbleExists($userid, $artist, $track, $time) {
 	global $adodb;
 
-	$res = $adodb->GetOne('SELECT time FROM Scrobbles WHERE userid = ' . ($userid) . ' AND artist = ' . ($artist) . ' AND track = ' . ($track) . ' AND time = ' . ($time));
+	$res = $adodb->GetOne('SELECT time FROM Scrobbles WHERE userid = ' . $userid . ' AND artist = ' . $artist . ' AND track = ' . $track . ' AND time = ' . $time);
 
-	if(!$res) {
+	if (!$res) {
 		return false;
 	} else {
 		return true;
 	}
 }
 
-function NoSpamTracks ($track) {
+function NoSpamTracks($track) {
 
 	// This function exists to remove things like '(PREVIEW: buy it at www.magnatune.com)' from track names.
-	$track = str_replace(' (PREVIEW: buy it at www.magnatune.com)', "", $track);
+	$track = str_replace(' (PREVIEW: buy it at www.magnatune.com)', '', $track);
 	return $track;
 
 }
@@ -153,12 +151,12 @@ function getAlbumArt($artist, $album) {
 
 	$Access_Key_ID = '1EST86JB355JBS3DFE82'; // this is mattl's personal key :)
 
-	$SearchIndex='Music';
-	$Keywords=urlencode($artist.' '.$album);
+	$SearchIndex = 'Music';
+	$Keywords = urlencode($artist . ' ' . $album);
 	$Operation = 'ItemSearch';
 	$Version = '2007-07-16';
 	$ResponseGroup = 'ItemAttributes,Images';
-	$request='http://ecs.amazonaws.com/onca/xml'
+	$request = 'http://ecs.amazonaws.com/onca/xml'
 		. '?Service=AWSECommerceService'
 		. '&AssociateTag=' . $Associate_tag
 		. '&AWSAccessKeyId=' . $Access_Key_ID
@@ -175,10 +173,10 @@ function getAlbumArt($artist, $album) {
 	return $image;
 }
 
-function validateMBID ($input) {
-	if(isset($input)) {
+function validateMBID($input) {
+	if (isset($input)) {
 		$input = strtolower(rtrim($input));
-		if(preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $input)) {
+		if (preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $input)) {
 			return $input;
 		} else {
 			return null;
@@ -195,56 +193,53 @@ function validateMBID ($input) {
 function forwardScrobble($userid, $artist, $album, $track, $time, $mbid, $source, $rating, $length) {
 	global $adodb, $lastfm_key, $lastfm_secret;
 
-	// Strip database quoting from details and urlencode
-	$artist = urlencode(substr($artist, 1, strlen($artist) - 2));
-	$track = urlencode(substr($track, 1, strlen($track) - 2));
-	$album == 'NULL' ? $album = false : $album = urlencode(substr($album, 1, strlen($album) - 2));
-	$mbid == 'NULL' ? $mbid = false : $mbid = urlencode(substr($mbid, 1, strlen($mbid) - 2));
-	$source == 'NULL' ? $source = false : $source = urlencode(substr($source, 1, strlen($source) - 2));
-	$rating == '\'0\'' ? $rating = false : 0;
-	$length == 'NULL' ? $length = false : 0;
+	$artist = urlencode($artist);
+	$track = urlencode($track);
+	$album = urlencode($album);
+	$mbid = urlencode($mbid);
+	$source = urlencode($source);
+	$rating = urlencode($rating);
+	$length = urlencode($length);
 
 	$res = $adodb->CacheGetAll(600, 'SELECT * FROM Service_Connections WHERE userid = ' . $userid . ' AND forward = 1');
-	foreach($res as &$row) {
+	foreach ($res as &$row) {
 		$remote_key = $row['remote_key'];
 		$ws_url = $row['webservice_url'];
 		$curl_session = curl_init($ws_url);
 
 		$post_vars = '';
-		if($album) {
+		if ($album) {
 			$post_vars .= 'album[0]=' . $album . '&';
 		}
 		$post_vars .= 'api_key=' . $lastfm_key . '&artist[0]=' . $artist;
-		if($length) {
+		if ($length) {
 			$post_vars .= '&length[0]=' . $length;
 		}
-		if($mbid) {
+		if ($mbid) {
 			$post_vars .= '&mbid[0]=' . $mbid;
 		}
 		$post_vars .= '&method=track.scrobble';
-		if($rating) {
+		if ($rating) {
 			$post_vars .= '&rating[0]=' . $rating;
 		}
 		$post_vars .= '&sk=' . $remote_key;
-		if($source) {
+		if ($source) {
 			$post_vars .= '&source[0]='. $source;
 		}
 		$post_vars .= '&timestamp[0]=' . $time . '&track[0]=' . $track;
 
-		$sig = str_replace('&', '', urldecode($post_vars));
+		$sig = urldecode(str_replace('&', '', $post_vars));
 		$sig = str_replace('=', '', $sig);
 		$sig = md5($sig . $lastfm_secret);
 
 		$post_vars .= '&api_sig=' . $sig;
-		curl_setopt ($curl_session, CURLOPT_POST, true);
-		curl_setopt ($curl_session, CURLOPT_POSTFIELDS, $post_vars);
-		curl_setopt ($curl_session, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt ($curl_session, CURLOPT_CONNECTTIMEOUT, 1);
-		curl_setopt ($curl_session, CURLOPT_TIMEOUT, 1);
+		curl_setopt($curl_session, CURLOPT_POST, true);
+		curl_setopt($curl_session, CURLOPT_POSTFIELDS, $post_vars);
+		curl_setopt($curl_session, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl_session, CURLOPT_CONNECTTIMEOUT, 1);
+		curl_setopt($curl_session, CURLOPT_TIMEOUT, 1);
 		$response = curl_exec($curl_session);
 
 		curl_close($curl_session);
 	}
 }
-
-?>

@@ -1,23 +1,20 @@
 <?php
-/*
-homepage: http://arc.semsol.org/
-license:  http://arc.semsol.org/license
-
-class:    ARC2 SPARQL Parser
-author:   Benjamin Nowack
-version:  2009-03-05 (Addition: dedicated xIRI_REF method)
+/**
+ * ARC2 SPARQL Parser
+ *
+ * @author Benjamin Nowack
+ * @license <http://arc.semsol.org/license>
+ * @homepage <http://arc.semsol.org/>
+ * @package ARC2
+ * @version 2010-11-16
 */
 
 ARC2::inc('TurtleParser');
 
 class ARC2_SPARQLParser extends ARC2_TurtleParser {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
-  }
-  
-  function ARC2_SPARQLParser($a = '', &$caller) {
-    $this->__construct($a, $caller);
   }
 
   function __init() {
@@ -29,9 +26,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
 
   /*  */
 
-  function parse($q, $src = '') {
+  function parse($q, $src = '', $iso_fallback = 'ignore') {
     $this->setDefaultPrefixes();
-    $this->base = $src ? $this->calcBase($src) : ARC2::getScriptURI();
+    $this->base = $src ? $this->calcBase($src) : ARC2::getRequestURI();
     $this->r = array(
       'base' => '',
       'vars' => array(),
@@ -56,13 +53,13 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
       $this->addError($msg);
     }
   }
-  
+
   function getQueryInfos() {
     return $this->v('r', array());
   }
 
   /* 1 */
-  
+
   function xQuery($v) {
     list($r, $v) = $this->xPrologue($v);
     foreach (array('Select', 'Construct', 'Describe', 'Ask') as $type) {
@@ -90,7 +87,7 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
   }
 
   /* 5.. */
-  
+
   function xSelectQuery($v) {
     if ($sub_r = $this->x('SELECT\s+', $v)) {
       $r = array(
@@ -146,13 +143,13 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   function xResultVar($v) {
     return $this->xVar($v);
   }
 
   /* 6.. */
-  
+
   function xConstructQuery($v) {
     if ($sub_r = $this->x('CONSTRUCT\s*', $v)) {
       $r = array(
@@ -189,7 +186,7 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
   }
 
   /* 7.. */
-  
+
   function xDescribeQuery($v) {
     if ($sub_r = $this->x('DESCRIBE\s+', $v)) {
       $r = array(
@@ -245,7 +242,7 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
   }
 
   /* 8.. */
-  
+
   function xAskQuery($v) {
     if ($sub_r = $this->x('ASK\s+', $v)) {
       $r = array(
@@ -282,7 +279,7 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
   }
 
   /* 13 */
-  
+
   function xWhereClause($v) {
     if ($r = $this->x('(WHERE)?', $v)) {
       $v = $r[2];
@@ -292,9 +289,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   /* 14, 15 */
-  
+
   function xSolutionModifier($v) {
     $r = array();
     if ((list($sub_r, $sub_v) = $this->xOrderClause($v)) && $sub_r) {
@@ -307,7 +304,7 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
   }
 
   /* 18, 19 */
-  
+
   function xLimitOrOffsetClause($v) {
     if ($sub_r = $this->x('(LIMIT|OFFSET)', $v)) {
       $key = strtolower($sub_r[1]);
@@ -323,7 +320,7 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
   }
 
   /* 16 */
-  
+
   function xOrderClause($v) {
     if ($sub_r = $this->x('ORDER BY\s+', $v)) {
       $sub_v = $sub_r[1];
@@ -340,9 +337,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   /* 17, 27 */
-  
+
   function xOrderCondition($v) {
     if ($sub_r = $this->x('(ASC|DESC)', $v)) {
       $dir = strtolower($sub_r[1]);
@@ -371,7 +368,7 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
   }
 
   /* 20 */
-  
+
   function xGroupGraphPattern($v) {
     $pattern_id = substr(md5(uniqid(rand())), 0, 4);
     if ($sub_r = $this->x('\{', $v)) {
@@ -414,7 +411,7 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   function indexBnodes($triples, $pattern_id) {
     $index_id = count($this->bnode_pattern_index['patterns']);
     $index_id = $pattern_id;
@@ -433,12 +430,12 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
       }
     }
   }
-  
+
   /* 22.., 25.. */
-  
+
   function xGraphPatternNotTriples($v) {
     if ((list($sub_r, $sub_v) = $this->xOptionalGraphPattern($v)) && $sub_r) {
-      return array($sub_r, $sub_v); 
+      return array($sub_r, $sub_v);
     }
     if ((list($sub_r, $sub_v) = $this->xGraphGraphPattern($v)) && $sub_r) {
       return array($sub_r, $sub_v);
@@ -466,7 +463,7 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
   }
 
   /* 23 */
-  
+
   function xOptionalGraphPattern($v) {
     if ($sub_r = $this->x('OPTIONAL', $v)) {
       $sub_v = $sub_r[1];
@@ -476,10 +473,10 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
       $this->addError('Missing or invalid Group Graph Pattern after OPTIONAL');
     }
     return array(0, $v);
-  } 
-  
+  }
+
   /* 24.. */
-  
+
   function xGraphGraphPattern($v) {
     if ($sub_r = $this->x('GRAPH', $v)) {
       $sub_v = $sub_r[1];
@@ -499,10 +496,10 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
       }
     }
     return array(0, $v);
-  } 
-  
+  }
+
   /* 26.., 27.. */
-  
+
   function xFilter($v) {
     if ($r = $this->x('FILTER', $v)) {
       $sub_v = $r[1];
@@ -519,9 +516,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   /* 28.. */
-  
+
   function xFunctionCall($v) {
     if ((list($r, $sub_v) = $this->xIRIref($v)) && $r) {
       if ((list($sub_r, $sub_v) = $this->xArgList($sub_v)) && $sub_r) {
@@ -530,9 +527,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   /* 29 */
-  
+
   function xArgList($v) {
     $r = array();
     $sub_v = $v;
@@ -557,9 +554,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return $closed ? array($r, $sub_v) : array(0, $v);
   }
-  
+
   /* 30, 31 */
-  
+
   function xConstructTemplate($v) {
     if ($sub_r = $this->x('\{', $v)) {
       $r = array();
@@ -572,9 +569,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-    
+
   /* 46, 47 */
-  
+
   function xExpression($v) {
     if ((list($sub_r, $sub_v) = $this->xConditionalAndExpression($v)) && $sub_r) {
       $r = array('type' => 'expression', 'sub_type' => 'or', 'patterns' => array($sub_r));
@@ -592,9 +589,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   /* 48.., 49.. */
-  
+
   function xConditionalAndExpression($v) {
     if ((list($sub_r, $sub_v) = $this->xRelationalExpression($v)) && $sub_r) {
       $r = array('type' => 'expression', 'sub_type' => 'and', 'patterns' => array($sub_r));
@@ -612,7 +609,7 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   /* 50, 51 */
 
   function xRelationalExpression($v) {
@@ -639,9 +636,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   /* 52 */
-  
+
   function xAdditiveExpression($v) {
     if ((list($sub_r, $sub_v) = $this->xMultiplicativeExpression($v)) && $sub_r) {
       $r = array('type' => 'expression', 'sub_type' => 'additive', 'patterns' => array($sub_r));
@@ -666,9 +663,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   /* 53 */
-  
+
   function xMultiplicativeExpression($v) {
     if ((list($sub_r, $sub_v) = $this->xUnaryExpression($v)) && $sub_r) {
       $r = array('type' => 'expression', 'sub_type' => 'multiplicative', 'patterns' => array($sub_r));
@@ -688,9 +685,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   /* 54 */
-  
+
   function xUnaryExpression($v) {
     $sub_v = $v;
     $op = '';
@@ -711,9 +708,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   /* 55 */
-  
+
   function xPrimaryExpression($v) {
     foreach (array('BrackettedExpression', 'BuiltInCall', 'IRIrefOrFunction', 'RDFLiteral', 'NumericLiteral', 'BooleanLiteral', 'Var', 'Placeholder') as $type) {
       $m = 'x' . $type;
@@ -723,9 +720,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   /* 56 */
-  
+
   function xBrackettedExpression($v) {
     if ($r = $this->x('\(', $v)) {
       if ((list($r, $sub_v) = $this->xExpression($r[1])) && $r) {
@@ -736,9 +733,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   /* 57.., 58.. */
-  
+
   function xBuiltInCall($v) {
     if ($sub_r = $this->x('(str|lang|langmatches|datatype|bound|sameterm|isiri|isuri|isblank|isliteral|regex)\s*\(', $v)) {
       $r = array('type' => 'built_in_call', 'call' => strtolower($sub_r[1]));
@@ -749,9 +746,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
     return array(0, $v);
   }
-  
+
   /* 59.. */
-  
+
   function xIRIrefOrFunction($v) {
     if ((list($r, $v) = $this->xIRIref($v)) && $r) {
       if ((list($sub_r, $sub_v) = $this->xArgList($v)) && is_array($sub_r)) {
@@ -761,16 +758,20 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
     }
   }
 
-  /* 70.. */
-  
+  /* 70.. @@sync with TurtleParser */
+
   function xIRI_REF($v) {
     if (($r = $this->x('\<(\$\{[^\>]*\})\>', $v)) && ($sub_r = $this->xPlaceholder($r[1]))) {
       return array($r[1], $r[2]);
     }
-    elseif ($r = $this->x('\<([^\<\>\"\|\^`\s]*)\>', $v)) {
+    elseif ($r = $this->x('\<([^\<\>\s\"\|\^`]*)\>', $v)) {
+      return array($r[1] ? $r[1] : true, $r[2]);
+    }
+    /* allow reserved chars in obvious IRIs */
+    elseif ($r = $this->x('\<(https?\:[^\s][^\<\>]*)\>', $v)) {
       return array($r[1] ? $r[1] : true, $r[2]);
     }
     return array(0, $v);
   }
-    
-}  
+
+}

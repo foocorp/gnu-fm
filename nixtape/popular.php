@@ -19,19 +19,15 @@
 
 */
 
-
 require_once('database.php');
 require_once('templating.php');
 require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/TagCloud.php');
 
-$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
-if ($aTagCloud) {
-        $smarty->assign('tagcloud', $aTagCloud);
-}
+try {
+	$aTagCloud = TagCloud::GenerateTagCloud('loved_tracks', 'artist');
+	$smarty->assign('tagcloud', $aTagCloud);
+} catch (Exception $e) {}
 
-
-$smarty->display("popular.tpl");
-
-?>
+$smarty->display('popular.tpl');

@@ -29,52 +29,50 @@
 
 require_once($install_path . 'data/Server.php');
 
-function identifierScrobbleEvent ($username, $artist, $track, $album, $time, $mbid=NULL, $ambid=NULL, $lmbid=NULL)
-{
-	if (!($username && $artist && $track && $time))
+function identifierScrobbleEvent ($username, $artist, $track, $album, $time, $mbid = null, $ambid = null, $lmbid = null) {
+	if (!($username && $artist && $track && $time)) {
 		return null;
+	}
 
 	$microhash = substr(md5($artist . '//' . $track), 0, 4);
 	return sprintf('%s#%s.%s', Server::getUserURL($username), rawurlencode($time), rawurlencode($microhash));
 }
 
-function identifierArtist ($username, $artist, $track, $album, $time, $mbid=NULL, $ambid=NULL, $lmbid=NULL)
-{
-	if (!empty($ambid))
-	{
+function identifierArtist ($username, $artist, $track, $album, $time, $mbid = null, $ambid = null, $lmbid = null) {
+	if (!empty($ambid)) {
 		return sprintf('http://dbtune.org/musicbrainz/resource/artist/%s', strtolower($ambid));
 	}
 
 	$u = identifierScrobbleEvent($username, $artist, $track, $album, $time, $mbid, $ambid, $lmbid) . '.artist';
-	if ($u != '.artist') return $u;
+	if ($u != '.artist') {
+		return $u;
+	}
 
 	return sprintf('%s#artist', Server::getArtistURL($artist));
 }
 
-function identifierAlbum ($username, $artist, $track, $album, $time, $mbid=NULL, $ambid=NULL, $lmbid=NULL)
-{
-	if (!empty($lmbid))
-	{
+function identifierAlbum ($username, $artist, $track, $album, $time, $mbid = null, $ambid = null, $lmbid = null) {
+	if (!empty($lmbid)) {
 		return sprintf('http://dbtune.org/musicbrainz/resource/record/%s', strtolower($lmbid));
 	}
 
 	$u = identifierScrobbleEvent($username, $artist, $track, $album, $time, $mbid, $ambid, $lmbid) . '.album';
-	if ($u != '.album') return $u;
+	if ($u != '.album') {
+		return $u;
+	}
 
 	return sprintf('%s#album', Server::getAlbumURL($artist, $album));
 }
 
-function identifierTrack ($username, $artist, $track, $album, $time, $mbid=NULL, $ambid=NULL, $lmbid=NULL)
-{
-	if (!empty($mbid))
-	{
+function identifierTrack ($username, $artist, $track, $album, $time, $mbid = null, $ambid = null, $lmbid = null) {
+	if (!empty($mbid)) {
 		return sprintf('http://dbtune.org/musicbrainz/resource/track/%s', strtolower($mbid));
 	}
 
 	$u = identifierScrobbleEvent($username, $artist, $track, $album, $time, $mbid, $ambid, $lmbid) . '.track';
-	if ($u != '.track') return $u;
+	if ($u != '.track') {
+		return $u;
+	}
 
 	return sprintf('%s#track', Server::getTrackURL($artist, $album, $track));
 }
-
-

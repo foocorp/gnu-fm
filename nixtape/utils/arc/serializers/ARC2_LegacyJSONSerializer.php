@@ -5,21 +5,17 @@ license:  http://arc.semsol.org/license
 
 class:    ARC2 Legacy JSON Serializer
 author:   Benjamin Nowack
-version:  2008-08-04
+version:  2010-11-16
 */
 
 ARC2::inc('Class');
 
 class ARC2_LegacyJSONSerializer extends ARC2_Class {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_LegacyJSONSerializer($a = '', &$caller) {/* ns */
-    $this->__construct($a, $caller);
-  }
-
   function __init() {
     parent::__init();
     $this->content_header = 'application/json';
@@ -32,7 +28,7 @@ class ARC2_LegacyJSONSerializer extends ARC2_Class {
     if (function_exists('json_encode')) return str_replace('","', '",' . $n . '"', json_encode($struct));
     $r = '';
     $from = array("\\", "\r", "\t", "\n", '"', "\b", "\f", "/");
-    $to = array('\\\\', '\r', '\t', '\n', '\"', '\b', '\f', '\foo/');
+    $to = array('\\\\', '\r', '\t', '\n', '\"', '\b', '\f', '\/');
     $is_flat = $this->isAssociativeArray($struct) ? 0 : 1;
     foreach ($struct as $k => $v) {
       $r .= $r ? ',' . $n . $ind . $ind : $ind . $ind;

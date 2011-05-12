@@ -5,21 +5,17 @@ license:  http://arc.semsol.org/license
 
 class:    ARC2 Legaxy XML Parser
 author:   Benjamin Nowack
-version:  2008-10-04 (Fix: nsDecl led to warnings when uri was an array.)
+version:  2010-11-16
 */
 
 ARC2::inc('Class');
 
 class ARC2_LegacyXMLParser extends ARC2_Class {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_LegacyXMLParser($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
   function __init() {/* reader */
     parent::__init();
     $this->encoding = $this->v('encoding', false, $this->a);
@@ -36,7 +32,7 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
   /*  */
 
   function setReader(&$reader) {
-    $this->reader =& $reader;
+    $this->reader = $reader;
   }
 
   function parse($path, $data = '', $iso_fallback = false) {
@@ -46,7 +42,7 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
     /* reader */
     if (!$this->v('reader')) {
       ARC2::inc('Reader');
-      $this->reader = & new ARC2_Reader($this->a, $this);
+      $this->reader = new ARC2_Reader($this->a, $this);
     }
     $this->reader->setAcceptHeader('Accept: application/xml; q=0.9, */*; q=0.1');
     $this->reader->activate($path, $data);
@@ -83,6 +79,7 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
     $this->target_encoding = xml_parser_get_option($this->xml_parser, XML_OPTION_TARGET_ENCODING);
     xml_parser_free($this->xml_parser);
     $this->reader->closeStream();
+    unset($this->reader);
     return $this->done();
   }
   
@@ -207,16 +204,17 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
       xml_set_character_data_handler($parser, 'cData');
       xml_set_start_namespace_decl_handler($parser, 'nsDecl');
       xml_set_object($parser, $this);
-      $this->xml_parser =& $parser;
+      $this->xml_parser = $parser;
     }
   }
 
   /*  */
   
   function open($p, $t, $a) {
+    $t_exact = $t;
     //echo "<br />\n".'opening '.$t . ' ' . print_r($a, 1); flush();
     //echo "<br />\n".'opening '.$t; flush();
-    $t = strtolower($t);
+    $t = strpos($t, ':') ? $t : strtolower($t);
     /* base check */
     $base = '';
     if (($t == 'base') && isset($a['href'])) {
@@ -226,7 +224,7 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
     /* URIs */
     foreach (array('href', 'src', 'id') as $uri_a) {
       if (isset($a[$uri_a])) {
-        $a[$uri_a . ' uri'] = ($uri_a == 'id') ? $this->calcUri('#'.$a[$uri_a]) : $this->calcUri($a[$uri_a]);
+        $a[$uri_a . ' uri'] = ($uri_a == 'id') ? $this->calcURI('#'.$a[$uri_a]) : $this->calcURI($a[$uri_a]);
       }
     }
     /* ns */
@@ -239,7 +237,8 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
     }
     /* node */
     $node = array(
-      'tag' => $t, 
+      'tag' => $t,
+      'tag_exact' => $t_exact,
       'a' => $a, 
       'level' => $this->level, 
       'pos' => 0,

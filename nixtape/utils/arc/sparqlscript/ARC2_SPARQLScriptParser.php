@@ -5,28 +5,24 @@ license:  http://arc.semsol.org/license
 
 class:    ARC2 SPARQLScript Parser (SPARQL+ + functions)
 author:   Benjamin Nowack
-version:  2008-09-22 (Addition: support for FunctionCall) 
+version:  2010-11-16
 */
 
 ARC2::inc('ARC2_SPARQLPlusParser');
 
 class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_SPARQLScriptParser($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
   function __init() {
     parent::__init();
   }
 
   /*  */
 
-  function parse($v, $src = '') {
+  function parse($v, $src = '', $iso_fallback = 'ignore') {
     $this->setDefaultPrefixes();
     $this->base = $src ? $this->calcBase($src) : ARC2::getScriptURI();
     $this->blocks = array();
@@ -67,6 +63,10 @@ class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
     if ((list($r, $v) = $this->xEndpointDecl($v)) && $r) {
       return array($r, $v);
     }
+    /* Return */
+    if ((list($r, $v) = $this->xReturn($v)) && $r) {
+      return array($r, $v);
+    }
     /* Assignment */
     if ((list($r, $v) = $this->xAssignment($v)) && $r) {
       return array($r, $v);
@@ -85,7 +85,7 @@ class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
     }
     /* FunctionCall */
     if ((list($r, $v) = $this->xFunctionCall($v)) && $r) {
-      return array($r, $v);
+      return array($r, ltrim($v, ';'));
     }
     /* Query */
     $prev_r = $this->r;
@@ -126,7 +126,7 @@ class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
   function xEndpointDecl($v) {
     if ($r = $this->x("ENDPOINT\s+", $v)) {
       if ((list($r, $sub_v) = $this->xIRI_REF($r[1])) && $r) {
-        $r = $this->calcUri($r, $this->base);
+        $r = $this->calcURI($r, $this->base);
         if ($sub_r = $this->x('\.', $sub_v)) {
           $sub_v = $sub_r[1];
         }
@@ -189,6 +189,18 @@ class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
         ltrim($rest, '; ')
       );
     }
+  }
+
+  function xReturn($v) {
+    if ($r = $this->x("return\s+", $v)) {
+      /* fake assignment which accepts same right-hand values */
+      $sub_v = '$__return_value__ := ' . $r[1];
+      if ((list($r, $sub_v) = $this->xAssignment($sub_v)) && $r) {
+        $r['type'] = 'return';
+        return array($r, $sub_v);
+      }
+    }
+    return array(0, $v);
   }
   
   /* s4 'IF' BrackettedExpression '{' Script '}' ( 'ELSE' '{' Script '}')?  */

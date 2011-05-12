@@ -23,8 +23,15 @@ require_once('database.php');
 require_once('templating.php');
 require_once('data/sanitize.php');
 require_once('data/Server.php');
+require_once('data/TagCloud.php');
+
+try {
+	$aTagCloud = TagCloud::GenerateTagCloud('loved_tracks', 'artist');
+	$smarty->assign('tagcloud', $aTagCloud);
+} catch(Exception $e) {
+	// Installation doesn't have any loved tracks yet
+}
 
 $smarty->assign('headerfile', 'welcome-header.tpl');
 $smarty->assign('welcome', true);
 $smarty->display('welcome.tpl');
-?>

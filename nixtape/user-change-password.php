@@ -24,8 +24,7 @@ require_once('templating.php');
 require_once('data/User.php');
 require_once('data/TagCloud.php');
 
-if($logged_in == false)
-{
+if ($logged_in == false) {
 	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'Not logged in! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
@@ -34,21 +33,17 @@ if($logged_in == false)
 
 $errors = array();
 
-if (isset($_POST['submit']))
-{
+if (isset($_POST['submit'])) {
 	$old_password = md5($_POST['old_password']);
-	if ($old_password != $this_user->password) 
-	{
+	if ($old_password != $this_user->password) {
 		$errors[] = 'Old password did not match the one associated with your profile.';
-	} 
-	
-	if ($_POST['password1'] != $_POST['password2']) 
-	{
+	}
+
+	if ($_POST['password1'] != $_POST['password2']) {
 		$errors[] = 'Passwords do not match!';
 	}
 
-	if (!isset($errors[0])) 
-	{
+	if (!isset($errors[0])) {
 		$this_user->password = md5($_POST['password1']);
 		$this_user->save();
 		$smarty->assign('success', true);

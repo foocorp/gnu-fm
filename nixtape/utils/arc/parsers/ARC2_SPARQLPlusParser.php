@@ -5,21 +5,17 @@ license:  http://arc.semsol.org/license
 
 class:    ARC2 SPARQL+ Parser (SPARQL + Aggregates + LOAD + INSERT + DELETE)
 author:   Benjamin Nowack
-version:  2008-05-30 (Tweak: CONSTRUCT keyword is now optional)
+version:  2010-11-16
 */
 
 ARC2::inc('SPARQLParser');
 
 class ARC2_SPARQLPlusParser extends ARC2_SPARQLParser {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_SPARQLPlusParser($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
   function __init() {
     parent::__init();
   }
@@ -42,7 +38,7 @@ class ARC2_SPARQLPlusParser extends ARC2_SPARQLParser {
   function xResultVar($v) {
     $aggregate = '';
     /* aggregate */
-    if ($sub_r = $this->x('(AVG|COUNT|MAX|MIN|SUM)\s*\(\s*([^\)]+)\)\s+AS\s+([^\s]+)', $v)) {
+    if ($sub_r = $this->x('\(?(AVG|COUNT|MAX|MIN|SUM)\s*\(\s*([^\)]+)\)\s+AS\s+([^\s\)]+)\)?', $v)) {
       $aggregate = $sub_r[1];
       $result_var = $sub_r[3];
       $v = $sub_r[2] . $sub_r[4];
@@ -195,9 +191,9 @@ class ARC2_SPARQLPlusParser extends ARC2_SPARQLParser {
         $proceed = 0;
         if ((list($sub_r, $sub_v) = $this->xVar($sub_v)) && $sub_r) {
           $r[] = $sub_r;
+          $proceed = 1;
           if ($sub_r = $this->x('\,', $sub_v)) {
             $sub_v = $sub_r[1];
-            $proceed = 1;
           }
         }
       } while ($proceed);

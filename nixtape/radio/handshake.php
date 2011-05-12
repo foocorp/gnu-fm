@@ -20,7 +20,7 @@
 
 require_once('../database.php');
 
-if(!isset($_GET['username']) || !isset($_GET['passwordmd5'])) {
+if (!isset($_GET['username']) || !isset($_GET['passwordmd5'])) {
 	die("BADAUTH\n");
 }
 
@@ -48,5 +48,3 @@ echo "info_message=\n";
 echo "fingerprint_upload_url=http://this.is.broken.example.com/fingerprint/upload.php\n";
 echo "permit_bootstrap=0\n";
 echo "freetrial=0\n";
-
-?>

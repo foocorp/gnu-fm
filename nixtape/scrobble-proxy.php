@@ -23,7 +23,7 @@ require_once('config.php');
 
 if ($_GET['method'] == 'scrobble') {
 	$url = $submissions_server . '/submissions/1.2/';
-} elseif ($_GET['method'] == 'nowplaying') {
+} else if ($_GET['method'] == 'nowplaying') {
 	$url = $submissions_server . '/nowplaying/1.2/';
 } else {
 	die("Invalid proxy method\n");
@@ -32,22 +32,21 @@ if ($_GET['method'] == 'scrobble') {
 $session = curl_init($url);
 
 $post_vars = '';
-foreach($_POST as $key => $element) {
+foreach ($_POST as $key => $element) {
 	if (is_array($element)) {
 		$i = 0;
-		foreach($element as $e) {
+		foreach ($element as $e) {
 			$post_vars .= $key . '[' . $i . ']=' . $e . '&';
 			$i++;
 		}
 	} else {
-		$post_vars .= $key.'='.$element.'&';
+		$post_vars .= $key . '=' . $element . '&';
 	}
 }
-curl_setopt ($session, CURLOPT_POST, true);
-curl_setopt ($session, CURLOPT_POSTFIELDS, $post_vars);
+curl_setopt($session, CURLOPT_POST, true);
+curl_setopt($session, CURLOPT_POSTFIELDS, $post_vars);
 
 $response = curl_exec($session);
 echo $response;
 
 curl_close($session);
-?>

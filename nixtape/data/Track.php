@@ -50,11 +50,11 @@ class Track {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$this->query = 'SELECT name, artist_name, album_name, duration, streamable, license, downloadurl, streamurl, mbid FROM Track WHERE '
-			. 'lower(name) = ' . strtolower($adodb->qstr($name)) . ' AND '
-			. 'lower(artist_name) = ' . strtolower($adodb->qstr($artist))
+			. 'lower(name) = lower(' . $adodb->qstr($name) . ') AND '
+			. 'lower(artist_name) = lower(' . $adodb->qstr($artist) . ')'
 			. 'ORDER BY streamable DESC';
 		$res = $adodb->CacheGetRow(600, $this->query);
-		if(!$res) {
+		if (!$res) {
 			$this->name = 'No such track: ' . $name;
 		} else {
 			$row = $res;
@@ -163,7 +163,7 @@ class Track {
 		global $adodb;
 
 		$streamable = 0;
-		if(is_free_license($license)) {
+		if (is_free_license($license)) {
 			$streamable = 1;
 		}
 
@@ -171,10 +171,14 @@ class Track {
 			' WHERE artist_name=' . $adodb->qstr($this->artist_name) . ' AND ' .
 			' name=' . $adodb->qstr($this->name));
 
-		if($streamable) {
+		if ($streamable) {
 			$adodb->Execute('UPDATE Artist SET streamable=1 WHERE name=' . $adodb->qstr($this->artist_name));
-			$artist = new Artist($this->artist_name);
-			$artist->clearCache();
+			try {
+				$artist = new Artist($this->artist_name);
+				$artist->clearCache();
+			} catch (Exception $e) {
+				// No such artist.
+			}
 		}
 		$this->clearCache();
 	}
@@ -185,7 +189,7 @@ class Track {
 	 * @return An int indicating the number of times this track has been played
 	 */
 	function getPlayCount() {
-		if($this->_playcount) {
+		if ($this->_playcount) {
 			// If we've been given a cached value from another SQL call use that
 			return $this->_playcount;
 		}
@@ -199,7 +203,7 @@ class Track {
 	 * @return An int indicating the number of listeners this track has
 	 */
 	function getListenerCount() {
-		if($this->_listeners) {
+		if ($this->_listeners) {
 			return $this->_listenercount;
 		}
 
@@ -218,7 +222,7 @@ class Track {
 			. ' GROUP BY track ORDER BY freq DESC');
 
 		if (!isset($row)) {
-		        $this->setPlaycount(0);
+			$this->setPlaycount(0);
 			$this->setListenerCount(0);
 		} else {
 			$this->setPlaycount($row['freq']);
@@ -232,7 +236,11 @@ class Track {
 	 * @return An artist object
 	 */
 	function getArtist() {
-		return new Artist($this->artist_name);
+		try {
+			return new Artist($this->artist_name);
+		} catch (Exception $e) {
+			throw $e;
+		}
 	}
 
 	function getURL() {
@@ -256,7 +264,7 @@ class Track {
 			. ' artist = ' . $adodb->qstr($this->artist_name)
 			. ' AND track = ' . $adodb->qstr($this->name)
 			. ' GROUP BY tag ORDER BY freq DESC');
-		
+
 		return $res;
 	}
 
@@ -275,7 +283,7 @@ class Track {
 			. ' AND userid = ' . $userid);
 
 		$tags = array();
-		foreach($res as &$row) {
+		foreach ($res as &$row) {
 			$tags[] = $row['tag'];
 		}
 

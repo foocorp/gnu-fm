@@ -25,7 +25,7 @@ require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/TagCloud.php');
 
-$track = new Track(urldecode($_GET['track']), urldecode($_GET['artist']));
+$track = new Track($_GET['track'], $_GET['artist']);
 $smarty->assign('track', $track);
 
 $album = new Album($track->album_name, $track->artist_name);
@@ -33,7 +33,7 @@ $smarty->assign('album', $album);
 
 try {
 	$artist = new Artist($track->artist_name);
-} catch (exception $e) {
+} catch (Exception $e) {
 	$smarty->assign('pageheading', 'Artist not found.');
 	$smarty->assign('details', 'The artist ' . $track->artist_name . ' was not found in the database.');
 	$smarty->display('error.tpl');
@@ -46,27 +46,29 @@ $smarty->assign('url', $track->getURL());
 $smarty->assign('pagetitle', $artist->name . ' : ' . $track->name);
 
 $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-$res = $adodb->GetAll('SELECT * FROM Track WHERE lower(artist_name) = ' . $adodb->qstr(mb_strtolower($track->artist_name, 'UTF-8')) . ' AND lower(name) = ' . $adodb->qstr(mb_strtolower($track->name, 'UTF-8')));
+$res = $adodb->GetAll('SELECT * FROM Track WHERE lower(artist_name) = lower(' . $adodb->qstr($track->artist_name) . ') AND lower(name) = lower(' . $adodb->qstr($track->name) . ')');
 
 $aOtherAlbums = array();
 
-foreach($res as &$trow) {
+foreach ($res as &$trow) {
 	if ($trow['album']) {
 		$aOtherAlbums[] = new Album($trow['album'], $trow['artist']);
 	}
 }
 
-if(isset($this_user) && $this_user->manages($artist->name)) {
+if (isset($this_user) && $this_user->manages($artist->name)) {
 	$smarty->assign('edit_link', $track->getEditURL());
 }
 
 
-if($track->duration) {
+if ($track->duration) {
 	// Give the duration in MM:SS
 	$mins = floor($track->duration / 60);
 	$sec = floor($track->duration % 60);
-	if (strlen($sec) == 1) { $sec = "0" . $sec; }
-	$duration = $mins . ":" . $sec;
+	if (strlen($sec) == 1) {
+		$sec = '0' . $sec;
+	}
+	$duration = $mins . ':' . $sec;
 	$smarty->assign('duration', $duration);
 }
 
@@ -74,13 +76,12 @@ $smarty->assign('albums', $aOtherAlbums);
 
 $smarty->assign('extra_head_links', array(
 		array(
-			'rel' => 'meta',
-			'type' => 'application/rdf+xml' ,
+			'rel'   => 'meta',
+			'type'  => 'application/rdf+xml',
 			'title' => 'Track Metadata',
-			'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $track->getURL()))
+			'href'  => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $track->getURL()))
 			)
 	));
 
 $smarty->assign('headerfile', 'track-header.tpl');
 $smarty->display('track.tpl');
-?>

@@ -19,11 +19,18 @@
 
 */
 
-function getAbsoluteURL() {
-	$scriptName = $_SERVER['SCRIPT_NAME'];
-	$path = explode('/', $scriptName);
-	array_pop($path);
-	$server = $_SERVER['HTTP_HOST'];
-	$string = implode('/', $path) . '/';
-	return 'http://' . $server . $string;
+/**
+ * Encodes an URL component in a mod_rewrite friendly way, handling plus,
+ * ampersand, hash and slash signs.
+ *
+ * @param string The text to encode
+ * @return string A mod_rewrite compatible encoding of the given text.
+ */
+function rewrite_encode($url) {
+	$url = urlencode($url);
+	$url = preg_replace('/%2B/', '%252B', $url); // +
+	$url = preg_replace('/%2F/', '%252F', $url); // /
+	$url = preg_replace('/%26/', '%2526', $url); // &
+	$url = preg_replace('/%23/', '%2523', $url); // #
+	return $url;
 }

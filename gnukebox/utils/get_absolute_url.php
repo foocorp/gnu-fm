@@ -21,10 +21,9 @@
 
 function getAbsoluteURL() {
 	$scriptName = $_SERVER['SCRIPT_NAME'];
-   	$path = explode("/", $scriptName);
-   	array_pop($path);
-   	$server = $_SERVER['HTTP_HOST'];
-   	$string = (implode("/", $path).'/');
-   	return "http://".$server.$string;
+	$path = explode('/', $scriptName);
+	array_pop($path);
+	$server = $_SERVER['HTTP_HOST'];
+	$string = (implode('/', $path) . '/');
+	return 'http://' . $server . $string;
 }
-?>

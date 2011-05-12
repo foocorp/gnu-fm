@@ -25,25 +25,24 @@ require_once('utils/EmailAddressValidator.php');
 
 
 if (isset($_POST['request'])) {
-    $errors = '';
-    $email = $_POST['email'];
+	$errors = '';
+	$email = $_POST['email'];
 
-    $validator = new EmailAddressValidator();
-    if (!$validator->check_email_address($email)) {
-	$errors .= 'You must enter a valid e-mail address('.$email.').<br />';
-    }
+	$validator = new EmailAddressValidator();
+	if (!$validator->check_email_address($email)) {
+		$errors .= 'You must enter a valid e-mail address(' . $email . ').<br />';
+	}
 
-    unset($validator);
+	unset($validator);
 
-    if(empty($errors)) {
-	$adodb->Execute('INSERT INTO Invitation_Request (email, time, status) VALUES('
-	    . $adodb->qstr($email) . ', '
-	    . time() . ', 0)');
-	$smarty->assign('reg', true);
-    } else {
-	$smarty->assign('errors', $errors);
-    }
+	if (empty($errors)) {
+		$adodb->Execute('INSERT INTO Invitation_Request (email, time, status) VALUES('
+			. $adodb->qstr($email) . ', '
+			. time() . ', 0)');
+		$smarty->assign('reg', true);
+	} else {
+		$smarty->assign('errors', $errors);
+	}
 }
 
-$smarty->display("request.tpl");
-?>
+$smarty->display('request.tpl');

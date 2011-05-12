@@ -1,25 +1,22 @@
 <?php
-/*
-homepage: http://arc.semsol.org/
-license:  http://arc.semsol.org/license
-
-class:    ARC2 Turtle Serializer
-author:   Benjamin Nowack
-version:  2009-02-16 (Tweak: support for "raw" parameter to skip getHead method)
+/**
+ * ARC2 Turtle Serializer
+ *
+ * @author    Benjamin Nowack
+ * @license   http://arc.semsol.org/license
+ * @homepage <http://arc.semsol.org/>
+ * @package   ARC2
+ * @version   2010-11-16
 */
 
 ARC2::inc('RDFSerializer');
 
 class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_TurtleSerializer($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
   function __init() {
     parent::__init();
     $this->content_header = 'application/x-turtle';
@@ -35,7 +32,11 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
       if (($term === 'p') && ($pn = $this->getPName($v))) {
         return $pn;
       }
-      if (($term === 'o') && ($qualifier === 'rdf:type') &&  ($pn = $this->getPName($v))) {
+      if (
+        ($term === 'o') &&
+        in_array($qualifier, array('rdf:type', 'rdfs:domain', 'rdfs:range', 'rdfs:subClassOf')) &&
+        ($pn = $this->getPName($v))
+      ) {
         return $pn;
       }
       if (preg_match('/^[a-z0-9]+\:[^\s]*$/is', $v)) {
@@ -50,7 +51,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
     $quot = '"';
     if (preg_match('/\"/', $v['value'])) {
       $quot = "'";
-      if (preg_match('/\'/', $v['value'])) {
+      if (preg_match('/\'/', $v['value']) || preg_match('/[\x0d\x0a]/', $v['value'])) {
         $quot = '"""';
         if (preg_match('/\"\"\"/', $v['value']) || preg_match('/\"$/', $v['value']) || preg_match('/^\"/', $v['value'])) {
           $quot = "'''";
@@ -73,7 +74,11 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
     $nl = "\n";
     foreach ($this->used_ns as $v) {
       $r .= $r ? $nl : '';
-      $r .= '@prefix ' . $this->nsp[$v] . ': <' .$v. '> .';
+      foreach ($this->ns as $prefix => $ns) {
+        if ($ns != $v) continue;
+        $r .= '@prefix ' . $prefix . ': <' .$v. '> .';
+        break;
+      }
     }
     return $r;
   }

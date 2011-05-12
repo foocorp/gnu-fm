@@ -25,33 +25,32 @@ require_once('user-menu.php');
 require_once('data/User.php');
 require_once('data/TagCloud.php');
 
-if($logged_in == false)
-{
+if ($logged_in == false) {
 	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'Not logged in! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
 	die();
 }
 
-if(isset($_GET['token']) && isset($_GET['webservice_url'])) {
+if (isset($_GET['token']) && isset($_GET['webservice_url'])) {
 	// Handle authentication callback from a foreign service
 	$token = $_GET['token'];
 	$webservice_url = $_GET['webservice_url'];
-	$sig = md5('api_key' . $lastfm_key . 'methodauth.getSession' . 'token' . $token  . $lastfm_secret);
+	$sig = md5('api_key' . $lastfm_key . 'methodauth.getSession' . 'token' . $token . $lastfm_secret);
 	$xmlresponse = simplexml_load_file($webservice_url . '?method=auth.getSession&token=' . $token . '&api_key=' . $lastfm_key . '&api_sig=' . $sig);
-	foreach($xmlresponse->children() as $child => $value) {
-		if($child == 'session') {
-			foreach($value->children() as $child2 => $value2) {
-				if($child2 == 'name') {
+	foreach ($xmlresponse->children() as $child => $value) {
+		if ($child == 'session') {
+			foreach ($value->children() as $child2 => $value2) {
+				if ($child2 == 'name') {
 					$remote_username = $value2;
-				} elseif($child2 == 'key') {
+				} else if ($child2 == 'key') {
 					$remote_key = $value2;
 				}
 			}
 		}
 	}
 
-	if(!isset($remote_username) || !isset($remote_key)) {
+	if (!isset($remote_username) || !isset($remote_key)) {
 		$smarty->assign('pageheading', 'Error!');
 		$smarty->assign('details', 'Sorry, we weren\'t able to authenticate your account.');
 		$smarty->display('error.tpl');
@@ -70,17 +69,23 @@ if(isset($_GET['token']) && isset($_GET['webservice_url'])) {
 		. $adodb->qstr($remote_key) . ', '
 		. $adodb->qstr($remote_username) . ')');
 
+	// Flush cache so this change takes effect immediately
+	$adodb->CacheFlush('SELECT * FROM Service_Connections WHERE userid = ' . $this_user->uniqueid . ' AND forward = 1');
+
 	$smarty->assign('connection_added', true);
 }
 
-if(isset($_GET['forward']) && isset($_GET['service'])) {
+if (isset($_GET['forward']) && isset($_GET['service'])) {
 	// Update the user's forwarding preferences
 	$adodb->Execute('UPDATE Service_Connections SET forward = ' . (int) ($_GET['forward'])
 		. ' WHERE userid = ' . $this_user->uniqueid
 		. ' AND webservice_url = ' . $adodb->qstr($_GET['service']));
+
+	// Flush cache so this change takes effect immediately
+	$adodb->CacheFlush('SELECT * FROM Service_Connections WHERE userid = ' . $this_user->uniqueid . ' AND forward = 1');
 }
 
-if(isset($lastfm_key)) {
+if (isset($lastfm_key)) {
 	$smarty->assign('lastfm_key', $lastfm_key);
 }
 

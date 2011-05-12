@@ -25,21 +25,18 @@ require_once('data/User.php');
 require_once('data/Group.php');
 require_once('data/TagCloud.php');
 
-if($logged_in == false)
-{
+if ($logged_in == false) {
 	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'Not logged in! You shouldn\'t be here!');
 	$smarty->display('error.tpl');
 	die();
 }
 
-if ($_REQUEST['group']=='new')
-{
-	if ($_REQUEST['new'])
-	{
+if ($_REQUEST['group'] == 'new') {
+	if ($_REQUEST['new']) {
 		try {
 			$result = Group::create(strtolower($_REQUEST['new']), $this_user);
-		} catch (exception $e) {
+		} catch (Exception $e) {
 			$smarty->assign('pageheading', 'Error!');
 			$smarty->assign('details', $e->getMessage());
 			$smarty->display('error.tpl');
@@ -49,14 +46,12 @@ if ($_REQUEST['group']=='new')
 			header('Location: ' . $base_url . '/edit_group.php?group=' . $_REQUEST['new']);
 			exit();
 		}
-	}
-	else
-	{
+	} else {
 		$smarty->assign('newform', true);
 		try {
 			$aTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable(), 'artist');
 			$smarty->assign('tagcloud', $aTagCloud);
-		} catch (exception $e) {}
+		} catch (Exception $e) {}
 		$smarty->display('edit_group.tpl');
 		exit();
 	}
@@ -64,8 +59,7 @@ if ($_REQUEST['group']=='new')
 
 $group = new Group($_REQUEST['group']);
 
-if ($group->owner->name != $this_user->name)
-{
+if ($group->owner->name != $this_user->name) {
 	$smarty->assign('pageheading', 'Error!');
 	$smarty->assign('details', 'You don\'t own this group!');
 	$smarty->display('error.tpl');
@@ -74,43 +68,46 @@ if ($group->owner->name != $this_user->name)
 
 $errors = array();
 
-if ($_POST['submit'])
-{
-	if (!empty($_POST['homepage']))
-	{
+if ($_POST['submit']) {
+	if (!empty($_POST['homepage'])) {
 		# Need better URI validation, but this will do for now. I think
 		# PEAR has a suitable module to help out here.
-		if ( !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['homepage']) )
+		if (!preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['homepage'])) {
 			$errors[] = 'Homepage must be a URI.';
-		if ( preg_match('/\s/', $_POST['homepage']) )
+		}
+		if (preg_match('/\s/', $_POST['homepage'])) {
 			$errors[] = 'Homepage must be a URI. Valid URIs cannot contain whitespace.';
+		}
 	}
 
-	if (!empty($_POST['avatar_uri']))
-	{
+	if (!empty($_POST['avatar_uri'])) {
 		# Need better URI validation, but this will do for now. I think
 		# PEAR has a suitable module to help out here.
-		if ( !preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['avatar_uri']) )
+		if (!preg_match('/^[a-z0-9\+\.\-]+\:/i', $_POST['avatar_uri'])) {
 			$errors[] = 'Avatar must be a URI.';
-		if ( preg_match('/\s/', $_POST['avatar_uri']) )
+		}
+		if (preg_match('/\s/', $_POST['avatar_uri'])) {
 			$errors[] = 'Avatar must be a URI. Valid URIs cannot contain whitespace.';
+		}
 	}
 
-	if (!isset($errors[0]))
-	{
-		if ($_POST['owner'] != $group->owner->username)
-		{
-			$new_owner = new User($_POST['owner']);
+	if (!isset($errors[0])) {
+		if ($_POST['owner'] != $group->owner->username) {
+			try {
+				$new_owner = new User($_POST['owner']);
+			} catch (Exception $e) {
+				$smarty->assign('pageheading', 'Error!');
+				$smarty->assign('details', 'Cannot assign group ownership to someone who does not exist!');
+				$smarty->display('error.tpl');
+				die();
+			}
 
-			if (! $group->memberCheck($new_owner))
-			{
+			if (!$group->memberCheck($new_owner)) {
 				$smarty->assign('pageheading', 'Error!');
 				$smarty->assign('details', 'Cannot assign group ownership to someone who is not a member!');
 				$smarty->display('error.tpl');
 				die();
-			}
-			else
-			{
+			} else {
 				$group->owner = $new_owner;
 			}
 		}
@@ -126,28 +123,23 @@ if ($_POST['submit'])
 		exit;
 	}
 
-	if (isset($errors[0]))
-	{
+	if (isset($errors[0])) {
 		header('Content-Type: text/plain');
 		//($errors);
 		exit;
 	}
 }
 
-if(isset($group->name))
-{
+if (isset($group->name)) {
 	# Stuff which cannot be changed.
 	$smarty->assign('group', $group->name);
 
-	if ($_POST['submit'])
-	{
+	if ($_POST['submit']) {
 		$smarty->assign('fullname',     $_POST['fullname']);
 		$smarty->assign('bio',          $_POST['bio']);
 		$smarty->assign('homepage',     $_POST['homepage']);
 		$smarty->assign('avatar_uri',   $_POST['avatar_uri']);
-	}
-	else
-	{
+	} else {
 		$smarty->assign('fullname',     $group->fullname);
 		$smarty->assign('bio',          $group->bio);
 		$smarty->assign('homepage',     $group->homepage);
@@ -163,14 +155,10 @@ if(isset($group->name))
 	try {
 		$aUserTagCloud = $group->tagCloudData();
 		$smarty->assign('tagcloud', $aTagCloud);
-	} catch (exception $e) {}
+	} catch (Exception $e) {}
 	$smarty->display('edit_group.tpl');
-}
-
-else
-{
+} else {
 	$smarty->assign('pageheading', 'Group not found');
 	$smarty->assign('details', 'Shall I call in a missing peoples report? This shouldn\'t happen.');
 	$smarty->display('error.tpl');
 }
-

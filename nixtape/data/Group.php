@@ -41,26 +41,24 @@ class Group {
 	 *
 	 * @param string $name The name of the user to load
 	 */
-	function __construct($name, $data=null) {
+	function __construct($name, $data = null) {
 
 		global $base_url;
 		$base = preg_replace('#/$#', '', $base_url);
 
 		if (is_array($data)) {
 			$row = $data;
-		}
-		else {
+		} else {
 			global $adodb;
 			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 			try {
-				$res = $adodb->GetRow('SELECT * FROM Groups WHERE lower(groupname) = ' . $adodb->qstr(strtolower($name)));
-			}
-			catch (exception $e) {
+				$res = $adodb->GetRow('SELECT * FROM Groups WHERE lower(groupname) = lower(' . $adodb->qstr($name) . ')');
+			} catch (Exception $e) {
 				header('Content-Type: text/plain');
 				exit;
 			}
 
-			if($res) {
+			if ($res) {
 				$row = $res;
 			}
 		}
@@ -75,46 +73,39 @@ class Group {
 			$this->owner        = User::new_from_uniqueid_number($row['owner']);
 			$this->count        = -1;
 			$this->users        = array();
-			if (! preg_match('/\:/', $this->id))
-				$this->id = $base.'/group/' . rawurlencode($this->name) . '#group';
+			if (!preg_match('/\:/', $this->id)) {
+				$this->id = $base . '/group/' . rawurlencode($this->name) . '#group';
+			}
 		}
 	}
 
 	/**
 	 * Selects a random nixtape group.
 	 *
-	 * @return object a Group object on success, or FALSE if there are no groups existing.
+	 * @return object a Group object on success, or false if there are no groups existing.
 	 * @author tobyink
 	 */
-	static function random ()
-	{
+	static function random() {
 		global $adodb;
 
-		if ( strtolower(substr($connect_string, 0, 5)) == 'mysql'  )
-		{
+		if (strtolower(substr($connect_string, 0, 5)) == 'mysql') {
 			$random = 'RAND';
-		}
-		elseif ( strtolower(substr($connect_string, 0, 5)) == 'mssql'  )
-		{
+		} else if (strtolower(substr($connect_string, 0, 5)) == 'mssql') {
 			$random = 'NEWID';  // I don't think we try to support MSSQL, but here's how it's done theoretically anyway
-		}
-		else
-		{
+		} else {
 			$random = 'RANDOM';  // postgresql, sqlite, possibly others
 		}
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
 			$res = $adodb->GetRow("SELECT * FROM Groups ORDER BY {$random}() LIMIT 1");
-		}
-		catch (exception $e) {
+		} catch (Exception $e) {
 			return $res;
 		}
 		if ($res) {
 			$row = $res;
-			return (new Group($row['groupname'], $row));
-		}
-		else {
+			return new Group($row['groupname'], $row);
+		} else {
 			// No groups found.
 			return false;
 		}
@@ -128,17 +119,14 @@ class Group {
 	 * @return object a Group object on success, throw an Exception object otherwise.
 	 * @author tobyink
 	 */
-	static function create ($name, $owner)
-	{
+	static function create($name, $owner) {
 		global $adodb;
 
-		if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9_\.-]*[A-Za-z0-9]$/', $name))
-		{
+		if (!preg_match('/^[A-Za-z0-9][A-Za-z0-9_\.-]*[A-Za-z0-9]$/', $name)) {
 			throw (new Exception('Group names should only contain letters, numbers, hyphens, underscores and full stops (a.k.a. dots/periods), must be at least two characters long, and can\'t start or end with punctuation.'));
 		}
 
-		if (in_array(strtolower($name), array('new', 'search')))
-		{
+		if (in_array(strtolower($name), array('new', 'search'))) {
 			throw (new Exception("Not allowed to create a group called '{$name}' (reserved word)!"));
 		}
 
@@ -148,8 +136,7 @@ class Group {
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
 			$res = $adodb->GetRow($q);
-		}
-		catch (exception $e) {
+		} catch (Exception $e) {
 			return $res;
 		}
 		if ($res) {
@@ -159,7 +146,7 @@ class Group {
 						($existing == $name) ?
 						"There is already a group called '{$existing}'." :
 						"The name '{$name}' it too similar to existing group '{$existing}'"
-					      ));
+						));
 		}
 
 		// Create new group
@@ -170,8 +157,7 @@ class Group {
 				, time());
 		try {
 			$res = $adodb->Execute($q);
-		}
-		catch (exception $e) {
+		} catch (Exception $e) {
 			return $res;
 		}
 
@@ -179,12 +165,10 @@ class Group {
 		$q = sprintf('SELECT id FROM Groups WHERE lower(groupname) = lower(%s)', $adodb->quote($name, 'text'));
 		try {
 			$res = $adodb->GetOne($q);
-		}
-		catch (exception $e) {
+		} catch (Exception $e) {
 			return $res;
 		}
-		if (!$res)
-		{
+		if (!$res) {
 			throw (new Exception('Something has gone horribly, horribly wrong!'));
 		}
 		$grp = $res;
@@ -196,48 +180,43 @@ class Group {
 				, time());
 		try {
 			$res = $adodb->Execute($q);
-		} catch (exception $e) {
+		} catch (Exception $e) {
 			return null;
 		}
 
 		// Return the newly created group. Callers should check the return value.
-		return (new Group($name));
+		return new Group($name);
 	}
 
-	static function groupList ($user=false)
-	{
+	static function groupList($user = false) {
 		global $adodb;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
 
-			if ($user)
-			{
+			if ($user) {
 				$res = $adodb->GetAll('SELECT gc.* FROM '
-						.'Group_Members m '
-						.'INNER JOIN (SELECT g.id, g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count '
-							.'FROM Groups g '
-							.'LEFT JOIN Group_Members gm ON gm.grp=g.id '
-							.'GROUP BY g.id, g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype) gc '
-						.'ON m.grp=gc.id '
-						.'WHERE m.member='.(int)($user->uniqueid));
-			}
-			else
-			{
+						. 'Group_Members m '
+						. 'INNER JOIN (SELECT g.id, g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count '
+						. 'FROM Groups g '
+						. 'LEFT JOIN Group_Members gm ON gm.grp=g.id '
+						. 'GROUP BY g.id, g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype) gc '
+						. 'ON m.grp=gc.id '
+						. 'WHERE m.member=' . (int)($user->uniqueid));
+			} else {
 				$res = $adodb->GetAll('SELECT g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype, COUNT(*) AS member_count '
-						.'FROM Groups g '
-						.'LEFT JOIN Group_Members gm ON gm.grp=g.id '
-						.'GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype');
+						. 'FROM Groups g '
+						. 'LEFT JOIN Group_Members gm ON gm.grp=g.id '
+						. 'GROUP BY g.groupname, g.owner, g.fullname, g.bio, g.homepage, g.created, g.modified, g.avatar_uri, g.grouptype');
 			}
 
-		}
-		catch (exception $e) {
+		} catch (Exception $e) {
 			header('Content-Type: text/plain');
 			exit;
 		}
 
 		$list = array();
-		foreach($res as &$row) {
+		foreach ($res as &$row) {
 			$g = new Group($row['group_name'], $row);
 			$g->count = $row['member_count'];
 			$list[] = $g;
@@ -246,8 +225,7 @@ class Group {
 		return $list;
 	}
 
-	function save ()
-	{
+	function save() {
 		global $adodb;
 
 		$q = sprintf('UPDATE Groups SET '
@@ -268,8 +246,7 @@ class Group {
 
 		try {
 			$res = $adodb->Execute($q);
-		}
-		catch (exception $e) {
+		} catch (Exception $e) {
 			header('Content-Type: text/plain');
 			exit;
 		}
@@ -283,10 +260,11 @@ class Group {
 	 * @param int $size The desired size of the avatar (between 1 and 512 pixels)
 	 * @return A URL to the user's avatar image
 	 */
-	function getAvatar($size=64) {
+	function getAvatar($size = 64) {
 		global $base_uri;
-		if (!empty($this->avatar_uri))
+		if (!empty($this->avatar_uri)) {
 			return $this->avatar_uri;
+		}
 		return $base_url . '/themes/librefm/images/default-avatar-stream.png';
 	}
 
@@ -296,27 +274,28 @@ class Group {
 
 	function getURLAction ($action) {
 		$url = $this->getURL();
-		if (strstr($url, '?'))
+		if (strstr($url, '?')) {
 			return $url . '&action=' . rawurlencode($action);
-		else
+		} else {
 			return $url . '?action=' . rawurlencode($action);
+		}
 	}
 
 	function getUsers () {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
-		if (!isset($this->users[0]))
-		{
+		if (!isset($this->users[0])) {
 			$res = $adodb->GetAll('SELECT u.* '
 					. 'FROM Users u '
 					. 'INNER JOIN Group_Members gm ON u.uniqueid=gm.member '
-					. 'WHERE gm.grp='.(int)($this->gid)
+					. 'WHERE gm.grp=' . (int)($this->gid)
 					. ' ORDER BY gm.joined');
-			if ($res)
-			{
-				foreach($res as &$row) {
-					$this->users[ $row['username'] ] = new User($row['username'], $row);
+			if ($res) {
+				foreach ($res as &$row) {
+					try {
+						$this->users[$row['username']] = new User($row['username'], $row);
+					} catch (Exception $e) {}
 				}
 			}
 
@@ -328,14 +307,16 @@ class Group {
 
 	function memberCheck ($user) {
 		$users = $this->getUsers();
-		if ($users[ $user->name ]->name == $user->name)
+		if ($users[$user->name]->name == $user->name) {
 			return true;
+		}
 		return false;
 	}
 
 	function memberJoin ($user) {
-		if ($this->memberCheck($user))
+		if ($this->memberCheck($user)) {
 			return false;
+		}
 
 		global $adodb;
 		try {
@@ -343,47 +324,50 @@ class Group {
 						(int)($this->gid),
 						(int)($user->uniqueid),
 						time()));
-		}
-		catch (exception $e) {
+		} catch (Exception $e) {
 			return false;
 		}
 
-		$this->users[ $user->name ] = $user;
+		$this->users[$user->name] = $user;
 		return true;
 	}
 
-	function memberLeave ($user) {
-		if (!$this->memberCheck($user))
+	function memberLeave($user) {
+		if (!$this->memberCheck($user)) {
 			return false;
+		}
 
 		// Group owner cannot leave, so we need a way to reassign ownership.
-		if ($this->owner->name == $user->name)
+		if ($this->owner->name == $user->name) {
 			return false;
+		}
 
 		global $adodb;
 		try {
 			$res = $adodb->Execute(sprintf('DELETE FROM Group_Members WHERE grp=%s AND member=%s',
 						(int)($this->gid),
 						(int)($user->uniqueid)));
-		}
-		catch (exception $e) {
+		} catch (Exception $e) {
 			return false;
 		}
 
-		$this->users[ $user->name ] = null;
+		$this->users[$user->name] = null;
 		// The array key still exists though. That's annoying. PHP needs an equivalent of Perl's 'delete'.
 		// This shouldn't actually cause us any problems, but people should be aware of the oddness.
 		return true;
 	}
 
 	function tagCloudData () {
-		return TagCloud::generateTagCloud(
-				TagCloud::scrobblesTable('group').' s LEFT JOIN Users u ON s.userid=u.uniqueid LEFT JOIN Group_Members gm ON u.uniqueid=gm.member LEFT JOIN Groups g ON gm.grp=g.id',
-				'artist',
-				40,
-				$this->name,
-				'groupname');
+		try {
+			return TagCloud::generateTagCloud(
+					TagCloud::scrobblesTable('group') . ' s LEFT JOIN Users u ON s.userid=u.uniqueid LEFT JOIN Group_Members gm ON u.uniqueid=gm.member LEFT JOIN Groups g ON gm.grp=g.id',
+					'artist',
+					40,
+					$this->name,
+					'groupname');
+		} catch (Exception $e) {
+			throw $e;
+		}
 	}
 
 }
-

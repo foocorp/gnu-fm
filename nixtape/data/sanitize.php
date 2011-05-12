@@ -22,10 +22,8 @@
 
 function sanitize($data) {
 	$sane = array();
-	foreach ($data as $key => $value)  {
+	foreach ($data as $key => $value) {
 		$sane[$key] = strip_tags(stripslashes($data[$key]));
 	}
 	return $sane;
 }
-
-?>

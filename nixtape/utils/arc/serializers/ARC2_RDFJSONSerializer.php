@@ -1,25 +1,22 @@
 <?php
-/*
-homepage: http://arc.semsol.org/
-license:  http://arc.semsol.org/license
-
-class:    ARC2 RDF/JSON Serializer
-author:   Benjamin Nowack
-version:  2008-07-01 (Fix: Proper jsonEscape method, thx to Keith Alexander)
+/**
+ * ARC2 RDF/JSON Serializer
+ *
+ * @author Benjamin Nowack <bnowack@semsol.com>
+ * @license http://arc.semsol.org/license
+ * @homepage <http://arc.semsol.org/>
+ * @package ARC2
+ * @version 2010-11-16
 */
 
 ARC2::inc('RDFSerializer');
 
 class ARC2_RDFJSONSerializer extends ARC2_RDFSerializer {
 
-  function __construct($a = '', &$caller) {
+  function __construct($a, &$caller) {
     parent::__construct($a, $caller);
   }
   
-  function ARC2_RDFJSONSerializer($a = '', &$caller) {
-    $this->__construct($a, $caller);
-  }
-
   function __init() {
     parent::__init();
     $this->content_header = 'application/json';
@@ -39,12 +36,12 @@ class ARC2_RDFJSONSerializer extends ARC2_RDFSerializer {
         return $this->getTerm($v['value'], $term);
       }
       if (preg_match('/^\_\:/', $v['value'])) {
-        return '{ "value" : "' . $v['value']. '", "type" : "bnode" }';
+        return '{ "value" : "' . $this->jsonEscape($v['value']) . '", "type" : "bnode" }';
       }
-      return '{ "value" : "' . $v['value']. '", "type" : "uri" }';
+      return '{ "value" : "' . $this->jsonEscape($v['value']) . '", "type" : "uri" }';
     }
     /* literal */
-    $r = '{ "value" : "' . $this->jsonEscape($v['value']). '", "type" : "literal"';
+    $r = '{ "value" : "' . $this->jsonEscape($v['value']) . '", "type" : "literal"';
     $suffix = isset($v['datatype']) ? ', "datatype" : "' . $v['datatype'] . '"' : '';
     $suffix = isset($v['lang']) ? ', "lang" : "' . $v['lang'] . '"' : $suffix;
     $r .= $suffix . ' }';
@@ -54,11 +51,11 @@ class ARC2_RDFJSONSerializer extends ARC2_RDFSerializer {
   function jsonEscape($v) {
     if (function_exists('json_encode')) return trim(json_encode($v), '"');
     $from = array("\\", "\r", "\t", "\n", '"', "\b", "\f", "/");
-    $to = array('\\\\', '\r', '\t', '\n', '\"', '\b', '\f', '\foo/');
+    $to = array('\\\\', '\r', '\t', '\n', '\"', '\b', '\f', '\/');
     return str_replace($from, $to, $v);
   }
     
-  function getSerializedIndex($index) {
+  function getSerializedIndex($index, $raw = 0) {
     $r = '';
     $nl = "\n";
     foreach ($index as $s => $ps) {

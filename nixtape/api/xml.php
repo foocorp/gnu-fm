@@ -25,7 +25,7 @@ class XML {
 		$dom->preserveWhitespace = false;
 		$dom->loadXML($xml->asXML());
 		$dom->formatOutput = true;
-		return($dom->saveXML());
+		return $dom->saveXML();
 	}
 
 	public static function error($status, $errcode, $errtext) {
@@ -33,12 +33,11 @@ class XML {
 		$xml->addAttribute('status', $status);
 		$error = $xml->addChild('error', $errtext);
 		$error->addAttribute('code', $errcode);
-		return($xml);
+		return $xml;
 	}
 }
 
 function repamp($input) {
 	$input = str_replace('&', '&amp;', $input);
-	return($input);
+	return $input;
 }
-?>
