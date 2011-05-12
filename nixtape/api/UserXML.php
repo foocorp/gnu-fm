@@ -125,7 +125,7 @@ class UserXML {
 			return(XML::error('error', '7', 'Invalid resource specified'));
 		}
 
-		$totalPages = $adodb->GetOne('SELECT COUNT(track) FROM scrobbles WHERE userid = ' . $user->uniqueid);
+		$totalPages = $adodb->GetOne('SELECT COUNT(track) FROM Scrobbles WHERE userid = ' . $user->uniqueid);
 		$totalPages = ceil($totalPages / $limit);
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
