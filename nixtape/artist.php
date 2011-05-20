@@ -67,7 +67,7 @@ if (isset($this_user) && $this_user->manages($artist->name)) {
 }
 
 try {
-	$tagCloud = TagCloud::generateTagCloud('tags', 'tag', 10, $artist->name, 'artist');
+	$tagCloud = TagCloud::generateTagCloud('Tags', 'tag', 10, $artist->name, 'artist');
 	$smarty->assign('tagcloud', $tagCloud);
 } catch (Exception $ex) {
 	$tagCloud = array();

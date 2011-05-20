@@ -260,7 +260,7 @@ class Track {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
-		$res = $adodb->CacheGetAll(600, 'SELECT COUNT(tag) AS freq, tag FROM tags WHERE'
+		$res = $adodb->CacheGetAll(600, 'SELECT COUNT(tag) AS freq, tag FROM Tags WHERE'
 			. ' artist = ' . $adodb->qstr($this->artist_name)
 			. ' AND track = ' . $adodb->qstr($this->name)
 			. ' GROUP BY tag ORDER BY freq DESC');
@@ -277,7 +277,7 @@ class Track {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
-		$res = $adodb->GetAll('SELECT tag FROM tags WHERE'
+		$res = $adodb->GetAll('SELECT tag FROM Tags WHERE'
 			. ' artist = ' . $adodb->qstr($this->artist_name)
 			. ' AND track = ' . $adodb->qstr($this->name)
 			. ' AND userid = ' . $userid);
