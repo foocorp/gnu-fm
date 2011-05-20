@@ -383,7 +383,7 @@ if (isset($_POST['install'])) {
 //      $adodb->Execute("CREATE UNIQE INDEX groups_groupname_idx ON Groups(lower(groupname))");
 
 // uncomment these if you're using postgresql and want to run the software as www-data
-//	$adodb->Execute("GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE Album, Artist, Auth, Clientcodes, Delete_Request Error, Invitation_Request, Invitations, Now_Playing, Places, Radio_Sessions, Scrobble_Sessions, Scrobbles, Scrobble_Track, Similar_Artist, Tags, Track, Users, User_Relationships, User_Relationship_Flags to \"www-data\"");
+//	$adodb->Execute("GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE Album, Artist, Auth, ClientCodes, Delete_Request, Error, Invitation_Request, Invitations, Now_Playing, Places, Radio_Sessions, Scrobble_Sessions, Scrobbles, Scrobble_Track, Similar_Artist, Tags, Track, Users, User_Relationships, User_Relationship_Flags to \"www-data\"");
 //	$adodb->Execute("GRANT SELECT ON Free_Scrobbles, Relationship_Flags to \"www-data\"");
 //	$adodb->Execute("GRANT SELECT, UPDATE ON users_uniqueid_seq, scrobble_track_id_seq, groups_id_seq, artist_id_seq, album_id_seq to \"www-data\"");
 
