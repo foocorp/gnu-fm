@@ -41,8 +41,8 @@ class TagCloud {
 		}
 		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
 		if ($field == 'artist') {
-			$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table . ' INNER JOIN artist ON ' . $table . '.' . $field . ' = artist.name '
-				. ' WHERE artist.streamable = 1';
+			$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table . ' INNER JOIN Artist ON ' . $table . '.' . $field . ' = Artist.name '
+				. ' WHERE Artist.streamable = 1';
 			$query .= (!is_null($constraint)) ? ' AND ' : null;
 		} else {
 			$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table;
