@@ -34,7 +34,7 @@ class TrackXML {
 				continue;
 			}
 			try {
-				$adodb->Execute('INSERT INTO tags VALUES ('
+				$adodb->Execute('INSERT INTO Tags VALUES ('
 					. $adodb->qstr($tag) . ', '
 					. $adodb->qstr($artist) . ', '
 					. $adodb->qstr($album) . ', '
@@ -92,7 +92,7 @@ class TrackXML {
 		global $adodb;
 
 		try {
-			$res = $adodb->Execute('INSERT INTO banned_tracks VALUES ('
+			$res = $adodb->Execute('INSERT INTO Banned_Tracks VALUES ('
 				. $userid . ', '
 				. $adodb->qstr($name) . ', '
 				. $adodb->qstr($artist) . ', '
@@ -108,7 +108,7 @@ class TrackXML {
 		global $adodb;
 
 		try {
-			$res = $adodb->Execute('INSERT INTO loved_tracks VALUES ('
+			$res = $adodb->Execute('INSERT INTO Loved_Tracks VALUES ('
 				. $userid . ', '
 				. $adodb->qstr($name) . ', '
 				. $adodb->qstr($artist) . ', '
@@ -124,7 +124,7 @@ class TrackXML {
 		global $adodb;
 
 		try {
-			$res = $adodb->Execute('DELETE FROM banned_tracks WHERE userid=' . $userid . ' AND track=' . $adodb->qstr($name) . ' AND artist=' . $adodb->qstr($artist));
+			$res = $adodb->Execute('DELETE FROM Banned_Tracks WHERE userid=' . $userid . ' AND track=' . $adodb->qstr($name) . ' AND artist=' . $adodb->qstr($artist));
 		} catch (Exception $e) {}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
@@ -137,7 +137,7 @@ class TrackXML {
 		global $adodb;
 
 		try {
-			$res = $adodb->Execute('DELETE FROM loved_tracks WHERE userid='	. $userid . ' AND track=' . $adodb->qstr($name) . ' AND artist=' . $adodb->qstr($artist));
+			$res = $adodb->Execute('DELETE FROM Loved_Tracks WHERE userid='	. $userid . ' AND track=' . $adodb->qstr($name) . ' AND artist=' . $adodb->qstr($artist));
 		} catch (Exception $e) {}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
