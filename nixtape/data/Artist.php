@@ -185,7 +185,7 @@ class Artist {
 				continue;
 			}
 			try {
-				$adodb->Execute('INSERT INTO tags (tag, artist, userid) VALUES ('
+				$adodb->Execute('INSERT INTO Tags (tag, artist, userid) VALUES ('
 					. $adodb->qstr($tag) . ', '
 					. $adodb->qstr($this->name) . ', '
 					. $userid . ')');
