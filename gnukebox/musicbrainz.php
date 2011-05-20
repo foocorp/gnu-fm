@@ -27,7 +27,7 @@ require_once('database.php');
 require_once('utils/human-time.php');
 
 $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-$res = $adodb->GetAll('SELECT artist, track from scrobbles where Album is null LIMIT 20;');
+$res = $adodb->GetAll('SELECT artist, track from Scrobbles where album is null LIMIT 20;');
 
 echo '<ul>';
 
@@ -65,7 +65,7 @@ function doABunchOfShit($artist, $track) {
 function ScrobbleLookup($artist, $track) {
 	global $adodb;
 
-	$sql = 'SELECT album from scrobbles where artist = ' . $adodb->qstr($artist) . ' and track = ' . $adodb->qstr($track) . ' LIMIT 1;';
+	$sql = 'SELECT album from Scrobbles where artist = ' . $adodb->qstr($artist) . ' and track = ' . $adodb->qstr($track) . ' LIMIT 1;';
 
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 	$album = $adodb->GetOne($sql);
