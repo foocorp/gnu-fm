@@ -308,7 +308,7 @@ class User {
 	function getTopTags($limit = 10) {
 		global $adodb;
 
-		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM tags WHERE '
+		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM Tags WHERE '
 			. ' userid = ' . $this->uniqueid
 			. ' GROUP BY tag '
 			. ' LIMIT ' . $limit);
@@ -325,7 +325,7 @@ class User {
 	function getTagsForArtist($artist) {
 		global $adodb;
 
-		$res = $adodb->GetAll('SELECT tag, COUNT(tag) AS freq FROM tags WHERE '
+		$res = $adodb->GetAll('SELECT tag, COUNT(tag) AS freq FROM Tags WHERE '
 			. ' userid = ' . $this->uniqueid
 			. ' AND artist = ' . $adodb->qstr($artist)
 			. ' GROUP BY tag ');

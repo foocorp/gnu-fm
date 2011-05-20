@@ -169,7 +169,7 @@ class Album {
 	function getTopTags($limit = 10) {
 		global $adodb;
 
-		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM tags WHERE '
+		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM Tags WHERE '
 			. ' artist = ' . $adodb->qstr($this->artist_name)
 			. ' AND album = ' . $adodb->qstr($this->name)
 			. ' GROUP BY tag ORDER BY freq DESC '

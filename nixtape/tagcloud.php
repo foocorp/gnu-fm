@@ -15,7 +15,7 @@ if ($n < 1) {
 }
 
 try {
-	$aTagCloud = TagCloud::GenerateTagCloud('free_scrobbles', 'artist', $n);
+	$aTagCloud = TagCloud::GenerateTagCloud('Free_Scrobbles', 'artist', $n);
 	$smarty->assign('tagcloud', $aTagCloud);
 } catch (Exception $e) {
 	$smarty->assign('errors', $errors);
