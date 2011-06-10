@@ -25,6 +25,7 @@ require_once('user-menu.php');
 require_once('data/User.php');
 require_once('data/TagCloud.php');
 require_once('data/Statistic.php');
+require_once('data/GraphTypes.php');
 
 if(!isset($_GET['user']) && $logged_in == false) {
 	$smarty->assign('pageheading', 'Error!');
@@ -66,6 +67,9 @@ if(isset($user->name)) {
 		die();
 	}
 	$smarty->assign('totaltracks', $user->getTotalTracks());
+	
+	$smarty->assign('graphtopartists', new GraphTopArtists($user, 20));
+	$smarty->assign('graphtoptracks', new GraphTopTracks($user));
 
 	$smarty->assign('me', $user);
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
@@ -74,13 +78,19 @@ if(isset($user->name)) {
 
 	$smarty->assign('extra_head_links', array(
 			array(
-				'rel' => 'meta',
-				'type' => 'application/rdf+xml' ,
+				'rel'   => 'meta',
+				'type'  => 'application/rdf+xml' ,
 				'title' => 'FOAF',
-				'href' => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL()))
-				)
+				'href'  => $base_url.'/rdf.php?fmt=xml&page='.urlencode(str_replace($base_url, '', $user->getURL()))
+				),
+			array(
+				'rel'   => 'stylesheet',
+				'type'	=> 'text/css',
+				'title' => 'jqPlot CSS',
+				'href' 	=> $base_url.'/themes/'.$default_theme.'/css/jquery.jqplot.min.css'
+			)
 		));
-
+	
 	$submenu = user_menu($user, 'Stats');
         $smarty->assign('submenu', $submenu);
 	$smarty->assign('headerfile', 'maxiprofile.tpl');
