@@ -46,10 +46,7 @@ class GraphTopArtists extends Graph {
             $artists_data[] = $node['count'];
         }
         
-        /* As in DESC order, first element has to be the largest. */
         $this->setMaxX($artists_data[0]);
-        
-        /* To get DESC cascading, once committed, possibly alter this in SQL. */
         $artists = array_reverse($artists);
         $artists_data = array_reverse($artists_data);
         $this->artists = $this->buildJsSingleArray($artists);
@@ -72,7 +69,6 @@ class GraphTopTracks extends Graph {
     
     private function buildGraphData()
     {
-        /* @TODO: Remove width column in SQL */
         $this->data_buffer = $this->user->getTopTracks($this->number_of_tracks);
         $tracks = array();
         $listings = array();
@@ -84,9 +80,7 @@ class GraphTopTracks extends Graph {
             $listings[] = $entry['freq'];
         }
         
-        /* @TODO: sort out SQL for orders */
         $this->setMaxX($listings[0]);
-        
         $tracks = array_reverse($tracks);
         $listings = array_reverse($listings);
         $this->tracks = $this->buildJsSingleArray($tracks);

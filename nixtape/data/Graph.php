@@ -138,10 +138,4 @@ class Graph {
         $temp = rtrim($temp, ',') . "]";
         return $temp;
     }
-    
-    public function getGraphJs() {
-        $output;
-        
-        return $output;
-    }
 }
