@@ -34,6 +34,7 @@ class Graph {
     public $data, $data_buffer;
     public $user, $type, $renderer, $label_renderer;
     public $max_x_axis, $max_y_axis;
+    public $tick_interval = 20;
     public $x_axis_label = "X axis", $y_axis_label = "Y Axis";
     
     /* Multidimensional array to allow for multiple series of data. */
@@ -87,7 +88,8 @@ class Graph {
     
     protected function setMaxX($raw)
     {
-        $this->max_x_axis = round($raw + ($raw * 0.10), -3);
+        $this->max_x_axis = round($raw + 100, -2);
+        $this->tick_interval = ($this->max_x_axis / 10);
     }
     
     /**
@@ -107,7 +109,8 @@ class Graph {
             {
                 foreach ($set as $k => $node)
                 {
-                    $temp .= "[" . ((! is_numeric($node)) ? "'".$node."'" : $node);
+                    /* @TODO: Need to escape the $node if not numeric! */
+                    $temp .= "[" . ((! is_numeric($node)) ? "'".(addslashes($node))."'" : $node);
                     /* @TODO: check $node for len > 1, if so tokenise string */
                     if ($inverse) $temp .= "," . ++$i;
                     $temp .= "],"; 
