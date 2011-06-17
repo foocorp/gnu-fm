@@ -31,10 +31,10 @@ class GraphTopArtists extends Graph {
         parent::__construct($user, "bar_horiz");
         $this->number_of_tracks = $num;
         
-        $this->buildArtistGraphData();
+        $this->buildGraphData();
     }
     
-    private function buildArtistGraphData()
+    private function buildGraphData()
     {
         $tmp = Statistic::GeneratePlayStats('Scrobbles', 'artist',
                         $this->number_of_tracks, $this->user->uniqueid, 300);
@@ -60,26 +60,68 @@ class GraphTopArtists extends Graph {
 
 class GraphTopTracks extends Graph {
     
+    public $tracks, $tracks_data;
     public $number_of_tracks;
     
     function __construct($user, $num = 20)
     {
         parent::__construct($user, "bar_horiz");
         $this->number_of_tracks = $num;
-        $this->buildTrackGraphData();
+        $this->buildGraphData();
     }
     
-    private function buildTrackGraphData()
+    private function buildGraphData()
     {
+        /* @TODO: Remove width column in SQL */
         $this->data_buffer = $this->user->getTopTracks($this->number_of_tracks);
-        $tmp_artists = array();
-        $tmp_listings = array();
+        $tracks = array();
+        $listings = array();
         
         foreach($this->data_buffer as $key => $entry)
         {
-            $tmp_artists[] = $entry['freq'];
-            $tmp_listings[] = $entry['artist'];
+            //$tracks[] = $entry['track'];
+            //$tracks[] = '<a href="'.$entry['artisturl'].'">'.$entry['artist'].'</a> - <a href="'.$entry['trackurl'].'">'.$entry['track'].'</a>';
+            $listings[] = $entry['freq'];
         }
+        
+        /* @TODO: sort out SQL for orders */
+        $this->setMaxX($listings[0]);
+        
+        $tracks = array_reverse($tracks);
+        $listings = array_reverse($listings);
+        $this->tracks = $this->buildJsSingleArray($tracks);
+        $this->data[0][0] = $listings;
+        $this->tracks_data = $this->buildJsDataArray(true);
+    }
+}
+
+class GraphPlaysByDays extends Graph {
+
+    public $plays_by_days;
+    public $number_of_days;
+    
+    function __construct($user, $num = 20)
+    {
+        parent::__construct($user, "line");
+        $this->number_of_days = $num;
+        $this->buildGraphData();
+    }
+    
+    private function buildGraphData()
+    {
+        $this->data_buffer = Statistic::generatePlayByDays('Scrobbles',
+                                $this->number_of_days, $user->uniqueid, 300);
+        
+        $date_line = "[";
+        
+        /* @TODO: Streamline this by simply removing size from SQL... */
+        foreach ($this->data_buffer as $key => $entry)
+        {
+            $date_line .= "['" . $entry['date'] . "', " . $entry['count'] . "],";
+        }
+        
+        $this->plays_by_days = rtrim($date_line, ',');
+        $this->plays_by_days .= "]";
     }
 }
 

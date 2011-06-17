@@ -69,7 +69,8 @@ if(isset($user->name)) {
 	$smarty->assign('totaltracks', $user->getTotalTracks());
 	
 	$smarty->assign('graphtopartists', new GraphTopArtists($user, 20));
-	$smarty->assign('graphtoptracks', new GraphTopTracks($user));
+	$smarty->assign('graphtoptracks', new GraphTopTracks($user, 20));
+	$smarty->assign('graphplaysbydays', new GraphPlaysByDays($user, 20));
 
 	$smarty->assign('me', $user);
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
@@ -87,7 +88,7 @@ if(isset($user->name)) {
 				'rel'   => 'stylesheet',
 				'type'	=> 'text/css',
 				'title' => 'jqPlot CSS',
-				'href' 	=> $base_url.'/themes/'.$default_theme.'/css/jquery.jqplot.min.css'
+				'href' 	=> $base_url.'/themes/'.$default_theme.'/css/jquery.jqplot.css'
 			)
 		));
 	
