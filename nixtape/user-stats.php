@@ -49,17 +49,15 @@ if(isset($user->name)) {
 
 	$smarty->assign('stat_barwidth', 320);
 	try {
-		$aUserPlayStat =  Statistic::GeneratePlayStats('Scrobbles', 'artist', 40, $user->uniqueid, 300);
-		$smarty->assign('user_playstats',$aUserPlayStat);
+		$smarty->assign('graphtopartists', new GraphTopArtists($user, 20));
 	} catch (exception $e) {}
 
 	try {
-		$aUserDayStat =  Statistic::generatePlayByDays('Scrobbles', 40, $user->uniqueid, 300);
-		$smarty->assign('user_daystats',$aUserDayStat);
+		$smarty->assign('graphplaysbydays', new GraphPlaysByDays($user, 20));
 	} catch (exception $e) {}
 
 	try {
-		$smarty->assign('toptracks', $user->getTopTracks(40));
+		$smarty->assign('graphtoptracks', new GraphTopTracks($user, 20));
 	} catch (exception $e) {
 		$smarty->assign('pageheading', 'Couldn\'t get users top tracks!');
 		$smarty->assign('details', 'User ' . $user->name . ' doesn\'t seem to have scrobbled anything yet.');
@@ -68,10 +66,6 @@ if(isset($user->name)) {
 	}
 	$smarty->assign('totaltracks', $user->getTotalTracks());
 	
-	$smarty->assign('graphtopartists', new GraphTopArtists($user, 20));
-	$smarty->assign('graphtoptracks', new GraphTopTracks($user, 20));
-	$smarty->assign('graphplaysbydays', new GraphPlaysByDays($user, 20));
-
 	$smarty->assign('me', $user);
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
 	$smarty->assign('isme', ($this_user->name == $user->name));
