@@ -153,7 +153,7 @@ class GraphPlaysByDays extends Graph {
     private function buildGraphData()
     {
         $this->data_buffer = Statistic::generatePlayByDays('Scrobbles',
-                                $this->number_of_days, $user->uniqueid, 300);
+                                $this->number_of_days, $this->user->uniqueid, 300);
         
         $date_line = "[";
         
