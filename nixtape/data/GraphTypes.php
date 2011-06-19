@@ -21,19 +21,36 @@
 
 require_once($install_path . '/data/Graph.php');
 
+/**
+ * Each subclass within this file extends the parent Graph object and
+ * correlate to individual graph data on the statistics pages.
+ *
+ * GraphTopArtists represents the Top Artists displayed on the user
+ * statistics page. */
 class GraphTopArtists extends Graph {
     
     public $artists, $artists_data;
     public $number_of_tracks;
 
+    /**
+     * @param $user - the current user to build the information on.
+     * @param $num - the number of tracks to be included in the search,
+     * 20 by default.
+     **/
     function __construct($user, $num = 20)
     {
         parent::__construct($user, "bar_horiz");
         $this->number_of_tracks = $num;
-        
         $this->buildGraphData();
     }
     
+    /**
+     * Parses the data internally into a format expected by the plotting
+     * JS libraries.
+     *
+     * Arrays are reversed to the expectation of order in the current (jqPlot)
+     * plotting utility.
+     **/
     private function buildGraphData()
     {
         $tmp = Statistic::GeneratePlayStats('Scrobbles', 'artist',
@@ -41,8 +58,7 @@ class GraphTopArtists extends Graph {
         
         foreach ($tmp as $root => $node)
         {
-            /* @TODO: check the URLs, make them work. */
-            $artists[] = '<a href="'.$node['artisturl'].'">'.$node['artist'].'</a>';
+            $artists[] = '<a href="'.$node['artisturl'].'">'.addslashes($node['artist']).'</a>';
             $artists_data[] = $node['count'];
         }
         
@@ -55,11 +71,19 @@ class GraphTopArtists extends Graph {
     }
 }
 
+/**
+ * Represents the Top Tracks data on the user statistic page.
+ **/
 class GraphTopTracks extends Graph {
     
     public $tracks, $tracks_data;
     public $number_of_tracks;
     
+    /**
+     * @param $user - the current user to build the information on.
+     * @param $num - the number of tracks to be included in the search,
+     * 20 by default.
+     **/
     function __construct($user, $num = 20)
     {
         parent::__construct($user, "bar_horiz");
@@ -67,6 +91,13 @@ class GraphTopTracks extends Graph {
         $this->buildGraphData();
     }
     
+    /**
+     * Parses the data internally into a format expected by the plotting
+     * JS libraries.
+     *
+     * Arrays are reversed to the expectation of order in the current (jqPlot)
+     * plotting utility.
+     **/
     private function buildGraphData()
     {
         $this->data_buffer = $this->user->getTopTracks($this->number_of_tracks);
@@ -75,9 +106,10 @@ class GraphTopTracks extends Graph {
         
         foreach($this->data_buffer as $key => $entry)
         {
-            //$tracks[] = $entry['track'];
-            //$tracks[] = '<a href="'.$entry['artisturl'].'">'.$entry['artist'].'</a> - <a href="'.$entry['trackurl'].'">'.$entry['track'].'</a>';
+            $tmp_line = '<a href="'.$entry['artisturl'].'">'.$entry['artist'].'</a>';
+            $tmp_line .= ' - <a href="'.$entry['trackurl'].'">'.addslashes($entry['track']).'</a>';
             $listings[] = $entry['freq'];
+            $tracks[] = $tmp_line;
         }
         
         $this->setMaxX($listings[0]);
@@ -89,11 +121,19 @@ class GraphTopTracks extends Graph {
     }
 }
 
+/**
+ * Represents the Plays By Days line graph data on the user statistic page.
+ **/
 class GraphPlaysByDays extends Graph {
 
     public $plays_by_days;
     public $number_of_days;
     
+    /**
+     * @param $user - the current user to build the information on.
+     * @param $num - the number of tracks to be included in the search,
+     * 20 by default.
+     **/
     function __construct($user, $num = 20)
     {
         parent::__construct($user, "line");
@@ -101,6 +141,15 @@ class GraphPlaysByDays extends Graph {
         $this->buildGraphData();
     }
     
+    /**
+     * Parses the data internally into a format expected by the plotting
+     * JS libraries.
+     *
+     * Currently does not delegate the construction of the JS array to parent
+     * object, however it should do this. Tokenisation required in parent.
+     *
+     * @todo: tokenise build JS array functions and refactor accordingly.
+     **/
     private function buildGraphData()
     {
         $this->data_buffer = Statistic::generatePlayByDays('Scrobbles',
@@ -108,7 +157,6 @@ class GraphPlaysByDays extends Graph {
         
         $date_line = "[";
         
-        /* @TODO: Streamline this by simply removing size from SQL... */
         foreach ($this->data_buffer as $key => $entry)
         {
             $date_line .= "['" . $entry['date'] . "', " . $entry['count'] . "],";
@@ -119,6 +167,5 @@ class GraphPlaysByDays extends Graph {
     }
 }
 
-class GraphTrackPerformance extends Graph {
-    
-}
+
+class GraphTrackPerformance extends Graph {}

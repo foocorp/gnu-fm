@@ -26,9 +26,13 @@ require_once($install_path . '/data/Server.php');
 require_once($install_path . '/data/Statistic.php');
 
 /**
- * Represents graph object, extended for specific implementations
- */
-
+ * Represents graph object, extended for specific implementations, currently
+ * acts as a data only object but intention is to delegate as much functionality
+ * with respect to the propagation of the graph objects themselves to this
+ * class. Many methods are, therefore, included with this view in mind.
+ *
+ * @see GraphTypes.php for implementations 
+ **/
 class Graph {
     
     public $data, $data_buffer;
@@ -46,46 +50,73 @@ class Graph {
         $this->user = $user;
         $this->resetData();
         
-        switch($type)
-        {
-            default:
-                $this->type = 0;
-        }
+        /* @todo: iterate through $type to determine renderer requirements */
+        switch($type){}
     }
     
+    /**
+     * Resets internal data object.
+     **/
     protected function resetData() {
         $this->data = array(array(array()));    
     }
     
+    /**
+     * Returns the graph renderer as defined at object instantiation.
+     **/
     public function getGraphRenderer() {
         return $this->graph_types[$this->renderer];
     }
     
+    /**
+     * Returns x-axis label.
+     **/
     public function getXAxis() {
         return $this->x_axis_label;
     }
     
+    /**
+     * Returns y-axis label.
+     **/
     public function getYAxis() {
         return $this->y_axis_label;
     }
     
+    /**
+     * Sets the axes labels of the current object.
+     * @param $x = x-axis label.
+     * @param $y = y-axis label.
+     **/
     public function setAxisLabels($x = NULL, $y = NULL)
     {
         $this->x_axis_label = ($x === NULL) ? $this->x_axis_label : $x;
         $this->y_axis_label = ($y === NULL) ? $this->y_axis_label : $y;
     }
     
+    /**
+     * Returns the JS array built from the internal data respresentation, not
+     * used at present by used to hide the internal building method.
+     * @return String JS array.
+     * @see buildJsDataArray().
+     **/
     public function getJsDataArray() {
-        $js_data = $this->buildJsDataArray();
+        return $this->buildJsDataArray();
     }
     
+    /**
+     * Sets the internal data source to a new object.
+     * @param $data = new data object for the Graph
+     **/
     public function setDataSource($data = NULL)
     {
         if (($data === NULL) && (! isEmpty($data))) return;
-        
         $this->data = $data;
     }
     
+    /**
+     * Sets the maximum value of x-axis, both the maximum, rounded value of the
+     * x-axis ticks and also determining a round, suitable tick interval.
+     */
     protected function setMaxX($raw)
     {
         $this->max_x_axis = round($raw + 100, -2);
@@ -93,8 +124,10 @@ class Graph {
     }
     
     /**
-     * Iterates through the multi-dimensional array to create a string of
-     * JS arrays on multiple datasets for the current plot.
+     * Iterates through the multi-dimensional array $data to create a string
+     * JS array representation of multiple series of data for the Graph object.
+     * @param $inverse Boolean TRUE if data is being represented horizontally.
+     * @return String JS multi-dimensional array.
      **/
     protected function buildJsDataArray($inverse = FALSE) {
         
@@ -109,8 +142,8 @@ class Graph {
             {
                 foreach ($set as $k => $node)
                 {
-                    /* @TODO: Need to escape the $node if not numeric! */
-                    $temp .= "[" . ((! is_numeric($node)) ? "'".(addslashes($node))."'" : $node);
+                    /* Determine if the node is numeric, if not, escape. */
+                    $temp .= "[".((! is_numeric($node)) ? "'".(addslashes($node))."'" : $node);
                     /* @TODO: check $node for len > 1, if so tokenise string */
                     if ($inverse) $temp .= "," . ++$i;
                     $temp .= "],"; 

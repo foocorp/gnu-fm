@@ -99,10 +99,6 @@ class Statistic {
 				if( $i['count'] > $max ) $max =  $i['count'];
 			}
 
-			foreach($res as &$i){
-				$i['size'] = round($i['count'] / $max * $maxwidth);
-			}
-
 			return $res;
 		}
 	}
