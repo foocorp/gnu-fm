@@ -64,4 +64,6 @@ $(document).ready(function() {
 		    }
 	        }
 	});
+	
+	$('.jqplot-yaxis-tick').css('z-index', 255); 
 });
