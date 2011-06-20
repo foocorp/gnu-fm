@@ -103,10 +103,6 @@ class Statistic {
 				}
 			}
 
-			foreach ($res as &$i){
-				$i['size'] = round($i['count'] / $max * $maxwidth);
-			}
-
 			return $res;
 		}
 	}
