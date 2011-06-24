@@ -7,7 +7,7 @@ $(document).ready(function() {
 		color: '#ff0000',
 	        rendererOptions: {
 			barDirection: 'horizontal',
-			barWidth: 15
+			barWidth: def_bar_width
 	        }
 	        },
 	        axes: {
@@ -32,7 +32,7 @@ $(document).ready(function() {
 		color: '#ff0000',
 	        rendererOptions: {
 			barDirection: 'horizontal',
-			barWidth: 15
+			barWidth: def_bar_width
 	        }
 	        },
 	        axes: {
