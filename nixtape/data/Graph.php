@@ -39,7 +39,7 @@ class Graph {
     public $user, $type, $renderer, $label_renderer;
     public $max_x_axis, $max_y_axis;
     public $tick_interval = 20;
-    public $x_axis_label = "X axis", $y_axis_label = "Y Axis";
+    public $x_axis_label = 'X axis', $y_axis_label = 'Y Axis';
     
     /* Multidimensional array to allow for multiple series of data. */
     protected $graph_types = array(array());
@@ -131,11 +131,11 @@ class Graph {
      **/
     protected function buildJsDataArray($inverse = FALSE) {
         
-        $temp = "[";
+        $temp = '[';
      
         foreach ($this->data as $i => $series)
         {
-            $temp .= "[";  
+            $temp .= '[';  
             if ($inverse) $i = 0;
             
             foreach ($series as $j => $set)
@@ -143,32 +143,35 @@ class Graph {
                 foreach ($set as $k => $node)
                 {
                     /* Determine if the node is numeric, if not, escape. */
-                    $temp .= "[".((! is_numeric($node)) ? "'".(addslashes($node))."'" : $node);
+                    $temp .= '['.((! is_numeric($node))
+                            ? '\''.addslashes($node).'\''
+                            : $node);
+                    
                     /* @TODO: check $node for len > 1, if so tokenise string */
-                    if ($inverse) $temp .= "," . ++$i;
-                    $temp .= "],"; 
+                    if ($inverse) $temp .= ',' . ++$i;
+                    $temp .= '],'; 
                 }
-                $temp = rtrim($temp, ',');
+                $temp = rtrim($temp, ','); 
             }
-            $temp .= "],";
+            $temp .= '],';
         }
         
         $temp = rtrim($temp, ',');
-        $temp .= "]";
+        $temp .= ']';
         
         return $temp;
     }
     
     protected function buildJsSingleArray($source) {
         
-        $temp = "[";
+        $temp = '[';
         
         foreach ($source as $i => $node)
         {
-            $temp .= ((! is_numeric($node)) ? "'".$node."'" : $node) . ",";
+            $temp .= ((! is_numeric($node)) ? '\''.$node.'\'' : $node) . ',';
         }
         
-        $temp = rtrim($temp, ',') . "]";
+        $temp = rtrim($temp, ',') . ']';
         return $temp;
     }
 }
