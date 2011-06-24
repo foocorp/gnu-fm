@@ -39,7 +39,7 @@ class GraphTopArtists extends Graph {
      **/
     function __construct($user, $num = 20)
     {
-        parent::__construct($user, "bar_horiz");
+        parent::__construct($user, 'bar_horiz');
         $this->number_of_tracks = $num;
         $this->buildGraphData();
     }
@@ -53,12 +53,14 @@ class GraphTopArtists extends Graph {
      **/
     private function buildGraphData()
     {
-        $tmp = Statistic::GeneratePlayStats('Scrobbles', 'artist',
+        $tmp = Statistic::generatePlayStats('Scrobbles', 'artist',
                         $this->number_of_tracks, $this->user->uniqueid, 300);
         
         foreach ($tmp as $root => $node)
         {
-            $artists[] = '<a href="'.$node['artisturl'].'">'.addslashes($node['artist']).'</a>';
+            $tmp = '<a href="'.$node['pageurl'].'">';
+            $tmp .= addslashes(htmlentities($node['artist'])).'</a>';
+            $artists[] = $tmp;
             $artists_data[] = $node['count'];
         }
         
@@ -86,7 +88,7 @@ class GraphTopTracks extends Graph {
      **/
     function __construct($user, $num = 20)
     {
-        parent::__construct($user, "bar_horiz");
+        parent::__construct($user, 'bar_horiz');
         $this->number_of_tracks = $num;
         $this->buildGraphData();
     }
@@ -106,8 +108,10 @@ class GraphTopTracks extends Graph {
         
         foreach($this->data_buffer as $key => $entry)
         {
-            $tmp_line = '<a href="'.$entry['artisturl'].'">'.$entry['artist'].'</a>';
-            $tmp_line .= ' - <a href="'.$entry['trackurl'].'">'.addslashes($entry['track']).'</a>';
+            $tmp_line = '<a href="'.$entry['artisturl'].'">';
+            $tmp_line .= addslashes(htmlentities($entry['artist'])).'</a>';
+            $tmp_line .= ' - <a href="'.$entry['trackurl'].'">';
+            $tmp_line .= addslashes(htmlentities($entry['track'])).'</a>';
             $listings[] = $entry['freq'];
             $tracks[] = $tmp_line;
         }
@@ -136,7 +140,7 @@ class GraphPlaysByDays extends Graph {
      **/
     function __construct($user, $num = 20)
     {
-        parent::__construct($user, "line");
+        parent::__construct($user, 'line');
         $this->number_of_days = $num;
         $this->buildGraphData();
     }
@@ -155,15 +159,15 @@ class GraphPlaysByDays extends Graph {
         $this->data_buffer = Statistic::generatePlayByDays('Scrobbles',
                                 $this->number_of_days, $this->user->uniqueid, 300);
         
-        $date_line = "[";
+        $date_line = '[';
         
         foreach ($this->data_buffer as $key => $entry)
         {
-            $date_line .= "['" . $entry['date'] . "', " . $entry['count'] . "],";
+            $date_line .= '[\'' . $entry['date'] . '\', ' . $entry['count'] . '],';
         }
         
         $this->plays_by_days = rtrim($date_line, ',');
-        $this->plays_by_days .= "]";
+        $this->plays_by_days .= ']';
     }
 }
 
