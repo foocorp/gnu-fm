@@ -135,8 +135,8 @@ class GraphPlaysByDays extends Graph {
     
     /**
      * @param $user - the current user to build the information on.
-     * @param $num - the number of tracks to be included in the search,
-     * 20 by default.
+     * @param $num - the number of days worth of tracks to be included in
+     * the search, 20 by default.
      **/
     function __construct($user, $num = 20)
     {
