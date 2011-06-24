@@ -59,7 +59,7 @@ class GraphTopArtists extends Graph {
         foreach ($tmp as $root => $node)
         {
             $tmp = '<a href="'.$node['pageurl'].'">';
-            $tmp .= addslashes(htmlentities($node['artist'])).'</a>';
+            $tmp .= htmlentities($node['artist'], ENT_QUOTES, 'UTF-8').'</a>';
             $artists[] = $tmp;
             $artists_data[] = $node['count'];
         }
@@ -109,9 +109,9 @@ class GraphTopTracks extends Graph {
         foreach($this->data_buffer as $key => $entry)
         {
             $tmp_line = '<a href="'.$entry['artisturl'].'">';
-            $tmp_line .= addslashes(htmlentities($entry['artist'])).'</a>';
+            $tmp_line .= htmlentities($entry['artist'], ENT_QUOTES, 'UTF-8').'</a>';
             $tmp_line .= ' - <a href="'.$entry['trackurl'].'">';
-            $tmp_line .= addslashes(htmlentities($entry['track'])).'</a>';
+            $tmp_line .= htmlentities($entry['track'], ENT_QUOTES, 'UTF-8').'</a>';
             $listings[] = $entry['freq'];
             $tracks[] = $tmp_line;
         }
