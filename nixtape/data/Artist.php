@@ -185,7 +185,7 @@ class Artist {
 				continue;
 			}
 			try {
-				$adodb->Execute('INSERT INTO tags (tag, artist, userid) VALUES ('
+				$adodb->Execute('INSERT INTO Tags (tag, artist, userid) VALUES ('
 					. $adodb->qstr($tag) . ', '
 					. $adodb->qstr($this->name) . ', '
 					. $userid . ')');
@@ -202,7 +202,7 @@ class Artist {
 	function getTopTags($limit = 10) {
 		global $adodb;
 
-		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM tags WHERE '
+		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM Tags WHERE '
 			. ' artist = ' . $adodb->qstr($this->name)
 			. ' GROUP BY tag ORDER BY freq DESC '
 			. ' LIMIT ' . $limit);

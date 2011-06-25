@@ -36,7 +36,7 @@ $tag = $_GET['tag'];
 $smarty->assign('tag', $tag);
 
 try {
-	$tagCloud = TagCloud::generateTagCloud('tags', 'artist', 40, $tag, 'tag');
+	$tagCloud = TagCloud::generateTagCloud('Tags', 'artist', 40, $tag, 'tag');
 	$smarty->assign('tagcloud', $tagCloud);
 } catch (Exception $e) {
 	$smarty->assign('pageheading', 'No artists found');
