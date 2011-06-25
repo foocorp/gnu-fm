@@ -25,6 +25,7 @@ require_once('user-menu.php');
 require_once('data/User.php');
 require_once('data/TagCloud.php');
 require_once('data/Statistic.php');
+require_once('data/GraphTypes.php');
 
 if (!isset($_GET['user']) && $logged_in == false) {
 	$smarty->assign('pageheading', 'Error!');
@@ -48,25 +49,23 @@ if (isset($user->name)) {
 
 	$smarty->assign('stat_barwidth', 320);
 	try {
-		$aUserPlayStat = Statistic::GeneratePlayStats('Scrobbles', 'artist', 40, $user->uniqueid, 300);
-		$smarty->assign('user_playstats', $aUserPlayStat);
-	} catch (Exception $e) {}
+		$smarty->assign('graphtopartists', new GraphTopArtists($user, 20));
+	} catch (exception $e) {}
 
 	try {
-		$aUserDayStat = Statistic::generatePlayByDays('Scrobbles', 40, $user->uniqueid, 300);
-		$smarty->assign('user_daystats', $aUserDayStat);
-	} catch (Exception $e) {}
+		$smarty->assign('graphplaysbydays', new GraphPlaysByDays($user, 20));
+	} catch (exception $e) {}
 
 	try {
-		$smarty->assign('toptracks', $user->getTopTracks(40));
-	} catch (Exception $e) {
+		$smarty->assign('graphtoptracks', new GraphTopTracks($user, 20));
+	} catch (exception $e) {
 		$smarty->assign('pageheading', 'Couldn\'t get users top tracks!');
 		$smarty->assign('details', 'User ' . $user->name . ' doesn\'t seem to have scrobbled anything yet.');
 		$smarty->display('error.tpl');
 		die();
 	}
 	$smarty->assign('totaltracks', $user->getTotalTracks());
-
+	
 	$smarty->assign('me', $user);
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
 	$smarty->assign('isme', ($this_user->name == $user->name));
@@ -75,12 +74,18 @@ if (isset($user->name)) {
 	$smarty->assign('extra_head_links', array(
 			array(
 				'rel'   => 'meta',
-				'type'  => 'application/rdf+xml',
+				'type'  => 'application/rdf+xml' ,
 				'title' => 'FOAF',
 				'href'  => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $user->getURL()))
-				)
+				),
+			array(
+				'rel'   => 'stylesheet',
+				'type'	=> 'text/css',
+				'title' => 'jqPlot CSS',
+				'href' 	=> $base_url . '/themes/' . $default_theme . '/css/jquery.jqplot.css'
+			)
 		));
-
+	
 	$submenu = user_menu($user, 'Stats');
 	$smarty->assign('submenu', $submenu);
 	$smarty->assign('headerfile', 'maxiprofile.tpl');
