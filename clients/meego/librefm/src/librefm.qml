@@ -10,6 +10,8 @@ PageStackWindow {
     signal tuneStation(string station)
     signal next()
     signal prev()
+    signal play()
+    signal pause()
 
     function openFile(file) {
         var component = Qt.createComponent(file)

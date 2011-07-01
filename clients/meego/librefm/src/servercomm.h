@@ -45,7 +45,9 @@ public slots:
     void login(const QString &username, const QString &password);
     void tuneStation(const QString &station);
     void getPlaylist();
-    void play(int song);
+    void loadSong(int song);
+    void play();
+    void pause();
     void next();
     void prev();
 

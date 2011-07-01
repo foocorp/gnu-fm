@@ -185,7 +185,7 @@ void ServerComm::playlistReply(QNetworkReply *reply) {
         }
     }
     if(currentSong == -1) {
-        play(0);
+        loadSong(0);
     }
 }
 
@@ -211,25 +211,33 @@ void ServerComm::parseTrack(QDomNode trackNode) {
     playlist->append(*t);
 }
 
-void ServerComm::play(int song) {
+void ServerComm::loadSong(int song) {
     currentSong = song;
     Track t = playlist->at(song);
     playing(t.artist, t.album, t.title, t.image);
     QUrl url(t.location);
     media->setCurrentSource(url);
-    media->play();
+    play();
 
     if (song >= playlist->length() - 3) {
         getPlaylist();
     }
 }
 
+void ServerComm::play() {
+    media->play();
+}
+
+void ServerComm::pause() {
+    media->pause();
+}
+
 void ServerComm::next() {
-    play(++currentSong);
+    loadSong(++currentSong);
 }
 
 void ServerComm::prev() {
-    if(currentSong > 1) {
-        play(--currentSong);
+    if(currentSong > 0) {
+        loadSong(--currentSong);
     }
 }
