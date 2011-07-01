@@ -116,8 +116,35 @@ void ServerComm::tuneStation(const QString &station) {
     QNetworkAccessManager *tune_netman = new QNetworkAccessManager(this);
     connect(tune_netman, SIGNAL(finished(QNetworkReply*)), this, SLOT(tuneReply(QNetworkReply*)));
     QUrl url = QUrl(ws_url);
-    url.addQueryItem("method", "radio.tune");
-    url.addQueryItem("sk", ws_sk);
-    url.addQueryItem("station", station);
-    tune_netman->get(QNetworkRequest(url));
+    QByteArray params;
+    params.append("method=radio.tune");
+    params.append("&sk="); params.append(ws_sk);
+    params.append("&station="); params.append(station);
+    tune_netman->post(QNetworkRequest(url), params);
+}
+
+void ServerComm::tuneReply(QNetworkReply *reply) {
+    QDomDocument xml("tuneresponse");
+    xml.setContent(reply);
+    QDomElement root = xml.documentElement();
+    QDomNode n = root.firstChild();
+    for(QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        QDomElement e = n.toElement();
+        if(!e.isNull()) {
+            if(e.tagName() == "error") {
+                qWarning() << "Station tuning failed.";
+            }
+
+            if(e.tagName() == "station") {
+                for(QDomNode c = n.firstChild(); !c.isNull(); c = c.nextSibling()) {
+                    QDomElement ce = c.toElement();
+                    if(ce.tagName() == "name") {
+                        QString stationName = ce.text().remove(0, 9); // Remove 'Libre.fm' from the start of station names
+                        qDebug() << "Tuned to:" << stationName;
+                        tuned(stationName);
+                    }
+                }
+            }
+        }
+    }
 }
