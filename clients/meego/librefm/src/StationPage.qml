@@ -112,11 +112,13 @@ Page {
 
                 onClicked: {
                     if (imgPlay.visible) {
-                        imgPlay.visible = false
-                        imgPause.visible = true
+                        rootWin.play();
+                        imgPlay.visible = false;
+                        imgPause.visible = true;
                     } else {
-                        imgPlay.visible = true
-                        imgPause.visible = false
+                        rootWin.pause();
+                        imgPlay.visible = true;
+                        imgPause.visible = false;
                     }
                 }
 
