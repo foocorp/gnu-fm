@@ -12,6 +12,8 @@ PageStackWindow {
     signal prev()
     signal play()
     signal pause()
+    signal love()
+    signal ban()
 
     function openFile(file) {
         var component = Qt.createComponent(file)
@@ -24,6 +26,6 @@ PageStackWindow {
     ToolBarLayout {
             id: commonTools
             visible: false
-            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
+            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); pause(); } }
      }
 }

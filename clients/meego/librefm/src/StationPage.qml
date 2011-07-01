@@ -25,7 +25,7 @@ Page {
 
     Column {
         anchors.horizontalCenter: parent.horizontalCenter
-        spacing: 20
+        spacing: 35
 
         Image {
             id: imgLibre
@@ -39,28 +39,44 @@ Page {
             id: lblStationName
             text: " "
             anchors.horizontalCenter: parent.horizontalCenter
-        }
-
-        Image {
-            id: imgCover
-            source: "empty-album.png"
-            anchors.horizontalCenter: parent.horizontalCenter
-            height: 200
-            width: 200
+            anchors.verticalCenterOffset: 5
+            font.weight: Font.Bold
+            font.pixelSize: 30
         }
 
         Row {
+            spacing: 50
             anchors.horizontalCenter: parent.horizontalCenter
-            Label {
-                id: lblArtist
-                text: "Tuning in..."
+            Image {
+                id: imgCover
+                source: "empty-album.png"
+                height: 200
+                width: 200
             }
-            Label {
-                id: lblSpacer
+
+            Column {
+                spacing: 40
+                anchors.verticalCenter: parent.verticalCenter
+                Row {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Label {
+                        id: lblArtist
+                        text: "Tuning in..."
+                    }
+                    Label {
+                        id: lblSpacer
+                    }
+                    Label {
+                        id: lblTrack
+                    }
+                }
+
+                Slider {
+                    id: songProgress
+                    value: 0.5
+                }
             }
-            Label {
-                id: lblTrack
-            }
+
         }
 
         ButtonRow {
@@ -72,6 +88,10 @@ Page {
                     anchors.centerIn: parent
                     anchors.verticalCenterOffset: -1
                     source: "ban.png"
+                }
+                onClicked: {
+                    rootWin.ban();
+                    rootWin.next();
                 }
             }
 
@@ -151,6 +171,9 @@ Page {
                     anchors.centerIn: parent
                     anchors.verticalCenterOffset: -1
                     source: "love.png"
+                }
+                onClicked: {
+                    rootWin.love();
                 }
             }
 

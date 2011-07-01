@@ -33,6 +33,8 @@ int main(int argc, char *argv[])
     QObject::connect(root, SIGNAL(prev()), &sc, SLOT(prev()));
     QObject::connect(root, SIGNAL(play()), &sc, SLOT(play()));
     QObject::connect(root, SIGNAL(pause()), &sc, SLOT(pause()));
+    QObject::connect(root, SIGNAL(love()), &sc, SLOT(love()));
+    QObject::connect(root, SIGNAL(ban()), &sc, SLOT(ban()));
     QObject::connect((QObject*)view.engine(), SIGNAL(quit()), &app, SLOT(quit()));
 
     view.showFullScreen();
