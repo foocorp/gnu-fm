@@ -28,6 +28,8 @@ int main(int argc, char *argv[])
     view.rootContext()->setContextProperty("serverComm", &sc);
     QObject::connect(root, SIGNAL(login(QString, QString)), &sc, SLOT(login(QString, QString)));
     QObject::connect(root, SIGNAL(tuneStation(QString)), &sc, SLOT(tuneStation(QString)));
+    QObject::connect(root, SIGNAL(next()), &sc, SLOT(next()));
+    QObject::connect(root, SIGNAL(prev()), &sc, SLOT(prev()));
     QObject::connect((QObject*)view.engine(), SIGNAL(quit()), &app, SLOT(quit()));
 
     view.showFullScreen();

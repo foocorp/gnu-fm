@@ -14,6 +14,7 @@ ServerComm::ServerComm(QObject *parent) :
     ws_url = "http://alpha.libre.fm/2.0/";
     playlist = new QList<Track>();
     settings = new QSettings("Libre.fm", "Libre.fm");
+    currentSong = -1;
 
     // Check login details
     qDebug() << "Checking settings...";
@@ -112,7 +113,8 @@ void ServerComm::wsLoginReply(QNetworkReply *reply) {
 
 void ServerComm::tuneStation(const QString &station) {
     qDebug() << "Tuning to station: " << station;
-
+    // Clear the playlist
+    playlist = new QList<Track>();
     QNetworkAccessManager *tune_netman = new QNetworkAccessManager(this);
     connect(tune_netman, SIGNAL(finished(QNetworkReply*)), this, SLOT(tuneReply(QNetworkReply*)));
     QUrl url = QUrl(ws_url);
@@ -178,6 +180,9 @@ void ServerComm::playlistReply(QNetworkReply *reply) {
             }
         }
     }
+    if(currentSong == -1) {
+        play(0);
+    }
 }
 
 void ServerComm::parseTrack(QDomNode trackNode) {
@@ -185,7 +190,7 @@ void ServerComm::parseTrack(QDomNode trackNode) {
     for(QDomNode n = trackNode.firstChild(); !n.isNull(); n = n.nextSibling()) {
         QDomElement e = n.toElement();
         if(!e.isNull()) {
-            if(e.tagName() == "artist") {
+            if(e.tagName() == "creator") {
                 t->artist = e.text();
             } else if(e.tagName() == "album") {
                 t->album = e.text();
@@ -198,9 +203,25 @@ void ServerComm::parseTrack(QDomNode trackNode) {
             }
         }
     }
+    qDebug() << "Artist: " << t->artist;
     playlist->append(*t);
 }
 
 void ServerComm::play(int song) {
+    Track t = playlist->at(song);
+    playing(t.artist, t.album, t.title, t.image);
 
+    if (song >= playlist->length() - 3) {
+        getPlaylist();
+    }
+}
+
+void ServerComm::next() {
+    play(currentSong++);
+}
+
+void ServerComm::prev() {
+    if(currentSong > 1) {
+        play(currentSong--);
+    }
 }
