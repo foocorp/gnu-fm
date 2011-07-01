@@ -1,5 +1,6 @@
 TEMPLATE = app
 QT += declarative
+QT += phonon
 CONFIG += meegotouch
 TARGET = "librefm"
 DEPENDPATH += .

@@ -5,6 +5,7 @@
 #include <QtNetwork/QNetworkReply>
 #include <QDateTime>
 #include <QtXml/QDomDocument>
+#include <phonon/AudioOutput>
 #include "servercomm.h"
 
 ServerComm::ServerComm(QObject *parent) :
@@ -15,6 +16,9 @@ ServerComm::ServerComm(QObject *parent) :
     playlist = new QList<Track>();
     settings = new QSettings("Libre.fm", "Libre.fm");
     currentSong = -1;
+    media = new Phonon::MediaObject(this);
+    Phonon::AudioOutput *audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
+    Phonon::createPath(media, audioOutput);
 
     // Check login details
     qDebug() << "Checking settings...";
@@ -208,8 +212,12 @@ void ServerComm::parseTrack(QDomNode trackNode) {
 }
 
 void ServerComm::play(int song) {
+    currentSong = song;
     Track t = playlist->at(song);
     playing(t.artist, t.album, t.title, t.image);
+    QUrl url(t.location);
+    media->setCurrentSource(url);
+    media->play();
 
     if (song >= playlist->length() - 3) {
         getPlaylist();
@@ -217,11 +225,11 @@ void ServerComm::play(int song) {
 }
 
 void ServerComm::next() {
-    play(currentSong++);
+    play(++currentSong);
 }
 
 void ServerComm::prev() {
     if(currentSong > 1) {
-        play(currentSong--);
+        play(--currentSong);
     }
 }
