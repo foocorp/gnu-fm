@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.1
+Name=Libre.fm
+GenericName=Libre.fm
+Comment=Streams free music from Libre.fm
+Exec=/usr/bin/single-instance /usr/bin/librefm
+Terminal=false
+Type=Application
+Icon=/usr/share/icons/hicolor/scalable/apps/librefm.svg
