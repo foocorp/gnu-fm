@@ -7,6 +7,7 @@
 #include <QtXml/QDomDocument>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QList>
+#include <phonon/MediaObject>
 #include "track.h"
 
 class ServerComm : public QObject
@@ -25,6 +26,7 @@ private:
     int currentSong;
     QSettings *settings;
     QList<Track> *playlist;
+    Phonon::MediaObject *media;
     void parseTrack(QDomNode trackNode);
 
 signals:

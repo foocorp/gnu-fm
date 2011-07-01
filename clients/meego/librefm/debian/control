@@ -8,7 +8,7 @@ Homepage: http://libre.fm
 
 Package: librefm
 Architecture: any
-Depends: qt-components, ${shlibs:Depends}, ${misc:Depends}
+Depends: qt-components, gstreamer0.10-plugins-good, ${shlibs:Depends}, ${misc:Depends}
 Description: Stream music from Libre.fm and discover new artists
  Listen to free music released under creative commons licenses from 
  Libre.fm. You can legally download, remix and share any music you 
