@@ -12,6 +12,7 @@ ServerComm::ServerComm(QObject *parent) :
 {
     hs_url = "http://turtle.libre.fm/";
     ws_url = "http://alpha.libre.fm/2.0/";
+    playlist = new QList<Track>();
     settings = new QSettings("Libre.fm", "Libre.fm");
 
     // Check login details
@@ -85,7 +86,6 @@ void ServerComm::wsLoginReply(QNetworkReply *reply) {
     QDomDocument xml("wsresponse");
     xml.setContent(reply);
     QDomElement root = xml.documentElement();
-    QDomNode n = root.firstChild();
     for(QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling()) {
         QDomElement e = n.toElement();
         if(!e.isNull()) {
@@ -127,7 +127,6 @@ void ServerComm::tuneReply(QNetworkReply *reply) {
     QDomDocument xml("tuneresponse");
     xml.setContent(reply);
     QDomElement root = xml.documentElement();
-    QDomNode n = root.firstChild();
     for(QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling()) {
         QDomElement e = n.toElement();
         if(!e.isNull()) {
@@ -142,9 +141,66 @@ void ServerComm::tuneReply(QNetworkReply *reply) {
                         QString stationName = ce.text().remove(0, 9); // Remove 'Libre.fm' from the start of station names
                         qDebug() << "Tuned to:" << stationName;
                         tuned(stationName);
+                        getPlaylist();
                     }
                 }
             }
         }
     }
+}
+
+void ServerComm::getPlaylist() {
+    qDebug() << "Fetching playlist";
+
+    QNetworkAccessManager *playlist_netman = new QNetworkAccessManager(this);
+    connect(playlist_netman, SIGNAL(finished(QNetworkReply*)), this, SLOT(playlistReply(QNetworkReply*)));
+    QUrl url = QUrl(ws_url);
+    url.addQueryItem("method", "radio.getPlaylist");
+    url.addQueryItem("sk", ws_sk);
+    playlist_netman->get(QNetworkRequest(url));
+}
+
+void ServerComm::playlistReply(QNetworkReply *reply) {
+    qDebug() << "Playlist retrieved";
+    QDomDocument xml("playlist");
+    xml.setContent(reply);
+    QDomElement root = xml.documentElement();
+    for(QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        QDomElement e = n.toElement();
+        if(!e.isNull()) {
+            if(e.tagName() == "trackList") {
+                for(QDomNode c = n.firstChild(); !c.isNull(); c = c.nextSibling()) {
+                    QDomElement ce = c.toElement();
+                    if(ce.tagName() == "track") {
+                        parseTrack(c);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void ServerComm::parseTrack(QDomNode trackNode) {
+    Track *t = new Track();
+    for(QDomNode n = trackNode.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        QDomElement e = n.toElement();
+        if(!e.isNull()) {
+            if(e.tagName() == "artist") {
+                t->artist = e.text();
+            } else if(e.tagName() == "album") {
+                t->album = e.text();
+            } else if(e.tagName() == "title") {
+                t->title = e.text();
+            } else if(e.tagName() == "location") {
+                t->location = e.text();
+            } else if(e.tagName() == "image") {
+                t->image = e.text();
+            }
+        }
+    }
+    playlist->append(*t);
+}
+
+void ServerComm::play(int song) {
+
 }
