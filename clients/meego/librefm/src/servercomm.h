@@ -34,12 +34,14 @@ signals:
     void loginSuccessful();
     void tuned(QString stationName);
     void playing(QString artist, QString album, QString title, QString imageurl);
+    void positionUpdate(double position);
 
 private slots:
     void wsLoginReply(QNetworkReply *reply);
     void scrobbleLoginReply(QNetworkReply *reply);
     void tuneReply(QNetworkReply *reply);
     void playlistReply(QNetworkReply *reply);
+    void updateProgress(qint64 time);
 
 public slots:
     void login(const QString &username, const QString &password);

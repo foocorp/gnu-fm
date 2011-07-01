@@ -19,6 +19,9 @@ ServerComm::ServerComm(QObject *parent) :
     media = new Phonon::MediaObject(this);
     Phonon::AudioOutput *audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
     Phonon::createPath(media, audioOutput);
+    media->setTickInterval(100);
+
+    QObject::connect(media, SIGNAL(tick(qint64)), this, SLOT(updateProgress(qint64)));
 
     // Check login details
     qDebug() << "Checking settings...";
@@ -272,3 +275,7 @@ void ServerComm::ban() {
     ban_netman->post(QNetworkRequest(url), params);
 }
 
+void ServerComm::updateProgress(qint64 time) {
+    double progress = time / (double) media->totalTime();
+    positionUpdate(progress);
+}

@@ -20,6 +20,10 @@ Page {
             imgCover.source = imageurl
         }
 
+        onPositionUpdate: {
+            songProgress.value = position;
+        }
+
     }
 
 
@@ -73,7 +77,7 @@ Page {
 
                 Slider {
                     id: songProgress
-                    value: 0.5
+                    value: 0
                 }
             }
 
