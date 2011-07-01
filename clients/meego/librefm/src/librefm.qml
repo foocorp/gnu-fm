@@ -8,6 +8,8 @@ PageStackWindow {
 
     signal login(string username, string password)
     signal tuneStation(string station)
+    signal next()
+    signal prev()
 
     function openFile(file) {
         var component = Qt.createComponent(file)

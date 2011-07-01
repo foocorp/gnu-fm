@@ -10,6 +10,14 @@ Page {
         target: serverComm
         onTuned: {
             lblStationName.text = stationName;
+            lblArtist.text = "Fetching playlist..."
+        }
+
+        onPlaying: {
+            lblArtist.text = artist;
+            lblSpacer.text = " - "
+            lblTrack.text = title;
+            imgCover.source = imageurl
         }
 
     }
@@ -24,12 +32,35 @@ Page {
             source: "librefm-logo.png"
             anchors.horizontalCenter: parent.horizontalCenter
             z: -1
+            visible: false
         }
 
         Label {
             id: lblStationName
-            text: "Tuning in..."
+            text: " "
             anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Image {
+            id: imgCover
+            source: "empty-album.png"
+            anchors.horizontalCenter: parent.horizontalCenter
+            height: 200
+            width: 200
+        }
+
+        Row {
+            anchors.horizontalCenter: parent.horizontalCenter
+            Label {
+                id: lblArtist
+                text: "Tuning in..."
+            }
+            Label {
+                id: lblSpacer
+            }
+            Label {
+                id: lblTrack
+            }
         }
 
         ButtonRow {
@@ -57,6 +88,9 @@ Page {
                 Image {
                     anchors.centerIn: parent
                     source: "image://theme/icon-m-toolbar-mediacontrol-previous" + (theme.inverted ? "-inverse" : "")
+                }
+                onClicked: {
+                    rootWin.prev();
                 }
             }
 
@@ -94,6 +128,9 @@ Page {
                 Image {
                     anchors.centerIn: parent
                     source: "image://theme/icon-m-toolbar-mediacontrol-next" + (theme.inverted ? "-inverse" : "")
+                }
+                onClicked: {
+                    rootWin.next();
                 }
             }
 

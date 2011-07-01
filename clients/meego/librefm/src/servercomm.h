@@ -22,6 +22,7 @@ private:
     QString scr_url;
     QString hs_url;
     QString ws_url;
+    int currentSong;
     QSettings *settings;
     QList<Track> *playlist;
     void parseTrack(QDomNode trackNode);
@@ -30,6 +31,7 @@ signals:
     void loginFailed();
     void loginSuccessful();
     void tuned(QString stationName);
+    void playing(QString artist, QString album, QString title, QString imageurl);
 
 private slots:
     void wsLoginReply(QNetworkReply *reply);
@@ -42,6 +44,8 @@ public slots:
     void tuneStation(const QString &station);
     void getPlaylist();
     void play(int song);
+    void next();
+    void prev();
 
 };
 
