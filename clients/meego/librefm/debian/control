@@ -1,0 +1,17 @@
+Source: librefm
+Section: user/Other
+Priority: extra
+Maintainer: Michael Sheldon <elleo@gnu.org>
+Build-Depends: debhelper (>= 7), dpatch
+Standards-Version: 3.8.4
+Homepage: http://libre.fm
+
+Package: librefm
+Architecture: any
+Depends: qt-components, ${shlibs:Depends}, ${misc:Depends}
+Description: Stream music from Libre.fm and discover new artists
+ Listen to free music released under creative commons licenses from 
+ Libre.fm. You can legally download, remix and share any music you 
+ hear from this service. By indicating which tracks you love you 
+ can quickly start receiving recommendations based on your unique 
+ tastes.
