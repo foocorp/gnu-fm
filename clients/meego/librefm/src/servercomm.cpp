@@ -207,11 +207,11 @@ void ServerComm::parseTrack(QDomNode trackNode) {
             }
         }
     }
-    qDebug() << "Artist: " << t->artist;
     playlist->append(*t);
 }
 
 void ServerComm::loadSong(int song) {
+    qDebug() << "Loading song";
     currentSong = song;
     Track t = playlist->at(song);
     playing(t.artist, t.album, t.title, t.image);
@@ -225,19 +225,50 @@ void ServerComm::loadSong(int song) {
 }
 
 void ServerComm::play() {
+    qDebug() << "Play";
     media->play();
 }
 
 void ServerComm::pause() {
+    qDebug() << "Pausing";
     media->pause();
 }
 
 void ServerComm::next() {
+    qDebug() << "Next song";
     loadSong(++currentSong);
 }
 
 void ServerComm::prev() {
+    qDebug() << "Previous song";
     if(currentSong > 0) {
         loadSong(--currentSong);
     }
 }
+
+void ServerComm::love() {
+    qDebug() << "Loving song";
+    Track t = playlist->at(currentSong);
+    QNetworkAccessManager *love_netman = new QNetworkAccessManager(this);
+    QUrl url = QUrl(ws_url);
+    QByteArray params;
+    params.append("method=track.love");
+    params.append("&sk="); params.append(ws_sk);
+    params.append("&artist="); params.append(t.artist);
+    params.append("&track="); params.append(t.title);
+    love_netman->post(QNetworkRequest(url), params);
+}
+
+void ServerComm::ban() {
+    qDebug() << "Banning song";
+    Track t = playlist->at(currentSong);
+    QNetworkAccessManager *ban_netman = new QNetworkAccessManager(this);
+    QUrl url = QUrl(ws_url);
+    QByteArray params;
+    params.append("method=track.ban");
+    params.append("&sk="); params.append(ws_sk);
+    params.append("&artist="); params.append(t.artist);
+    params.append("&track="); params.append(t.title);
+    ban_netman->post(QNetworkRequest(url), params);
+}
+
