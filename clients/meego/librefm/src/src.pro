@@ -7,9 +7,11 @@ INCLUDEPATH += .
 
 # Input
 HEADERS += \
-    servercomm.h
+    servercomm.h \
+    track.h
 SOURCES += main.cpp \
-    servercomm.cpp
+    servercomm.cpp \
+    track.cpp
 #FORMS#
 
   unix {
