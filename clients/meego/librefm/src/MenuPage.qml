@@ -100,7 +100,7 @@ Page {
                         anchors.fill: background
                         onClicked: {
                             rootWin.openFile("StationPage.qml")
-                            rootWin.launchStation(station)
+                            rootWin.tuneStation(station)
                         }
                     }
                 }
