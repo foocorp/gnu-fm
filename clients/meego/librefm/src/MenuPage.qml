@@ -3,7 +3,6 @@ import com.nokia.meego 1.0
 
 Page {
     id: menuPage
-    property int buttonWidth: 300
     anchors.margins: rootWin.pageMargin
 
     Image {
@@ -19,7 +18,7 @@ Page {
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: 40
         anchors.horizontalCenter: parent.horizontalCenter
-        spacing: 200
+        spacing: 300
 
         Column {
             id: col_recent
@@ -29,7 +28,6 @@ Page {
                 id: lbl_recent
                 text: "Recent Stations"
                 font.weight: Font.Bold
-                width: buttonWidth
             }
 
             ListModel {
@@ -66,7 +64,7 @@ Page {
                 delegate:  Item {
                     id: listItem
                     height: 44
-                    width: buttonWidth
+                    width: 300
 
                     BorderImage {
                         id: background

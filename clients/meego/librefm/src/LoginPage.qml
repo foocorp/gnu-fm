@@ -3,7 +3,6 @@ import com.nokia.meego 1.0
 
 Page {
     id: loginPage
-    property int buttonWidth: 300
     anchors.margins: rootWin.pageMargin
 
     Connections {

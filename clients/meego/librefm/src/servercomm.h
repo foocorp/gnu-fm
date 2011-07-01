@@ -24,12 +24,14 @@ private:
 signals:
     void loginFailed();
     void loginSuccessful();
+    void tuned(QString stationName);
 
 public slots:
     void login(const QString &username, const QString &password);
     void tuneStation(const QString &station);
     void wsLoginReply(QNetworkReply *reply);
     void scrobbleLoginReply(QNetworkReply *reply);
+    void tuneReply(QNetworkReply *reply);
 };
 
 #endif // SERVERCOMM_H
