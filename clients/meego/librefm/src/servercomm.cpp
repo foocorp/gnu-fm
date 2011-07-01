@@ -12,10 +12,23 @@ ServerComm::ServerComm(QObject *parent) :
 {
     hs_url = "http://turtle.libre.fm/";
     ws_url = "http://alpha.libre.fm/2.0/";
+    settings = new QSettings("Libre.fm", "Libre.fm");
+
+    // Check login details
+    qDebug() << "Checking settings...";
+    if (settings->contains("Auth/username") && settings->contains("Auth/password")) {
+        qDebug() << "Logging in...";
+        login(settings->value("Auth/username").toString(), settings->value("Auth/password").toString());
+        qDebug() << "Username:" << settings->value("Auth/username").toString();
+    }
 }
 
 void ServerComm::login(const QString &username, const QString &password) {
     qDebug() << "Logging in...";
+    if(username.isEmpty() || password.isEmpty()) {
+        loginFailed();
+        return;
+    }
     QString passMD5 = QCryptographicHash::hash(QByteArray(password.toAscii()), QCryptographicHash::Md5).toHex();
     long timestamp = QDateTime::currentDateTime().toTime_t();
     QString token = QCryptographicHash::hash(QByteArray(QString(QString(passMD5) + QString::number(timestamp)).toAscii()), QCryptographicHash::Md5).toHex();
@@ -41,6 +54,10 @@ void ServerComm::login(const QString &username, const QString &password) {
     url.addQueryItem("authToken", wstoken);
     qDebug() << "AuthToken:" << wstoken;
     ws_netman->get(QNetworkRequest(url));
+
+    // Save authentication details
+    settings->setValue("Auth/username", username);
+    settings->setValue("Auth/password", password);
 }
 
 void ServerComm::scrobbleLoginReply(QNetworkReply *reply) {
@@ -72,7 +89,6 @@ void ServerComm::wsLoginReply(QNetworkReply *reply) {
     for(QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling()) {
         QDomElement e = n.toElement();
         if(!e.isNull()) {
-            qDebug() << "Tag:" << e.tagName();
             if(e.tagName() == "error") {
                 loginFailed();
                 return;
@@ -94,6 +110,14 @@ void ServerComm::wsLoginReply(QNetworkReply *reply) {
     }
 }
 
-void ServerComm::launchStation(const QString &station) {
-    qDebug() << "Launching station: " << station;
+void ServerComm::tuneStation(const QString &station) {
+    qDebug() << "Tuning to station: " << station;
+
+    QNetworkAccessManager *tune_netman = new QNetworkAccessManager(this);
+    connect(tune_netman, SIGNAL(finished(QNetworkReply*)), this, SLOT(tuneReply(QNetworkReply*)));
+    QUrl url = QUrl(ws_url);
+    url.addQueryItem("method", "radio.tune");
+    url.addQueryItem("sk", ws_sk);
+    url.addQueryItem("station", station);
+    tune_netman->get(QNetworkRequest(url));
 }

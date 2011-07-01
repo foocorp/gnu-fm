@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QSettings>
 #include <QtNetwork/QNetworkAccessManager>
 
 class ServerComm : public QObject
@@ -18,6 +19,7 @@ private:
     QString scr_url;
     QString hs_url;
     QString ws_url;
+    QSettings *settings;
 
 signals:
     void loginFailed();
@@ -25,7 +27,7 @@ signals:
 
 public slots:
     void login(const QString &username, const QString &password);
-    void launchStation(const QString &station);
+    void tuneStation(const QString &station);
     void wsLoginReply(QNetworkReply *reply);
     void scrobbleLoginReply(QNetworkReply *reply);
 };

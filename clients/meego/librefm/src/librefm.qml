@@ -7,7 +7,7 @@ PageStackWindow {
     initialPage: LoginPage { }
 
     signal login(string username, string password)
-    signal launchStation(string station)
+    signal tuneStation(string station)
 
     function openFile(file) {
         var component = Qt.createComponent(file)

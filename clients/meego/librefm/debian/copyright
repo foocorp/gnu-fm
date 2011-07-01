@@ -4,7 +4,7 @@ This package was debianized by:
 
 It was downloaded from:
 
-    <url://example.com or remove>
+    http://libre.fm
 
 Upstream Author(s):
 
@@ -16,11 +16,9 @@ Copyright:
 
 License:
 
-    <specify license>
+    GPL 3.0 or later
 
 The Debian packaging is:
 
     Copyright C) 2011, Michael Sheldon <elleo@gnu.org>
-
-    <specify license of debianized version or remove>
 
