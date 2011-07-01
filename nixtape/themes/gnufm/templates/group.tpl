@@ -56,19 +56,5 @@
 	{/section}
 </ul>
 
-{if !isset($this_user) || $this_user->anticommercial<>1}
-	    <!--Ad Bard advertisement snippet, begin -->
-
-	    <script type='text/javascript'>
-	     var ab_h = '4bcaab930d3bdfded68fd7be730d7db4';
-     	     var ab_s = '0';
-     	    </script>
-   	    
-            <script type='text/javascript' src='http://cdn1.adbard.net/js/ab1.js'></script>
-
-	    <!--Ad Bard, end -->
-{/if}
-
-
 
 {include file='footer.tpl'}
