@@ -28,6 +28,10 @@ if (isset($_GET['tag'])) {
 	$station = $_GET['station'];
 }
 
+if (isset($_GET['only_loved']) && $_GET['only_loved']) {
+	$station .= '/loved';
+}
+
 if (isset($station)) {
 	if (isset($this_user)) {
 		$radio_session = $this_user->getRadioSession($station);
