@@ -27,6 +27,10 @@ require_once('../utils/resolve-external.php');
 
 function radio_title_from_url($url) {
 
+	if (preg_match('@l(ast|ibre)fm://globaltags/(.*)/loved@', $url, $regs)) {
+		$tag = $regs[2];
+		return 'Libre.fm ' . ucwords($tag) . ' Loved Tag Radio';
+	}
 	if (preg_match('@l(ast|ibre)fm://globaltags/(.*)@', $url, $regs)) {
 		$tag = $regs[2];
 		return 'Libre.fm ' . ucwords($tag) . ' Tag Radio';
@@ -86,10 +90,13 @@ function make_playlist($session, $old_format = false) {
 
 	$title = radio_title_from_url($url);
 	$smarty->assign('title', $title);
-
-	if (preg_match('@l(ast|ibre)fm://globaltags/(.*)@', $url, $regs)) {
+	
+	if (preg_match('@l(ast|ibre)fm://globaltags/(.*)/loved@', $url, $regs)) {
 		$tag = $regs[2];
 		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist WHERE streamable=1 AND lower(tag) = lower(' . $adodb->qstr($tag) . ')');
+	} else if (preg_match('@l(ast|ibre)fm://globaltags/(.*)@', $url, $regs)) {
+		$tag = $regs[2];
+		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE streamable=1 AND lower(tag) = lower(' . $adodb->qstr($tag) . ')');
 	} else if (preg_match('@l(ast|ibre)fm://artist/(.*)/similarartists@', $url, $regs)) {
 		try {
 			$artist = new Artist($regs[2]);
