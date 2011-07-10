@@ -3,12 +3,12 @@
     <string name="app_name">Libre Droid</string>
     <string name="tag_examples">Examples: acoustic, female vocals, german, piano, violin, french, etc.</string>
     <string name="tagged_station">Station tagged with:</string>
-    <string name="login">Login</string>
-    <string name="password">Password:</string>
-    <string name="username">Username:</string>
+    <string name="login">Anmelden</string>
+    <string name="password">Passwort:</string>
+    <string name="username">Benutzername:</string>
     <string name="not_google_account">(This is not the same as your Google account)</string>
     <string name="account_details">Libre.fm account details:</string>
-    <string name="no_account">Don\'t have an account?</string>
+    <string name="no_account">Brauchst du ein Konto?</string>
     <string name="register">Visit www.libre.fm to sign up for a free account.</string>
     <string name="tag_stations">Tag Stations</string>
     <string name="loved_tracks">Your Loved Tracks</string>

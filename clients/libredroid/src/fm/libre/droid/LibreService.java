@@ -2,7 +2,6 @@ package fm.libre.droid;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URL;
@@ -128,7 +127,7 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 			// Login for streaming
 			String output = this.httpGet("http://alpha.libre.fm/radio/handshake.php?username=" + username + "&passwordmd5=" + passMD5);
 			if (output.trim().equals("BADAUTH")) {
-				Toast.makeText(this, "Incorrect username or password", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, R.string.login_failed, Toast.LENGTH_SHORT).show();
 			} else {
 				String[] result = output.split("[=\n]");
 				for (int x=0; x<result.length; x++)  {
@@ -149,7 +148,7 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 			wsp.parse(output);
 			this.serviceToken = wsp.getKey();
 		} catch (Exception ex) {
-			Toast.makeText(this, "Unable to connect to libre.fm server: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.cant_connect + " " + ex.getMessage(), Toast.LENGTH_LONG).show();
 		}
 		return loggedIn;
 	}
@@ -186,7 +185,7 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 		if (this.currentSong >= this.playlist.size()) {
 			this.getPlaylist();
 			if(this.playlist.size() == 0) {
-				Toast.makeText(this, "Sorry, this station doesn't appear to have any more content.", Toast.LENGTH_LONG).show();
+				Toast.makeText(this, R.string.no_content, Toast.LENGTH_LONG).show();
 				this.stop();
 				return;
 			}
@@ -247,7 +246,7 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 		Song song = this.getSong();
 		try {
 			this.httpPost("http://alpha.libre.fm/2.0/", "method", "track.love", "sk", this.serviceToken, "artist", song.artist, "track", song.title);
-			Toast.makeText(this, "Loved", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.loved, Toast.LENGTH_SHORT).show();
 		} catch (Exception ex) {
 			Log.d("libredroid", "Couldn't love " + song.title + ": " + ex.getMessage()); 
 		}		
@@ -257,7 +256,7 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 		Song song = this.getSong();
 		try {
 			this.httpPost("http://alpha.libre.fm/2.0/", "method", "track.ban", "sk", this.serviceToken, "artist", song.artist, "track", song.title);
-			Toast.makeText(this, "Banned", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.banned, Toast.LENGTH_SHORT).show();
 		} catch (Exception ex) {
 			Log.d("libredroid", "Couldn't ban " + song.title + ": " + ex.getMessage()); 
 		}
@@ -288,7 +287,7 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 			this.playlist.parse(xspf);
 		} catch (Exception ex) {
 			Log.w("libredroid", "Unable to process playlist: " + ex.getMessage());
-			Toast.makeText(this, "Unable to process playlist: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.playlist_failed + " " + ex.getMessage(), Toast.LENGTH_LONG).show();
 		}
 	}
 	
@@ -297,7 +296,7 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 	}
 	
 	public void tuneStation(String type, String station) {
-		Toast.makeText(this, "Tuning in...", Toast.LENGTH_LONG).show();
+		Toast.makeText(this, R.string.tuning_in, Toast.LENGTH_LONG).show();
 		Log.d("librefm", "Tuning to librefm://" + type + "/" + station);
 		new TuneStationTask().execute(type, station);
 	}
