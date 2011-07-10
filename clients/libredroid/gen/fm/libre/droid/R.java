@@ -71,7 +71,31 @@ public final class R {
         public static final int main=0x7f030001;
     }
     public static final class string {
-        public static final int app_name=0x7f040001;
-        public static final int hello=0x7f040000;
+        public static final int account_details=0x7f040007;
+        public static final int add_station=0x7f04000d;
+        public static final int app_name=0x7f040000;
+        public static final int banned=0x7f040015;
+        public static final int cant_connect=0x7f040018;
+        public static final int community_loved=0x7f04000c;
+        public static final int download_failed=0x7f040010;
+        public static final int downloading=0x7f040011;
+        public static final int finished_download=0x7f04000f;
+        public static final int login=0x7f040003;
+        public static final int login_failed=0x7f040019;
+        public static final int loved=0x7f040016;
+        public static final int loved_tracks=0x7f04000b;
+        public static final int no_account=0x7f040008;
+        public static final int no_content=0x7f040017;
+        public static final int not_google_account=0x7f040006;
+        public static final int password=0x7f040004;
+        public static final int playlist_failed=0x7f040014;
+        public static final int quit=0x7f040012;
+        public static final int register=0x7f040009;
+        public static final int sd_card_needed=0x7f04000e;
+        public static final int tag_examples=0x7f040001;
+        public static final int tag_stations=0x7f04000a;
+        public static final int tagged_station=0x7f040002;
+        public static final int tuning_in=0x7f040013;
+        public static final int username=0x7f040005;
     }
 }

@@ -26,7 +26,6 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -223,7 +222,7 @@ public class LibreDroid extends ListActivity {
 	public void onListItemClick(ListView l, View v, int pos, long id) {
 		super.onListItemClick(l, v, pos, id);
 		String selection = l.getItemAtPosition(pos).toString();
-		if(selection.equals("Add A Custom Station...")) {			
+		if(selection.equals(R.string.add_station)) {			
 			LibreDroid.this.nextPage();
 		} else {
 			LibreDroid.this.libreServiceConn.service.tuneStation("globaltags", selection);
@@ -353,8 +352,7 @@ public class LibreDroid extends ListActivity {
 
 	public void save() {
 		Song song = this.libreServiceConn.service.getSong();
-		Toast.makeText(LibreDroid.this,
-				"Downloading \"" + song.title + "\" to your SD card.",
+		Toast.makeText(LibreDroid.this, getString(R.string.downloading, song.title),
 				Toast.LENGTH_LONG).show();
 		new DownloadTrackTask().execute(song);
 	}
@@ -363,7 +361,7 @@ public class LibreDroid extends ListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuItem changeStation = menu.add(0, Menu.FIRST, 0, "Change Station")
 				.setIcon(R.drawable.back);
-		MenuItem quit = menu.add(0, 2, 0, "Quit").setIcon(R.drawable.quit);
+		MenuItem quit = menu.add(0, 2, 0, R.string.quit).setIcon(R.drawable.quit);
 		changeStation.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
 				final ViewAnimator view = (ViewAnimator) findViewById(R.id.viewAnimator);
@@ -433,7 +431,7 @@ public class LibreDroid extends ListActivity {
 				if (!Environment.getExternalStorageState().equals(
 						Environment.MEDIA_MOUNTED)) {
 					res.add(false);
-					res.add("Please ensure an SD card is inserted before attempting to download songs. " + Environment.getExternalStorageState());
+					res.add(R.string.sd_card_needed + " " + Environment.getExternalStorageState());
 					return res;
 				}
 				File musicDir = new File(root, "Music");
@@ -465,10 +463,10 @@ public class LibreDroid extends ListActivity {
 				bis.close();
 				is.close();
 				res.add(true);
-				res.add("Finished downloading \"" + song.title + "\"");
+				res.add(getString(R.string.finished_download, song.title));
 			} catch (Exception ex) {
 				res.add(false);
-				res.add("Unable to download \"" + song.title + "\": "
+				res.add(getString(R.string.download_failed, song.title)
 						+ ex.getMessage());
 			}
 			return res;
