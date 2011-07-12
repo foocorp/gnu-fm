@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setApplicationName("Libre.fm");
     QDeclarativeView view;
-    view.setSource(QUrl::fromLocalFile("src/librefm.qml"));
-    //view.setSource(QUrl::fromLocalFile(DATADIR "/librefm/librefm.qml"));
+    //view.setSource(QUrl::fromLocalFile("src/librefm.qml"));
+    view.setSource(QUrl::fromLocalFile(DATADIR "/librefm/librefm.qml"));
     QObject *root = (QObject*)(view.rootObject());
 
     ServerComm sc;

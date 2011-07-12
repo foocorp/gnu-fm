@@ -30,8 +30,10 @@ private:
     void parseTrack(QDomNode trackNode);
 
 signals:
+    void loggingIn();
     void loginFailed();
     void loginSuccessful();
+    void loginNeeded();
     void tuned(QString stationName);
     void playing(QString artist, QString album, QString title, QString imageurl);
     void positionUpdate(double position);

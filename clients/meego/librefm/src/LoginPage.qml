@@ -16,6 +16,10 @@ Page {
             msg_logging_in.close();
             rootWin.openFile("MenuPage.qml");
         }
+
+        onLoggingIn: {
+            msg_logging_in.open();
+        }
     }
 
     Image {
@@ -28,7 +32,8 @@ Page {
     Column {
         spacing: 10
         anchors.centerIn: parent
-        anchors.verticalCenterOffset: 15
+        anchors.verticalCenterOffset: 40
+        width: 400
 
         TextField {
             id: txt_username
@@ -43,21 +48,18 @@ Page {
             width: parent.width
         }
 
-        Row {
-            spacing: 10
-
-            Button {
-                text: "Login"
-                onClicked: {
-                    msg_logging_in.open()
-                    rootWin.login(txt_username.text, txt_password.text)
-                }
+        Button {
+            text: "Login"
+            onClicked: {
+                rootWin.login(txt_username.text, txt_password.text)
             }
+            width: parent.width
+        }
 
-            Button {
-                text: "Quit"
-                onClicked: Qt.quit()
-            }
+        Button {
+            text: "Quit"
+            onClicked: Qt.quit()
+            width: parent.width
         }
     }
 

@@ -7,18 +7,66 @@ Page {
 
     Image {
         id: towerImg
-        anchors.centerIn: parent
+        anchors.horizontalCenter: parent.horizontalCenter
         source: "librefm-tower.png"
         z: -1
     }
 
+    states: [
+        State {
+            name: "inLandscape"
+            when: !rootWin.inPortrait
+            PropertyChanges {
+                target: grid_menus
+                rows: 1
+                columns: 2
+                spacing: 200
+                anchors.verticalCenterOffset: 50
+                anchors.horizontalCenterOffset: -60
+            }
+        },
+        State {
+            name: "inPortrait"
+            when: rootWin.inPortrait
+            PropertyChanges {
+                target: grid_menus
+                anchors.verticalCenterOffset: -72
+                anchors.horizontalCenterOffset: 0
+                rows: 2
+                columns: 1
+                spacing: 50
+            }
+        }
+    ]
 
     Grid {
-        rows: screen.orientation == Screen.Landscape || screen.orientation == Screen.LandscapeInverted ? 2 : 1
+        id: grid_menus
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: 40
         anchors.horizontalCenter: parent.horizontalCenter
-        spacing: 300
+
+        Column {
+            id: col_buttons
+            spacing: 20
+
+            Button {
+                text: "New Station"
+            }
+
+            Button {
+                text: "Preferences"
+            }
+
+            Button {
+                text: "About"
+                onClicked: rootWin.openFile("About.qml")
+            }
+
+            Button {
+                text: "Quit"
+                onClicked: Qt.quit()
+            }
+
+        }
 
         Column {
             id: col_recent
@@ -108,28 +156,5 @@ Page {
             }
         }
 
-        Column {
-            id: col_buttons
-            spacing: 20
-
-            Button {
-                text: "New Station"
-            }
-
-            Button {
-                text: "Preferences"
-            }
-
-            Button {
-                text: "About"
-                onClicked: rootWin.openFile("About.qml")
-            }
-
-            Button {
-                text: "Quit"
-                onClicked: Qt.quit()
-            }
-
-        }
     }
 }
