@@ -40,6 +40,7 @@ void ServerComm::login(const QString &username, const QString &password) {
         loginFailed();
         return;
     }
+    this->username = username;
     loggingIn();
     QString passMD5 = QCryptographicHash::hash(QByteArray(password.toAscii()), QCryptographicHash::Md5).toHex();
     long timestamp = QDateTime::currentDateTime().toTime_t();
@@ -133,6 +134,18 @@ void ServerComm::tuneStation(const QString &station) {
     params.append("&sk="); params.append(ws_sk);
     params.append("&station="); params.append(station);
     tune_netman->post(QNetworkRequest(url), params);
+}
+
+void ServerComm::tuneStationByName(const QString &name) {
+    if (name == "my-loved") {
+        tuneStation("librefm://user/" + username + "/loved");
+    } else if (name == "my-recommended") {
+        tuneStation("librefm://user/" + username + "/recommended");
+    } else if (name == "my-mix") {
+        tuneStation("librefm://user/" + username + "/mix");
+    } else if (name == "my-neighbourhood") {
+        tuneStation("librefm://user/" + username + "/neighbours");
+    }
 }
 
 void ServerComm::tuneReply(QNetworkReply *reply) {
