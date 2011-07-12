@@ -37,6 +37,7 @@ signals:
     void tuned(QString stationName);
     void playing(QString artist, QString album, QString title, QString imageurl);
     void positionUpdate(double position);
+    void noContent();
 
 private slots:
     void wsLoginReply(QNetworkReply *reply);

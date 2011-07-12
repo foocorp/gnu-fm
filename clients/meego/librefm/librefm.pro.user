@@ -30,6 +30,7 @@
        <value type="QString">LOCAL</value>
        <value type="QString">1</value>
       </valuelist>
+      <value key="QtProjectManager.QMakeBuildStep.QMakeForced" type="bool">false</value>
      </valuemap>
      <valuemap key="ProjectExplorer.BuildStepList.Step.1" type="QVariantMap">
       <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">Make</value>
@@ -79,6 +80,7 @@
       <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString"></value>
       <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">QtProjectManager.QMakeBuildStep</value>
       <valuelist key="QtProjectManager.QMakeBuildStep.QMakeArguments" type="QVariantList"/>
+      <value key="QtProjectManager.QMakeBuildStep.QMakeForced" type="bool">false</value>
      </valuemap>
      <valuemap key="ProjectExplorer.BuildStepList.Step.1" type="QVariantMap">
       <value key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName" type="QString">Make</value>
