@@ -6,8 +6,16 @@ Page {
     anchors.margins: rootWin.pageMargin
 
     Image {
-        id: towerImg
+        id: imgLibre
+        source: "librefm-logo.png"
         anchors.horizontalCenter: parent.horizontalCenter
+        z: -1
+    }
+
+    Image {
+        id: imgTower
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: imgLibre.bottom
         source: "librefm-tower.png"
         z: -1
     }
@@ -24,6 +32,10 @@ Page {
                 anchors.verticalCenterOffset: 50
                 anchors.horizontalCenterOffset: -60
             }
+            PropertyChanges {
+                target: imgTower
+                visible: true
+            }
         },
         State {
             name: "inPortrait"
@@ -35,6 +47,10 @@ Page {
                 rows: 2
                 columns: 1
                 spacing: 50
+            }
+            PropertyChanges {
+                target: imgTower
+                visible: false
             }
         }
     ]
