@@ -29,6 +29,8 @@ ServerComm::ServerComm(QObject *parent) :
         qDebug() << "Logging in...";
         login(settings->value("Auth/username").toString(), settings->value("Auth/password").toString());
         qDebug() << "Username:" << settings->value("Auth/username").toString();
+    } else {
+        qDebug() << "Login needed";
     }
 }
 
@@ -38,6 +40,7 @@ void ServerComm::login(const QString &username, const QString &password) {
         loginFailed();
         return;
     }
+    loggingIn();
     QString passMD5 = QCryptographicHash::hash(QByteArray(password.toAscii()), QCryptographicHash::Md5).toHex();
     long timestamp = QDateTime::currentDateTime().toTime_t();
     QString token = QCryptographicHash::hash(QByteArray(QString(QString(passMD5) + QString::number(timestamp)).toAscii()), QCryptographicHash::Md5).toHex();

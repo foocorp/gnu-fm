@@ -18,12 +18,12 @@ Page {
         anchors.centerIn: parent
 
         Label {
-            text: "Libre.fm MeeGo Client Version 0.1"
+            text: "Libre.fm MeeGo Client 0.1"
             font.pixelSize: 34
         }
 
         Label {
-            text: "Released under the GPL, version 3.0 or later."
+            text: "Released under the GPL 3.0 or later."
         }
 
         Label {

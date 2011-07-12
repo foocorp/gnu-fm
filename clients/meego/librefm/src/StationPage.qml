@@ -26,6 +26,42 @@ Page {
 
     }
 
+    states: [
+        State {
+            name: "inLandscape"
+            when: !rootWin.inPortrait
+            PropertyChanges {
+                target: grid_details
+                rows: 1
+                columns: 2
+            }
+            PropertyChanges {
+                target: col_details
+                anchors.verticalCenterOffset: 0
+            }
+            PropertyChanges {
+                target: imgCover
+                anchors.horizontalCenterOffset: -250
+            }
+        },
+        State {
+            name: "inPortrait"
+            when: rootWin.inPortrait
+            PropertyChanges {
+                target: grid_details
+                rows: 2
+                columns: 1
+            }
+            PropertyChanges {
+                target: col_details
+                anchors.verticalCenterOffset: 100
+            }
+            PropertyChanges {
+                target: imgCover
+                anchors.horizontalCenterOffset: 0
+            }
+        }
+    ]
 
     Column {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -48,17 +84,20 @@ Page {
             font.pixelSize: 30
         }
 
-        Row {
+        Grid {
+            id: grid_details
             spacing: 50
             anchors.horizontalCenter: parent.horizontalCenter
-            Image {
+            Image {                
                 id: imgCover
+                anchors.horizontalCenter: parent.horizontalCenter
                 source: "empty-album.png"
                 height: 200
                 width: 200
             }
 
             Column {
+                id: col_details
                 spacing: 40
                 anchors.verticalCenter: parent.verticalCenter
                 Row {
@@ -83,104 +122,105 @@ Page {
 
         }
 
-        ButtonRow {
-            exclusive: false
+    }
 
-            Button {
-                id: btnBan
-                Image {
-                    anchors.centerIn: parent
-                    anchors.verticalCenterOffset: -1
-                    source: "ban.png"
-                }
-                onClicked: {
-                    rootWin.ban();
-                    rootWin.next();
+    ButtonRow {
+        exclusive: false
+        anchors.bottom: parent.bottom
+
+        Button {
+            id: btnBan
+            Image {
+                anchors.centerIn: parent
+                anchors.verticalCenterOffset: -1
+                source: "ban.png"
+            }
+            onClicked: {
+                rootWin.ban();
+                rootWin.next();
+            }
+        }
+
+        Button {
+            id: btnTag
+            Image {
+                anchors.centerIn: parent
+                source: "image://theme/icon-m-toolbar-tag" + (theme.inverted ? "-inverse" : "")
+            }
+        }
+
+        Button {
+            id: btnPrevious
+            Image {
+                anchors.centerIn: parent
+                source: "image://theme/icon-m-toolbar-mediacontrol-previous" + (theme.inverted ? "-inverse" : "")
+            }
+            onClicked: {
+                rootWin.prev();
+            }
+        }
+
+        Button {
+            id: btnPlay
+            property bool playing: false;
+            Image {
+                id: imgPlay
+                anchors.centerIn: parent
+                visible: false
+                source: "image://theme/icon-m-toolbar-mediacontrol-play" + (theme.inverted ? "-inverse" : "")
+            }
+
+            Image {
+                id: imgPause
+                anchors.centerIn: parent
+                source: "image://theme/icon-m-toolbar-mediacontrol-pause" + (theme.inverted ? "-inverse" : "")
+            }
+
+            onClicked: {
+                if (imgPlay.visible) {
+                    rootWin.play();
+                    imgPlay.visible = false;
+                    imgPause.visible = true;
+                } else {
+                    rootWin.pause();
+                    imgPlay.visible = true;
+                    imgPause.visible = false;
                 }
             }
 
-            Button {
-                id: btnTag
-                Image {
-                    anchors.centerIn: parent
-                    source: "image://theme/icon-m-toolbar-tag" + (theme.inverted ? "-inverse" : "")
-                }
+
+        }
+
+        Button {
+            id: btnNext
+            Image {
+                anchors.centerIn: parent
+                source: "image://theme/icon-m-toolbar-mediacontrol-next" + (theme.inverted ? "-inverse" : "")
             }
-
-            Button {
-                id: btnPrevious
-                Image {
-                    anchors.centerIn: parent
-                    source: "image://theme/icon-m-toolbar-mediacontrol-previous" + (theme.inverted ? "-inverse" : "")
-                }
-                onClicked: {
-                    rootWin.prev();
-                }
+            onClicked: {
+                rootWin.next();
             }
+        }
 
-            Button {
-                id: btnPlay
-                property bool playing: false;
-                Image {
-                    id: imgPlay
-                    anchors.centerIn: parent
-                    visible: false
-                    source: "image://theme/icon-m-toolbar-mediacontrol-play" + (theme.inverted ? "-inverse" : "")
-                }
-
-                Image {
-                    id: imgPause
-                    anchors.centerIn: parent
-                    source: "image://theme/icon-m-toolbar-mediacontrol-pause" + (theme.inverted ? "-inverse" : "")
-                }
-
-                onClicked: {
-                    if (imgPlay.visible) {
-                        rootWin.play();
-                        imgPlay.visible = false;
-                        imgPause.visible = true;
-                    } else {
-                        rootWin.pause();
-                        imgPlay.visible = true;
-                        imgPause.visible = false;
-                    }
-                }
-
-
+        Button {
+            id: btnSave
+            Image {
+                anchors.centerIn: parent
+                source: "image://theme/icon-m-common-save-as" + (theme.inverted ? "-inverse" : "")
+                scale: 0.8
             }
+        }
 
-            Button {
-                id: btnNext
-                Image {
-                    anchors.centerIn: parent
-                    source: "image://theme/icon-m-toolbar-mediacontrol-next" + (theme.inverted ? "-inverse" : "")
-                }
-                onClicked: {
-                    rootWin.next();
-                }
+        Button {
+            id: btnLove
+            Image {
+                anchors.centerIn: parent
+                anchors.verticalCenterOffset: -1
+                source: "love.png"
             }
-
-            Button {
-                id: btnSave
-                Image {
-                    anchors.centerIn: parent
-                    source: "image://theme/icon-m-common-save-as" + (theme.inverted ? "-inverse" : "")
-                    scale: 0.8
-                }
+            onClicked: {
+                rootWin.love();
             }
-
-            Button {
-                id: btnLove
-                Image {
-                    anchors.centerIn: parent
-                    anchors.verticalCenterOffset: -1
-                    source: "love.png"
-                }
-                onClicked: {
-                    rootWin.love();
-                }
-            }
-
         }
 
     }

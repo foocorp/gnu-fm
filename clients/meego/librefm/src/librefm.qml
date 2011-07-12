@@ -15,6 +15,14 @@ PageStackWindow {
     signal love()
     signal ban()
 
+    Connections {
+        target: serverComm
+        onLoginNeeded: {
+            openFile("LoginPage.qml");
+        }
+    }
+
+
     function openFile(file) {
         var component = Qt.createComponent(file)
         if (component.status == Component.Ready)
