@@ -190,7 +190,10 @@ void ServerComm::playlistReply(QNetworkReply *reply) {
             }
         }
     }
-    if(currentSong == -1) {
+
+    if(playlist->length() == currentSong + 1) {
+        noContent();
+    } else if(currentSong == -1) {
         loadSong(0);
     }
 }

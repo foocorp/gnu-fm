@@ -10,18 +10,23 @@ Page {
         target: serverComm
         onTuned: {
             lblStationName.text = stationName;
-            lblArtist.text = "Fetching playlist..."
+            lblArtist.text = "Fetching playlist...";
         }
 
         onPlaying: {
             lblArtist.text = artist;
-            lblSpacer.text = " - "
+            lblSpacer.text = " - ";
             lblTrack.text = title;
-            imgCover.source = imageurl
+            imgCover.source = imageurl;
         }
 
         onPositionUpdate: {
             songProgress.value = position;
+        }
+
+        onNoContent: {
+            pause();
+            msg_no_content.open();
         }
 
     }
@@ -223,6 +228,16 @@ Page {
             }
         }
 
+    }
+
+
+    QueryDialog {
+        id: msg_no_content
+        titleText: "No more content"
+        message: "This station doesn't appear to have any more content. If this is one of your loved, mix, recommendation or neighbourhood stations then you may need to love a few more songs first."
+        rejectButtonText: "Okay"
+        onAccepted: pageStack.pop();
+        onRejected: pageStack.pop();
     }
 
 }
