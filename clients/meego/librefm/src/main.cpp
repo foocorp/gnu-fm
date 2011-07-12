@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
     view.rootContext()->setContextProperty("serverComm", &sc);
     QObject::connect(root, SIGNAL(login(QString, QString)), &sc, SLOT(login(QString, QString)));
     QObject::connect(root, SIGNAL(tuneStation(QString)), &sc, SLOT(tuneStation(QString)));
+    QObject::connect(root, SIGNAL(tuneStationByName(QString)), &sc, SLOT(tuneStationByName(QString)));
     QObject::connect(root, SIGNAL(next()), &sc, SLOT(next()));
     QObject::connect(root, SIGNAL(prev()), &sc, SLOT(prev()));
     QObject::connect(root, SIGNAL(play()), &sc, SLOT(play()));

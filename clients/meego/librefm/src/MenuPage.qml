@@ -66,10 +66,12 @@ Page {
 
             Button {
                 text: "New Station"
+                onClicked: rootWin.openFile("NewStationPage.qml")
             }
 
             Button {
                 text: "Preferences"
+                onClicked: rootWin.openFile("PreferencesPage.qml")
             }
 
             Button {

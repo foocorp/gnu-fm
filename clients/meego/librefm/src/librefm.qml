@@ -8,6 +8,7 @@ PageStackWindow {
 
     signal login(string username, string password)
     signal tuneStation(string station)
+    signal tuneStationByName(string name)
     signal next()
     signal prev()
     signal play()

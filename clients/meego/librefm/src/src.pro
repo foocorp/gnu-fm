@@ -57,4 +57,5 @@ OTHER_FILES += \
     StationPage.qml \
     About.qml \
     librefm.qml \
-    NewStationPage.qml
+    NewStationPage.qml \
+    PreferencesPage.qml

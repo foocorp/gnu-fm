@@ -15,6 +15,7 @@ class ServerComm : public QObject
     Q_OBJECT
 public:
     explicit ServerComm(QObject *parent = 0);
+    QString username;
 
 private:
     QString ws_sk;
@@ -49,6 +50,7 @@ private slots:
 public slots:
     void login(const QString &username, const QString &password);
     void tuneStation(const QString &station);
+    void tuneStationByName(const QString &name);
     void getPlaylist();
     void loadSong(int song);
     void play();
