@@ -167,7 +167,7 @@ if (isset($_POST['install'])) {
 	$stage_two_queries_other = array(
 		'CREATE SEQUENCE track_id_seq;',
 		'CREATE TABLE Track(
-		id INTEGER NOT NULL DEFAULT nextval('track_id_seq'::regclass) PRIMARY KEY,
+		id INTEGER NOT NULL DEFAULT nextval("track_id_seq"::regclass) PRIMARY KEY,
 		name VARCHAR(255),
 		artist_name VARCHAR(255) REFERENCES Artist(name),
 		album_name VARCHAR(255),
