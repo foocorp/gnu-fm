@@ -53,7 +53,7 @@ function playerInit(list, sk, ws, rk) {
 	if(typeof audio.duration == "undefined") {
 		//Browser doesn't support <audio>
 		if(streaming) {
-			audio.replaceWith("<p>Sorry, you need a browser capable of using the HTML 5 &lt;audio&gt; element to enjoy the streaming service via the Javascript player.</p>");
+			$("#audio").replaceWith("<p>Sorry, you need a browser capable of using the HTML 5 &lt;audio&gt; element to enjoy the streaming service via the Javascript player.</p>");
 		}
 		return;
 	}
