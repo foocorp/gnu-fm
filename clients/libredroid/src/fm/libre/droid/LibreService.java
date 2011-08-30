@@ -2,7 +2,6 @@ package fm.libre.droid;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URL;
@@ -55,8 +54,8 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 		super.onCreate();
 		this.mp = new MediaPlayer();
 		this.currentSong = 0;
-        this.playlist = new Playlist();
-        this.sessionKey = "";
+		this.playlist = new Playlist();
+		this.sessionKey = "";
 	}
 	
 	@Override
@@ -70,88 +69,88 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 	}
 	
 	public String httpGet(String url) throws URISyntaxException, ClientProtocolException, IOException {
-    	DefaultHttpClient client = new DefaultHttpClient();
-    	URI uri = new URI(url);
+		DefaultHttpClient client = new DefaultHttpClient();
+		URI uri = new URI(url);
 		HttpGet method = new HttpGet(uri);
 		HttpResponse res = client.execute(method);
 		ByteArrayOutputStream outstream = new ByteArrayOutputStream();  
 		res.getEntity().writeTo(outstream);
 		return outstream.toString();
-    }
+	}
 	
 	public String httpPost(String url, String... params) throws URISyntaxException, ClientProtocolException, IOException {
-    	DefaultHttpClient client = new DefaultHttpClient();
-    	URI uri = new URI(url);
-    	HttpPost method = new HttpPost(uri);
-    	List<NameValuePair> paramPairs = new ArrayList<NameValuePair>(2);
-    	for (int i = 0; i < params.length; i+=2) {
-    		paramPairs.add(new BasicNameValuePair(params[i], params[i+1]));  
-    	}  
-    	method.setEntity(new UrlEncodedFormEntity(paramPairs));
-    	method.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false); // Disable expect-continue, caching server doesn't like this
-    	HttpResponse res = client.execute(method);
-    	ByteArrayOutputStream outstream = new ByteArrayOutputStream();
-    	res.getEntity().writeTo(outstream);
-    	return outstream.toString();
-    }
+		DefaultHttpClient client = new DefaultHttpClient();
+		URI uri = new URI(url);
+		HttpPost method = new HttpPost(uri);
+		List<NameValuePair> paramPairs = new ArrayList<NameValuePair>(2);
+		for (int i = 0; i < params.length; i+=2) {
+			paramPairs.add(new BasicNameValuePair(params[i], params[i+1]));  
+		}  
+		method.setEntity(new UrlEncodedFormEntity(paramPairs));
+		method.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false); // Disable expect-continue, caching server doesn't like this
+		HttpResponse res = client.execute(method);
+		ByteArrayOutputStream outstream = new ByteArrayOutputStream();
+		res.getEntity().writeTo(outstream);
+		return outstream.toString();
+	}
 	
 	public boolean login(String username, String password) {
 		loggedIn = false;
-    	String passMD5 = "";
-    	String token = "";
-    	String wsToken = "";
-    	long timestamp = new Date().getTime() / 1000;
-    	try {
-    		MessageDigest md = MessageDigest.getInstance("MD5");
-    		md.update(password.getBytes(), 0, password.length());
-    		passMD5 = new BigInteger(1, md.digest()).toString(16);
-    		if (passMD5.length() == 31) {
-    			passMD5 = "0" + passMD5; 
-    		}
-    		token = passMD5 + Long.toString(timestamp);
-    		md.update(token.getBytes(), 0, token.length());
-    		token = new BigInteger(1, md.digest()).toString(16);
-    		if (token.length() == 31) {
-    			token = "0" + token;
-    		}
-    		wsToken = username + passMD5;
-    		md.update(wsToken.getBytes(), 0, wsToken.length());
-    		wsToken = new BigInteger(1, md.digest()).toString(16);
-    		if (wsToken.length() == 31) {
-    			wsToken = "0" + wsToken;
-    		}
-    	} catch (NoSuchAlgorithmException ex) {
-    		Toast.makeText(this, "MD5 hashing unavailable, unable to login.", Toast.LENGTH_LONG);
-    	}
-    	
-    	try {
-    		// Login for streaming
-    		String output = this.httpGet("http://alpha.libre.fm/radio/handshake.php?username=" + username + "&passwordmd5=" + passMD5);
-    		if (output.trim().equals("BADAUTH")) {
-    			Toast.makeText(this, "Incorrect username or password", Toast.LENGTH_SHORT).show();
-    		} else {
-    		    String[] result = output.split("[=\n]");
-    		    for (int x=0; x<result.length; x++)  {
-    		    	if (result[x].trim().equals("session")) {
-    		    		this.sessionKey = result[x+1].trim();
-    		    	}
-    		    }
-    		    loggedIn = true;
-    		}
-    		// Login for scrobbling
-    		output = this.httpGet("http://turtle.libre.fm/?hs=true&p=1.2&u=" + username + "&t=" + Long.toString(timestamp) + "&a=" + token + "&c=ldr" );    		
-    		if (output.split("\n")[0].equals("OK")) {
-    			this.scrobbleKey = output.split("\n")[1].trim();
-    		}
-    		// Login for web services
-    		output = this.httpGet("http://alpha.libre.fm/2.0/?method=auth.getmobilesession&username=" + username + "&authToken=" + wsToken);
-    		WSParser wsp = new WSParser();
-    		wsp.parse(output);
-    		this.serviceToken = wsp.getKey();
-    	} catch (Exception ex) {
-    		Toast.makeText(this, "Unable to connect to libre.fm server: " + ex.getMessage(), Toast.LENGTH_LONG).show();
-    	}
-    	return loggedIn;
+		String passMD5 = "";
+		String token = "";
+		String wsToken = "";
+		long timestamp = new Date().getTime() / 1000;
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(password.getBytes(), 0, password.length());
+			passMD5 = new BigInteger(1, md.digest()).toString(16);
+			if (passMD5.length() == 31) {
+				passMD5 = "0" + passMD5; 
+			}
+			token = passMD5 + Long.toString(timestamp);
+			md.update(token.getBytes(), 0, token.length());
+			token = new BigInteger(1, md.digest()).toString(16);
+			if (token.length() == 31) {
+				token = "0" + token;
+			}
+			wsToken = username + passMD5;
+			md.update(wsToken.getBytes(), 0, wsToken.length());
+			wsToken = new BigInteger(1, md.digest()).toString(16);
+			if (wsToken.length() == 31) {
+				wsToken = "0" + wsToken;
+			}
+		} catch (NoSuchAlgorithmException ex) {
+			Toast.makeText(this, "MD5 hashing unavailable, unable to login.", Toast.LENGTH_LONG);
+		}
+		
+		try {
+			// Login for streaming
+			String output = this.httpGet("http://alpha.libre.fm/radio/handshake.php?username=" + username + "&passwordmd5=" + passMD5);
+			if (output.trim().equals("BADAUTH")) {
+				Toast.makeText(this, R.string.login_failed, Toast.LENGTH_SHORT).show();
+			} else {
+				String[] result = output.split("[=\n]");
+				for (int x=0; x<result.length; x++)  {
+					if (result[x].trim().equals("session")) {
+						this.sessionKey = result[x+1].trim();
+					}
+				}
+				loggedIn = true;
+			}
+			// Login for scrobbling
+			output = this.httpGet("http://turtle.libre.fm/?hs=true&p=1.2&u=" + username + "&t=" + Long.toString(timestamp) + "&a=" + token + "&c=ldr" );			
+			if (output.split("\n")[0].equals("OK")) {
+				this.scrobbleKey = output.split("\n")[1].trim();
+			}
+			// Login for web services
+			output = this.httpGet("http://alpha.libre.fm/2.0/?method=auth.getmobilesession&username=" + username + "&authToken=" + wsToken);
+			WSParser wsp = new WSParser();
+			wsp.parse(output);
+			this.serviceToken = wsp.getKey();
+		} catch (Exception ex) {
+			Toast.makeText(this, R.string.cant_connect + " " + ex.getMessage(), Toast.LENGTH_LONG).show();
+		}
+		return loggedIn;
 	}
 	
 	public boolean isLoggedIn() {
@@ -183,169 +182,169 @@ public class LibreService extends Service implements OnBufferingUpdateListener, 
 	}
 	
 	public void play() {
-    	if (this.currentSong >= this.playlist.size()) {
-    		this.getPlaylist();
-    		if(this.playlist.size() == 0) {
-    			Toast.makeText(this, "Sorry, this station doesn't appear to have any more content.", Toast.LENGTH_LONG).show();
-    			this.stop();
-    			return;
-    		}
-    	}
-    	this.playing = true;
-    	this.buffering = true;
-    	Song song = this.playlist.getSong(currentSong);
-    	Log.d("libredroid", "Song: " + this.playlist);
-    	try {
-    		this.mp.reset();
-    		// Hack to get Jamendo MP3 stream instead of OGG because MediaPlayer
-    		// doesn't support streaming OGG at the moment.
-    		URL url = new URL(song.location.replace("ogg2", "mp31"));
-    		// Hack2: Froyo's new streaming mechanism is massively broken and fails
-    		// when presented with a HTTP redirection message so we have to resolve
-    		// it first.
-    		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-    		conn.setInstanceFollowRedirects(false);
-    		conn.connect();
-    		if(conn.getResponseCode() == 301 || conn.getResponseCode() == 302 || conn.getResponseCode() == 307) {
-    			Log.d("libredroid", "Got a HTTP redirection for " + url.toString() + ". Resolves to: " + conn.getHeaderField("Location") + " (resolving it ourselves to avoid Froyo's incomplete HTTP streaming implementation)");
-    			this.mp.setDataSource(conn.getHeaderField("Location"));
-    		} else  {
-    			this.mp.setDataSource(url.toString());
-    		}
-    		conn.disconnect();
-    		this.mp.setOnBufferingUpdateListener(this);
-            this.mp.setOnCompletionListener(this);
-    		this.mp.prepareAsync();
-    		// Send now playing data
-    		this.httpPost("http://turtle.libre.fm/nowplaying/1.2/", "s", this.scrobbleKey, "a", song.artist, "t", song.title);
-    	} catch (Exception ex) {
-    		Log.d("libredroid", "Couldn't play " + song.title + ": " + ex.getMessage());
-    		this.next();
-    	}
-    	this.sendBroadcast(new Intent("LibreDroidNewSong"));
-    }
+		if (this.currentSong >= this.playlist.size()) {
+			this.getPlaylist();
+			if(this.playlist.size() == 0) {
+				Toast.makeText(this, R.string.no_content, Toast.LENGTH_LONG).show();
+				this.stop();
+				return;
+			}
+		}
+		this.playing = true;
+		this.buffering = true;
+		Song song = this.playlist.getSong(currentSong);
+		Log.d("libredroid", "Song: " + this.playlist);
+		try {
+			this.mp.reset();
+			// Hack to get Jamendo MP3 stream instead of OGG because MediaPlayer
+			// doesn't support streaming OGG at the moment.
+			URL url = new URL(song.location.replace("ogg2", "mp31"));
+			// Hack2: Froyo's new streaming mechanism is massively broken and fails
+			// when presented with a HTTP redirection message so we have to resolve
+			// it first.
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setInstanceFollowRedirects(false);
+			conn.connect();
+			if(conn.getResponseCode() == 301 || conn.getResponseCode() == 302 || conn.getResponseCode() == 307) {
+				Log.d("libredroid", "Got a HTTP redirection for " + url.toString() + ". Resolves to: " + conn.getHeaderField("Location") + " (resolving it ourselves to avoid Froyo's incomplete HTTP streaming implementation)");
+				this.mp.setDataSource(conn.getHeaderField("Location"));
+			} else  {
+				this.mp.setDataSource(url.toString());
+			}
+			conn.disconnect();
+			this.mp.setOnBufferingUpdateListener(this);
+			this.mp.setOnCompletionListener(this);
+			this.mp.prepareAsync();
+			// Send now playing data
+			this.httpPost("http://turtle.libre.fm/nowplaying/1.2/", "s", this.scrobbleKey, "a", song.artist, "t", song.title);
+		} catch (Exception ex) {
+			Log.d("libredroid", "Couldn't play " + song.title + ": " + ex.getMessage());
+			this.next();
+		}
+		this.sendBroadcast(new Intent("LibreDroidNewSong"));
+	}
 	
 	public void next() {
-    	mp.stop();
-    	this.currentSong++;
-    	this.play();
-    }
-    
-    public void prev() {
-    	if (this.currentSong > 0) {
-    		mp.stop();
-    		this.currentSong--;
-    		this.play();
-    	}
-    }
-    
-    public void stop() {
-    	mp.stop();
-    }
-    
-    public void love() {
-    	Song song = this.getSong();
-    	try {
-    		this.httpPost("http://alpha.libre.fm/2.0/", "method", "track.love", "sk", this.serviceToken, "artist", song.artist, "track", song.title);
-    		Toast.makeText(this, "Loved", Toast.LENGTH_SHORT).show();
-    	} catch (Exception ex) {
-    		Log.d("libredroid", "Couldn't love " + song.title + ": " + ex.getMessage()); 
-    	}    	
-    }
-    
-    public void ban() {
-    	Song song = this.getSong();
-    	try {
-    		this.httpPost("http://alpha.libre.fm/2.0/", "method", "track.ban", "sk", this.serviceToken, "artist", song.artist, "track", song.title);
-    		Toast.makeText(this, "Banned", Toast.LENGTH_SHORT).show();
-    	} catch (Exception ex) {
-    		Log.d("libredroid", "Couldn't ban " + song.title + ": " + ex.getMessage()); 
-    	}
-    	this.next();
-    }
-    
-    public Song getSong() {
-    	return this.getSong(this.currentSong);
-    }
-    
-    public Song getSong(int songNumber) {
-    	return this.playlist.getSong(songNumber);
-    }
-    
-    public void togglePause() {
-    	if(this.playing) {
-    		mp.pause();
-    	} else {
-    		mp.start();
-    	}
-    	this.playing = !this.playing;
-    }
-    
-    public void getPlaylist() {
-    	try {
-    		String xspf = this.httpGet("http://alpha.libre.fm/radio/xspf.php?sk=" + this.sessionKey + "&desktop=1.0");
-    		Log.d("libredroid", "Fetching playlist from: http://alpha.libre.fm/radio/xspf.php?sk=" + this.sessionKey + "&desktop=1.0");
-    		this.playlist.parse(xspf);
-    	} catch (Exception ex) {
-    		Log.w("libredroid", "Unable to process playlist: " + ex.getMessage());
-    		Toast.makeText(this, "Unable to process playlist: " + ex.getMessage(), Toast.LENGTH_LONG).show();
-    	}
-    }
-    
-    public boolean isPlaying() {
-    	return this.playing;
-    }
+		mp.stop();
+		this.currentSong++;
+		this.play();
+	}
 	
-    public void tuneStation(String type, String station) {
-    	Toast.makeText(this, "Tuning in...", Toast.LENGTH_LONG).show();
-    	Log.d("librefm", "Tuning to librefm://" + type + "/" + station);
-    	new TuneStationTask().execute(type, station);
-    }
+	public void prev() {
+		if (this.currentSong > 0) {
+			mp.stop();
+			this.currentSong--;
+			this.play();
+		}
+	}
+	
+	public void stop() {
+		mp.stop();
+	}
+	
+	public void love() {
+		Song song = this.getSong();
+		try {
+			this.httpPost("http://alpha.libre.fm/2.0/", "method", "track.love", "sk", this.serviceToken, "artist", song.artist, "track", song.title);
+			Toast.makeText(this, R.string.loved, Toast.LENGTH_SHORT).show();
+		} catch (Exception ex) {
+			Log.d("libredroid", "Couldn't love " + song.title + ": " + ex.getMessage()); 
+		}		
+	}
+	
+	public void ban() {
+		Song song = this.getSong();
+		try {
+			this.httpPost("http://alpha.libre.fm/2.0/", "method", "track.ban", "sk", this.serviceToken, "artist", song.artist, "track", song.title);
+			Toast.makeText(this, R.string.banned, Toast.LENGTH_SHORT).show();
+		} catch (Exception ex) {
+			Log.d("libredroid", "Couldn't ban " + song.title + ": " + ex.getMessage()); 
+		}
+		this.next();
+	}
+	
+	public Song getSong() {
+		return this.getSong(this.currentSong);
+	}
+	
+	public Song getSong(int songNumber) {
+		return this.playlist.getSong(songNumber);
+	}
+	
+	public void togglePause() {
+		if(this.playing) {
+			mp.pause();
+		} else {
+			mp.start();
+		}
+		this.playing = !this.playing;
+	}
+	
+	public void getPlaylist() {
+		try {
+			String xspf = this.httpGet("http://alpha.libre.fm/radio/xspf.php?sk=" + this.sessionKey + "&desktop=1.0");
+			Log.d("libredroid", "Fetching playlist from: http://alpha.libre.fm/radio/xspf.php?sk=" + this.sessionKey + "&desktop=1.0");
+			this.playlist.parse(xspf);
+		} catch (Exception ex) {
+			Log.w("libredroid", "Unable to process playlist: " + ex.getMessage());
+			Toast.makeText(this, R.string.playlist_failed + " " + ex.getMessage(), Toast.LENGTH_LONG).show();
+		}
+	}
+	
+	public boolean isPlaying() {
+		return this.playing;
+	}
+	
+	public void tuneStation(String type, String station) {
+		Toast.makeText(this, R.string.tuning_in, Toast.LENGTH_LONG).show();
+		Log.d("librefm", "Tuning to librefm://" + type + "/" + station);
+		new TuneStationTask().execute(type, station);
+	}
 
-    
-    private class TuneStationTask extends AsyncTask<String,String,String> {
-    	
-    	protected String doInBackground(String... params) {
-    		String type = params[0];
-    		String result = "";
-    		String station;
-    		
-    		try {
-    			station = URLEncoder.encode(params[1], "UTF-8");
-    			result = LibreService.this.httpGet("http://alpha.libre.fm/radio/adjust.php?session=" + LibreService.this.sessionKey + "&url=librefm://" + type + "/" + station);
-    		} catch (Exception ex) {
-    			Log.w("libredroid", "Unable to tune station: " + ex.getMessage());
+	
+	private class TuneStationTask extends AsyncTask<String,String,String> {
+		
+		protected String doInBackground(String... params) {
+			String type = params[0];
+			String result = "";
+			String station;
+			
+			try {
+				station = URLEncoder.encode(params[1], "UTF-8");
+				result = LibreService.this.httpGet("http://alpha.libre.fm/radio/adjust.php?session=" + LibreService.this.sessionKey + "&url=librefm://" + type + "/" + station);
+			} catch (Exception ex) {
+				Log.w("libredroid", "Unable to tune station: " + ex.getMessage());
 			}
 			return result;
 		}
 
-    	protected void onPostExecute(String output) {
-    		
-    		if (output.length() == 0) {
-    			return;
-    		}
-    		
-    		LibreService.this.currentSong = 0;
-    		LibreService.this.playlist = new Playlist();
-    		
-    		if (output.split(" ")[0].equals("FAILED")) {
-    			Toast.makeText(LibreService.this, output.substring(7), Toast.LENGTH_LONG).show();
-    		} else {
-    			String[] result = output.split("[=\n]");
-    			for (int x=0; x<result.length; x++)  {
-    				if (result[x].trim().equals("stationname")) {
-    					LibreService.this.stationName = result[x+1].trim();
-    				}
-    			}
-    			LibreService.this.play();
-    		}
-    	}
-    }
-    
-    public String getStationName() {
-    	return LibreService.this.stationName;
-    }
-    
+		protected void onPostExecute(String output) {
+			
+			if (output.length() == 0) {
+				return;
+			}
+			
+			LibreService.this.currentSong = 0;
+			LibreService.this.playlist = new Playlist();
+			
+			if (output.split(" ")[0].equals("FAILED")) {
+				Toast.makeText(LibreService.this, output.substring(7), Toast.LENGTH_LONG).show();
+			} else {
+				String[] result = output.split("[=\n]");
+				for (int x=0; x<result.length; x++)  {
+					if (result[x].trim().equals("stationname")) {
+						LibreService.this.stationName = result[x+1].trim();
+					}
+				}
+				LibreService.this.play();
+			}
+		}
+	}
+	
+	public String getStationName() {
+		return LibreService.this.stationName;
+	}
+	
 	
 	public class LibreServiceBinder extends Binder implements ILibreService {
 
