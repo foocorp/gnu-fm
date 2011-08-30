@@ -253,11 +253,16 @@ function playSong(song) {
  * @param int song The song number in the playlist that should be loaded
  */
 function loadSong(song) {
-	var url = playlist[song]["url"];
-	artist = playlist[song]["artist"];
-	album = playlist[song]["album"];
-	track = playlist[song]["track"];
-	trackpage = playlist[song]["trackpage"];
+	try {
+		var url = playlist[song]["url"];
+		artist = playlist[song]["artist"];
+		album = playlist[song]["album"];
+		track = playlist[song]["track"];
+		trackpage = playlist[song]["trackpage"];
+	} catch (e) {
+		// Handle a possible TypeError when song < 0 or song >= playlist.length
+		return;
+	}
 
 	// Highlight current song in the playlist
 	$("#song-" + current_song).css({fontWeight : "normal"});
