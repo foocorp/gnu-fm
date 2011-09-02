@@ -165,14 +165,18 @@ class UserXML {
 		$track->addChild('streamable', null);
 	}
 
-	public static function getTopTags($u, $limit = 10) {
+	public static function getTopTags($u, $limit, $cache) {
 		global $base_url;
 
 		try {
 			$user = new User($u);
-			$res = $user->getTopTags($limit);
+			$res = $user->getTopTags($limit, 0, $cache);
 		} catch (Exception $e) {
 			return XML::error('error', '7', 'Invalid resource specified');
+		}
+
+		if(!$res) {
+			return XML::error('error', '6', 'No tags for this user');
 		}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
@@ -185,6 +189,115 @@ class UserXML {
 			$tag->addChild('count', repamp($row['freq']));
 			$tag->addChild('url', Server::getTagURL($row['tag']));
 		}
+
+		return $xml;
+	}
+
+	public static function getPersonalTags($u, $tag, $taggingtype, $limit, $page, $cache, $streamable) {
+
+		$offset = ($page - 1) * $limit;
+
+		try {
+			$user = new User($u);
+			$res = $user->getPersonalTags($tag, $taggingtype, $limit, $offset, $cache, $streamable);
+		} catch (Exception $e) {
+			return XML::error('error', '7', 'Invalid resource specified');
+		}
+
+		if(!$res) {
+			return XML::error('error', '6', 'No tag with this name');
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('taggings');
+		$root->addAttribute('user', repamp($user->name));
+		$root->addAttribute('tag', repamp($tag));
+		$root->addAttribute('page', $page);
+		$root->addAttribute('perPage', $limit);
+		$root->addAttribute('totalPages', null); //TODO
+		$root->addAttribute('total', null); //TODO
+
+		if(strtolower($taggingtype) == 'artist') {
+			$artists = $root->addChild('artists', null);
+			foreach($res as &$row) {
+				$artist = new Artist($row['artist']);
+				$artist_node = $artists->addChild('artist', null);
+				$artist_node->addChild('name', repamp($artist->name));
+				$artist_node->addChild('mbid', $artist->mbid);
+				$artist_node->addChild('url', $artist->getURL());
+				$artist_node->addChild('streamable', $artist->streamable);
+				$image_small = $artist_node->addchild('image', $artist->image_small);
+				$image_small->addAttribute('size', 'small');
+				$image_medium = $artist_node->addchild('image', $artist->image_medium);
+				$image_medium->addAttribute('size', 'medium');
+				$image_large = $artist_node->addchild('image', $artist->image_large);
+				$image_large->addAttribute('size', 'large');
+			}
+		}elseif(strtolower($taggingtype) == 'album') {
+			$albums = $root->addChild('albums', null);
+			foreach($res as &$row) {
+				$album = new Album($row['album'], $row['artist']);
+				$album_node = $albums->addChild('album', null);
+				$album_node->addChild('name', repamp($album->name));
+				$album_node->addChild('mbid', $album->mbid);
+				$album_node->addChild('url', $album->getURL());
+
+				$artist = new Artist($row['artist']);
+				$artist_node = $album_node->addChild('artist', null);
+				$artist_node->addChild('name', repamp($artist->name));
+				$artist_node->addChild('mbid', $artist->mbid);
+				$artist_node->addChild('url', $artist->getURL());
+				$album_node->addChild('image', $album->image);
+			}
+		}elseif(strtolower($taggingtype) == 'track') {
+			$tracks = $root->addChild('tracks', null);
+			foreach($res as &$row) {
+				$track = new Track($row['track'], $row['artist']);
+				$track_node = $tracks->addChild('track', null);
+				$track_node->addChild('name', repamp($track->name));
+				$track_node->addChild('duration', $track->duration);
+				$track_node->addChild('mbid', $track->mbid);
+				$track_node->addChild('url', $track->getURL());
+				$track_node->addChild('streamable', $track->streamable);
+
+				$artist = new Artist($row['artist']);
+				$artist_node = $track_node->addChild('artist', null);
+				$artist_node->addChild('name', repamp($artist->name));
+				$artist_node->addChild('mbid', $artist->mbid);
+				$artist_node->addChild('url', $artist->getURL());
+				$image_small = $track_node->addchild('image', $artist->image_small);
+				$image_small->addAttribute('size', 'small');
+				$image_medium = $track_node->addchild('image', $artist->image_medium);
+				$image_medium->addAttribute('size', 'medium');
+				$image_large = $track_node->addchild('image', $artist->image_large);
+				$image_large->addAttribute('size', 'large');
+			}
+
+		} else {
+			return XML::error('error', '7', 'Invalid resource specified');
+		}
+
+		return $xml;
+	}
+
+	public static function getTagInfo($u, $tag, $cache) {
+
+		try {
+			$user = new User($u);
+			$res = $user->getTagInfo($tag, $cache);
+		} catch (Exception $e) {
+			return XML::error('error', '7', 'Invalid resource specified');
+		}
+
+		if(!$res) {
+			return XML::error('error', '6', 'No tag with that name');
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('tag');
+		$root->addChild('name', repamp($tag));
+		$root->addChild('url', Server::getTagURL($tag));
+		$root->addChild('taggings', $res[0]['freq']);
 
 		return $xml;
 	}
