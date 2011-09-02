@@ -26,6 +26,7 @@ require_once($install_path . '/data/Album.php');
 require_once($install_path . '/data/Track.php');
 require_once($install_path . '/data/Server.php');
 require_once($install_path . '/utils/linkeddata.php');
+require_once($install_path . '/data/Tag.php');
 
 /**
  * Represents artist data
@@ -194,20 +195,31 @@ class Artist {
 	}
 
 	/**
-	 * Get an artist's most used tags
+	 * Get the top tags for an artist, ordered by tag count
+	 * (including any tags for the artist's albums and tracks)
 	 *
-	 * @param int $limit The number of tags to return (defaults to 10)
-	 * @return An array of tags
+	 * @param int $limit The number of tags to return (default is 10)
+	 * @param int $offset The position of the first tag to return (default is 0)
+	 * @param int $cache Caching period of query in seconds (default is 600)
+	 * @return An array of tag details ((tag, freq) .. )
 	 */
-	function getTopTags($limit = 10) {
-		global $adodb;
+	function getTopTags($limit=10, $offset=0, $cache=600) {
+		return Tag::_getTagData($cache, $limit, $offset, null, $this->name);
+	}
 
-		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM Tags WHERE '
-			. ' artist = ' . $adodb->qstr($this->name)
-			. ' GROUP BY tag ORDER BY freq DESC '
-			. ' LIMIT ' . $limit);
-
-		return $res;
+	/**
+	 * Get a specific user's tags for this artist.
+	 *
+	 * @param int $userid Get tags for this user
+	 * @param int $limit The number of tags to return (default is 10)
+	 * @param int $offset The position of the first tag to return (default is 0)
+	 * @param int $cache Caching period of query in seconds (default is 600)
+	 * @return An array of tag details ((tag, freq) .. )
+	 */
+	function getTags($userid, $limit=10, $offset=0, $cache=600) {
+		if(isset($userid)) {
+			return Tag::_getTagData($cache, $limit, $offset, $userid, $this->name);
+		}
 	}
 
 	function clearCache() {
