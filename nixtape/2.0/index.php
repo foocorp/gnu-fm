@@ -25,6 +25,7 @@ require_once('../api/UserXML.php');
 require_once('../api/JSONEncoder.php');
 require_once('../api/TrackXML.php');
 require_once('../api/AlbumXML.php');
+require_once('../api/TagXML.php');
 require_once('../data/Server.php');
 require_once('../radio/radio-utils.php');
 
@@ -79,18 +80,27 @@ $method_map = array(
 	'artist.getinfo'        => method_artist_getInfo,
 	'artist.gettoptracks'   => method_artist_getTopTracks,
 	'artist.gettoptags'     => method_artist_getTopTags,
+	'artist.gettags'        => method_artist_getTags,
 	'artist.getflattr'      => method_artist_getFlattr,
 	'album.addtags'         => method_album_addTags,
 	'album.gettoptags'      => method_album_getTopTags,
+	'album.gettags'         => method_album_getTags,
 	'user.getinfo'          => method_user_getInfo,
 	'user.gettoptracks'     => method_user_getTopTracks,
 	'user.getrecenttracks'  => method_user_getRecentTracks,
 	'user.gettoptags'       => method_user_getTopTags,
+	'user.getpersonaltags'  => method_user_getPersonalTags,
+	'user.gettaginfo'       => method_user_getTagInfo,
 	'user.getlovedtracks'   => method_user_getLovedTracks,
 	'user.getbannedtracks'  => method_user_getBannedTracks,
 	'user.getneighbours'    => method_user_getNeighbours,
 	'radio.tune'            => method_radio_tune,
 	'radio.getplaylist'     => method_radio_getPlaylist,
+	'tag.gettoptags'        => method_tag_getTopTags,
+	'tag.gettopartists'     => method_tag_getTopArtists,
+	'tag.gettopalbums'      => method_tag_getTopAlbums,
+	'tag.gettoptracks'      => method_tag_getTopTracks,
+	'tag.getinfo'           => method_tag_getInfo,
 	'track.addtags'         => method_track_addTags,
 	'track.gettoptags'      => method_track_getTopTags,
 	'track.gettags'         => method_track_getTags,
@@ -122,10 +132,39 @@ function method_user_getTopTags() {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	$xml = UserXML::getTopTags($_GET['user']);
+	$limit = get_with_default('limit', 50);
+
+	$cache = 600;
+
+	$xml = UserXML::getTopTags($_GET['user'], $limit, $cache);
 	respond($xml);
 }
 
+function method_user_getPersonalTags() {
+	if(!isset($_GET['user']) or !isset($_GET['tag']) or !isset($_GET['taggingtype'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$limit = get_with_default('limit', 10);
+	$page = get_with_default('page', 1);
+
+	$streamable = False;
+	$cache = 600;
+
+	$xml = UserXML::getPersonalTags($_GET['user'], $_GET['tag'], $_GET['taggingtype'], $limit, $page, $cache, $streamable);
+	respond($xml);
+}
+
+function method_user_getTagInfo() {
+	if(!isset($_GET['user']) or !isset($_GET['tag'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$cache = 600;
+
+	$xml = UserXML::getTagInfo($_GET['user'], $_GET['tag'], $cache);
+	respond($xml);
+}
 
 function method_user_getTopTracks() {
 	if (!isset($_GET['user'])) {
@@ -221,7 +260,25 @@ function method_artist_getTopTags() {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	$xml = ArtistXML::getTopTags($_GET['artist']);
+	$limit = get_with_default('limit', 50);
+
+	$cache = 600;	
+
+	$xml = ArtistXML::getTopTags($_GET['artist'], $limit, $cache);
+	respond($xml);
+}
+
+function method_artist_getTags() {
+	if (!isset($_REQUEST['artist'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$limit = get_with_default('limit', 50);
+
+	$userid = get_userid();
+	$cache = 600;
+
+	$xml = ArtistXML::getTags($_REQUEST['artist'], $userid, $limit, $cache);
 	respond($xml);
 }
 
@@ -253,10 +310,27 @@ function method_album_getTopTags() {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	$xml = AlbumXML::getTopTags($_GET['artist'], $_GET['album']);
+	$limit = get_with_default('limit', 50);
+
+	$cache = 600;
+
+	$xml = AlbumXML::getTopTags($_GET['artist'], $_GET['album'], $limit, $cache);
 	respond($xml);
 }
 
+function method_album_getTags() {
+	if (!isset($_GET['artist']) || !isset($_GET['album'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$limit = get_with_default('limit', 10);
+
+	$userid = get_userid();
+	$cache = 600;
+
+	$xml = AlbumXML::getTags($_GET['artist'], $_GET['album'], $userid, $limit, $cache);
+	respond($xml);
+}
 
 /**
  * Authentication methods
@@ -450,19 +524,25 @@ function method_track_getTopTags() {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	$xml = TrackXML::getTopTags($_GET['artist'], $_GET['track']);
+	$limit = get_with_default('limit', 50);
+
+	$cache = 600;
+
+	$xml = TrackXML::getTopTags($_GET['artist'], $_GET['track'], $limit, $cache);
 	respond($xml);
 }
 
 function method_track_getTags() {
-	global $adodb;
-
 	if (!isset($_GET['artist']) || !isset($_GET['track'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
+	$limit = get_with_default('limit', 50);
+
+	$cache = 600;
+	
 	$userid = get_userid();
-	$xml = TrackXML::getTags($_GET['artist'], $_GET['track'], $userid);
+	$xml = TrackXML::getTags($_GET['artist'], $_GET['track'], $userid, $limit, $cache);
 	respond($xml);
 }
 
@@ -506,7 +586,74 @@ function method_track_unban() {
 	respond($xml);
 }
 
+/**
+ * Tag methods
+ */
 
+function method_tag_getTopTags() {
+	$limit = get_with_default('limit', 50);
+
+	$cache = 600;
+
+	$xml = TagXML::getTopTags($limit, $cache);
+	respond($xml);
+}
+
+function method_tag_getTopArtists() {
+	if (!isset($_GET['tag'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$limit = get_with_default('limit', 50);
+	$page = get_with_default('page', 1);
+
+	$streamable = True;
+	$cache = 600;
+
+	$xml = TagXML::getTopArtists($_GET['tag'], $limit, $page, $streamable, $cache);
+	respond($xml);
+}
+
+function method_tag_getTopAlbums() {
+	if (!isset($_GET['tag'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$limit = get_with_default('limit', 50);
+	$page = get_with_default('page', 1);
+
+	$streamable = True;
+	$cache = 600;
+
+	$xml = TagXML::getTopAlbums($_GET['tag'], $limit, $page, $streamable, $cache);
+	respond($xml);
+}
+
+function method_tag_getTopTracks() {
+	if (!isset($_GET['tag'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$limit = get_with_default('limit', 50);
+	$page = get_with_default('page', 1);
+
+	$streamable = True;
+	$cache = 600;
+
+	$xml = TagXML::getTopTracks($_GET['tag'], $limit, $page, $streamable, $cache);
+	respond($xml);
+}
+
+function method_tag_getInfo() {
+	if (!isset($_GET['tag'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$cache = 600;
+
+	$xml = TagXML::getInfo($_GET['tag'], $cache);
+	respond($xml);
+}
 
 function get_userid() {
 	global $adodb;
