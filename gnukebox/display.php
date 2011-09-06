@@ -39,7 +39,7 @@ require_once('temp-utils.php');
 
 	try {
 
-	$res = $adodb->CacheGetAll(20, 'SELECT artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 5');
+	$res = $adodb->CacheGetAll(80, 'SELECT artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 5');
 
 	} catch (Exception $e) {
 		die($e->getMessage());
