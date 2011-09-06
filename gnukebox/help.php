@@ -1,0 +1,45 @@
+<?php
+
+/* GNUkebox -- a free software server for recording your listening habits
+
+   Copyright (C) 2009, 2011 Free Software Foundation, Inc
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU Affero General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Please point your music player here!</title>
+<style type="text/css">
+html, body {background-color: #ccc; color: #111; font-size: 36px; text-align: center;}
+</style>
+</head>
+<body>
+<h1>Please point your music player here.</h1>
+
+<p><img src="data:image/gif;base64,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" alt="" /></p>
+
+<p>The Libre.fm wiki has a <a
+href="http://bugs.foocorp.net/projects/librefm/wiki/Clients">good list
+of players</a> that can be configured to support GNU FM servers, such
+as this one.</p>
+
+<p><small>Adding this information to your computer's hosts file often helps if you're totally stuck: <?php echo $_SERVER['SERVER_ADDR'];?> <?php echo $_SERVER['SERVER_NAME']; ?> &mdash; <a href="http://en.wikipedia.org/wiki/Hosts_%28file%29#Location_in_the_file_system">Where's this file?</a></small>.</p>
+
+</body>
+</html>
