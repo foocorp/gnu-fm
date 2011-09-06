@@ -26,13 +26,13 @@
 <head>
 <title>Please point your music player here!</title>
 <style type="text/css">
-html, body {background-color: #ccc; color: #111; font-size: 24px; text-align: center;}
+html, body {background-color: #ccc; color: #111; font-family: sans-serif; font-size: 24px; text-align: center;}
 </style>
 </head>
 <body>
 <h1>Please point your music player here.</h1>
 
-<p><img src="R0lGODlhtwF5AcQQAICAgEBAQL+/v+/v7xAQEDAwMM/Pz5+fn2BgYN/f3yAgIK+vr1BQUHBwcI+P
+<p><img src="data:image/gif;base64,R0lGODlhtwF5AcQQAICAgEBAQL+/v+/v7xAQEDAwMM/Pz5+fn2BgYN/f3yAgIK+vr1BQUHBwcI+P
 jwAAAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEA
 ABAALAAAAAC3AXkBAAX/ICSOZGmeaKqubOu+cCzPdG3feK7vfO//wKBwSMwtAsikcslsOp/QqHRK
 rTIPxax2y+16gYWHeEwum8/otHrNbrvfZcB3Tq/b70EDfM/v+/9ucniDhIWGhA6AiouMjWSCh5GS
