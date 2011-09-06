@@ -1,7 +1,7 @@
 <?php
 /* GNUkebox -- a free software server for recording your listening habits
 
-   Copyright (C) 2009 Free Software Foundation, Inc
+   Copyright (C) 2009, 2011 Free Software Foundation, Inc
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -28,11 +28,10 @@ require_once('temp-utils.php');
 <html>
 <head>
    <title>GNUkebox</title>
-   <meta name="author" content="FooCorp catalogue number FOO200 and contributors" />
-<meta http-equiv="refresh" content="180" />
+<meta http-equiv="refresh" content="20" />
 </head>
 <body>
-       <h2>Last 25 tracks received</h2>
+       <h2>Recent tracks</h2>
 
      <?php
 
@@ -40,7 +39,7 @@ require_once('temp-utils.php');
 
 	try {
 
-	$res = $adodb->CacheGetAll(60, 'SELECT artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 25');
+	$res = $adodb->CacheGetAll(20, 'SELECT artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 5');
 
 	} catch (Exception $e) {
 		die($e->getMessage());
