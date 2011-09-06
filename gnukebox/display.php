@@ -28,7 +28,6 @@ require_once('temp-utils.php');
 <html>
 <head>
    <title>GNUkebox</title>
-<meta http-equiv="refresh" content="20" />
 </head>
 <body>
        <h2>Recent tracks</h2>
@@ -39,7 +38,7 @@ require_once('temp-utils.php');
 
 	try {
 
-	$res = $adodb->CacheGetAll(80, 'SELECT artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 5');
+	$res = $adodb->CacheGetAll(300, 'SELECT artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 500');
 
 	} catch (Exception $e) {
 		die($e->getMessage());
