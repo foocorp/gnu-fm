@@ -306,7 +306,7 @@ class Artist {
 		$tmpTags = $adodb->CacheGetAll(86400, 'SELECT lower(tag) as ltag, count(tag) as num FROM Tags WHERE artist = ' . $adodb->qstr($this->name) . ' GROUP BY ltag ORDER BY num DESC');
 		$tagCount = $adodb->CacheGetOne(86400, 'SELECT count(artist) FROM Tags WHERE artist = ' . $adodb->qstr($this->name));
 		// Narrow down similar artists to ones that at least share the most common tag and get hold of their other tags
-		$otherArtists = $adodb->CacheGetAll(86400, 'SELECT artist, lower(tag) as ltag, count(tag) as num FROM Tags WHERE artist in '
+		$otherArtists = $adodb->CacheGetAll(86400, 'SELECT artist, lower(tag) as ltag, count(tag) as num FROM Tags INNER JOIN Artist ON Artist.name = Tags.artist WHERE Artist.streamable = 1 AND artist in '
 			. '(SELECT distinct(artist) FROM Tags WHERE lower(tag) = ' . $adodb->qstr($tmpTags[0]['ltag']) . ') '
 			. 'GROUP BY artist, ltag ORDER BY num DESC');
 
@@ -364,8 +364,7 @@ class Artist {
 		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
 		$i = 0;
 		foreach ($similarArtists as $artist) {
-			$streamable = $adodb->cacheGetOne(86400, 'SELECT streamable FROM Artist WHERE name = ' . $adodb->qstr($artist['artist']));
-			if ($artist['artist'] != $this->name && $streamable) {
+			if ($artist['artist'] != $this->name) {
 				$similarWithMeta[$i]['artist'] = $artist['artist'];
 				$similarWithMeta[$i]['similarity'] = $artist['similarity'];
 				$similarWithMeta[$i]['url'] = Server::getArtistURL($artist['artist']);
