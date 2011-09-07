@@ -358,7 +358,7 @@ class User {
 	function getLovedArtists($limit = 10) {
 		global $adodb;
 
-		$res = $adodb->CacheGetAll(600, 'SELECT artist, count(artist) as num FROM Loved_Tracks WHERE '
+		$res = $adodb->CacheGetAll(600, 'SELECT artist, count(artist) as num FROM Loved_Tracks INNER JOIN Artist ON Artist.name=Loved_Tracks.artist WHERE Artist.streamable=1 AND '
 			. ' userid = ' . $this->uniqueid . ' GROUP BY artist ORDER BY num DESC');
 
 		// Add meta data (url, tag size, etc.)
@@ -366,16 +366,13 @@ class User {
 		$lovedWithMeta = array();
 		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
 		foreach ($res as $artist) {
-			$streamable = $adodb->cacheGetOne(86400, 'SELECT streamable FROM Artist WHERE name = ' . $adodb->qstr($artist['artist']));
-			if ($streamable) {
-				$lovedWithMeta[$i]['artist'] = $artist['artist'];
-				$lovedWithMeta[$i]['numLoved'] = $artist['num'];
-				$lovedWithMeta[$i]['url'] = Server::getArtistURL($artist['artist']);
-				$lovedWithMeta[$i]['size'] = $sizes[(int) ($i/($limit/count($sizes)))];
-				$i++;
-				if ($i >= $limit) {
-					break;
-				}
+			$lovedWithMeta[$i]['artist'] = $artist['artist'];
+			$lovedWithMeta[$i]['numLoved'] = $artist['num'];
+			$lovedWithMeta[$i]['url'] = Server::getArtistURL($artist['artist']);
+			$lovedWithMeta[$i]['size'] = $sizes[(int) ($i/($limit/count($sizes)))];
+			$i++;
+			if ($i >= $limit) {
+				break;
 			}
 		}
 		sort($lovedWithMeta);
