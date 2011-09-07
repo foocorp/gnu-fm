@@ -2,7 +2,7 @@
 
 /* GNUkebox -- a free software server for recording your listening habits
 
-   Copyright (C) 2009 Free Software Foundation, Inc
+   Copyright (C) 2009, 2011 Free Software Foundation, Inc
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -39,7 +39,7 @@ if (isset($_GET['hs']) && isset($_GET['p'])) {
 } else {
 	//If we're not handshaking then just display some nice stats
 	if ($displaythings) {
-		require_once('display.php');
+		require_once('help.php');
 	} else {
 		echo '<h1>GNUkebox!</h1><p>Please configure your system for ' . $_SERVER['SERVER_NAME'] . '</p>';
 	}
