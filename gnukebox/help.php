@@ -120,7 +120,11 @@ as this one.</p>
 
 <p><small>Adding this information to your computer's hosts file often helps if you're totally stuck:</small></p>
 
-<p><tt><?php echo $_SERVER['SERVER_ADDR'];?> <?php echo $_SERVER['SERVER_NAME']; ?></tt></p>
+<p><tt><?php echo $_SERVER['SERVER_ADDR'];?> post.audioscrobbler.com</tt></p>
+
+<p><small>(We are not <a
+href="http://audioscrobbler.com">Audioscrobbler</a>, but we can do
+most of the same server functions.</small>)</p>
 
 <p><a href="http://en.wikipedia.org/wiki/Hosts_%28file%29#Location_in_the_file_system">Where's my hosts file?</a></small>.</p>
 
