@@ -52,9 +52,8 @@ class Server {
 		try {
 			if ($userid) {
 				$res = $adodb->CacheGetAll(60,
-					'SELECT *
-					FROM Scrobbles
-					WHERE userid = ' . ($userid) . ' ORDER BY time DESC LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
+					'SELECT scrobbles.*, loved_tracks.userid as loved
+					FROM scrobbles LEFT JOIN loved_tracks ON (scrobbles.track=loved_tracks.track AND scrobbles.artist=loved_tracks.artist AND scrobbles.userid=loved_tracks.userid) WHERE scrobbles.userid = ' . ($userid) . ' ORDER BY scrobbles.time DESC LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
 
 				/**
 
@@ -141,12 +140,6 @@ class Server {
 			$row['id_track']  = identifierTrack($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 			$row['id_album']  = identifierAlbum($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 
-			if ($userid) {
-				$row['loved'] = $adodb->CacheGetOne(60, 'SELECT Count(*) FROM Loved_Tracks WHERE artist='
-						. $adodb->qstr($row['artist'])
-						. ' AND track=' . $adodb->qstr($row['track'])
-						. ' AND userid=' . $userid);
-			}
 			if (!$row['album_image']) {
 				$row['album_image'] = false;
 			} else {
