@@ -54,10 +54,7 @@ try {
 	$aUserScrobbles = $user->getScrobbles($scrobbleCount);
 	$smarty->assign('scrobbles', $aUserScrobbles);
 } catch (Exception $e) {}
-try {
-	$aUserTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->uniqueid);
-	$smarty->assign('user_tagcloud', $aUserTagCloud);
-} catch (Exception $e) {}
+
 $smarty->assign('isme', ($this_user->name == $user->name));
 $smarty->assign('me', $user);
 $smarty->assign('profile', true);
