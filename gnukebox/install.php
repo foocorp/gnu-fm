@@ -381,16 +381,6 @@ if (isset($_POST['install'])) {
 	$adodb->Execute("CREATE INDEX scrobbles_track_idx on Scrobbles(lower(track))");
 	$adodb->Execute("CREATE UNIQE INDEX groups_groupname_idx ON Groups(lower(groupname))");
 
-	// Test user configuration
-	try {
-		$adodb->Execute('INSERT INTO Users
-			(username, password, active)
-			VALUES
-			(\'testuser\', \'' . md5('password') . '\', 1);');
-	} catch(Exception $e) {
-		die('Error testing database: ' . $adodb->ErrorMsg());
-	}
-
 	$adodb->Close();
 
 	$submissions_server = $_POST['submissions'];
