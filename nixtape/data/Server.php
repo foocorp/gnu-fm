@@ -52,8 +52,8 @@ class Server {
 		try {
 			if ($userid) {
 				$res = $adodb->CacheGetAll(60,
-					'SELECT scrobbles.*, loved_tracks.userid as loved
-					FROM scrobbles LEFT JOIN loved_tracks ON (scrobbles.track=loved_tracks.track AND scrobbles.artist=loved_tracks.artist AND scrobbles.userid=loved_tracks.userid) WHERE scrobbles.userid = ' . ($userid) . ' ORDER BY scrobbles.time DESC LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
+					'SELECT Scrobbles.*, Loved_Tracks.userid as loved
+					FROM Scrobbles LEFT JOIN Loved_Tracks ON (Scrobbles.track=Loved_Tracks.track AND Scrobbles.artist=Loved_Tracks.artist AND Scrobbles.userid=Loved_Tracks.userid) WHERE Scrobbles.userid = ' . ($userid) . ' ORDER BY Scrobbles.time DESC LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
 
 				/**
 
