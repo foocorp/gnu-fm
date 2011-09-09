@@ -56,7 +56,7 @@ require_once('version.php');
 
 	</ul>
 
-<p>This server is powered by <a href="http://bzr.savannah.gnu.org/lh/librefm/">GNU FM</a> version <?php echo $version; ?></p>
+<p>This server is powered by <a href="https://gitorious.org/foocorp/gnu-fm">GNU FM</a> version <?php echo $version; ?></p>
 
 </body>
 </html>
