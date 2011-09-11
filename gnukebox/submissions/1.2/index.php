@@ -123,14 +123,12 @@ for ($i = 0; $i < count($_POST['a']); $i++) {
 
 	$failed = false;
 	try {
-		createArtistIfNew($artist);
-		if ($album != 'NULL') {
-			createAlbumIfNew($artist, $album);
-		}
-		$tid = getTrackCreateIfNew($artist, $album, $track, $mbid);
-		$stid = getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid);
-
 		$exists = scrobbleExists($userid, $artist, $track, $time);
+		
+		if (!$exists) {
+			$stid = getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid);
+		}
+
 	} catch (Exception $ex) {
 		$failed = true;
 		reportError($ex->getMessage(), '');

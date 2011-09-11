@@ -66,6 +66,9 @@ function createAlbumIfNew($artist, $album) {
 	if (!$name) {
 		// Album doesn't exist, so create it
 
+		// First check if artist exist, if not create it
+		createArtistIfNew($artist);
+
 		// Disable to fix scrobble breakage
 		//$art = $adodb->qstr(getAlbumArt($artist, $album));
 		$art = '';
@@ -93,6 +96,13 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	}
 
 	if (!$res) {
+		// First check if artist and album exists, if not create them
+		if ($album != 'NULL') {
+			CreateAlbumIfNew($artist, $album);
+		} else {
+			createArtistIfNew($artist);
+		}
+		
 		// Create new track
 		$res = $adodb->Execute('INSERT INTO Track (name, artist_name, album_name, mbid) VALUES ('
 			. $track . ', '
@@ -105,7 +115,7 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	}
 }
 
-function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
+function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid) {
 	global $adodb;
 
 	$res = $adodb->GetOne('SELECT id FROM Scrobble_Track WHERE name = lower('
@@ -114,6 +124,9 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid) {
 		. (($mbid == 'NULL') ? 'IS NULL' : ('= lower(' . $mbid . ')')));
 
 	if (!$res) {
+		// First check if track exists, if not create it
+		$tid = getTrackCreateIfNew($artist, $album, $track, $mbid);
+
 		$sql = 'INSERT INTO Scrobble_Track (name, artist, album, mbid, track) VALUES ('
 			. 'lower(' . $track . '), '
 			. 'lower(' . $artist . '), '
