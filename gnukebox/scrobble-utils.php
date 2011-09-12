@@ -98,7 +98,7 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	if (!$res) {
 		// First check if artist and album exists, if not create them
 		if ($album != 'NULL') {
-			CreateAlbumIfNew($artist, $album);
+			createAlbumIfNew($artist, $album);
 		} else {
 			createArtistIfNew($artist);
 		}
