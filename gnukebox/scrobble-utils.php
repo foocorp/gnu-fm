@@ -50,9 +50,9 @@ function createArtistIfNew($artist) {
 
 	$artist = NoSpamTracks($artist);
 
-	$res = $adodb->GetOne('SELECT name FROM Artist WHERE lower(name) = lower(' . $artist . ')');
+	$id = $adodb->GetOne('SELECT id FROM Artist WHERE lower(name) = lower(' . $artist . ')');
 
-	if (!$res) {
+	if (!$id) {
 		// Artist doesn't exist, so we create them
 		$res = $adodb->Execute('INSERT INTO Artist (name) VALUES (' . $artist . ')');
 	}
@@ -61,9 +61,9 @@ function createArtistIfNew($artist) {
 function createAlbumIfNew($artist, $album) {
 	global $adodb;
 
-	$name = $adodb->GetOne('SELECT name FROM Album WHERE lower(name) = lower(' . $album . ') AND lower(artist_name) = lower(' . $artist . ')');
+	$id = $adodb->GetOne('SELECT id FROM Album WHERE lower(name) = lower(' . $album . ') AND lower(artist_name) = lower(' . $artist . ')');
 
-	if (!$name) {
+	if (!$id) {
 		// Album doesn't exist, so create it
 
 		// First check if artist exist, if not create it
