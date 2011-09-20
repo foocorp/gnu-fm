@@ -61,7 +61,7 @@ class Tag {
 		$orderfreq = ' ORDER BY freq DESC';
 
 		if($streamable) {
-			$wherestream = ' INNER JOIN artist ON tags.artist=artist.name WHERE artist.streamable=1';
+			$wherestream = ' INNER JOIN Artist ON Tags.artist=Artist.name WHERE Artist.streamable=1';
 			$whereuser = $anduser;
 			$whereartist = $andartist;
 			$wheretag = $andtag;
@@ -71,69 +71,69 @@ class Tag {
 			if($artist) {
 				if($album) {
 					//Album->getTags	
-					$query = 'SELECT tag, COUNT(tag) AS freq FROM tags' . $whereuser . $andartist . $andalbum/* . $notrack*/ . ' GROUP BY tag';
+					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereuser . $andartist . $andalbum/* . $notrack*/ . ' GROUP BY tag';
 				} elseif($track) {
 					//Track->getTags	
-					$query = 'SELECT tag, COUNT(tag) AS freq FROM tags' . $whereuser . $andartist . $andtrack . ' GROUP BY tag';
+					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereuser . $andartist . $andtrack . ' GROUP BY tag';
 				} else {
 					//Artist->getTags
-					$query = 'SELECT tag, COUNT(tag) AS freq FROM tags' . $whereuser . $andartist/* . $noalbum . $notrack*/ . ' GROUP BY tag';
+					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereuser . $andartist/* . $noalbum . $notrack*/ . ' GROUP BY tag';
 				}
 			} else {
 				if($tag) {
 					if(strtolower($taggingtype)=='artist') {
 						//User->getPersonalTags (artist)
-						$query = 'SELECT artist FROM tags' . $wherestream . $whereuser . $andtag . $hasartist . $noalbum . $notrack;
+						$query = 'SELECT artist FROM Tags' . $wherestream . $whereuser . $andtag . $hasartist . $noalbum . $notrack;
 					} elseif(strtolower($taggingtype)=='album') {
 						//User->getPersonalTags (album)
-						$query = 'SELECT artist, album FROM tags' . $wherestream . $whereuser . $andtag . $hasalbum . $notrack;
+						$query = 'SELECT artist, album FROM Tags' . $wherestream . $whereuser . $andtag . $hasalbum . $notrack;
 					} elseif(strtolower($taggingtype)=='track') {
 						//User->getPersonalTags (track)
-						$query = 'SELECT artist, track FROM tags' . $wherestream . $whereuser . $andtag . $hastrack;
+						$query = 'SELECT artist, track FROM Tags' . $wherestream . $whereuser . $andtag . $hastrack;
 					} elseif($taggingtype) {
 						//Invalid taggingtype
 						throw new Exception("Invalid taggingtype: " . $taggingtype);
 					} else {
 						//User->getTagInfo
-						$query = 'SELECT tag, COUNT(tag) AS freq FROM tags' . $whereuser . $andtag . ' GROUP BY tag';
+						$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereuser . $andtag . ' GROUP BY tag';
 					}
 				} else {
 					//User->getTopTags
-					$query = 'SELECT tag, COUNT(tag) AS freq FROM tags' . $whereuser . ' GROUP BY tag' . $orderfreq;
+					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereuser . ' GROUP BY tag' . $orderfreq;
 				}
 			}
 		} else {
 			if($artist) {
 				if($album) {
 					//Album->getTopTags
-					$query = 'SELECT tag, COUNT(tag) AS freq FROM tags' .$whereartist . $andalbum/* . $notrack*/ . ' GROUP BY tag' . $orderfreq;
+					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' .$whereartist . $andalbum/* . $notrack*/ . ' GROUP BY tag' . $orderfreq;
 				} elseif($track) {
 					//Track->getTopTags
-					$query = 'SELECT tag, COUNT(tag) AS freq FROM tags' . $whereartist . $andtrack . ' GROUP BY tag' . $orderfreq;
+					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereartist . $andtrack . ' GROUP BY tag' . $orderfreq;
 				} else {
 					//Artist->getTopTags
-					$query = 'SELECT tag, COUNT(tag) AS freq FROM tags' . $whereartist/* . $noalbum . $notrack*/ . ' GROUP BY tag' . $orderfreq;
+					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereartist/* . $noalbum . $notrack*/ . ' GROUP BY tag' . $orderfreq;
 				}
 			} elseif($tag) {
 				if(strtolower($taggingtype)=='artist') {
 					//Tag::getTopArtists
-					$query = 'SELECT artist, COUNT(artist) AS freq FROM tags' . $wherestream . $wheretag . $hasartist . $noalbum . $notrack . ' GROUP BY artist' . $orderfreq;
+					$query = 'SELECT artist, COUNT(artist) AS freq FROM Tags' . $wherestream . $wheretag . $hasartist . $noalbum . $notrack . ' GROUP BY artist' . $orderfreq;
 				} elseif(strtolower($taggingtype)=='album') {
 					//Tag::getTopAlbums
-					$query = 'SELECT artist, album, COUNT(album) AS freq FROM tags' . $wherestream . $wheretag . $hasalbum . $notrack . ' GROUP BY album, artist' . $orderfreq;
+					$query = 'SELECT artist, album, COUNT(album) AS freq FROM Tags' . $wherestream . $wheretag . $hasalbum . $notrack . ' GROUP BY album, artist' . $orderfreq;
 				} elseif(strtolower($taggingtype)=='track') {
 					//Tag::getTopTracks
-					$query = 'SELECT artist, track, COUNT(track) AS freq FROM tags' . $wherestream . $wheretag . $hastrack . ' GROUP BY track, artist' . $orderfreq;
+					$query = 'SELECT artist, track, COUNT(track) AS freq FROM Tags' . $wherestream . $wheretag . $hastrack . ' GROUP BY track, artist' . $orderfreq;
 				} elseif($taggingtype) {
 						//Invalid taggingtype
 						throw new Exception("Invalid taggingtype: " . $taggingtype);
 				} else {
 					//Tag::getInfo
-					$query = 'SELECT tag, COUNT(tag) AS freq FROM tags' . $wheretag . ' GROUP BY tag';
+					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $wheretag . ' GROUP BY tag';
 				}
 			} else {
 				//Tag::getTopTags
-				$query = 'SELECT tag, COUNT(tag) AS freq FROM tags GROUP BY tag' . $orderfreq;
+				$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags GROUP BY tag' . $orderfreq;
 			}
 		}
 
