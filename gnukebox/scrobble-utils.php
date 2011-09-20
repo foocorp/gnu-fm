@@ -134,7 +134,7 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid) {
 			. (($mbid == 'NULL') ? 'NULL' : 'lower(' . $mbid . ')') . ', '
 			. $tid . ')';
 		$res = $adodb->Execute($sql);
-		return getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid);
+		return getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid);
 	} else {
 		return $res;
 	}
