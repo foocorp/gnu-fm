@@ -83,7 +83,8 @@ if (isset($_POST['install'])) {
 		laconica_profile VARCHAR(255),
 		created INTEGER DEFAULT 0,
 		modified INTEGER DEFAULT 0,
-		journal_rss VARCHAR(255))',
+		journal_rss VARCHAR(255),
+		receive_emails INTEGER DEFAULT 1)',
 
 		'CREATE TABLE Groups (
 		id SERIAL PRIMARY KEY,
