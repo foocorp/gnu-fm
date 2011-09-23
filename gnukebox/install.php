@@ -374,7 +374,7 @@ if (isset($_POST['install'])) {
 
 	$adodb->Execute("CREATE INDEX scrobbles_time_idx ON Scrobbles(time)");
 
-	if(strtolower(substr($dbms, 0, 8)) == 'postgres') {
+	if(strtolower(substr($dbms, 0, 5)) == 'pgsql') {
 		// MySQL doesn't support the use of lower() to create case-insensitive indexes
 		$adodb->Execute("CREATE INDEX album_artistname_idx ON Album(lower(artist_name))");
 		$adodb->Execute("CREATE INDEX track_artist_idx ON Track(lower(artist_name))");
