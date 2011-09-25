@@ -410,7 +410,7 @@ class JamendoImport:
 
 if __name__ == "__main__":
 
-	if len(sys.argv) != 6:
+	if len(sys.argv) != 2:
 		print "Usage: import-jamendo.py <database dump>"
 		sys.exit(1)
 
