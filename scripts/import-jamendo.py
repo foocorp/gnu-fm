@@ -135,8 +135,8 @@ genremap = {
 
 class JamendoImport:
 
-	def __init__(self, hostname=False, username=False, password=False, database=False, updates=False):
-		self.conn = ordbms.connect ("dbname='librefm' user='librefm'")
+	def __init__(self, username='librefm', database='librefm', updates=False):
+		self.conn = ordbms.connect ("dbname='%s' user='%s'" % (database, username))
 		self.perform_updates = updates
 		self.cursor = self.conn.cursor ()
 
@@ -410,15 +410,20 @@ class JamendoImport:
 
 if __name__ == "__main__":
 
-	if len(sys.argv) != 2:
+	if len(sys.argv) != 2 and len(sys.argv) != 4:
 		print "Usage: import-jamendo.py <database dump>"
+		print "or"
+		print "import-jamendo.py <database dump> <username> <database>"
 		sys.exit(1)
 
 	if sys.argv[1][-2:] == "gz":
 		dump = gzip.open(sys.argv[1], "r")
 	else:
 		dump = open(sys.argv[1], "r")
-	
-	importer = JamendoImport()
+
+	if len(sys.argv) == 2:
+		importer = JamendoImport()
+	else:
+		importer = JamendoImport(sys.argv[2], sys.argv[3])
 	importer.parse(dump)
 	importer.close()
