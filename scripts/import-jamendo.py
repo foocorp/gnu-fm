@@ -137,7 +137,7 @@ class JamendoImport:
 
 	def __init__(self, hostname, username, password, database):
 		self.conn = ordbms.connect ("dbname='librefm' user='librefm'")
-
+		self.perform_updates = False
 		self.cursor = self.conn.cursor ()
 
 
@@ -147,12 +147,13 @@ class JamendoImport:
 				artist = self.proc_artist(elem)
 
 				if self.artist_exists(artist["name"]):
-					try:
-						self.cursor.execute("UPDATE Artist SET image_small = %s, homepage = %s, mbid = %s WHERE name = %s", (artist["image"], artist["url"], artist["mbid"], artist["name"]))
-						self.conn.commit()
-					except Exception,  e:
-						self.conn.rollback()
-						print 'ua', e
+					if self.perform_updates:
+						try:
+							self.cursor.execute("UPDATE Artist SET image_small = %s, homepage = %s, mbid = %s WHERE name = %s", (artist["image"], artist["url"], artist["mbid"], artist["name"]))
+							self.conn.commit()
+						except Exception,  e:
+							self.conn.rollback()
+							print 'ua', e
 				else:
 					try:
 						self.cursor.execute("INSERT INTO Artist (name, image_small, mbid, homepage)  VALUES (%s, %s, %s, %s)", (artist["name"], artist["image"], artist["mbid"], artist["url"]))
@@ -164,14 +165,15 @@ class JamendoImport:
 				any_streamable_tracks = 0
 				for album in artist["albums"]:
 					if self.album_exists(artist["name"], album["name"]):
-						try:
-							self.cursor.execute("UPDATE Album SET albumurl = %s, image = %s, artwork_license = %s, mbid = %s, releasedate = %s, downloadurl = %s WHERE name = %s AND artist_name = %s", 
-									(album["url"], album["image"], album["license_artwork"], album["mbid"], album["releasedate"], album["downloadurl"],
-									album["name"], artist["name"]))
-							self.conn.commit()
-						except Exception,  e:
-							self.conn.rollback()
-							print 'ub', e
+						if self.perform_updates:
+							try:
+								self.cursor.execute("UPDATE Album SET albumurl = %s, image = %s, artwork_license = %s, mbid = %s, releasedate = %s, downloadurl = %s WHERE name = %s AND artist_name = %s", 
+										(album["url"], album["image"], album["license_artwork"], album["mbid"], album["releasedate"], album["downloadurl"],
+										album["name"], artist["name"]))
+								self.conn.commit()
+							except Exception,  e:
+								self.conn.rollback()
+								print 'ub', e
 					else:
 						try:
 							self.cursor.execute("INSERT INTO Album (name, artist_name, albumurl, image, artwork_license, mbid, releasedate, downloadurl) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
@@ -212,12 +214,13 @@ class JamendoImport:
 							otherid += "unknown"
 
 						if self.track_exists(artist["name"], album["name"], track["name"]):
-							try:
-								self.cursor.execute("UPDATE Track SET downloadurl = %s, streamurl = %s, mbid = %s, license = %s, duration = %s, otherid = %s, streamable = %s WHERE name = %s AND artist_name = %s AND album_name = %s", (track["downloadurl"], track["streamurl"], track["mbid"], track["license"], duration, otherid, streamable, track["name"], artist["name"], album["name"]))
-								self.conn.commit()
-							except Exception,  e:
-								self.conn.rollback()
-								print 'ut', e
+							if self.perform_updates:
+								try:
+									self.cursor.execute("UPDATE Track SET downloadurl = %s, streamurl = %s, mbid = %s, license = %s, duration = %s, otherid = %s, streamable = %s WHERE name = %s AND artist_name = %s AND album_name = %s", (track["downloadurl"], track["streamurl"], track["mbid"], track["license"], duration, otherid, streamable, track["name"], artist["name"], album["name"]))
+									self.conn.commit()
+								except Exception,  e:
+									self.conn.rollback()
+									print 'ut', e
 						else:
 							try:
 								self.cursor.execute("INSERT INTO Track (name, artist_name, album_name, mbid, downloadurl, streamurl, license, duration, otherid, streamable) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (track["name"], artist["name"], album["name"], track["mbid"], track["downloadurl"], track["streamurl"], track["license"], duration, otherid, streamable))
