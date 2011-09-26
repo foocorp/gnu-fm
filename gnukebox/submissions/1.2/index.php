@@ -53,6 +53,7 @@ for ($i = 0; $i < count($_POST['a']); $i++) {
 	}
 
 	$artist = trim($_POST['a'][$i]);
+	$artist = noSpamTracks($artist);
 	if (empty($artist)) {
 		//Add error message to db and skip to next scrobble
 		reportError("FAILED Track $i was submitted with empty artist field",
@@ -70,6 +71,7 @@ for ($i = 0; $i < count($_POST['a']); $i++) {
 	}
 
 	$track = trim($_POST['t'][$i]);
+	$track = noSpamTracks($track);
 	if (empty($track)) {
 		//Add error message to db and skip to next scrobble
 		reportError("FAILED Track $i was submitted with empty track field",
@@ -95,6 +97,7 @@ for ($i = 0; $i < count($_POST['a']); $i++) {
 	}
 
 	$album = trim($_POST['b'][$i]);
+	$album = noSpamTracks($album);
 	if (!empty($album)) {
 		switch (mb_detect_encoding($album)) {
 			case 'ASCII':
