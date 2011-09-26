@@ -31,13 +31,17 @@ if (!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t'])) {
 //trim parameters
 $session_id = trim($_POST['s']);
 $artist = trim($_POST['a']);
+$artist = noSpamTracks($artist);
 $track = trim($_POST['t']);
+$track = noSpamTracks($track);
+
 if (empty($session_id) || empty($artist) || empty($track)) {
 	die("FAILED Required POST parameters are empty\n");
 }
 
 if (isset($_POST['b'])) {
 	$album = trim($_POST['b']);
+	$album = noSpamTracks($album);
 }
 if (empty($album)) {
 	$album = 'NULL';
