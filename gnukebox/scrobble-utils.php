@@ -48,8 +48,6 @@ function useridFromSID($session_id) {
 function createArtistIfNew($artist) {
 	global $adodb;
 
-	$artist = NoSpamTracks($artist);
-
 	$id = $adodb->GetOne('SELECT id FROM Artist WHERE lower(name) = lower(' . $artist . ')');
 
 	if (!$id) {
@@ -85,9 +83,6 @@ function createAlbumIfNew($artist, $album) {
 
 function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	global $adodb;
-
-	$track = NoSpamTracks($track);
-	$artist = NoSpamTracks($artist);
 
 	if ($album != 'NULL') {
 		$res = $adodb->GetOne('SELECT id FROM Track WHERE lower(name) = lower(' . $track . ') AND lower(artist_name) = lower(' . $artist . ') AND lower(album_name) = lower(' . $album . ')');
@@ -152,7 +147,7 @@ function scrobbleExists($userid, $artist, $track, $time) {
 	}
 }
 
-function NoSpamTracks($track) {
+function noSpamTracks($track) {
 
 	// This function exists to remove things like '(PREVIEW: buy it at www.magnatune.com)' from track names.
 	$track = str_replace(' (PREVIEW: buy it at www.magnatune.com)', '', $track);
