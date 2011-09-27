@@ -304,7 +304,7 @@ class Artist {
 	function getManagers() {
 		global $adodb;
 		$managers = array();
-		$res = $adodb->Execute('SELECT userid FROM Manages WHERE lower(artist)=lower(' . $adodb->qstr($this->name) . ')');
+		$res = $adodb->Execute('SELECT userid FROM Manages WHERE lower(artist)=lower(' . $adodb->qstr($this->name) . ') AND authorised=1');
 		foreach($res as $row) {
 			$managers[] = User::new_from_uniqueid_number($row['userid']);
 		}
