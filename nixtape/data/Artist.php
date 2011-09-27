@@ -293,6 +293,21 @@ class Artist {
 	}
 
 	/**
+	 * Finds out which users manage this artist.
+	 *
+	 * @return An array of users who manage this artist.
+	 */
+	function getManagers() {
+		global $adodb;
+		$managers = array();
+		$res = $adodb->Execute('SELECT userid FROM Manages WHERE lower(artist)=lower(' . $adodb->qstr($this->name) . ')');
+		foreach($res as $row) {
+			$managers[] = User::new_from_uniqueid_number($row['userid']);
+		}
+		return $managers;
+	}
+
+	/**
 	 * Retrieves a list of similar artist names
 	 *
 	 * @return An array of artists and their similarity measure (between 0 and 1), sorted from most to least similar
