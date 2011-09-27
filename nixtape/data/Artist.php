@@ -308,6 +308,18 @@ class Artist {
 	}
 
 	/**
+	 * Returns the number of listeners this artist has in total.
+	 *
+	 * @return An int indicating the number of people who've listened to this artist.
+	 */
+	function getListenerCount() {
+		global $adodb;
+		$row = $adodb->CacheGetRow(600, 'SELECT COUNT(DISTINCT userid) AS listeners FROM Scrobbles WHERE'
+			. ' artist = ' . $adodb->qstr($this->name));
+		return $row['listeners'];
+	}
+
+	/**
 	 * Retrieves a list of similar artist names
 	 *
 	 * @return An array of artists and their similarity measure (between 0 and 1), sorted from most to least similar
