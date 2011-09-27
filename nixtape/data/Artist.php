@@ -44,8 +44,9 @@ class Artist {
 	 *
 	 * @param string $name The name of the artist to load
 	 * @param string $mbid The mbid of the artist (optional)
+	 * @param boolean $recache Whether the artist cache should be cleared before loading the artist
 	 */
-	function __construct($name, $mbid = false) {
+	function __construct($name, $mbid = false, $recache = false) {
 		global $adodb;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -56,6 +57,9 @@ class Artist {
 		$this->query = 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large, homepage, hashtag, flattr_uid FROM Artist WHERE '
 			. $mbidquery
 			. 'lower(name) = lower(' . $adodb->qstr($name) . ')';
+		if($recache) {
+			$this->clearCache();
+		}
 		$row = $adodb->CacheGetRow(1200, $this->query);
 		if (!$row) {
 			throw new Exception('No such artist' . $name);
