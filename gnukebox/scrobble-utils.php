@@ -48,11 +48,9 @@ function useridFromSID($session_id) {
 function createArtistIfNew($artist) {
 	global $adodb;
 
-	$artist = NoSpamTracks($artist);
+	$id = $adodb->GetOne('SELECT id FROM Artist WHERE lower(name) = lower(' . $artist . ')');
 
-	$res = $adodb->GetOne('SELECT name FROM Artist WHERE lower(name) = lower(' . $artist . ')');
-
-	if (!$res) {
+	if (!$id) {
 		// Artist doesn't exist, so we create them
 		$res = $adodb->Execute('INSERT INTO Artist (name) VALUES (' . $artist . ')');
 	}
@@ -61,9 +59,9 @@ function createArtistIfNew($artist) {
 function createAlbumIfNew($artist, $album) {
 	global $adodb;
 
-	$name = $adodb->GetOne('SELECT name FROM Album WHERE lower(name) = lower(' . $album . ') AND lower(artist_name) = lower(' . $artist . ')');
+	$id = $adodb->GetOne('SELECT id FROM Album WHERE lower(name) = lower(' . $album . ') AND lower(artist_name) = lower(' . $artist . ')');
 
-	if (!$name) {
+	if (!$id) {
 		// Album doesn't exist, so create it
 
 		// First check if artist exist, if not create it
@@ -85,9 +83,6 @@ function createAlbumIfNew($artist, $album) {
 
 function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	global $adodb;
-
-	$track = NoSpamTracks($track);
-	$artist = NoSpamTracks($artist);
 
 	if ($album != 'NULL') {
 		$res = $adodb->GetOne('SELECT id FROM Track WHERE lower(name) = lower(' . $track . ') AND lower(artist_name) = lower(' . $artist . ') AND lower(album_name) = lower(' . $album . ')');
@@ -134,7 +129,7 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid) {
 			. (($mbid == 'NULL') ? 'NULL' : 'lower(' . $mbid . ')') . ', '
 			. $tid . ')';
 		$res = $adodb->Execute($sql);
-		return getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid);
+		return getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid);
 	} else {
 		return $res;
 	}
@@ -152,7 +147,7 @@ function scrobbleExists($userid, $artist, $track, $time) {
 	}
 }
 
-function NoSpamTracks($track) {
+function noSpamTracks($track) {
 
 	// This function exists to remove things like '(PREVIEW: buy it at www.magnatune.com)' from track names.
 	$track = str_replace(' (PREVIEW: buy it at www.magnatune.com)', '', $track);
