@@ -10,6 +10,11 @@
 <label for="new">{t}Address for the group:{/t}</label><br />
 <b>{$base_url}/group/</b><input id="new" name="new" size="12" /></p>
 
+<p>Please remember that Libre.fm is focused on freedom, so try to
+create groups that can help that goal. Also be mindful of the power of
+words and the importance of framing the issues we discuss and work on
+in the best possible terms.</p>
+
 <p>
 <input name="group" value="new" type="hidden" />
 <input type="submit" value=" {t}Create{/t} " />
@@ -31,12 +36,12 @@
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<th align="right" valign="top"><label for="homepage">{t}Homepage URL:{/t}</label></th>
+			<th align="right" valign="top"><label for="homepage">{t}Website address:{/t}</label></th>
 			<td><input name="homepage" id="homepage" value="{$homepage|escape:'html':'UTF-8'}" /></td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<th align="right" valign="top"><label for="avatar_uri">{t}Logo URL:{/t}</label></th>
+			<th align="right" valign="top"><label for="avatar_uri">{t}Logo address:{/t}</label></th>
 			<td><input name="avatar_uri" id="avatar_uri" value="{$avatar_uri|escape:'html':'UTF-8'}" /></td>
 			<td><a href="#dfn_avatar_uri" rel="glossary">{t}What's this?{/t}</a></td>
 		</tr>
@@ -72,8 +77,8 @@
 
 <h3>Help</h3>
 <dl>
-	<dt id="dfn_avatar_uri">Logo URL</dt>
-	<dd>{t}The web address for a picture to represent your group on. It should
+	<dt id="dfn_avatar_uri">Logo address</dt>
+	<dd>{t}The web address for a picture to represent your group on libre.fm. It should
 	not be more than 80x80 pixels. (64x64 is best.){/t}</dd>
 
 	<dt id="dfn_owner">Leader</dt>

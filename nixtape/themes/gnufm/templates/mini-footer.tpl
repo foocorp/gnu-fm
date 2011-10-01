@@ -1,4 +1,4 @@
-<p><a href="/">back to site</a> | <a href="/register.php">Register</a> | <a href="/login.php">Login</a> | <a href="/reset.php">Lost password</a></p>
+<p><a href="/">{t}Back to site{/t}</a> | <a href="/register.php">{t}Register{/t}</a> | <a href="/login.php">{t}Login{/t}</a> | <a href="/reset.php">{t}Lost password{/t}</a></p>
 
 </body>
 </html>

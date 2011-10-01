@@ -1,0 +1,1221 @@
+# German translations for PACKAGE package.
+# Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Michael Sheldon <mike@mikeasoft.com>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-21 16:57+0100\n"
+"PO-Revision-Date: 2011-05-27 18:52+0000\n"
+"Last-Translator: T. Break <Unknown>\n"
+"Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-09-21 15:56+0000\n"
+"X-Generator: Launchpad (build 13996)\n"
+
+#: translatable_strings.c:2
+msgid "Profile deleted"
+msgstr "Profil gelöscht"
+
+#: translatable_strings.c:5
+msgid "Your account has been deleted."
+msgstr "Dein Konto wurde gelöscht."
+
+#: translatable_strings.c:8
+msgid "Email was sent successfully!"
+msgstr "Email erfolgreich gesendet!"
+
+#: translatable_strings.c:11
+msgid "Requests for invites"
+msgstr "Eine Einladung anfragen"
+
+#: translatable_strings.c:14
+msgid "Invited people"
+msgstr "Eingeladene Personen"
+
+#: translatable_strings.c:17
+msgid "Album Name"
+msgstr "Albumtitel"
+
+#: translatable_strings.c:20
+msgid "The name of the album"
+msgstr "Titel des Albums"
+
+#: translatable_strings.c:23
+msgid "Cover Image"
+msgstr "Cover-Bild"
+
+#: translatable_strings.c:26
+msgid "Address linking to the album's cover image"
+msgstr "Internet-Adresse für das Cover-Bild"
+
+#: translatable_strings.c:29
+msgid "Create Album"
+msgstr "Album anlegen"
+
+#: translatable_strings.c:32
+msgid "Add new track"
+msgstr "Neues Lied hinzufügen"
+
+#: translatable_strings.c:35 translatable_strings.c:524
+#: ../../../../../trunk/nixtape/user-menu.php:33
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: translatable_strings.c:38
+msgid "Popular tags other people used to describe this artist"
+msgstr ""
+"Beliebte Stichwörter, die andere Personen für diesen Künstler verwendet haben"
+
+#: translatable_strings.c:41 translatable_strings.c:77
+msgid "This tag was used %1 times"
+msgstr "Dieses Stichwort wurde %1 Mal verwendet"
+
+#: translatable_strings.c:44
+msgid "Tags you've used for this artist"
+msgstr "Stichwörter, die du für diesen Künstler verwendet hast"
+
+#: translatable_strings.c:47
+msgid "Add tags:"
+msgstr "Stichwörter hinzufügen:"
+
+#: translatable_strings.c:50 translatable_strings.c:350
+#: translatable_strings.c:353 translatable_strings.c:356
+#: translatable_strings.c:359 translatable_strings.c:377
+#: translatable_strings.c:485 ../../../../../trunk/nixtape/artist-menu.php:26
+msgid "Tag"
+msgstr "Stichwort"
+
+#: translatable_strings.c:53
+msgid "e.g. guitar, violin, female vocals, piano"
+msgstr "z. B. Gitarre, Violine, weiblicher Gesang, Klavier"
+
+#: translatable_strings.c:56
+msgid "%1's homepage"
+msgstr "%1’s Internetseite"
+
+#: translatable_strings.c:59
+msgid "Biography"
+msgstr "Biografie"
+
+#: translatable_strings.c:62
+msgid "Show more..."
+msgstr "Mehr zeigen …"
+
+#: translatable_strings.c:65
+msgid "Albums"
+msgstr "Alben"
+
+#: translatable_strings.c:68
+msgid "Add new album"
+msgstr "Neues Album hinzufügen"
+
+#: translatable_strings.c:71
+msgid "Similar free artists"
+msgstr "Ähnliche freie Künstler"
+
+#: translatable_strings.c:74
+msgid "Tags used to describe this artist"
+msgstr "Stichwörter für diesen Künstler"
+
+#: translatable_strings.c:80
+msgid "Remove your profile"
+msgstr "Dein Profil löschen"
+
+#: translatable_strings.c:83
+msgid "Create a group"
+msgstr "Eine Gruppe erstellen"
+
+#: translatable_strings.c:86
+msgid "Address for the group:"
+msgstr "Adresse der Gruppe:"
+
+#: translatable_strings.c:89
+msgid "Create"
+msgstr "Erstellen"
+
+#: translatable_strings.c:92
+msgid "Edit your group"
+msgstr "Deine Gruppe bearbeiten"
+
+#: translatable_strings.c:95
+msgid ""
+"The form below is still very experimental. Using this may wreck your group!"
+msgstr ""
+"Das Formular unten ist noch sehr experimentell. Die Verwendung könnte deine "
+"Gruppe zerstören!"
+
+#: translatable_strings.c:98 translatable_strings.c:593
+msgid "Full name:"
+msgstr "Vollständiger Name:"
+
+#: translatable_strings.c:101 translatable_strings.c:602
+msgid "Website address:"
+msgstr "Internetseite:"
+
+#: translatable_strings.c:104
+msgid "Logo address:"
+msgstr "Logo-Adresse:"
+
+#: translatable_strings.c:107 translatable_strings.c:608
+#: translatable_strings.c:617 translatable_strings.c:623
+#: translatable_strings.c:629 translatable_strings.c:635
+msgid "What's this?"
+msgstr "Was ist das?"
+
+#: translatable_strings.c:110
+msgid "Description:"
+msgstr "Beschreibung:"
+
+#: translatable_strings.c:113
+msgid ""
+"The web address for a picture to represent your group on libre.fm. It "
+"should\n"
+"\tnot be more than 80x80 pixels. (64x64 is best.)"
+msgstr ""
+"Die Webadresse für ein Bild, dass deine Gruppe auf libre.fm darstellen soll. "
+"Es sollte\n"
+"\tnicht größer als 80x80 Pixel sein. (64x64 ist am Besten.)"
+
+#: translatable_strings.c:116
+msgid ""
+"The group leader 'owns' the group and is able to make changes to the group.\n"
+"\tA group can only have one leader, so if you make someone else the leader, "
+"you will\n"
+"\tno longer be able to edit this group. You will not be able to undo this "
+"change!"
+msgstr ""
+"Der Gruppenleiter »besitzt« die Gruppe und kann Änderungen an der Gruppe "
+"vornehmen.\n"
+"\tEine Gruppe kann nur einen Leiter haben. Sobald du jemand anderen zum "
+"Leiter machst, kannst du\n"
+"\n"
+"deine Gruppe nicht mehr bearbeiten. Diese Änderung kann nicht rückgängig "
+"gemacht werden!"
+
+#: translatable_strings.c:119
+msgid "Explore popular artists"
+msgstr "Beliebte Künstler entdecken"
+
+#: translatable_strings.c:122
+msgid "Libre.fm is a proud supporter of the Play Ogg campaign"
+msgstr "Libre.fm ist stolzer Unterstützer der »Play Ogg«-Kampagne"
+
+#: translatable_strings.c:125
+msgid "Developer info"
+msgstr "Informationen für Entwickler"
+
+#: translatable_strings.c:128
+msgid "Report a bug"
+msgstr "Einen Fehler melden"
+
+#: translatable_strings.c:131
+msgid "Wiki"
+msgstr "Wiki"
+
+#: translatable_strings.c:134
+msgid "Join our blog"
+msgstr "Mach bei unserem Blog mit"
+
+#: translatable_strings.c:137
+msgid "Recent tracks"
+msgstr "Kürzlich gehörte Lieder"
+
+#: translatable_strings.c:140
+msgid ""
+"Powered by <a href=\"https://savannah.gnu.org/projects/librefm/\">GNU FM"
+msgstr ""
+"Angetrieben von <a href=\"https://savannah.gnu.org/projects/librefm/\">GNU FM"
+
+#: translatable_strings.c:143
+msgid ""
+"A <a href='http://foocorp.net'>FooCorp</a> thing. Since 1997 the good people "
+"of FooCorp have been making entertaining things for the web."
+msgstr ""
+"Ein Werk von <a href='http://foocorp.net'>FooCorp</a>. Seit 1997 bauen die "
+"guten Menschen von FooCorp unterhaltsame Sachen für’s Internet."
+
+#: translatable_strings.c:146
+msgid "Visit other autonomo.us sites like:"
+msgstr "Besuche auch andere autonomo.us-Seiten:"
+
+#: translatable_strings.c:149 translatable_strings.c:152
+msgid "All Groups"
+msgstr "Alle Gruppen"
+
+#: translatable_strings.c:155
+msgid "%1 members"
+msgstr "%1 Mitglieder"
+
+#: translatable_strings.c:158
+msgid "Group:"
+msgstr "Gruppe:"
+
+#: translatable_strings.c:161
+msgid "edit"
+msgstr "bearbeiten"
+
+#: translatable_strings.c:164
+msgid "leave"
+msgstr "verlassen"
+
+#: translatable_strings.c:167
+msgid "join"
+msgstr "mitmachen"
+
+#: translatable_strings.c:170
+msgid "Top artists"
+msgstr "Top-Künstler"
+
+#: translatable_strings.c:173 translatable_strings.c:176
+msgid "discover new music"
+msgstr "Neue Musik entdecken"
+
+#: translatable_strings.c:179
+msgid ""
+"Your invitation has been sent, pretty soon your friend should be thanking "
+"you profusely."
+msgstr ""
+"Deine Einladung wurde gesendet, bald sollte dir dein Freund überschwänglich "
+"dafür danken."
+
+#: translatable_strings.c:182
+msgid ""
+"Do you have an awesome friend you'd like to share <a href='http://libre.fm' "
+"rel='bookmark' class='vcard fn org url'>libre.fm</a> with? Just enter his/"
+"her email address and we'll sort them out with an invitation code."
+msgstr ""
+"Hast du einen Freund, dem du <a href='http://libre.fm' rel='bookmark' "
+"class='vcard fn org url'>libre.fm</a> zeigen möchtest? Trage hier seine "
+"Email-Adresse ein und wir schicken ihm eine Einladung."
+
+#: translatable_strings.c:185
+msgid "Invitee's E-mail:"
+msgstr "Email des Eingeladenen:"
+
+#: translatable_strings.c:188 translatable_strings.c:449
+msgid "must be valid!"
+msgstr "muss gültig sein!"
+
+#: translatable_strings.c:191
+msgid "Let them in!"
+msgstr "Lass’ sie ’rein!"
+
+#: translatable_strings.c:194
+msgid "Preferred language:"
+msgstr "Bevorzugte Sprache:"
+
+#: translatable_strings.c:197
+msgid "Please select your language"
+msgstr "Bitte wähle deine Sprache"
+
+#: translatable_strings.c:200
+msgid "Change Language"
+msgstr "Sprache ändern"
+
+#: translatable_strings.c:203
+msgid ""
+"Hey! If you really like this artist you can show your appreciation by "
+"donating to them via <a href='http://flattr.com'>flattr</a>."
+msgstr ""
+"Hey! Wenn du diesen Künstler wirklich magst, kannst du deine Wertschätzung "
+"durch eine Spende per <a href='http://flattr.com'>flattr</a> zeigen."
+
+#: translatable_strings.c:206
+msgid "Listen to 100&#37; libre music right here in your web browser!"
+msgstr "Höre 100&#37; freie Musik direkt in deinem Webbrowser!"
+
+#: translatable_strings.c:209
+msgid ""
+"To get started, simply enter the type of music you'd like to hear or select "
+"one of the common tags below:"
+msgstr ""
+"Gib einfach die Art von Musik ein, die du hören möchtest, oder wähle eines "
+"der beliebten Stichworte:"
+
+#: translatable_strings.c:212
+msgid "Custom tag:"
+msgstr "Eigenes Stichwort:"
+
+#: translatable_strings.c:215
+msgid "Only play me songs that other people love"
+msgstr ""
+
+#: translatable_strings.c:218 translatable_strings.c:257
+#: translatable_strings.c:269
+msgid "Listen"
+msgstr "Hören"
+
+#: translatable_strings.c:221
+msgid ""
+"Or listen to a random selection of the whole libre.fm community's favourite "
+"music on the <a href=\"?station=librefm://community/loved\">Libre.fm "
+"Community Station</a>"
+msgstr ""
+"Oder höre eine zufällige Auswahl von Lieblingsmusik der ganzen libre.fm-"
+"Gemeinschaft im <a href=\"?station=librefm://community/loved\">Libre.fm-"
+"Gemeinschafts-Radio</a>"
+
+#: translatable_strings.c:224
+msgid "Country:"
+msgstr "Land:"
+
+#: translatable_strings.c:227
+msgid "Users in"
+msgstr "Benutzer aus"
+
+#: translatable_strings.c:230 translatable_strings.c:467
+#: translatable_strings.c:569
+msgid "Username"
+msgstr "Benutzername"
+
+#: translatable_strings.c:233
+msgid "Password"
+msgstr "Passwort"
+
+#: translatable_strings.c:236
+msgid "Remember my login"
+msgstr "Anmeldung merken"
+
+#: translatable_strings.c:239 translatable_strings.c:242
+#: translatable_strings.c:284
+msgid "Login"
+msgstr "Anmelden"
+
+#: translatable_strings.c:245
+msgid "Need an account?"
+msgstr "Brauchst du ein Konto?"
+
+#: translatable_strings.c:248
+msgid "Register now!"
+msgstr "Registriere dich jetzt!"
+
+#: translatable_strings.c:251
+msgid ""
+"Join us in #libre.fm on irc.freenode.net to help shape that, or <a href="
+"\"http://lists.nongnu.org/mailman/listinfo/librefm-discuss\"> join our "
+"mailing list</a> and have your say!"
+msgstr ""
+"Um mitzumachen, schau vorbei in #libre.fm auf irc.freenode.net oder <a href="
+"\"http://lists.nongnu.org/mailman/listinfo/librefm-discuss\">abonniere "
+"unsere Mailingliste</a>!"
+
+#: translatable_strings.c:254
+msgid "Profile"
+msgstr "Profil"
+
+#: translatable_strings.c:260 translatable_strings.c:272
+msgid "Popular"
+msgstr "Beliebt"
+
+#: translatable_strings.c:263
+msgid "Logout"
+msgstr "Abmelden"
+
+#: translatable_strings.c:266
+msgid "Log in"
+msgstr "Anmelden"
+
+#: translatable_strings.c:275 translatable_strings.c:788
+msgid "Sign up now"
+msgstr "Registrieren"
+
+#: translatable_strings.c:278
+msgid "Back to site"
+msgstr "Zurück zur Webseite"
+
+#: translatable_strings.c:281
+msgid "Register"
+msgstr "Registrieren"
+
+#: translatable_strings.c:287
+msgid "Lost password"
+msgstr "Passwort vergessen"
+
+#: translatable_strings.c:290
+msgid ""
+"Player problems? The player currently works in <a href='http://www.chromium."
+"org/Home'>Chromium</a> and <a href='http://www.gnu.org/software/"
+"gnuzilla/'>Icecat</a>/<a href='http://www.mozilla.org/en/firefox/'>Firefox</"
+"a> 3.5 or later &mdash; it may also work in Chrome and Opera, though we "
+"don't recommend them.</p><p>Firefox users may experience problems under "
+"Ubuntu due to <a href='https://bugs.launchpad.net/ubuntu/+source/firefox/"
+"+bug/450684'>bug #450684</a>."
+msgstr ""
+"Probleme mit der Wiedergabe? Momentan funktioniert es mit <a href='http://"
+"www.chromium.org/Home'>Chromium</a> und <a href='http://www.gnu.org/software/"
+"gnuzilla/'>Icecat</a>/<a href='http://www.mozilla.org/en/firefox/'>Firefox</"
+"a> ab Version 3.5 &ndash; vielleicht funktioniert es auch mit Chrome und "
+"Opera, wir empfehlen diese jedoch nicht.</p><p>Mit Firefox unter Ubuntu "
+"können Probleme auftreten, siehe <a href='https://bugs.launchpad.net/ubuntu/"
+"+source/firefox/+bug/450684'>Fehler #450684</a>."
+
+#: translatable_strings.c:293 translatable_strings.c:296
+msgid "Show playlist"
+msgstr "Wiedergabeliste anzeigen"
+
+#: translatable_strings.c:299 translatable_strings.c:302
+msgid "Hide playlist"
+msgstr "Wiedergabeliste ausblenden"
+
+#: translatable_strings.c:305
+msgid "Playlist"
+msgstr "Wiedergabeliste"
+
+#: translatable_strings.c:308 translatable_strings.c:311
+msgid "Ban"
+msgstr "Blocken"
+
+#: translatable_strings.c:314 translatable_strings.c:317
+msgid "Skip Backwards"
+msgstr "Zurück springen"
+
+#: translatable_strings.c:320 translatable_strings.c:323
+msgid "Seek Backwards"
+msgstr "Zurückspulen"
+
+#: translatable_strings.c:326 translatable_strings.c:329
+msgid "Play"
+msgstr "Wiedergabe"
+
+#: translatable_strings.c:332 translatable_strings.c:335
+msgid "Pause"
+msgstr "Pause"
+
+#: translatable_strings.c:338 translatable_strings.c:341
+msgid "Seek Forwards"
+msgstr "Vorspulen"
+
+#: translatable_strings.c:344 translatable_strings.c:347
+msgid "Skip Forwards"
+msgstr "Vorwärts springen"
+
+#: translatable_strings.c:362 translatable_strings.c:365
+msgid "Love"
+msgstr "Favorisieren"
+
+#: translatable_strings.c:368 translatable_strings.c:371
+msgid "Volume"
+msgstr "Lautstärke"
+
+#: translatable_strings.c:374
+msgid "Enter a list of tags separated by commas:"
+msgstr "Eine kommaseparierte Stichwortliste:"
+
+#: translatable_strings.c:380
+msgid "Player problems?"
+msgstr "Probleme mit der Wiedergabe?"
+
+#: translatable_strings.c:383
+msgid ""
+"The player currently works in <a href='http://www.chromium.org/"
+"Home'>Chromium</a> and <a href='http://www.gnu.org/software/"
+"gnuzilla/'>Icecat</a>/<a href='http://www.mozilla.com/en-US/"
+"firefox/'>Firefox</a> 3.5 or later &mdash; it may also work in Chrome and "
+"Opera, though we don't recommend them."
+msgstr ""
+"Die Wiedergabe funktioniert momentan in <a href='http://www.chromium.org/"
+"Home'>Chromium</a> und <a href='http://www.gnu.org/software/"
+"gnuzilla/'>Icecat</a>/<a href='http://www.mozilla.com/en-US/"
+"firefox/'>Firefox</a> 3.5 und neuer &ndash; vielleicht funktioniert es auch "
+"in Chrome und Opera, allerdings empfehlen wir diese nicht."
+
+#: translatable_strings.c:386
+msgid "Explore popular free artists"
+msgstr "Finde bekannte freie Künstler"
+
+#: translatable_strings.c:389
+msgid "This artist was loved %1 times"
+msgstr "Dieser Künstler wurde %1 Mal favorisiert"
+
+#: translatable_strings.c:392
+msgid "You're in!"
+msgstr "Du bist dabei!"
+
+#: translatable_strings.c:395
+msgid ""
+"Your account has been activated! You may now <a href=\"/login.php\">login!</"
+"a>"
+msgstr ""
+"Dein Konto wurde aktiviert! Du kannst dich jetzt <a href=\"/login.php"
+"\">anmelden</a>!"
+
+#: translatable_strings.c:398
+msgid "Go! Go! Go! Check your email now"
+msgstr "Los! Los! Los! Ruf’ deine Emails ab!"
+
+#: translatable_strings.c:401
+msgid "Please follow the link in your email to activate your account!"
+msgstr "Benutze den Verweis in deiner Email, um dein Konto zu aktivieren!"
+
+#: translatable_strings.c:404
+msgid "You look awesome today, by the way"
+msgstr "Übrigens, du siehst heute großartig aus"
+
+#: translatable_strings.c:407
+msgid "Your username:"
+msgstr "Dein Benutzername:"
+
+#: translatable_strings.c:410
+msgid "No more than 16 characters, please."
+msgstr "Maximal 16 Zeichen"
+
+#: translatable_strings.c:413
+msgid "Your password:"
+msgstr "Dein Passwort:"
+
+#: translatable_strings.c:416
+msgid ""
+"Try and make it hard to guess! Don't use the same password for everything!"
+msgstr ""
+"Es darf nicht leicht zu erraten sein! Und nimm’ nicht das gleiche Passwort "
+"für alles!"
+
+#: translatable_strings.c:419
+msgid "Your password again"
+msgstr "Dein Passwort noch einmal:"
+
+#: translatable_strings.c:422
+msgid "Who said repeating yourself was a bad thing?"
+msgstr "Wer hat gesagt, dass Wiederholungen langweilig sind?"
+
+#: translatable_strings.c:425
+msgid "Your e-mail:"
+msgstr "Deine Email-Adresse:"
+
+#: translatable_strings.c:428
+msgid "We're going to email you here to confirm this account."
+msgstr "Wir werden dir eine Bestätigung per Email senden."
+
+#: translatable_strings.c:431
+msgid ""
+"I read this form carefully, and double-checked my email address first, "
+"honest."
+msgstr ""
+"Ich habe dieses Formular aufmerksam durchgelesen und habe meine Email-"
+"Adresse doppelt kontrolliert. Indianer-Ehrenwort."
+
+#: translatable_strings.c:434
+msgid "Sign up"
+msgstr "Anmelden"
+
+#: translatable_strings.c:437
+msgid ""
+"We won't sell, swap or give away your email address. You can optionally "
+"include personal data on your profile, which is displayed publicly."
+msgstr ""
+"Wir werden deine Email-Adresse weder verkaufen, tauschen oder weitergeben. "
+"Du kannst zusätzlich noch persönliche Daten in deinem öffentlichen Profil "
+"angeben."
+
+#: translatable_strings.c:440
+msgid ""
+"Your request for an invitation has been registered. Thank you for your "
+"interest in libre.fm!"
+msgstr ""
+"Deine Anfrage nach einer Einladung ist vorgemerkt. Danke für dein Interesse "
+"an libre.fm!"
+
+#: translatable_strings.c:443
+msgid ""
+"<a href='http://libre.fm' rel='bookmark' class='vcard fn org url'>libre.fm</"
+"a> is now in alpha. We're slowly adding new users, so if you're interested, "
+"type in your email address and you'll receive an invitation in a few days "
+"time."
+msgstr ""
+"<a href='http://libre.fm' rel='bookmark' class='vcard fn org url'>libre.fm</"
+"a> befindet sich jetzt im Alpha-Stadium und wir fügen langsam neue Benutzer "
+"hinzu. Falls du interessiert bist, trage deine Email-Adresse ein und du "
+"bekommst in wenigen Tagen eine Einladung."
+
+#: translatable_strings.c:446
+msgid "Email"
+msgstr "Email"
+
+#: translatable_strings.c:452
+msgid "Request invite!"
+msgstr "Einladung anfordern!"
+
+#: translatable_strings.c:455
+msgid "Reset my password"
+msgstr "Passwort zurücksetzen"
+
+#: translatable_strings.c:458
+msgid "Your new password has been emailed to you."
+msgstr "Dein neues Passwort wurde dir per Email gesendet."
+
+#: translatable_strings.c:461
+msgid ""
+"An email with further information has been sent to the email address "
+"associated with your profile."
+msgstr ""
+"Eine Email mit weiteren Informationen wurde an die Adresse aus deinem Profil "
+"geschickt."
+
+#: translatable_strings.c:464
+msgid ""
+"Enter your username or e-mail address and we'll email you a link to reset "
+"your password. All passwords are encrypted in our database."
+msgstr ""
+"Sag’ uns deinen Nutzernamen oder Email-Adresse und wir werden dir einen Link "
+"für ein neues Passwort senden."
+
+#: translatable_strings.c:470
+msgid "or"
+msgstr "oder"
+
+#: translatable_strings.c:473
+msgid "E-mail"
+msgstr "Email"
+
+#: translatable_strings.c:476
+msgid "Reset my password!"
+msgstr "Passwort zurücksetzen!"
+
+#: translatable_strings.c:479
+msgid "Artist"
+msgstr "Künstler"
+
+#: translatable_strings.c:482
+msgid "User"
+msgstr "Benutzer"
+
+#: translatable_strings.c:488
+msgid "Search"
+msgstr "Suche"
+
+#: translatable_strings.c:491
+msgid "Libre.fm Merchandise"
+msgstr "Libre.fm-Produkte"
+
+#: translatable_strings.c:494
+msgid ""
+"Support Libre.fm and look even cooler than ever by visiting our <a "
+"href='http://librefm.spreadshirt.net'>European</a> or <a href='http://"
+"librefm.spreadshirt.com'>American store</a>."
+msgstr ""
+"Schau besser aus als du es sowieso schon tust und unterstütze Libre.fm "
+"dabei! Besuche den <a href='http://librefm.spreadshirt.net'>europäischen</a> "
+"oder <a href='http://librefm.spreadshirt.com'>amerikanischen Laden</a>."
+
+#: translatable_strings.c:497
+msgid "Help Support Libre.fm"
+msgstr "Helfe uns, indem du Libre.fm unterstützt"
+
+#: translatable_strings.c:500
+msgid ""
+"Your donations don't just help to keep Libre.fm running, they also "
+"contribute to exciting new stuff like better equipment, artist outreach "
+"programs, conferences and hackfests."
+msgstr ""
+"Deine Spenden helfen nicht nur dabei sicher zu stellen, dass Libre.fm "
+"weiterhin laufen wird. Sie tragen auch zur Beschaffung von neuem Equipment, "
+"Öffentlichkeitsarbeit für Artisten, Konferenzen und zu Hack-Festen bei."
+
+#: translatable_strings.c:503
+msgid ""
+"You can find out more about our targets for this year on our <a href='http://"
+"libre.fm/donate.html'>donations page</a>."
+msgstr ""
+"Du kannst mehr über die Ziele, die wir uns für dieses Jahr gesetzt haben auf "
+"unserer <a href='http://libre.fm/donate.html'>Spenden-Seite</a> lesen."
+
+#: translatable_strings.c:506
+msgid "Neighbours"
+msgstr "Nachbarn"
+
+#: translatable_strings.c:509
+msgid "These folks all have excellent taste!"
+msgstr "All diese Leute haben einen exzellenten Musikgeschmack!"
+
+#: translatable_strings.c:512
+msgid "These folks all have similar tastes to %1."
+msgstr "All diese Leute haben ähnliche Musikgeschmäcker wie %1."
+
+#: translatable_strings.c:515
+msgid "Did you know..."
+msgstr "Wusstest du schon …"
+
+#: translatable_strings.c:518
+msgid ""
+"You can now get a monthly summary of the latest goings on in the Libre.fm "
+"world on our <A href='http://libre.fm/news/'>news site</a>."
+msgstr ""
+"Nun gibt es monatliche Zusammenfassungen der letzten Neuerungen um Libre.fm "
+"auf der <A href='http://libre.fm/news/'>Nachrichtenseite</a>."
+
+#: translatable_strings.c:521
+msgid ""
+"Libre.fm has a monthly <a href='http://libre.fm/podcast'>podcast</a>, "
+"featuring a selection of some of the best music on Libre.fm, a summary of "
+"recent development news and the occasional interview."
+msgstr ""
+"Libre.fm hat einen monatlichen <a href='http://libre.fm/podcast'>Podcast</"
+"a>! Dort gibt es eine Auswahl der besten Musik auf Libre.fm, eine "
+"Zusammenfassung von neuen Entwicklungen und das ein oder andere Interview."
+
+#: translatable_strings.c:527
+msgid "Artist:"
+msgstr "Künstler:"
+
+#: translatable_strings.c:530
+msgid "Album:"
+msgstr "Album:"
+
+#: translatable_strings.c:533
+msgid "Playcount:"
+msgstr "Gespielte Lieder:"
+
+#: translatable_strings.c:536
+msgid "Listeners:"
+msgstr "Hörer:"
+
+#: translatable_strings.c:539 translatable_strings.c:542
+msgid "Download track"
+msgstr "Lied herunterladen"
+
+#: translatable_strings.c:545
+msgid ""
+"Sorry, the link you followed does not appear to be correct. Please make sure "
+"you copied the entire link from your mail client. If this still doesn't work "
+"you can change your subscribption options at any time from your profile page "
+"by logging in, visiting your profile and clicking the \"Edit\" link."
+msgstr ""
+
+#: translatable_strings.c:548
+msgid ""
+"You've now been unsubscribed from our e-mails, if you'd ever like to "
+"subscribe again simply log in, visit your profile and click the \"Edit\" "
+"link."
+msgstr ""
+
+#: translatable_strings.c:551
+msgid "Edit your profile"
+msgstr "Profil ändern"
+
+#: translatable_strings.c:554
+msgid "Connections to other services"
+msgstr "Verbindung zu anderen Diensten"
+
+#: translatable_strings.c:557
+msgid "Your new connection has been successfully added!"
+msgstr "Die neue Verbindung wurde hinzugefügt!"
+
+#: translatable_strings.c:560
+msgid "Current connections"
+msgstr "Aktuelle Verbindungen"
+
+#: translatable_strings.c:563
+msgid "You don't currently have any connections configured."
+msgstr "Momentan hast du keine Verbindungen."
+
+#: translatable_strings.c:566
+msgid "Service"
+msgstr "Dienst"
+
+#: translatable_strings.c:572
+msgid "Forward Scrobbles?"
+msgstr "Scrobbles weiterleiten?"
+
+#: translatable_strings.c:575
+msgid "Yes"
+msgstr "Ja"
+
+#: translatable_strings.c:578
+msgid "No"
+msgstr "Nein"
+
+#: translatable_strings.c:581
+msgid ""
+"Connections to other services allow us to do nifty things like forwarding "
+"your scrobbles to other places around the web."
+msgstr ""
+"Verbindungen zu anderen Diensten machen raffinierte Sachen möglich, wie "
+"beispielsweise die Weiterleitung von Scrobbles zu anderen Plattformen im "
+"Internet."
+
+#: translatable_strings.c:584
+msgid "If that sounds cool then simply make a connection below."
+msgstr "Wenn sich das gut anhört, erstelle eine Verbindung."
+
+#: translatable_strings.c:587
+msgid "Add a connection"
+msgstr "Verbindung hinzufügen"
+
+#: translatable_strings.c:590
+msgid "Connect to a Last.fm account"
+msgstr "Mit Last.fm-Konto verbinden"
+
+#: translatable_strings.c:596
+msgid "Enter your name here, if you want to."
+msgstr "Wenn du magst, kannst du hier deinen Namen eingeben."
+
+#: translatable_strings.c:599
+msgid "Location:"
+msgstr "Ort:"
+
+#: translatable_strings.c:605
+msgid "Avatar address:"
+msgstr "Benutzerbild:"
+
+#: translatable_strings.c:611
+msgid "Mini Biography:"
+msgstr "Kurzbiografie:"
+
+#: translatable_strings.c:614
+#, fuzzy
+msgid "Receive E-mails:"
+msgstr "Email des Eingeladenen:"
+
+#: translatable_strings.c:620
+msgid "WebID (FOAF)"
+msgstr "WebID (FOAF)"
+
+#: translatable_strings.c:626
+msgid "StatusNet/identi.ca Profile:"
+msgstr "Identi.ca-Profil:"
+
+#: translatable_strings.c:632
+msgid "RSS Feed:"
+msgstr "Newsfeed:"
+
+#: translatable_strings.c:638
+msgid "Delete my account"
+msgstr "Konto löschen"
+
+#: translatable_strings.c:641
+msgid "Hide advanced settings"
+msgstr "Erweiterte Einstellungen verbergen"
+
+#: translatable_strings.c:644
+msgid "Show advanced settings"
+msgstr "Erweiterte Einstellungen anzeigen"
+
+#: translatable_strings.c:647
+msgid "Password:"
+msgstr "Passwort:"
+
+#: translatable_strings.c:650
+msgid "Leave this blank if you don't want to change your password."
+msgstr "Lass’ dieses Feld leer, wenn du dein Passwort nicht ändern möchtest."
+
+#: translatable_strings.c:653
+msgid "Confirm Password:"
+msgstr "Passwort bestätigen:"
+
+#: translatable_strings.c:656
+msgid "Change"
+msgstr "Ändern"
+
+#: translatable_strings.c:659
+msgid "Help"
+msgstr "Hilfe"
+
+#: translatable_strings.c:662
+msgid "Location check"
+msgstr "Ort überprüfen"
+
+#: translatable_strings.c:665
+msgid ""
+"This feature looks up your location on <a href='http://www.geonames."
+"org'>geonames</a>. You don't need to do it, but it will allow us find your "
+"latitude and longitude so we can add some great location-based features in "
+"the future."
+msgstr ""
+"Dein Standort wird auf <a href='http://www.geonames.org'>GeoNames</a> "
+"nachgeschlagen. Das ist nicht nötig, aber ermöglicht uns, zukünftig "
+"großartige ortsabhängige Funktionen anzubieten."
+
+#: translatable_strings.c:668
+msgid "Avatar address"
+msgstr "Benutzerbild"
+
+#: translatable_strings.c:671
+#, fuzzy
+msgid ""
+"The web address for a picture to represent you on Libre.fm. It should not be "
+"more than 80x80 pixels. (64x64 is best.) If you leave this empty, libre.fm "
+"will use <a href='http://gravatar.com'>Gravatar</a> to find an image for you."
+msgstr ""
+"Die Internetadresse für dein Benutzerbild. Es sollte nicht größer sein als "
+"80x80 Pixel (idealerweise 64x64). Wenn du dieses Feld leer lässt, werden wir "
+"automatisch <a href='http://gravatar.com'>Gravatar</a> nutzen, um ein Bild "
+"zu finden."
+
+#: translatable_strings.c:674
+msgid ""
+"An address that represents you in RDF. See <a href='http://esw.w3.org/topic/"
+"WebID'>WebID</a> for details. If you don't know what this is, it's best to "
+"leave it blank."
+msgstr ""
+"Eine Adresse, die dich in RDF repräsentiert. Weitere Details auf <a "
+"href='http://esw.w3.org/topic/WebID'>WebID</a>. Wenn du nicht weißt, was das "
+"ist, lass’ es einfach leer."
+
+#: translatable_strings.c:677
+msgid ""
+"The address for your micro-blog on a <a href='http://status.net/'>StatusNet</"
+"a>-powered site such as <a href='http://identi.ca/'>identi.ca</a>."
+msgstr ""
+"Die Adresse für dein Profil auf einer <a href='http://status."
+"net/'>StatusNet</a>-Seite wie beispielsweise <a href='http://identi."
+"ca/'>identi.ca</a>."
+
+#: translatable_strings.c:680
+#, fuzzy
+msgid ""
+"An RSS feed which will be used to populate your journal on Libre.fm. "
+"Defaults to your StatusNet RSS feed if you provide your StatusNet micro-blog "
+"address."
+msgstr ""
+"Ein Newsfeed der auf deiner Libre.fm-Seite angezeigt wird. Wenn du ein "
+"StatusNet-Profil angibst, wird dieses genutzt."
+
+#: translatable_strings.c:683
+msgid ""
+"From time to time we send out e-mails about all the cool new stuff we're "
+"getting up to. If you'd rather not hear about these things then simply "
+"untick this box."
+msgstr ""
+
+#: translatable_strings.c:686
+msgid "Now Playing:"
+msgstr "Hört gerade:"
+
+#: translatable_strings.c:689 translatable_strings.c:692
+#: translatable_strings.c:698 translatable_strings.c:701
+#: translatable_strings.c:713 translatable_strings.c:716
+msgid "Loved"
+msgstr "Favoriten"
+
+#: translatable_strings.c:695 translatable_strings.c:710
+msgid "Latest %1 Plays:"
+msgstr "Letzte %1 Lieder:"
+
+#: translatable_strings.c:704
+msgid "Free artists that %1 loves"
+msgstr "Freie Künstler, die %1 mag"
+
+#: translatable_strings.c:707
+msgid "Free artists that %1 might like"
+msgstr "Freie Künstler die %1 vielleicht mag"
+
+#: translatable_strings.c:719 translatable_strings.c:725
+msgid "%1's Recommended Radio"
+msgstr "Empfehlungen-Radio von %1"
+
+#: translatable_strings.c:722
+msgid "%1's Loved Radio"
+msgstr "Favoriten-Radio von %1"
+
+#: translatable_strings.c:728
+msgid "%1's Mix Radio"
+msgstr "Mix-Radio von %1"
+
+#: translatable_strings.c:731
+msgid "%1's Neighbourhood Radio"
+msgstr "%1s Nachbarschafts-Radio"
+
+#: translatable_strings.c:734
+msgid "Most played artists"
+msgstr "Meistgespielte Künstler"
+
+#: translatable_strings.c:737
+msgid "Top tracks"
+msgstr "Top-Lieder"
+
+#: translatable_strings.c:740
+msgid "Scrobbles by day"
+msgstr "Scrobbles pro Tag"
+
+#: translatable_strings.c:743
+msgid "%1's most played artists"
+msgstr "%1s meistgespielte Künstler"
+
+#: translatable_strings.c:746
+msgid "%1's top tracks"
+msgstr "%1s Top-Lieder"
+
+#: translatable_strings.c:749
+msgid "%1's scrobbles by day"
+msgstr "%1s Scrobbles pro Tag"
+
+#: translatable_strings.c:752
+msgid "Welcome back!"
+msgstr "Willkommen zurück!"
+
+#: translatable_strings.c:755
+msgid ""
+"Libre.fm allows you to share your listening habits and discover new music."
+msgstr ""
+"Libre.fm ermöglicht es dir, deine Hörgewohnheiten zu teilen und neue Musik "
+"zu entdecken."
+
+#: translatable_strings.c:758
+msgid ""
+"Have you <a href=\"http://bugs.libre.fm/wiki/clients\">configured your "
+"player</a> to report your music listening habits?"
+msgstr ""
+"Hast du deine <a href=\"http://bugs.libre.fm/wiki/clients\">Wiedergabe-"
+"Einstellungen</a> übernommen, um deine Hörgewohnheiten zu protokollieren?"
+
+#: translatable_strings.c:761
+msgid ""
+"<a href=\"%1\">Go to your profile</a> or <a href=\"%2\">view your listening "
+"statistics</a>."
+msgstr ""
+"<a href=\"%1\">Besuche dein Profil</a> oder <a href=\"%2\">deine Musik-"
+"Statistiken</a>."
+
+#: translatable_strings.c:764
+msgid "100&#37; indie artists."
+msgstr "100&#37; Indie-Künstler."
+
+#: translatable_strings.c:767
+msgid ""
+"Libre.fm actively supports the creation of music by independent artists."
+msgstr "Libre.fm unterstützt die Musik von unabhängigen Künstlern."
+
+#: translatable_strings.c:770
+msgid "You own your own listening data."
+msgstr "Deine Hörgewohnheiten gehören dir."
+
+#: translatable_strings.c:773
+msgid ""
+"Everything you put into Libre.fm is yours, not ours. Take it away and do "
+"cool things!"
+msgstr ""
+"Alles, was du bei Libre.fm hinzufügst, gehört dir und nicht uns. Nimm’ es "
+"dir und mach’ Großartiges damit!"
+
+#: translatable_strings.c:776
+msgid "Legally download and share any track."
+msgstr "Jedes Lied kannst du legal herunterladen und mit anderen teilen."
+
+#: translatable_strings.c:779
+msgid ""
+"Every song on Libre.fm is made by musicians who <b>want</b> you to share "
+"their music."
+msgstr ""
+"Jedes Lied auf Libre.fm ist von Musikern gemacht, die <b>möchten</b>, dass "
+"ihre Musik verbreitet wird."
+
+#: translatable_strings.c:782
+msgid "Your privacy, taken care of."
+msgstr "Wir respektieren deine Privatsphäre."
+
+#: translatable_strings.c:785
+msgid ""
+"Our <a href=\"http://libre.fm/more.html#privacy\">privacy policy</a> is "
+"awesome. We don't even log your IP address! Privacy is important."
+msgstr ""
+"Unsere <a href=\"http://libre.fm/more.html#privacy\">Datenschutzrichtlinien</"
+"a> sind spitze. Wir protokollieren nicht einmal deine IP-Adresse! "
+"Privatsphäre ist uns wichtig."
+
+#: translatable_strings.c:791
+msgid ""
+"That's not all! The code that powers Libre.fm is <a href=\"http://www.gnu."
+"org/philosophy/free-sw.html\">free software</a> &mdash; <a href=\"http://"
+"gitorious.org/foocorp/gnu-fm\">take it</a>, run your own site and <a href="
+"\"http://lists.nongnu.org/mailman/listinfo/librefm-discuss\">join the "
+"development community!"
+msgstr ""
+"Und das ist noch nicht alles! Das Programm, auf dem Libre.fm läuft, ist <a "
+"href=\"http://www.gnu.org/philosophy/free-sw.html\">freie Software</a> "
+"&ndash; <a href=\"http://gitorious.org/foocorp/gnu-fm\">nimm’ es dir</a>, "
+"mach’ deine eigene Seite und <a href=\"http://lists.nongnu.org/mailman/"
+"listinfo/librefm-discuss\">trete der Entwickler-Gemeinschaft bei!"
+
+#: ../../../../../trunk/nixtape/artist-menu.php:25
+#: ../../../../../trunk/nixtape/user-menu.php:25
+msgid "Overview"
+msgstr "Übersicht"
+
+#: ../../../../../trunk/nixtape/listen.php:43
+msgid "Go ahead, listen all you want"
+msgstr "Nur zu, hör so viel du magst"
+
+#: ../../../../../trunk/nixtape/unsubscribe.php:40
+msgid "Unsubscribe"
+msgstr ""
+
+#: ../../../../../trunk/nixtape/user-menu.php:26
+msgid "Stats"
+msgstr "Statistiken"
+
+#: ../../../../../trunk/nixtape/user-menu.php:27
+msgid "Recent Tracks"
+msgstr "Kürzlich gespielte Lieder"
+
+#: ../../../../../trunk/nixtape/user-menu.php:30
+msgid "Radio Stations"
+msgstr "Radiosender"
+
+#: ../../../../../trunk/nixtape/utils/human-time.php:35
+msgid "in the future (?)"
+msgstr "in der Zukunft (?)"
+
+#: ../../../../../trunk/nixtape/utils/human-time.php:39
+msgid "a second ago"
+msgstr "vor einer Sekunde"
+
+#: ../../../../../trunk/nixtape/utils/human-time.php:47
+msgid "about a minute ago"
+msgstr "vor einer Minute"
+
+#: ../../../../../trunk/nixtape/utils/human-time.php:51
+#, php-format
+msgid "%d minutes ago"
+msgstr "vor %d Minuten"
+
+#: ../../../../../trunk/nixtape/utils/human-time.php:55
+msgid "about an hour ago"
+msgstr "vor einer Stunde"
+
+#: ../../../../../trunk/nixtape/utils/human-time.php:59
+#, php-format
+msgid "%d hours ago"
+msgstr "vor %d Stunden"
+
+#: ../../../../../trunk/nixtape/utils/human-time.php:63
+msgid "about a day ago"
+msgstr "gestern"
+
+#: ../../../../../trunk/nixtape/utils/human-time.php:68
+#: ../../../../../trunk/nixtape/utils/human-time.php:74
+#: ../../../../../trunk/nixtape/utils/human-time.php:79
+msgid "about a week ago"
+msgstr "letzte Woche"
+
+#: ../../../../../trunk/nixtape/utils/human-time.php:70
+#, php-format
+msgid "%d days ago"
+msgstr "vor %d Tagen"
+
+#: ../../../../../trunk/nixtape/utils/human-time.php:81
+#, php-format
+msgid "%d weeks ago"
+msgstr "vor %d Wochen"
+
+#: ../../../../../trunk/nixtape/utils/human-time.php:85
+msgid "about a month ago"
+msgstr "letzten Monat"
+
+#: ../../../../../trunk/nixtape/utils/human-time.php:89
+#, php-format
+msgid "%d months ago"
+msgstr "vor %d Monaten"
+
+#: ../../../../../trunk/nixtape/utils/human-time.php:93
+msgid "about a year ago"
+msgstr "letztes Jahr"
+
+#: ../../../../../trunk/nixtape/utils/human-time.php:96
+msgid "more than a year ago"
+msgstr "vor mehr als einem Jahr"
