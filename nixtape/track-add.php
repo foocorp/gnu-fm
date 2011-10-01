@@ -116,6 +116,11 @@ if (isset($_POST['submit'])) {
 			if($tag_errors) {
 				$errors[] = 'Errors in the artist, album or track name tags stop us from being able to track statistics about your song correctly. Please correct these, reupload your file to archive.org and try again. You can use software such as <a href="http://easytag.sourceforge.net/">EasyTag</a> to help you tag your files correctly.';
 			}
+
+			// Check we aren't being linked to a file with an unstreamably high bitrate
+			if($ogg->Streams['vorbis']['bitrate'] > 192000) {
+				$errors[] = 'Maximum bitrate should be no higher than 192kbps.';
+			}
 		} else {
 			$errors[] = 'File must be in Ogg Vorbis format.';
 		}
