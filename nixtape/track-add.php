@@ -78,8 +78,13 @@ if (isset($_POST['submit'])) {
 		$streaming_url = 'http://' . $streaming_url;
 	}
 
-	if (!preg_match('/http:\/\/(www.)?archive.org\/download\/([^\/]*)\/.*/', $streaming_url, $matches)) {
-		$errors[] = 'The streaming URL must be hosted at archive.org. Make sure you aren\'t linking to a mirror location (URL should begin with http://www.archive.org/...).';
+	if (preg_match('@http://[^/]*archive.org/.*/items/([^/]*)/([^/]*)@', $streaming_url, $matches)) {
+		// Convert mirror URL into canonical URL
+		$streaming_url = 'http://www.archive.org/download/' . $matches[1] . '/' . $matches[2];
+	}
+
+	if (!preg_match('@http://(www.)?archive.org/download/([^\/]*)/.*@', $streaming_url, $matches)) {
+		$errors[] = 'Sorry, the streaming URL must be hosted at archive.org.';
 	} else {
 		// Check we've been given correct file types
 		$finfo = new finfo(FILEINFO_MIME_TYPE);
