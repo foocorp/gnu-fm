@@ -25,6 +25,7 @@ require_once('templating.php');
 require_once('data/Album.php');
 require_once('data/Track.php');
 require_once('utils/licenses.php');
+require_once('utils/oggclass/ogg.class.php');
 
 try {
 	$artist = new Artist($_GET['artist']);
@@ -89,7 +90,33 @@ if (isset($_POST['submit'])) {
 		// Check we've been given correct file types
 		$finfo = new finfo(FILEINFO_MIME_TYPE);
 		$type = $finfo->buffer(file_get_contents($streaming_url, false, null, -1, 12));
-		if ($type != 'application/ogg') {
+		if ($type == 'application/ogg') {
+			// Check metadata matches artist/album/track names
+			$ogg = new Ogg($streaming_url, NOCACHING);
+			$tag_errors = false;
+			foreach($ogg->Streams['vorbis']['comments'] as $comment) {
+				if (preg_match('/ARTIST=(.*)/i', $comment, $comment_matches)) {
+					if (strtolower($comment_matches[1]) != strtolower($artist->name)) {
+						$errors[] = 'The artist tag in the uploaded file doesn\'t match your current artist name. The artist tag should be: "' . $artist->name . '", but currently it\'s: "' . $comment_matches[1] . '".';
+						$tag_errors = true;
+					}
+				} elseif (preg_match('/ALBUM=(.*)/i', $comment, $comment_matches)) {
+					if (strtolower($comment_matches[1]) != strtolower($album->name)) {
+						$errors[] = 'The album tag in the uploaded file doesn\'t match the name of the album you\'re editing. The album tag should be: "' . $album->name . '", but currently it\'s: "' . $comment_matches[1] . '".';
+						$tag_errors = true;
+					}
+				} elseif (preg_match('/TITLE=(.*)/i', $comment, $comment_matches)) {
+					if (strtolower($comment_matches[1]) != strtolower($track->name)) {
+						$errors[] = 'The track name tag in the uploaded file doesn\'t match the name of the track you\'re editing. The track name tag should be: "' . $track->name . '", but currently it\'s: "' . $comment_matches[1] . '".';
+						$tag_errors = true;
+					}
+				}
+			}
+
+			if($tag_errors) {
+				$errors[] = 'Errors in the artist, album or track name tags stop us from being able to track statistics about your song correctly. Please correct these, reupload your file to archive.org and try again. You can use software such as <a href="http://easytag.sourceforge.net/">EasyTag</a> to help you tag your files correctly.';
+			}
+		} else {
 			$errors[] = 'File must be in Ogg Vorbis format.';
 		}
 
