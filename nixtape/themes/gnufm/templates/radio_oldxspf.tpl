@@ -1,6 +1,6 @@
 <playlist version="1" xmlns:lastfm="http://www.audioscrobbler.net/dtd/xspf-lastfm">
 <title>{$title}</title>
-<creator>GNU FM</creator>
+<creator>libre.fm</creator>
 <link rel="http://www.last.fm/skipsLeft">9999</link>
 <trackList>
 

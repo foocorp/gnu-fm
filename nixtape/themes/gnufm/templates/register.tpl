@@ -2,21 +2,21 @@
 
 {if isset($activated)}
 
-        <h2>You're in!</h2>
+        <h2>{t}You're in!{/t}</h2>
 
-	<p>Your account has been activated! You may now <a href="/login.php">login!</a></p>
+	<p>{t escape=no}Your account has been activated! You may now <a href="/login.php">login!</a>{/t}</p>
 
-{elseif isset($registered) }
+{elseif isset($registered)}
 
-	<h2>Go! Go! Go! Check your email now</h2>
+	<h2>{t}Go! Go! Go! Check your email now{/t}</h2>
 
 	<p>{t}Please follow the link in your email to activate your account!{/t}</p>
 	
 {else}
 
-<h2>You look awesome today, by the way</h2>
+<h2>{t}You look awesome today, by the way{/t}</h2>
 
-	{if isset($errors) }
+	{if isset($errors)}
 		<p id='errors'>{$errors}</p>
 	{/if}
 
@@ -34,14 +34,14 @@
 
 			<h3>
 			<label for='password-repeat'>{t}Your password again{/t}</label></h3>
-			<p><small>Who said repeating yourself was a bad thing?</small></p>
+			<p><small>{t}Who said repeating yourself was a bad thing?{/t}</small></p>
 			<div><input id='password-repeat' name='password-repeat' type='password' value=''/></div>
 
 			<h3><label for='email'>{t}Your e-mail:{/t}</label></h3>
-			<p><small>We're going to email you here to confirm this account.</small></p>
+			<p><small>{t}We're going to email you here to confirm this account.{/t}</small></p>
 			<div><input id='email' name='email' type='text' value='{$email}' maxlength='64' /></div>
 
-			<p><label><input type="checkbox" name="foo-check" /> I read this form carefully, and double-checked my email address first, honest.</label></p>
+			<p><label><input type="checkbox" name="foo-check" /> {t}I read this form carefully, and double-checked my email address first, honest.{/t}</label></p>
 
 		</fieldset>
 

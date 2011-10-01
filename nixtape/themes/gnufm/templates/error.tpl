@@ -1,6 +1,5 @@
 {include file='header.tpl'}
 
-<h2>{$error}</h2>
-{$details}
+{$details|escape:'htmlall'}
 
 {include file='footer.tpl'}
