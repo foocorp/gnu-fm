@@ -52,12 +52,9 @@ class Tag {
 		$andtag = ' AND LOWER(tag) = LOWER(' . $adodb->qstr((string)$tag) . ')';
 		$andalbum = ' AND LOWER(album) = LOWER(' . $adodb->qstr((string)$album) . ')';
 		$andtrack = ' AND LOWER(track) = LOWER(' . $adodb->qstr((string)$track) . ')';
-		$hasartist = ' AND artist IS NOT NULL';
-		$hasalbum = ' AND album IS NOT NULL';
-		$hastrack = ' AND track IS NOT NULL';
-		$noartist = ' AND artist IS NULL';
-		$noalbum = ' AND album IS NULL';
-		$notrack = ' AND track IS NULL';
+		$hasartist = ' AND artist IS NOT NULL AND artist <> \'\'';
+		$hasalbum = ' AND album IS NOT NULL AND album <> \'\'';
+		$hastrack = ' AND track IS NOT NULL AND track <> \'\'';
 		$orderfreq = ' ORDER BY freq DESC';
 
 		if($streamable) {
@@ -71,22 +68,22 @@ class Tag {
 			if($artist) {
 				if($album) {
 					//Album->getTags	
-					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereuser . $andartist . $andalbum/* . $notrack*/ . ' GROUP BY tag';
+					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereuser . $andartist . $andalbum . ' GROUP BY tag';
 				} elseif($track) {
 					//Track->getTags	
 					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereuser . $andartist . $andtrack . ' GROUP BY tag';
 				} else {
 					//Artist->getTags
-					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereuser . $andartist/* . $noalbum . $notrack*/ . ' GROUP BY tag';
+					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereuser . $andartist . ' GROUP BY tag';
 				}
 			} else {
 				if($tag) {
 					if(strtolower($taggingtype)=='artist') {
 						//User->getPersonalTags (artist)
-						$query = 'SELECT artist FROM Tags' . $wherestream . $whereuser . $andtag . $hasartist . $noalbum . $notrack;
+						$query = 'SELECT artist FROM Tags' . $wherestream . $whereuser . $andtag . $hasartist;
 					} elseif(strtolower($taggingtype)=='album') {
 						//User->getPersonalTags (album)
-						$query = 'SELECT artist, album FROM Tags' . $wherestream . $whereuser . $andtag . $hasalbum . $notrack;
+						$query = 'SELECT artist, album FROM Tags' . $wherestream . $whereuser . $andtag . $hasalbum;
 					} elseif(strtolower($taggingtype)=='track') {
 						//User->getPersonalTags (track)
 						$query = 'SELECT artist, track FROM Tags' . $wherestream . $whereuser . $andtag . $hastrack;
@@ -106,21 +103,21 @@ class Tag {
 			if($artist) {
 				if($album) {
 					//Album->getTopTags
-					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' .$whereartist . $andalbum/* . $notrack*/ . ' GROUP BY tag' . $orderfreq;
+					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' .$whereartist . $andalbum . ' GROUP BY tag' . $orderfreq;
 				} elseif($track) {
 					//Track->getTopTags
 					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereartist . $andtrack . ' GROUP BY tag' . $orderfreq;
 				} else {
 					//Artist->getTopTags
-					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereartist/* . $noalbum . $notrack*/ . ' GROUP BY tag' . $orderfreq;
+					$query = 'SELECT tag, COUNT(tag) AS freq FROM Tags' . $whereartist . ' GROUP BY tag' . $orderfreq;
 				}
 			} elseif($tag) {
 				if(strtolower($taggingtype)=='artist') {
 					//Tag::getTopArtists
-					$query = 'SELECT artist, COUNT(artist) AS freq FROM Tags' . $wherestream . $wheretag . $hasartist . $noalbum . $notrack . ' GROUP BY artist' . $orderfreq;
+					$query = 'SELECT artist, COUNT(artist) AS freq FROM Tags' . $wherestream . $wheretag . $hasartist . ' GROUP BY artist' . $orderfreq;
 				} elseif(strtolower($taggingtype)=='album') {
 					//Tag::getTopAlbums
-					$query = 'SELECT artist, album, COUNT(album) AS freq FROM Tags' . $wherestream . $wheretag . $hasalbum . $notrack . ' GROUP BY album, artist' . $orderfreq;
+					$query = 'SELECT artist, album, COUNT(album) AS freq FROM Tags' . $wherestream . $wheretag . $hasalbum . ' GROUP BY album, artist' . $orderfreq;
 				} elseif(strtolower($taggingtype)=='track') {
 					//Tag::getTopTracks
 					$query = 'SELECT artist, track, COUNT(track) AS freq FROM Tags' . $wherestream . $wheretag . $hastrack . ' GROUP BY track, artist' . $orderfreq;
