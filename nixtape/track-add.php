@@ -107,7 +107,7 @@ if (isset($_POST['submit'])) {
 					}
 				} elseif (preg_match('/TITLE=(.*)/i', $comment, $comment_matches)) {
 					if (strtolower($comment_matches[1]) != strtolower($name)) {
-						$errors[] = 'The track name tag in the uploaded file doesn\'t match the name of the track you\'re editing. The track name tag should be: "' . $track->name . '", but currently it\'s: "' . $comment_matches[1] . '".';
+						$errors[] = 'The track name tag in the uploaded file doesn\'t match the name of the track you\'re editing. The track name tag should be: "' . $name . '", but currently it\'s: "' . $comment_matches[1] . '".';
 						$tag_errors = true;
 					}
 				}
