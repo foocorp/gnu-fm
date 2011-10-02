@@ -95,17 +95,17 @@ if (isset($_POST['submit'])) {
 			$ogg = new Ogg($streaming_url, NOCACHING);
 			$tag_errors = false;
 			foreach($ogg->Streams['vorbis']['comments'] as $comment) {
-				if (preg_match('/ARTIST=(.*)/i', $comment, $comment_matches)) {
+				if (preg_match('/^ARTIST=(.*)$/i', $comment, $comment_matches)) {
 					if (strtolower($comment_matches[1]) != strtolower($artist->name)) {
 						$errors[] = 'The artist tag in the uploaded file doesn\'t match your current artist name. The artist tag should be: "' . $artist->name . '", but currently it\'s: "' . $comment_matches[1] . '".';
 						$tag_errors = true;
 					}
-				} elseif (preg_match('/ALBUM=(.*)/i', $comment, $comment_matches)) {
+				} elseif (preg_match('/^ALBUM=(.*)$/i', $comment, $comment_matches)) {
 					if (strtolower($comment_matches[1]) != strtolower($album->name)) {
 						$errors[] = 'The album tag in the uploaded file doesn\'t match the name of the album you\'re editing. The album tag should be: "' . $album->name . '", but currently it\'s: "' . $comment_matches[1] . '".';
 						$tag_errors = true;
 					}
-				} elseif (preg_match('/TITLE=(.*)/i', $comment, $comment_matches)) {
+				} elseif (preg_match('/^TITLE=(.*)$/i', $comment, $comment_matches)) {
 					if (strtolower($comment_matches[1]) != strtolower($name)) {
 						$errors[] = 'The track name tag in the uploaded file doesn\'t match the name of the track you\'re editing. The track name tag should be: "' . $name . '", but currently it\'s: "' . $comment_matches[1] . '".';
 						$tag_errors = true;
