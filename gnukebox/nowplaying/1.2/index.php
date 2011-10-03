@@ -67,8 +67,12 @@ if (!$mbid) {
 $session_id = $adodb->qstr($session_id);
 $artist = $adodb->qstr($artist);
 $track = $adodb->qstr($track);
-$album = $adodb->qstr($album);
-$mbid = $adodb->qstr($mbid);
+if($album != 'NULL') {
+	$album = $adodb->qstr($album);
+}
+if ($mbid != 'NULL') {
+	$mbid = $adodb->qstr($mbid);
+}
 
 //Delete this user's last playing song (if any)
 $adodb->Execute('DELETE FROM Now_Playing WHERE sessionid = ' . ($session_id));
