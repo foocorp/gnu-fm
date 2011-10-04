@@ -373,6 +373,7 @@ if (isset($_POST['install'])) {
 	}
 
 	$adodb->Execute("CREATE INDEX scrobbles_time_idx ON Scrobbles(time)");
+	$adodb->Execute("CREATE INDEX scrobbles_userid_idx ON Scrobbles(userid)");
 
 	if(strtolower(substr($dbms, 0, 5)) == 'pgsql') {
 		// MySQL doesn't support the use of lower() to create case-insensitive indexes
