@@ -85,6 +85,11 @@ class Statistic {
 
 		$query .= (!is_null($constraint)) ? ' WHERE ' : null;
 		$query .= (!is_null($constraint)) ? ' userid = ' . ($constraint) : null;
+
+		// Ignore timestamps older than $limit*3 days, this speeds up the query a lot
+		// but will not return $limit data points if the user hasnt scrobbled at least once/day
+		// in $limit of those $limit*3 days
+		$query .= ' AND time > ' . (time() - (60 * 60 * 24 * ($limit * 3)));
 		$query .= ' GROUP BY date ORDER BY date DESC LIMIT ' . $limit;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
