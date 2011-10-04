@@ -174,6 +174,8 @@ class GraphPlaysByDays extends Graph {
         
 	        $this->plays_by_days = rtrim($date_line, ',');
         	$this->plays_by_days .= ']';
+	} else {
+		$this->plays_by_days = '[]';
 	}
     }
 }
