@@ -225,8 +225,8 @@ class Track {
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$row = $adodb->CacheGetRow(300, 'SELECT COUNT(track) AS freq, COUNT(DISTINCT userid) AS listeners FROM Scrobbles WHERE'
-			. ' artist = ' . $adodb->qstr($this->artist_name)
-			. ' AND track = ' . $adodb->qstr($this->name)
+			. ' lower(artist) = lower(' . $adodb->qstr($this->artist_name) . ')'
+			. ' AND lower(track) = lower(' . $adodb->qstr($this->name) . ')'
 			. ' GROUP BY track ORDER BY freq DESC');
 
 		if (!isset($row)) {
