@@ -291,7 +291,7 @@ class User {
 		if ($since) {
 			$query = 'SELECT COUNT(*) FROM Scrobbles WHERE userid = ' . ($this->uniqueid) . ' AND time > ' . (int)($since);
 		} else {
-			$query = 'SELECT COUNT(*) FROM Scrobbles WHERE userid = ' . ($this->uniqueid);
+			$query = 'SELECT scrobble_count FROM User_Stats WHERE userid = ' . ($this->uniqueid);
 		}
 		try {
 			$tracks = $adodb->CacheGetOne(200, $query);
