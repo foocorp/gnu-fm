@@ -38,7 +38,7 @@ require_once('temp-utils.php');
 
 		<?php
 			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-			$total = $adodb->CacheGetOne(500, 'SELECT COUNT(*) as total from Scrobbles');
+			$total = $adodb->CacheGetOne(500, 'SELECT SUM(scrobble_count) as total from User_Stats');
 			if (!$total) {
 				die('sql error');
 			}
