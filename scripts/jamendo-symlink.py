@@ -10,7 +10,8 @@ class JamendoSymlink:
 
 	def __init__(self, path):
 		self.music_path = path
-
+		if not os.path.exists(os.path.join(path, "link")):
+			os.mkdir(os.path.join(path, "link"))
 
 	def parse(self, dump):
 		for event, elem in ElementTree.iterparse(dump):
@@ -79,8 +80,8 @@ class JamendoSymlink:
 				if track["id"] and track["name"] and album["name"] and artist["name"] and self.free_license(track["license"]):
 					filename = "%s-%s-%s" % (artist["name"].replace("/", ""), album["name"].replace("/", ""), track["name"].replace("/", " "))
 					filename = filename.encode("utf-8")
-					os.symlink("%s/%s.ogg" % (self.music_path, filename), "%s/%d.ogg2" % (self.music_path, track['id']))
-					os.symlink("%s/%s.mp3" % (self.music_path, filename), "%s/%d.mp31" % (self.music_path, track['id']))
+					os.symlink("%s/ogg/%s.ogg" % (self.music_path, filename), "%s/link/%d.ogg2" % (self.music_path, track['id']))
+					os.symlink("%s/mp3/%s.mp3" % (self.music_path, filename), "%s/link/%d.mp31" % (self.music_path, track['id']))
 
 
 	def free_license(self, license):
