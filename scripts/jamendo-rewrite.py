@@ -7,15 +7,17 @@ import sys, gzip, time, os, os.path, urllib, threading
 
 class JamendoRewrite:
 
+
 	def __init__(self, path):
 		self.music_path = path
-		print "RewriteEngine on"
+
 
 	def parse(self, dump):
 		for event, elem in ElementTree.iterparse(dump):
 			if elem.tag == "artist":
 				artist = self.proc_artist(elem)
 				self.make_rules(artist)
+
 
 	def proc_artist(self, elem):
 		artist = {}
@@ -31,6 +33,7 @@ class JamendoRewrite:
 					artist["albums"].append(self.proc_album(album_e))
 
 		return artist
+
 
 	def proc_album(self, elem):
 
@@ -76,8 +79,7 @@ class JamendoRewrite:
 				if track["id"] and track["name"] and album["name"] and artist["name"] and self.free_license(track["license"]):
 					filename = "%s-%s-%s" % (artist["name"].replace("/", ""), album["name"].replace("/", ""), track["name"].replace("/", " "))
 					filename = filename.encode("utf-8")
-					rule = "RewriteRule ^%d\.(...)		%s/%s.$1" % (track['id'], self.music_path, urllib.quote(filename))
-					rule = rule.replace("%20", "\ ")
+					rule = "rewrite %d\.(...).?		%s/%s.$1 redirect;" % (track['id'], self.music_path, urllib.quote(filename))
 					print rule
 
 
