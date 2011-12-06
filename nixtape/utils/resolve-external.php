@@ -10,7 +10,7 @@ function resolve_external_url($url) {
 function process_jamendo_url($url) {
 	if (substr($url, 10, 13) == 'track/stream/') {
 		$id = substr($url, 23);
-		return 'http://gigue.rrbone.net/' . $id . '.ogg2';
+		return 'http://api.jamendo.com/get2/stream/track/redirect/?id=' . $id . '&streamencoding=ogg2';
 	}
 
 	if (substr($url, 10, 15) == 'album/download/') {
