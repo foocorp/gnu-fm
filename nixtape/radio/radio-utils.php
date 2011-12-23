@@ -65,7 +65,7 @@ function radio_title_from_url($url) {
 	if (preg_match('@l(ast|ibre)fm://community/loved@', $url, $regs)) {
 		return $host_name . ' Community\'s Loved Radio';
 	}
-	if (preg_match('@l(ast|ibre)fm://community/@', $url, $regs)) {
+	if (preg_match('@l(ast|ibre)fm://community@', $url, $regs)) {
 		return $host_name . ' Community\'s All Tracks Radio';
 	}
 
@@ -152,7 +152,7 @@ function make_playlist($session, $old_format = false) {
 		$res = get_loved_tracks($userids);
 	} else if (preg_match('@l(ast|ibre)fm://community/loved@', $url, $regs)) {
 		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Track.streamable=1');
-	} else if (preg_match('@l(ast|ibre)fm://community/@', $url, $regs)) {
+	} else if (preg_match('@l(ast|ibre)fm://community@', $url, $regs)) {
 		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track WHERE Track.streamable=1');
 	} else {
 		die("FAILED\n"); // this should return a blank dummy playlist instead
