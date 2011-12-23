@@ -244,7 +244,7 @@ function get_artist_selection($artists, $artist = false) {
 
 	$artistsClause = '( ';
 	if ($artist) {
-		$artistsClause = 'lower(artist_name) = lower(' . $adodb->qstr($artist->name) . ')';
+		$artistsClause = '( lower(artist_name) = lower(' . $adodb->qstr($artist->name) . ')';
 	}
 	for ($i = 0; $i < 8; $i++) {
 		$r = rand(0, count($artists) - 1);
