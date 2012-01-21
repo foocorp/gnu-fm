@@ -298,7 +298,9 @@ function method_auth_getMobileSession() {
 		report_failure(LFM_INVALID_TOKEN);
 	}
 
-	list($username, $lc_username, $password) = $result;
+	$username = $result['username'];
+	$lc_username = $result['lc_username'];
+	$password = $result['password'];
 	if (md5($lc_username . $password) != $_GET['authToken']) {
 		report_failure(LFM_INVALID_TOKEN);
 	}
