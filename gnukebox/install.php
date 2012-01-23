@@ -391,7 +391,7 @@ if (isset($_POST['install'])) {
 		$adodb->Execute("CREATE INDEX groups_groupname_idx ON Groups(lower(groupname))");
 
 		// PostgreSQL stored functions
-		$adodb->Execute("CREATE LANGUAGE plpgsql;");
+		$adodb->Execute("CREATE OR REPLACE LANGUAGE plpgsql;");
 		$adodb->Execute("CREATE FUNCTION update_user_stats_scrobble_count() RETURNS TRIGGER AS $$
 			DECLARE s_count int;
 			BEGIN
