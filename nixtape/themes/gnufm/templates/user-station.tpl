@@ -12,11 +12,13 @@
 
 		{include file='player.tpl'}
 		<script type="text/javascript">
-			{if isset($this_user)}
-				playerInit(false, "{$this_user->getScrobbleSession()}", "{$this_user->getWebServiceSession()}", "{$radio_session}");
-			{else}
-				playerInit(false, false, false, "{$radio_session}");
-			{/if}
+			$(document).ready(function() {ldelim}
+				{if isset($this_user)}
+					playerInit(false, "{$this_user->getScrobbleSession()}", "{$this_user->getWebServiceSession()}", "{$radio_session}");
+				{else}
+					playerInit(false, false, false, "{$radio_session}");
+				{/if}
+			{rdelim});
 		</script>
 	</div>
 </center>

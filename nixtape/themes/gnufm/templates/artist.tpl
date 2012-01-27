@@ -12,11 +12,13 @@
 		<div id='player-container'>
 		{include file='player.tpl'}
 		<script type="text/javascript">
-			{if isset($this_user)}
-				playerInit(false, "{$this_user->getScrobbleSession()}", "{$this_user->getWebServiceSession()}", "{$radio_session}");
-			{else}
-				playerInit(false, false, false, "{$radio_session}");
-		   	{/if}
+			$(document).ready(function() {ldelim}
+				{if isset($this_user)}
+					playerInit(false, "{$this_user->getScrobbleSession()}", "{$this_user->getWebServiceSession()}", "{$radio_session}");
+				{else}
+					playerInit(false, false, false, "{$radio_session}");
+				{/if}
+			{rdelim});
 		</script>
 		</div>
 		{/if}
@@ -27,7 +29,7 @@
 			{if $homepage}<a href="{$homepage|escape:'htmlall'}">{$name|escape:'html':'UTF-8'}'s homepage</a>{/if}
 		</p></center><br />
 		{else}
-			{if $homepage}<p style='clear: both;'><a href="{$homepage|escape:'htmlall'}">{t name=$name|escape:'html':'UTF-8'}%1's homepage{/t}</a></P>{/if}
+			{if $homepage}<p style='clear: left;'><a href="{$homepage|escape:'htmlall'}">{t name=$name|escape:'html':'UTF-8'}%1's homepage{/t}</a></P>{/if}
 		{/if}
 		
 		{if $bio_summary}

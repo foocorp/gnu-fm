@@ -14,6 +14,8 @@
 		<option {if $lang_selector_array.gl_ES}selected="selected"{/if} value='gl_ES'>Galician</option>
 		<option {if $lang_selector_array.nl_NL}selected="selected"{/if} value='nl_NL'>Nederlands</option>
 		<option {if $lang_selector_array.pt_BR}selected="selected"{/if} value='pt_BR'>Português Brasileiro</option>
+		<option {if $lang_selector_array.ru_RU}selected="selected"{/if} value='ru_RU'>Pусский язык</option>
+		<option {if $lang_selector_array.sq_AL}selected="selected"{/if} value='sq_AL'>Shqip</option>
 		<option {if $lang_selector_array.sl_SI}selected="selected"{/if} value='sl_SI'>Slovenščina</option>
 		</optgroup>
 	</select>
