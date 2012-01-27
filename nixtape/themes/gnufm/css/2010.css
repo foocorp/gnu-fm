@@ -76,6 +76,17 @@ h2 a {
 h2 a:hover {
 	border-bottom: 1px solid;
 }
+
+#site-title a, #site-title a:hover {
+	border-bottom: none;
+	color: fireBrick;
+}
+
+#site-title h2 {
+	font-size: 52px;
+	text-shadow: 3px 3px 3px #999999;
+}
+
 #buttons li {
     list-style: none outside none;
 }

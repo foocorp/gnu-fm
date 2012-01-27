@@ -3,9 +3,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	{if !($pagetitle)}
-		<title>GNU FM</title>
+		<title>{$site_name}</title>
 	{else}
-		<title>{$pagetitle|escape:'html':'UTF-8'} &mdash; GNU FM</title>
+		<title>{$pagetitle|escape:'html':'UTF-8'} &mdash; {$site_name}</title>
 	{/if}
 	<link rel="stylesheet" href="{$base_url}/themes/{$default_theme}/css/2010.css" type="text/css" />
 	<script type="text/javascript" src="{$base_url}/js/jquery-1.4.4.min.js"></script>
@@ -21,7 +21,7 @@
 <body>
 	<div id="doc" class="yui-t7"> 
 		<div id="hd">
-			<h1><a href="{$base_url}">GNU FM</a></h1>
+			<h1><a href="{$base_url}">{$site_name}</a></h1>
 			<div class="yui-g" id="navbar">
 				{include file='search-box.tpl'}
 				{include file='menu.tpl'}

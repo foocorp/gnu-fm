@@ -34,7 +34,7 @@
 
 <br />
 
-<p>{t escape=no}Or listen to a random selection of the whole libre.fm community's favourite music on the <a href="?station=librefm://community/loved">Libre.fm Community Station</a>{/t}</p>
+<p>{t site=$site_name escape=no}Or listen to a random selection of the whole libre.fm community's favourite music on the <a href="?station=librefm://community/loved">%1 Community Station</a>{/t}</p>
 {/if}
 
 {include file='footer.tpl'}

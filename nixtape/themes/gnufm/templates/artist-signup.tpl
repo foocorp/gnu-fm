@@ -37,7 +37,7 @@
 		</form>
 	{/if}
 {else}
-	{t escape=no}Before creating an artist account you first need to <a href='{$base_url}/register.php'>register</a> or <a href='{$base_url}/login.php'>log in</a> with a normal Libre.fm account.{/t}
+	{t site=$site_name escape=no}Before creating an artist account you first need to <a href='{$base_url}/register.php'>register</a> or <a href='{$base_url}/login.php'>log in</a> with a normal %1 account.{/t}
 {/if}
 
 {include file='footer.tpl'}
