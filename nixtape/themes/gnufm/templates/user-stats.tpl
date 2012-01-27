@@ -1,4 +1,10 @@
 {include file='header.tpl'}
+<script type="text/javascript" src="{$base_url}/js/stats/user.js"></script>
+<script type="text/javascript" src="{$base_url}/js/jquery.jqplot.min.js"></script> 
+<script type="text/javascript" src="{$base_url}/js/plugins/jqplot.barRenderer.min.js"></script>
+<script type="text/javascript" src="{$base_url}/js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+<script type="text/javascript" src="{$base_url}/js/plugins/jqplot.dateAxisRenderer.min.js"></script>
+<script type="text/javascript" src="{$base_url}/js/plugins/jqplot.pointLabels.min.js"></script>
 
 <ul>
 	<li><a href="#stats_by_artist">{t}Most played artists{/t}</a></li>
