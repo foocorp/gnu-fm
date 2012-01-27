@@ -24,43 +24,49 @@ require_once('../data/Track.php');
 require_once('../data/Server.php');
 require_once('../utils/resolve-external.php');
 
-
 function radio_title_from_url($url) {
+
+	// get last two segments of host name
+	preg_match('/[^.]+\.[^.]+$/', $_SERVER['HTTP_HOST'], $matches);
+	$host_name = ucwords($matches[0]);
 
 	if (preg_match('@l(ast|ibre)fm://globaltags/(.*)/loved@', $url, $regs)) {
 		$tag = $regs[2];
-		return 'Libre.fm ' . ucwords($tag) . ' Loved Tag Radio';
+		return $host_name . ' ' . ucwords($tag) . ' Loved Tag Radio';
 	}
 	if (preg_match('@l(ast|ibre)fm://globaltags/(.*)@', $url, $regs)) {
 		$tag = $regs[2];
-		return 'Libre.fm ' . ucwords($tag) . ' Tag Radio';
+		return $host_name . ' ' . ucwords($tag) . ' Tag Radio';
 	}
 	if (preg_match('@l(ast|ibre)fm://artist/(.*)/similarartists@', $url, $regs)) {
 		$artist = $regs[2];
-		return 'Libre.fm ' . ucwords($artist) . ' Similar Artist Radio';
+		return $host_name . ' ' . ucwords($artist) . ' Similar Artist Radio';
 	}
 	if (preg_match('@l(ast|ibre)fm://artist/(.*)@', $url, $regs)) {
 		$artist = $regs[2];
-		return 'Libre.fm ' . ucwords($artist) . ' Artist Radio';
+		return $host_name . ' ' . ucwords($artist) . ' Artist Radio';
 	}
 	if (preg_match('@l(ast|ibre)fm://user/(.*)/loved@', $url, $regs)) {
 		$user = $regs[2];
-		return 'Libre.fm ' . ucwords($user) . '\'s Loved Radio';
+		return $host_name . ' ' . ucwords($user) . '\'s Loved Radio';
 	}
 	if (preg_match('@l(ast|ibre)fm://user/(.*)/recommended@', $url, $regs)) {
 		$user = $regs[2];
-		return 'Libre.fm ' . ucwords($user) . '\'s Recommended Radio';
+		return $host_name . ' ' . ucwords($user) . '\'s Recommended Radio';
 	}
 	if (preg_match('@l(ast|ibre)fm://user/(.*)/mix@', $url, $regs)) {
 		$user = $regs[2];
-		return 'Libre.fm ' . ucwords($user) . '\'s Mix Radio';
+		return $host_name . ' ' . ucwords($user) . '\'s Mix Radio';
 	}
 	if (preg_match('@l(ast|ibre)fm://user/(.*)/neighbours@', $url, $regs)) {
 		$user = $regs[2];
-		return 'Libre.fm ' . ucwords($user) . '\'s Neighbourhood radio';
+		return $host_name . ' ' . ucwords($user) . '\'s Neighbourhood radio';
 	}
 	if (preg_match('@l(ast|ibre)fm://community/loved@', $url, $regs)) {
-		return 'Libre.fm Community\'s Loved Radio';
+		return $host_name . ' Community\'s Loved Radio';
+	}
+	if (preg_match('@l(ast|ibre)fm://community@', $url, $regs)) {
+		return $host_name . ' Community\'s All Tracks Radio';
 	}
 
 	return 'FAILED';
@@ -146,6 +152,8 @@ function make_playlist($session, $old_format = false) {
 		$res = get_loved_tracks($userids);
 	} else if (preg_match('@l(ast|ibre)fm://community/loved@', $url, $regs)) {
 		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Track.streamable=1');
+	} else if (preg_match('@l(ast|ibre)fm://community@', $url, $regs)) {
+		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track WHERE Track.streamable=1');
 	} else {
 		die("FAILED\n"); // this should return a blank dummy playlist instead
 	}
@@ -236,7 +244,7 @@ function get_artist_selection($artists, $artist = false) {
 
 	$artistsClause = '( ';
 	if ($artist) {
-		$artistsClause = 'lower(artist_name) = lower(' . $adodb->qstr($artist->name) . ')';
+		$artistsClause = '( lower(artist_name) = lower(' . $adodb->qstr($artist->name) . ')';
 	}
 	for ($i = 0; $i < 8; $i++) {
 		$r = rand(0, count($artists) - 1);
