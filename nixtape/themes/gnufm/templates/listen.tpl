@@ -21,7 +21,7 @@
 </div>
 </center>
 {else}
-<h3>{t escape=no}Listen to 100&#37; libre music right here in your web browser!{/t}</h3>
+<h3>{t escape=no}Listen to music right here in your web browser!{/t}</h3>
 
 <p>{t}To get started, simply enter the type of music you'd like to hear or select one of the common tags below:{/t}</p>
 
@@ -34,7 +34,7 @@
 
 <br />
 
-<p>{t site=$site_name escape=no}Or listen to a random selection of the whole libre.fm community's favourite music on the <a href="?station=librefm://community/loved">%1 Community Station</a>{/t}</p>
+<p>{t site=$site_name escape=no}Or listen to a random selection of the whole %1 community's favourite music on the <a href="?station=librefm://community/loved">%1 Community Station</a>{/t}</p>
 {/if}
 
 {include file='footer.tpl'}
