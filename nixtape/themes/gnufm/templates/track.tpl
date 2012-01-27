@@ -21,14 +21,7 @@
 	</div>
 	{/if}
 
-	{if $flattr_uid}
-        <div class="flattr" style="padding-left: 2em;">
-                <a class="FlattrButton" style="display:none;"
-                        title="{$track->artist_name|escape:'htmlall'} - {$track->name|escape:'htmlall'}"
-                        rev="flattr;uid:{$flattr_uid|escape:'htmlall'};category:audio;tags:music,creative commons,free,libre.fm;"
-                        href="{$url}">{$track->artist_name|escape:'htmlall'} is making {$track->name|escape:'htmlall'} freely available on Libre.fm for you to listen to, share and remix however you like.</a>
-        </div>
-        {/if}
+	{include file='flattr-track-button.tpl'}
 
 	<dl>
 		<dt>{t}Artist:{/t}</dt>
