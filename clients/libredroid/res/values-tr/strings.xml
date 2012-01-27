@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Libre Droid</string>
+    <string name="tag_examples">Örneğin akustik, Alman, piyano, keman, Fransız, vb.</string>
+    <string name="tagged_station">Şu şekilde etiketlenen istasyonlar:</string>
+    <string name="login">Giriş</string>
+    <string name="password">Şifreniz:</string>
+    <string name="username">Kullanıcı isminiz:</string>
+    <string name="not_google_account">(Bu Google hesabınız değildir)</string>
+    <string name="account_details">Libre.fm oturum detayları:</string>
+    <string name="no_account">Hesabınız yok mu?</string>
+    <string name="register">www.libre.fm sitesini ziyaret edip ücretsiz bir hesap edinebilirsiniz.</string>
+    <string name="tag_stations">Tematik istasyonlar</string>
+    <string name="loved_tracks">Sevdiğiniz parçalar</string>
+    <string name="community_loved">Camianın beğendiği parçalar</string>
+    <string name="add_station">İstasyon ekle</string>
+    <string name="sd_card_needed">Şarkı indirmeden önce SD kartınızın takılı olduğundan emin olunuz.</string>
+    <string name="finished_download">&quot;%s&quot; parçasının indirimi sona erdi</string>
+    <string name="download_failed">&quot;%s&quot; indirilemedi:</string>
+    <string name="downloading">&quot;%s&quot; SD kartınıza indiriliyor.</string>
+    <string name="quit">Kapat</string>
+    <string name="tuning_in">Bekleyiniz...</string>
+    <string name="playlist_failed">Çalma listesi açılamadı:</string>
+    <string name="banned">Yasaklandı</string>
+    <string name="loved">Beğenildi</string>
+    <string name="no_content">Üzgünüz, bu istasyonda daha fazla içerik yoktur.</string>
+    <string name="cant_connect">Libre.fm sunucusuna bağlanılamadı:</string>
+    <string name="login_failed">Şifre ya da kullanıcı ismi hatalı</string>
+</resources>

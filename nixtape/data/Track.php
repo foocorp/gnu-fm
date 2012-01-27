@@ -88,6 +88,8 @@ class Track {
 	public static function create($name, $artist_name, $album_name, $streamurl, $downloadurl, $license) {
 		global $adodb;
 
+		$streamable = (is_free_license($license) && !empty($streamurl)) ? 1 : 0;
+
 		$adodb->Execute('INSERT INTO Track (name, artist_name, album_name, streamurl, downloadurl, license, streamable) VALUES ('
 			. $adodb->qstr($name) . ', '
 			. $adodb->qstr($artist_name) . ', '
@@ -95,10 +97,16 @@ class Track {
 			. $adodb->qstr($streamurl) . ', '
 			. $adodb->qstr($downloadurl) . ', '
 			. $adodb->qstr($license) . ', '
-			. '1' . ')');
+			. $streamable . ')');
 
 		$album = new Album($album_name, $artist_name);
 		$album->clearTrackCache();
+
+		$artist = new Artist($artist_name);
+		if (!$artist->isStreamable() && $streamable == 1) {
+			// This artist has just had a streamable track added, so are now streamable
+			$adodb->Execute('UPDATE Artist SET streamable = 1 WHERE name = ' . $adodb->qstr($artist->name));
+		}
 
 		return new Track($name, $artist_name);
 	}
@@ -217,8 +225,8 @@ class Track {
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$row = $adodb->CacheGetRow(300, 'SELECT COUNT(track) AS freq, COUNT(DISTINCT userid) AS listeners FROM Scrobbles WHERE'
-			. ' artist = ' . $adodb->qstr($this->artist_name)
-			. ' AND track = ' . $adodb->qstr($this->name)
+			. ' lower(artist) = lower(' . $adodb->qstr($this->artist_name) . ')'
+			. ' AND lower(track) = lower(' . $adodb->qstr($this->name) . ')'
 			. ' GROUP BY track ORDER BY freq DESC');
 
 		if (!isset($row)) {

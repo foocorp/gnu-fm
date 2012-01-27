@@ -319,7 +319,7 @@ class Artist {
 	function getListenerCount() {
 		global $adodb;
 		$row = $adodb->CacheGetRow(600, 'SELECT COUNT(DISTINCT userid) AS listeners FROM Scrobbles WHERE'
-			. ' artist = ' . $adodb->qstr($this->name));
+			. ' lower(artist) = lower(' . $adodb->qstr($this->name) . ')');
 		return $row['listeners'];
 	}
 
