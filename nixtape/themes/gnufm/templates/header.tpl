@@ -12,12 +12,6 @@
 	<script type="text/javascript" src="{$base_url}/js/jquery-ui-1.7.1.custom.min.js"></script>
 	<script type="text/javascript" src="{$base_url}/js/jquery.placeholdr.js"></script>
 	<script type="text/javascript" src="{$base_url}/js/player.js"></script>
-	<script type="text/javascript" src="{$base_url}/js/stats/user.js"></script>
-	<script type="text/javascript" src="{$base_url}/js/jquery.jqplot.min.js"></script> 
-	<script type="text/javascript" src="{$base_url}/js/plugins/jqplot.barRenderer.min.js"></script>
-	<script type="text/javascript" src="{$base_url}/js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
-	<script type="text/javascript" src="{$base_url}/js/plugins/jqplot.dateAxisRenderer.min.js"></script>
-	<script type="text/javascript" src="{$base_url}/js/plugins/jqplot.pointLabels.min.js"></script> 
 	<meta name="author" content="FooCorp catalogue number FOO200 and contributors" />
 {section name=i loop=$extra_head_links}
 	<link rel="{$extra_head_links[i].rel|escape:'html':'UTF-8'}" href="{$extra_head_links[i].href|escape:'UTF-8'}" type="{$extra_head_links[i].type|escape:'html':'UTF-8'}" title="{$extra_head_links[i].title|escape:'html':'UTF-8'}"  />
