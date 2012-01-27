@@ -159,7 +159,7 @@ class UserXML {
 		$track->addChild('mbid', $row['mbid']);
 		$album = $track->addChild('album', repamp($row['album']));
 		$album->addAttribute('mbid', $row['album_mbid']);
-		$track->addChild('url', Server::getTrackURL($row['artist'], $row['album'], $row['track']));
+		$track->addChild('url', repamp(Server::getTrackURL($row['artist'], $row['album'], $row['track'])));
 		$date = $track->addChild('date', gmdate('d M Y H:i', $row['time']) . ' GMT');
 		$date->addAttribute('uts', $row['time']);
 		$track->addChild('streamable', null);
