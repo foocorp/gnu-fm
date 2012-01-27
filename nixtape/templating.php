@@ -56,7 +56,7 @@ textdomain('nixtape');
 
 $smarty = new Smarty();
 
-$smarty->template_dir = $install_path . '/themes/'. $theme . '/templates/';
+$smarty->template_dir = array($install_path . '/themes/'. $theme . '/templates/', $install_path . '/themes/gnufm/templates/');
 $smarty->compile_dir = $install_path. '/themes/' . $theme . '/templates_c/';
 $smarty->cache_dir = $install_path. '/cache/';
 
