@@ -80,6 +80,3 @@ if (isset($logged_in)) {
 
 header('Content-Type: text/html; charset=utf-8');
 
-function insert_getMenu($lidsid, $smrt) {
-	$smrt->display('menu.tpl');
-}
