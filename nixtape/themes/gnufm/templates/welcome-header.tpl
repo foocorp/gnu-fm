@@ -4,5 +4,5 @@
 </div>
 
 {else}
-<h2><img src="{$img_url}/welcome-message.gif" alt="{t}Libre.fm allows you to share your listening habits and discover new music.{/t}" /></h2>
+<center><div id='site-title'><h2><a href="{$base_url}">{$site_name}</a></h2></div></center>
 {/if}

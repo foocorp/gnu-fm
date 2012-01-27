@@ -1,11 +1,7 @@
 <div class='sideblock'>
-	{math equation='rand(0,1)' assign=ad}
+	{math equation='rand(0,0)' assign=ad}
 	{if $ad == 0}
-		<h3>{t}Libre.fm Merchandise{/t}</h3>
-		<img src='{$img_url}/t-shirt.png' alt='Artistic. Freedom. T-Shirt.' /><br /><br />
-		<p>{t escape=no}Support Libre.fm and look even cooler than ever by visiting our <a href='http://librefm.spreadshirt.net'>European</a> or <a href='http://librefm.spreadshirt.com'>American store</a>.{/t}</p>
-	{elseif $ad == 1}
-		<h3>{t}Help Support Libre.fm{/t}</h3>
+		<h3>{t}Help Support GNU FM{/t}</h3>
 		<br />
 		<script type='text/javascript'> 
 			{literal}
@@ -34,7 +30,7 @@
 		</div>
 		<a href='http://libre.fm/donate.html'><img src='{$img_url}/bitcoin.png' alt='Donate BitCoins' title='Donate BitCoins' /></a>
 		<br /><br />
-		<p>{t escape=no}Your donations don't just help to keep Libre.fm running, they also contribute to exciting new stuff like better equipment, artist outreach programs, conferences and hackfests.{/t}
+		<p>{t escape=no}Help us make the GNU FM software which powers this site even better.{/t}
 		<p>{t escape=no}You can find out more about our targets for this year on our <a href='http://libre.fm/donate.html'>donations page</a>.{/t}</p>
 	{/if}
 </div>
