@@ -4,7 +4,7 @@
 
         <h2>{t}You're in!{/t}</h2>
 
-	<p>{t escape=no}Your account has been activated! You may now <a href="/login.php">login!</a>{/t}</p>
+	<p>{t escape=no}Your account has been activated! You may now <a href="{$base_url}/login.php">login!</a>{/t}</p>
 
 {elseif isset($registered)}
 
