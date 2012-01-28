@@ -93,7 +93,8 @@ class UserXML {
 			$track->addChild('name', repamp($row['track']));
 
 			$track->addChild('playcount', $row['freq']);
-			$artist = $track->addChild('artist', repamp($row['artist']));
+			$artist = $track->addChild('artist', null);
+			$artist->addChild('name', repamp($row['artist']));
 			$artist->addChild('mbid', $row['artist_mbid']);  // artist_mbid isn't being set by getTopTracks yet
 			$i++;
 		}
