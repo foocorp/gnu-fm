@@ -29,9 +29,8 @@ if ($logged_in == true) {
 }
 
 function sendEmail($text, $email) {
-	$headers = 'From: Libre.fm Account Activation <account@libre.fm>';
-	$subject = 'Libre.fm Account Activation - Action needed!';
-	mail($email, $subject, $text, $headers);
+	$subject = $site_name . ' Account Activation - Action needed!';
+	mail($email, $subject, $text);
 }
 
 if (isset($_GET['auth'])) {
@@ -144,10 +143,10 @@ if (isset($_POST['register'])) {
 
 		$url = $base_url . '/register.php?auth=' . $code;
 		$content = "Hi!\n\nSomeone registered an account "
-			. "at http://alpha.libre.fm. If this was you, please visit the webpage specified below to activate "
+			. "at " . $base_url . ". If this was you, please visit the webpage specified below to activate "
 			. "your account within 48 hours, after which time all information provided by you and "
 			. "your activation code will be permanently deleted from our database. If you do not want to activate your account, "
-			. "please disregard this email.\n\n" . $url . "\n\n- The Libre.fm Team";
+			. "please disregard this email.\n\n" . $url . "\n\n- The " . $site_name . " Team";
 		sendEmail($content, $email);
 
 		$smarty->assign('registered', true);

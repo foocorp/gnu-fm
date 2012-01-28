@@ -76,9 +76,8 @@ if ($logged_in == false) {
 	$expire = time() + 86400;
 	$adodb->Execute('INSERT INTO Delete_Request (code, expires, username) VALUES (' . $adodb->qstr($code) . ', ' . $adodb->qstr($expire) . ',' . $adodb->qstr($username) . ')');
 	$url = $base_url . '/delete-profile.php?code=' . $code;
-	$content = "Hi!\n\nSomeone from the IP address " . $_SERVER['REMOTE_ADDR'] . " requested account deletion at libre.fm.  To remove this account click: \n\n" . $url . "\n\n- The Libre.fm Team";
-	$headers = 'From: Libre.fm <account@libre.fm>';
-	$subject = 'Libre.fm Account Delete Request - Action needed!';
-	mail($email, $subject, $content, $headers);
+	$content = "Hi!\n\nSomeone from the IP address " . $_SERVER['REMOTE_ADDR'] . " requested account deletion at " . $site_name . ".  To remove this account click: \n\n" . $url . "\n\n- The " . $site_name . " Team";
+	$subject = $site_name . ' Account Delete Request - Action needed!';
+	mail($email, $subject, $content);
 	$smarty->display('delete-profile.tpl');
 }
