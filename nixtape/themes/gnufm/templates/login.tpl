@@ -2,7 +2,7 @@
 
 <h2>{t}Login{/t}</h2>
 
-<h3>{t}Need an account?{/t} <a href="register.php">{t}Register now!{/t}</a></h3>
+<h3>{t}Need an account?{/t} <a href="{base_url}/register.php">{t}Register now!{/t}</a></h3>
 
 {if isset($errors)}
         <p id='errors'>{$errors}</p>
