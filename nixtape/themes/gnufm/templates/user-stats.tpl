@@ -20,7 +20,7 @@
      class="chart_space horizontal_chart_axes" about="{$me->id}"></div>
 
 <h4 id="stats_by_track">{t name=$me->name|escape:'html':'UTF-8'}%1's top tracks{/t}</h4>
-<div id="chart_top_tracks" style="height:500px;width:95%;"
+<div id="chart_top_tracks" style="height:{$toptrackspx}px;width:95%;"
      class="chart_space horizontal_chart_axes" about="{$me->id}"></div>
 
 <h4 id="stats_by_day">{t name=$me->name|escape:'html':'UTF-8'}%1's scrobbles by day{/t}</h4>
