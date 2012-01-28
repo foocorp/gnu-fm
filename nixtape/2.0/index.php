@@ -321,7 +321,7 @@ function method_auth_getMobileSession() {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 
-	if ($_GET['format'] == 'json') {
+	if ($_REQUEST['format'] == 'json') {
 		$json_data = array('session' => array('name' => $username, 'key' => $session, 'subscriber' => 0));
 		json_response(json_encode($json_data));
 	} else {
@@ -365,7 +365,7 @@ function method_auth_getSession() {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 
-	if ($_GET['format'] == 'json') {
+	if ($_REQUEST['format'] == 'json') {
 		$json_data = array('session' => array('name' => $username, 'key' => $session, 'subscriber' => 0));
 		json_response(json_encode($json_data));
 	} else {
@@ -406,7 +406,7 @@ function method_radio_tune() {
 	$stationname = radio_title_from_url($_POST['station']);
 	$stationurl = 'http://libre.fm';
 
-	if ($_POST['format'] == 'json') {
+	if ($_REQUEST['format'] == 'json') {
 		header('Content-Type: text/javascript');
 		$json_data = array('station' => array('type' => $stationtype, 'name' => $stationname, 'url' => $stationurl, 'supportsdiscovery' => 1));
 		print(json_encode($json_data));
