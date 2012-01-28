@@ -27,9 +27,8 @@ global $adodb;
 $errors = '';
 
 function sendEmail($text, $email) {
-	$headers = 'From: Libre.fm Reset <recovery@libre.fm>';
-	$subject = 'Libre.fm Password Reset';
-	return mail($email, $subject, $text, $headers);
+	$subject = $site_name . ' Password Reset';
+	return mail($email, $subject, $text);
 }
 
 if (isset($_GET['code'])) {
@@ -58,7 +57,7 @@ if (isset($_GET['code'])) {
 
 	$adodb->Execute($sql);
 
-	$content = "Hi!\n\nYour password has been set to " . $password . "\n\n - The Libre.fm Team";
+	$content = "Hi!\n\nYour password has been set to " . $password . "\n\n - The " . $site_name . " Team";
 	sendEmail($content, $email);
 	$sql = 'DELETE FROM Recovery_Request WHERE code=' . $adodb->qstr($email);
 	$adodb->Execute($sql);
@@ -128,7 +127,7 @@ if (isset($_GET['code'])) {
 		. "Username: {$username}\n\n"
 		. "To reset your password, please visit\n\n"
 		. $url . "\n\nIf you do not wish to reset your password, simply "
-		. "disregard this email.\n\n- The Libre.fm Team";
+		. "disregard this email.\n\n- The " . $site_name . " Team";
 
 	$status = sendEmail($content, $row['email']);
 	if (!$status) {
