@@ -45,6 +45,11 @@ try {
 	$user = null;
 }
 
+$toptracks = $_GET['toptracks'];
+if (500 != $toptracks) {
+	$toptracks = 20;
+}
+
 if (isset($user->name)) {
 
 	$smarty->assign('stat_barwidth', 320);
@@ -56,8 +61,9 @@ if (isset($user->name)) {
 		$smarty->assign('graphplaysbydays', new GraphPlaysByDays($user, 20));
 	} catch (exception $e) {}
 
+	$smarty->assign('toptrackspx', 25 * $toptracks);
 	try {
-		$smarty->assign('graphtoptracks', new GraphTopTracks($user, 20));
+		$smarty->assign('graphtoptracks', new GraphTopTracks($user, $toptracks));
 	} catch (exception $e) {
 		$smarty->assign('pageheading', 'Couldn\'t get users top tracks!');
 		$smarty->assign('details', 'User ' . $user->name . ' doesn\'t seem to have scrobbled anything yet.');

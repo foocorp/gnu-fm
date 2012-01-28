@@ -45,8 +45,9 @@ class Artist {
 	 *
 	 * @param string $name The name of the artist to load
 	 * @param string $mbid The mbid of the artist (optional)
+	 * @param boolean $recache Whether the artist cache should be cleared before loading the artist
 	 */
-	function __construct($name, $mbid = false) {
+	function __construct($name, $mbid = false, $recache = false) {
 		global $adodb;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -57,6 +58,9 @@ class Artist {
 		$this->query = 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large, homepage, hashtag, flattr_uid FROM Artist WHERE '
 			. $mbidquery
 			. 'lower(name) = lower(' . $adodb->qstr($name) . ')';
+		if($recache) {
+			$this->clearCache();
+		}
 		$row = $adodb->CacheGetRow(1200, $this->query);
 		if (!$row) {
 			throw new Exception('No such artist' . $name);
@@ -305,6 +309,33 @@ class Artist {
 	}
 
 	/**
+	 * Finds out which users manage this artist.
+	 *
+	 * @return An array of users who manage this artist.
+	 */
+	function getManagers() {
+		global $adodb;
+		$managers = array();
+		$res = $adodb->Execute('SELECT userid FROM Manages WHERE lower(artist)=lower(' . $adodb->qstr($this->name) . ') AND authorised=1');
+		foreach($res as $row) {
+			$managers[] = User::new_from_uniqueid_number($row['userid']);
+		}
+		return $managers;
+	}
+
+	/**
+	 * Returns the number of listeners this artist has in total.
+	 *
+	 * @return An int indicating the number of people who've listened to this artist.
+	 */
+	function getListenerCount() {
+		global $adodb;
+		$row = $adodb->CacheGetRow(600, 'SELECT COUNT(DISTINCT userid) AS listeners FROM Scrobbles WHERE'
+			. ' lower(artist) = lower(' . $adodb->qstr($this->name) . ')');
+		return $row['listeners'];
+	}
+
+	/**
 	 * Retrieves a list of similar artist names
 	 *
 	 * @return An array of artists and their similarity measure (between 0 and 1), sorted from most to least similar
@@ -318,7 +349,7 @@ class Artist {
 		$tmpTags = $adodb->CacheGetAll(86400, 'SELECT lower(tag) as ltag, count(tag) as num FROM Tags WHERE artist = ' . $adodb->qstr($this->name) . ' GROUP BY ltag ORDER BY num DESC');
 		$tagCount = $adodb->CacheGetOne(86400, 'SELECT count(artist) FROM Tags WHERE artist = ' . $adodb->qstr($this->name));
 		// Narrow down similar artists to ones that at least share the most common tag and get hold of their other tags
-		$otherArtists = $adodb->CacheGetAll(86400, 'SELECT artist, lower(tag) as ltag, count(tag) as num FROM Tags WHERE artist in '
+		$otherArtists = $adodb->CacheGetAll(86400, 'SELECT artist, lower(tag) as ltag, count(tag) as num FROM Tags INNER JOIN Artist ON Artist.name = Tags.artist WHERE Artist.streamable = 1 AND artist in '
 			. '(SELECT distinct(artist) FROM Tags WHERE lower(tag) = ' . $adodb->qstr($tmpTags[0]['ltag']) . ') '
 			. 'GROUP BY artist, ltag ORDER BY num DESC');
 
@@ -376,8 +407,7 @@ class Artist {
 		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
 		$i = 0;
 		foreach ($similarArtists as $artist) {
-			$streamable = $adodb->cacheGetOne(86400, 'SELECT streamable FROM Artist WHERE name = ' . $adodb->qstr($artist['artist']));
-			if ($artist['artist'] != $this->name && $streamable) {
+			if ($artist['artist'] != $this->name) {
 				$similarWithMeta[$i]['artist'] = $artist['artist'];
 				$similarWithMeta[$i]['similarity'] = $artist['similarity'];
 				$similarWithMeta[$i]['url'] = Server::getArtistURL($artist['artist']);

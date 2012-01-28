@@ -53,7 +53,7 @@ function playerInit(list, sk, ws, rk) {
 	if(typeof audio.duration == "undefined") {
 		//Browser doesn't support <audio>
 		if(streaming) {
-			audio.replaceWith("<p>Sorry, you need a browser capable of using the HTML 5 &lt;audio&gt; element to enjoy the streaming service via the Javascript player.</p>");
+			$("#audio").replaceWith("<p>Sorry, you need a browser capable of using the HTML 5 &lt;audio&gt; element to enjoy the streaming service via the Javascript player.</p>");
 		}
 		return;
 	}
@@ -253,11 +253,16 @@ function playSong(song) {
  * @param int song The song number in the playlist that should be loaded
  */
 function loadSong(song) {
-	var url = playlist[song]["url"];
-	artist = playlist[song]["artist"];
-	album = playlist[song]["album"];
-	track = playlist[song]["track"];
-	trackpage = playlist[song]["trackpage"];
+	try {
+		var url = playlist[song]["url"];
+		artist = playlist[song]["artist"];
+		album = playlist[song]["album"];
+		track = playlist[song]["track"];
+		trackpage = playlist[song]["trackpage"];
+	} catch (e) {
+		// Handle a possible TypeError when song < 0 or song >= playlist.length
+		return;
+	}
 
 	// Highlight current song in the playlist
 	$("#song-" + current_song).css({fontWeight : "normal"});
@@ -300,7 +305,7 @@ function updateFlattr(data) {
 	var flattr_uid = data.flattr.flattr_uid;
 	if (flattr_uid) {
 		$("#flattr").empty();
-		$("#flattr").html('<a class="FlattrButton" style="display:none;" title=' + artist + ' - ' + track + '" rev="flattr;uid:' + flattr_uid + ';category:audio;tags:music,creative commons,free,libre.fm;" href="' + trackpage + '">' + artist + ' is making ' + track + ' freely available on Libre.fm for you to listen to, share and remix however you like.</a>');
+		$("#flattr").html('<a class="FlattrButton" style="display:none;" title="' + artist + ' - ' + track + '" rev="flattr;uid:' + flattr_uid + ';category:audio;tags:music,creative commons,free,libre.fm;" href="' + trackpage + '">' + artist + ' is making ' + track + ' freely available on Libre.fm for you to listen to, share and remix however you like.</a>');
 		FlattrLoader.setup();
 		$("#flattrstream").show(1000);
 	} else {

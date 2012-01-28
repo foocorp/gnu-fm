@@ -52,9 +52,8 @@ class Server {
 		try {
 			if ($userid) {
 				$res = $adodb->CacheGetAll(60,
-					'SELECT *
-					FROM Scrobbles
-					WHERE userid = ' . ($userid) . ' ORDER BY time DESC LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
+					'SELECT Scrobbles.*, Loved_Tracks.userid as loved
+					FROM Scrobbles LEFT JOIN Loved_Tracks ON (Scrobbles.track=Loved_Tracks.track AND Scrobbles.artist=Loved_Tracks.artist AND Scrobbles.userid=Loved_Tracks.userid) WHERE Scrobbles.userid = ' . ($userid) . ' ORDER BY Scrobbles.time DESC LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
 
 				/**
 
@@ -112,11 +111,21 @@ class Server {
 			return null;
 		}
 
+		if($userid) {
+			$username = uniqueid_to_username;
+			$userurl = Server::getUserURL($username);
+		}
+
 		foreach ($res as &$i) {
 			$row = sanitize($i);
 
-			$row['username'] = uniqueid_to_username($row['userid']);
-			$row['userurl'] = Server::getUserURL(uniqueid_to_username($row['userid']));
+			if(!$userid) {
+				$row['username'] = uniqueid_to_username($row['userid']);
+				$row['userurl'] = Server::getUserURL($row['username']);
+			} else {
+				$row['username'] = $username;
+				$row['userurl'] = $userurl;
+			}
 			if ($row['album']) {
 				$row['albumurl'] = Server::getAlbumURL($row['artist'], $row['album']);
 			}
@@ -126,17 +135,11 @@ class Server {
 			$row['timehuman'] = human_timestamp($row['time']);
 			$row['timeiso']   = date('c', (int)$row['time']);
 
-			$row['id']        = identifierScrobbleEvent(uniqueid_to_username($row['userid']), $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
-			$row['id_artist'] = identifierArtist(uniqueid_to_username($row['userid']), $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
-			$row['id_track']  = identifierTrack(uniqueid_to_username($row['userid']), $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
-			$row['id_album']  = identifierAlbum(uniqueid_to_username($row['userid']), $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id']        = identifierScrobbleEvent($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id_artist'] = identifierArtist($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id_track']  = identifierTrack($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
+			$row['id_album']  = identifierAlbum($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 
-			if ($userid) {
-				$row['loved'] = $adodb->CacheGetOne(60, 'SELECT Count(*) FROM Loved_Tracks WHERE artist='
-						. $adodb->qstr($row['artist'])
-						. ' AND track=' . $adodb->qstr($row['track'])
-						. ' AND userid=' . $userid);
-			}
 			if (!$row['album_image']) {
 				$row['album_image'] = false;
 			} else {

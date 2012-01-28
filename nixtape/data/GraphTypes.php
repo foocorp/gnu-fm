@@ -56,20 +56,23 @@ class GraphTopArtists extends Graph {
         $tmp = Statistic::generatePlayStats('Scrobbles', 'artist',
                         $this->number_of_tracks, $this->user->uniqueid, 300);
         
-        foreach ($tmp as $root => $node)
-        {
-            $tmp = '<a href="'.$node['pageurl'].'">';
-            $tmp .= htmlentities($node['artist'], ENT_QUOTES, 'UTF-8').'</a>';
-            $artists[] = $tmp;
-            $artists_data[] = $node['count'];
-        }
+	if (!empty($tmp)) 
+	{
+	        foreach ($tmp as $root => $node)
+	        {
+	            $tmp = '<a href="'.$node['pageurl'].'">';
+	            $tmp .= htmlentities($node['artist'], ENT_QUOTES, 'UTF-8').'</a>';
+	            $artists[] = $tmp;
+	            $artists_data[] = $node['count'];
+	        }
         
-        $this->setMaxX($artists_data[0]);
-        $artists = array_reverse($artists);
-        $artists_data = array_reverse($artists_data);
-        $this->artists = $this->buildJsSingleArray($artists);
-        $this->data[0][0] = $artists_data;
-        $this->artists_data = $this->buildJsDataArray(true);
+	        $this->setMaxX($artists_data[0]);
+	        $artists = array_reverse($artists);
+	        $artists_data = array_reverse($artists_data);
+	        $this->artists = $this->buildJsSingleArray($artists);
+	        $this->data[0][0] = $artists_data;
+	        $this->artists_data = $this->buildJsDataArray(true);
+	}
     }
 }
 
@@ -160,14 +163,20 @@ class GraphPlaysByDays extends Graph {
                                 $this->number_of_days, $this->user->uniqueid, 300);
         
         $date_line = '[';
-        
-        foreach ($this->data_buffer as $key => $entry)
+
+        if (!empty($this->data_buffer))
         {
-            $date_line .= '[\'' . $entry['date'] . '\', ' . $entry['count'] . '],';
-        }
         
-        $this->plays_by_days = rtrim($date_line, ',');
-        $this->plays_by_days .= ']';
+	        foreach ($this->data_buffer as $key => $entry)
+        	{
+	            $date_line .= '[\'' . $entry['date'] . '\', ' . $entry['count'] . '],';
+	        }
+        
+	        $this->plays_by_days = rtrim($date_line, ',');
+        	$this->plays_by_days .= ']';
+	} else {
+		$this->plays_by_days = '[]';
+	}
     }
 }
 

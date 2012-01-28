@@ -45,20 +45,27 @@ if (isset($_GET['lang'])) {
 }
 $current_lang = setlocale(LC_ALL, $languages);
 
-bindtextdomain('nixtape', $install_path . '/themes/' . $default_theme . '/locale/');
+if(isset($_GET['mobile']) && $_GET['mobile']) {
+	$theme = 'mobile';
+} else {
+	$theme = $default_theme;
+}
+
+bindtextdomain('nixtape', $install_path . '/themes/' . $theme . '/locale/');
 textdomain('nixtape');
 
 $smarty = new Smarty();
 
-$smarty->template_dir = $install_path . '/themes/'. $default_theme . '/templates/';
-$smarty->compile_dir = $install_path. '/themes/' . $default_theme . '/templates_c/';
+$smarty->template_dir = array($install_path . '/themes/'. $theme . '/templates/', $install_path . '/themes/gnufm/templates/');
+$smarty->compile_dir = $install_path. '/themes/' . $theme . '/templates_c/';
 $smarty->cache_dir = $install_path. '/cache/';
 
 $current_lang = preg_replace('/.UTF-8/', '', $current_lang);
 $smarty->assign('lang_selector_array', array(($current_lang) => 1));
 $smarty->assign('base_url', $base_url);
 $smarty->assign('default_theme', $default_theme);
-$smarty->assign('img_url', $base_url . '/themes/' . $default_theme . '/img/');
+$smarty->assign('site_name', $site_name);
+$smarty->assign('img_url', $base_url . '/themes/' . $theme . '/img/');
 $smarty->assign('this_page', $_SERVER['REQUEST_URI']);
 $smarty->assign('this_page_absolute',
 	  (empty($_SERVER['HTTPS']) ? 'http://' : 'http://')
@@ -74,6 +81,3 @@ if (isset($logged_in)) {
 
 header('Content-Type: text/html; charset=utf-8');
 
-function insert_getMenu($lidsid, $smrt) {
-	$smrt->display('menu.tpl');
-}

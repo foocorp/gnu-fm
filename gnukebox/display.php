@@ -1,7 +1,7 @@
 <?php
 /* GNUkebox -- a free software server for recording your listening habits
 
-   Copyright (C) 2009 Free Software Foundation, Inc
+   Copyright (C) 2009, 2011 Free Software Foundation, Inc
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,17 +22,16 @@ header('Content-type: text/html; charset=utf-8');
 require_once('database.php');
 require_once('utils/human-time.php');
 require_once('temp-utils.php');
+require_once('version.php');
 
 ?>
 <!DOCTYPE html>
 <html>
 <head>
    <title>GNUkebox</title>
-   <meta name="author" content="FooCorp catalogue number FOO200 and contributors" />
-<meta http-equiv="refresh" content="180" />
 </head>
 <body>
-       <h2>Last 25 tracks received</h2>
+       <h2>Recent tracks</h2>
 
      <?php
 
@@ -40,7 +39,7 @@ require_once('temp-utils.php');
 
 	try {
 
-	$res = $adodb->CacheGetAll(60, 'SELECT artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 25');
+	$res = $adodb->CacheGetAll(300, 'SELECT artist, track, time FROM Scrobbles ORDER BY time DESC LIMIT 500');
 
 	} catch (Exception $e) {
 		die($e->getMessage());
@@ -57,7 +56,7 @@ require_once('temp-utils.php');
 
 	</ul>
 
-<p>This server is powered by <a href="http://bzr.savannah.gnu.org/lh/librefm/">GNU FM</a> version <?php echo $version; ?></p>
+<p>This server is powered by <a href="https://gitorious.org/foocorp/gnu-fm">GNU FM</a> version <?php echo $version; ?></p>
 
 </body>
 </html>

@@ -83,7 +83,8 @@ if (isset($_POST['install'])) {
 		laconica_profile VARCHAR(255),
 		created INTEGER DEFAULT 0,
 		modified INTEGER DEFAULT 0,
-		journal_rss VARCHAR(255))',
+		journal_rss VARCHAR(255),
+		receive_emails INTEGER DEFAULT 1)',
 
 		'CREATE TABLE Groups (
 		id SERIAL PRIMARY KEY,
@@ -167,7 +168,7 @@ if (isset($_POST['install'])) {
 	$stage_two_queries_other = array(
 		'CREATE SEQUENCE track_id_seq;',
 		'CREATE TABLE Track(
-		id INTEGER NOT NULL DEFAULT nextval('track_id_seq'::regclass) PRIMARY KEY,
+		id INTEGER NOT NULL DEFAULT nextval(\'track_id_seq\'::regclass) PRIMARY KEY,
 		name VARCHAR(255),
 		artist_name VARCHAR(255) REFERENCES Artist(name),
 		album_name VARCHAR(255),
@@ -318,23 +319,28 @@ if (isset($_POST['install'])) {
 		PRIMARY KEY (uid1, uid2, flag),
 		FOREIGN KEY (uid1, uid2) REFERENCES User_Relationships (uid1, uid2))',
 
-		'INSERT INTO Relationship_Flags VALUES ("contact")',
-		'INSERT INTO Relationship_Flags VALUES ("acquaintance")',
-		'INSERT INTO Relationship_Flags VALUES ("friend")',
-		'INSERT INTO Relationship_Flags VALUES ("met")',
-		'INSERT INTO Relationship_Flags VALUES ("co-worker")',
-		'INSERT INTO Relationship_Flags VALUES ("colleague")',
-		'INSERT INTO Relationship_Flags VALUES ("co-resident")',
-		'INSERT INTO Relationship_Flags VALUES ("neighbor")',
-		'INSERT INTO Relationship_Flags VALUES ("child")',
-		'INSERT INTO Relationship_Flags VALUES ("parent")',
-		'INSERT INTO Relationship_Flags VALUES ("sibling")',
-		'INSERT INTO Relationship_Flags VALUES ("spouse")',
-		'INSERT INTO Relationship_Flags VALUES ("kin")',
-		'INSERT INTO Relationship_Flags VALUES ("muse")',
-		'INSERT INTO Relationship_Flags VALUES ("crush")',
-		'INSERT INTO Relationship_Flags VALUES ("date")',
-		'INSERT INTO Relationship_Flags VALUES ("sweetheart")'
+		'INSERT INTO Relationship_Flags VALUES (\'contact\')',
+		'INSERT INTO Relationship_Flags VALUES (\'acquaintance\')',
+		'INSERT INTO Relationship_Flags VALUES (\'friend\')',
+		'INSERT INTO Relationship_Flags VALUES (\'met\')',
+		'INSERT INTO Relationship_Flags VALUES (\'co-worker\')',
+		'INSERT INTO Relationship_Flags VALUES (\'colleague\')',
+		'INSERT INTO Relationship_Flags VALUES (\'co-resident\')',
+		'INSERT INTO Relationship_Flags VALUES (\'neighbor\')',
+		'INSERT INTO Relationship_Flags VALUES (\'child\')',
+		'INSERT INTO Relationship_Flags VALUES (\'parent\')',
+		'INSERT INTO Relationship_Flags VALUES (\'sibling\')',
+		'INSERT INTO Relationship_Flags VALUES (\'spouse\')',
+		'INSERT INTO Relationship_Flags VALUES (\'kin\')',
+		'INSERT INTO Relationship_Flags VALUES (\'muse\')',
+		'INSERT INTO Relationship_Flags VALUES (\'crush\')',
+		'INSERT INTO Relationship_Flags VALUES (\'date\')',
+		'INSERT INTO Relationship_Flags VALUES (\'sweetheart\')',
+
+		'CREATE TABLE User_Stats (
+			userid INTEGER REFERENCES Users(uniqueid) ON DELETE CASCADE,
+			scrobble_count INTEGER NOT NULL,
+			PRIMARY KEY (userid))'
 	);
 
 	foreach ($stage_one_queries as $query) {
@@ -371,30 +377,55 @@ if (isset($_POST['install'])) {
 		}
 	}
 
-// uncomment these to solve performance problems with getRecentScrobbles
-// 	$adodb->Execute("CREATE INDEX album_artistname_idx ON Album(artist_name)");
-// 	$adodb->Execute("CREATE INDEX scrobbles_artist_idx ON Scrobbles(artist)");
-//	$adodb->Execute("CREATE INDEX scrobbles_time_idx ON Scrobbles(time)");
-//      $adodb->Execute("CREATE INDEX track_artist_idx ON Track(lower(artist_name))");
-//      $adodb->Execute("CREATE INDEX track_name_idx ON Track(lower(name))");
-//      $adodb->Execute("CREATE INDEX track_streamable_idx on Track(streamable);");
-//      $adodb->Execute("CREATE INDEX scrobbles_artist_idx on Scrobbles(lower(artist))");
-//      $adodb->Execute("CREATE INDEX scrobbles_track_idx on Scrobbles(lower(track))");
-//      $adodb->Execute("CREATE UNIQE INDEX groups_groupname_idx ON Groups(lower(groupname))");
+	$adodb->Execute("CREATE INDEX scrobbles_time_idx ON Scrobbles(time)");
+	$adodb->Execute("CREATE INDEX scrobbles_userid_idx ON Scrobbles(userid)");
 
-// uncomment these if you're using postgresql and want to run the software as www-data
-//	$adodb->Execute("GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE Album, Artist, Auth, ClientCodes, Delete_Request, Error, Invitation_Request, Invitations, Now_Playing, Places, Radio_Sessions, Scrobble_Sessions, Scrobbles, Scrobble_Track, Similar_Artist, Tags, Track, Users, User_Relationships, User_Relationship_Flags to \"www-data\"");
-//	$adodb->Execute("GRANT SELECT ON Free_Scrobbles, Relationship_Flags to \"www-data\"");
-//	$adodb->Execute("GRANT SELECT, UPDATE ON users_uniqueid_seq, scrobble_track_id_seq, groups_id_seq, artist_id_seq, album_id_seq to \"www-data\"");
+	if(strtolower(substr($dbms, 0, 5)) == 'pgsql') {
+		// MySQL doesn't support the use of lower() to create case-insensitive indexes
+		$adodb->Execute("CREATE INDEX album_artistname_idx ON Album(lower(artist_name))");
+		$adodb->Execute("CREATE INDEX track_artist_idx ON Track(lower(artist_name))");
+		$adodb->Execute("CREATE INDEX track_name_idx ON Track(lower(name))");
+		$adodb->Execute("CREATE INDEX track_streamable_idx on Track(streamable);");
+		$adodb->Execute("CREATE INDEX scrobbles_artist_idx on Scrobbles(lower(artist))");
+		$adodb->Execute("CREATE INDEX scrobbles_track_idx on Scrobbles(lower(track))");
+		$adodb->Execute("CREATE INDEX groups_groupname_idx ON Groups(lower(groupname))");
 
-	// Test user configuration
-	try {
-		$adodb->Execute('INSERT INTO Users
-			(username, password, active)
-			VALUES
-			("testuser", "' . md5('password') . '", 1);');
-	} catch(Exception $e) {
-		die('Error testing database: ' . $adodb->ErrorMsg());
+		// PostgreSQL stored functions
+		$adodb->Execute("CREATE OR REPLACE LANGUAGE plpgsql;");
+		$adodb->Execute("CREATE FUNCTION update_user_stats_scrobble_count() RETURNS TRIGGER AS $$
+			DECLARE s_count int;
+			BEGIN
+				UPDATE User_Stats SET scrobble_count = scrobble_count + 1 WHERE userid = NEW.userid;
+				IF found THEN
+					RETURN NULL;
+				END IF;
+				BEGIN
+					-- userid not in User_Stats table, get current scrobble count from Scrobbles
+					-- and insert userid into User_Stats
+					SELECT COUNT(userid) into s_count FROM Scrobbles WHERE userid = NEW.userid;
+					INSERT INTO User_Stats(userid, scrobble_count) VALUES(NEW.userid, s_count);
+					RETURN NULL;
+				END;
+			END;
+			$$ LANGUAGE plpgsql;");
+		$adodb->Execute("CREATE TRIGGER update_user_stats_scrobble_count
+			AFTER INSERT ON Scrobbles
+			FOR EACH ROW EXECUTE PROCEDURE update_user_stats_scrobble_count();");
+
+	} elseif (substr($dbms, 0, 5) == 'mysql') {
+		$adodb->Execute("CREATE PROCEDURE update_user_stats_scrobble_count(uid INT)
+			main: BEGIN
+				DECLARE s_count INT;
+				UPDATE User_Stats SET scrobble_count = (scrobble_count + 1) WHERE userid = uid;
+				IF ROW_COUNT() > 0 THEN
+					LEAVE main;
+				END IF;
+				SELECT COUNT(userid) INTO s_count FROM Scrobbles WHERE userid = uid;
+				INSERT INTO User_Stats(userid, scrobble_count) VALUES(uid, s_count);
+			END main;");
+		$adodb->Execute("CREATE TRIGGER update_user_stats_scrobble_count
+			AFTER INSERT ON Scrobbles
+			FOR EACH ROW CALL update_user_stats_scrobble_count(NEW.userid);");
 	}
 
 	$adodb->Close();

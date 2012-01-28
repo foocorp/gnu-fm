@@ -23,6 +23,8 @@ require_once('database.php');
 require_once('data/User.php');
 require_once($install_path . '/temp-utils.php'); // this is extremely dodgy and shameful
 
+$logged_in = false;
+
 session_start();
 if (isset($_COOKIE['session_id'])) {
 	$err = 0;
