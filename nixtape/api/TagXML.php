@@ -39,7 +39,7 @@ class TagXML {
 			$tag_node = $root->addChild('tag');
 			$tag_node->addChild('name', repamp($row['tag']));
 			$tag_node->addChild('count', $row['freq']);
-			$tag_node->addChild('url', Server::getTagURL($row['tag']));
+			$tag_node->addChild('url', repamp(Server::getTagURL($row['tag'])));
 		}
 
 		return $xml;
@@ -72,11 +72,11 @@ class TagXML {
 			$artist_node->addChild('mbid', $artist->mbid);
 			$artist_node->addChild('url', $artist->getURL());
 			$artist_node->addChild('streamable', $artist->streamable);
-			$image_small = $artist_node->addchild('image', $artist->image_small);
+			$image_small = $artist_node->addChild('image', repamp($artist->image_small));
 			$image_small->addAttribute('size', 'small');
-			$image_medium = $artist_node->addchild('image', $artist->image_medium);
+			$image_medium = $artist_node->addChild('image', repamp($artist->image_medium));
 			$image_medium->addAttribute('size', 'medium');
-			$image_large = $artist_node->addchild('image', $artist->image_large);
+			$image_large = $artist_node->addChild('image', repamp($artist->image_large));
 			$image_large->addAttribute('size', 'large');
 			$i++;
 		}
@@ -116,8 +116,8 @@ class TagXML {
 			$artist_node = $album_node->addChild('artist');
 			$artist_node->addChild('name', repamp($artist->name));
 			$artist_node->addChild('mbid', $artist->mbid);
-			$artist_node->addChild('url', $artist->getURL());
-			$album_node->addchild('image', $album->image);
+			$artist_node->addChild('url', repamp($artist->getURL()));
+			$album_node->addChild('image', repamp($album->image));
 			$i++;
 		}
 
@@ -185,7 +185,7 @@ class TagXML {
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$root = $xml->addChild('tag');
 		$root->addChild('name', repamp($tag));
-		$root->addChild('url', Server::getTagURL($tag));
+		$root->addChild('url', repamp(Server::getTagURL($tag)));
 		$root->addChild('taggings', $res[0]['freq']);
 
 		return $xml;
