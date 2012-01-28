@@ -47,31 +47,46 @@ class TrackXML {
 		return $xml;
 	}
 
-	public static function getTopTags($artist, $name) {
+	public static function getTopTags($artist, $name, $limit, $cache) {
 
-		$track = new Track($name, $artist);
-		$tags = $track->getTopTags();
+		try {
+			$track = new Track($name, $artist);
+			$res = $track->getTopTags($limit, 0, $cache);
+		} catch (Exception $e) {
+			return(XML::error('failed', '7', 'Invalid resource specified'));
+		}
 
+		if(!$res) {
+			return(XML::error('failed', '6', 'No tags for this track'));
+		}
+	
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
-
 		$root = $xml->addChild('toptags', null);
 		$root->addAttribute('artist', $artist);
 		$root->addAttribute('track', $name);
 
-		foreach ($tags as &$tag) {
+		foreach ($res as &$row) {
 			$tag_node = $root->addChild('tag', null);
-			$tag_node->addChild('name', repamp($tag['tag']));
-			$tag_node->addChild('count', $tag['freq']);
+			$tag_node->addChild('name', repamp($row['tag']));
+			$tag_node->addChild('count', $row['freq']);
 			$tag_node->addChild('url', Server::getTagURL($row['tag']));
 		}
 
 		return $xml;
 	}
 
-	public static function getTags($artist, $name, $userid) {
+	public static function getTags($artist, $name, $userid, $limit, $cache) {
+		
+		try {
+			$track = new Track($name, $artist);
+			$res = $track->getTags($userid, $limit, 0, $cache);
+		} catch (Exception $e) {
+			return(XML::error('failed', '7', 'Invalid resource specified'));
+		}
 
-		$track = new Track($name, $artist);
-		$tags = $track->getTags($userid);
+		if(!$res) {
+			return(XML::error('failed', '6', 'No tags for this track'));
+		}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 
@@ -79,9 +94,9 @@ class TrackXML {
 		$root->addAttribute('artist', $artist);
 		$root->addAttribute('track', $name);
 
-		foreach ($tags as $tag) {
+		foreach ($res as &$row) {
 			$tag_node = $root->addChild('tag', null);
-			$tag_node->addChild('name', repamp($tag));
+			$tag_node->addChild('name', repamp($row['tag']));
 			$tag_node->addChild('url', Server::getTagURL($row['tag']));
 		}
 

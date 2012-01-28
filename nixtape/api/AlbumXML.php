@@ -24,11 +24,17 @@ require_once('xml.php');
 
 class AlbumXML {
 
-	public static function getTopTags($artist, $album) {
-
-		$album = new Album($album, $artist);
-		if (!$album) {
+	public static function getTopTags($artist, $name, $limit, $cache) {
+		
+		try {
+			$album = new Album($name, $artist);
+			$res = $album->getTopTags($limit, 0, $cache);
+		} catch (Exception $e) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
+		}
+
+		if(!$res) {
+			return(XML::error('failed', '6', 'No tags for this album'));
 		}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
@@ -36,15 +42,42 @@ class AlbumXML {
 		$root->addAttribute('artist', $album->artist_name);
 		$root->addAttribute('album', $album->name);
 
-		$tags = $album->getTopTags();
-		foreach ($tags as &$tag) {
+		foreach ($res as &$row) {
 			$tag_node = $root->addChild('tag', null);
-			$tag_node->addChild('name', repamp($tag['tag']));
-			$tag_node->addChild('count', $tag['freq']);
-			$tag_node->addChild('url', Server::getTagURL($tag['tag']));
+			$tag_node->addChild('name', repamp($row['tag']));
+			$tag_node->addChild('count', $row['freq']);
+			$tag_node->addChild('url', Server::getTagURL($row['tag']));
 		}
 
 		return $xml;
 	}
+
+	public static function getTags($artist, $name, $userid, $limit, $cache) {
+		
+		try {
+			$album = new Album($name, $artist);
+			$res = $album->getTags($userid, $limit, 0, $cache);
+		} catch (Exception $e) {
+			return(XML::error('failed', '7', 'Invalid resource specified'));
+		}
+
+		if(!$res) {
+			return(XML::error('failed', '6', 'No tags for this album'));
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('tags', null);
+		$root->addAttribute('artist', $artist);
+		$root->addAttribute('album', $name);
+
+		foreach ($res as &$row) {
+			$tag_node = $root->addChild('tag', null);
+			$tag_node->addChild('name', repamp($row['tag']));
+			$tag_node->addChild('url', Server::getTagURL($row['tag']));
+		}
+
+		return $xml;
+	}
+
 
 }
