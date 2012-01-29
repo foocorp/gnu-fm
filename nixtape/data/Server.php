@@ -378,15 +378,29 @@ class Server {
 	}
 
 
-	static function getTrackURL($artist, $album, $track) {
+	static function getTrackURL($artist, $album, $track, $component = '') {
 		global $friendly_urls, $base_url;
-		if ($friendly_urls && $album) {
-			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . rewrite_encode($album) . '/track/' . rewrite_encode($track);
-		} else if ($friendly_urls) {
-			return $base_url . '/artist/' . rewrite_encode($artist) . '/track/' . rewrite_encode($track);
+
+		if($friendly_urls) {
+			$trackurl = $base_url . '/artist/' . rewrite_encode($artist);
+			if($album) {
+				$trackurl .= '/album/' . rewrite_encode($album);
+			}
+			$trackurl .= '/track/' . rewrite_encode($track);
+			if($component) {
+				$trackurl .= '/' . $component;
+			}
 		} else {
-			return $base_url . '/track.php?artist=' . urlencode($artist) . '&album=' . urlencode($album) . '&track=' . urlencode($track);
+			if($component) {
+				$trackurl = $base_url . '/track-' . $component . '.php?artist='	. urlencode($artist)
+				   	. '&album=' . urlencode($album) . '&track=' . urlencode($track);
+			} else {
+				$trackurl = $baseurl . '/track.php?artist=' . urlencode($artist)
+				   	. '&album=' . urlencode($album) . '&track=' . urlencode($track);
+			}
 		}
+
+		return $trackurl;
 	}
 
 	static function getTrackEditURL($artist, $album, $track) {
