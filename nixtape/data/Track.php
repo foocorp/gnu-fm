@@ -297,4 +297,29 @@ class Track {
 		}
 	}
 
+	/**
+	 * Add a list of tags to a track
+	 *
+	 * @param string $tags A comma-separated list of tags
+	 * @param int $userid The user adding these tags
+	 */
+	function addTags($tags, $userid) {
+		global $adodb;
+
+		$tags = explode(',', strtolower($tags));
+		foreach($tags as $tag) {
+			$tag = trim($tag);
+			if(strlen($tag) == 0) {
+				continue;
+			}
+			try {
+				$adodb->Execute('INSERT INTO Tags VALUES ('
+					. $adodb->qstr($tag) . ','
+					. $adodb->qstr($this->artist_name) . ', '
+					. $adodb->qstr($this->album_name) . ', '
+					. $adodb->qstr($this->name) . ', '
+					. $userid . ')');
+			} catch (Exception $e) {}
+		}
+	}
 }
