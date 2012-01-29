@@ -24,23 +24,12 @@ require_once('xml.php');
 
 class TrackXML {
 
-	public static function addTags($userid, $artist, $album, $track, $tags) {
-		global $adodb;
-
-		$tags = explode(',', strtolower($tags));
-		foreach ($tags as $tag) {
-			$tag = trim($tag);
-			if (strlen($tag) == 0) {
-				continue;
-			}
-			try {
-				$adodb->Execute('INSERT INTO Tags VALUES ('
-					. $adodb->qstr($tag) . ', '
-					. $adodb->qstr($artist) . ', '
-					. $adodb->qstr($album) . ', '
-					. $adodb->qstr($track) . ', '
-					. $userid . ')');
-			} catch (Exception $e) {}
+	public static function addTags($userid, $artist, $album, $trackName, $tags) {
+		try {
+			$track = new Track($trackName, $artist);
+			$track->addTags($tags, $userid);
+		} catch (Exception $e) {
+			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
