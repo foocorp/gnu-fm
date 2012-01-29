@@ -59,7 +59,16 @@
 	<p style='padding-left: 1em;'><b><a href='{$track->streamurl}'>{t}Download track{/t}</a></b></p>
 	{/if}
 	{/if}
+	
+	{if !empty($tagcloud)}
+		<h3 style='text-align: center; clear: left;'>{t}Tags used to describe this track{/t}</h3>
+		<ul class="tagcloud">
+		{section name=i loop=$tagcloud}
+			<li style='font-size:{$tagcloud[i].size}'><a href='/tag/{$tagcloud[i].tag|urlencode}' title='{t uses=$tagcloud[i].count}This tag was used %1 times{/t}' rel='tag'>{$tagcloud[i].tag}</a></li>
+		{/section}
+		</ul>
+	{/if}
+	<br />
 
- 
 </div>
 {include file='footer.tpl'}
