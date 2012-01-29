@@ -58,7 +58,7 @@ if (500 != $topartists) {
 if (isset($user->name)) {
 
 	$smarty->assign('stat_barwidth', 320);
-	$smarty->assign('topartistspx', 25 * $toptracks);
+	$smarty->assign('topartistspx', 25 * $topartists);
 	try {
 		$smarty->assign('graphtopartists', new GraphTopArtists($user, $topartists));
 	} catch (exception $e) {}
