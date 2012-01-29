@@ -16,7 +16,7 @@
 <h3>Total tracks: {$totaltracks}</h3>
 
 <h4 id="stats_by_artist">{t name=$me->name|escape:'html':'UTF-8'}%1's most played artists{/t}</h4>
-<div id="chart_top_artists" style="height:500px;width:95%;"
+<div id="chart_top_artists" style="height:{$topartistspx}px;width:95%;"
      class="chart_space horizontal_chart_axes" about="{$me->id}"></div>
 
 <h4 id="stats_by_track">{t name=$me->name|escape:'html':'UTF-8'}%1's top tracks{/t}</h4>
