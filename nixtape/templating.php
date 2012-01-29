@@ -73,7 +73,7 @@ $smarty->assign('this_page_absolute',
 	. (($_SERVER['SERVER_PORT'] == 80) ? '' : (':' . $_SERVER['SERVER_PORT']))
 	. $_SERVER['REQUEST_URI']);
 
-if (isset($logged_in)) {
+if (isset($logged_in) && $logged_in) {
 	$smarty->assign('logged_in', true);
 	// Pre-fix this user's details with 'this_' to avoid confusion with other users
 	$smarty->assign('this_user', $this_user);
