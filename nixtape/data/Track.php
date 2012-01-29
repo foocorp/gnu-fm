@@ -252,8 +252,8 @@ class Track {
 		}
 	}
 
-	function getURL() {
-		return Server::getTrackURL($this->artist_name, $this->album_name, $this->name);
+	function getURL($component = '') {
+		return Server::getTrackURL($this->artist_name, $this->album_name, $this->name, $component);
 	}
 
 	function getEditURL() {
