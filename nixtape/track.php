@@ -45,17 +45,6 @@ $smarty->assign('flattr_uid', $artist->flattr_uid);
 $smarty->assign('url', $track->getURL());
 $smarty->assign('pagetitle', $artist->name . ' : ' . $track->name);
 
-$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-$res = $adodb->GetAll('SELECT * FROM Track WHERE lower(artist_name) = lower(' . $adodb->qstr($track->artist_name) . ') AND lower(name) = lower(' . $adodb->qstr($track->name) . ')');
-
-$aOtherAlbums = array();
-
-foreach ($res as &$trow) {
-	if ($trow['album']) {
-		$aOtherAlbums[] = new Album($trow['album'], $trow['artist']);
-	}
-}
-
 if (isset($this_user) && $this_user->manages($artist->name)) {
 	$smarty->assign('edit_link', $track->getEditURL());
 }
@@ -71,8 +60,6 @@ if ($track->duration) {
 	$duration = $mins . ':' . $sec;
 	$smarty->assign('duration', $duration);
 }
-
-$smarty->assign('albums', $aOtherAlbums);
 
 $smarty->assign('extra_head_links', array(
 		array(
