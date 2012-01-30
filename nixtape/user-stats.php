@@ -45,13 +45,13 @@ try {
 	$user = null;
 }
 
-$toptracks = $_GET['toptracks'];
-if (500 != $toptracks) {
+$toptracks = intval($_GET['toptracks']);
+if (!($toptracks >= 10 && $toptracks <= 500)) {
 	$toptracks = 20;
 }
 
-$topartists = $_GET['topartists'];
-if (500 != $topartists) {
+$topartists = intval($_GET['topartists']);
+if (!($topartists >= 10 && $topartists <= 500)) {
 	$topartists = 20;
 }
 
