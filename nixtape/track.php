@@ -24,6 +24,7 @@ require_once('templating.php');
 require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/TagCloud.php');
+require_once('track-menu.php');
 
 $track = new Track($_GET['track'], $_GET['artist']);
 $smarty->assign('track', $track);
@@ -81,7 +82,16 @@ $smarty->assign('extra_head_links', array(
 			'title' => 'Track Metadata',
 			'href'  => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $track->getURL()))
 			)
-	));
+		));
 
+try {
+	$tagCloud = TagCloud::generateTagCloud('Tags', 'tag', 10, $track->name, 'track');
+} catch ( Exception $e) {
+	$tagCloud = array();
+}
+$smarty->assign('tagcloud', $tagCloud);
+
+$submenu = track_menu($track, 'Overview');
+$smarty->assign('submenu', $submenu);
 $smarty->assign('headerfile', 'track-header.tpl');
 $smarty->display('track.tpl');
