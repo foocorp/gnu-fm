@@ -48,6 +48,94 @@ class UserXML {
 		return $xml;
 	}
 
+	public static function getTopArtists($username, $limit, $streamable, $page, $period, $cache) {
+		global $adodb;
+
+		$timestamp;
+		if (!isset($period)) {
+			$period = 'overall';
+		}
+
+		if (strcmp($period, 'overall') == 0) {
+			$timestamp = 0;
+		} else if (strcmp($period, '7day') == 0) {
+			$timestamp = strtotime('-7 days');
+		} else if (strcmp($period, '1month') == 0) {
+			$timestamp = strtotime('-1 month');
+		} else if (strcmp($period, '3month') == 0) {
+			$timestamp = strtotime('-3 months');
+		} else if (strcmp($period, '6month') == 0) {
+			$timestamp = strtotime('-6 months');
+		} else if (strcmp($period, '12month') == 0) {
+			$timestamp = strtotime('-12 months');
+		} else {
+			return(XML::error('error', '13', 'Invalid method signature supplied'));
+		}
+
+		$offset = ($page - 1) * $limit;
+		$begin = $timestamp - ($timestamp % 3600);
+
+		try {
+			$user = new User($username);
+			$res = $user->getTopArtists($limit, $offset, $streamable, $begin, null, $cache);
+		} catch (Exception $e) {
+			return XML::error('error', '7', 'Invalid resource specified');
+		}
+
+		$query = 'SELECT COUNT(DISTINCT(artist)) FROM Scrobbles s';
+
+		if($streamable) {
+			$query .= ' INNER JOIN Artist a ON s.artist=a.name WHERE a.streamable=1';
+			$andquery = True;
+		} else {
+			$query .= ' WHERE';
+			$andquery = False;
+		}
+
+		if ($begin) {
+			$andquery ? $query .= ' AND' : $andquery = True;
+			$query .= ' time>' . $begin;
+		}
+
+		$andquery ? $query .= ' AND' : null;
+		$query .= ' userid=' . $user->uniqueid;
+
+		$total = $adodb->CacheGetOne($cache, $query);
+		$totalPages = ceil($total/$limit);
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('topartists', null);
+		$root->addAttribute('user', $user->name);
+		$root->addAttribute('type', $period);
+		$root->addAttribute('page', $page);
+		$root->addAttribute('perPage', $limit);
+		$root->addAttribute('totalPages', $totalPages);
+		$root->addAttribute('total', $total);
+
+		$i = $offset + 1;
+		foreach($res as &$row) {
+			$artist_node = $root->addChild('artist', null);
+			$artist_node->addAttribute('rank', $i);
+			$artist_node->addChild('name', repamp($row['artist']));
+			$artist_node->addChild('playcount', $row['freq']);
+			try {
+				$artist = new Artist($row['artist']);
+				$artist_node->addChild('mbid', $artist->mbid);
+				$artist_node->addChild('url', $artist->geturl());
+				$artist_node->addChild('streamable', $artist->streamable);
+				$image_small = $artist_node->addChild('image', $artist->image_small);
+				$image_small->addAttribute('size', 'small');
+				$image_medium = $artist_node->addChild('image', $artist->image_medium);
+				$image_medium->addAttribute('size', 'medium');
+				$image_large = $artist_node->addChild('image', $artist->image_large);
+				$image_large->addAttribute('size', 'large');
+			} catch (Exception $e) {}
+			$i++;
+		}
+
+		return $xml;
+	}
+
 	public static function getTopTracks($username, $time) {
 		global $adodb;
 

@@ -86,6 +86,7 @@ $method_map = array(
 	'album.gettoptags'      => method_album_getTopTags,
 	'album.gettags'         => method_album_getTags,
 	'user.getinfo'          => method_user_getInfo,
+	'user.gettopartists'	=> method_user_getTopArtists,
 	'user.gettoptracks'     => method_user_getTopTracks,
 	'user.getrecenttracks'  => method_user_getRecentTracks,
 	'user.gettoptags'       => method_user_getTopTags,
@@ -114,6 +115,22 @@ $method_map = array(
 /**
  * User methods
  */
+
+function method_user_getTopArtists() {
+	if (!isset($_GET['user'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$limit = get_with_default('limit', 50);
+	$page = get_with_default('page', 1);
+	$period = get_with_default('period', 'overall');
+	$streamable = get_with_default('streamable', 0);
+	$cache = 600;
+
+	$xml = UserXML::getTopArtists($_GET['user'], $limit, $streamable, $page, $period, $cache);
+
+	respond($xml);
+}
 
 function method_user_getRecentTracks() {
 	if (!isset($_GET['user'])) {
