@@ -162,17 +162,58 @@ class Server {
 	/**
 	 * Retrieves a list of popular artists
 	 *
-	 * @param int $number The number of artists to return
-	 * @return An array of artists or null in case of failure
+	 * @param int $limit The number of artists to return
+	 * @param int $offset Skip this number of rows before returning artists
+	 * @param bool $streamable Only return streamable artists
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param int $userid Only return results from this userid
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of artists ((artist, freq, artisturl) ..) or empty array in case of failure
 	 */
-	static function getTopArtists($number = 20) {
+	static function getTopArtists($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $userid = null, $cache = 600) {
 		global $adodb;
+
+		$query = ' SELECT artist, COUNT(artist) as freq FROM Scrobbles s';
+
+		if ($streamable) {
+			$query .= ' INNER JOIN Artist a ON s.artist=a.name WHERE a.streamable=1';
+			$andquery = True;
+		} else {
+			if($begin || $end || $userid) {
+				$query .= ' WHERE';
+				$andquery = False;
+			}
+		}
+
+		if($begin) {
+			//change time resolution to full hours (for easier caching)
+			$begin = $begin - ($begin % 3600);
+			
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' time>' . (int)$begin;
+		}
+
+		if($end) {
+			//change time resolution to full hours (for easier caching)
+			$end = $end - ($end % 3600);
+			
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' time<' . (int)$end;
+		}
+
+		if($userid) {
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' userid=' . (int)$userid;
+		}
+
+		$query .= ' GROUP BY artist ORDER BY freq DESC LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
-			$data = $adodb->CacheGetAll(720, 'SELECT COUNT(artist) as c, artist FROM Scrobbles GROUP BY artist ORDER BY c DESC LIMIT 20');
+			$data = $adodb->CacheGetAll($cache, $query);
 		} catch (Exception $e) {
-			return null;
+			return array();
 		}
 
 		foreach ($data as &$i) {
