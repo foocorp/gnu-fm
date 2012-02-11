@@ -102,7 +102,7 @@ function make_playlist($session, $old_format = false) {
 		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE streamable=1 AND lower(tag) = lower(' . $adodb->qstr($tag) . ')');
 	} else if (preg_match('@l(ast|ibre)fm://globaltags/(.*)@', $url, $regs)) {
 		$tag = $regs[2];
-		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist WHERE streamable=1 AND lower(tag) = lower(' . $adodb->qstr($tag) . ')');
+		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Tags ON Track.name=Tags.track AND Track.artist_name=Tags.artist WHERE streamable=1 AND lower(tag) = lower(' . $adodb->qstr($tag) . ') ORDER BY RANDOM() LIMIT 500');
 	} else if (preg_match('@l(ast|ibre)fm://artist/(.*)/similarartists@', $url, $regs)) {
 		try {
 			$artist = new Artist($regs[2]);
@@ -151,9 +151,9 @@ function make_playlist($session, $old_format = false) {
 		}
 		$res = get_loved_tracks($userids);
 	} else if (preg_match('@l(ast|ibre)fm://community/loved@', $url, $regs)) {
-		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Track.streamable=1');
+		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track INNER JOIN Loved_Tracks ON Track.artist_name=Loved_Tracks.artist AND Track.name=Loved_Tracks.track WHERE Track.streamable=1 ORDER BY RANDOM() LIMIT 500');
 	} else if (preg_match('@l(ast|ibre)fm://community@', $url, $regs)) {
-		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track WHERE Track.streamable=1');
+		$res = $adodb->CacheGetAll(7200, 'SELECT Track.name, Track.artist_name, Track.album_name, Track.duration, Track.streamurl FROM Track WHERE Track.streamable=1 ORDER BY RANDOM() LIMIT 500');
 	} else {
 		die("FAILED\n"); // this should return a blank dummy playlist instead
 	}
