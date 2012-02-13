@@ -121,7 +121,7 @@ class UserXML {
 		return $xml;
 	}
 
-	public static function getTopTracks($username, $period) {
+	public static function getTopTracks($username, $limit, $streamable, $page, $period, $cache) {
 		global $adodb;
 
 		try {
@@ -130,37 +130,73 @@ class UserXML {
 			return(XML::error('error', '13', 'Invalid method signature supplied'));
 		}
 
-		$err = 0;
+		$offset = ($page - 1) * $limit;
+		$begin = $timestamp - ($timestamp % 3600);
+
 		try {
 			$user = new User($username);
-			$res = $user->getTopTracks(20, $timestamp);
+			$res = $user->getTopTracks($limit, $offset, $streamable, $begin, null, null, $cache);
 		} catch (Exception $e) {
-			$err = 1;
+			return XML::error('error', '7', 'Invalid resource specified');
 		}
 
-		if ($err || !$res) {
-			return(XML::error('failed', '7', 'Invalid resource specified'));
+		// Get total track count, using subquery to get distinct row(artist, track) count
+		$query = 'SELECT count(*) FROM (SELECT count(*) FROM Scrobbles s';
+		if($streamable) {
+			$query .= ' WHERE ROW(s.artist, s.track) IN (SELECT artist_name, name FROM Track WHERE streamable=1)';
+			$andquery = True;
+		} else {
+			$query .= ' WHERE';
+			$andquery = False;
 		}
+		if ($begin) {
+			$andquery ? $query .= ' AND' : $andquery = True;
+			$query .= ' time>' . $begin;
+		}
+		$andquery ? $query .= ' AND' : null;
+		$query .= ' userid=' . $user->uniqueid . ' GROUP BY s.track, s.artist) c';
+		$total = $adodb->CacheGetOne($cache, $query);
+
+		$totalPages = ceil($total/$limit);
+
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
-
 		$root = $xml->addChild('toptracks', null);
-		$root->addAttribute('user', $username);
+		$root->addAttribute('user', $user->name);
 		$root->addAttribute('type', $period);
-		$i = 1;
-		foreach ($res as &$row) {
-			$track = $root->addChild('track', null);
-			$track->addAttribute('rank', $i);
-			$track->addChild('name', repamp($row['track']));
+		$root->addAttribute('page', $page);
+		$root->addAttribute('perPage', $limit);
+		$root->addAttribute('totalPages', $totalPages);
+		$root->addAttribute('total', $total);
 
-			$track->addChild('playcount', $row['freq']);
-			$artist = $track->addChild('artist', null);
-			$artist->addChild('name', repamp($row['artist']));
-			$artist->addChild('mbid', $row['artist_mbid']);  // artist_mbid isn't being set by getTopTracks yet
+		$i = $offset + 1;
+		foreach($res as &$row) {
+			try {
+				$track = new Track($row['track'], $row['artist']);
+				$artist = $track->getArtist();
+				$track_node = $root->addChild('track', null);
+				$track_node->addAttribute('rank', $i);
+				$track_node->addChild('name', repamp($track->name));
+				$track_node->addChild('duration', $track->duration);
+				$track_node->addChild('playcount', $row['freq']);
+				$track_node->addChild('mbid', $track->mbid);
+				$track_node->addChild('url', repamp($row['trackurl']));
+				$track_node->addChild('streamable', $track->streamable);
+
+				$artist_node = $track_node->addChild('artist', null);
+				$artist_node->addChild('name', repamp($artist->name));
+				$artist_node->addChild('mbid', $artist->mbid);
+				$artist_node->addChild('url', repamp($row['artisturl']));
+				$image_small = $track_node->addChild('image', $artist->image_small);
+				$image_small->addAttribute('size', 'small');
+				$image_medium = $track_node->addChild('image', $artist->image_medium);
+				$image_medium->addAttribute('size', 'medium');
+				$image_large = $track_node->addChild('image', $artist->image_large);
+				$image_large->addAttribute('size', 'large');
+			} catch (Exception $e) {}
 			$i++;
 		}
 
 		return $xml;
-
 	}
 
 	public static function getRecentTracks($u, $limit, $page) {
