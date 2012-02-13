@@ -18,79 +18,125 @@
 
 */
 
-require_once($install_path . '/database.php');
 require_once($install_path . '/data/Server.php');
-require_once($install_path . '/config.php'); // Should already be required though.
+require_once($install_path . '/data/Artist.php');
+require_once($install_path . '/data/Album.php');
+require_once($install_path . '/data/Track.php');
+require_once($install_path . '/data/Tag.php');
 
 class TagCloud {
 
-	/*
-	 * returns an array counting appareances of a given field and his corresponding font-size.
-	 * @param string $table table name to be queried
-	 * @param string $field field name to count
-	 * @param integer $limit limit of the query
-	 * @param string $constraint username or artistname depending on field
-	 * inaccurate @param integer $sizes quantity of possible sizes
-	 * inaccurate @param float $max_font_size maximum font size (px, em, %, etc)
-	 * @return array tagcloud
-	 */
-	static function generateTagCloud($table, $field, $limit = 40, $constraint = null, $constrained_field = false, $cache_period = 7200) {
-		global $adodb;
-		if (!is_string($field) || !is_string($table) || !is_integer($limit)) {
-			return false;
-		}
-		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
-		if ($field == 'artist') {
-			$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table . ' INNER JOIN Artist ON ' . $table . '.' . $field . ' = Artist.name '
-				. ' WHERE Artist.streamable = 1';
-			$query .= (!is_null($constraint)) ? ' AND ' : null;
-		} else {
-			$query = 'SELECT ' . $field . ', count(*) AS count FROM ' . $table;
-			$query .= (!is_null($constraint)) ? ' WHERE ' : null;
-		}
-		if ($constrained_field) {
-			$query .= (!is_null($constraint)) ? $constrained_field . ' = ' . $adodb->qstr($constraint) : null;
-		} else if ($field == 'track') {
-			$query .= (!is_null($constraint)) ? ' artist = ' . $adodb->qstr($constraint) : null;
-		} else {
-			$query .= (!is_null($constraint)) ? ' userid = ' . $adodb->qstr($constraint) : null;
-		}
-		$query .= ' GROUP BY ' . $field . ' ORDER BY count DESC LIMIT ' . $limit;
-		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$res = $adodb->CacheGetAll($cache_period, $query);
-		if (!$res) {
-			throw new Exception('ERROR ' . $query);
-		} else {
-			foreach ($res as $count => &$i) {
-				$i['size'] = $sizes[(int) ($count/(count($res)/7))];
-			}
-			foreach ($res as &$i){
-				$i['pageurl'] = Server::getArtistURL($i['artist']);
-			}
-			sort($res);
-			return $res;
-		}
-	}
-
 	/**
-	 * Returns the preferred table to generate scrobble data from.
-	 *
-	 * @param string $area The are where we're displaying scrobble data; one of 'main', 'user', 'group'. Optional: defaults to 'main'.
-	 * @return string Usually 'Scrobbles' or 'Free_Scrobbles'.
-	 * @author tobyink
+	 * Generate array for use when building tag clouds
+	 * 
+	 * @param string $set The set to return data from (artists, tracks, tags, loved)
+	 * @param string $item The item to count in the set (artist, track, tag)
+	 * @param int $limit Max amount of items to return (default is 40)
+	 * @param string $constraint_type The type of constraint to filter by (artist, track, tag, userid) (default is null)
+	 * @param string $constraint The constraint value(s) to filter by (default is null)
+	 * @param bool $streamable Only return streamable artists/albums/tracks (default is true)
+	 * @param int $cache int The caching period in seconds (default is 7200)
+	 * @return array An array of items ((name, count, size, pageurl) .. )
 	 */
-	static function scrobblesTable($area = 'main') {
-		// This array can be set up in config.php
-		global $scrobblecloud_table;
+	static function generateTagCloud($set, $item, $limit=40, $constraint_type=null, $constraint=null, $streamable = True, $cache=7200) {
 
-		if (!empty($scrobblecloud_table[$area])) {
-			return $scrobblecloud_table[$area];
+		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
+
+		if ($set == 'artists') {
+			if ($item == 'artist') {
+				if ($constraint_type == 'userid') {
+					$res = Server::getTopArtists($limit, 0, $streamable, null, null, $constraint, $cache);
+				} else if (is_null($constraint_type)) {
+					$res = Server::getTopArtists($limit, 0, $streamable, null, null, null, $cache);
+				}
+			} else {
+				throw new Exception("Not a valid tagcloud item: " . $item);
+			}
+
+		} else if ($set == 'loved') {
+			if ($item == 'artist') {
+				if ($constraint_type == 'userid') {
+					$res = Server::getLovedArtists($limit, 0, $streamable, $constraint, $cache);
+				} else if (is_null($constraint_type)) {
+					$res = Server::getLovedArtists($limit, 0, $streamable, null, $cache);
+				}
+			} else if ($item == 'track') {
+				if ($constraint_type == 'userid') {
+					$res = Server::getLovedTracks($limit, 0, $streamable, null, $constraint, $cache);
+				} else if ($constraint_type == 'artist') {
+					$res = Server::getLovedTracks($limit, 0, $streamable, $constraint, null, $cache);
+				} else if (is_null($constraint_type)) {
+					$res = Server::getLovedTracks($limit, 0, $streamable, null, null, $cache);
+				}
+			} else {
+				throw new Exception("Not a valid tagcloud item: " . $item);
+			}
+
+		} else if ($set == 'tracks') {
+			if ($item == 'track') {
+				if ($constraint_type == 'userid') {
+					$res = Server::getTopTracks($limit, 0, $streamable, null, null, null, $constraint, $cache);
+				} else if ($constraint_type == 'artist') {
+					$res = Server::getTopTracks($limit, 0, $streamable, null, null, $constraint, null, $cache);
+				} else if (is_null($constraint_type)) {
+					$res = Server::getTopTracks($limit, 0, $streamable, null, null, null, null, $cache);
+				}
+			} else {
+				throw new Exception("Not a valid tagcloud item: " . $item);
+			}
+
+		} else if ($set == 'tags') {
+			if ($item == 'tag') {
+				if ($constraint_type == 'artist') {
+					$artist = new Artist($constraint);
+					$res = $artist->getTopTags($limit, 0, $cache);
+				} else if ($constraint_type == 'album') {
+					// $constraint needs to be an array of (album_name, artist_name)
+					$album = new Album($constraint[0], $constraint[1]);
+					$res = $album->getTopTags($limit, 0, $cache);
+				} else if ($constraint_type == 'track') {
+					// $constraint needs to be an array of (track_name, artist_name)
+					$track = new Track($constraint[0], $constraint[1]);
+					$res = $track->getTopTags($limit, 0, $cache);
+				}
+			} else if ($item == 'artist') {
+				if ($constraint_type == 'tag') {
+					$res = Tag::getTopArtists($constraint, $limit, 0, $streamable, $cache);
+				}
+			} else if ($item == 'track') {
+				if ($constraint_type == 'tag') {
+					$res = Tag::getTopTracks($constraint, $limit, 0, $streamable, $cache);
+				}
+			} else {
+				throw new Exception("Not a valid tagcloud item: " . $item);
+			}
+
+		} else {
+			throw new Exception("Not a valid tagcloud set: " . $set);
 		}
 
-		if ($area == 'main') {
-			return 'Free_Scrobbles';
+		if(!$res) {
+			return array();
+		}
+		
+		$tagcloud = array();
+		$i=0;
+		foreach ($res as &$row) {
+			$tagcloud[$i]['name'] = $row[$item];
+			$tagcloud[$i]['count'] = $row['freq'];
+			$tagcloud[$i]['size'] = $sizes[(int) ($i/(count($res)/7))];
+			if ($item == 'artist') {
+				$tagcloud[$i]['pageurl'] = Server::getArtistURL($row[$item]);
+			} else if ($item == 'tag') {
+				$tagcloud[$i]['pageurl'] = Server::getTagURL($row[$item]);
+			} else if ($item == 'track') {
+				$tagcloud[$i]['artist_name'] = $row['artist'];
+				$tagcloud[$i]['pageurl'] = Server::getTrackURL($row['artist'], null, $row[$item]);
+			}
+			$i++;
 		}
 
-		return 'Scrobbles';
+		sort($tagcloud);
+		return $tagcloud;
 	}
 }
