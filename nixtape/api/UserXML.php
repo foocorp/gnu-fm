@@ -51,24 +51,9 @@ class UserXML {
 	public static function getTopArtists($username, $limit, $streamable, $page, $period, $cache) {
 		global $adodb;
 
-		$timestamp;
-		if (!isset($period)) {
-			$period = 'overall';
-		}
-
-		if (strcmp($period, 'overall') == 0) {
-			$timestamp = 0;
-		} else if (strcmp($period, '7day') == 0) {
-			$timestamp = strtotime('-7 days');
-		} else if (strcmp($period, '1month') == 0) {
-			$timestamp = strtotime('-1 month');
-		} else if (strcmp($period, '3month') == 0) {
-			$timestamp = strtotime('-3 months');
-		} else if (strcmp($period, '6month') == 0) {
-			$timestamp = strtotime('-6 months');
-		} else if (strcmp($period, '12month') == 0) {
-			$timestamp = strtotime('-12 months');
-		} else {
+		try {
+			$timestamp = UserXML::_periodToTimestamp($period);
+		} catch (Exception $e) {
 			return(XML::error('error', '13', 'Invalid method signature supplied'));
 		}
 
@@ -136,25 +121,12 @@ class UserXML {
 		return $xml;
 	}
 
-	public static function getTopTracks($username, $time) {
+	public static function getTopTracks($username, $period) {
 		global $adodb;
 
-		$timestamp;
-		if (!isset($time)) {
-			$time = 'overall';
-		}
-		//TODO: Do better, this is too ugly :\
-		if (strcmp($time, 'overall') == 0) {
-			$timestamp = 0;
-		} else if (strcmp($time, '3month') == 0) {
-			$timestamp = strtotime('-3 months');
-		} else if (strcmp($time, '6month') == 0) {
-			$timestamp = strtotime('-6 months');
-		} else if (strcmp($time, '9month') == 0) {
-			$timestamp = strtotime('-9 months');
-		} else if (strcmp($time, '12month') == 0) {
-			$timestamp = strtotime('-12 months');
-		} else {
+		try {
+			$timestamp = UserXML::_periodToTimestamp($period);
+		} catch (Exception $e) {
 			return(XML::error('error', '13', 'Invalid method signature supplied'));
 		}
 
@@ -173,7 +145,7 @@ class UserXML {
 
 		$root = $xml->addChild('toptracks', null);
 		$root->addAttribute('user', $username);
-		$root->addAttribute('type', $time);
+		$root->addAttribute('type', $period);
 		$i = 1;
 		foreach ($res as &$row) {
 			$track = $root->addChild('track', null);
@@ -252,6 +224,26 @@ class UserXML {
 		$date = $track->addChild('date', gmdate('d M Y H:i', $row['time']) . ' GMT');
 		$date->addAttribute('uts', $row['time']);
 		$track->addChild('streamable', null);
+	}
+
+	private static function _periodToTimestamp($period) {
+		//TODO: Do better, this is too ugly :\
+		if (strcmp($period, 'overall') == 0) {
+			$timestamp = 0;
+		} else if (strcmp($period, '7day') == 0) {
+			$timestamp = strtotime('-7 days');
+		} else if (strcmp($period, '1month') == 0) {
+			$timestamp = strtotime('-1 month');
+		} else if (strcmp($period, '3month') == 0) {
+			$timestamp = strtotime('-3 months');
+		} else if (strcmp($period, '6month') == 0) {
+			$timestamp = strtotime('-6 months');
+		} else if (strcmp($period, '12month') == 0) {
+			$timestamp = strtotime('-12 months');
+		} else {
+			throw new Exception("Not a valid period");
+		}
+		return $timestamp;
 	}
 
 	public static function getTopTags($u, $limit, $cache) {
