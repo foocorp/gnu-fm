@@ -510,7 +510,7 @@ class Server {
 				$trackurl = $base_url . '/track-' . $component . '.php?artist='	. urlencode($artist)
 				   	. '&album=' . urlencode($album) . '&track=' . urlencode($track);
 			} else {
-				$trackurl = $baseurl . '/track.php?artist=' . urlencode($artist)
+				$trackurl = $base_url . '/track.php?artist=' . urlencode($artist)
 				   	. '&album=' . urlencode($album) . '&track=' . urlencode($track);
 			}
 		}
