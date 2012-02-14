@@ -262,43 +262,18 @@ class User {
 	}
 
 	/**
-	 * Get this user's top 20 tracks
+	 * Get this user's top tracks
 	 *
-	 * @return array This user's top 20 tracks
+	 * @param int $limit The number of tracks to return
+	 * @param int $offset Skip this number of rows before returning tracks
+	 * @param bool $streamable Only return streamable tracks
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
 	 */
-	function getTopTracks($number = 20, $since = null) {
-		global $adodb;
-
-		if ($since) {
-			$query = 'SELECT COUNT(track) as freq, artist, album, track FROM Scrobbles WHERE userid = ' . ($this->uniqueid) . ' AND time > ' . (int)($since) . ' GROUP BY artist,album,track ORDER BY freq DESC LIMIT ' . ($number);
-		} else {
-			$query = 'SELECT COUNT(track) as freq, artist, album, track FROM Scrobbles WHERE userid = ' . ($this->uniqueid) . ' GROUP BY artist,album,track ORDER BY freq DESC LIMIT ' . ($number);
-		}
-		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$data = $adodb->CacheGetAll(7200, $query);
-		if (!$data) {
-			throw new Exception('ERROR ' . $query);
-		}
-
-		$maxcount = 0;
-
-		foreach ($data as &$i) {
-			$row = sanitize($i);
-			$row['artisturl'] = Server::getArtistURL($row['artist']);
-			$row['trackurl'] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
-			if ((int)$row['freq'] > $maxcount) {
-				$maxcount = (int)$row['freq'];
-			}
-			$result[] = $row;
-		}
-
-		if ($maxcount > 0) {
-			foreach ($result as &$row) {
-				$row['width'] = (int)(300 * ($row['freq']/$maxcount));
-			}
-		}
-
-		return $result;
+	function getTopTracks($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $cache = 600) {
+		return Server::getTopTracks($limit, $offset, $streamable, $begin, $end, null, $this->uniqueid, $cache);
 	}
 
 	public function getTotalTracks($since = null) {
