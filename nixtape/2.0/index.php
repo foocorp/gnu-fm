@@ -272,8 +272,12 @@ function method_artist_getTopTracks() {
 	if (!isset($_GET['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
+	$limit = get_with_default('limit', 50);
+	$page = get_with_default('page', 1);
+	$streamable = get_with_default('streamable', False);
+	$cache = 600;
 
-	$xml = ArtistXML::getTopTracks($_GET['artist']);
+	$xml = ArtistXML::getTopTracks($_GET['artist'], $limit, $streamable, $page, $cache);
 	respond($xml);
 }
 
