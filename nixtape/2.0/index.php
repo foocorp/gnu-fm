@@ -187,8 +187,13 @@ function method_user_getTopTracks() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
+	$limit = get_with_default('limit', 10);
+	$streamable = get_with_default('streamable', False);
+	$page = get_with_default('page', 1);
+	$period = get_with_default('period', 'overall');
+	$cache = 600;
 
-	$xml = UserXML::getTopTracks($_GET['user'], $_GET['period']);
+	$xml = UserXML::getTopTracks($_GET['user'], $limit, $streamable, $page, $period, $cache);
 	respond($xml);
 }
 
