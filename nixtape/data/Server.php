@@ -226,6 +226,54 @@ class Server {
 	}
 
 	/**
+	 * Retrieves a list of loved artists
+	 *
+	 * @param int $limit The number of artists to return
+	 * @param int $offset Skip this number of rows before returning artists
+	 * @param bool $streamable Only return streamable artists
+	 * @param int $userid Only return results from this userid
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of artists ((artist, freq, artisturl) ..) or empty array in case of failure
+	 */
+	static function getLovedArtists($limit = 20, $offset = 0, $streamable = False, $userid = null, $cache = 600) {
+		global $adodb;
+
+		$query = ' SELECT artist, COUNT(artist) as freq FROM Loved_Tracks lt INNER JOIN Artist a ON a.name=lt.artist';
+
+		if ($streamable) {
+			$query .= ' WHERE a.streamable=1';
+			$andquery = True;
+		} else {
+			if ($userid) {
+				$query .= ' WHERE';
+				$andquery = False;
+			}
+		}
+
+		if ($userid) {
+			$andquery ? $query .= ' AND' : null;
+			$query .= ' userid=' . (int)$userid;
+		}
+
+		$query .= ' GROUP BY artist ORDER BY freq DESC LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
+
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
+			$data = $adodb->CacheGetAll($cache, $query);
+		} catch (Exception $e) {
+			return array();
+		}
+
+		foreach ($data as &$i) {
+			$row = sanitize($i);
+			$row['artisturl'] = Server::getArtistURL($row['artist']);
+			$result[] = $row;
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Retrieves a list of popular tracks
 	 *
 	 * @param int $limit The number of tracks to return
