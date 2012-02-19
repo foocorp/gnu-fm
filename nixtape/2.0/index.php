@@ -215,8 +215,10 @@ function method_user_getLovedTracks() {
 
 	$limit = get_with_default('limit', 50);
 	$page = get_with_default('page', 1);
+	$streamable = get_with_default('streamable', False);
+	$cache = 600;
 
-	$xml = UserXML::getLovedTracks($user, $limit, $page);
+	$xml = UserXML::getLovedTracks($user, $limit, $page, $streamable, $cache);
 	respond($xml);
 }
 
