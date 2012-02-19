@@ -125,26 +125,18 @@ class Artist {
 	}
 
 	/**
-	 * Retrieves an artist's most popular tracks
+	 * Get this artist's top tracks
 	 *
-	 * @param int $tracks the number of tracks to return
-	 * @return An array of Track objects
+	 * @param int $limit The number of tracks to return
+	 * @param int $offset Skip this number of rows before returning tracks
+	 * @param bool $streamable Only return streamable tracks
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
 	 */
-	function getTopTracks($number) {
-		global $adodb;
-		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$res = $adodb->CacheGetAll(600,
-			'SELECT track, COUNT(track) AS freq, COUNT(DISTINCT userid) AS listeners FROM Scrobbles WHERE'
-			. ' artist = ' . $adodb->qstr($this->name)
-			. ' GROUP BY track ORDER BY freq DESC LIMIT ' . (int)($number));
-		foreach ($res as &$row) {
-			$track = new Track($row['track'], $this->name);
-			$track->setPlayCount($row['freq']);
-			$track->setListenerCount($row['listeners']);
-			$tracks[] = $track;
-		}
-
-		return $tracks;
+	function getTopTracks($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $cache = 600) {
+		return Server::getTopTracks($limit, $offset, $streamable, $begin, $end, $this->name, null, $cache);
 	}
 
 	/**
