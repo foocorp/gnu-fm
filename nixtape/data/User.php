@@ -353,19 +353,17 @@ class User {
 	}
 
 	/**
-	 * Get a user's loved tracks
+	 * Retrieves a list of user's loved tracks
 	 *
-	 * @param int $limit The number of tracks to return (defaults to 50)
-	 * @return array An array of track details
+	 * @param int $limit The number of tracks to return
+	 * @param int $offset Skip this number of rows before returning tracks
+	 * @param bool $streamable Only return streamable tracks
+	 * @param int $artist Only return results from this artist
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
 	 */
-	function getLovedTracks($limit = 50, $offset = 0) {
-		global $adodb;
-
-		$res = $adodb->CacheGetAll(600, 'SELECT * FROM Loved_Tracks WHERE '
-			. ' userid = ' . $this->uniqueid . ' ORDER BY time DESC'
-			. ' LIMIT ' . $limit . ' OFFSET ' . $offset);
-
-		return $res;
+	function getLovedTracks($limit = 20, $offset = 0, $streamable = False, $artist = null, $cache = 600) {
+		return Server::getLovedTracks($limit, $offset, $streamable, $artist, $this->uniqueid, $cache);
 	}
 
 	/**
