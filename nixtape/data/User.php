@@ -369,35 +369,17 @@ class User {
 	}
 
 	/**
-	 * Get a user's loved artists
+	 * Retrieves a list of user's loved artists
 	 *
-	 * @param int $limit The number of artists to return (defaults to 10)
-	 * @return array An array of artist details
+	 * @param int $limit The number of artists to return
+	 * @param int $offset Skip this number of rows before returning artists
+	 * @param bool $streamable Only return streamable artists
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of artists ((artist, freq, artisturl) ..) or empty array in case of failure
 	 */
-	function getLovedArtists($limit = 10) {
-		global $adodb;
-
-		$res = $adodb->CacheGetAll(600, 'SELECT artist, count(artist) as num FROM Loved_Tracks INNER JOIN Artist ON Artist.name=Loved_Tracks.artist WHERE Artist.streamable=1 AND '
-			. ' userid = ' . $this->uniqueid . ' GROUP BY artist ORDER BY num DESC');
-
-		// Add meta data (url, tag size, etc.)
-		$i = 0;
-		$lovedWithMeta = array();
-		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
-		foreach ($res as $artist) {
-			$lovedWithMeta[$i]['artist'] = $artist['artist'];
-			$lovedWithMeta[$i]['numLoved'] = $artist['num'];
-			$lovedWithMeta[$i]['url'] = Server::getArtistURL($artist['artist']);
-			$lovedWithMeta[$i]['size'] = $sizes[(int) ($i/($limit/count($sizes)))];
-			$i++;
-			if ($i >= $limit) {
-				break;
-			}
-		}
-		sort($lovedWithMeta);
-		return $lovedWithMeta;
+	function getLovedArtists($limit = 20, $offset = 0, $streamable = False, $cache = 600) {
+		return Server::getLovedArtists($limit, $offset, $streamable, $this->uniqueid, $cache);
 	}
-
 
 	/**
 	 * Get a user's banned tracks
