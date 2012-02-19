@@ -419,19 +419,33 @@ class UserXML {
 		return $xml;
 	}
 
-	public static function getLovedTracks($u, $limit = 50, $page = 1) {
+	public static function getLovedTracks($username, $limit = 50, $page = 1, $streamable = False, $cache = 600) {
 		global $adodb;
 
 		$offset = ($page - 1) * $limit;
 		try {
-			$user = new User($u);
-			$res = $user->getLovedTracks($limit, $offset);
+			$user = new User($username);
+			$res = $user->getLovedTracks($limit, $offset, $streamable, null, $cache);
 		} catch (Exception $ex) {
 			return XML::error('error', '7', 'Invalid resource specified');
 		}
 
-		$totalPages = $adodb->GetOne('SELECT COUNT(track) FROM Loved_Tracks WHERE userid = ' . $user->uniqueid);
-		$totalPages = ceil($totalPages / $limit);
+		// Get total track count, using subquery to get distinct row(artist, track) count
+		$query = 'SELECT COUNT(*) FROM (SELECT count(*) FROM Loved_Tracks lt';
+
+		if($streamable) {
+			$query .= ' WHERE ROW(lt.artist, lt.track) IN (SELECT artist_name, name FROM Track WHERE streamable=1)';
+			$andquery = True;
+		} else {
+			$query .= ' WHERE';
+			$andquery = False;
+		}
+
+		$andquery ? $query .= ' AND' : null;
+		$query .= ' userid=' . $user->uniqueid . ' GROUP BY lt.track, lt.artist) c';
+		$total = $adodb->CacheGetOne($cache, $query);
+
+		$totalPages = ceil($total/$limit);
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$root = $xml->addChild('lovedtracks');
@@ -439,6 +453,7 @@ class UserXML {
 		$root->addAttribute('page', $page);
 		$root->addAttribute('perPage', $limit);
 		$root->addAttribute('totalPages', $totalPages);
+		$root->addAttribute('total', $total);
 
 		foreach ($res as &$row) {
 			$track_node = $root->addChild('track', null);
