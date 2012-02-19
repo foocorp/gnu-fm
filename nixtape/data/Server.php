@@ -347,6 +347,62 @@ class Server {
 		return $result;
 	}
 
+	/**
+	 * Retrieves a list of loved tracks
+	 *
+	 * @param int $limit The number of tracks to return
+	 * @param int $offset Skip this number of rows before returning tracks
+	 * @param bool $streamable Only return streamable tracks
+	 * @param int $artist Only return results from this artist
+	 * @param int $userid Only return results from this userid
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
+	 */
+	static function getLovedTracks($limit = 20, $offset = 0, $streamable = False, $artist = null, $userid = null, $cache = 600) {
+		global $adodb;
+
+		$query = 'SELECT lt.artist, lt.track, max(lt.time) as time, count(lt.track) AS freq FROM Loved_Tracks lt';
+		
+		if ($streamable) {
+			$query .= ' WHERE ROW(lt.artist, lt.track) IN (SELECT artist_name, name FROM Track WHERE streamable=1)';
+			$andquery = True;
+		} else {
+			if($userid || $artist) {
+				$query .= ' WHERE';
+				$andquery = False;
+			}
+		}
+
+		if($userid) {
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' lt.userid=' . (int)$userid;
+		}
+
+		if($artist) {
+			$andquery ? $query .= ' AND' : $andquery = True;
+			$query .= ' lower(lt.artist)=lower(' . $adodb->qstr($artist) . ')';
+		}
+	
+		//We dont group by album, should we?
+		$query .= ' GROUP BY lt.track, lt.artist ORDER BY freq DESC, time DESC LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
+
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
+			$data = $adodb->CacheGetAll($cache, $query);
+		} catch (Exception $e) {
+			return array();
+		}
+
+		foreach ($data as &$i) {
+			$row = sanitize($i);
+			$row['artisturl'] = Server::getArtistURL($row['artist']);
+			$row['trackurl'] = Server::getTrackURL($row['artist'], null, $row['track']);
+			$result[] = $row;
+		}
+
+		return $result;
+	}
+
 	static function getUserList($alpha) {
 		global $adodb;
 
