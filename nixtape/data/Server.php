@@ -225,6 +225,80 @@ class Server {
 		return $result;
 	}
 
+	/**
+	 * Retrieves a list of popular tracks
+	 *
+	 * @param int $limit The number of tracks to return
+	 * @param int $offset Skip this number of rows before returning tracks
+	 * @param bool $streamable Only return streamable tracks
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param int $artist Only return results from this artist
+	 * @param int $userid Only return results from this userid
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
+	 */
+	static function getTopTracks($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $artist = null, $userid = null, $cache = 600) {
+		global $adodb;
+
+		$query = 'SELECT s.artist, s.track, count(s.track) AS freq, count(DISTINCT s.userid) AS listeners FROM Scrobbles s';
+		
+		if ($streamable) {
+			$query .= ' WHERE ROW(s.artist, s.track) IN (SELECT artist_name, name FROM Track WHERE streamable=1)';
+			$andquery = True;
+		} else {
+			if($begin || $end || $userid || $artist) {
+				$query .= ' WHERE';
+				$andquery = False;
+			}
+		}
+
+		if($begin) {
+			//change time resolution to full hours (for easier caching)
+			$begin = $begin - ($begin % 3600);
+			
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' s.time>' . (int)$begin;
+		}
+
+		if($end) {
+			//change time resolution to full hours (for easier caching)
+			$end = $end - ($end % 3600);
+			
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' s.time<' . (int)$end;
+		}
+
+		if($userid) {
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' s.userid=' . (int)$userid;
+		}
+
+		if($artist) {
+			$andquery ? $query .= ' AND' : $andquery = True;
+			$query .= ' lower(s.artist)=lower(' . $adodb->qstr($artist) . ')';
+		}
+	
+		//We dont group by album, should we?
+		$query .= ' GROUP BY s.track, s.artist ORDER BY freq DESC LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
+
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
+			$data = $adodb->CacheGetAll($cache, $query);
+		} catch (Exception $e) {
+			return array();
+		}
+
+		foreach ($data as &$i) {
+			$row = sanitize($i);
+			$row['artisturl'] = Server::getArtistURL($row['artist']);
+			$row['trackurl'] = Server::getTrackURL($row['artist'], null, $row['track']);
+			$result[] = $row;
+		}
+
+		return $result;
+	}
+
 	static function getUserList($alpha) {
 		global $adodb;
 
