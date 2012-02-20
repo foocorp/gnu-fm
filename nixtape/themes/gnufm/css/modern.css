@@ -89,6 +89,8 @@ body{ font:16px/24px Helvetica, Helvetica Neue, Arial, sans-serif; }
 	background:red;
 }
 
+aside a{color: yellow;}
+
 #title, #title a{ color:white; }
 
 ::-moz-selection { background: #f16529; color: #fff; text-shadow: none; }
