@@ -81,7 +81,6 @@ body{ font:16px/24px Helvetica, Helvetica Neue, Arial, sans-serif; }
 
 #header-container{ border-bottom: 20px solid darkgreen; }
 #footer-container{ border-top:    20px solid darkgreen; }
-#main aside      { border-top:    20px solid darkgreen; }
 
 #header-container,
 #footer-container{
@@ -287,7 +286,6 @@ nav a:hover{
 }
 
 #main aside{
-	color:white;
 	padding:0px 5% 10px;
 }
 
@@ -367,20 +365,13 @@ nav a:hover{
 		float:left;
 	}
 
-	nav ul{
-display: block;
-width: 100%;
-left: 0;
-clear: both;
-
-	}
-
 	nav li a{
-		float:left;
+		float:right;
 		width:8%;
 		margin:0 0.5%;
 		padding:10px 2%;
 		margin-bottom:0;
+		font-size: 80%;
 	}
 
 /* ============
