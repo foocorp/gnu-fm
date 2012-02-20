@@ -88,8 +88,7 @@ body{ font:16px/24px sans-serif; }
 }
 
 #header-container a,
-#footer-container a,
-#main aside a{
+#footer-container a{
 	color: yellow !important;
 }
 
