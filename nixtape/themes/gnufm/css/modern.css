@@ -212,9 +212,20 @@ nav a:hover{
 		float:left;
 	}
 
-	nav{
-		float:right;
-		width:38%;
+	nav ul{
+display: block;
+width: 100%;
+left: 0;
+clear: both;
+
+	}
+
+	nav li a{
+		float:left;
+		width:8%;
+		margin:0 0.5%;
+		padding:10px 2%;
+		margin-bottom:0;
 	}
 
 /* ============
