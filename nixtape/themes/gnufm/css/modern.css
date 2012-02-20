@@ -95,6 +95,153 @@ body{ font:16px/24px Helvetica, Helvetica Neue, Arial, sans-serif; }
 ::selection      { background: #f16529; color: #fff; text-shadow: none; }
 
 /* ==============
+
+   GNU FM player
+   =============== */
+
+#player-container {
+    float: right;
+    margin: 1em 2em 1em 1em;
+    text-align: right;
+    width: 340px;
+}
+#playerproblems {
+    text-align: justify;
+}
+#player > #interface {
+    border: 1px solid black;
+    border-radius: 8px 8px 8px 8px;
+    color: white;
+    display: none;
+    padding: 10px 10px 0;
+    text-align: left;
+    width: 320px;
+}
+#player > #interface > #p_buttons a {
+    opacity: 0.5;
+}
+#player > #interface > #progress {
+    text-align: right;
+}
+#player > #interface > #trackinfo {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid black;
+    border-radius: 8px 8px 8px 8px;
+    color: black;
+    margin-bottom: 5px;
+    overflow: hidden;
+    padding: 3px 5px;
+}
+#player > #interface > #trackinfo > #playlist {
+    display: none;
+}
+#showplaylist {
+    float: right;
+    margin-top: 2px;
+}
+#hideplaylist {
+    display: none;
+    float: right;
+    margin-top: 2px;
+}
+#scrobbled {
+    display: none;
+    float: left;
+}
+#volume-box {
+    font-size: 8px;
+    margin-bottom: 1em;
+    padding: 0;
+}
+.ui-widget {
+    font-family: Verdana,Arial,sans-serif;
+    font-size: 1.1em;
+}
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+    font-family: Verdana,Arial,sans-serif;
+    font-size: 1em;
+}
+.ui-widget-content {
+    background: none repeat scroll 0 0 transparent;
+    border: 1px solid #AAAAAA;
+    color: #222222;
+}
+.ui-widget-content a {
+    color: #222222;
+}
+.ui-corner-all {
+    border-radius: 4px 4px 4px 4px;
+}
+.ui-progressbar {
+    height: 11px;
+    text-align: left;
+}
+.ui-progressbar .ui-progressbar-value {
+    height: 100%;
+}
+.ui-progressbar-value {
+    background-image: url("../img/player/pbar-ani.gif");
+}
+.ui-slider {
+    position: relative;
+    text-align: left;
+}
+.ui-slider .ui-slider-handle {
+    cursor: default;
+    height: 1.2em;
+    position: absolute;
+    width: 1.2em;
+    z-index: 2;
+}
+.ui-slider .ui-slider-range {
+    background-position: 0 0;
+    border: 0 none;
+    display: block;
+    font-size: 0.7em;
+    position: absolute;
+    z-index: 1;
+}
+.ui-slider-horizontal {
+    background: none repeat scroll 0 0 white;
+    height: 0.8em;
+}
+.ui-slider-horizontal .ui-slider-handle {
+    background: none repeat scroll 0 0 #F57900;
+    margin-left: -0.6em;
+    top: -0.3em;
+}
+.ui-slider-horizontal .ui-slider-range {
+    height: 100%;
+    top: 0;
+}
+.ui-slider-horizontal .ui-slider-range-min {
+    left: 0;
+}
+.ui-slider-horizontal .ui-slider-range-max {
+    right: 0;
+}
+.ui-slider-vertical {
+    height: 100px;
+    width: 0.8em;
+}
+.ui-slider-vertical .ui-slider-handle {
+    left: -0.3em;
+    margin-bottom: -0.6em;
+    margin-left: 0;
+}
+.ui-slider-vertical .ui-slider-range {
+    left: 0;
+    width: 100%;
+}
+.ui-slider-vertical .ui-slider-range-min {
+    bottom: 0;
+}
+.ui-slider-vertical .ui-slider-range-max {
+    top: 0;
+}
+
+
+/* ==============
     MOBILE: Menu
    ============== */
 
