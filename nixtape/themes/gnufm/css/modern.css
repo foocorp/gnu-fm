@@ -87,10 +87,10 @@ body{ font:16px/24px sans-serif; }
 	background:green;
 }
 
-#header-container a:link,
-#footer-container a:link,
-#main aside a:link{
-	color: yellow;
+#header-container a,
+#footer-container a,
+#main aside a{
+	color: yellow !important;
 }
 
 
@@ -372,6 +372,8 @@ nav a:hover{
 		padding:10px 2%;
 		margin-bottom:0;
 		font-size: 80%;
+		background-color: transparent;
+		text-decoration: underline;
 	}
 
 /* ============
