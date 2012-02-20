@@ -1,45 +1,130 @@
-body, html {
-    margin: 0;
-    padding: 0;
-}
 body {
-    background-color: white;
-    font-family: sans-serif;
-    margin: 0 auto;
-    width: 600px;
+margin:0 auto;
+padding:15px 20px !important;
+width:440px;
 }
-h2 {
-    color: #B22222;
-    font-size: 34px;
-    text-align: center;
+html {
+background-color:#fff;
+padding-top:38px;
 }
-input {
-    font-size: 17px;
-    margin-bottom: 14px;
+table, tr, td {
+border:0 none !important;
 }
+#headline-container {
+font-weight:bold;
+text-align:center;
+}
+#logo-container {
+padding-top:15px;
+text-align:center;
+}
+label {
+font-weight:bold;
+}
+#form-layout {
+position:relative;
+margin: 0 auto;
+}
+#form-layout td {
+clear:both;
+float:left;
+padding-bottom:2px;
+}
+#form-layout input {
+font-size:18px;
+tab-index: 1;
+}
+
+#submit-container input {
+
+font-size: 14px;
+}
+
+#infoline {border-top: 1px dashed #ccc;}
+
+
+textarea,
+input[type=text],
+input[type=password] {
+  background: #FCFCFC;
+  border: 1px solid #DDD;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.10);
+  -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.10);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.10);
+  color: #999;
+  font-size: 0.90em;
+  padding: 8px;
+  outline: none;
+  transition: all ease-in-out 0.15s;
+  -moz-transition: all ease-in-out 0.15s;
+  -webkit-transition: all ease-in-out 0.15s;
+}
+
+textarea:focus,
+input[type=text]:focus,
+input[type=password]:focus {
+  background: #FFF;
+  box-shadow:
+    0 0 4px 2px #E6F9FF,
+    inset 0 1px 1px rgba(0,0,0,0.10);
+  -webkit-box-shadow:
+    0 0 4px 2px #E6F9FF,
+    inset 0 1px 1px rgba(0,0,0,0.10);
+  -moz-box-shadow:
+    0 0 4px 2px #E6F9FF,
+    inset 0 1px 1px rgba(0,0,0,0.10);
+  border-color: #80d2f0;
+  color: #666;
+}
+
+input[type=text],
+input[type=password] {
+  width: 100%;
+}
+
+.messagebox {display: block; text-align: center;}
+
+.confirmation {background-color: lime; color: black;   padding: 7px 20px;  text-shadow: 0 1px 0 #eee;
+
+.mistake{ background-color: #E55E5E;
+  padding: 7px 20px;
+  color: #fff;
+  text-shadow: 0 1px 0 #CB0000;
+}
+
 fieldset {
-    border: 0 none;
-}
-form {
-    background-color: whitesmoke;
-    border: 5px solid #DDDDDD;
-    padding: 10px;
-}
-h1 {
-    text-align: center;
-    font-family: "serif";
-    font-size: 3em;
-    color: #B22222;
-    text-shadow: 0 0 1px #999999;
-
-}
-#errors {
-    background-color: #BB2222;
-    color: white;
-    font-weight: bold;
-    padding: 1em;
-}
-#errors a {
-    color: yellow !important;
+  margin-bottom: 20px;
 }
 
+label.optional:after,
+fieldset.optional legend:after {
+  content: ' (optional)';
+  font-weight: 200;
+}
+
+label + input,
+label + select,
+label + textarea {
+  display: block;
+}
+
+label + input[type=radio] {
+  display: inline-block;
+}
+
+label {
+  cursor: pointer;
+}
+
+#infoline {margin-top: 10px; padding-top: 10px; border-top: 1px solid #ccc !important;}
+
+#headline-container {font-size: 22px !important; font-weight: normal !important; color: #333; letter-spacing: 0.1em; padding-bottom: 10px; border-bottom: 1px solid #ccc;}
+
+input {margin-bottom: 10px !important;}
+
+.button {font-size: 18px !important; padding: 8px  12px !important; 
+  color: #666;
+  cursor: pointer;}
