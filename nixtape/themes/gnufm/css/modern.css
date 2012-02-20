@@ -76,17 +76,16 @@ body{ font:16px/24px Helvetica, Helvetica Neue, Arial, sans-serif; }
 }
 
 /* ===================
-    ALL: Blue Theme
+    ALL: Theme
    =================== */
 
-#header-container{ border-bottom: 20px solid #336699; }
-#footer-container{ border-top:    20px solid #336699; }
-#main aside      { border-top:    20px solid #336699; }
+#header-container{ border-bottom: 20px solid darkgreen; }
+#footer-container{ border-top:    20px solid darkgreen; }
+#main aside      { border-top:    20px solid darkgreen; }
 
 #header-container,
-#footer-container,
-#main aside{
-	background:#3104B4;
+#footer-container{
+	background:green;
 }
 
 #header-container a:link,
@@ -95,11 +94,6 @@ body{ font:16px/24px Helvetica, Helvetica Neue, Arial, sans-serif; }
 	color: yellow;
 }
 
-#header-container a:visited,
-#footer-container a:visited,
-#main aside a:visited{
-	color: magenta;
-}
 
 
 
