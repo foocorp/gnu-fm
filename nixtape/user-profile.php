@@ -53,7 +53,7 @@ if (isset($user->name)) {
 	if ($user->hasLoved()) {
 		$recommendedArtists = $user->getRecommended(10);
 		$smarty->assign('recommendedArtists', $recommendedArtists);
-		$lovedArtists = $user->getLovedArtists(10);
+		$lovedArtists = TagCloud::generateTagCloud('loved', 'artist', 10, 'userid', $user->uniqueid);
 		$smarty->assign('lovedArtists', $lovedArtists);
 	}
 	$smarty->assign('isme', ($this_user->name == $user->name));
