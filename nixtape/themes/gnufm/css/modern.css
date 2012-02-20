@@ -76,20 +76,32 @@ body{ font:16px/24px Helvetica, Helvetica Neue, Arial, sans-serif; }
 }
 
 /* ===================
-    ALL: Red Theme
+    ALL: Blue Theme
    =================== */
 
-#header-container{ border-bottom: 20px solid maroon; }
-#footer-container{ border-top:    20px solid maroon; }
-#main aside      { border-top:    20px solid maroon; }
+#header-container{ border-bottom: 20px solid #336699; }
+#footer-container{ border-top:    20px solid #336699; }
+#main aside      { border-top:    20px solid #336699; }
 
 #header-container,
 #footer-container,
 #main aside{
-	background:red;
+	background:#3104B4;
 }
 
-aside a{color: yellow;}
+#header-container a:link,
+#footer-container a:link,
+#main aside a:link{
+	color: yellow;
+}
+
+#header-container a:visited,
+#footer-container a:visited,
+#main aside a:visted{
+	color: magenta;
+}
+
+
 
 #title, #title a{ color:white; }
 
