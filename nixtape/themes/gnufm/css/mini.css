@@ -1,6 +1,7 @@
 @import url('combo.css');
 
 body {
+text-align: left;
 margin:0 auto;
 padding:15px 20px !important;
 width:440px;
