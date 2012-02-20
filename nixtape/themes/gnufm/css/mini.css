@@ -92,7 +92,7 @@ input[type=password] {
 
 .confirmation {background-color: lime; color: black;   padding: 7px 20px;  text-shadow: 0 1px 0 #eee;
 
-.errors{ background-color: #E55E5E;
+#errors{ background-color: #E55E5E;
   padding: 7px 20px;
   color: #fff;
   text-shadow: 0 1px 0 #CB0000;
