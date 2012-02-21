@@ -327,7 +327,6 @@ class Server {
 			$query .= ' lower(s.artist)=lower(' . $adodb->qstr($artist) . ')';
 		}
 	
-		//We dont group by album, should we?
 		$query .= ' GROUP BY s.track, s.artist ORDER BY freq DESC LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -383,7 +382,6 @@ class Server {
 			$query .= ' lower(lt.artist)=lower(' . $adodb->qstr($artist) . ')';
 		}
 	
-		//We dont group by album, should we?
 		$query .= ' GROUP BY lt.track, lt.artist ORDER BY freq DESC, time DESC LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
