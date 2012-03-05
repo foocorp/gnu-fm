@@ -56,11 +56,20 @@ if (!($topartists >= 10 && $topartists <= 500)) {
 }
 
 if (isset($user->name)) {
+	$begin = null;
+	$total_tracks_limit = 20000;
+	$total_tracks = $user->getTotalTracks();
+
+	// Limit stats to timeperiod if track count is higher than limit
+	if($total_tracks > $total_tracks_limit) {
+		$begin = strtotime('-6 months');
+		$smarty->assign('timeperiod', '(last 6 months)');
+	}
 
 	$smarty->assign('stat_barwidth', 320);
 	$smarty->assign('topartistspx', 25 * $topartists);
 	try {
-		$smarty->assign('graphtopartists', new GraphTopArtists($user, $topartists));
+		$smarty->assign('graphtopartists', new GraphTopArtists($user, $topartists, $begin));
 	} catch (exception $e) {}
 
 	try {
@@ -69,14 +78,14 @@ if (isset($user->name)) {
 
 	$smarty->assign('toptrackspx', 25 * $toptracks);
 	try {
-		$smarty->assign('graphtoptracks', new GraphTopTracks($user, $toptracks));
+		$smarty->assign('graphtoptracks', new GraphTopTracks($user, $toptracks, $begin));
 	} catch (exception $e) {
 		$smarty->assign('pageheading', 'Couldn\'t get users top tracks!');
 		$smarty->assign('details', 'User ' . $user->name . ' doesn\'t seem to have scrobbled anything yet.');
 		$smarty->display('error.tpl');
 		die();
 	}
-	$smarty->assign('totaltracks', $user->getTotalTracks());
+	$smarty->assign('totaltracks', $total_tracks);
 	
 	$smarty->assign('me', $user);
 	$smarty->assign('geo', Server::getLocationDetails($user->location_uri));
