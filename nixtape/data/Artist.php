@@ -84,9 +84,9 @@ class Artist {
 	}
 
 	/**
-	 * Retrieves all an artist's albums
+	 * Retrieves the artist's albums
 	 *
-	 * @return An array of Album objects
+	 * @return array Album objects
 	 */
 	function getAlbums() {
 		global $adodb;
@@ -108,9 +108,9 @@ class Artist {
 	}
 
 	/**
-	 * Retrieves all an artist's tracks
+	 * Retrieves the artist's tracks
 	 *
-	 * @return An array of Track objects
+	 * @return array Track objects
 	 */
 	function getTracks() {
 		global $adodb;
@@ -142,7 +142,8 @@ class Artist {
 	/**
 	 * Gives the URL for this artist
 	 *
-	 * @return A string containing the URL of this artist
+	 * @param string $component Type of page
+	 * @return string URL of this artist
 	 */
 	function getURL($component = '') {
 		return Server::getArtistURL($this->name, $component);
@@ -151,7 +152,7 @@ class Artist {
 	/**
 	 * Gives the URL to the management interface for this artist
 	 *
-	 * @return A string containing the URL for this artist's management interface
+	 * @return string URL for this artist's management interface
 	 */
 	function getManagementURL() {
 		return Server::getArtistManagementURL($this->name);
@@ -160,7 +161,7 @@ class Artist {
 	/**
 	 * Gives the URL for manages to add a new album to this artist
 	 *
-	 * @return A string containing the URL for adding albums to this artist
+	 * @return string URL for adding albums to this artist
 	 */
 	function getAddAlbumURL() {
 		return Server::getAddAlbumURL($this->name);
@@ -197,7 +198,7 @@ class Artist {
 	 * @param int $limit The number of tags to return (default is 10)
 	 * @param int $offset The position of the first tag to return (default is 0)
 	 * @param int $cache Caching period of query in seconds (default is 600)
-	 * @return An array of tag details ((tag, freq) .. )
+	 * @return array Tag details ((tag, freq) .. )
 	 */
 	function getTopTags($limit=10, $offset=0, $cache=600) {
 		return Tag::_getTagData($cache, $limit, $offset, null, $this->name);
@@ -210,7 +211,7 @@ class Artist {
 	 * @param int $limit The number of tags to return (default is 10)
 	 * @param int $offset The position of the first tag to return (default is 0)
 	 * @param int $cache Caching period of query in seconds (default is 600)
-	 * @return An array of tag details ((tag, freq) .. )
+	 * @return array Tag details ((tag, freq) .. )
 	 */
 	function getTags($userid, $limit=10, $offset=0, $cache=600) {
 		if(isset($userid)) {
@@ -218,6 +219,9 @@ class Artist {
 		}
 	}
 
+	/**
+	 * Clear cached database query for this artist
+	 */
 	function clearCache() {
 		global $adodb;
 		$adodb->CacheFlush($this->query);
@@ -295,6 +299,11 @@ class Artist {
 		$adodb->CacheFlush($this->query);
 	}
 
+	/**
+	 * Get streamable status for this artist
+	 *
+	 * @return bool True if artist have any streamable tracks
+	 */
 	function isStreamable() {
 		global $adodb;
 		return $this->streamable;
@@ -303,7 +312,7 @@ class Artist {
 	/**
 	 * Finds out which users manage this artist.
 	 *
-	 * @return An array of users who manage this artist.
+	 * @return array User objects who manage this artist.
 	 */
 	function getManagers() {
 		global $adodb;
@@ -318,7 +327,7 @@ class Artist {
 	/**
 	 * Returns the number of listeners this artist has in total.
 	 *
-	 * @return An int indicating the number of people who've listened to this artist.
+	 * @return int The number of people who've listened to this artist.
 	 */
 	function getListenerCount() {
 		global $adodb;
@@ -330,7 +339,8 @@ class Artist {
 	/**
 	 * Retrieves a list of similar artist names
 	 *
-	 * @return An array of artists and their similarity measure (between 0 and 1), sorted from most to least similar
+	 * @param int $limit Number of artists to return
+	 * @return array Artists and their similarity measure (between 0 and 1), sorted from most to least similar
 	 */
 	function getSimilar($limit = 10) {
 		global $adodb;
