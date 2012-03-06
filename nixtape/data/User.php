@@ -41,6 +41,7 @@ class User {
 	 * User constructor
 	 *
 	 * @param string $name The name of the user to load
+	 * @param array $data User data as row returned from Users database table
 	 */
 	function __construct($name, $data = null) {
 
@@ -88,6 +89,12 @@ class User {
 			}
 		}
 	}
+	/**
+	 * Create User object from user id
+	 *
+	 * @param int $uid User id
+	 * @return User User object, or false in case of failure
+	 */
 
 	public static function new_from_uniqueid_number($uid) {
 		global $adodb;
@@ -105,6 +112,12 @@ class User {
 			return false;
 		}
 	}
+
+	/**
+	 * Save user data to database
+	 *
+	 * @return int 1 on success
+	 */
 
 	function save() {
 		global $adodb;
@@ -184,7 +197,7 @@ class User {
 	 * Retrieve a user's avatar via the gravatar service
 	 *
 	 * @param int $size The desired size of the avatar (between 1 and 512 pixels)
-	 * @return array A URL to the user's avatar image
+	 * @return string A URL to the user's avatar image
 	 */
 	function getAvatar($size = 64) {
 		if (!empty($this->avatar_uri)) {
@@ -194,6 +207,12 @@ class User {
 		return 'http://www.gravatar.com/avatar/' . md5(strtolower($this->email)) . '?s=' . $size . '&d=monsterid';
 	}
 
+	/**
+	 * Retrieves the URL to the user's page
+	 *
+	 * @param string $component Type of user page, profile|stats|recent-tracks|station
+	 * @return string URL to the user's page
+	 */
 	function getURL($component = 'profile', $params = false) {
 		return Server::getUserURL($this->name, $component, $params);
 	}
@@ -201,7 +220,8 @@ class User {
 	/**
 	 * Get a user's now-playing tracks
 	 *
-	 * @return array An array of nowplaying data
+	 * @param int $number Amount of tracks to retrieve
+	 * @return array An array of nowplaying data or null in case of failure
 	 */
 	function getNowPlaying($number) {
 		return Server::getNowPlaying($number, $this->name);
@@ -276,6 +296,12 @@ class User {
 		return Server::getTopTracks($limit, $offset, $streamable, $begin, $end, null, $this->uniqueid, $cache);
 	}
 
+	/**
+	 * Get this user's total number of tracks scrobbled
+	 *
+	 * @param int $since Timestamp to start counting tracks from
+	 * @return int Number of tracks scrobbled
+	 */
 	public function getTotalTracks($since = null) {
 		global $adodb;
 
@@ -309,12 +335,12 @@ class User {
 	 * Get artists, albums, or tracks tagged with tag by user
 	 *
 	 * @param string $tag Items are tagged by this tag
-	 * $param string $taggingtype Type of tags to return (artist|album|track)
+	 * @param string $taggingtype Type of tags to return (artist|album|track)
 	 * @param int $limit The number of items to return (default is 10)
 	 * @param int $offset The position of the first item to return (default is 0)
 	 * @param int $cache Caching period of query in seconds (default is 600)
 	 * @param bool $streamable Show only content by streamable artists (default is False)
-	 * @return An array of item details ((artist, .. , freq) .. )
+	 * @return array Item details ((artist, .. , freq) .. )
 	 */
 
 	function getPersonalTags($tag, $taggingtype, $limit=10, $offset=0, $cache=600, $streamable=False) {
@@ -360,7 +386,7 @@ class User {
 	 * @param bool $streamable Only return streamable tracks
 	 * @param int $artist Only return results from this artist
 	 * @param int $cache Caching period in seconds
-	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
+	 * @return array Track details ((artist, track, time, freq, artisturl, trackurl) ..) or empty array in case of failure
 	 */
 	function getLovedTracks($limit = 20, $offset = 0, $streamable = False, $artist = null, $cache = 600) {
 		return Server::getLovedTracks($limit, $offset, $streamable, $artist, $this->uniqueid, $cache);
@@ -380,10 +406,13 @@ class User {
 	}
 
 	/**
-	 * Get a user's banned tracks
+	 * Retrieves a list of user's banned tracks
 	 *
-	 * @param int $limit The number of tracks to return (defaults to 50)
-	 * @return array An array of track details
+	 * @todo Rewrite this function like $user->getLovedTracks()
+	 *
+	 * @param int $limit The number of tracks to return
+	 * @param int $offset Skip this number of rows before returning tracks
+	 * @return array Track details ((userid, track, artist, time) ..) or empty array in case of failure
 	 */
 	function getBannedTracks($limit = 50, $offset = 0) {
 		global $adodb;
@@ -414,7 +443,7 @@ class User {
 	 * Get artists recommended for this user
 	 *
 	 * @param int $limit The number of artists to return (defaults to 10)
-	 * @param bool $randomised Pick artists at random
+	 * @param bool $random Pick artists at random
 	 * @return array An array of artist details
 	 */
 	function getRecommended($limit = 10, $random = false) {
@@ -462,7 +491,7 @@ class User {
 	/**
 	 * Determines whether a user has permission to manage an artist
 	 *
-	 * @oaram string $artist The name of the artist to check
+	 * @param string $artist The name of the artist to check
 	 * @return bool Boolean indicating whether this user can edit the artist or not.
 	 */
 	function manages($artist) {
