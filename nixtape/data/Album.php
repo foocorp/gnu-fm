@@ -40,6 +40,8 @@ class Album {
 	/**
 	 * Album constructor
 	 *
+	 * @todo throw Exception instead of setting $this->name to 'No such album: $name'
+	 *
 	 * @param string name The name of the album to load
 	 * @param string artist The name of the artist who recorded this album
 	 */
@@ -79,7 +81,7 @@ class Album {
 	 * @param string $name The name of the album
 	 * @param string $artist_name The name of the artist who recorded this album
 	 * @param string $image The URL to this album's cover image (optional)
-	 * @return An Album object corresponding to the newly created album
+	 * @return Album Album object corresponding to the newly created album
 	 */
 	public static function create($name, $artist_name, $image = '') {
 		global $adodb;
@@ -115,6 +117,11 @@ class Album {
 		$adodb->CacheFlush($this->query);
 	}
 
+	/**
+	 * Retrieves total play count for all tracks on this album
+	 * 
+	 * @return int Number of plays
+	 */
 	function getPlayCount() {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -138,7 +145,7 @@ class Album {
 	/**
 	 * Retrieves all the tracks in an album
 	 *
-	 * @return An array of Track objects
+	 * @return array Track objects
 	 */
 	function getTracks() {
 		global $adodb;
@@ -154,7 +161,7 @@ class Album {
 	/**
 	 * Gives the URL for this album
 	 *
-	 * @return A string containing the URL of this album
+	 * @return string The URL of this album
 	 */
 	function getURL() {
 		return Server::getAlbumURL($this->artist_name, $this->name);
@@ -163,22 +170,23 @@ class Album {
 	/**
 	 * Gives the URL for managers to add a new track to this album
 	 *
-	 * @return A string containing the URL for adding tracks to this album
+	 * @return string The URL for adding tracks to this album
 	 */
 	function getAddTrackURL() {
 		return Server::getAddTrackURL($this->artist_name, $this->name);
 	}
 
 	/**
-	 * Get the top tags for an album, ordered by tag count
+	 * Get the top tags for this album, ordered by tag count
+	 *
+	 * @todo Remove throw new Exception when album construct has been changed to throw it
 	 *
 	 * @param int $limit The number of tags to return (default is 10)
 	 * @param int $offset The position of the first tag to return (default is 0)
 	 * @param int $cache Caching period of query in seconds (default is 600)
-	 * @return An array of tag details ((tag, freq) .. )
+	 * @return array Tag details ((tag, freq) .. )
 	 */
 	function getTopTags($limit=10, $offset=0, $cache=600) {
-		//TODO: Remove horrible workaround and fix album construct to throw it instead
 		if(substr($this->name, 0, 13) == 'No such album') {
 			throw new Exception('No such album');
 		}
@@ -189,15 +197,16 @@ class Album {
 	/**
 	 * Get a specific user's tags for this album.
 	 *
+	 * @todo Remove throw new Exception when album construct has been changed to throw it
+	 *
 	 * @param int $userid Get tags for this user
 	 * @param int $limit The number of tags to return (default is 10)
 	 * @param int $offset The position of the first tag to return (default is 0)
 	 * @param int $cache Caching period of query in seconds (default is 600)
-	 * @return An array of tag details ((tag, freq) .. )
+	 * @return array Tag details ((tag, freq) .. )
 	 */
 	function getTags($userid, $limit=10, $offset=0, $cache=600) {
 		if(isset($userid)) {
-			//TODO: Remove horrible workaround and fix album construct to throw it instead
 			if(substr($this->name, 0, 13) == 'No such album') {
 				throw new Exception('No such album');
 			}
@@ -225,11 +234,14 @@ class Album {
 
 	/**
 	 * Return Album Art URL from Wikipedia
-	 * @param string Album
-	 * @param string Artist
-	 * @param bool Save info to Album table.
-	 * @param string Wikipedia API URL
-	 * @return an object with the url and usage_url properties
+	 *
+	 * @deprecated mb_convert_case fails and wikipedia returns 403. 20120307 kabniel
+	 *
+	 * @param string $album_name Album name
+	 * @param string $artist_name Artist name
+	 * @param bool $save Save info to Album table.
+	 * @param string $api_url Wikipedia API URL
+	 * @return array An object with the url and usage_url properties
 	 */
 	function WikipediaAlbumArt ($album_name, $artist_name, $save = false, $api_url = 'http://en.wikipedia.org/w/api.php') {
 		global $adodb;
@@ -363,7 +375,14 @@ class Album {
 
 }
 
-
+/**
+ * Retrieves and saves the URL to cover art for an album
+ *
+ * @deprecated amazonaws.com returns error 400. 20120307 kabniel
+ *
+ * @param string $artist Artist name
+ * @param string $album Album name
+ */
 function go_get_album_art($artist, $album){
 	global $adodb;
 	$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
