@@ -196,7 +196,7 @@ class Server {
 			throw new Exception('ERROR ' . $query);
 		}
 
-		return $data
+		return $data;
 	}
 
 	/**
