@@ -188,7 +188,7 @@ class Server {
 		global $adodb;
 
 		$alpha .= '%';
-		$query = 'SELECT username from Users where username LIKE ' . $adodb->qstr($alpha);
+		$query = 'SELECT username from Users where username LIKE ' . $adodb->qstr($alpha) . ' ORDER BY username ASC';
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$data = $adodb->CacheGetAll(7200, $query);
@@ -196,6 +196,7 @@ class Server {
 			throw new Exception('ERROR ' . $query);
 		}
 
+		return $data
 	}
 
 	/**
