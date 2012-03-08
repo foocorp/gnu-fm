@@ -44,6 +44,8 @@ class Track {
 	/**
 	 * Track constructor
 	 *
+	 * @todo throw Exception instead of setting $this->name to 'No such track: $name'
+
 	 * @param string $name The name of the track to load
 	 * @param string $artist The name of the artist who recorded this track
 	 */
@@ -78,13 +80,13 @@ class Track {
 	/**
 	 * Add a new track to the database.
 	 *
-	 * @param string $name
-	 * @param string $artist_name
-	 * @param string $album_name
-	 * @param string $streaming_url
-	 * @param string $download_url
-	 * @param string $license
-	 * @return A newly created track object
+	 * @param string $name Track name
+	 * @param string $artist_name Artist name
+	 * @param string $album_name Album name
+	 * @param string $streamurl The URL pointing to a streamable file
+	 * @param string $downloadurl The URL pointing to a downloadable file
+	 * @param string $license A license URL
+	 * @return Track A newly created track object
 	 */
 	public static function create($name, $artist_name, $album_name, $streamurl, $downloadurl, $license) {
 		global $adodb;
@@ -112,6 +114,9 @@ class Track {
 		return new Track($name, $artist_name);
 	}
 
+	/**
+	 * Clear cached database query for this track
+	 */
 	function clearCache() {
 		global $adodb;
 		$adodb->CacheFlush($this->query);
@@ -194,8 +199,9 @@ class Track {
 
 
 	/**
+	 * Gets the play count for this track
 	 *
-	 * @return An int indicating the number of times this track has been played
+	 * @return int Number of times this track has been played
 	 */
 	function getPlayCount() {
 		if ($this->_playcount) {
@@ -208,8 +214,9 @@ class Track {
 	}
 
 	/**
+	 * Gets the listener count for this track
 	 *
-	 * @return An int indicating the number of listeners this track has
+	 * @return int Number of listeners this track has
 	 */
 	function getListenerCount() {
 		if ($this->_listeners) {
@@ -221,6 +228,9 @@ class Track {
 	}
 
 
+	/**
+	 * Updates the play count and listener count for this track
+	 */
 	private function _getPlayCountAndListenerCount() {
 		global $adodb;
 
@@ -240,9 +250,9 @@ class Track {
 	}
 
 	/**
-	 * Retrieve the artist for this track.
+	 * Gets the artist for this track.
 	 *
-	 * @return An artist object
+	 * @return Artist Artist object for this track
 	 */
 	function getArtist() {
 		try {
@@ -252,24 +262,36 @@ class Track {
 		}
 	}
 
+	/**
+	 * Gets the URL for this track
+	 *
+	 * @param string $component Type of page, 'tags', ''
+	 * @return string URL for this track
+	 */
 	function getURL($component = '') {
 		return Server::getTrackURL($this->artist_name, $this->album_name, $this->name, $component);
 	}
 
+	/**
+	 * Gets the edit URL for this track
+	 *
+	 * @return string Edit URL for this track
+	 */
 	function getEditURL() {
 		return Server::getTrackEditURL($this->artist_name, $this->album_name, $this->name);
 	}
 
 	/**
-	 * Get the top tags for this track, ordered by tag count
+	 * Gets the top tags for this track, ordered by tag count
+	 *
+	 * @todo Remove throw new Exception when track construct has been changed to throw it
 	 *
 	 * @param int $limit The number of tags to return (default is 10)
 	 * @param int $offset The position of the first tag to return (default is 0)
 	 * @param int $cache Caching period of query in seconds (default is 600)
-	 * @return An array of tag details ((tag, freq) .. )
+	 * @return array Tag details ((tag, freq) .. )
 	 */
 	function getTopTags($limit=10, $offset=0, $cache=600) {
-		//TODO: Remove horrible workaround and fix track construct to throw it instead
 		if(substr($this->name, 0, 13) == 'No such track') {
 			throw new Exception('No such track');
 		}
@@ -280,15 +302,16 @@ class Track {
 	/**
 	 * Get a specific user's tags for this track.
 	 *
+	 * @todo Remove throw new Exception when track construct has been changed to throw it
+	 *
 	 * @param int $userid Get tags for this user
 	 * @param int $limit The number of tags to return (default is 10)
 	 * @param int $offset The position of the first tag to return (default is 0)
 	 * @param int $cache Caching period of query in seconds (default is 600)
-	 * @return An array of tag details ((tag, freq) .. )
+	 * @return array Tag details ((tag, freq) .. )
 	 */
 	function getTags($userid, $limit=10, $offset=0, $cache=600) {
 		if(isset($userid)) {
-			//TODO: Remove horrible workaround and fix track construct to throw it instead
 			if(substr($this->name, 0, 13) == 'No such track') {
 				throw new Exception('No such track');
 			}
