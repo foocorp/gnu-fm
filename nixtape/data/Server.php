@@ -187,7 +187,8 @@ class Server {
 	static function getUserList($alpha) {
 		global $adodb;
 
-		$query = 'SELECT username from Users where username LIKE \'' . $alpha . '%\'';
+		$alpha .= '%';
+		$query = 'SELECT username from Users where username LIKE ' . $adodb->qstr($alpha);
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$data = $adodb->CacheGetAll(7200, $query);
