@@ -19,6 +19,12 @@
 
 */
 
+/**
+ * GNU FM web service methods
+ *
+ * @link http://bugs.foocorp.net/projects/librefm/wiki/Librefm_API
+ * @package Webservice
+ */
 require_once('../database.php');
 require_once('../api/ArtistXML.php');
 require_once('../api/UserXML.php');
@@ -111,11 +117,25 @@ $method_map = array(
 	'track.unban'           => method_track_unban,
 );
 
-
 /**
- * User methods
+ * user.gettopartists : Get the top artists for a user.
+ *
+ * ###Description
+ * Get the top artists for a user, ordered by play count.
+ *
+ * ###Parameters
+ * * **user** (required)		: Name of the user
+ * * **limit** (optional)		: How many items to return. Defaults to 50.
+ * * **page** (optional)		: The page to show. Defaults to 1.
+ * * **period** (optional)		: The time period to get top artists for - overall|7day|1month|3month|6month|12month. Default is overall.
+ * * **streamable** (optional)	: Only show streamable artists. Default is false.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage User
+ * @api
  */
-
 function method_user_getTopArtists() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -132,6 +152,23 @@ function method_user_getTopArtists() {
 	respond($xml);
 }
 
+/**
+ * user.getrecenttracks : Get recently played tracks by a user.
+ *
+ * ###Description
+ * Get recently played tracks by a user, ordered by time.
+ *
+ * ###Parameters
+ * * **user** (required)		: Name of the user.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **page** (optional)		: The page to show. Defaults to 1.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage User
+ * @api
+ */
 function method_user_getRecentTracks() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -144,6 +181,22 @@ function method_user_getRecentTracks() {
 	respond($xml);
 }
 
+/**
+ * user.gettoptags : Get the top tags for a user.
+ *
+ * ###Description
+ * Get the top tags for a user, ordered by tag count.
+ *
+ * ###Parameters
+ * * **user** (required)		: Name of the user.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage User
+ * @api
+ */
 function method_user_getTopTags() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -157,6 +210,26 @@ function method_user_getTopTags() {
 	respond($xml);
 }
 
+/**
+ * user.getpersonaltags : Get a list of items tagged by a user with a specific tag.
+ *
+ * ###Description
+ * Get a list of items (artists, albums or tracks)
+ * that has been tagged by a user with a specific tag
+ *
+ * ###Parameters
+ * * **user** (required)		: Name of the user.
+ * * **tag** (required)			: Name of the tag.
+ * * **taggingtype** (required)	: Type of tag - artist|album|track.
+ * * **limit** (optional)		: How many items to show. Defaults to 10.
+ * * **page** (optional)		: The page to show. Defaults to 1.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage User
+ * @api
+ */
 function method_user_getPersonalTags() {
 	if(!isset($_GET['user']) or !isset($_GET['tag']) or !isset($_GET['taggingtype'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -172,6 +245,21 @@ function method_user_getPersonalTags() {
 	respond($xml);
 }
 
+/**
+ * user.gettaginfo : Get info about a user's tag.
+ *
+ * ###Description
+ * Get info about a user's tag.
+ *
+ * ###Parameters
+ * * **user** (required)		: Name of the user.
+ * * **tag** (required)			: Name of the tag.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage User
+ * @api
+ */
 function method_user_getTagInfo() {
 	if(!isset($_GET['user']) or !isset($_GET['tag'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -183,6 +271,25 @@ function method_user_getTagInfo() {
 	respond($xml);
 }
 
+/**
+ * user.gettoptracks : Get the top tracks for a user.
+ *
+ * ###Description
+ * Get the top tracks for a user, ordered by play count.
+ *
+ * ###Parameters
+ * * **user** (required)		: Name of the user.
+ * * **limit** (optional)		: How many items to show. Defaults to 10.
+ * * **page** (optional)		: The page to show. Defaults to 1.
+ * * **period** (optional)		: The time period to get top artists for - overall|7day|1month|3month|6month|12month. Default is overall.
+ * * **streamable** (optional)	: Only show streamable tracks. Default is false.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage User
+ * @api
+ */
 function method_user_getTopTracks() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -197,6 +304,19 @@ function method_user_getTopTracks() {
 	respond($xml);
 }
 
+/** user.getinfo : Get information about a user
+ *
+ * ###Description
+ * Get information (such as biography and playcount) about a user.
+ *
+ * ###Parameters
+ * * **user** (required)		: Name of the user.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage User
+ * @api
+ */
 function method_user_getInfo() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -206,6 +326,24 @@ function method_user_getInfo() {
 	respond($xml);
 }
 
+/**
+ * user.getlovedtracks : Get the loved tracks for a user.
+ *
+ * ###Description
+ * Get the loved tracks for a user, ordered by time.
+ *
+ * ###Parameters
+ * * **user** (required)		: Name of the user.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **page** (optional)		: The page to show. Defaults to 1.
+ * * **streamable** (optional)	: Only show streamable tracks. Default is false.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage User
+ * @api
+ */
 function method_user_getLovedTracks() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -222,6 +360,23 @@ function method_user_getLovedTracks() {
 	respond($xml);
 }
 
+/**
+ * user.getbannedtracks : Get the banned tracks for a user.
+ *
+ * ###Description
+ * Get the banned tracks for a user, ordered by time.
+ *
+ * ###Parameters
+ * * **user** (required)		: Name of the user.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **page** (optional)		: The page to show. Defaults to 1.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage User
+ * @api
+ */
 function method_user_getBannedTracks() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -235,6 +390,22 @@ function method_user_getBannedTracks() {
 	respond($xml);
 }
 
+/**
+ * user.getneighbours : Get the neighbours for a user.
+ *
+ * ###Description
+ * Get the neighbours for a user, ordered by relevance.
+ *
+ * ###Parameters
+ * * **user** (required)		: Name of the user.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage User
+ * @api
+ */
 function method_user_getNeighbours() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -248,9 +419,27 @@ function method_user_getNeighbours() {
 }
 
 /**
- * Artist methods
+ * artist.addtags : Add tags to an artist.
+ *
+ * ###Description
+ * Add tags to an artist using a comma-separated list of tags.
+ * 
+ * ###Parameters
+ * * **artist** (required)		: Name of the album's artist.
+ * * **tags** (required)		: Comma-separated list of tags.
+ * * **sk** (required)			: Session key.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**.
+ *
+ * **HTTP request method** : POST.
+ * - - - 
+ *
+ * @package Webservice
+ * @subpackage Artist
+ * @api
  */
-
 function method_artist_addTags() {
 	if (!isset($_POST['artist']) || !isset($_POST['tags'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -261,6 +450,19 @@ function method_artist_addTags() {
 	respond($xml);
 }
 
+/** artist.getinfo : Get information about an artist.
+ *
+ * ###Description
+ * Get information about an user.
+ *
+ * ###Parameters
+ * * **artist** (required)		: Name of the artist.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Artist
+ * @api
+ */
 function method_artist_getInfo() {
 	if (!isset($_GET['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -270,6 +472,24 @@ function method_artist_getInfo() {
 	respond($xml);
 }
 
+/**
+ * artist.gettoptracks : Get the top tracks for an aritst.
+ *
+ * ###Description
+ * Get the top tracks for an artist, ordered by play count.
+ *
+ * ###Parameters
+ * * **artist** (required)		: Name of the artist.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **page** (optional)		: The page to show. Defaults to 1.
+ * * **streamable** (optional)	: Only show streamable tracks. Default is false.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Artist
+ * @api
+ */
 function method_artist_getTopTracks() {
 	if (!isset($_GET['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -283,6 +503,22 @@ function method_artist_getTopTracks() {
 	respond($xml);
 }
 
+/**
+ * artist.gettoptags : Get the top tags for an artist.
+ *
+ * ###Description
+ * Get the top tags used for an artist, ordered by tag count.
+ *
+ * ###Parameters
+ * * **artist** (required)		: Name of the album's artist.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Artist
+ * @api
+ */
 function method_artist_getTopTags() {
 	if (!isset($_GET['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -296,6 +532,27 @@ function method_artist_getTopTags() {
 	respond($xml);
 }
 
+/**
+ * artist.gettags : Get a user's top tags for an artist.
+ *
+ * ###Description
+ * Get the top tags used for an artist, filtered by user name and ordered by tag count.
+ *
+ * ###Parameters
+ * * **artist** (required)		: Name of the artist.
+ * * **sk** (required)			: Session key.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Artist
+ * @api
+ * @todo Only require sk if no user specified, see http://www.last.fm/api/show/artist.getTags.
+ */
 function method_artist_getTags() {
 	if (!isset($_REQUEST['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -310,6 +567,21 @@ function method_artist_getTags() {
 	respond($xml);
 }
 
+/**
+ * artist.getflattr : Get the Flattr id of an artist.
+ *
+ * ###Description
+ * Get the Flattr id of an artist.
+ *
+ * ###Parameters
+ * * **artist**					: Name of the artist.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Artist
+ * @api
+ */
 function method_artist_getFlattr() {
 	if (!isset($_GET['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -320,9 +592,28 @@ function method_artist_getFlattr() {
 }
 
 /**
- * Album methods
+ * album.addtags : Add tags to an album.
+ *
+ * ###Description
+ * Add tags to an album using a comma-separated list of tags.
+ * 
+ * ###Parameters
+ * * **artist** (required)		: Name of the album's artist.
+ * * **album** (required)		: Name of the album.
+ * * **tags** (required)		: Comma-separated list of tags.
+ * * **sk** (required)			: Session key.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**.
+ *
+ * **HTTP request method** : POST.
+ * - - - 
+ *
+ * @package Webservice
+ * @subpackage Album
+ * @api
  */
-
 function method_album_addTags() {
 	if (!isset($_POST['artist']) || !isset($_POST['album']) || !isset($_POST['tags'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -333,6 +624,23 @@ function method_album_addTags() {
 	respond($xml);
 }
 
+/**
+ * album.gettoptags : Get the top tags for an album.
+ *
+ * ###Description
+ * Get the top tags used for an album, ordered by tag count.
+ *
+ * ###Parameters
+ * * **artist** (required)		: Name of the album's artist.
+ * * **album** (required)		: Name of the album.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Album
+ * @api
+ */
 function method_album_getTopTags() {
 	if (!isset($_GET['artist']) || !isset($_GET['album'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -346,6 +654,29 @@ function method_album_getTopTags() {
 	respond($xml);
 }
 
+/**
+ * album.gettags : Get a user's top tags for an album.
+ *
+ * ###Description
+ * Get the top tags used for an album, filtered by user name and ordered by tag count.
+ *
+ * ###Parameters
+ *
+ * * **artist** (required)		: Name of the album's artist.
+ * * **album** (required)		: Name of the album.
+ * * **sk** (required)			: Session key.
+ * * **limit** (optional)		: How many items to show. Defaults to 10.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Album
+ * @api
+ * @todo Only require sk if no user specified, see http://www.last.fm/api/show/album.getTags.
+ */
 function method_album_getTags() {
 	if (!isset($_GET['artist']) || !isset($_GET['album'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -361,9 +692,16 @@ function method_album_getTags() {
 }
 
 /**
- * Authentication methods
+ * auth.gettoken : Get a request token
+ *
+ * ###Description
+ *
+ * - - -
+ * @todo Documentation
+ * @package Webservice
+ * @subpackage Auth
+ * @api
  */
-
 function method_auth_getToken() {
 	global $adodb;
 
@@ -381,7 +719,24 @@ function method_auth_getToken() {
 	$xml = simplexml_load_string('<lfm status="ok"><token>' . $key . '</token></lfm>');
 	respond($xml);
 }
-
+/**
+ * auth.getmobilesession : Create a webservice session
+ *
+ * ###Description
+ * Create a webservice session and a session key required for authenticating with other webservice methods,
+ * the formula for the authentication token required is:
+ *
+ *     md5(username+md5(password))
+ *
+ * ###Parameters
+ * * **authtoken** (required)	: Authentication token
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Auth
+ * @api
+ */
 function method_auth_getMobileSession() {
 	global $adodb;
 
@@ -437,6 +792,21 @@ function method_auth_getMobileSession() {
 	}
 }
 
+/**
+ * auth.getsession : Create a webservice session.
+ *
+ * ###Description
+ *
+ *
+ * ###Parameters
+ * * **token** (required)		: Token
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ * @todo Documentation
+ * @package Webservice
+ * @subpackage Auth
+ * @api
+ */
 function method_auth_getSession() {
 	global $adodb;
 
@@ -481,6 +851,27 @@ function method_auth_getSession() {
 	}
 }
 
+/**
+ * radio.tune : Tune in to a radio station
+ *
+ * ###Description
+ * Tune in to a radio station
+ *
+ * ###Parameters
+ * * **station** (required)		: Station URL
+ * * **sk** (required)			: Session key
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**.
+ *
+ * **HTTP request method** : POST.
+ * - - - 
+ *
+ * @package Webservice
+ * @subpackage Radio
+ * @api
+ */
 function method_radio_tune() {
 	global $adodb;
 
@@ -525,6 +916,25 @@ function method_radio_tune() {
 	}
 }
 
+/**
+ * radio.getplaylist : Get playlist from a tuned station
+ *
+ * ###Description
+ * Get playlist from a tuned station
+ *
+ * ###Parameters
+ * * **sk** (required)			: Session key
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**.
+ * - - -
+ *
+ * @todo Any errors should be in whatever format specified, currently plaintext
+ * @package Webservice
+ * @subpackage Radio
+ * @api
+ */
 function method_radio_getPlaylist() {
 	global $adodb;
 
@@ -583,9 +993,29 @@ function method_radio_getPlaylist() {
 }
 
 /**
- * Track methods
+ * track.addtags : Add tags to a track.
+ *
+ * ###Description
+ * Add tags to a track using a comma-separated list of tags.
+ * 
+ * ###Parameters
+ * * **artist** (required)		: Name of the tracks's artist.
+ * * **track** (required)		: Name of the tracks.
+ * * **tags** (required)		: Comma-separated list of tags.
+ * * **sk** (required)			: Session key.
+ * * **album** (optional)		: Name of the tracks's album.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**.
+ *
+ * **HTTP request method** : POST.
+ * - - - 
+ *
+ * @package Webservice
+ * @subpackage Track
+ * @api
  */
-
 function method_track_addTags() {
 	if (!isset($_POST['artist']) || !isset($_POST['track']) || !isset($_POST['tags'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -596,6 +1026,23 @@ function method_track_addTags() {
 	respond($xml);
 }
 
+/**
+ * track.gettoptags : Get the top tags for a track.
+ *
+ * ###Description
+ * Get the top tags used for a track, ordered by tag count.
+ *
+ * ###Parameters
+ * * **artist** (required)		: Name of the track's artist.
+ * * **track** (required)		: Name of the track.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Track
+ * @api
+ */
 function method_track_getTopTags() {
 	if (!isset($_GET['artist']) || !isset($_GET['track'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -609,6 +1056,29 @@ function method_track_getTopTags() {
 	respond($xml);
 }
 
+/**
+ * track.gettags : Get a user's top tags for a track.
+ *
+ * ###Description
+ * Get the top tags used for a track, filtered by user name and ordered by tag count.
+ *
+ * ###Parameters
+ *
+ * * **artist** (required)		: Name of the track's artist.
+ * * **track** (required)		: Name of the track.
+ * * **sk** (required)			: Session key.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Track
+ * @api
+ * @todo Only require sk if no user specified, see http://www.last.fm/api/show/track.getTags.
+ */
 function method_track_getTags() {
 	if (!isset($_GET['artist']) || !isset($_GET['track'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -623,6 +1093,28 @@ function method_track_getTags() {
 	respond($xml);
 }
 
+/**
+ * track.ban : Add a track to the user's banned tracks list.
+ *
+ * ###Description
+ * Add a track to the user's banned tracks list.
+ * 
+ * ###Parameters
+ * * **artist** (required)		: Name of the tracks's artist.
+ * * **track** (required)		: Name of the track.
+ * * **sk** (required)			: Session key.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**.
+ *
+ * **HTTP request method** : POST.
+ * - - - 
+ *
+ * @package Webservice
+ * @subpackage Track
+ * @api
+ */
 function method_track_ban() {
 	if (!isset($_POST['artist']) || !isset($_POST['track'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -633,6 +1125,28 @@ function method_track_ban() {
 	respond($xml);
 }
 
+/**
+ * track.love : Add a track to the user's loved tracks list.
+ *
+ * ###Description
+ * Add a track to the user's loved tracks list.
+ * 
+ * ###Parameters
+ * * **artist** (required)		: Name of the tracks's artist.
+ * * **track** (required)		: Name of the track.
+ * * **sk** (required)			: Session key.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**.
+ *
+ * **HTTP request method** : POST.
+ * - - - 
+ *
+ * @package Webservice
+ * @subpackage Track
+ * @api
+ */
 function method_track_love() {
 	if (!isset($_POST['artist']) || !isset($_POST['track'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -643,6 +1157,28 @@ function method_track_love() {
 	respond($xml);
 }
 
+/**
+ * track.unlove : Remove a track from the user's loved tracks list.
+ *
+ * ###Description
+ * Remove a track from the user's loved tracks list.
+ * 
+ * ###Parameters
+ * * **artist** (required)		: Name of the tracks's artist.
+ * * **track** (required)		: Name of the track.
+ * * **sk** (required)			: Session key.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**.
+ *
+ * **HTTP request method** : POST.
+ * - - - 
+ *
+ * @package Webservice
+ * @subpackage Track
+ * @api
+ */
 function method_track_unlove() {
 	if (!isset($_POST['artist']) || !isset($_POST['track'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -653,6 +1189,28 @@ function method_track_unlove() {
 	respond($xml);
 }
 
+/**
+ * track.unban : Remove a track from the user's banned tracks list.
+ *
+ * ###Description
+ * Remove a track from the user's banned tracks list.
+ * 
+ * ###Parameters
+ * * **artist** (required)		: Name of the tracks's artist.
+ * * **track** (required)		: Name of the track.
+ * * **sk** (required)			: Session key.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**.
+ *
+ * **HTTP request method** : POST.
+ * - - - 
+ *
+ * @package Webservice
+ * @subpackage Track
+ * @api
+ */
 function method_track_unban() {
 	if (!isset($_POST['artist']) || !isset($_POST['track'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -664,9 +1222,20 @@ function method_track_unban() {
 }
 
 /**
- * Tag methods
+ * tag.gettoptags : Get the top tags.
+ *
+ * ###Description
+ * Get the top tags used, ordered by tag count.
+ *
+ * ###Parameters
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Tag
+ * @api
  */
-
 function method_tag_getTopTags() {
 	$limit = get_with_default('limit', 50);
 
@@ -676,6 +1245,23 @@ function method_tag_getTopTags() {
 	respond($xml);
 }
 
+/**
+ * tag.gettopartists : Get the top artists tagged by a tag.
+ *
+ * ###Description
+ * Get the top artists tagged by a specific tag, ordered by tag count.
+ *
+ * ###Parameters
+ * * **tag** (required)			: Name of the tag.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **page** (optional)		: The page to show. Defaults to 1.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Tag
+ * @api
+ */
 function method_tag_getTopArtists() {
 	if (!isset($_GET['tag'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -691,6 +1277,23 @@ function method_tag_getTopArtists() {
 	respond($xml);
 }
 
+/**
+ * tag.gettopalbums : Get the top albums tagged by a tag.
+ *
+ * ###Description
+ * Get the top albums tagged by a specific tag, ordered by tag count.
+ *
+ * ###Parameters
+ * * **tag** (required)			: Name of the tag.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **page** (optional)		: The page to show. Defaults to 1.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Tag
+ * @api
+ */
 function method_tag_getTopAlbums() {
 	if (!isset($_GET['tag'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -706,6 +1309,23 @@ function method_tag_getTopAlbums() {
 	respond($xml);
 }
 
+/**
+ * tag.gettoptracks : Get the top tracks tagged by a tag.
+ *
+ * ###Description
+ * Get the top tracks tagged by a specific tag, ordered by tag count.
+ *
+ * ###Parameters
+ * * **tag** (required)			: Name of the tag.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **page** (optional)		: The page to show. Defaults to 1.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Tag
+ * @api
+ */
 function method_tag_getTopTracks() {
 	if (!isset($_GET['tag'])) {
 		report_failure(LFM_INVALID_PARAMS);
@@ -721,6 +1341,21 @@ function method_tag_getTopTracks() {
 	respond($xml);
 }
 
+/**
+ * tag.getinfo : Get info about a tag.
+ *
+ * ###Description
+ * Get info about a tag.
+ *
+ * ###Parameters
+ * * **tag** (required)			: Name of the tag.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Tag
+ * @api
+ */
 function method_tag_getInfo() {
 	if (!isset($_GET['tag'])) {
 		report_failure(LFM_INVALID_PARAMS);
