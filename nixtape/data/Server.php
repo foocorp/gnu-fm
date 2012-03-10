@@ -416,6 +416,15 @@ class Server {
 		}
 	}
 
+	static function getAlbumEditURL($artist, $album) {
+		global $friendly_urls, $base_url;
+		if ($friendly_urls) {
+			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . rewrite_encode($album) . '/edit';
+		} else {
+			return $base_url . '/album-add.php?artist=' . urlencode($artist) . '&album=' . urlencode($album);
+		}
+	}
+
 	static function getTagURL($tag) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {

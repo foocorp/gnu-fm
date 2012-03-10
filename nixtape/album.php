@@ -35,6 +35,10 @@ try {
 	die();
 }
 
+if (isset($this_user) && $this_user->manages($artist->name)) {
+	$smarty->assign('edit_link', $album->getEditURL());
+}
+
 $smarty->assign('name', $album->name);
 $smarty->assign('id', $album->id);
 $smarty->assign('artist', $artist);
