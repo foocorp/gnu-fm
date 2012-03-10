@@ -16,6 +16,7 @@ RewriteRule ^artist/([^/]+)/album/([^/]+)/track/([^/]+)/edit/?$	track-add.php?ar
 RewriteRule ^artist/([^/]+)/album/([^/]+)/track/([^/]+)/tag/?$	track-tag.php?artist=$1&album=$2&track=$3	[NC,QSA]
 RewriteRule ^artist/([^/]+)/album/([^/]+)/track/([^/]+)/?$	track.php?artist=$1&album=$2&track=$3		[NC,QSA]
 RewriteRule ^artist/([^/]+)/album/add/?$			album-add.php?artist=$1				[NC,QSA]
+RewriteRule ^artist/([^/]+)/album/([^/]+)/edit/?$		album-add.php?artist=$1&album=$2		[NC,QSA]
 RewriteRule ^artist/([^/]+)/album/([^/]+)/?$			album.php?artist=$1&album=$2 			[NC,QSA]
 RewriteRule ^artist/([^/]+)/?$					artist.php?artist=$1				[NC,QSA]
 RewriteRule ^artist/([^/]+)/manage/?$				artist-manage.php?artist=$1			[NC,QSA]

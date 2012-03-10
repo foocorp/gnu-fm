@@ -46,10 +46,10 @@ class Album {
 	function __construct($name, $artist) {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$r = $adodb->CacheGetRow(1200,
-			'SELECT name, artist_name, mbid, image, releasedate FROM Album WHERE '
+		$this->query = 	'SELECT name, artist_name, mbid, image, releasedate FROM Album WHERE '
 			. 'lower(name) = lower(' . $adodb->qstr($name) . ') AND '
-			. 'lower(artist_name) = lower(' . $adodb->qstr($artist) . ')');
+			. 'lower(artist_name) = lower(' . $adodb->qstr($artist) . ')';
+		$r = $adodb->CacheGetRow(1200, $this->query);
 		if (!$r) {
 			$this->name = 'No such album: ' . $name;
 		} else {
@@ -105,6 +105,14 @@ class Album {
 	function clearTrackCache() {
 		global $adodb;
 		$adodb->CacheFlush($this->track_query);
+	}
+
+	/**
+	 * Clear the cache of the album information
+	 */
+	function clearCache() {
+		global $adodb;
+		$adodb->CacheFlush($this->query);
 	}
 
 	function getPlayCount() {
@@ -196,6 +204,23 @@ class Album {
 
 			return Tag::_getTagData($cache, $limit, $offset, $userid, $this->artist_name, $this->name);
 		}
+	}
+
+	/**
+	 * Set the cover art for this artist.
+	 *
+	 * @param string $image The URL of the image to use.
+	 */
+	function setImage($image) {
+		global $adodb;
+		$adodb->Execute('UPDATE Album SET image=' . $adodb->qstr($image) 
+			. ' WHERE artist_name = ' . $adodb->qstr($this->artist_name)
+			. ' AND name = ' . $adodb->qstr($this->name));
+		$this->clearCache();
+	}
+
+	function getEditURL() {
+		return Server::getAlbumEditURL($this->artist_name, $this->name);
 	}
 
 	/**

@@ -5,5 +5,6 @@
                         </span>
                         &#8212; 
                         <span class="album" property="dc:title" rel="foaf:page" rev="foaf:primaryTopic" resource="">{$name}</span>
+			{if $edit_link}<a href="{$edit_link}"><small>[{t}Edit{/t}]</small></a>{/if}
         </h2>
 
