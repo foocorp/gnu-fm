@@ -25,6 +25,7 @@ require_once($install_path . '/data/User.php');
 
 if (isset($_COOKIE['session_id']) && $_GET['action'] == 'logout') {
 	setcookie('session_id', '', time() - 3600);
+	setcookie('lang', '', time() - 3600);
 	header('Location: index.php');
 }
 
