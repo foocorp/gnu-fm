@@ -33,7 +33,7 @@ if (isset($_POST['install'])) {
 	//Get the database connection string
 	$dbms = $_POST['dbms'];
 	if ($dbms == 'sqlite') {
-		$filename = urlencode($_POST['filename']);
+		$filename = rawurlencode($_POST['filename']);
 		$connect_string = 'sqlite://' . $filename;
 	} else {
 		$connect_string = $dbms . '://' . $_POST['username'] . ':' . $_POST['password'] . '@' . $_POST['hostname'] . ':' . $_POST['port'] . '/' . $_POST['dbname'];

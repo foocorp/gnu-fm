@@ -371,7 +371,7 @@ function go_get_album_art($artist, $album){
 	$Access_Key_ID = '1EST86JB355JBS3DFE82'; // this is mattl's personal key :)
 
 	$SearchIndex = 'Music';
-	$Keywords = urlencode($artist . ' ' . $album);
+	$Keywords = rawurlencode($artist . ' ' . $album);
 	$Operation = 'ItemSearch';
 	$Version = '2007-07-16';
 	$ResponseGroup = 'ItemAttributes,Images';
