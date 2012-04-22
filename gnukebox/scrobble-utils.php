@@ -160,7 +160,7 @@ function getAlbumArt($artist, $album) {
 	$Access_Key_ID = '1EST86JB355JBS3DFE82'; // this is mattl's personal key :)
 
 	$SearchIndex = 'Music';
-	$Keywords = urlencode($artist . ' ' . $album);
+	$Keywords = rawurlencode($artist . ' ' . $album);
 	$Operation = 'ItemSearch';
 	$Version = '2007-07-16';
 	$ResponseGroup = 'ItemAttributes,Images';
@@ -201,13 +201,13 @@ function validateMBID($input) {
 function forwardScrobble($userid, $artist, $album, $track, $time, $mbid, $source, $rating, $length) {
 	global $adodb, $lastfm_key, $lastfm_secret;
 
-	$artist = urlencode($artist);
-	$track = urlencode($track);
-	$album = urlencode($album);
-	$mbid = urlencode($mbid);
-	$source = urlencode($source);
-	$rating = urlencode($rating);
-	$length = urlencode($length);
+	$artist = rawurlencode($artist);
+	$track = rawurlencode($track);
+	$album = rawurlencode($album);
+	$mbid = rawurlencode($mbid);
+	$source = rawurlencode($source);
+	$rating = rawurlencode($rating);
+	$length = rawurlencode($length);
 
 	$res = $adodb->CacheGetAll(600, 'SELECT * FROM Service_Connections WHERE userid = ' . $userid . ' AND forward = 1');
 	foreach ($res as &$row) {
