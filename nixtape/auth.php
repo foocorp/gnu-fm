@@ -50,6 +50,11 @@ if (isset($_COOKIE['session_id'])) {
 			$err = 1;
 		}
 	}
+
+header("Cache-Control:no-cache");
+header("Pragma: no-cache");
+header("Expires = -1");
+        
 } else {
 $seconds_to_cache = 3600;
 $ts = gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT";
