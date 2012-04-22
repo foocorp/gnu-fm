@@ -1,6 +1,3 @@
-{if (!$logged_in)}
-<p>Please <a href='{$base_url}/login.php'>log in</a> to view Libre.fm in other languages.</p>
-{else}
 <form method='get' action=''>
 	<label for='lang'>{t}Preferred language:{/t} </label>
 	<select name='lang' id='lang' onchange='this.form.submit()'>
@@ -26,4 +23,3 @@
 		<input type='submit' value='{t}Change Language{/t}' />
 	</noscript>
 </form>
-{/if}
