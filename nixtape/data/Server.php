@@ -301,10 +301,10 @@ class Server {
 	 * objects so that we can produce URLs without needing to build whole objects.
 	 *
 	 * @param string $username The username we want a URL for
-	 * @param string $gets Trailing get parameters
+	 * @param string $params Trailing get parameters
 	 * @return A string containing URL to the user's profile
 	 */
-	static function getUserURL ($username, $component = 'profile', $gets = false) {
+	static function getUserURL ($username, $component = 'profile', $params = false) {
 		global $friendly_urls, $base_url;
 		if ($component == 'edit') {
 			return $base_url . '/user-edit.php';
@@ -316,9 +316,9 @@ class Server {
 			} else {
 				$component = "/{$component}";
 			}
-			return $base_url . '/user/' . rewrite_encode($username) . $component . ($gets ? '?' . $gets : null);
+			return $base_url . '/user/' . rewrite_encode($username) . $component . ($params ? '?' . $params : null);
 		} else {
-			return $base_url . "/user-{$component}.php?user=" . rawurlencode($username) . ($gets ? '&' . $gets : null);
+			return $base_url . "/user-{$component}.php?user=" . rawurlencode($username) . ($params ? '&' . $params : null);
 		}
 	}
 
