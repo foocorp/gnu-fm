@@ -59,12 +59,12 @@ if (len(sys.argv) > 1):
         for x in range (1,len(sys.argv)):
             n = n + sys.argv[x] + " "
 
-        n = n.strip() + "\n"
+        n = n.strip()
 
         try:
             f = open(LATERBASE, "a")
             try:
-                f.write (n)
+                f.write (n + "\n")
                 print "Added '" + n + "' to the laterbase."
             finally:
                 f.close()
