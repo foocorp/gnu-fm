@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Libre Droid</string>
+    <string name="tag_examples">Exemples: acoustique, allemand, piano, violon, français, etc.</string>
+    <string name="tagged_station">Stations avec les étiquettes suivantes:</string>
+    <string name="login">Ouverture de session</string>
+    <string name="password">Mot de passe:</string>
+    <string name="username">Nom d\'utilisateur:</string>
+    <string name="not_google_account">(Il ne s\'agit pas de votre compte Google)</string>
+    <string name="account_details">Détails de votre compte Libre.fm:</string>
+    <string name="no_account">Vous n\'avez pas de compte?</string>
+    <string name="register">Rendez-vous sur www.libre.fm pour vous inscrire et créer un compte gratuit.</string>
+    <string name="tag_stations">Stations thématiques</string>
+    <string name="loved_tracks">Les morceaux que vous avez aimé</string>
+    <string name="community_loved">Les morceaux que la communauté a aimé</string>
+    <string name="add_station">Ajouter une station</string>
+    <string name="sd_card_needed">Veuillez vous assurer qu\'une carte SD est bien insérée avant de télécharger des morceaux.</string>
+    <string name="finished_download">Téléchargement de &#171;%s&#187; terminé</string>
+    <string name="download_failed">Impossible de télécharger &#171;%s&#187;:</string>
+    <string name="downloading">Téléchargement de &#171;%s&#187; sur votre carte SD.</string>
+    <string name="quit">Fermer</string>
+    <string name="tuning_in">Patientez...</string>
+    <string name="playlist_failed">Impossible de traiter la liste de lecture:</string>
+    <string name="banned">Banni</string>
+    <string name="loved">Aimé</string>
+    <string name="no_content">Désolé, cette station ne semble pas avoir davantage de contenu.</string>
+    <string name="cant_connect">Impossible d\'établir une connexion au serveur libre.fm:</string>
+    <string name="login_failed">Nom d\'utilisateur ou mot de passe incorrect</string>
+</resources>

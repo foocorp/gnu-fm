@@ -1,16 +1,19 @@
 <div id="player">
+
 	<audio id="audio" autobuffer>
 		{if $track->streamurl}
 			<object id="fallbackembed" style="width:200px;height:50px;" type="application/ogg" data="{$track->streamurl}"><a type="application/ogg" rel="enclosure" href="{$track->streamurl}">Listen to this track</a></object>
 		{elseif isset($radio_session)}
 
-			<p>Player problems? The player currently works in <a href='http://www.chromium.org/Home'>Chromium</a> and <a href='http://www.gnu.org/software/gnuzilla/'>Icecat</a>/<a href='http://www.mozilla.org/en/firefox/'>Firefox</a> 3.5 or later &mdash; it may also work in Chrome and Opera, though we don't recommend them.</p><p>Firefox users may experience problems under Ubuntu due to <a href='https://bugs.launchpad.net/ubuntu/+source/firefox/+bug/450684'>bug #450684</a>.</p>			
+			<p>{t escape=no}Player problems? The player currently works in <a href='http://www.chromium.org/Home'>Chromium</a> and <a href='http://www.gnu.org/software/gnuzilla/'>Icecat</a>/<a href='http://www.mozilla.org/en/firefox/'>Firefox</a> 3.5 or later &mdash; it may also work in Chrome and Opera, though we don't recommend them.</p><p>Firefox users may experience problems under Ubuntu due to <a href='https://bugs.launchpad.net/ubuntu/+source/firefox/+bug/450684'>bug #450684</a>.{/t}</p>
 
 		{/if}
 	</audio>
+
 	<div id="interface">
+
 		<div id="trackinfo">
-			<span id="artistname"></span> - <span id="trackname"></span> <span id="showplaylist"><a href="#" onclick="togglePlaylist(); return false;"><img src="{$img_url}/player/show-playlist.png" alt="Show playlist" title="Show playlist" /></a></span><span id="hideplaylist"><a href="#" onclick="togglePlaylist(); return false;"><img src="{$img_url}/player/hide-playlist.png" alt="Hide playlist" title="Hide playlist" /></a></span>
+			<span id="artistname"></span> - <span id="trackname"></span> <span id="showplaylist"><a href="#" onclick="togglePlaylist(); return false;"><img src="{$img_url}/player/show-playlist.png" alt="{t}Show playlist{/t}" title="{t}Show playlist{/t}" /></a></span><span id="hideplaylist"><a href="#" onclick="togglePlaylist(); return false;"><img src="{$img_url}/player/hide-playlist.png" alt="{t}Hide playlist{/t}" title="{t}Hide playlist{/t}" /></a></span>
 			<div id="playlist">
 				<br />
 				<strong><u>{t}Playlist{/t}</u></strong>
@@ -18,30 +21,38 @@
 				</ul>
 			</div>
 		</div>
+
 		<div id="progress">
 			<div id="progressbar"></div>
 			<span id="scrobbled">Scrobbled</span>
 			<span id="currenttime"></span>/<span id="duration"></span>
 		</div>
+
 		<div id="p_buttons">
 			{if $logged_in}
-			<a href="#" onclick="ban(); return false;" id="ban"><img src="{$img_url}/player/ban.png" alt="Ban" title="Ban" /></a>
+			<a href="#" onclick="ban(); return false;" id="ban"><img src="{$img_url}/player/ban.png" alt="{t}Ban{/t}" title="{t}Ban{/t}" /></a>
 			{/if}
-			<a href="#" onclick="skipBack(); return false;" id="skipback"><img src="{$img_url}/player/skip-backward.png" alt="Skip Backwards" title="Skip Backwards" /></a>
-			<a href="#" onclick="seekBack(); return false;" id="seekback"><img src="{$img_url}/player/seek-backward.png" alt="Seek Backwards" title="Seek Backwards" /></a>
-			<a href="#" onclick="play(); return false;" id="play"><img src="{$img_url}/player/play.png" alt="Play" title="Play" /></a>
-			<a href="#" onclick="pause(); return false;" id="pause"><img src="{$img_url}/player/pause.png" alt="Pause" title="Pause" /></a>
-			<a href="#" onclick="seekForward(); return false;" id="seekforward"><img src="{$img_url}/player/seek-forward.png" alt="Seek Forwards" title="Seek Forwards" /></a>
-			<a href="#" onclick="skipForward(); return false;" id="skipforward"><img src="{$img_url}/player/skip-forward.png" alt="Skip Forwards" title="Skip Forwards" /></a>
+			<a href="#" onclick="skipBack(); return false;" id="skipback"><img src="{$img_url}/player/skip-backward.png" alt="{t}Skip Backwards{/t}" title="{t}Skip Backwards{/t}" /></a>
+			<a href="#" onclick="seekBack(); return false;" id="seekback"><img src="{$img_url}/player/seek-backward.png" alt="{t}Seek Backwards{/t}" title="{t}Seek Backwards{/t}" /></a>
+			<a href="#" onclick="play(); return false;" id="play"><img src="{$img_url}/player/play.png" alt="{t}Play{/t}" title="{t}Play{/t}" /></a>
+			<a href="#" onclick="pause(); return false;" id="pause"><img src="{$img_url}/player/pause.png" alt="{t}Pause{/t}" title="{t}Pause{/t}" /></a>
+			<a href="#" onclick="seekForward(); return false;" id="seekforward"><img src="{$img_url}/player/seek-forward.png" alt="{t}Seek Forwards{/t}" title="{t}Seek Forwards{/t}" /></a>
+			<a href="#" onclick="skipForward(); return false;" id="skipforward"><img src="{$img_url}/player/skip-forward.png" alt="{t}Skip Forwards{/t}" title="{t}Skip Forwards{/t}" /></a>
 			{if $logged_in}
-			<a href="#" onclick="toggleTag(); return false;" id="open_tag"><img src="{$img_url}/player/open-tag.png" alt="Tag" title="Tag" /></a>
-			<a href="#" onclick="toggleTag(); return false;" id="close_tag" style='display: none;'><img src="{$img_url}/player/close-tag.png" alt="Tag" title="Tag" /></a>
-			<a href="#" onclick="love(); return false;" id="love"><img src="{$img_url}/player/love.png" alt="Love" title="Love" /></a>
+			<a href="#" onclick="toggleTag(); return false;" id="open_tag"><img src="{$img_url}/player/open-tag.png" alt="{t}Tag{/t}" title="{t}Tag{/t}" /></a>
+			<a href="#" onclick="toggleTag(); return false;" id="close_tag" style='display: none;'><img src="{$img_url}/player/close-tag.png" alt="{t}Tag{/t}" title="{t}Tag{/t}" /></a>
+			<a href="#" onclick="love(); return false;" id="love"><img src="{$img_url}/player/love.png" alt="{t}Love{/t}" title="{t}Love{/t}" /></a>
 			{/if}
+			<a href="#" onclick="toggleVolume(); return false;" id="volume"><img src="{$img_url}/player/volume-medium.png" alt="{t}Volume{/t}" title="{t}Volume{/t}" /></a>
 		</div>
+
+		<div id="volume-box" style="display: none;">
+			<div id="volume-slider"></div>
+		</div>
+
 		<div id="tag_input" style="display: none";>
-			<p>Enter a list of tags separated by commas:<br />
-			<input type='text' id='tags' name='tags' style='width: 75%; margin-top: 5px;' /><button id='tag_button' onclick="tag()" style='width: 20%; margin-top: 4px; float: right;'>Tag</button></p>
+			<p>{t}Enter a list of tags separated by commas:{/t}<br />
+			<input type='text' id='tags' name='tags' style='width: 75%; margin-top: 5px;' /><button id='tag_button' onclick="tag()" style='width: 20%; margin-top: 4px; float: right;'>{t}Tag{/t}</button></p>
 			{literal}
 			<script type="text/javascript">
 				$("#tags").keyup(function(event){
@@ -52,10 +63,14 @@
 			</script>
 			{/literal}
 		</div>
+
 	</div>
-<br />
-	<a href='#' onclick='$("#playerproblems").toggle(1000)'>Player problems?</a>
+
+	<br />
+
+	<a href='#' onclick='$("#playerproblems").toggle(1000)'>{t}Player problems?{/t}</a>
 	<div id='playerproblems' style='display: none;'>
-		<p>The player currently works in <a href='http://www.chromium.org/Home'>Chromium</a> and <a href='http://www.gnu.org/software/gnuzilla/'>Icecat</a>/<a href='http://www.mozilla.org/en/firefox/'>Firefox</a> 3.5 or later &mdash; it may also work in Chrome and Opera, though we don't recommend them.</p>
+		<p>{t escape=no}The player currently works in <a href='http://www.chromium.org/Home'>Chromium</a> and <a href='http://www.gnu.org/software/gnuzilla/'>Icecat</a>/<a href='http://www.mozilla.com/en-US/firefox/'>Firefox</a> 3.5 or later &mdash; it may also work in Chrome and Opera, though we don't recommend them.{/t}</p>
 	</div>
+
 </div>

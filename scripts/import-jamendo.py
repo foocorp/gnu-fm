@@ -135,9 +135,9 @@ genremap = {
 
 class JamendoImport:
 
-	def __init__(self, hostname, username, password, database):
-		self.conn = ordbms.connect ("dbname='librefm' user='librefm'")
-
+	def __init__(self, username='librefm', database='librefm', updates=False):
+		self.conn = ordbms.connect ("dbname='%s' user='%s'" % (database, username))
+		self.perform_updates = updates
 		self.cursor = self.conn.cursor ()
 
 
@@ -147,12 +147,13 @@ class JamendoImport:
 				artist = self.proc_artist(elem)
 
 				if self.artist_exists(artist["name"]):
-					try:
-						self.cursor.execute("UPDATE Artist SET image_small = %s, homepage = %s, mbid = %s WHERE name = %s", (artist["image"], artist["url"], artist["mbid"], artist["name"]))
-						self.conn.commit()
-					except Exception,  e:
-						self.conn.rollback()
-						print 'ua', e
+					if self.perform_updates:
+						try:
+							self.cursor.execute("UPDATE Artist SET image_small = %s, homepage = %s, mbid = %s WHERE name = %s", (artist["image"], artist["url"], artist["mbid"], artist["name"]))
+							self.conn.commit()
+						except Exception,  e:
+							self.conn.rollback()
+							print 'ua', e
 				else:
 					try:
 						self.cursor.execute("INSERT INTO Artist (name, image_small, mbid, homepage)  VALUES (%s, %s, %s, %s)", (artist["name"], artist["image"], artist["mbid"], artist["url"]))
@@ -164,14 +165,15 @@ class JamendoImport:
 				any_streamable_tracks = 0
 				for album in artist["albums"]:
 					if self.album_exists(artist["name"], album["name"]):
-						try:
-							self.cursor.execute("UPDATE Album SET albumurl = %s, image = %s, artwork_license = %s, mbid = %s, releasedate = %s, downloadurl = %s WHERE name = %s AND artist_name = %s", 
-									(album["url"], album["image"], album["license_artwork"], album["mbid"], album["releasedate"], album["downloadurl"],
-									album["name"], artist["name"]))
-							self.conn.commit()
-						except Exception,  e:
-							self.conn.rollback()
-							print 'ub', e
+						if self.perform_updates:
+							try:
+								self.cursor.execute("UPDATE Album SET albumurl = %s, image = %s, artwork_license = %s, mbid = %s, releasedate = %s, downloadurl = %s WHERE name = %s AND artist_name = %s", 
+										(album["url"], album["image"], album["license_artwork"], album["mbid"], album["releasedate"], album["downloadurl"],
+										album["name"], artist["name"]))
+								self.conn.commit()
+							except Exception,  e:
+								self.conn.rollback()
+								print 'ub', e
 					else:
 						try:
 							self.cursor.execute("INSERT INTO Album (name, artist_name, albumurl, image, artwork_license, mbid, releasedate, downloadurl) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
@@ -407,15 +409,20 @@ class JamendoImport:
 
 if __name__ == "__main__":
 
-	if len(sys.argv) != 6:
-		print "Usage: import-jamendo.py <database dump> <mysql hostname> <mysql username> <mysql password> <mysql database>"
+	if len(sys.argv) != 2 and len(sys.argv) != 4:
+		print "Usage: import-jamendo.py <database dump>"
+		print "or"
+		print "import-jamendo.py <database dump> <username> <database>"
 		sys.exit(1)
 
 	if sys.argv[1][-2:] == "gz":
 		dump = gzip.open(sys.argv[1], "r")
 	else:
 		dump = open(sys.argv[1], "r")
-	
-	importer = JamendoImport(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+
+	if len(sys.argv) == 2:
+		importer = JamendoImport()
+	else:
+		importer = JamendoImport(sys.argv[2], sys.argv[3])
 	importer.parse(dump)
 	importer.close()

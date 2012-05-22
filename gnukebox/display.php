@@ -22,6 +22,7 @@ header('Content-type: text/html; charset=utf-8');
 require_once('database.php');
 require_once('utils/human-time.php');
 require_once('temp-utils.php');
+require_once('version.php');
 
 ?>
 <!DOCTYPE html>
@@ -55,7 +56,7 @@ require_once('temp-utils.php');
 
 	</ul>
 
-<p>This server is powered by <a href="http://bzr.savannah.gnu.org/lh/librefm/">GNU FM</a> version <?php echo $version; ?></p>
+<p>This server is powered by <a href="https://gitorious.org/foocorp/gnu-fm">GNU FM</a> version <?php echo $version; ?></p>
 
 </body>
 </html>

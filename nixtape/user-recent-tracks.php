@@ -54,10 +54,7 @@ try {
 	$aUserScrobbles = $user->getScrobbles($scrobbleCount);
 	$smarty->assign('scrobbles', $aUserScrobbles);
 } catch (Exception $e) {}
-try {
-	$aUserTagCloud = TagCloud::GenerateTagCloud(TagCloud::scrobblesTable('user'), 'artist', 40, $user->uniqueid);
-	$smarty->assign('user_tagcloud', $aUserTagCloud);
-} catch (Exception $e) {}
+
 $smarty->assign('isme', ($this_user->name == $user->name));
 $smarty->assign('me', $user);
 $smarty->assign('profile', true);
@@ -68,13 +65,13 @@ $smarty->assign('extra_head_links', array(
 			'rel'   => 'alternate',
 			'type'  => 'application/rss+xml',
 			'title' => 'RSS 1.0 Feed (Recent plays)',
-			'href'  => $base_url . '/rdf.php?fmt=rss&page=' . urlencode(str_replace($base_url, '', $user->getURL('recent-tracks')))
+			'href'  => $base_url . '/rdf.php?fmt=rss&page=' . rawurlencode(str_replace($base_url, '', $user->getURL('recent-tracks')))
 			),
 		array(
 			'rel'   => 'meta',
 			'type'  => 'application/rdf+xml',
 			'title' => 'FOAF',
-			'href'  => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $user->getURL()))
+			'href'  => $base_url . '/rdf.php?fmt=xml&page=' . rawurlencode(str_replace($base_url, '', $user->getURL()))
 			)
 	));
 

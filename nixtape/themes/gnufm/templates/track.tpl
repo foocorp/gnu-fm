@@ -1,8 +1,27 @@
 {include file='header.tpl'}
+{if $flattr_uid}
+{include file='flattr.tpl'}
+{/if}
 
 <div about="{$track->id|escape:'html':'UTF-8'}" typeof="mo:Track" class="haudio">
 
-	<h2 property="dc:title" class="fn" rel="foaf:page" rev="foaf:primaryTopic" resource="">{$track->name|escape:'html':'UTF-8'}</h2>
+	{if $track->streamable}
+	<div id='player-container'>
+	{include file='player.tpl'}
+	<script type="text/javascript">
+		$(document).ready(function() {ldelim}
+			var playlist = [{ldelim}"artist" : "{$track->artist_name|escape:'javascript'}", "album" : "{$track->album_name|escape:'javascript'}", "track" : "{$track->name|escape:'javascript'}", "url" : "{$track->streamurl}"{rdelim}];
+			{if isset($this_user)}
+			playerInit(playlist, "{$this_user->getScrobbleSession()}", "{$this_user->getWebServiceSession()}", false);
+			{else}
+			playerInit(playlist, false, false, false);
+			{/if}
+		{rdelim});
+	</script>
+	</div>
+	{/if}
+
+	{include file='flattr-track-button.tpl'}
 
 	<dl>
 		<dt>{t}Artist:{/t}</dt>
@@ -25,25 +44,31 @@
 	</dl>
 
 	{if $track->licenseurl && $track->license}
-	<p><a rel=":license" href="{$track->licenseurl}"><img src="{$base_url}/themes/images/licenses/{$track->license}.png" /></a></p>
+	<p id='license'><a rel=":license" href="{$track->licenseurl}"><img src="{$img_url}/licenses/{$track->license}.png" /></a></p>
 	{/if}
-
+	
 	<ul>
-		{if !empty($track->duration)}<li property="mo:durationXSD" datatype="xsd:duration" content="PT{$track->duration}S">Duration: {$track->duration}</li>{/if}
+		{if !empty($track->duration)}<li property="mo:durationXSD" datatype="xsd:duration" content="PT{$track->duration}S">Duration: {$duration}</li>{/if}
 		<li property="rdfs:comment">{t}Playcount:{/t} {$track->getPlayCount()}</li>
 		<li property="rdfs:comment">{t}Listeners:{/t} {$track->getListenerCount()}</li>
 	</ul>
-  
-	{include file='player.tpl'}
-	<script type="text/javascript">
-		var playlist = [{ldelim}"artist" : "{$track->artist_name}", "album" : "{$track->album_name}", "track" : "{$track->name}", "url" : "{$track->streamurl}"{rdelim}];
-		{if isset($this_user)}
-		playerInit(playlist, "{$this_user->getScrobbleSession()}", false);
-		{else}
-		playerInit(playlist, false, false);
-		{/if}
-	</script>
+	{if $track->streamable}
+	{if $track->downloadurl}
+	<p style='padding-left: 1em;'><b><a href='{$track->downloadurl}'>{t}Download track{/t}</a></b></p>
+	{elseif $track->streamurl}
+	<p style='padding-left: 1em;'><b><a href='{$track->streamurl}'>{t}Download track{/t}</a></b></p>
+	{/if}
+	{/if}
+	
+	{if !empty($tagcloud)}
+		<h3 style='text-align: center; clear: left;'>{t}Tags used to describe this track{/t}</h3>
+		<ul class="tagcloud">
+		{section name=i loop=$tagcloud}
+			<li style='font-size:{$tagcloud[i].size}'><a href='/tag/{$tagcloud[i].tag|urlencode}' title='{t uses=$tagcloud[i].count}This tag was used %1 times{/t}' rel='tag'>{$tagcloud[i].tag}</a></li>
+		{/section}
+		</ul>
+	{/if}
+	<br />
 
- 
 </div>
 {include file='footer.tpl'}

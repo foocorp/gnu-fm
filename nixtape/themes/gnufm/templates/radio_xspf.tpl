@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<lfm status="ok">
 <playlist version="1" xmlns="http://xspf.org/ns/0/">
 <title>{$title}</title>
-<creator>GNU FM</creator>
+<creator>libre.fm</creator>
 <date>{$date}</date>
 <link rel="http://www.last.fm/expiry">3600</link>
 <trackList>
@@ -16,7 +15,7 @@
 	    <creator>{$radiotracks[rt].creator|escape:"html":"UTF-8"}</creator>
 	    <duration>{$radiotracks[rt].duration|escape:"html":"UTF-8"}</duration>
 	    <image>{$radiotracks[rt].image|escape:"html":"UTF-8"}</image>
-	    <extension application="/">
+	    <extension application="http://alpha.libre.fm/">
 		<trackauth>00000</trackauth>
 		<albumid>00000</albumid>
 		<artistid>00000</artistid>
@@ -33,4 +32,3 @@
 
 </trackList>
 </playlist>
-</lfm>

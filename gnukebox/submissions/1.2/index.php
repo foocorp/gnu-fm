@@ -40,43 +40,52 @@ $actualcount = 0;
 $timeisstupid = 0;
 
 for ($i = 0; $i < count($_POST['a']); $i++) {
-	switch (mb_detect_encoding($_POST['a'][$i])) {
-		case 'ASCII':
-		case 'UTF-8':
-			$artist = $adodb->qstr(trim(mb_strcut($_POST['a'][$i], 0, 255, 'UTF-8')));
-			break;
-		default:
-			die("FAILED Bad encoding in artist submission $i\n");
-	}
-
-	if (isset($_POST['b'][$i]) && !empty($_POST['b'][$i])) {
-		switch (mb_detect_encoding($_POST['b'][$i])) {
-			case 'ASCII':
-			case 'UTF-8':
-				$album = $adodb->qstr(trim(mb_strcut($_POST['b'][$i], 0, 255, 'UTF-8')));
-				break;
-			default:
-				die("FAILED Bad encoding in album submission $i\n");
-		}
-	} else {
-		$album = 'NULL';
-	}
 
 	if (!isset($_POST['t'][$i]) || !isset($_POST['a'][$i]) || !isset($_POST['i'][$i])) {
 		$f = isset($_POST['t'][$i]) ? "T({$_POST['t'][$i]})" : 't';
 		$f .= isset($_POST['a'][$i]) ? "A({$_POST['a'][$i]})" : 'a';
 		$f .= isset($_POST['i'][$i]) ? "I({$_POST['i'][$i]})" : 'i';
 
-		die("FAILED Track $i was submitted with empty mandatory field(s): {$f}\n");
+		//Add error message to db and skip to next scrobble
+		reportError("FAILED Track $i was submitted with empty mandatory field(s)",
+			"artist:{$_POST['a'][$i]}, album:{$_POST['b'][$i]}, track:{$_POST['t'][$i]}, time:{$_POST['i'][$i]}");
+		continue;
 	}
 
-	switch (mb_detect_encoding($_POST['t'][$i])) {
+	$artist = trim($_POST['a'][$i]);
+	$artist = noSpamTracks($artist);
+	if (empty($artist)) {
+		//Add error message to db and skip to next scrobble
+		reportError("FAILED Track $i was submitted with empty artist field",
+			"artist:{$_POST['a'][$i]}, album:{$_POST['b'][$i]}, track:{$_POST['t'][$i]}, time:{$_POST['i'][$i]}");
+		continue;
+	} else {
+		switch (mb_detect_encoding($artist)) {
+			case 'ASCII':
+			case 'UTF-8':
+				$artist = $adodb->qstr(trim(mb_strcut($artist, 0, 255, 'UTF-8')));
+				break;
+			default:
+				die("FAILED Bad encoding in artist submission $i\n");
+		}
+	}
+
+	$track = trim($_POST['t'][$i]);
+	$track = noSpamTracks($track);
+	if (empty($track)) {
+		//Add error message to db and skip to next scrobble
+		reportError("FAILED Track $i was submitted with empty track field",
+			"artist:{$_POST['a'][$i]}, album:{$_POST['b'][$i]}, track:{$_POST['t'][$i]}, time:{$_POST['i'][$i]}");
+		continue;
+	} else {
+		switch (mb_detect_encoding($track)) {
 		case 'ASCII':
 		case 'UTF-8':
-			$track = $adodb->qstr(trim(mb_strcut($_POST['t'][$i], 0, 255, 'UTF-8')));
+			$track = $adodb->qstr(trim(mb_strcut($track, 0, 255, 'UTF-8')));
 			break;
 		default:
 			die("FAILED Bad encoding in title submission $i\n");
+		}
 	}
 
 	if (is_numeric($_POST['i'][$i])) {
@@ -85,6 +94,21 @@ for ($i = 0; $i < count($_POST['a']); $i++) {
 		// 1.1 time format
 		date_default_timezone_set('UTC');
 		$time = strtotime($_POST['i'][$i]);
+	}
+
+	$album = trim($_POST['b'][$i]);
+	$album = noSpamTracks($album);
+	if (!empty($album)) {
+		switch (mb_detect_encoding($album)) {
+			case 'ASCII':
+			case 'UTF-8':
+				$album = $adodb->qstr(trim(mb_strcut($album, 0, 255, 'UTF-8')));
+				break;
+			default:
+				die("FAILED Bad encoding in album submission $i\n");
+		}
+	} else {
+		$album = 'NULL';
 	}
 
 	$mb = validateMBID($_POST['m'][$i]);
@@ -123,14 +147,12 @@ for ($i = 0; $i < count($_POST['a']); $i++) {
 
 	$failed = false;
 	try {
-		createArtistIfNew($artist);
-		if ($album != 'NULL') {
-			createAlbumIfNew($artist, $album);
-		}
-		$tid = getTrackCreateIfNew($artist, $album, $track, $mbid);
-		$stid = getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid, $tid);
-
 		$exists = scrobbleExists($userid, $artist, $track, $time);
+		
+		if (!$exists) {
+			$stid = getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid);
+		}
+
 	} catch (Exception $ex) {
 		$failed = true;
 		reportError($ex->getMessage(), '');

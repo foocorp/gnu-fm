@@ -45,19 +45,31 @@ try {
 	$user = null;
 }
 
+$toptracks = intval($_GET['toptracks']);
+if (!($toptracks >= 10 && $toptracks <= 500)) {
+	$toptracks = 20;
+}
+
+$topartists = intval($_GET['topartists']);
+if (!($topartists >= 10 && $topartists <= 500)) {
+	$topartists = 20;
+}
+
 if (isset($user->name)) {
 
 	$smarty->assign('stat_barwidth', 320);
+	$smarty->assign('topartistspx', 25 * $topartists);
 	try {
-		$smarty->assign('graphtopartists', new GraphTopArtists($user, 20));
+		$smarty->assign('graphtopartists', new GraphTopArtists($user, $topartists));
 	} catch (exception $e) {}
 
 	try {
 		$smarty->assign('graphplaysbydays', new GraphPlaysByDays($user, 20));
 	} catch (exception $e) {}
 
+	$smarty->assign('toptrackspx', 25 * $toptracks);
 	try {
-		$smarty->assign('graphtoptracks', new GraphTopTracks($user, 20));
+		$smarty->assign('graphtoptracks', new GraphTopTracks($user, $toptracks));
 	} catch (exception $e) {
 		$smarty->assign('pageheading', 'Couldn\'t get users top tracks!');
 		$smarty->assign('details', 'User ' . $user->name . ' doesn\'t seem to have scrobbled anything yet.');
@@ -76,7 +88,7 @@ if (isset($user->name)) {
 				'rel'   => 'meta',
 				'type'  => 'application/rdf+xml' ,
 				'title' => 'FOAF',
-				'href'  => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $user->getURL()))
+				'href'  => $base_url . '/rdf.php?fmt=xml&page=' . rawurlencode(str_replace($base_url, '', $user->getURL()))
 				),
 			array(
 				'rel'   => 'stylesheet',

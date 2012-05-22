@@ -22,6 +22,7 @@
 require_once($install_path . '/database.php');
 require_once($install_path . '/data/Artist.php');
 require_once($install_path . '/data/Track.php');
+require_once($install_path . '/data/Tag.php');
 require_once($install_path . '/utils/resolve-external.php');
 require_once($install_path . '/utils/linkeddata.php');
 
@@ -45,10 +46,10 @@ class Album {
 	function __construct($name, $artist) {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$r = $adodb->CacheGetRow(1200,
-			'SELECT name, artist_name, mbid, image, releasedate FROM Album WHERE '
+		$this->query = 	'SELECT name, artist_name, mbid, image, releasedate FROM Album WHERE '
 			. 'lower(name) = lower(' . $adodb->qstr($name) . ') AND '
-			. 'lower(artist_name) = lower(' . $adodb->qstr($artist) . ')');
+			. 'lower(artist_name) = lower(' . $adodb->qstr($artist) . ')';
+		$r = $adodb->CacheGetRow(1200, $this->query);
 		if (!$r) {
 			$this->name = 'No such album: ' . $name;
 		} else {
@@ -106,6 +107,14 @@ class Album {
 		$adodb->CacheFlush($this->track_query);
 	}
 
+	/**
+	 * Clear the cache of the album information
+	 */
+	function clearCache() {
+		global $adodb;
+		$adodb->CacheFlush($this->query);
+	}
+
 	function getPlayCount() {
 		global $adodb;
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -161,25 +170,60 @@ class Album {
 	}
 
 	/**
-	 * Get an albums's most used tags
+	 * Get the top tags for an album, ordered by tag count
 	 *
-	 * @param int $limit The number of tags to return (defaults to 10)
-	 * @return An array of tags
+	 * @param int $limit The number of tags to return (default is 10)
+	 * @param int $offset The position of the first tag to return (default is 0)
+	 * @param int $cache Caching period of query in seconds (default is 600)
+	 * @return An array of tag details ((tag, freq) .. )
 	 */
-	function getTopTags($limit = 10) {
-		global $adodb;
+	function getTopTags($limit=10, $offset=0, $cache=600) {
+		//TODO: Remove horrible workaround and fix album construct to throw it instead
+		if(substr($this->name, 0, 13) == 'No such album') {
+			throw new Exception('No such album');
+		}
 
-		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM Tags WHERE '
-			. ' artist = ' . $adodb->qstr($this->artist_name)
-			. ' AND album = ' . $adodb->qstr($this->name)
-			. ' GROUP BY tag ORDER BY freq DESC '
-			. ' LIMIT ' . $limit);
-
-		return $res;
+		return Tag::_getTagData($cache, $limit, $offset, null, $this->artist_name, $this->name);
 	}
 
+	/**
+	 * Get a specific user's tags for this album.
+	 *
+	 * @param int $userid Get tags for this user
+	 * @param int $limit The number of tags to return (default is 10)
+	 * @param int $offset The position of the first tag to return (default is 0)
+	 * @param int $cache Caching period of query in seconds (default is 600)
+	 * @return An array of tag details ((tag, freq) .. )
+	 */
+	function getTags($userid, $limit=10, $offset=0, $cache=600) {
+		if(isset($userid)) {
+			//TODO: Remove horrible workaround and fix album construct to throw it instead
+			if(substr($this->name, 0, 13) == 'No such album') {
+				throw new Exception('No such album');
+			}
 
-	/*
+			return Tag::_getTagData($cache, $limit, $offset, $userid, $this->artist_name, $this->name);
+		}
+	}
+
+	/**
+	 * Set the cover art for this artist.
+	 *
+	 * @param string $image The URL of the image to use.
+	 */
+	function setImage($image) {
+		global $adodb;
+		$adodb->Execute('UPDATE Album SET image=' . $adodb->qstr($image) 
+			. ' WHERE artist_name = ' . $adodb->qstr($this->artist_name)
+			. ' AND name = ' . $adodb->qstr($this->name));
+		$this->clearCache();
+	}
+
+	function getEditURL() {
+		return Server::getAlbumEditURL($this->artist_name, $this->name);
+	}
+
+	/**
 	 * Return Album Art URL from Wikipedia
 	 * @param string Album
 	 * @param string Artist
@@ -327,7 +371,7 @@ function go_get_album_art($artist, $album){
 	$Access_Key_ID = '1EST86JB355JBS3DFE82'; // this is mattl's personal key :)
 
 	$SearchIndex = 'Music';
-	$Keywords = urlencode($artist . ' ' . $album);
+	$Keywords = rawurlencode($artist . ' ' . $album);
 	$Operation = 'ItemSearch';
 	$Version = '2007-07-16';
 	$ResponseGroup = 'ItemAttributes,Images';

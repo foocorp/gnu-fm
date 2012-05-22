@@ -23,6 +23,7 @@
 require_once($install_path . '/database.php');
 require_once($install_path . '/data/Artist.php');
 require_once($install_path . '/data/Album.php');
+require_once($install_path . '/data/Tag.php');
 require_once($install_path . '/data/Server.php');
 require_once($install_path . '/utils/resolve-external.php');
 require_once($install_path . '/utils/licenses.php');
@@ -88,6 +89,8 @@ class Track {
 	public static function create($name, $artist_name, $album_name, $streamurl, $downloadurl, $license) {
 		global $adodb;
 
+		$streamable = (is_free_license($license) && !empty($streamurl)) ? 1 : 0;
+
 		$adodb->Execute('INSERT INTO Track (name, artist_name, album_name, streamurl, downloadurl, license, streamable) VALUES ('
 			. $adodb->qstr($name) . ', '
 			. $adodb->qstr($artist_name) . ', '
@@ -95,10 +98,16 @@ class Track {
 			. $adodb->qstr($streamurl) . ', '
 			. $adodb->qstr($downloadurl) . ', '
 			. $adodb->qstr($license) . ', '
-			. '1' . ')');
+			. $streamable . ')');
 
 		$album = new Album($album_name, $artist_name);
 		$album->clearTrackCache();
+
+		$artist = new Artist($artist_name);
+		if (!$artist->isStreamable() && $streamable == 1) {
+			// This artist has just had a streamable track added, so are now streamable
+			$adodb->Execute('UPDATE Artist SET streamable = 1 WHERE name = ' . $adodb->qstr($artist->name));
+		}
 
 		return new Track($name, $artist_name);
 	}
@@ -217,8 +226,8 @@ class Track {
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$row = $adodb->CacheGetRow(300, 'SELECT COUNT(track) AS freq, COUNT(DISTINCT userid) AS listeners FROM Scrobbles WHERE'
-			. ' artist = ' . $adodb->qstr($this->artist_name)
-			. ' AND track = ' . $adodb->qstr($this->name)
+			. ' lower(artist) = lower(' . $adodb->qstr($this->artist_name) . ')'
+			. ' AND lower(track) = lower(' . $adodb->qstr($this->name) . ')'
 			. ' GROUP BY track ORDER BY freq DESC');
 
 		if (!isset($row)) {
@@ -243,8 +252,8 @@ class Track {
 		}
 	}
 
-	function getURL() {
-		return Server::getTrackURL($this->artist_name, $this->album_name, $this->name);
+	function getURL($component = '') {
+		return Server::getTrackURL($this->artist_name, $this->album_name, $this->name, $component);
 	}
 
 	function getEditURL() {
@@ -252,42 +261,65 @@ class Track {
 	}
 
 	/**
-	 * Retrieve the tags for this track.
+	 * Get the top tags for this track, ordered by tag count
 	 *
-	 * @return An array of tag names and how frequent they are
+	 * @param int $limit The number of tags to return (default is 10)
+	 * @param int $offset The position of the first tag to return (default is 0)
+	 * @param int $cache Caching period of query in seconds (default is 600)
+	 * @return An array of tag details ((tag, freq) .. )
 	 */
-	function getTopTags() {
-		global $adodb;
-		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	function getTopTags($limit=10, $offset=0, $cache=600) {
+		//TODO: Remove horrible workaround and fix track construct to throw it instead
+		if(substr($this->name, 0, 13) == 'No such track') {
+			throw new Exception('No such track');
+		}
 
-		$res = $adodb->CacheGetAll(600, 'SELECT COUNT(tag) AS freq, tag FROM Tags WHERE'
-			. ' artist = ' . $adodb->qstr($this->artist_name)
-			. ' AND track = ' . $adodb->qstr($this->name)
-			. ' GROUP BY tag ORDER BY freq DESC');
-
-		return $res;
+		return Tag::_getTagData($cache, $limit, $offset, null, $this->artist_name, null, $this->name);
 	}
 
 	/**
-	 * Retrieve a specific user's tags for this track.
+	 * Get a specific user's tags for this track.
 	 *
-	 * @return An array of tag names.
+	 * @param int $userid Get tags for this user
+	 * @param int $limit The number of tags to return (default is 10)
+	 * @param int $offset The position of the first tag to return (default is 0)
+	 * @param int $cache Caching period of query in seconds (default is 600)
+	 * @return An array of tag details ((tag, freq) .. )
 	 */
-	function getTags($userid) {
-		global $adodb;
-		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+	function getTags($userid, $limit=10, $offset=0, $cache=600) {
+		if(isset($userid)) {
+			//TODO: Remove horrible workaround and fix track construct to throw it instead
+			if(substr($this->name, 0, 13) == 'No such track') {
+				throw new Exception('No such track');
+			}
 
-		$res = $adodb->GetAll('SELECT tag FROM Tags WHERE'
-			. ' artist = ' . $adodb->qstr($this->artist_name)
-			. ' AND track = ' . $adodb->qstr($this->name)
-			. ' AND userid = ' . $userid);
-
-		$tags = array();
-		foreach ($res as &$row) {
-			$tags[] = $row['tag'];
+			return Tag::_getTagData($cache, $limit, $offset, $userid, $this->artist_name, null, $this->name);
 		}
-
-		return $tags;
 	}
 
+	/**
+	 * Add a list of tags to a track
+	 *
+	 * @param string $tags A comma-separated list of tags
+	 * @param int $userid The user adding these tags
+	 */
+	function addTags($tags, $userid) {
+		global $adodb;
+
+		$tags = explode(',', strtolower($tags));
+		foreach($tags as $tag) {
+			$tag = trim($tag);
+			if(strlen($tag) == 0) {
+				continue;
+			}
+			try {
+				$adodb->Execute('INSERT INTO Tags VALUES ('
+					. $adodb->qstr($tag) . ','
+					. $adodb->qstr($this->artist_name) . ', '
+					. $adodb->qstr($this->album_name) . ', '
+					. $adodb->qstr($this->name) . ', '
+					. $userid . ')');
+			} catch (Exception $e) {}
+		}
+	}
 }

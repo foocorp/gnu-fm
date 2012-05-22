@@ -1,21 +1,27 @@
 {include file='header.tpl'}
 {if ($logged_in)}
+<div id="welcome-box">
+<br />
+<p>{t escape=no userurl=$this_user->getURL() statsurl=$this_user->getURL('stats')}<a href="%1">Go to your profile</a> or <a href="%2">view your listening statistics</a>.{/t}</p>
 
-<h2 id="txt-this-is-your-dashboard">This is your dashboard.</h2>
+</div>
 
-<ul>
-<li>Have you configured your player to report your music listening habits?</li>
-<li>Have you <a href="/listen/">tried our funky in-browser player</a>?</li>
-</ul>
+{if isset($tagcloud)}
+<div id="tag-cloud-box">
 
-<h2><a href="{$this_user->getURL()}">Go to your profile</a> or <a href="{$this_user->getURL()}/stats">view your listening statistics</a>.</h2>
+    {include file='popular.tpl'}
+
+</div>
+{/if}
 
 {else}
 
-       <ul id="buttons">
-	 <li><a href="/register.php">Sign up now</a></li>
-	 </ul>
+	<p class="c">{t site=$site_name}%1 allows you to share your listening habits and discover new music.{/t}</p>
+	<ul id="buttons sign-up">
+		<li><a href="{$base_url}/register.php">{t}Sign up now{/t}</a></li>
+	</ul>
 
 {/if}
+	<p class="c artist-signup">Are you an artist? <a href="{$base_url}/artist-signup.php">Sign up now</a> to start sharing your music with our listeners!</p>
 
 {include file='footer.tpl'}

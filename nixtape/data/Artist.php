@@ -26,6 +26,7 @@ require_once($install_path . '/data/Album.php');
 require_once($install_path . '/data/Track.php');
 require_once($install_path . '/data/Server.php');
 require_once($install_path . '/utils/linkeddata.php');
+require_once($install_path . '/data/Tag.php');
 
 /**
  * Represents artist data
@@ -44,8 +45,9 @@ class Artist {
 	 *
 	 * @param string $name The name of the artist to load
 	 * @param string $mbid The mbid of the artist (optional)
+	 * @param boolean $recache Whether the artist cache should be cleared before loading the artist
 	 */
-	function __construct($name, $mbid = false) {
+	function __construct($name, $mbid = false, $recache = false) {
 		global $adodb;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -56,6 +58,9 @@ class Artist {
 		$this->query = 'SELECT name, mbid, streamable, bio_published, bio_content, bio_summary, image_small, image_medium, image_large, homepage, hashtag, flattr_uid FROM Artist WHERE '
 			. $mbidquery
 			. 'lower(name) = lower(' . $adodb->qstr($name) . ')';
+		if($recache) {
+			$this->clearCache();
+		}
 		$row = $adodb->CacheGetRow(1200, $this->query);
 		if (!$row) {
 			throw new Exception('No such artist' . $name);
@@ -194,20 +199,31 @@ class Artist {
 	}
 
 	/**
-	 * Get an artist's most used tags
+	 * Get the top tags for an artist, ordered by tag count
+	 * (including any tags for the artist's albums and tracks)
 	 *
-	 * @param int $limit The number of tags to return (defaults to 10)
-	 * @return An array of tags
+	 * @param int $limit The number of tags to return (default is 10)
+	 * @param int $offset The position of the first tag to return (default is 0)
+	 * @param int $cache Caching period of query in seconds (default is 600)
+	 * @return An array of tag details ((tag, freq) .. )
 	 */
-	function getTopTags($limit = 10) {
-		global $adodb;
+	function getTopTags($limit=10, $offset=0, $cache=600) {
+		return Tag::_getTagData($cache, $limit, $offset, null, $this->name);
+	}
 
-		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM Tags WHERE '
-			. ' artist = ' . $adodb->qstr($this->name)
-			. ' GROUP BY tag ORDER BY freq DESC '
-			. ' LIMIT ' . $limit);
-
-		return $res;
+	/**
+	 * Get a specific user's tags for this artist.
+	 *
+	 * @param int $userid Get tags for this user
+	 * @param int $limit The number of tags to return (default is 10)
+	 * @param int $offset The position of the first tag to return (default is 0)
+	 * @param int $cache Caching period of query in seconds (default is 600)
+	 * @return An array of tag details ((tag, freq) .. )
+	 */
+	function getTags($userid, $limit=10, $offset=0, $cache=600) {
+		if(isset($userid)) {
+			return Tag::_getTagData($cache, $limit, $offset, $userid, $this->name);
+		}
 	}
 
 	function clearCache() {
@@ -290,6 +306,33 @@ class Artist {
 	function isStreamable() {
 		global $adodb;
 		return $this->streamable;
+	}
+
+	/**
+	 * Finds out which users manage this artist.
+	 *
+	 * @return An array of users who manage this artist.
+	 */
+	function getManagers() {
+		global $adodb;
+		$managers = array();
+		$res = $adodb->Execute('SELECT userid FROM Manages WHERE lower(artist)=lower(' . $adodb->qstr($this->name) . ') AND authorised=1');
+		foreach($res as $row) {
+			$managers[] = User::new_from_uniqueid_number($row['userid']);
+		}
+		return $managers;
+	}
+
+	/**
+	 * Returns the number of listeners this artist has in total.
+	 *
+	 * @return An int indicating the number of people who've listened to this artist.
+	 */
+	function getListenerCount() {
+		global $adodb;
+		$row = $adodb->CacheGetRow(600, 'SELECT COUNT(DISTINCT userid) AS listeners FROM Scrobbles WHERE'
+			. ' lower(artist) = lower(' . $adodb->qstr($this->name) . ')');
+		return $row['listeners'];
 	}
 
 	/**

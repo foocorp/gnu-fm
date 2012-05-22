@@ -27,21 +27,26 @@ header('Content-Type: text/plain');
 if (!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t'])) {
 	die("FAILED Required POST parameters are not set\n");
 }
-if (empty($_POST['s']) || empty($_POST['a']) || empty($_POST['t'])) {
+
+//trim parameters
+$session_id = trim($_POST['s']);
+$artist = trim($_POST['a']);
+$artist = noSpamTracks($artist);
+$track = trim($_POST['t']);
+$track = noSpamTracks($track);
+
+if (empty($session_id) || empty($artist) || empty($track)) {
 	die("FAILED Required POST parameters are empty\n");
 }
 
-$session_id = $_POST['s'];
-
-$MQsess = $adodb->qstr($session_id);
-
-$artist = $adodb->qstr($_POST['a']);
 if (isset($_POST['b'])) {
-	$album = $adodb->qstr($_POST['b']);
-} else {
+	$album = trim($_POST['b']);
+	$album = noSpamTracks($album);
+}
+if (empty($album)) {
 	$album = 'NULL';
 }
-$track = $adodb->qstr($_POST['t']);
+
 if (isset($_POST['l']) && is_numeric($_POST['l'])) {
 	$length = (int) $_POST['l'];
 	if ($length > 5400) {
@@ -53,24 +58,32 @@ if (isset($_POST['l']) && is_numeric($_POST['l'])) {
 	$expires = time() + 250; //Expire in 5 minutes if we don't know the track length
 }
 
-$mb = validateMBID($_POST['m']);
-
-if ($mb) {
-	$mbid = $adodb->qstr($mb);
-} else {
+$mbid = validateMBID($_POST['m']);
+if (!$mbid) {
 	$mbid = 'NULL';
 }
 
-//Delete this user's last playing song (if any)
-$adodb->Execute('DELETE FROM Now_Playing WHERE sessionid = ' . ($MQsess));
+//quote strings
+$session_id = $adodb->qstr($session_id);
+$artist = $adodb->qstr($artist);
+$track = $adodb->qstr($track);
+if($album != 'NULL') {
+	$album = $adodb->qstr($album);
+}
+if ($mbid != 'NULL') {
+	$mbid = $adodb->qstr($mbid);
+}
 
-if (!check_session($MQsess)) {
+//Delete this user's last playing song (if any)
+$adodb->Execute('DELETE FROM Now_Playing WHERE sessionid = ' . ($session_id));
+
+if (!check_session($session_id)) {
 	die("BADSESSION\n");
 }
 
 try {
 	$adodb->Execute('INSERT INTO Now_Playing (sessionid, artist, album, track, expires, mbid) VALUES ('
-			. $MQsess . ', '
+			. $session_id . ', '
 			. $artist . ', '
 			. $album . ', '
 			. $track . ', '
@@ -80,10 +93,6 @@ try {
 	die('FAILED ' . $e->getMessage() . "\n");
 }
 
-createArtistIfNew($artist);
-if ($album != 'NULL') {
-	createAlbumIfNew($artist, $album);
-}
 getTrackCreateIfNew($artist, $album, $track, $mbid);
 
 //Expire old tracks

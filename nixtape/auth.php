@@ -23,6 +23,8 @@ require_once('database.php');
 require_once('data/User.php');
 require_once($install_path . '/temp-utils.php'); // this is extremely dodgy and shameful
 
+$logged_in = false;
+
 session_start();
 if (isset($_COOKIE['session_id'])) {
 	$err = 0;
@@ -48,4 +50,16 @@ if (isset($_COOKIE['session_id'])) {
 			$err = 1;
 		}
 	}
+
+header("Cache-Control:no-cache");
+header("Pragma: no-cache");
+header("Expires = -1");
+        
+} else {
+$seconds_to_cache = 3600;
+$ts = gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT";
+header("Expires: $ts");
+header("Pragma: no-cache");
+header("Cache-Control: max-age=$seconds_to_cache");
+setcookie('lang', '', time() - 3600);
 }

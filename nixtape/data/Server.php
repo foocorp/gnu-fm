@@ -52,9 +52,8 @@ class Server {
 		try {
 			if ($userid) {
 				$res = $adodb->CacheGetAll(60,
-					'SELECT *
-					FROM Scrobbles
-					WHERE userid = ' . ($userid) . ' ORDER BY time DESC LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
+					'SELECT Scrobbles.*, Loved_Tracks.userid as loved
+					FROM Scrobbles LEFT JOIN Loved_Tracks ON (Scrobbles.track=Loved_Tracks.track AND Scrobbles.artist=Loved_Tracks.artist AND Scrobbles.userid=Loved_Tracks.userid) WHERE Scrobbles.userid = ' . ($userid) . ' ORDER BY Scrobbles.time DESC LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
 
 				/**
 
@@ -141,12 +140,6 @@ class Server {
 			$row['id_track']  = identifierTrack($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 			$row['id_album']  = identifierAlbum($row['username'], $row['artist'], $row['track'], $row['album'], $row['time'], $row['mbid'], $row['artist_mbid'], $row['album_mbid']);
 
-			if ($userid) {
-				$row['loved'] = $adodb->CacheGetOne(60, 'SELECT Count(*) FROM Loved_Tracks WHERE artist='
-						. $adodb->qstr($row['artist'])
-						. ' AND track=' . $adodb->qstr($row['track'])
-						. ' AND userid=' . $userid);
-			}
 			if (!$row['album_image']) {
 				$row['album_image'] = false;
 			} else {
@@ -194,7 +187,8 @@ class Server {
 	static function getUserList($alpha) {
 		global $adodb;
 
-		$query = 'SELECT username from Users where username LIKE \'' . $alpha . '%\'';
+		$alpha .= '%';
+		$query = 'SELECT username from Users where username LIKE ' . $adodb->qstr($alpha) . ' ORDER BY username ASC';
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		$data = $adodb->CacheGetAll(7200, $query);
@@ -202,6 +196,7 @@ class Server {
 			throw new Exception('ERROR ' . $query);
 		}
 
+		return $data;
 	}
 
 	/**
@@ -322,7 +317,7 @@ class Server {
 			}
 			return $base_url . '/user/' . rewrite_encode($username) . $component;
 		} else {
-			return $base_url . "/user-{$component}.php?user=" . urlencode($username);
+			return $base_url . "/user-{$component}.php?user=" . rawurlencode($username);
 		}
 	}
 
@@ -331,7 +326,7 @@ class Server {
 		if ($friendly_urls) {
 			return $base_url . '/group/' . rewrite_encode($groupname);
 		} else {
-			return $base_url . '/group.php?group=' . urlencode($groupname);
+			return $base_url . '/group.php?group=' . rawurlencode($groupname);
 		}
 	}
 
@@ -341,9 +336,9 @@ class Server {
 			return $base_url . '/artist/' . rewrite_encode($artist) . '/' . $component;
 		} else {
 			if ($component) {
-				return $base_url . '/artist-' . $component . '.php?artist=' . urlencode($artist);
+				return $base_url . '/artist-' . $component . '.php?artist=' . rawurlencode($artist);
 			} else {
-				return $base_url . '/artist.php?artist=' . urlencode($artist);
+				return $base_url . '/artist.php?artist=' . rawurlencode($artist);
 			}
 		}
 	}
@@ -353,7 +348,7 @@ class Server {
 		if ($friendly_urls) {
 			return Server::getArtistURL($artist) . '/manage';
 		} else {
-			return $base_url . '/artist-manage.php?artist=' . urlencode($artist);
+			return $base_url . '/artist-manage.php?artist=' . rawurlencode($artist);
 		}
 	}
 
@@ -362,7 +357,7 @@ class Server {
 		if ($friendly_urls) {
 			return Server::getArtistURL($artist) . '/album/add';
 		} else {
-			return $base_url . '/album-add.php?artist=' . urlencode($artist);
+			return $base_url . '/album-add.php?artist=' . rawurlencode($artist);
 		}
 	}
 
@@ -371,7 +366,7 @@ class Server {
 		if ($friendly_urls) {
 			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . rewrite_encode($album);
 		} else {
-			return $base_url . '/album.php?artist=' . urlencode($artist) . '&album=' . urlencode($album);
+			return $base_url . '/album.php?artist=' . rawurlencode($artist) . '&album=' . rawurlencode($album);
 		}
 	}
 
@@ -380,20 +375,34 @@ class Server {
 		if ($friendly_urls) {
 			return Server::getAlbumURL($artist, $album) . '/track/add';
 		} else {
-			return $base_url . '/track-add.php?artist=' . urlencode($artist) . '&album=' . urlencode($album);
+			return $base_url . '/track-add.php?artist=' . rawurlencode($artist) . '&album=' . rawurlencode($album);
 		}
 	}
 
 
-	static function getTrackURL($artist, $album, $track) {
+	static function getTrackURL($artist, $album, $track, $component = '') {
 		global $friendly_urls, $base_url;
-		if ($friendly_urls && $album) {
-			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . rewrite_encode($album) . '/track/' . rewrite_encode($track);
-		} else if ($friendly_urls) {
-			return $base_url . '/artist/' . rewrite_encode($artist) . '/track/' . rewrite_encode($track);
+
+		if($friendly_urls) {
+			$trackurl = $base_url . '/artist/' . rewrite_encode($artist);
+			if($album) {
+				$trackurl .= '/album/' . rewrite_encode($album);
+			}
+			$trackurl .= '/track/' . rewrite_encode($track);
+			if($component) {
+				$trackurl .= '/' . $component;
+			}
 		} else {
-			return $base_url . '/track.php?artist=' . urlencode($artist) . '&album=' . urlencode($album) . '&track=' . urlencode($track);
+			if($component) {
+				$trackurl = $base_url . '/track-' . $component . '.php?artist='	. rawurlencode($artist)
+				   	. '&album=' . rawurlencode($album) . '&track=' . rawurlencode($track);
+			} else {
+				$trackurl = $baseurl . '/track.php?artist=' . rawurlencode($artist)
+				   	. '&album=' . rawurlencode($album) . '&track=' . rawurlencode($track);
+			}
 		}
+
+		return $trackurl;
 	}
 
 	static function getTrackEditURL($artist, $album, $track) {
@@ -403,7 +412,16 @@ class Server {
 		} else if ($friendly_urls) {
 			return $base_url . '/artist/' . rewrite_encode($artist) . '/track/' . rewrite_encode($track) . '/edit';
 		} else {
-			return $base_url . '/track-add.php?artist=' . urlencode($artist) . '&album=' . urlencode($album) . '&track=' . urlencode($track);
+			return $base_url . '/track-add.php?artist=' . rawurlencode($artist) . '&album=' . rawurlencode($album) . '&track=' . rawurlencode($track);
+		}
+	}
+
+	static function getAlbumEditURL($artist, $album) {
+		global $friendly_urls, $base_url;
+		if ($friendly_urls) {
+			return $base_url . '/artist/' . rewrite_encode($artist) . '/album/' . rewrite_encode($album) . '/edit';
+		} else {
+			return $base_url . '/album-add.php?artist=' . rawurlencode($artist) . '&album=' . rawurlencode($album);
 		}
 	}
 
@@ -412,7 +430,7 @@ class Server {
 		if ($friendly_urls) {
 			return $base_url . '/tag/' . rewrite_encode($tag);
 		} else {
-			return $base_url . '/tag.php?tag=' . urlencode($tag);
+			return $base_url . '/tag.php?tag=' . rawurlencode($tag);
 		}
 	}
 

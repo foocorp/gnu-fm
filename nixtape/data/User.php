@@ -23,6 +23,7 @@ require_once($install_path . '/database.php');
 require_once($install_path . '/data/sanitize.php');
 require_once($install_path . '/utils/human-time.php');
 require_once($install_path . '/data/Server.php');
+require_once($install_path . '/data/Tag.php');
 
 /**
  * Represents User data
@@ -34,7 +35,7 @@ class User {
 
 	public $name, $email, $fullname, $bio, $location, $homepage, $error, $userlevel;
 	public $id, $acctid, $avatar_uri, $location_uri, $webid_uri, $laconica_profile, $journal_rss;
-	public $password, $has_identica, $created, $modified, $uniqueid, $anticommercial;
+	public $password, $has_identica, $created, $modified, $uniqueid, $anticommercial, $receive_emails;
 
 	/**
 	 * User constructor
@@ -78,6 +79,7 @@ class User {
 			$this->modified         = $row['modified'];
 			$this->uniqueid         = $row['uniqueid'];
 			$this->anticommercial   = $row['anticommercial'];
+			$this->receive_emails   = $row['receive_emails'];
 
 			$this->has_identica = preg_match('#^http://identi\.ca/#i', $this->laconica_profile);
 
@@ -128,6 +130,7 @@ class User {
 				. 'laconica_profile=%s, '
 				. 'journal_rss=%s, '
 				. 'anticommercial=%d, '
+				. 'receive_emails=%d, '
 				. 'modified=%d '
 				. 'WHERE username=%s'
 				, $adodb->qstr($this->email)
@@ -143,6 +146,7 @@ class User {
 				, $adodb->qstr($this->laconica_profile)
 				, $adodb->qstr($this->journal_rss)
 				, (int)($this->anticommercial)
+				, (int)($this->receive_emails)
 				, time()
 				, $adodb->qstr($this->name));
 
@@ -288,7 +292,7 @@ class User {
 		if ($since) {
 			$query = 'SELECT COUNT(*) FROM Scrobbles WHERE userid = ' . ($this->uniqueid) . ' AND time > ' . (int)($since);
 		} else {
-			$query = 'SELECT COUNT(*) FROM Scrobbles WHERE userid = ' . ($this->uniqueid);
+			$query = 'SELECT scrobble_count FROM User_Stats WHERE userid = ' . ($this->uniqueid);
 		}
 		try {
 			$tracks = $adodb->CacheGetOne(200, $query);
@@ -300,37 +304,62 @@ class User {
 	}
 
 	/**
-	 * Get a user's most used tags
+	 * Get a user's top tags, ordered by tag count
 	 *
-	 * @param int $limit The number of tags to return (defaults to 10)
-	 * @return array An array of tag details
+	 * @param int $limit The number of tags to return (default is 10)
+	 * @param int $offset The position of the first tag to return (default is 0)
+	 * @param int $cache Caching period of query in seconds (default is 600)
+	 * @return An array of tag details ((tag, freq) .. )
 	 */
-	function getTopTags($limit = 10) {
-		global $adodb;
+	function getTopTags($limit=10, $offset=0, $cache=600) {
+		return Tag::_getTagData($cache, $limit, $offset, $this->uniqueid);
+	}
 
-		$res = $adodb->CacheGetAll(600, 'SELECT tag, COUNT(tag) AS freq FROM Tags WHERE '
-			. ' userid = ' . $this->uniqueid
-			. ' GROUP BY tag '
-			. ' LIMIT ' . $limit);
+	/**
+	 * Get artists, albums, or tracks tagged with tag by user
+	 *
+	 * @param string $tag Items are tagged by this tag
+	 * $param string $taggingtype Type of tags to return (artist|album|track)
+	 * @param int $limit The number of items to return (default is 10)
+	 * @param int $offset The position of the first item to return (default is 0)
+	 * @param int $cache Caching period of query in seconds (default is 600)
+	 * @param bool $streamable Show only content by streamable artists (default is False)
+	 * @return An array of item details ((artist, .. , freq) .. )
+	 */
 
-		return $res;
+	function getPersonalTags($tag, $taggingtype, $limit=10, $offset=0, $cache=600, $streamable=False) {
+		if(isset($tag) and isset($taggingtype)) {
+			return Tag::_getTagData($cache, $limit, $offset, $this->uniqueid, null, null, null, $tag, $taggingtype, $streamable);
+		}
 	}
 
 	/**
 	 * Get a user's tags for a specific artist
 	 *
 	 * @param string $artist The name of the artist to fetch tags for
-	 * @return array An array of tag details
+	 * @param int $limit The number of tags to return (default is 10)
+	 * @param int $offset The position of the first tag to return (default is 0)
+	 * @param int $cache Caching period of query in seconds (default is 600)
+	 * @return An array of tag details ((tag, freq) .. )
 	 */
-	function getTagsForArtist($artist) {
-		global $adodb;
+	function getTagsForArtist($artist, $limit=10, $offset=0, $cache=0) {
+		if(isset($artist)) {
+			$artistobj = new Artist($artist);
+			return $artistobj->getTags($this->uniqueid, $limit, $offset, $cache);
+		}
+	}
 
-		$res = $adodb->GetAll('SELECT tag, COUNT(tag) AS freq FROM Tags WHERE '
-			. ' userid = ' . $this->uniqueid
-			. ' AND artist = ' . $adodb->qstr($artist)
-			. ' GROUP BY tag ');
-
-		return $res;
+	/**
+	 * Get tag count for tag and user
+	 *
+	 * @param string $tag The tag to show user's tag count for
+	 * @param int $cache Caching period of query in seconds (default is 600)
+	 * @return An array of tag details ((tag, freq) .. )
+	 */
+	function getTagInfo($tag, $cache=600) {
+		if(isset($tag)) {
+			return Tag::_getTagData($cache, 1, 0, $this->uniqueid, null, null, null, $tag);
+		}
 	}
 
 	/**

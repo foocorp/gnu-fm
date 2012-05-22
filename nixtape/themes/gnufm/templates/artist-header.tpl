@@ -1,0 +1,1 @@
+<h2 class="fn org" property="foaf:name" rel="foaf:page" rev="foaf:primaryTopic" resource="">{$name|escape:'html':'UTF-8'}{if $manage_link} <a href="{$manage_link}"><small>[{t}Edit{/t}]</small></a>{/if}</h2>

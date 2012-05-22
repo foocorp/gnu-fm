@@ -83,7 +83,8 @@ if (isset($_POST['install'])) {
 		laconica_profile VARCHAR(255),
 		created INTEGER DEFAULT 0,
 		modified INTEGER DEFAULT 0,
-		journal_rss VARCHAR(255))',
+		journal_rss VARCHAR(255),
+		receive_emails INTEGER DEFAULT 1)',
 
 		'CREATE TABLE Groups (
 		id SERIAL PRIMARY KEY,
@@ -334,7 +335,12 @@ if (isset($_POST['install'])) {
 		'INSERT INTO Relationship_Flags VALUES (\'muse\')',
 		'INSERT INTO Relationship_Flags VALUES (\'crush\')',
 		'INSERT INTO Relationship_Flags VALUES (\'date\')',
-		'INSERT INTO Relationship_Flags VALUES (\'sweetheart\')'
+		'INSERT INTO Relationship_Flags VALUES (\'sweetheart\')',
+
+		'CREATE TABLE User_Stats (
+			userid INTEGER REFERENCES Users(uniqueid) ON DELETE CASCADE,
+			scrobble_count INTEGER NOT NULL,
+			PRIMARY KEY (userid))'
 	);
 
 	foreach ($stage_one_queries as $query) {
@@ -371,15 +377,56 @@ if (isset($_POST['install'])) {
 		}
 	}
 
-	$adodb->Execute("CREATE INDEX album_artistname_idx ON Album(artist_name)");
-	$adodb->Execute("CREATE INDEX scrobbles_artist_idx ON Scrobbles(artist)");
 	$adodb->Execute("CREATE INDEX scrobbles_time_idx ON Scrobbles(time)");
-	$adodb->Execute("CREATE INDEX track_artist_idx ON Track(lower(artist_name))");
-	$adodb->Execute("CREATE INDEX track_name_idx ON Track(lower(name))");
-	$adodb->Execute("CREATE INDEX track_streamable_idx on Track(streamable);");
-	$adodb->Execute("CREATE INDEX scrobbles_artist_idx on Scrobbles(lower(artist))");
-	$adodb->Execute("CREATE INDEX scrobbles_track_idx on Scrobbles(lower(track))");
-	$adodb->Execute("CREATE UNIQE INDEX groups_groupname_idx ON Groups(lower(groupname))");
+	$adodb->Execute("CREATE INDEX scrobbles_userid_idx ON Scrobbles(userid)");
+
+	if(strtolower(substr($dbms, 0, 5)) == 'pgsql') {
+		// MySQL doesn't support the use of lower() to create case-insensitive indexes
+		$adodb->Execute("CREATE INDEX album_artistname_idx ON Album(lower(artist_name))");
+		$adodb->Execute("CREATE INDEX track_artist_idx ON Track(lower(artist_name))");
+		$adodb->Execute("CREATE INDEX track_name_idx ON Track(lower(name))");
+		$adodb->Execute("CREATE INDEX track_streamable_idx on Track(streamable);");
+		$adodb->Execute("CREATE INDEX scrobbles_artist_idx on Scrobbles(lower(artist))");
+		$adodb->Execute("CREATE INDEX scrobbles_track_idx on Scrobbles(lower(track))");
+		$adodb->Execute("CREATE INDEX groups_groupname_idx ON Groups(lower(groupname))");
+
+		// PostgreSQL stored functions
+		$adodb->Execute("CREATE OR REPLACE LANGUAGE plpgsql;");
+		$adodb->Execute("CREATE FUNCTION update_user_stats_scrobble_count() RETURNS TRIGGER AS $$
+			DECLARE s_count int;
+			BEGIN
+				UPDATE User_Stats SET scrobble_count = scrobble_count + 1 WHERE userid = NEW.userid;
+				IF found THEN
+					RETURN NULL;
+				END IF;
+				BEGIN
+					-- userid not in User_Stats table, get current scrobble count from Scrobbles
+					-- and insert userid into User_Stats
+					SELECT COUNT(userid) into s_count FROM Scrobbles WHERE userid = NEW.userid;
+					INSERT INTO User_Stats(userid, scrobble_count) VALUES(NEW.userid, s_count);
+					RETURN NULL;
+				END;
+			END;
+			$$ LANGUAGE plpgsql;");
+		$adodb->Execute("CREATE TRIGGER update_user_stats_scrobble_count
+			AFTER INSERT ON Scrobbles
+			FOR EACH ROW EXECUTE PROCEDURE update_user_stats_scrobble_count();");
+
+	} elseif (substr($dbms, 0, 5) == 'mysql') {
+		$adodb->Execute("CREATE PROCEDURE update_user_stats_scrobble_count(uid INT)
+			main: BEGIN
+				DECLARE s_count INT;
+				UPDATE User_Stats SET scrobble_count = (scrobble_count + 1) WHERE userid = uid;
+				IF ROW_COUNT() > 0 THEN
+					LEAVE main;
+				END IF;
+				SELECT COUNT(userid) INTO s_count FROM Scrobbles WHERE userid = uid;
+				INSERT INTO User_Stats(userid, scrobble_count) VALUES(uid, s_count);
+			END main;");
+		$adodb->Execute("CREATE TRIGGER update_user_stats_scrobble_count
+			AFTER INSERT ON Scrobbles
+			FOR EACH ROW CALL update_user_stats_scrobble_count(NEW.userid);");
+	}
 
 	$adodb->Close();
 

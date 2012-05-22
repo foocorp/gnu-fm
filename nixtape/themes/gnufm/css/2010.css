@@ -1,0 +1,527 @@
+@import "combo.css";
+#doc, #player > #interface {
+    background-color: #B22222;
+}
+#doc a {
+    color: black;
+}
+#doc a:hover, #hd a, #hd a:hover, #navbar li a:hover, #submenu li.active a {
+    color: #B22222;
+}
+#doc {
+    position: relative;
+    width: 100%;
+}
+#navbar {
+    padding-top: 10px;
+    text-align: center;
+}
+#navbar ul {
+    margin: 0;
+    padding: 0;
+    width: auto;
+}
+#navbar li {
+    display: inline;
+    font-size: 18px;
+    font-weight: bold;
+    list-style: none outside none;
+    margin-right: 1em;
+    padding-bottom: 10px;
+}
+#navbar li a {
+    border-bottom: 1px dotted;
+    color: black;
+    text-decoration: none;
+    text-shadow: 0 0 1px #999999;
+}
+#navbar li a:hover {
+    border-bottom: 1px solid;
+}
+#submenu ul {
+    margin: 0;
+    text-align: center;
+    width: 728px;
+}
+#submenu li {
+    display: inline;
+    font-size: 14px;
+    font-weight: bold;
+    list-style: none outside none;
+    padding-left: 1em;
+    padding-right: 1em;
+    position: relative;
+    top: 1px;
+}
+#submenu li.active {
+    background: none repeat scroll 0 0 white;
+    border-bottom: 3px solid white;
+    border-top: 3px solid white;
+}
+#submenu a {
+    border-bottom: 1px dotted;
+    color: black;
+    text-decoration: none;
+}
+h2 {
+    font-size: 32px;
+    text-align: center;
+    text-shadow: 0px 1px 1px #999999;
+}
+
+h2 a {
+	text-decoration:none;
+	border-bottom: 1px dotted;
+}
+h2 a:hover {
+	border-bottom: 1px solid;
+}
+
+#site-title a, #site-title a:hover {
+	border-bottom: none;
+	color: fireBrick;
+}
+
+#site-title h2 {
+	font-size: 52px;
+	text-shadow: 3px 3px 3px #999999;
+}
+
+#buttons li {
+    list-style: none outside none;
+}
+#buttons {
+    margin: 3em;
+    text-align: center;
+}
+li ul {
+    margin: 0 0 1em;
+    padding: 0 1em;
+}
+li ul li {
+    font-weight: bold;
+    list-style: none outside none;
+    padding-top: 0.5em;
+}
+.tagcloud {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+.tagcloud li {
+    display: inline;
+    line-height: 1.2em;
+    margin-right: 0.2em;
+}
+.tagcloud a {
+    color: #CC0000;
+    text-decoration: none;
+}
+.tagcloud a:hover {
+    text-decoration: underline;
+}
+.tagcloud .t1 {
+    font-size: 200%;
+}
+.tagcloud .t2 {
+    font-size: 180%;
+}
+.tagcloud .t3 {
+    font-size: 160%;
+}
+.tagcloud .t4 {
+    font-size: 140%;
+}
+.tagcloud .t5 {
+    font-size: 120%;
+}
+.tagcloud .t6 {
+    font-size: 100%;
+}
+#bd form {
+    margin: 1em auto;
+    padding: 1em;
+    width: 30em;
+}
+#bd input {
+    width: 98%;
+}
+#bd textarea {
+    width: 98%;
+}
+#ft ul {
+    text-align: center;
+}
+#ft li {
+    display: inline;
+    list-style: none outside none;
+}
+#header-spacing {
+    margin-top: 13em;
+}
+.albumart {
+    float: right;
+    margin-right: 4em;
+}
+#profile-box {
+    text-align: center;
+}
+#profile-box h2 {
+    line-height: 50px;
+    margin-bottom: 0;
+    padding: 0;
+}
+#profile-box ul {
+    margin: 0;
+    padding: 0;
+}
+#profile-box li {
+    display: inline;
+    font-size: 90%;
+}
+hr {
+    display: none !important;
+}
+#doc {
+    position: relative;
+}
+div#bd {
+    padding-left: 20px;
+}
+#infobox {
+    background-color: white;
+    border: 1px solid black;
+    margin-top: 4em;
+    padding: 12px;
+    text-align: center;
+}
+#infobox p {
+    margin: 0;
+    padding: 0;
+}
+h3 {
+    clear: left;
+}
+#welcome-box h2 {
+    font-size: 45px;
+}
+#welcome-box p {
+    font-size: 24px;
+    text-align: center;
+}
+#tag-cloud-box {
+    border: 1px solid #EEEEEE;
+    margin-top: 32px;
+    padding: 24px;
+}
+#tag-cloud-box h3 {
+    font-size: 24px;
+    margin-top: 0;
+    text-align: center;
+}
+#search form {
+    background: none repeat scroll 0 0 transparent;
+    float: right;
+    margin: 0 8px 0 0;
+    padding: 0;
+    width: auto;
+}
+#search input {
+    width: 110px;
+}
+#search select {
+    margin-left: 10px;
+    width: 75px;
+}
+input#search_button {
+    margin-left: 10px;
+    margin-right: 12px;
+    width: 70px;
+}
+body {
+    margin: 0;
+    min-width: 1100px;
+}
+h1 {
+    float: left;
+    font-family: "serif";
+    font-size: 3em;
+    font-weight: normal;
+    margin: 0 0 0 8px;
+    text-align: left;
+    text-shadow: 0 0 1px #999999;
+}
+#hd a, #hd a:hover {
+    text-decoration: none;
+}
+#hd {
+    background-color: white;
+    box-shadow: 0 0 7px black;
+    height: 49px;
+    text-align: center;
+    width: 100%;
+}
+#hd-border {
+    display: none;
+    height: 16px;
+    position: relative;
+    top: -4px;
+    width: 100%;
+}
+
+#bd {
+    margin: auto;
+    width: 1080px;
+}
+#ft {
+    background-color: white;
+    box-shadow: 0 0 7px black;
+    font-weight: bold;
+    padding: 1em;
+    text-align: center;
+}
+#ft-border {
+    display: none;
+    position: relative;
+    top: 15px;
+    width: 100%;
+}
+#footer-content {
+    margin-top: 1em;
+}
+#dev-links li {
+    margin-right: 2em;
+}
+#content-box-top {
+    width: 700px;
+    height: 102px;
+    margin-bottom: 1em;
+    padding: 0 1em;
+    position: absolute;
+}
+#content {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid;
+    margin-top: 5em;
+    padding: 1em;
+    width: 700px;
+}
+#content-box-bottom {
+    height: 50px;
+    left: -9px;
+    position: relative;
+    width: 100%;
+}
+.stats-bar {
+    background-color: #F57900;
+    margin-top: 0.5em;
+    padding: 0.5em;
+}
+#license {
+    margin-left: 3em;
+}
+#ad {
+    height: 170px;
+}
+#sidebar {
+    float: right;
+}
+.sideblock {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid;
+    margin-bottom: 2em;
+    margin-left: 5px;
+    margin-right: 20px;
+    padding: 0 0 2em;
+    text-align: center;
+    width: 287px;
+}
+.sideblock-top {
+    display: none;
+    height: 14px;
+    margin: 1px;
+    padding: 0;
+    position: relative;
+    top: 20px;
+    width: 300px;
+}
+.sideblock-bottom {
+    display: none;
+    height: 14px;
+    margin-bottom: 8px;
+    margin-left: -1px;
+    padding: 0;
+    position: relative;
+    top: -4px;
+    width: 300px;
+}
+.sideblock p {
+    margin-left: 1.8em;
+    margin-right: 1.8em;
+    text-align: justify;
+}
+.sideblock h3 {
+    color: black;
+    font-size: 14pt;
+    height: 30px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    padding-top: 0.2em;
+    position: relative;
+    text-shadow: 0 1px 1px #999999;
+}
+.neighbour {
+    border: 1px solid black;
+    height: 64px;
+    margin: 5px;
+    width: 64px;
+}
+#neighbours {
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    text-align: center;
+}
+#player-container {
+    float: right;
+    margin: 1em 2em 1em 1em;
+    text-align: right;
+    width: 340px;
+}
+#playerproblems {
+    text-align: justify;
+}
+#player > #interface {
+    border: 1px solid black;
+    border-radius: 8px 8px 8px 8px;
+    color: white;
+    display: none;
+    padding: 10px 10px 0;
+    text-align: left;
+    width: 320px;
+}
+#player > #interface > #p_buttons a {
+    opacity: 0.5;
+}
+#player > #interface > #progress {
+    text-align: right;
+}
+#player > #interface > #trackinfo {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid black;
+    border-radius: 8px 8px 8px 8px;
+    color: black;
+    margin-bottom: 5px;
+    overflow: hidden;
+    padding: 3px 5px;
+}
+#player > #interface > #trackinfo > #playlist {
+    display: none;
+}
+#showplaylist {
+    float: right;
+    margin-top: 2px;
+}
+#hideplaylist {
+    display: none;
+    float: right;
+    margin-top: 2px;
+}
+#scrobbled {
+    display: none;
+    float: left;
+}
+#volume-box {
+    font-size: 8px;
+    margin-bottom: 1em;
+    padding: 0;
+}
+.ui-widget {
+    font-family: Verdana,Arial,sans-serif;
+    font-size: 1.1em;
+}
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+    font-family: Verdana,Arial,sans-serif;
+    font-size: 1em;
+}
+.ui-widget-content {
+    background: none repeat scroll 0 0 transparent;
+    border: 1px solid #AAAAAA;
+    color: #222222;
+}
+.ui-widget-content a {
+    color: #222222;
+}
+.ui-corner-all {
+    border-radius: 4px 4px 4px 4px;
+}
+.ui-progressbar {
+    height: 11px;
+    text-align: left;
+}
+.ui-progressbar .ui-progressbar-value {
+    height: 100%;
+}
+.ui-progressbar-value {
+    background-image: url("../img/player/pbar-ani.gif");
+}
+.ui-slider {
+    position: relative;
+    text-align: left;
+}
+.ui-slider .ui-slider-handle {
+    cursor: default;
+    height: 1.2em;
+    position: absolute;
+    width: 1.2em;
+    z-index: 2;
+}
+.ui-slider .ui-slider-range {
+    background-position: 0 0;
+    border: 0 none;
+    display: block;
+    font-size: 0.7em;
+    position: absolute;
+    z-index: 1;
+}
+.ui-slider-horizontal {
+    background: none repeat scroll 0 0 white;
+    height: 0.8em;
+}
+.ui-slider-horizontal .ui-slider-handle {
+    background: none repeat scroll 0 0 #F57900;
+    margin-left: -0.6em;
+    top: -0.3em;
+}
+.ui-slider-horizontal .ui-slider-range {
+    height: 100%;
+    top: 0;
+}
+.ui-slider-horizontal .ui-slider-range-min {
+    left: 0;
+}
+.ui-slider-horizontal .ui-slider-range-max {
+    right: 0;
+}
+.ui-slider-vertical {
+    height: 100px;
+    width: 0.8em;
+}
+.ui-slider-vertical .ui-slider-handle {
+    left: -0.3em;
+    margin-bottom: -0.6em;
+    margin-left: 0;
+}
+.ui-slider-vertical .ui-slider-range {
+    left: 0;
+    width: 100%;
+}
+.ui-slider-vertical .ui-slider-range-min {
+    bottom: 0;
+}
+.ui-slider-vertical .ui-slider-range-max {
+    top: 0;
+}
+#submenu a:hover {
+    border-bottom: 1px solid;
+}
+

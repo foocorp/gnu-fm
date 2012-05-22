@@ -24,6 +24,7 @@ require_once('templating.php');
 require_once('data/sanitize.php');
 require_once('data/Server.php');
 require_once('data/TagCloud.php');
+require_once('track-menu.php');
 
 $track = new Track($_GET['track'], $_GET['artist']);
 $smarty->assign('track', $track);
@@ -45,21 +46,9 @@ $smarty->assign('flattr_uid', $artist->flattr_uid);
 $smarty->assign('url', $track->getURL());
 $smarty->assign('pagetitle', $artist->name . ' : ' . $track->name);
 
-$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-$res = $adodb->GetAll('SELECT * FROM Track WHERE lower(artist_name) = lower(' . $adodb->qstr($track->artist_name) . ') AND lower(name) = lower(' . $adodb->qstr($track->name) . ')');
-
-$aOtherAlbums = array();
-
-foreach ($res as &$trow) {
-	if ($trow['album']) {
-		$aOtherAlbums[] = new Album($trow['album'], $trow['artist']);
-	}
-}
-
 if (isset($this_user) && $this_user->manages($artist->name)) {
 	$smarty->assign('edit_link', $track->getEditURL());
 }
-
 
 if ($track->duration) {
 	// Give the duration in MM:SS
@@ -72,16 +61,23 @@ if ($track->duration) {
 	$smarty->assign('duration', $duration);
 }
 
-$smarty->assign('albums', $aOtherAlbums);
-
 $smarty->assign('extra_head_links', array(
 		array(
 			'rel'   => 'meta',
 			'type'  => 'application/rdf+xml',
 			'title' => 'Track Metadata',
-			'href'  => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $track->getURL()))
+			'href'  => $base_url . '/rdf.php?fmt=xml&page=' . rawurlencode(str_replace($base_url, '', $track->getURL()))
 			)
-	));
+		));
 
+try {
+	$tagCloud = TagCloud::generateTagCloud('Tags', 'tag', 10, $track->name, 'track');
+} catch ( Exception $e) {
+	$tagCloud = array();
+}
+$smarty->assign('tagcloud', $tagCloud);
+
+$submenu = track_menu($track, 'Overview');
+$smarty->assign('submenu', $submenu);
 $smarty->assign('headerfile', 'track-header.tpl');
 $smarty->display('track.tpl');

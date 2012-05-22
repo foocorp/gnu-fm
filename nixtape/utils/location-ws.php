@@ -41,9 +41,9 @@ if (!$num) {
 $lang = 'en';
 
 $uri = sprintf('http://ws.geonames.org/searchJSON?q=%s&maxRows=%d&lang=%s&style=full',
-	urlencode($query),
+	rawurlencode($query),
 	$num,
-	urlencode($lang));
+	rawurlencode($lang));
 
 if (function_exists('curl_init')) {
 	# We'll try to use cURL if the extension is installed on this server.
