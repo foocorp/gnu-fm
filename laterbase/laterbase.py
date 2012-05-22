@@ -45,7 +45,7 @@ if (len(sys.argv) > 1):
         try:
             ins = open( LATERBASE, "r" )
             for line in ins:
-                print line
+                print "* " + line
             ins.close()
         except IOError as e:
             print "You don't have anything on your laterbase. Try lb <item> to add something to the laterbase."
@@ -59,7 +59,7 @@ if (len(sys.argv) > 1):
         for x in range (1,len(sys.argv)):
             n = n + sys.argv[x] + " "
 
-        n = n.strip()
+        n = n.strip() + "\n"
 
         try:
             f = open(LATERBASE, "a")
