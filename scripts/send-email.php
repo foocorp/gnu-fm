@@ -8,7 +8,7 @@ if (PHP_SAPI != 'cli') {
 require_once('adodb/adodb-exceptions.inc.php');
 require_once('adodb/adodb.inc.php');
 
-$connect_string = 'postgres://dbname=librefm';
+$connect_string = 'pgsql://librefm:5jM0nEy6e1qBPVNWM7Fh8Dj9@db.libre.fm:5432/librefm';
 $delay = 1;
 
 try {
