@@ -36,6 +36,7 @@ $session_id = $_POST['s'];
 
 $userid = useridFromSID($session_id);
 $rowvalues = array();
+$forwardvalues = array();
 $actualcount = 0;
 $timeisstupid = 0;
 
@@ -171,6 +172,21 @@ for ($i = 0; $i < count($_POST['a']); $i++) {
 			. $length . ','
 			. $stid . ')';
 
+		// Create array with tracks to be forwarded
+		if (isset($lastfm_key)) {
+			$forwardvalues[$actualcount] = array(
+				$userid,
+				$_POST['a'][$i],
+				$_POST['b'][$i],
+				$_POST['t'][$i],
+				$time,
+				$_POST['m'][$i],
+				$_POST['o'][$i],
+				$_POST['r'][$i],
+				$_POST['l'][$i]
+			);
+		}
+
 		$actualcount++;
 	}
 
@@ -186,7 +202,7 @@ for ($i = 0; $i < count($_POST['a']); $i++) {
 				try {
 					$res =& $adodb->Execute($sql);
 					if (isset($lastfm_key)) {
-						forwardScrobble($userid, $_POST['a'][$i], $_POST['b'][$i], $_POST['t'][$i], $time, $_POST['m'][$i], $_POST['o'][$i], $_POST['r'][$i], $_POST['l'][$i]);
+						call_user_func_array("forwardScrobble", $forwardvalues[$j]);
 					}
 				} catch (Exception $e) {
 					$msg = $e->getMessage();
