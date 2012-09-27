@@ -75,14 +75,14 @@ if (isset($_GET['code'])) {
 	$err = 0;
 
 	try {
-		$row = $adodb->GetRow('SELECT * FROM Users WHERE ' . $field . ' = ' . $adodb->qstr($value));
+		$row = $adodb->GetRow('SELECT * FROM Users WHERE lower(' . $field . ') = lower(' . $adodb->qstr($value) .')');
 	} catch (Exception $e) {
 		$err = 1;
 	}
 
 	if ($err || !$row) {
 		$errors .= "User not found.\n";
-		$smarty->assign('errors', $errors);
+		$smarty->assign('details', $errors);
 		$smarty->display('error.tpl');
 		die();
 	}
@@ -101,7 +101,7 @@ if (isset($_GET['code'])) {
 		}
 	} catch (Exception $e) {
 		$errors .= 'Error on: ' . $sql;
-		$smarty->assign('errors', $errors);
+		$smarty->assign('details', $errors);
 		$smarty->display('error.tpl');
 		die();
 	}
@@ -116,7 +116,7 @@ if (isset($_GET['code'])) {
 		$res = $adodb->Execute($sql);
 	} catch (Exception $e) {
 		$errors .= 'Error on: ' . $sql;
-		$smarty->assign('errors', $errors);
+		$smarty->assign('details', $errors);
 		$smarty->display('error.tpl');
 		die();
 	}
@@ -133,7 +133,7 @@ if (isset($_GET['code'])) {
 	if (!$status) {
 		$errors = 'Error while trying to send email to: ' . $row['email'];
 		$errors .= '. Please try again later, or contact the site administrators.';
-		$smarty->assign('errors', $errors);
+		$smarty->assign('details', $errors);
 		$smarty->display('error.tpl');
 		die();
 	}
