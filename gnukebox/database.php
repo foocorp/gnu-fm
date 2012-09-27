@@ -31,8 +31,7 @@ require_once('adodb/adodb.inc.php');
 try {
 	$adodb =& NewADOConnection($connect_string);
 } catch (Exception $e) {
-	var_dump($e);
-	adodb_backtrace($e->gettrace());
+	die("Unable to connect to database");
 }
 
 // To keep functionality with existing code
