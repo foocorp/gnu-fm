@@ -30,17 +30,19 @@ require_once($install_path . '/data/Graph.php');
 class GraphTopArtists extends Graph {
     
     public $artists, $artists_data;
-    public $number_of_tracks;
+	public $number_of_artists;
+	public $begin;
 
-    /**
-     * @param $user - the current user to build the information on.
-     * @param $num - the number of tracks to be included in the search,
-     * 20 by default.
-     **/
-    function __construct($user, $num = 20)
+	/**
+	 * @param string $user The current user to build the information on.
+	 * @param int $num The number of artists to be included in the search.
+	 * @param int $begin Only count scrobbles with a timestamp higher than this.
+	 **/
+    function __construct($user, $num = 20, $begin = null)
     {
         parent::__construct($user, 'bar_horiz');
-        $this->number_of_tracks = $num;
+		$this->number_of_artists = $num;
+		$this->begin = $begin;
         $this->buildGraphData();
     }
     
@@ -53,17 +55,16 @@ class GraphTopArtists extends Graph {
      **/
     private function buildGraphData()
     {
-        $tmp = Statistic::generatePlayStats('Scrobbles', 'artist',
-                        $this->number_of_tracks, $this->user->uniqueid, 300);
+		$tmp = $this->user->getTopArtists($this->number_of_artists, 0, False, $this->begin);
         
 	if (!empty($tmp)) 
 	{
 	        foreach ($tmp as $root => $node)
 	        {
-	            $tmp = '<a href="'.$node['pageurl'].'">';
+	            $tmp = '<a href="'.$node['artisturl'].'">';
 	            $tmp .= htmlentities($node['artist'], ENT_QUOTES, 'UTF-8').'</a>';
 	            $artists[] = $tmp;
-	            $artists_data[] = $node['count'];
+	            $artists_data[] = $node['freq'];
 	        }
         
 	        $this->setMaxX($artists_data[0]);
@@ -82,17 +83,19 @@ class GraphTopArtists extends Graph {
 class GraphTopTracks extends Graph {
     
     public $tracks, $tracks_data;
-    public $number_of_tracks;
+	public $number_of_tracks;
+	public $begin;
     
-    /**
-     * @param $user - the current user to build the information on.
-     * @param $num - the number of tracks to be included in the search,
-     * 20 by default.
-     **/
-    function __construct($user, $num = 20)
+	/**
+	 * @param string $user The current user to build the information on.
+	 * @param int $num The number of tracks to be included in the search, 20 by default.
+	 * @param int $begin Only count scrobbles with a timestamp higher than this.
+	 **/
+    function __construct($user, $num = 20, $begin = null)
     {
         parent::__construct($user, 'bar_horiz');
-        $this->number_of_tracks = $num;
+		$this->number_of_tracks = $num;
+		$this->begin = $begin;
         $this->buildGraphData();
     }
     
@@ -104,8 +107,9 @@ class GraphTopTracks extends Graph {
      * plotting utility.
      **/
     private function buildGraphData()
-    {
-        $this->data_buffer = $this->user->getTopTracks($this->number_of_tracks);
+	{
+		$begin = strtotime('-6 months');
+		$this->data_buffer = $this->user->getTopTracks($this->number_of_tracks, 0, False, $this->begin);
         $tracks = array();
         $listings = array();
         
