@@ -135,7 +135,7 @@ class UserXML {
 
 		try {
 			$user = new User($username);
-			$res = $user->getTopTracks($limit, $offset, $streamable, $begin, null, null, $cache);
+			$res = $user->getTopTracks($limit, $offset, $streamable, $begin, null, $cache);
 		} catch (Exception $e) {
 			return XML::error('error', '7', 'Invalid resource specified');
 		}
