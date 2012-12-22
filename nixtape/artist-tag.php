@@ -50,7 +50,7 @@ $smarty->assign('name', $artist->name);
 $smarty->assign('pagetitle', $artist->name);
 
 try {
-	$tagCloud = TagCloud::generateTagCloud('Tags', 'tag', 10, $artist->name, 'artist');
+	$tagCloud = TagCloud::generateTagCloud('tags', 'tag', 10, 'artist', $artist->name);
 	$smarty->assign('tagcloud', $tagCloud);
 } catch (Exception $e) {
 	$tagCloud = array();

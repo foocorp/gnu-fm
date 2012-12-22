@@ -26,7 +26,7 @@ require_once('data/Server.php');
 require_once('data/TagCloud.php');
 
 try {
-	$aTagCloud = TagCloud::GenerateTagCloud('Loved_Tracks', 'artist');
+	$aTagCloud = TagCloud::GenerateTagCloud('loved', 'artist');
 	$smarty->assign('tagcloud', $aTagCloud);
 } catch(Exception $e) {
 	// Installation doesn't have any loved tracks yet

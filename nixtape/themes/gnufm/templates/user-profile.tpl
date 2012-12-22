@@ -32,7 +32,7 @@
 	<h3 style='text-align: center; clear: left;'>{t name=$me->name}Free artists that %1 loves{/t}</h3>
 	<ul class="tagcloud">
 		{section name=i loop=$lovedArtists}
-			<li style='font-size:{$lovedArtists[i].size}'><a href='{$lovedArtists[i].url}'>{$lovedArtists[i].artist}</a></li>
+			<li style='font-size:{$lovedArtists[i].size}'><a href='{$lovedArtists[i].pageurl}'>{$lovedArtists[i].name}</a></li>
 		{/section}
 	</ul>
 {/if}

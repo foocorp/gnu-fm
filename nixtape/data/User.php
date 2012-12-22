@@ -247,43 +247,33 @@ class User {
 	}
 
 	/**
-	 * Get this user's top 20 tracks
+	 * Get this user's top artists
 	 *
-	 * @return array This user's top 20 tracks
+	 * @param int $limit The number of artists to return
+	 * @param int $offset Skip this number of rows before returning artists
+	 * @param bool $streamable Only return streamable artists
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of artists ((artist, freq, artisturl) ..) or empty array in case of failure
 	 */
-	function getTopTracks($number = 20, $since = null) {
-		global $adodb;
+	function getTopArtists($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $cache = 600) {
+		return Server::getTopArtists($limit, $offset, $streamable, $begin, $end, $this->uniqueid, $cache);
+	}
 
-		if ($since) {
-			$query = 'SELECT COUNT(track) as freq, artist, album, track FROM Scrobbles WHERE userid = ' . ($this->uniqueid) . ' AND time > ' . (int)($since) . ' GROUP BY artist,album,track ORDER BY freq DESC LIMIT ' . ($number);
-		} else {
-			$query = 'SELECT COUNT(track) as freq, artist, album, track FROM Scrobbles WHERE userid = ' . ($this->uniqueid) . ' GROUP BY artist,album,track ORDER BY freq DESC LIMIT ' . ($number);
-		}
-		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		$data = $adodb->CacheGetAll(7200, $query);
-		if (!$data) {
-			throw new Exception('ERROR ' . $query);
-		}
-
-		$maxcount = 0;
-
-		foreach ($data as &$i) {
-			$row = sanitize($i);
-			$row['artisturl'] = Server::getArtistURL($row['artist']);
-			$row['trackurl'] = Server::getTrackURL($row['artist'], $row['album'], $row['track']);
-			if ((int)$row['freq'] > $maxcount) {
-				$maxcount = (int)$row['freq'];
-			}
-			$result[] = $row;
-		}
-
-		if ($maxcount > 0) {
-			foreach ($result as &$row) {
-				$row['width'] = (int)(300 * ($row['freq']/$maxcount));
-			}
-		}
-
-		return $result;
+	/**
+	 * Get this user's top tracks
+	 *
+	 * @param int $limit The number of tracks to return
+	 * @param int $offset Skip this number of rows before returning tracks
+	 * @param bool $streamable Only return streamable tracks
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
+	 */
+	function getTopTracks($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $cache = 600) {
+		return Server::getTopTracks($limit, $offset, $streamable, $begin, $end, null, $this->uniqueid, $cache);
 	}
 
 	public function getTotalTracks($since = null) {
@@ -363,51 +353,31 @@ class User {
 	}
 
 	/**
-	 * Get a user's loved tracks
+	 * Retrieves a list of user's loved tracks
 	 *
-	 * @param int $limit The number of tracks to return (defaults to 50)
-	 * @return array An array of track details
+	 * @param int $limit The number of tracks to return
+	 * @param int $offset Skip this number of rows before returning tracks
+	 * @param bool $streamable Only return streamable tracks
+	 * @param int $artist Only return results from this artist
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
 	 */
-	function getLovedTracks($limit = 50, $offset = 0) {
-		global $adodb;
-
-		$res = $adodb->CacheGetAll(600, 'SELECT * FROM Loved_Tracks WHERE '
-			. ' userid = ' . $this->uniqueid . ' ORDER BY time DESC'
-			. ' LIMIT ' . $limit . ' OFFSET ' . $offset);
-
-		return $res;
+	function getLovedTracks($limit = 20, $offset = 0, $streamable = False, $artist = null, $cache = 600) {
+		return Server::getLovedTracks($limit, $offset, $streamable, $artist, $this->uniqueid, $cache);
 	}
 
 	/**
-	 * Get a user's loved artists
+	 * Retrieves a list of user's loved artists
 	 *
-	 * @param int $limit The number of artists to return (defaults to 10)
-	 * @return array An array of artist details
+	 * @param int $limit The number of artists to return
+	 * @param int $offset Skip this number of rows before returning artists
+	 * @param bool $streamable Only return streamable artists
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of artists ((artist, freq, artisturl) ..) or empty array in case of failure
 	 */
-	function getLovedArtists($limit = 10) {
-		global $adodb;
-
-		$res = $adodb->CacheGetAll(600, 'SELECT artist, count(artist) as num FROM Loved_Tracks INNER JOIN Artist ON Artist.name=Loved_Tracks.artist WHERE Artist.streamable=1 AND '
-			. ' userid = ' . $this->uniqueid . ' GROUP BY artist ORDER BY num DESC');
-
-		// Add meta data (url, tag size, etc.)
-		$i = 0;
-		$lovedWithMeta = array();
-		$sizes = array('xx-large', 'x-large', 'large', 'medium', 'small', 'x-small', 'xx-small');
-		foreach ($res as $artist) {
-			$lovedWithMeta[$i]['artist'] = $artist['artist'];
-			$lovedWithMeta[$i]['numLoved'] = $artist['num'];
-			$lovedWithMeta[$i]['url'] = Server::getArtistURL($artist['artist']);
-			$lovedWithMeta[$i]['size'] = $sizes[(int) ($i/($limit/count($sizes)))];
-			$i++;
-			if ($i >= $limit) {
-				break;
-			}
-		}
-		sort($lovedWithMeta);
-		return $lovedWithMeta;
+	function getLovedArtists($limit = 20, $offset = 0, $streamable = False, $cache = 600) {
+		return Server::getLovedArtists($limit, $offset, $streamable, $this->uniqueid, $cache);
 	}
-
 
 	/**
 	 * Get a user's banned tracks

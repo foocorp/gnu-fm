@@ -49,7 +49,7 @@ if($_POST['tag']) {
 $smarty->assign('pagetitle', $track->artist_name . ' : ' . $track->name);
 
 try {
-	$tagCloud = TagCloud::generateTagCloud('Tags', 'tag', 10, $track->name, 'track');
+	$tagCloud = TagCloud::generateTagCloud('tags', 'tag', 10, 'track', array($track->name, $track->artist_name));
 	$smarty->assign('tagcloud', $tagCloud);
 } catch(Exception $e) {
 	$tagCloud = array();
