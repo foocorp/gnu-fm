@@ -532,7 +532,54 @@ function method_radio_getPlaylist() {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	make_playlist($_REQUEST['sk']);
+	//we return a JSPF (http://wiki.xiph.org/JSPF_Draft) playlist if format=json
+	//any errors will still be plaintext (make_playlist can return BADSESSION or FAILED)
+	if ($_REQUEST['format'] == 'json') {
+		list($title, $res) = make_playlist($_REQUEST['sk'], false, 'json');
+
+		$tracks = array();
+		foreach($res as &$row) {
+			$track = array(
+				'location' => $row['location'],
+				'title' => $row['title'],
+				'identifier' => $row['id'],
+				'album' => $row['album'],
+				'creator' => $row['creator'],
+				'duration' => $row['duration'],
+				'image' => $row['image'],
+				'extension' => array(
+					'http://alpha.libre.fm/' => array(
+						'trackauth' => null,
+						'albumid' => null,
+						'artistid' => null,
+						'recording' => null,
+						'artistpage' => $row['artisturl'],
+						'albumpage' => $row['albumurl'],
+						'trackpage' => $row['trackurl'],
+						'buyTrackURL' => null,
+						'buyAlbumURL' => null,
+						'freeTrackURL' => $row['downloadurl']
+					)
+				)
+			);
+			$tracks[] = $track;
+		}
+
+		$playlist = array(
+			'playlist' => array(
+				'title' => $title,
+				'creator' => 'libre.fm',
+				'date' => date('c'),
+				'link' => array('http://www.last.fm/expiry' => 3600),
+				'track' => $tracks)
+			);
+
+		header('Content-Type: text/javascript');
+		print(json_encode($playlist));
+	}else{
+		//we return XSPF playlists by default
+		make_playlist($_REQUEST['sk']);
+	}
 }
 
 /**

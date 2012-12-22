@@ -73,7 +73,7 @@ function radio_title_from_url($url) {
 }
 
 
-function make_playlist($session, $old_format = false) {
+function make_playlist($session, $old_format = false, $format='xml') {
 	global $adodb, $smarty;
 
 	$row = $adodb->GetRow('SELECT username, url FROM Radio_Sessions WHERE session = ' . $adodb->qstr($session));
@@ -229,12 +229,17 @@ function make_playlist($session, $old_format = false) {
 		}
 	}
 
-	$smarty->assign('radiotracks', $radiotracks);
-
-	if ($old_format) {
-		$smarty->display('radio_oldxspf.tpl');
-	} else {
-		$smarty->display('radio_xspf.tpl');
+	if($format == 'json') {
+		return array($title, $radiotracks);
+	}else{
+		$smarty->assign('radiotracks', $radiotracks);
+		$smarty->assign('date', date("c"));
+		
+		if ($old_format) {
+			$smarty->display('radio_oldxspf.tpl');
+		} else {
+			$smarty->display('radio_xspf.tpl');
+		}
 	}
 }
 
