@@ -116,6 +116,8 @@ class Server {
 			$userurl = Server::getUserURL($username);
 		}
 
+		$result = array();
+
 		foreach ($res as &$i) {
 			$row = sanitize($i);
 
@@ -216,6 +218,8 @@ class Server {
 			return array();
 		}
 
+		$result = array();
+
 		foreach ($data as &$i) {
 			$row = sanitize($i);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
@@ -263,6 +267,8 @@ class Server {
 		} catch (Exception $e) {
 			return array();
 		}
+
+		$result = array();
 
 		foreach ($data as &$i) {
 			$row = sanitize($i);
@@ -336,6 +342,8 @@ class Server {
 			return array();
 		}
 
+		$result = array();
+
 		foreach ($data as &$i) {
 			$row = sanitize($i);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
@@ -390,6 +398,8 @@ class Server {
 		} catch (Exception $e) {
 			return array();
 		}
+
+		$result = array();
 
 		foreach ($data as &$i) {
 			$row = sanitize($i);
@@ -478,6 +488,8 @@ class Server {
 		} catch (Exception $e) {
 			return null;
 		}
+
+		$result = array();
 
 		foreach ($data as &$i) {
 			$row = sanitize($i);
