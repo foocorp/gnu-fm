@@ -57,7 +57,7 @@ if (!($topartists >= 10 && $topartists <= 500)) {
 
 if (isset($user->name)) {
 	$begin = null;
-	$total_tracks_limit = 20000;
+	$total_tracks_limit = 15000;
 	$total_tracks = $user->getTotalTracks();
 
 	// Limit stats to timeperiod if track count is higher than limit
