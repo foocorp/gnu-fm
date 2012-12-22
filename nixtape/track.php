@@ -71,7 +71,7 @@ $smarty->assign('extra_head_links', array(
 		));
 
 try {
-	$tagCloud = TagCloud::generateTagCloud('Tags', 'tag', 10, $track->name, 'track');
+	$tagCloud = TagCloud::generateTagCloud('tags', 'tag', 10, 'track', array($track->name, $track->artist_name));
 } catch ( Exception $e) {
 	$tagCloud = array();
 }
