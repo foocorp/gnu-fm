@@ -1,0 +1,107 @@
+--- Installing GNU FM ---
+
+If for any reason you might need assistance following these instructions, please don't 
+hestitate to join us at #libre.fm @ freenode (IRC).
+
+Dependencies: 
+	      - Postgresql (recommended) / MySQL / SQlite (untested?)
+	      - Apache / lighttpd
+	      - PHP 5
+	      - AdoDB
+	      - Smarty + Smarty-gettext (see footnote)
+	      - Database modules for PHP
+
+(this guide assumes you are capable of creating a user and database yourself)
+TODO: Write guide for creating user and database
+
+First, grab yourself a copy of the code. It is available here:
+http://gitorious.org/foocorp/gnu-fm
+
+The checkout should contain a bunch of folders, the only ones we're
+interested in at the moment are the ones called "gnukebox" and "nixtape".
+
+GNU FM is divided into two modules: gnukebox, which receives scrobbles, and
+nixtape, which is the web frontend and provides the webservices (such as radio).
+
+Gnukebox:
+Installing gnukebox is easy:
+	   (1) Copy the contents of gnukebox to the root of a vhost.
+	   (2) Set up correct permissions on files and folders
+	   (3) Run 'install.php' through a web browser.
+
+Gnukebox needs to be at the root of a vhost, simply because that's where clients 
+expect it to be. For the rest of this document I'll assume gnukebox is accessible 
+through the address 'gnukebox.local'. To complete step 1, copy the contents of
+the "gnukebox"-folder to the root of your vhost:
+
+$ cp -r gnukebox/* /var/www/htdocs/gnukebox/.
+
+/var/www/htdocs/gnukebox is just where I've set up my gnukebox-vhost in Apache.
+
+Gnukebox relies on an external database abstraction layer called ADOdb. This can be installed
+systemwide through a package manager or locally for gnukebox only by extracting the ADOdb-archive
+present in the "external_dependencies"-folder.
+
+To install ADOdb system wide either use your distributions package manager or find a guide that
+tells you how to do it manually. If you decide to use a local copy you will need to repeat this 
+step when installing nixtape.
+
+To use a local copy of ADOdb:
+   $ cp external_dependencies/adodb511.tgz /var/www/htdocs/gnukebox/.
+   $ cd /var/www/htdocs/gnukebox
+   $ tar zxvf adodb511.tgz
+   $ mv adodb5 adodb
+
+Now run these commands as root to correctly set permissions (assuming www-data is the user
+your webserver runs under).
+
+$ chown www-data:www-data -R /var/www/htdocs/gnukebox
+
+Now point your browser to 'http://gnukebox.local/install.php'.
+
+Just fill in the appropriate details and click 'Install'. This should connect to the database,
+create the appropriate tables and complete the 'config.php'-file in the gnukebox-directory.
+If the script was unable to create the file, it will echo the contents to the screen and tell
+you to create it yourself. Note: Some users have reported getting a Server 500-error here.
+If you do, see if the tables were created and if 'config.php' has appeared in your gnukebox-folder.
+
+---------------------------------------------------------------------------------------------------
+
+Nixtape:
+
+Installing nixtape is currently a bit more work, but not much ;)
+
+Installing the base system:
+    $ cp -r nixtape/* /var/www/htdocs/nixtape/.
+    $ mkdir /var/www/htdocs/nixtape/themes/gnufm/templates_c
+
+Installing dependencies (Smarty+AdoDB):
+
+Both Smarty and AdoDB can be downloaded and placed in the gnukebox-folder (both are also located in
+the folder "external_dependencies"). If installed through a package manager, make sure Smarty 
+is installed correctly[1]. When unpacking Smarty, move all files in smarty/libs/ to smarty/.
+
+Installing Smarty:
+    $ cd external_dependencies
+    $ cp Smarty* /var/www/htdocs/nixtape/.
+    $ cp smarty* /var/www/htdocs/nixtape/.
+    $ tar zxvf Smarty*
+    $ tar zxvf smarty*
+    $ mv smarty/libs/* smarty/.
+    $ mv smarty-gettext/block.t.php smarty/.
+
+Installing ADOdb:
+    $ cp external_dependencies/adodb511.tgz /var/www/htdocs/nixtape/.
+    $ cd /var/www/htdocs/nixtape
+    $ tar zxvf adodb511.tgz
+    $ mv adodb5 adodb
+
+Setting the correct permissions:
+    $ chown www-data:www-data -R /var/www/htdocs/nixtape
+
+Now access your installation through a browser and follow the instructions.
+
+__________________________________________________________________________
+[1] Debian installs Smarty wrong and Ubuntu installs Smarty-Gettext wrong. 
+See http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=514305 and 
+https://bugs.launchpad.net/ubuntu/+source/smarty-gettext/+bug/150461
