@@ -50,7 +50,6 @@ if (isset($this_user) && $this_user->manages($artist->name)) {
 	$smarty->assign('edit_link', $track->getEditURL());
 }
 
-
 if ($track->duration) {
 	// Give the duration in MM:SS
 	$mins = floor($track->duration / 60);
@@ -67,7 +66,7 @@ $smarty->assign('extra_head_links', array(
 			'rel'   => 'meta',
 			'type'  => 'application/rdf+xml',
 			'title' => 'Track Metadata',
-			'href'  => $base_url . '/rdf.php?fmt=xml&page=' . urlencode(str_replace($base_url, '', $track->getURL()))
+			'href'  => $base_url . '/rdf.php?fmt=xml&page=' . rawurlencode(str_replace($base_url, '', $track->getURL()))
 			)
 		));
 

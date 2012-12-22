@@ -1,0 +1,12 @@
+Matt Lee <mattl@cnuk.org>
+A message from Libre.fm 
+Hello $username,
+
+
+
+---
+Matt Lee
+Founder, Libre.fm
+
+To unsubscribe from regular Libre.fm emails simply visit:
+$unsubscribe

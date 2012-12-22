@@ -300,9 +300,9 @@ class Auth_OpenID {
         $pairs = array();
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                $pairs[] = urlencode($value[0])."=".urlencode($value[1]);
+                $pairs[] = rawurlencode($value[0])."=".rawurlencode($value[1]);
             } else {
-                $pairs[] = urlencode($key)."=".urlencode($value);
+                $pairs[] = rawurlencode($key)."=".rawurlencode($value);
             }
         }
         return implode("&", $pairs);

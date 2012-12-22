@@ -39,14 +39,31 @@ if (!isset($this_user) || !$this_user->manages($artist->name)) {
 	die();
 }
 
+$edit = false;
+if (isset($_GET['album'])) {
+	$edit = true;
+	$album = new Album($_GET['album'], $artist->name);
+}
+
 
 $smarty->assign('artist', $artist);
-$smarty->assign('pageheading', '<a href="' . $artist->getURL() . '">' . $artist->name . '</a> &mdash; Add Album');
+$smarty->assign('edit', $edit);
+if ($edit) {
+	$name = $album->name;
+	$smarty->assign('name', $name);
+	$smarty->assign('image', $album->image);
+	$smarty->assign('pageheading', '<a href="' . $artist->getURL() . '">' . $artist->name . '</a> &mdash; Edit Album');
+} else {
+	$smarty->assign('pageheading', '<a href="' . $artist->getURL() . '">' . $artist->name . '</a> &mdash; Add Album');
+}
 
 if (isset($_POST['submit'])) {
 
-	if (empty($_POST['name'])) {
-		$errors[] = 'An album name must be specified.';
+	if(!$edit) {
+		if (empty($_POST['name'])) {
+			$errors[] = 'An album name must be specified.';
+		}
+		$name = $_POST['name'];
 	}
 
 	if (empty($_POST['image'])) {
@@ -64,8 +81,12 @@ if (isset($_POST['submit'])) {
 		$smarty->assign('image', $image);
 		$smarty->assign('name', $_POST['name']);
 	} else {
+		if($edit) {
+			$album->setImage($image);
+		} else {
+			$album = Album::create($name, $artist->name, $image);
+		}
 		// If the creation was successful send the user back to the view page
-		$album = Album::create($_POST['name'], $artist->name, $image);
 		header('Location: ' . $album->getURL());
 	}
 }

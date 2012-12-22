@@ -89,7 +89,7 @@ class ARC2 {
     if (@include_once($path)) return 1;
     /* try other path */
     if ($prefix != 'ARC2') {
-      $path = $inc_path . strtolower($prefix) . '/' . $prefix . '_' . urlencode($f) . '.php';
+      $path = $inc_path . strtolower($prefix) . '/' . $prefix . '_' . rawurlencode($f) . '.php';
       if (file_exists($path)) return include_once($path);
       /* safe-mode hack */
       if (@include_once($path)) return 1;
@@ -123,7 +123,7 @@ class ARC2 {
   /*  */
   
   static function toUTF8($v) {
-    if (urlencode($v) === $v) return $v;
+    if (rawurlencode($v) === $v) return $v;
     //if (utf8_decode($v) == $v) return $v;
     $v = (strpos(utf8_decode(str_replace('?', '', $v)), '?') === false) ? utf8_decode($v) : $v;
     /* custom hacks, mainly caused by bugs in PHP's json_decode */
