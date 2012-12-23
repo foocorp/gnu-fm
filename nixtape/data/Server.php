@@ -116,6 +116,8 @@ class Server {
 			$userurl = Server::getUserURL($username);
 		}
 
+		$result = array();
+
 		foreach ($res as &$i) {
 			$row = sanitize($i);
 
@@ -162,22 +164,247 @@ class Server {
 	/**
 	 * Retrieves a list of popular artists
 	 *
-	 * @param int $number The number of artists to return
-	 * @return An array of artists or null in case of failure
+	 * @param int $limit The number of artists to return
+	 * @param int $offset Skip this number of rows before returning artists
+	 * @param bool $streamable Only return streamable artists
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param int $userid Only return results from this userid
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of artists ((artist, freq, artisturl) ..) or empty array in case of failure
 	 */
-	static function getTopArtists($number = 20) {
+	static function getTopArtists($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $userid = null, $cache = 600) {
 		global $adodb;
+
+		$query = ' SELECT artist, COUNT(artist) as freq FROM Scrobbles s';
+
+		if ($streamable) {
+			$query .= ' INNER JOIN Artist a ON s.artist=a.name WHERE a.streamable=1';
+			$andquery = True;
+		} else {
+			if($begin || $end || $userid) {
+				$query .= ' WHERE';
+				$andquery = False;
+			}
+		}
+
+		if($begin) {
+			//change time resolution to full hours (for easier caching)
+			$begin = $begin - ($begin % 3600);
+			
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' time>' . (int)$begin;
+		}
+
+		if($end) {
+			//change time resolution to full hours (for easier caching)
+			$end = $end - ($end % 3600);
+			
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' time<' . (int)$end;
+		}
+
+		if($userid) {
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' userid=' . (int)$userid;
+		}
+
+		$query .= ' GROUP BY artist ORDER BY freq DESC LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 		try {
-			$data = $adodb->CacheGetAll(720, 'SELECT COUNT(artist) as c, artist FROM Scrobbles GROUP BY artist ORDER BY c DESC LIMIT 20');
+			$data = $adodb->CacheGetAll($cache, $query);
 		} catch (Exception $e) {
-			return null;
+			return array();
 		}
+
+		$result = array();
 
 		foreach ($data as &$i) {
 			$row = sanitize($i);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
+			$result[] = $row;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Retrieves a list of loved artists
+	 *
+	 * @param int $limit The number of artists to return
+	 * @param int $offset Skip this number of rows before returning artists
+	 * @param bool $streamable Only return streamable artists
+	 * @param int $userid Only return results from this userid
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of artists ((artist, freq, artisturl) ..) or empty array in case of failure
+	 */
+	static function getLovedArtists($limit = 20, $offset = 0, $streamable = False, $userid = null, $cache = 600) {
+		global $adodb;
+
+		$query = ' SELECT artist, COUNT(artist) as freq FROM Loved_Tracks lt INNER JOIN Artist a ON a.name=lt.artist';
+
+		if ($streamable) {
+			$query .= ' WHERE a.streamable=1';
+			$andquery = True;
+		} else {
+			if ($userid) {
+				$query .= ' WHERE';
+				$andquery = False;
+			}
+		}
+
+		if ($userid) {
+			$andquery ? $query .= ' AND' : null;
+			$query .= ' userid=' . (int)$userid;
+		}
+
+		$query .= ' GROUP BY artist ORDER BY freq DESC LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
+
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
+			$data = $adodb->CacheGetAll($cache, $query);
+		} catch (Exception $e) {
+			return array();
+		}
+
+		$result = array();
+
+		foreach ($data as &$i) {
+			$row = sanitize($i);
+			$row['artisturl'] = Server::getArtistURL($row['artist']);
+			$result[] = $row;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Retrieves a list of popular tracks
+	 *
+	 * @param int $limit The number of tracks to return
+	 * @param int $offset Skip this number of rows before returning tracks
+	 * @param bool $streamable Only return streamable tracks
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param int $artist Only return results from this artist
+	 * @param int $userid Only return results from this userid
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
+	 */
+	static function getTopTracks($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $artist = null, $userid = null, $cache = 600) {
+		global $adodb;
+
+		$query = 'SELECT s.artist, s.track, count(s.track) AS freq, count(DISTINCT s.userid) AS listeners FROM Scrobbles s';
+		
+		if ($streamable) {
+			$query .= ' WHERE ROW(s.artist, s.track) IN (SELECT artist_name, name FROM Track WHERE streamable=1)';
+			$andquery = True;
+		} else {
+			if($begin || $end || $userid || $artist) {
+				$query .= ' WHERE';
+				$andquery = False;
+			}
+		}
+
+		if($begin) {
+			//change time resolution to full hours (for easier caching)
+			$begin = $begin - ($begin % 3600);
+			
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' s.time>' . (int)$begin;
+		}
+
+		if($end) {
+			//change time resolution to full hours (for easier caching)
+			$end = $end - ($end % 3600);
+			
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' s.time<' . (int)$end;
+		}
+
+		if($userid) {
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' s.userid=' . (int)$userid;
+		}
+
+		if($artist) {
+			$andquery ? $query .= ' AND' : $andquery = True;
+			$query .= ' lower(s.artist)=lower(' . $adodb->qstr($artist) . ')';
+		}
+	
+		$query .= ' GROUP BY s.track, s.artist ORDER BY freq DESC LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
+
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
+			$data = $adodb->CacheGetAll($cache, $query);
+		} catch (Exception $e) {
+			return array();
+		}
+
+		$result = array();
+
+		foreach ($data as &$i) {
+			$row = sanitize($i);
+			$row['artisturl'] = Server::getArtistURL($row['artist']);
+			$row['trackurl'] = Server::getTrackURL($row['artist'], null, $row['track']);
+			$result[] = $row;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Retrieves a list of loved tracks
+	 *
+	 * @param int $limit The number of tracks to return
+	 * @param int $offset Skip this number of rows before returning tracks
+	 * @param bool $streamable Only return streamable tracks
+	 * @param int $artist Only return results from this artist
+	 * @param int $userid Only return results from this userid
+	 * @param int $cache Caching period in seconds
+	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
+	 */
+	static function getLovedTracks($limit = 20, $offset = 0, $streamable = False, $artist = null, $userid = null, $cache = 600) {
+		global $adodb;
+
+		$query = 'SELECT lt.artist, lt.track, max(lt.time) as time, count(lt.track) AS freq FROM Loved_Tracks lt';
+		
+		if ($streamable) {
+			$query .= ' WHERE ROW(lt.artist, lt.track) IN (SELECT artist_name, name FROM Track WHERE streamable=1)';
+			$andquery = True;
+		} else {
+			if($userid || $artist) {
+				$query .= ' WHERE';
+				$andquery = False;
+			}
+		}
+
+		if($userid) {
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' lt.userid=' . (int)$userid;
+		}
+
+		if($artist) {
+			$andquery ? $query .= ' AND' : $andquery = True;
+			$query .= ' lower(lt.artist)=lower(' . $adodb->qstr($artist) . ')';
+		}
+	
+		$query .= ' GROUP BY lt.track, lt.artist ORDER BY freq DESC, time DESC LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
+
+		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+		try {
+			$data = $adodb->CacheGetAll($cache, $query);
+		} catch (Exception $e) {
+			return array();
+		}
+
+		$result = array();
+
+		foreach ($data as &$i) {
+			$row = sanitize($i);
+			$row['artisturl'] = Server::getArtistURL($row['artist']);
+			$row['trackurl'] = Server::getTrackURL($row['artist'], null, $row['track']);
 			$result[] = $row;
 		}
 
@@ -262,6 +489,8 @@ class Server {
 			return null;
 		}
 
+		$result = array();
+
 		foreach ($data as &$i) {
 			$row = sanitize($i);
 			// this logic should be cleaned up and the free/nonfree decision be moved into the smarty templates
@@ -301,9 +530,10 @@ class Server {
 	 * objects so that we can produce URLs without needing to build whole objects.
 	 *
 	 * @param string $username The username we want a URL for
+	 * @param string $params Trailing get parameters
 	 * @return A string containing URL to the user's profile
 	 */
-	static function getUserURL ($username, $component = 'profile') {
+	static function getUserURL ($username, $component = 'profile', $params = false) {
 		global $friendly_urls, $base_url;
 		if ($component == 'edit') {
 			return $base_url . '/user-edit.php';
@@ -315,9 +545,9 @@ class Server {
 			} else {
 				$component = "/{$component}";
 			}
-			return $base_url . '/user/' . rewrite_encode($username) . $component;
+			return $base_url . '/user/' . rewrite_encode($username) . $component . ($params ? '?' . $params : null);
 		} else {
-			return $base_url . "/user-{$component}.php?user=" . rawurlencode($username);
+			return $base_url . "/user-{$component}.php?user=" . rawurlencode($username) . ($params ? '&' . $params : null);
 		}
 	}
 
@@ -395,10 +625,10 @@ class Server {
 		} else {
 			if($component) {
 				$trackurl = $base_url . '/track-' . $component . '.php?artist='	. rawurlencode($artist)
-				   	. '&album=' . rawurlencode($album) . '&track=' . rawurlencode($track);
+					. '&album=' . rawurlencode($album) . '&track=' . rawurlencode($track);
 			} else {
-				$trackurl = $baseurl . '/track.php?artist=' . rawurlencode($artist)
-				   	. '&album=' . rawurlencode($album) . '&track=' . rawurlencode($track);
+				$trackurl = $base_url . '/track.php?artist=' . rawurlencode($artist)
+					. '&album=' . rawurlencode($album) . '&track=' . rawurlencode($track);
 			}
 		}
 

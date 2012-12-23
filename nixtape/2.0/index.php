@@ -86,6 +86,7 @@ $method_map = array(
 	'album.gettoptags'      => method_album_getTopTags,
 	'album.gettags'         => method_album_getTags,
 	'user.getinfo'          => method_user_getInfo,
+	'user.gettopartists'	=> method_user_getTopArtists,
 	'user.gettoptracks'     => method_user_getTopTracks,
 	'user.getrecenttracks'  => method_user_getRecentTracks,
 	'user.gettoptags'       => method_user_getTopTags,
@@ -114,6 +115,22 @@ $method_map = array(
 /**
  * User methods
  */
+
+function method_user_getTopArtists() {
+	if (!isset($_GET['user'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$limit = get_with_default('limit', 50);
+	$page = get_with_default('page', 1);
+	$period = get_with_default('period', 'overall');
+	$streamable = get_with_default('streamable', 0);
+	$cache = 600;
+
+	$xml = UserXML::getTopArtists($_GET['user'], $limit, $streamable, $page, $period, $cache);
+
+	respond($xml);
+}
 
 function method_user_getRecentTracks() {
 	if (!isset($_GET['user'])) {
@@ -170,8 +187,13 @@ function method_user_getTopTracks() {
 	if (!isset($_GET['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
+	$limit = get_with_default('limit', 10);
+	$streamable = get_with_default('streamable', False);
+	$page = get_with_default('page', 1);
+	$period = get_with_default('period', 'overall');
+	$cache = 600;
 
-	$xml = UserXML::getTopTracks($_GET['user'], $_GET['period']);
+	$xml = UserXML::getTopTracks($_GET['user'], $limit, $streamable, $page, $period, $cache);
 	respond($xml);
 }
 
@@ -193,8 +215,10 @@ function method_user_getLovedTracks() {
 
 	$limit = get_with_default('limit', 50);
 	$page = get_with_default('page', 1);
+	$streamable = get_with_default('streamable', False);
+	$cache = 600;
 
-	$xml = UserXML::getLovedTracks($user, $limit, $page);
+	$xml = UserXML::getLovedTracks($user, $limit, $page, $streamable, $cache);
 	respond($xml);
 }
 
@@ -250,8 +274,12 @@ function method_artist_getTopTracks() {
 	if (!isset($_GET['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
+	$limit = get_with_default('limit', 50);
+	$page = get_with_default('page', 1);
+	$streamable = get_with_default('streamable', False);
+	$cache = 600;
 
-	$xml = ArtistXML::getTopTracks($_GET['artist']);
+	$xml = ArtistXML::getTopTracks($_GET['artist'], $limit, $streamable, $page, $cache);
 	respond($xml);
 }
 
@@ -504,7 +532,54 @@ function method_radio_getPlaylist() {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	make_playlist($_REQUEST['sk']);
+	//we return a JSPF (http://wiki.xiph.org/JSPF_Draft) playlist if format=json
+	//any errors will still be plaintext (make_playlist can return BADSESSION or FAILED)
+	if ($_REQUEST['format'] == 'json') {
+		list($title, $res) = make_playlist($_REQUEST['sk'], false, 'json');
+
+		$tracks = array();
+		foreach($res as &$row) {
+			$track = array(
+				'location' => $row['location'],
+				'title' => $row['title'],
+				'identifier' => $row['id'],
+				'album' => $row['album'],
+				'creator' => $row['creator'],
+				'duration' => $row['duration'],
+				'image' => $row['image'],
+				'extension' => array(
+					'http://alpha.libre.fm/' => array(
+						'trackauth' => null,
+						'albumid' => null,
+						'artistid' => null,
+						'recording' => null,
+						'artistpage' => $row['artisturl'],
+						'albumpage' => $row['albumurl'],
+						'trackpage' => $row['trackurl'],
+						'buyTrackURL' => null,
+						'buyAlbumURL' => null,
+						'freeTrackURL' => $row['downloadurl']
+					)
+				)
+			);
+			$tracks[] = $track;
+		}
+
+		$playlist = array(
+			'playlist' => array(
+				'title' => $title,
+				'creator' => 'libre.fm',
+				'date' => date('c'),
+				'link' => array('http://www.last.fm/expiry' => 3600),
+				'track' => $tracks)
+			);
+
+		header('Content-Type: text/javascript');
+		print(json_encode($playlist));
+	}else{
+		//we return XSPF playlists by default
+		make_playlist($_REQUEST['sk']);
+	}
 }
 
 /**

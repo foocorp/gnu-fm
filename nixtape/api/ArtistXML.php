@@ -62,28 +62,67 @@ class ArtistXML {
 		return $xml;
 	}
 
-	public static function getTopTracks($artistName) {
+	public static function getTopTracks($artistname, $limit, $streamable, $page, $cache) {
+		global $adodb;
+
+		$offset = ($page - 1) * $limit;
 
 		try {
-			$artist = new Artist($artistName);
+			$artist = new Artist($artistname);
+			$res = $artist->getTopTracks($limit, $offset, $streamable, null, null, $cache);
 		} catch (Exception $e) {
-			return(XML::error('failed', '7', 'Invalid resource specified'));
+			return XML::error('error', '7', 'Invalid resource specified');
 		}
+
+		// Get total track count, using subquery to get distinct row(artist, track) count
+		$query = 'SELECT count(*) FROM (SELECT count(*) FROM Scrobbles s';
+		if($streamable) {
+			$query .= ' WHERE ROW(s.artist, s.track) IN (SELECT artist_name, name FROM Track WHERE streamable=1)';
+			$andquery = True;
+		} else {
+			$query .= ' WHERE';
+			$andquery = False;
+		}
+		$andquery ? $query .= ' AND' : null;
+		$query .= ' artist=' . $adodb->qstr($artist->name) . ' GROUP BY s.track, s.artist) c';
+		$total = $adodb->CacheGetOne($cache, $query);
+
+		$totalPages = ceil($total/$limit);
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$root = $xml->addChild('toptracks', null);
 		$root->addAttribute('artist', $artist->name);
+		$root->addAttribute('page', $page);
+		$root->addAttribute('perPage', $limit);
+		$root->addAttribute('totalPages', $totalPages);
+		$root->addAttribute('total', $total);
 
-		$tracks = $artist->getTopTracks(50);
+		$i = $offset + 1;
+		foreach($res as &$row) {
+			try {
+				$track = new Track($row['track'], $row['artist']);
+				$track_node = $root->addChild('track', null);
+				$track_node->addAttribute('rank', $i);
+				$track_node->addChild('name', repamp($track->name));
+				$track_node->addChild('duration', $track->duration);
+				$track_node->addChild('playcount', $row['freq']);
+				$track_node->addChild('listeners', $row['listeners']);
+				$track_node->addChild('mbid', $track->mbid);
+				$track_node->addChild('url', repamp($row['trackurl']));
+				$track_node->addChild('streamable', $track->streamable);
 
-		// Loop over every result and add as children to "toptracks".
-		for ($i = 1; $i < count($tracks); $i++) {
-			$track = $root->addChild('track', null);
-			$track->addAttribute('rank', $i);
-			$track->addChild('name', $tracks[$i]->name);
-			$track->addChild('mbid', $tracks[$i]->mbid);
-			$track->addChild('playcount', $tracks[$i]->getPlayCount());
-			$track->addChild('listeners', $tracks[$i]->getListenerCount());
+				$artist_node = $track_node->addChild('artist', null);
+				$artist_node->addChild('name', repamp($artist->name));
+				$artist_node->addChild('mbid', $artist->mbid);
+				$artist_node->addChild('url', repamp($row['artisturl']));
+				$image_small = $track_node->addChild('image', $artist->image_small);
+				$image_small->addAttribute('size', 'small');
+				$image_medium = $track_node->addChild('image', $artist->image_medium);
+				$image_medium->addAttribute('size', 'medium');
+				$image_large = $track_node->addChild('image', $artist->image_large);
+				$image_large->addAttribute('size', 'large');
+			} catch (Exception $e) {}
+			$i++;
 		}
 
 		return $xml;
