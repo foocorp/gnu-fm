@@ -35,6 +35,7 @@ require_once($install_path . '/data/User.php');
 class RemoteUser extends User {
 
 	public $domain;
+	public $lastfm = false;
 
 	/**
 	 * User constructor
@@ -42,19 +43,29 @@ class RemoteUser extends User {
 	 * @param string $name The name of the user to load
 	 */
 	function __construct($name, $data = null) {
+		global $base_url, $lastfm_key;
 
-		global $base_url;
 		$base = preg_replace('#/$#', '', $base_url);
 
 		$components = explode("@", $name, 2);
-		$username = $components[0];
+		$this->username = $components[0];
 		$this->domain = $components[1];
+
+		if (strstr($this->domain, 'last.fm') || strstr($this->domain, 'ws.audioscrobbler.com')) {
+			$this->domain = 'ws.audioscrobbler.com';
+			$this->lastfm = true;
+		}
+
+		if ($this->lastfm && !isset($lastfm_key)) {
+			throw new Exception('This server isn\'t configured to communicate with Last.fm');
+		}
 
 		if (is_array($data)) {
 			$row = $data;
 		} else {
 			global $adodb;
-			$row = simplexml_load_file('http://' . $this->domain . '/2.0/?method=user.getInfo&user=' . $username);
+		
+			$row = $this->get_xml('?method=user.getInfo&user=' . $this->username);
 			if (!isset($row->user)) {
 				throw new Exception('EUSER', 22);
 			} else {
@@ -64,7 +75,7 @@ class RemoteUser extends User {
 
 		$this->name             = $name;
 		$this->email            = $row->email;
-		$this->fullname         = $row->fullname;
+		$this->fullname         = $row->realname;
 		$this->url		= $row->url;
 		$this->homepage         = $row->homepage;
 		$this->bio              = $row->bio;
@@ -72,7 +83,7 @@ class RemoteUser extends User {
 		$this->location_uri     = $row->location_uri;
 		$this->id               = $row->webid_uri;
 		$this->webid_uri        = $row->webid_uri;
-		$this->avatar_uri       = $row->avatar_uri;
+		$this->avatar_uri       = $row->image[2];
 		$this->laconica_profile = $row->laconica_profile;
 		$this->journal_rss      = $row->journal_rss;
 		$this->acctid           = $row->url . '#acct';
@@ -96,7 +107,22 @@ class RemoteUser extends User {
 	 * @return array An array of scrobbles with human time
 	 */
 	function getScrobbles($number, $offset = 0) {
-		return array();
+		$page = (int) $offset / $number + 1;
+		$xml = $this->get_xml('?method=user.getRecentTracks&user=' . $this->username . '&limit=' . $number . '&page=' . $page);
+		$tracks = array();
+		foreach($xml->recenttracks->track as $xmltrack) {
+			$track = array();
+			$track['artist'] = $xmltrack->artist;
+			$track['album'] = $xmltrack->album;
+			$track['track'] = $xmltrack->name;
+			$track['artisturl'] = $xmltrack->url;
+			$track['albumurl'] = $xmltrack->url;
+			$track['trackurl'] = $xmltrack->url;
+			$track['time'] = (int) $xmltrack->date->attributes()->uts;
+			$track['timehuman'] = human_timestamp($track['time']);
+			$tracks[] = $track;
+		}
+		return $tracks;
 	}
 
 	/**
@@ -369,6 +395,16 @@ class RemoteUser extends User {
 	 */
 	function getNeighbours($limit=10) {
 		return array();
+	}
+
+	function get_xml($params) {
+		global $lastfm_key;
+
+		$wsurl = 'http://' . $this->domain . '/2.0/' . $params;
+		if ($this->lastfm) {
+			$wsurl .= '&api_key=' . $lastfm_key;
+		}
+		return simplexml_load_file($wsurl);
 	}
 
 }
