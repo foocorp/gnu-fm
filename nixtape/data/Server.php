@@ -112,7 +112,7 @@ class Server {
 		}
 
 		if($userid) {
-			$username = uniqueid_to_username;
+			$username = uniqueid_to_username($userid);
 			$userurl = Server::getUserURL($username);
 		}
 
