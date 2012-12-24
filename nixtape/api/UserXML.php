@@ -38,13 +38,13 @@ class UserXML {
 		$user_node->addChild('realname', $user->fullname);
 		$user_node->addChild('homepage', $user->homepage);
 		$user_node->addChild('location', $user->location);
-		$ic = $user_node->addChild('image', $user->getAvatar(34));
+		$ic = $user_node->addChild('image', repamp($user->getAvatar(34)));
 		$ic->addAttribute('size', 'small');
-		$ic = $user_node->addChild('image', $user->getAvatar(64));
+		$ic = $user_node->addChild('image', repamp($user->getAvatar(64)));
 		$ic->addAttribute('size', 'medium');
-		$ic = $user_node->addChild('image', $user->getAvatar(126));
+		$ic = $user_node->addChild('image', repamp($user->getAvatar(126)));
 		$ic->addAttribute('size', 'large');
-		$ic = $user_node->addChild('image', $user->getAvatar(252));
+		$ic = $user_node->addChild('image', repamp($user->getAvatar(252)));
 		$ic->addAttribute('size', 'extralarge');
 		$user_node->addChild('bio', $user->bio);
 		$user_node->addChild('url', $user->getURL());
