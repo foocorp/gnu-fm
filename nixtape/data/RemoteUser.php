@@ -36,6 +36,9 @@ class RemoteUser extends User {
 
 	public $domain;
 	public $lastfm = false;
+	public $remote = true;
+
+	private $nowplaying = [];
 
 	/**
 	 * User constructor
@@ -120,7 +123,11 @@ class RemoteUser extends User {
 			$track['trackurl'] = $xmltrack->url;
 			$track['time'] = (int) $xmltrack->date->attributes()->uts;
 			$track['timehuman'] = human_timestamp($track['time']);
-			$tracks[] = $track;
+			if($xmltrack->attributes()->nowplaying == true) {
+				$this->nowplaying[] = $track;
+			} else {
+				$tracks[] = $track;
+			}
 		}
 		return $tracks;
 	}
@@ -149,7 +156,12 @@ class RemoteUser extends User {
 	 * @return array An array of nowplaying data
 	 */
 	function getNowPlaying($number) {
-		return array();
+		if(!empty($this->nowplaying)) {
+			return $this->nowplaying;
+		}
+
+		$this->getScrobbles($number);
+		return $this->nowplaying;
 	}
 
 	/**
@@ -283,7 +295,18 @@ class RemoteUser extends User {
 	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
 	 */
 	function getLovedTracks($limit = 20, $offset = 0, $streamable = False, $artist = null, $cache = 600) {
-		return array();
+		$page = (int) $offset / $limit + 1;
+		$xml = $this->get_xml('?method=user.getLovedTracks&user=' . $this->username . '&limit=' . $limit . '&page=' . $page);
+		$loved = array();
+		foreach($xml->lovedtracks->track as $l) {
+			$track = array();
+			$track['artist'] = $l->artist->name;
+			$track['track'] = $l->name;
+			$track['artisturl'] = $l->artist->url;
+			$track['trackurl'] = $l->url;
+			$loved[] = $track;
+		}
+		return $loved;
 	}
 
 	/**
@@ -384,7 +407,7 @@ class RemoteUser extends User {
 	 * @return bool Boolean indicating whether this user has marked any tracks as being loved in the past.
 	 */
 	function hasLoved() {
-		return false;
+		return count($this->getLovedTracks(1)) == 1;
 	}
 
 	/**
