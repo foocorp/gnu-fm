@@ -23,6 +23,7 @@ require_once('database.php');
 require_once('user-menu.php');
 require_once('templating.php');
 require_once('data/User.php');
+require_once('data/RemoteUser.php');
 require_once('data/TagCloud.php');
 require_once('data/Server.php');
 
@@ -34,7 +35,11 @@ if (!isset($_GET['user']) && $logged_in == false) {
 }
 
 try {
-	$user = new User($_GET['user']);
+	if(strstr($_GET['user'], '@')) {
+		$user = new RemoteUser($_GET['user']);
+	} else {
+		$user = new User($_GET['user']);
+	}
 } catch (Exception $e) {
 	$error = 'User not found';
 }
@@ -53,8 +58,14 @@ if (isset($user->name)) {
 	if ($user->hasLoved()) {
 		$recommendedArtists = $user->getRecommended(10);
 		$smarty->assign('recommendedArtists', $recommendedArtists);
-		$lovedArtists = TagCloud::generateTagCloud('loved', 'artist', 10, 'userid', $user->uniqueid);
-		$smarty->assign('lovedArtists', $lovedArtists);
+		if($user->remote) {
+			// Just get the 10 most recently loved artists from a remote user
+			$lovedArtists = $user->getLovedArtists(10);
+			$smarty->assign('lovedArtists', $lovedArtists);
+		} else {
+			$lovedArtists = TagCloud::generateTagCloud('loved', 'artist', 10, 'userid', $user->uniqueid);
+			$smarty->assign('lovedArtists', $lovedArtists);
+		}
 	}
 	$smarty->assign('isme', ($this_user->name == $user->name));
 	$smarty->assign('me', $user);
