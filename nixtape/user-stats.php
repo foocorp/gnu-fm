@@ -23,6 +23,7 @@ require_once('database.php');
 require_once('templating.php');
 require_once('user-menu.php');
 require_once('data/User.php');
+require_once('data/RemoteUser.php');
 require_once('data/TagCloud.php');
 require_once('data/Statistic.php');
 require_once('data/GraphTypes.php');
@@ -35,7 +36,11 @@ if (!isset($_GET['user']) && $logged_in == false) {
 }
 
 try {
-	$user = new User($_GET['user']);
+	if(strstr($_GET['user'], '@')) {
+		$user = new RemoteUser($_GET['user']);
+	} else {
+		$user = new User($_GET['user']);
+	}
 } catch (Exception $e) {
 	if ($e->getCode() == 22) {
 		echo('We had some trouble locating that user.  Are you sure you spelled it correctly?' . "\n");

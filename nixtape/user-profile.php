@@ -58,8 +58,14 @@ if (isset($user->name)) {
 	if ($user->hasLoved()) {
 		$recommendedArtists = $user->getRecommended(10);
 		$smarty->assign('recommendedArtists', $recommendedArtists);
-		$lovedArtists = TagCloud::generateTagCloud('loved', 'artist', 10, 'userid', $user->uniqueid);
-		$smarty->assign('lovedArtists', $lovedArtists);
+		if($user->remote) {
+			// Just get the 10 most recently loved artists from a remote user
+			$lovedArtists = $user->getLovedArtists(10);
+			$smarty->assign('lovedArtists', $lovedArtists);
+		} else {
+			$lovedArtists = TagCloud::generateTagCloud('loved', 'artist', 10, 'userid', $user->uniqueid);
+			$smarty->assign('lovedArtists', $lovedArtists);
+		}
 	}
 	$smarty->assign('isme', ($this_user->name == $user->name));
 	$smarty->assign('me', $user);
