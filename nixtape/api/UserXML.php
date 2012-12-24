@@ -35,8 +35,17 @@ class UserXML {
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$user_node = $xml->addChild('user', null);
 		$user_node->addChild('name', $user->name);
+		$user_node->addChild('realname', $user->fullname);
 		$user_node->addChild('homepage', $user->homepage);
 		$user_node->addChild('location', $user->location);
+		$ic = $user_node->addChild('image', $user->getAvatar(34));
+		$ic->addAttribute('size', 'small');
+		$ic = $user_node->addChild('image', $user->getAvatar(64));
+		$ic->addAttribute('size', 'medium');
+		$ic = $user_node->addChild('image', $user->getAvatar(126));
+		$ic->addAttribute('size', 'large');
+		$ic = $user_node->addChild('image', $user->getAvatar(252));
+		$ic->addAttribute('size', 'extralarge');
 		$user_node->addChild('bio', $user->bio);
 		$user_node->addChild('url', $user->getURL());
 		$user_node->addChild('playcount', $user->getTotalTracks());
