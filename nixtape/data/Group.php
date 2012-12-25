@@ -31,6 +31,7 @@ require_once($install_path . '/data/User.php');
  *
  * General attributes are accessible as public variables.
  *
+ * @deprecated This class hasnt been used in a long time and needs to be reviewed before use. 20120308 kabniel
  */
 class Group {
 
