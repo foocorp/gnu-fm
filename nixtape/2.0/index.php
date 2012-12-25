@@ -254,6 +254,7 @@ function method_user_getPersonalTags() {
  * ###Parameters
  * * **user** (required)		: Name of the user.
  * * **tag** (required)			: Name of the tag.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
  * - - -
  *
  * @package Webservice
@@ -311,6 +312,7 @@ function method_user_getTopTracks() {
  *
  * ###Parameters
  * * **user** (required)		: Name of the user.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
  * - - -
  *
  * @package Webservice
@@ -457,6 +459,7 @@ function method_artist_addTags() {
  *
  * ###Parameters
  * * **artist** (required)		: Name of the artist.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
  * - - -
  *
  * @package Webservice
