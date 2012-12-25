@@ -19,7 +19,12 @@
 
 */
 
-
+/**
+ * Strips html and php tags from an array
+ *
+ * @param array $data Unsanitized data
+ * @return array Sanitized data
+ */
 function sanitize($data) {
 	$sane = array();
 	foreach ($data as $key => $value) {
