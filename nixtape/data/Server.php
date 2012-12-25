@@ -43,7 +43,9 @@ class Server {
 	 * Retrieves a list of recent scrobbles
 	 *
 	 * @param int $number The number of scrobbles to return
-	 * @return An array of scrobbles or null in case of failure
+	 * @param int $userid The user id to return scrobbles for
+	 * @param int $offset Amount of entries to skip before returning scrobbles
+	 * @return array Scrobbles or null in case of failure
 	 */
 	static function getRecentScrobbles($number = 10, $userid = false, $offset = 0) {
 		global $adodb;
@@ -237,7 +239,7 @@ class Server {
 	 * @param bool $streamable Only return streamable artists
 	 * @param int $userid Only return results from this userid
 	 * @param int $cache Caching period in seconds
-	 * @return array An array of artists ((artist, freq, artisturl) ..) or empty array in case of failure
+	 * @return array Artists ((artist, freq, artisturl) ..) or empty array in case of failure
 	 */
 	static function getLovedArtists($limit = 20, $offset = 0, $streamable = False, $userid = null, $cache = 600) {
 		global $adodb;
@@ -290,7 +292,7 @@ class Server {
 	 * @param int $artist Only return results from this artist
 	 * @param int $userid Only return results from this userid
 	 * @param int $cache Caching period in seconds
-	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
+	 * @return array Tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
 	 */
 	static function getTopTracks($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $artist = null, $userid = null, $cache = 600) {
 		global $adodb;
@@ -363,7 +365,7 @@ class Server {
 	 * @param int $artist Only return results from this artist
 	 * @param int $userid Only return results from this userid
 	 * @param int $cache Caching period in seconds
-	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
+	 * @return array Tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
 	 */
 	static function getLovedTracks($limit = 20, $offset = 0, $streamable = False, $artist = null, $userid = null, $cache = 600) {
 		global $adodb;
@@ -411,6 +413,11 @@ class Server {
 		return $result;
 	}
 
+	/**
+	 * Get a list of users
+	 *
+	 * @param string $alpha Search for user names starting with this string
+	 */
 	static function getUserList($alpha) {
 		global $adodb;
 
@@ -430,7 +437,8 @@ class Server {
 	 * Retrieves a list of the currently playing tracks
 	 *
 	 * @param int $number The maximum number of tracks to return
-	 * @return An array of now playing data or null in case of failure
+	 * @param string $username The name of the user to retrieve playing tracks for
+	 * @return array Now playing data or null in case of failure
 	 */
 	static function getNowPlaying($number = 1, $username = false) {
 		global $adodb;
@@ -526,12 +534,15 @@ class Server {
 	}
 
 	/**
+	 * Gets the URL to a user's profile page
+	 *
 	 * The get*URL functions are implemented here rather than in their respective
 	 * objects so that we can produce URLs without needing to build whole objects.
 	 *
-	 * @param string $username The username we want a URL for
+	 * @param string $username The user name we want a URL for
+	 * @param string $component Type of URL to return
 	 * @param string $params Trailing get parameters
-	 * @return A string containing URL to the user's profile
+	 * @return string URL to the user's profile
 	 */
 	static function getUserURL ($username, $component = 'profile', $params = false) {
 		global $friendly_urls, $base_url;
@@ -551,6 +562,12 @@ class Server {
 		}
 	}
 
+	/**
+	 * Gets the URL to a group's page
+	 *
+	 * @param string $groupname The group we want a URL for
+	 * @return string URL to the group's page
+	 */
 	static function getGroupURL($groupname) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
@@ -560,6 +577,13 @@ class Server {
 		}
 	}
 
+	/**
+	 * Gets the URL to an artist's page
+	 *
+	 * @param string $artist The artist we want a URL for
+	 * @param string $component Type of URL to return
+	 * @return string URL to the artist's page
+	 */
 	static function getArtistURL($artist, $component = '') {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
@@ -572,7 +596,12 @@ class Server {
 			}
 		}
 	}
-
+	/**
+	 * Gives the URL to the management interface for an artist
+	 *
+	 * @param string $artist The artist we want a URL for
+	 * @return string URL for an artist's management interface
+	 */
 	static function getArtistManagementURL($artist) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
@@ -582,6 +611,12 @@ class Server {
 		}
 	}
 
+	/**
+	 * Gives the URL for managers to add a new album to an artist
+	 *
+	 * @param string $artist The artist we want a URL for
+	 * @return string URL for adding albums to an artist
+	 */
 	static function getAddAlbumURL($artist) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
@@ -591,6 +626,13 @@ class Server {
 		}
 	}
 
+	/**
+	 * Gets the URL to an album's page
+	 *
+	 * @param string $artist The artist name of the album
+	 * @param string $album The name of the album
+	 * @return string URL to the album's page
+	 */
 	static function getAlbumURL($artist, $album) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
@@ -600,6 +642,13 @@ class Server {
 		}
 	}
 
+	/**
+	 * Gives the URL for managers to add a new track to an album
+	 *
+	 * @param string $artist The artist name of the album
+	 * @param string $album The name of the album
+	 * @return string URL for adding tracks to an album
+	 */
 	static function getAddTrackURL($artist, $album) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
@@ -609,7 +658,15 @@ class Server {
 		}
 	}
 
-
+	/**
+	 * Gets the URL to a track's page
+	 *
+	 * @param string $artist The artist name of the track
+	 * @param string $album The album name of this track (optional)
+	 * @param string $track The name of the track
+	 * @param string $component Type of page
+	 * @return string URL to the track's page
+	 */
 	static function getTrackURL($artist, $album, $track, $component = '') {
 		global $friendly_urls, $base_url;
 
@@ -635,6 +692,14 @@ class Server {
 		return $trackurl;
 	}
 
+	/**
+	 * Gets the URL to a track's edit page
+	 *
+	 * @param string $artist The artist name of the track
+	 * @param string $album The album name of this track (optional)
+	 * @param string $track The name of the track
+	 * @return string URL to the track's edit page
+	 */
 	static function getTrackEditURL($artist, $album, $track) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls && $album) {
@@ -655,6 +720,12 @@ class Server {
 		}
 	}
 
+	/**
+	 * Gets the URL to a tag's page
+	 *
+	 * @param string $tag The name of the tag
+	 * @return string URL to the tag's page
+	 */
 	static function getTagURL($tag) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
@@ -724,7 +795,7 @@ class Server {
 	 * @param string $station The station to be played
 	 * @param string $username The user to associate this session with (optional)
 	 * @param string $session_id Allows for a custom session id to be set, allowing for compatibility with webservices
-	 * @return A string containing the session key to be used for streaming
+	 * @return string Session key to be used for streaming
 	 */
 	static function getRadioSession($station, $username = false, $session_id = false) {
 		global $adodb;
@@ -753,7 +824,7 @@ class Server {
 	 * Log in to web services
 	 *
 	 * @param string $username The user to create a session for
-	 * @return A string containing the web service session key
+	 * @return string The web service session key
 	 */
 	static function getWebServiceSession($username) {
 		global $adodb;
@@ -767,7 +838,11 @@ class Server {
 		return $sk;
 	}
 
-
+	/**
+	 * Get all artists
+	 *
+	 * @return array Artists ordered by name
+	 */
 	static function getAllArtists() {
 		global $adodb;
 
@@ -790,7 +865,16 @@ class Server {
 		return $result;
 	}
 
-
+	/**
+	 * Search for users, artists or tags
+	 *
+	 * Does a lower-case search of %search_term%
+	 *
+	 * @param string $search_term
+	 * @param string $search_type Type of search, artist|user|tag
+	 * @param int $limit How many items to return
+	 * @return array Results
+	 */
 	static function search($search_term, $search_type, $limit = 40) {
 		global $adodb;
 		switch ($search_type) {
