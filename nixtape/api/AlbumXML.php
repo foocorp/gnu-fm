@@ -22,8 +22,24 @@ require_once($install_path . '/database.php');
 require_once($install_path . '/data/Album.php');
 require_once('xml.php');
 
+/**
+ * Class with functions that returns XML-formatted data for albums.
+ *
+ * These functions are mainly used by web service methods.
+ *
+ * @package API
+ */
 class AlbumXML {
 
+	/**
+	 * Get an album's Top Tags
+	 *
+	 * @param string $artist Name of the album's artist
+	 * @param string $name Name of the album
+	 * @param int $limit How many tags to return
+	 * @param int $cache Caching period of request in seconds
+	 * @return string XML-formatted data
+	 */
 	public static function getTopTags($artist, $name, $limit, $cache) {
 		
 		try {
