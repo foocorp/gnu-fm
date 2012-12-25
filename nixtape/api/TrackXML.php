@@ -22,6 +22,13 @@ require_once($install_path . '/database.php');
 require_once($install_path . '/data/Track.php');
 require_once('xml.php');
 
+/**
+ * Class with functions that returns XML-formatted data for tracks.
+ *
+ * These functions are mainly used by web service methods.
+ *
+ * @package API
+ */
 class TrackXML {
 
 	public static function addTags($userid, $artist, $album, $trackName, $tags) {
