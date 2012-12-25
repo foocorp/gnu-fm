@@ -37,8 +37,10 @@ if (!isset($_GET['user']) && $logged_in == false) {
 try {
 	if(strstr($_GET['user'], '@')) {
 		$user = new RemoteUser($_GET['user']);
+		$remote = true;
 	} else {
 		$user = new User($_GET['user']);
+		$remote = false;
 	}
 } catch (Exception $e) {
 	$error = 'User not found';
@@ -47,6 +49,8 @@ try {
 if (isset($user->name)) {
 	if (isset($_GET['type'])) {
 		$type = $_GET['type'];
+	} elseif($remote) {
+		$type = 'recommended';
 	} else {
 		$type = 'loved';
 	}
@@ -65,6 +69,7 @@ if (isset($user->name)) {
 	$smarty->assign('submenu', $submenu);
 	$smarty->assign('type', $type);
 	$smarty->assign('headerfile', 'maxiprofile.tpl');
+	$smarty->assign('remote', $remote);
 
 	$smarty->display('user-station.tpl');
 } else {
