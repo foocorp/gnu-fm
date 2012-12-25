@@ -21,6 +21,13 @@
 require_once($install_path . '/data/Artist.php');
 require_once('xml.php');
 
+/**
+ * Class with functions that returns XML-formatted data for artists.
+ *
+ * These functions are mainly used by web service methods.
+ *
+ * @package API
+ */
 class ArtistXML {
 
 	/**
