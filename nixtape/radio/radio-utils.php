@@ -22,6 +22,7 @@ require_once('../database.php');
 require_once('../templating.php');
 require_once('../data/Track.php');
 require_once('../data/Server.php');
+require_once('../data/RemoteUser.php');
 require_once('../utils/resolve-external.php');
 
 function radio_title_from_url($url) {
@@ -123,7 +124,11 @@ function make_playlist($session, $old_format = false, $format='xml') {
 		$res = get_loved_tracks(array($requser->uniqueid));
 	} else if (preg_match('@l(ast|ibre)fm://user/(.*)/recommended@', $url, $regs)) {
 		try {
-			$requser = new User($regs[2]);
+			if(strstr($regs[2], '@')) {
+				$requser = new RemoteUser($regs[2]);
+			} else {
+				$requser = new User($regs[2]);
+			}
 		} catch (Exception $e) {
 			die("FAILED\n"); // this should return a blank dummy playlist instead
 		}
