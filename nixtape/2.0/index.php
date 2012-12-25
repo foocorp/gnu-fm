@@ -453,7 +453,7 @@ function method_artist_addTags() {
 /** artist.getinfo : Get information about an artist.
  *
  * ###Description
- * Get information about an user.
+ * Get information about an artist.
  *
  * ###Parameters
  * * **artist** (required)		: Name of the artist.
