@@ -19,9 +19,10 @@
 
 */
 
+define('SMARTY_DIR', '/usr/share/php/smarty3/');
 require_once('config.php');
 require_once('auth.php');
-require_once('smarty/Smarty.class.php');
+require_once(SMARTY_DIR . 'Smarty.class.php');
 
 if (isset($_GET['lang'])) {
 	$languages = array($_GET['lang'] . '.UTF-8');
@@ -56,9 +57,17 @@ textdomain('nixtape');
 
 $smarty = new Smarty();
 
-$smarty->template_dir = array($install_path . '/themes/'. $theme . '/templates/', $install_path . '/themes/gnufm/templates/');
-$smarty->compile_dir = $install_path. '/themes/' . $theme . '/templates_c/';
-$smarty->cache_dir = $install_path. '/cache/';
+$smarty->setTemplateDir(array(
+	$install_path . '/themes/'. $theme . '/templates/',
+	$install_path . '/themes/gnufm/templates/'
+));
+$smarty->setPluginsDir(array(
+	SMARTY_DIR . '/plugins/',
+	$install_path. '/themes/' . $theme . '/plugins/',
+	$install_path . '/themes/gnufm/plugins/'
+));
+$smarty->setCompileDir($install_path . '/themes/' . $theme . '/templates_c/');
+$smarty->setCacheDir($install_path . '/cache/');
 
 $current_lang = preg_replace('/.UTF-8/', '', $current_lang);
 $smarty->assign('lang_selector_array', array(($current_lang) => 1));
