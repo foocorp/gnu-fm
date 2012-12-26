@@ -158,9 +158,19 @@ class GraphPlaysByDays extends Graph {
 							$this->number_of_days, $this->user->uniqueid, 300);
 
 		$date_line = '[';
+		$prev_date == null;
 
 		if (!empty($this->data_buffer)) {
 			foreach ($this->data_buffer as $key => $entry) {
+				$curr_date = DateTime::createFromFormat("Y-m-d", $entry['date']);
+				if($prev_date == null) {
+					$prev_date = DateTime::createFromFormat("Y-m-d", $entry['date']);
+				}
+				while($prev_date > $curr_date) {
+					$date_line .= '[\'' . $prev_date->format("Y-m-d") . '\', 0],';
+					$prev_date->sub(new DateInterval("P1D"));
+				}
+				$prev_date->sub(new DateInterval("P1D"));
 				$date_line .= '[\'' . $entry['date'] . '\', ' . $entry['count'] . '],';
 			}
 
