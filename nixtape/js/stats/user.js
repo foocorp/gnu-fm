@@ -3,50 +3,50 @@ $(document).ready(function() {
 		seriesDefaults: {
 			renderer:$.jqplot.BarRenderer,
 			pointLabels: { show: true, location: 'e', edgeTolerance: -10 },
-	        shadow: false,
-		color: '#ff0000',
-	        rendererOptions: {
-			barDirection: 'horizontal',
-			barWidth: def_bar_width
-	        }
-	        },
-	        axes: {
-	            yaxis: {
-	                renderer: $.jqplot.CategoryAxisRenderer,
-			ticks: artists
-	            },
-		    xaxis: {
-			renderer: $.jqplot.LinearAxisRenderer,
-			tickInterval: artists_ti,
-			min: 0,
-			max: artists_max
-		    }
-	        }
+			shadow: false,
+			color: '#ff0000',
+			rendererOptions: {
+				barDirection: 'horizontal',
+				barWidth: def_bar_width
+			}
+		},
+		axes: {
+			yaxis: {
+				renderer: $.jqplot.CategoryAxisRenderer,
+				ticks: artists
+			},
+			xaxis: {
+				renderer: $.jqplot.LinearAxisRenderer,
+				tickInterval: artists_ti,
+				min: 0,
+				max: artists_max
+			}
+		}
 	});
 	
 	var top_tracks = $.jqplot('chart_top_tracks', tracks_data, {
 		seriesDefaults: {
 			renderer:$.jqplot.BarRenderer,
 			pointLabels: { show: true, location: 'e', edgeTolerance: -10 },
-	        shadow: false,
-		color: '#ff0000',
-	        rendererOptions: {
-			barDirection: 'horizontal',
-			barWidth: def_bar_width
-	        }
-	        },
-	        axes: {
-	            yaxis: {
-	                renderer: $.jqplot.CategoryAxisRenderer,
-			ticks: tracks
-	            },
-		    xaxis: {
-			renderer: $.jqplot.LinearAxisRenderer,
-			tickInterval: tracks_ti,
-			min: 0,
-			max: tracks_max
-		    }
-	        }
+			shadow: false,
+			color: '#ff0000',
+			rendererOptions: {
+				barDirection: 'horizontal',
+				barWidth: def_bar_width
+			}
+		},
+		axes: {
+			yaxis: {
+				renderer: $.jqplot.CategoryAxisRenderer,
+				ticks: tracks
+			},
+			xaxis: {
+				renderer: $.jqplot.LinearAxisRenderer,
+				tickInterval: tracks_ti,
+				min: 0,
+				max: tracks_max
+			}
+		}
 	});
 	
 	var plays_by_days = $.jqplot('chart_plays_by_days', [date_data], {
@@ -59,10 +59,10 @@ $(document).ready(function() {
 			pad: 0
 		},
 		axes: {
-		    xaxis: {
-			renderer: $.jqplot.DateAxisRenderer
-		    }
-	        }
+			xaxis: {
+				renderer: $.jqplot.DateAxisRenderer
+			}
+		}
 	});
 	
 	$('.jqplot-yaxis-tick').css('z-index', 255); 
