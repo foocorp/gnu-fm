@@ -345,4 +345,59 @@ class Track {
 			} catch (Exception $e) {}
 		}
 	}
+
+	/**
+	 * Love a track
+	 *
+	 * @param int $userid The user loving this track
+	 */
+	function love($userid) {
+		global $adodb;
+		
+		try {
+			$adodb->Execute('INSERT INTO Loved_Tracks VALUES ('
+				. $userid . ', '
+				. $adodb->qstr($this->name) . ', '
+				. $adodb->qstr($this->artist_name) . ', '
+				. time() . ')');
+		} catch (Exception $e) {}
+	}
+
+	/**
+	 * Unlove a track
+	 *
+	 * @param int $userid The user unloving this track
+	 */
+	function unlove($userid) {
+		global $adodb;
+
+		try {
+			$adodb->Execute('DELETE FROM Loved_Tracks WHERE userid=' . $userid
+				. ' AND track=' . $adodb->qstr($this->name)
+				. ' AND artist=' . $adodb->qstr($this->artist_name));
+		} catch (Exception $e) {}
+	}
+
+	/**
+	 * Check if track has been loved by user
+	 *
+	 * @param int $userid The user we are looking for
+	 * @return bool True if track has been loved by user
+	 */
+	function isLoved($userid) {
+		global $adodb;
+
+		try {
+			$res = $adodb->GetRow('SELECT * FROM Loved_Tracks WHERE userid='
+				. $userid . ' AND track='
+				. $adodb->qstr($this->name) . ' AND artist='
+				. $adodb->qstr($this->artist_name));
+		} catch (Exception $e) {}
+
+		if($res) {
+			return True;
+		}
+		return False;
+	}
+	
 }
