@@ -25,6 +25,7 @@ function track_menu($track, $active_page) {
 	$submenu = array(
 		array('name' => _('Overview'), 'url' => $track->getURL()),
 		array('name' => _('Tag'), 'url' => $track->getURL('tag')),
+		array('name' => _('Love'), 'url' => $track->getURL('love')),
 	);
 	
 	foreach($submenu as &$item) {
