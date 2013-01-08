@@ -732,10 +732,13 @@ function method_auth_getToken() {
  *     md5(username+md5(password))
  *
  * ###Parameters
+ * * **username** (required)	: Name of the user
  * * **authtoken** (required)	: Authentication token
  * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
  * - - -
  *
+ * @todo authtoken is deprecated on last.fm's version, uses password instead
+ * @todo make XML response better (use xml_response)
  * @package Webservice
  * @subpackage Auth
  * @api
@@ -743,8 +746,8 @@ function method_auth_getToken() {
 function method_auth_getMobileSession() {
 	global $adodb;
 
-	if (!isset($_REQUEST['authToken'])) {
-		report_failure(LFM_INVALID_TOKEN);
+	if (!isset($_REQUEST['authToken']) OR !isset($_REQUEST['username'])) {
+		report_failure(LFM_INVALID_PARAMS);
 	}
 
 	// Check for a token that is bound to a user
@@ -806,6 +809,7 @@ function method_auth_getMobileSession() {
  * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
  * - - -
  * @todo Documentation
+ * @todo make XML response better (use xml_response)
  * @package Webservice
  * @subpackage Auth
  * @api
@@ -871,6 +875,7 @@ function method_auth_getSession() {
  * **HTTP request method** : POST.
  * - - - 
  *
+ * @todo make XML response better (use xml_response)
  * @package Webservice
  * @subpackage Radio
  * @api
