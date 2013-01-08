@@ -26,15 +26,15 @@ require_once('temp-utils.php');
 
 $supported_protocols = array('1.2', '1.2.1');
 
-if (!isset($_GET['p']) || !isset($_GET['u']) || !isset($_GET['t']) || !isset($_GET['a']) || !isset($_GET['c'])) {
+if (!isset($_REQUEST['p']) || !isset($_REQUEST['u']) || !isset($_REQUEST['t']) || !isset($_REQUEST['a']) || !isset($_REQUEST['c'])) {
 	die("BADAUTH\n");
 }
 
-$protocol = $_GET['p'];
-$username = $_GET['u'];
-$timestamp = $_GET['t'];
-$auth_token = $_GET['a'];
-$client = $_GET['c'];
+$protocol = $_REQUEST['p'];
+$username = $_REQUEST['u'];
+$timestamp = $_REQUEST['t'];
+$auth_token = $_REQUEST['a'];
+$client = $_REQUEST['c'];
 
 if ($client == 'import') {
 	die("FAILED Import scripts are broken\n"); // this should be removed or changed to check the version once import.php is fixed
@@ -48,8 +48,8 @@ if (abs($timestamp - time()) > 300) {
 	die("BADTIME\n"); // let's try a 5-minute tolerance
 }
 
-if (isset($_GET['api_key']) && isset($_GET['sk'])) {
-	$authed = check_web_auth($username, $auth_token, $timestamp, $_GET['api_key'], $_GET['sk']);
+if (isset($_REQUEST['api_key']) && isset($_REQUEST['sk'])) {
+	$authed = check_web_auth($username, $auth_token, $timestamp, $_REQUEST['api_key'], $_REQUEST['sk']);
 } else {
 	$authed = check_standard_auth($username, $auth_token, $timestamp);
 }

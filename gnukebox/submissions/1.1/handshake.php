@@ -30,11 +30,11 @@ require_once('temp-utils.php');
 
 $supported_protocols = array('1.1');
 
-if (!isset($_GET['p']) || !isset($_GET['u']) || !isset($_GET['c'])) {
+if (!isset($_REQUEST['p']) || !isset($_REQUEST['u']) || !isset($_REQUEST['c'])) {
 	die("FAILED\n");
 }
 
-$protocol = $_GET['p']; $username = $_GET['u']; $client = $_GET['c'];
+$protocol = $_REQUEST['p']; $username = $_REQUEST['u']; $client = $_REQUEST['c'];
 
 if (!in_array($protocol, $supported_protocols)) {
 	die("FAILED Unsupported protocol version\n");
