@@ -1406,8 +1406,7 @@ function report_failure($code) {
 		$json_data = array('error' => $code, 'message' => $error_text[$code]);
 		json_response(json_encode($json_data));
 	} else {
-		print("<lfm status=\"failed\">\n");
-		print("	<error code=\"{$code}\">" . $error_text[$code] . "</error></lfm>");
+		xml_response(XML::error('failed', $code, $error_text[$code]));
 	}
 	die();
 }
