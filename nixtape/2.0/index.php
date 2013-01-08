@@ -137,7 +137,7 @@ $method_map = array(
  * @api
  */
 function method_user_getTopArtists() {
-	if (!isset($_GET['user'])) {
+	if (!isset($_REQUEST['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
@@ -147,7 +147,7 @@ function method_user_getTopArtists() {
 	$streamable = get_with_default('streamable', 0);
 	$cache = 600;
 
-	$xml = UserXML::getTopArtists($_GET['user'], $limit, $streamable, $page, $period, $cache);
+	$xml = UserXML::getTopArtists($_REQUEST['user'], $limit, $streamable, $page, $period, $cache);
 
 	respond($xml);
 }
@@ -170,14 +170,14 @@ function method_user_getTopArtists() {
  * @api
  */
 function method_user_getRecentTracks() {
-	if (!isset($_GET['user'])) {
+	if (!isset($_REQUEST['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
 	$limit = get_with_default('limit', 50);
 	$page = get_with_default('page', 1);
 
-	$xml = UserXML::getRecentTracks($_GET['user'], $limit, $page);
+	$xml = UserXML::getRecentTracks($_REQUEST['user'], $limit, $page);
 	respond($xml);
 }
 
@@ -198,7 +198,7 @@ function method_user_getRecentTracks() {
  * @api
  */
 function method_user_getTopTags() {
-	if (!isset($_GET['user'])) {
+	if (!isset($_REQUEST['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
@@ -206,7 +206,7 @@ function method_user_getTopTags() {
 
 	$cache = 600;
 
-	$xml = UserXML::getTopTags($_GET['user'], $limit, $cache);
+	$xml = UserXML::getTopTags($_REQUEST['user'], $limit, $cache);
 	respond($xml);
 }
 
@@ -231,7 +231,7 @@ function method_user_getTopTags() {
  * @api
  */
 function method_user_getPersonalTags() {
-	if(!isset($_GET['user']) or !isset($_GET['tag']) or !isset($_GET['taggingtype'])) {
+	if(!isset($_REQUEST['user']) or !isset($_REQUEST['tag']) or !isset($_REQUEST['taggingtype'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
@@ -241,7 +241,7 @@ function method_user_getPersonalTags() {
 	$streamable = False;
 	$cache = 600;
 
-	$xml = UserXML::getPersonalTags($_GET['user'], $_GET['tag'], $_GET['taggingtype'], $limit, $page, $cache, $streamable);
+	$xml = UserXML::getPersonalTags($_REQUEST['user'], $_REQUEST['tag'], $_REQUEST['taggingtype'], $limit, $page, $cache, $streamable);
 	respond($xml);
 }
 
@@ -262,13 +262,13 @@ function method_user_getPersonalTags() {
  * @api
  */
 function method_user_getTagInfo() {
-	if(!isset($_GET['user']) or !isset($_GET['tag'])) {
+	if(!isset($_REQUEST['user']) or !isset($_REQUEST['tag'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
 	$cache = 600;
 
-	$xml = UserXML::getTagInfo($_GET['user'], $_GET['tag'], $cache);
+	$xml = UserXML::getTagInfo($_REQUEST['user'], $_REQUEST['tag'], $cache);
 	respond($xml);
 }
 
@@ -292,7 +292,7 @@ function method_user_getTagInfo() {
  * @api
  */
 function method_user_getTopTracks() {
-	if (!isset($_GET['user'])) {
+	if (!isset($_REQUEST['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 	$limit = get_with_default('limit', 10);
@@ -301,7 +301,7 @@ function method_user_getTopTracks() {
 	$period = get_with_default('period', 'overall');
 	$cache = 600;
 
-	$xml = UserXML::getTopTracks($_GET['user'], $limit, $streamable, $page, $period, $cache);
+	$xml = UserXML::getTopTracks($_REQUEST['user'], $limit, $streamable, $page, $period, $cache);
 	respond($xml);
 }
 
@@ -320,11 +320,11 @@ function method_user_getTopTracks() {
  * @api
  */
 function method_user_getInfo() {
-	if (!isset($_GET['user'])) {
+	if (!isset($_REQUEST['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	$xml = UserXML::getInfo($_GET['user']);
+	$xml = UserXML::getInfo($_REQUEST['user']);
 	respond($xml);
 }
 
@@ -347,11 +347,11 @@ function method_user_getInfo() {
  * @api
  */
 function method_user_getLovedTracks() {
-	if (!isset($_GET['user'])) {
+	if (!isset($_REQUEST['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	$user = $_GET['user'];
+	$user = $_REQUEST['user'];
 
 	$limit = get_with_default('limit', 50);
 	$page = get_with_default('page', 1);
@@ -380,11 +380,11 @@ function method_user_getLovedTracks() {
  * @api
  */
 function method_user_getBannedTracks() {
-	if (!isset($_GET['user'])) {
+	if (!isset($_REQUEST['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	$user = $_GET['user'];
+	$user = $_REQUEST['user'];
 	$limit = get_with_default('limit', 50);
 	$page = get_with_default('page', 1);
 
@@ -409,11 +409,11 @@ function method_user_getBannedTracks() {
  * @api
  */
 function method_user_getNeighbours() {
-	if (!isset($_GET['user'])) {
+	if (!isset($_REQUEST['user'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	$user = $_GET['user'];
+	$user = $_REQUEST['user'];
 	$limit = get_with_default('limit', 50);
 
 	$xml = UserXML::getNeighbours($user, $limit);
@@ -467,11 +467,11 @@ function method_artist_addTags() {
  * @api
  */
 function method_artist_getInfo() {
-	if (!isset($_GET['artist'])) {
+	if (!isset($_REQUEST['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	$xml = ArtistXML::getInfo($_GET['artist']);
+	$xml = ArtistXML::getInfo($_REQUEST['artist']);
 	respond($xml);
 }
 
@@ -494,7 +494,7 @@ function method_artist_getInfo() {
  * @api
  */
 function method_artist_getTopTracks() {
-	if (!isset($_GET['artist'])) {
+	if (!isset($_REQUEST['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 	$limit = get_with_default('limit', 50);
@@ -502,7 +502,7 @@ function method_artist_getTopTracks() {
 	$streamable = get_with_default('streamable', False);
 	$cache = 600;
 
-	$xml = ArtistXML::getTopTracks($_GET['artist'], $limit, $streamable, $page, $cache);
+	$xml = ArtistXML::getTopTracks($_REQUEST['artist'], $limit, $streamable, $page, $cache);
 	respond($xml);
 }
 
@@ -523,7 +523,7 @@ function method_artist_getTopTracks() {
  * @api
  */
 function method_artist_getTopTags() {
-	if (!isset($_GET['artist'])) {
+	if (!isset($_REQUEST['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
@@ -531,7 +531,7 @@ function method_artist_getTopTags() {
 
 	$cache = 600;	
 
-	$xml = ArtistXML::getTopTags($_GET['artist'], $limit, $cache);
+	$xml = ArtistXML::getTopTags($_REQUEST['artist'], $limit, $cache);
 	respond($xml);
 }
 
@@ -586,11 +586,11 @@ function method_artist_getTags() {
  * @api
  */
 function method_artist_getFlattr() {
-	if (!isset($_GET['artist'])) {
+	if (!isset($_REQUEST['artist'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
-	$xml = ArtistXML::getFlattr($_GET['artist']);
+	$xml = ArtistXML::getFlattr($_REQUEST['artist']);
 	respond($xml);
 }
 
@@ -645,7 +645,7 @@ function method_album_addTags() {
  * @api
  */
 function method_album_getTopTags() {
-	if (!isset($_GET['artist']) || !isset($_GET['album'])) {
+	if (!isset($_REQUEST['artist']) || !isset($_REQUEST['album'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
@@ -653,7 +653,7 @@ function method_album_getTopTags() {
 
 	$cache = 600;
 
-	$xml = AlbumXML::getTopTags($_GET['artist'], $_GET['album'], $limit, $cache);
+	$xml = AlbumXML::getTopTags($_REQUEST['artist'], $_REQUEST['album'], $limit, $cache);
 	respond($xml);
 }
 
@@ -681,7 +681,7 @@ function method_album_getTopTags() {
  * @todo Only require sk if no user specified, see http://www.last.fm/api/show/album.getTags.
  */
 function method_album_getTags() {
-	if (!isset($_GET['artist']) || !isset($_GET['album'])) {
+	if (!isset($_REQUEST['artist']) || !isset($_REQUEST['album'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
@@ -690,7 +690,7 @@ function method_album_getTags() {
 	$userid = get_userid();
 	$cache = 600;
 
-	$xml = AlbumXML::getTags($_GET['artist'], $_GET['album'], $userid, $limit, $cache);
+	$xml = AlbumXML::getTags($_REQUEST['artist'], $_REQUEST['album'], $userid, $limit, $cache);
 	respond($xml);
 }
 
@@ -743,14 +743,14 @@ function method_auth_getToken() {
 function method_auth_getMobileSession() {
 	global $adodb;
 
-	if (!isset($_GET['authToken'])) {
+	if (!isset($_REQUEST['authToken'])) {
 		report_failure(LFM_INVALID_TOKEN);
 	}
 
 	// Check for a token that is bound to a user
 	try {
 		$result = $adodb->GetRow('SELECT username, lower(username) AS lc_username, password FROM Users WHERE '
-			. 'lower(username) = lower(' . $adodb->qstr($_GET['username']) . ')');
+			. 'lower(username) = lower(' . $adodb->qstr($_REQUEST['username']) . ')');
 	} catch (Exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
@@ -761,7 +761,7 @@ function method_auth_getMobileSession() {
 	$username = $result['username'];
 	$lc_username = $result['lc_username'];
 	$password = $result['password'];
-	if (md5($lc_username . $password) != $_GET['authToken']) {
+	if (md5($lc_username . $password) != $_REQUEST['authToken']) {
 		report_failure(LFM_INVALID_TOKEN);
 	}
 
@@ -813,14 +813,14 @@ function method_auth_getMobileSession() {
 function method_auth_getSession() {
 	global $adodb;
 
-	if (!isset($_GET['token'])) {
+	if (!isset($_REQUEST['token'])) {
 		report_failure(LFM_INVALID_TOKEN);
 	}
 
 	// Check for a token that (1) is bound to a user, and (2) is not bound to a session
 	try {
 		$username = $adodb->GetOne('SELECT username FROM Auth WHERE '
-			. 'token = ' . $adodb->qstr($_GET['token']) . ' AND '
+			. 'token = ' . $adodb->qstr($_REQUEST['token']) . ' AND '
 			. 'username IS NOT NULL AND sk IS NULL');
 	} catch (Exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
@@ -835,7 +835,7 @@ function method_auth_getSession() {
 	try {
 		$result = $adodb->Execute('UPDATE Auth SET '
 			. 'sk = ' . $adodb->qstr($session) . ' WHERE '
-			. 'token = ' . $adodb->qstr($_GET['token']));
+			. 'token = ' . $adodb->qstr($_REQUEST['token']));
 	} catch (Exception $e) {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
@@ -1047,7 +1047,7 @@ function method_track_addTags() {
  * @api
  */
 function method_track_getTopTags() {
-	if (!isset($_GET['artist']) || !isset($_GET['track'])) {
+	if (!isset($_REQUEST['artist']) || !isset($_REQUEST['track'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
@@ -1055,7 +1055,7 @@ function method_track_getTopTags() {
 
 	$cache = 600;
 
-	$xml = TrackXML::getTopTags($_GET['artist'], $_GET['track'], $limit, $cache);
+	$xml = TrackXML::getTopTags($_REQUEST['artist'], $_REQUEST['track'], $limit, $cache);
 	respond($xml);
 }
 
@@ -1083,7 +1083,7 @@ function method_track_getTopTags() {
  * @todo Only require sk if no user specified, see http://www.last.fm/api/show/track.getTags.
  */
 function method_track_getTags() {
-	if (!isset($_GET['artist']) || !isset($_GET['track'])) {
+	if (!isset($_REQUEST['artist']) || !isset($_REQUEST['track'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
@@ -1092,7 +1092,7 @@ function method_track_getTags() {
 	$cache = 600;
 	
 	$userid = get_userid();
-	$xml = TrackXML::getTags($_GET['artist'], $_GET['track'], $userid, $limit, $cache);
+	$xml = TrackXML::getTags($_REQUEST['artist'], $_REQUEST['track'], $userid, $limit, $cache);
 	respond($xml);
 }
 
@@ -1266,7 +1266,7 @@ function method_tag_getTopTags() {
  * @api
  */
 function method_tag_getTopArtists() {
-	if (!isset($_GET['tag'])) {
+	if (!isset($_REQUEST['tag'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
@@ -1276,7 +1276,7 @@ function method_tag_getTopArtists() {
 	$streamable = True;
 	$cache = 600;
 
-	$xml = TagXML::getTopArtists($_GET['tag'], $limit, $page, $streamable, $cache);
+	$xml = TagXML::getTopArtists($_REQUEST['tag'], $limit, $page, $streamable, $cache);
 	respond($xml);
 }
 
@@ -1298,7 +1298,7 @@ function method_tag_getTopArtists() {
  * @api
  */
 function method_tag_getTopAlbums() {
-	if (!isset($_GET['tag'])) {
+	if (!isset($_REQUEST['tag'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
@@ -1308,7 +1308,7 @@ function method_tag_getTopAlbums() {
 	$streamable = True;
 	$cache = 600;
 
-	$xml = TagXML::getTopAlbums($_GET['tag'], $limit, $page, $streamable, $cache);
+	$xml = TagXML::getTopAlbums($_REQUEST['tag'], $limit, $page, $streamable, $cache);
 	respond($xml);
 }
 
@@ -1330,7 +1330,7 @@ function method_tag_getTopAlbums() {
  * @api
  */
 function method_tag_getTopTracks() {
-	if (!isset($_GET['tag'])) {
+	if (!isset($_REQUEST['tag'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
@@ -1340,7 +1340,7 @@ function method_tag_getTopTracks() {
 	$streamable = True;
 	$cache = 600;
 
-	$xml = TagXML::getTopTracks($_GET['tag'], $limit, $page, $streamable, $cache);
+	$xml = TagXML::getTopTracks($_REQUEST['tag'], $limit, $page, $streamable, $cache);
 	respond($xml);
 }
 
@@ -1360,13 +1360,13 @@ function method_tag_getTopTracks() {
  * @api
  */
 function method_tag_getInfo() {
-	if (!isset($_GET['tag'])) {
+	if (!isset($_REQUEST['tag'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
 	$cache = 600;
 
-	$xml = TagXML::getInfo($_GET['tag'], $cache);
+	$xml = TagXML::getInfo($_REQUEST['tag'], $cache);
 	respond($xml);
 }
 
@@ -1435,8 +1435,8 @@ function json_response($data) {
 }
 
 function get_with_default($param, $default) {
-	if (isset($_GET[$param])) {
-		return $_GET[$param];
+	if (isset($_REQUEST[$param])) {
+		return $_REQUEST[$param];
 	} else {
 		return $default;
 	}
