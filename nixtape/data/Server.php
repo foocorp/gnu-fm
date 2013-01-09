@@ -494,12 +494,10 @@ class Server {
 			$row = sanitize($i);
 			$client = getClientData($row['client']);
 			if(is_array($client)) {
-					$clientstr = '<a href="' . strip_tags(stripslashes($client['url'])) . '">' . strip_tags(stripslashes($client['name'])) . '</a>';
-			}else{
-				$clientstr = strip_tags(stripslashes($row['client'])) . ' (unknown, <a href="http://bugs.foocorp.net/projects/librefm/wiki/Clients">please tell us what this is</a>)';
+				$row['clientname'] = $client['name'];
+				$row['clienturl'] = $client['url'];
+				$row['clientfree'] = $client['free'];
 			}
-
-			$row['clientstr'] = $clientstr;
 			$row['username'] = uniqueid_to_username($row['userid']);
 			$row['userurl'] = Server::getUserURL($row['username']);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
