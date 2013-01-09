@@ -20,7 +20,7 @@
 */
 
 /**
- * Get name, url and license type based on a client code
+ * Get name, url and license type of a scrobble client based on client code
  *
  * @param string $code Client code
  * @return array ("name" => string, "url" => string, "FLOSS" => boolean)
