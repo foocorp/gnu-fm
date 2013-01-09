@@ -26,6 +26,8 @@
  * @return array ("name" => string, "url" => string, "free" => boolean)
  */
 function getClientData($code) {
+	global $base_url, $site_name;
+
 	$clients = array(
 		"amk" => array("name" => "Amarok 1.4.x plugin", "url" => "http://amarok.kde.org/", "free" => True),
 		"amp" => array("name" => "Aimp2", "url" => "http://www.aimp.ru/", "free" => False),
@@ -54,7 +56,7 @@ function getClientData($code) {
 		"isp" => array("name" => "iSproggler", "url" => "http://iSproggler.org/", "free" => True),
 		"jaj" => array("name" => "Jajuk", "url" => "http://jajuk.info/", "free" => True),
 		"ldr" => array("name" => "Libre Droid", "url" => "http://linux.mikeasoft.com/libredroid/", "free" => True),
-		"lfm" => array("name" => "Libre.fm", "url" => "http://libre.fm", "free" => True),
+		"lfm" => array("name" => $site_name, "url" => $base_url, "free" => True),
 		"lib" => array("name" => "LibreTunes", "url" => "http://libretunes.sourceforge.net/", "free" => True),
 		"liv" => array("name" => "Livewwwire", "url" => "http://ciarang.com", "free" => True),
 		"lpd" => array("name" => "lastPod", "url" => "http://www.lastpod.org", "free" => True),
