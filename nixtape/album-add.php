@@ -47,7 +47,7 @@ if (isset($_GET['album'])) {
 		$album = new Album($_GET['album'], $artist->name);
 	} catch (Exception $e) {
 		$smarty->assign('pageheading', 'Album not found.');
-		$smarty->assign('details', 'The album ' . $_GET['album'] . ' was not found in the database.');
+		$smarty->assign('details', 'The album ' . $_GET['album'] . ' by artist ' . $artist->name . ' was not found in the database.');
 		$smarty->display('error.tpl');
 		die();
 	}
