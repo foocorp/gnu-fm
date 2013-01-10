@@ -24,7 +24,14 @@ require_once('database.php');
 require_once('templating.php');
 require_once('data/Album.php');
 
-$album = new Album($_GET['album'], $_GET['artist']);
+try {
+	$album = new Album($_GET['album'], $_GET['artist']);
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Album not found.');
+	$smarty->assign('details', 'The album ' . $_GET['album'] . ' was not found in the database.');
+	$smarty->display('error.tpl');
+	die();
+}
 
 try {
 	$artist = new Artist($album->artist_name);
