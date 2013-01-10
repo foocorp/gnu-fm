@@ -38,13 +38,8 @@ $smarty->assign('track', $track);
 
 try {
 	$album = new Album($track->album_name, $track->artist_name);
-} catch (Exception $e) {
-	$smarty->assign('pageheading', 'Album not found.');
-	$smarty->assign('details', 'The album ' . $track->album_name . ' by artist ' . $track->artist_name . ' was not found in the database.');
-	$smarty->display('error.tpl');
-	die();
-}
-$smarty->assign('album', $album);
+	$smarty->assign('album', $album);
+} catch (Exception $e) {}
 
 try {
 	$artist = new Artist($track->artist_name);
