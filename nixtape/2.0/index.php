@@ -231,7 +231,7 @@ function method_user_getTopTags() {
  * @api
  */
 function method_user_getPersonalTags() {
-	if(!isset($_REQUEST['user']) or !isset($_REQUEST['tag']) or !isset($_REQUEST['taggingtype'])) {
+	if(!isset($_REQUEST['user']) || !isset($_REQUEST['tag']) || !isset($_REQUEST['taggingtype'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
@@ -262,7 +262,7 @@ function method_user_getPersonalTags() {
  * @api
  */
 function method_user_getTagInfo() {
-	if(!isset($_REQUEST['user']) or !isset($_REQUEST['tag'])) {
+	if(!isset($_REQUEST['user']) || !isset($_REQUEST['tag'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
