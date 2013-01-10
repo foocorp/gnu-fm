@@ -746,7 +746,7 @@ function method_auth_getToken() {
 function method_auth_getMobileSession() {
 	global $adodb;
 
-	if (!isset($_REQUEST['authToken']) OR !isset($_REQUEST['username'])) {
+	if (!isset($_REQUEST['authToken']) || !isset($_REQUEST['username'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
