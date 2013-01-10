@@ -40,8 +40,6 @@ class Album {
 	/**
 	 * Album constructor
 	 *
-	 * @todo throw Exception instead of setting $this->name to 'No such album: $name'
-	 *
 	 * @param string name The name of the album to load
 	 * @param string artist The name of the artist who recorded this album
 	 */
@@ -53,7 +51,7 @@ class Album {
 			. 'lower(artist_name) = lower(' . $adodb->qstr($artist) . ')';
 		$r = $adodb->CacheGetRow(1200, $this->query);
 		if (!$r) {
-			$this->name = 'No such album: ' . $name;
+			throw new Exception('No such album: ' . $name);
 		} else {
 			$row = sanitize($r);
 			$this->name = $row['name'];
@@ -179,25 +177,17 @@ class Album {
 	/**
 	 * Get the top tags for this album, ordered by tag count
 	 *
-	 * @todo Remove throw new Exception when album construct has been changed to throw it
-	 *
 	 * @param int $limit The number of tags to return (default is 10)
 	 * @param int $offset The position of the first tag to return (default is 0)
 	 * @param int $cache Caching period of query in seconds (default is 600)
 	 * @return array Tag details ((tag, freq) .. )
 	 */
 	function getTopTags($limit=10, $offset=0, $cache=600) {
-		if(substr($this->name, 0, 13) == 'No such album') {
-			throw new Exception('No such album');
-		}
-
 		return Tag::_getTagData($cache, $limit, $offset, null, $this->artist_name, $this->name);
 	}
 
 	/**
 	 * Get a specific user's tags for this album.
-	 *
-	 * @todo Remove throw new Exception when album construct has been changed to throw it
 	 *
 	 * @param int $userid Get tags for this user
 	 * @param int $limit The number of tags to return (default is 10)
@@ -207,10 +197,6 @@ class Album {
 	 */
 	function getTags($userid, $limit=10, $offset=0, $cache=600) {
 		if(isset($userid)) {
-			if(substr($this->name, 0, 13) == 'No such album') {
-				throw new Exception('No such album');
-			}
-
 			return Tag::_getTagData($cache, $limit, $offset, $userid, $this->artist_name, $this->name);
 		}
 	}
