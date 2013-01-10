@@ -26,10 +26,24 @@ require_once('data/Server.php');
 require_once('data/TagCloud.php');
 require_once('track-menu.php');
 
-$track = new Track($_GET['track'], $_GET['artist']);
+try {
+	$track = new Track($_GET['track'], $_GET['artist']);
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Track not found.');
+	$smarty->assign('details', 'The track ' . $_GET['track'] . ' by artist ' . $_GET['artist'] . ' was not found in the database.');
+	$smarty->display('error.tpl');
+	die();
+}
 $smarty->assign('track', $track);
 
-$album = new Album($track->album_name, $track->artist_name);
+try {
+	$album = new Album($track->album_name, $track->artist_name);
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Album not found.');
+	$smarty->assign('details', 'The album ' . $track->album_name . ' by artist ' . $track->artist_name . ' was not found in the database.');
+	$smarty->display('error.tpl');
+	die();
+}
 $smarty->assign('album', $album);
 
 try {
