@@ -57,7 +57,6 @@ try {
 $smarty->assign('tagcloud', $tagCloud);
 
 if ($logged_in) {
-	$smarty->assign('logged_in', $logged_in);
 	if($_POST['love']) {
 		$track->love($this_user->uniqueid);
 	}
