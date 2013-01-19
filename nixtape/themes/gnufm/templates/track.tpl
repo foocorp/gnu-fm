@@ -61,6 +61,18 @@
 	<p style='padding-left: 1em;'><b><a href='{$track->streamurl}'>{t}Download track{/t}</a></b></p>
 	{/if}
 	{/if}
+
+	{if $logged_in}
+		{if $isloved}
+				<form action='' method='post'>
+					<input type='submit' name='unlove' id='unlove' value='{t}Unlove this track{/t}' />
+				</form>
+		{else}
+			<form action='' method='post'>
+				<input type='submit' name='love' id='love' value='{t}Love this track{/t}' />
+				</form>
+		{/if}
+	{/if}
 	
 	{if !empty($tagcloud)}
 		<h3 style='text-align: center; clear: left;'>{t}Tags used to describe this track{/t}</h3>

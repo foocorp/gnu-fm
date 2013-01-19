@@ -56,6 +56,17 @@ try {
 }
 $smarty->assign('tagcloud', $tagCloud);
 
+if ($logged_in) {
+	$smarty->assign('logged_in', $logged_in);
+	if($_POST['love']) {
+		$track->love($this_user->uniqueid);
+	}
+	if($_POST['unlove']) {
+		$track->unlove($this_user->uniqueid);
+	}
+	$smarty->assign('isloved', $track->isLoved($this_user->uniqueid));
+}
+	
 $submenu = track_menu($track, 'Overview');
 $smarty->assign('submenu', $submenu);
 $smarty->display('track.tpl');
