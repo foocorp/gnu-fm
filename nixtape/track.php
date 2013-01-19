@@ -26,38 +26,8 @@ require_once('data/Server.php');
 require_once('data/TagCloud.php');
 require_once('track-menu.php');
 
-try {
-	$track = new Track($_GET['track'], $_GET['artist']);
-} catch (Exception $e) {
-	$smarty->assign('pageheading', 'Track not found.');
-	$smarty->assign('details', 'The track ' . $_GET['track'] . ' by artist ' . $_GET['artist'] . ' was not found in the database.');
-	$smarty->display('error.tpl');
-	die();
-}
-$smarty->assign('track', $track);
-
-try {
-	$album = new Album($track->album_name, $track->artist_name);
-	$smarty->assign('album', $album);
-} catch (Exception $e) {}
-
-try {
-	$artist = new Artist($track->artist_name);
-} catch (Exception $e) {
-	$smarty->assign('pageheading', 'Artist not found.');
-	$smarty->assign('details', 'The artist ' . $track->artist_name . ' was not found in the database.');
-	$smarty->display('error.tpl');
-	die();
-}
-
-$smarty->assign('artist', $artist);
 $smarty->assign('flattr_uid', $artist->flattr_uid);
 $smarty->assign('url', $track->getURL());
-$smarty->assign('pagetitle', $artist->name . ' : ' . $track->name);
-
-if (isset($this_user) && $this_user->manages($artist->name)) {
-	$smarty->assign('edit_link', $track->getEditURL());
-}
 
 if ($track->duration) {
 	// Give the duration in MM:SS
@@ -88,5 +58,4 @@ $smarty->assign('tagcloud', $tagCloud);
 
 $submenu = track_menu($track, 'Overview');
 $smarty->assign('submenu', $submenu);
-$smarty->assign('headerfile', 'track-header.tpl');
 $smarty->display('track.tpl');
