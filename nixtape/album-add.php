@@ -42,9 +42,17 @@ if (!isset($this_user) || !$this_user->manages($artist->name)) {
 $edit = false;
 if (isset($_GET['album'])) {
 	$edit = true;
-	$album = new Album($_GET['album'], $artist->name);
-}
 
+	try {
+		$album = new Album($_GET['album'], $artist->name);
+	} catch (Exception $e) {
+		$smarty->assign('pageheading', 'Album not found.');
+		$smarty->assign('details', 'The album ' . $_GET['album'] . ' was not found in the database.');
+		$smarty->display('error.tpl');
+		die();
+	}
+	
+}
 
 $smarty->assign('artist', $artist);
 $smarty->assign('edit', $edit);
