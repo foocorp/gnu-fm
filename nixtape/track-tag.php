@@ -33,14 +33,13 @@ if ($logged_in == false) {
 
 try {
 	$track = new Track($_GET['track'], $_GET['artist']);
-	$smarty->assign('track', $track);
 } catch (Exception $e) {
-	//TODO Make track throw exception
 	$smarty->assign('pageheading', 'Track not found.');
 	$smarty->assign('details', 'The track ' . $_GET['track'] . ' was not found in the database.');
 	$smarty->display('error.tpl');
 	die();
 }
+$smarty->assign('track', $track);
 
 if($_POST['tag']) {
 	$track->addTags($_POST['tags'], $this_user->uniqueid);
