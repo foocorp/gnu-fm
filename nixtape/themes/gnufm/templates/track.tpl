@@ -29,10 +29,12 @@
 			<a about="{$artist->id|escape:'html':'UTF-8'}" typeof="mo:MusicArtist" property="foaf:name" class="url fn org"
 				rel="foaf:page" rev="foaf:primaryTopic" href="{$artist->getURL()|escape:'html':'UTF-8'}">{$artist->name|escape:'html':'UTF-8'}</a>
 		</dd>
+		{if $album}
 		<dt>{t}Album:{/t}</dt>
 		<dd rev="mo:track">
 			<a about="{$album->id|escape:'html':'UTF-8'}" typeof="mo:Record" property="dc:title" class="album"
 				rel="foaf:page" rev="foaf:primaryTopic" href="{$album->getURL()|escape:'html':'UTF-8'}">{$album->name|escape:'html':'UTF-8'}</a>
+		{/if}
 		</dd>
 		{if $track->mbid != ""}
 		<dt>MusicBrainz ID:</dt>
