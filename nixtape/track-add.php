@@ -36,7 +36,14 @@ try {
 	die();
 }
 
-$album = new Album($_GET['album'], $artist->name);
+try {
+	$album = new Album($_GET['album'], $artist->name);
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Album not found.');
+	$smarty->assign('details', 'The album ' . $_GET['album'] . ' by artist ' . $artist->name . ' was not found in the database.');
+	$smarty->display('error.tpl');
+	die();
+}
 
 if (!isset($this_user) || !$this_user->manages($artist->name)) {
 	$smarty->assign('pageheading', 'Permission denied');
@@ -48,7 +55,15 @@ if (!isset($this_user) || !$this_user->manages($artist->name)) {
 $edit = false;
 if (isset($_GET['track'])) {
 	$edit = true;
-	$track = new Track($_GET['track'], $artist->name);
+
+	try {
+		$track = new Track($_GET['track'], $artist->name);
+	} catch (Exception $e) {
+		$smarty->assign('pageheading', 'Track not found.');
+		$smarty->assign('details', 'The track ' . $_GET['track'] . ' by artist ' . $artist->name . ' was not found in the database.');
+		$smarty->display('error.tpl');
+		die();
+	}
 }
 
 $smarty->assign('artist', $artist);

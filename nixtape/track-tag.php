@@ -35,7 +35,7 @@ try {
 	$track = new Track($_GET['track'], $_GET['artist']);
 } catch (Exception $e) {
 	$smarty->assign('pageheading', 'Track not found.');
-	$smarty->assign('details', 'The track ' . $_GET['track'] . ' was not found in the database.');
+	$smarty->assign('details', 'The track ' . $_GET['track'] . ' by artist ' . $_GET['artist'] . ' was not found in the database.');
 	$smarty->display('error.tpl');
 	die();
 }
