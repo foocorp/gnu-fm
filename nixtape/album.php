@@ -19,7 +19,6 @@
 
 */
 
-
 require_once('database.php');
 require_once('templating.php');
 require_once('data/Album.php');
@@ -27,8 +26,6 @@ require_once('album-menu.php');
 
 $smarty->assign('name', $album->name);
 $smarty->assign('id', $album->id);
-$smarty->assign('artist', $artist);
-$smarty->assign('album', $album);
 $aAlbumTracks = $album->getTracks();
 if ($aAlbumTracks) {
 	$smarty->assign('tracks', $aAlbumTracks);

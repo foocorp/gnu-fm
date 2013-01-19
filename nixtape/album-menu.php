@@ -34,6 +34,7 @@ function track_menu($track, $active_page) {
 
 try {
 	$album = new Album($_GET['album'], $_GET['artist']);
+	$smarty->assign('album', $album);
 } catch (Exception $e) {
 	$smarty->assign('pageheading', 'Album not found.');
 	$smarty->assign('details', 'The album ' . $_GET['album'] . ' by artist ' . $_GET['artist'] . ' was not found in the database.');
@@ -43,6 +44,7 @@ try {
 
 try {
 	$artist = new Artist($album->artist_name);
+	$smarty->assign('artist', $artist);
 } catch (Exception $e) {
 	$smarty->assign('pageheading', 'Artist not found.');
 	$smarty->assign('details', 'The artist ' . $track->artist_name . ' was not found in the database.');
