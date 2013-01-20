@@ -19,11 +19,11 @@
 
 */
 
-function track_menu($track, $active_page) {
+function album_menu($album, $active_page) {
 	global $this_user;
 
 	$submenu = array(
-		array('name' => _('Overview'), 'url' => $track->getURL()),
+		array('name' => _('Overview'), 'url' => $album->getURL()),
 	);
 	
 	foreach($submenu as &$item) {
