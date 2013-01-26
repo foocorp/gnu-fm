@@ -79,6 +79,7 @@ function playerReady() {
 	loadSong(0);
 	audio.pause();
 	audio.addEventListener("ended", songEnded, false);
+	audio.addEventListener("error", songEnded, false);
 	updateProgress();
 	$("#play").fadeTo("normal", 1);
 	$("#pause").fadeTo("normal", 1);
