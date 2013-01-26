@@ -35,6 +35,7 @@ function artist_menu($artist, $active_page) {
 
 try {
 	$artist = new Artist($_GET['artist']);
+	$smarty->assign(artist, $artist);
 } catch (Exception $e) {
 	$smarty->assign('pageheading', 'Artist not found.');
 	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');
