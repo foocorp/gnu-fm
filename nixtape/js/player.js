@@ -357,8 +357,9 @@ function getRadioPlaylist() {
  */
 function checkDupe(playlist, creator, title) {
 	var i;
-	for(i in playlist) {
-		if(playlist[i].artist === creator && playlist[i].track === title) {
+	var pl = playlist.slice(-40); //only check against 40 latest tracks in playlist
+	for(i in pl) {
+		if(pl[i].artist === creator && pl[i].track === title) {
 			return i;
 		}
 	}
