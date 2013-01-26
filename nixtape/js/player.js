@@ -332,7 +332,9 @@ function getRadioPlaylist() {
 					album = tracks[i].getElementsByTagName("album")[0].childNodes[0].nodeValue;
 					url = tracks[i].getElementsByTagName("location")[0].childNodes[0].nodeValue;
 					trackpage_url = tracks[i].getElementsByTagName("trackpage")[0].childNodes[0].nodeValue;
-					playlist.push({"artist" : artist, "album" : album, "track" : title, "url" : url, "trackpage" : trackpage_url});
+					if(checkDupe(playlist, artist, title) === false) {
+						playlist.push({"artist" : artist, "album" : album, "track" : title, "url" : url, "trackpage" : trackpage_url});
+					}
 				} catch(err) {
 				}
 			}
@@ -344,6 +346,23 @@ function getRadioPlaylist() {
 				$("#skipforward").fadeTo("normal", 1.0);
 			}
 		}, "text");
+}
+
+/**
+ * Check if track is already in playlist
+ *
+ * @param array Playlist array
+ * @param creator Track creator (artist name)
+ * @param title Track title
+ */
+function checkDupe(playlist, creator, title) {
+	var i;
+	for(i in playlist) {
+		if(playlist[i].artist === creator && playlist[i].track === title) {
+			return i;
+		}
+	}
+	return false;
 }
 
 /**
