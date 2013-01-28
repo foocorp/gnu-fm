@@ -737,7 +737,7 @@ function method_auth_getToken() {
  * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
  * - - -
  *
- * @todo authtoken is deprecated on last.fm's version, uses password instead
+ * @todo parameter 'authtoken' is deprecated on last.fm's version, uses parameter 'password' with HTTPS and POST instead
  * @todo make XML response better (use xml_response)
  * @package Webservice
  * @subpackage Auth
@@ -746,7 +746,9 @@ function method_auth_getToken() {
 function method_auth_getMobileSession() {
 	global $adodb;
 
-	if (!isset($_REQUEST['authToken']) || !isset($_REQUEST['username'])) {
+	$_REQUEST_lower = array_change_key_case($_REQUEST, CASE_LOWER);
+
+	if (!isset($_REQUEST_lower['authtoken']) || !isset($_REQUEST['username'])) {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
@@ -764,7 +766,7 @@ function method_auth_getMobileSession() {
 	$username = $result['username'];
 	$lc_username = $result['lc_username'];
 	$password = $result['password'];
-	if (md5($lc_username . $password) != $_REQUEST['authToken']) {
+	if (md5($lc_username . $password) != $_REQUEST_lower['authtoken']) {
 		report_failure(LFM_INVALID_TOKEN);
 	}
 
