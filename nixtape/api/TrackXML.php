@@ -195,4 +195,44 @@ class TrackXML {
 
 		return $xml;
 	}
+
+
+	public static function scrobble($userid, $artist, $track, $timestamp) {
+		global $base_url;
+
+		if(empty($artist) || empty($track) || empty($timestamp)) {
+			return(XML::error('failed', '6', 'Required parameters are empty'));
+		}
+
+		$user = User::new_from_uniqueid_number($userid);
+		$session_id = $user->getScrobbleSession();
+
+		$post_vars = array(
+			'a[0]' => $artist,
+			't[0]' => $track,
+			'i[0]' => $timestamp,
+			's' => $session_id
+		);
+
+		$url = $base_url . '/scrobble-proxy.php?method=scrobble';
+		$mysession = curl_init($url);
+		curl_setopt($mysession, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($mysession, CURLOPT_POST, true);
+		curl_setopt($mysession, CURLOPT_POSTFIELDS, $post_vars);
+
+		$response = curl_exec($mysession);
+		curl_close($mysession);
+
+		if($response == "OK\n1") {
+			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+			$root = $xml->addChild('scrobble', null);
+			$root->addChild('track', repamp($track));
+			$root->addChild('artist', repamp($artist));
+		}else{
+			$xml = new SimpleXMLElement('<lfm status="failed"></lfm>');
+		}
+
+		return $xml;
+	}
+
 }
