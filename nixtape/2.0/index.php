@@ -116,6 +116,7 @@ $method_map = array(
 	'track.unlove'          => method_track_unlove,
 	'track.unban'           => method_track_unban,
 	'track.updatenowplaying' => method_track_updateNowPlaying,
+	'track.scrobble'        => method_track_scrobble,
 );
 
 /**
@@ -1270,6 +1271,45 @@ function method_track_updateNowPlaying() {
 		$_POST['mbid'],
 		$_POST['duration'],
 		$_POST['albumArtist']);
+	respond($xml);
+}
+
+/**
+ * track.scrobble : Submits a track for scrobbling.
+ *
+ * ###Description
+ *
+ * Submits a track for scrobbling.
+ * 
+ * ###Parameters
+ * * **artist** (required)		: Name of the tracks's artist.
+ * * **track** (required)		: Name of the track.
+ * * **timestamp** (required)	: The time the track started playing (in UNIX time)
+ * * **sk** (required)			: Session key.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**.
+ *
+ * **HTTP request method** : POST.
+ * - - - 
+ *
+ * @todo docs, XML, testing, optional params, batch mode
+ * @version Experimental
+ * @package Webservice
+ * @subpackage Track
+ * @api
+ */
+function method_track_scrobble() {
+	if (!isset($_POST['artist']) || !isset($_POST['track']) || !isset($_POST['timestamp'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$userid = get_userid();
+	$xml = TrackXML::scrobble($userid,
+		$_POST['artist'],
+		$_POST['track'],
+		$_POST['timestamp']);
 	respond($xml);
 }
 
