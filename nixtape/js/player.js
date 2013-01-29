@@ -101,9 +101,6 @@ function playerReady() {
  */
 function play() {
 	audio.play();
-	if(!now_playing) {
-		nowPlaying();
-	}
 	$("#play").hide();
 	$("#pause").show();
 	$("#seekforward").fadeTo("normal", 1);
@@ -149,6 +146,11 @@ function updateProgress() {
 	} else {
 		$("#duration").text(friendlyTime(0));
 	}
+
+	if(!now_playing && audio.currentTime > 0) {
+		nowPlaying();
+	}
+
 	if (!scrobbled && audio.currentTime > audio.duration / 2) {
 		scrobble();
 	}
