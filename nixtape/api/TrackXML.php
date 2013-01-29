@@ -225,9 +225,11 @@ class TrackXML {
 
 		if($response == "OK\n1") {
 			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
-			$root = $xml->addChild('scrobble', null);
-			$root->addChild('track', repamp($track));
-			$root->addChild('artist', repamp($artist));
+			$root = $xml->addChild('scrobbles', null);
+			$scrobble = $root->addChild('scrobble', null);
+			$scrobble->addChild('track', repamp($track));
+			$scrobble->addChild('artist', repamp($artist));
+			$scrobble->addChild('timestamp', $timestamp);
 		}else{
 			$xml = new SimpleXMLElement('<lfm status="failed"></lfm>');
 		}
