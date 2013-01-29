@@ -115,6 +115,7 @@ $method_map = array(
 	'track.love'            => method_track_love,
 	'track.unlove'          => method_track_unlove,
 	'track.unban'           => method_track_unban,
+	'track.updatenowplaying' => method_track_updateNowPlaying,
 );
 
 /**
@@ -1221,6 +1222,54 @@ function method_track_unban() {
 
 	$userid = get_userid();
 	$xml = TrackXML::unban($_POST['artist'], $_POST['track'], $userid);
+	respond($xml);
+}
+
+/**
+ * track.updatenowplaying : Submits the user's currently playing track.
+ *
+ * ###Description
+ * Submits the user's currently playing song.
+ * 
+ * ###Parameters
+ * * **artist** (required)		: Name of the tracks's artist.
+ * * **track** (required)		: Name of the track.
+ * * **sk** (required)			: Session key.
+ * * **album** (optional)		: Name of the track's album.
+ * * **trackNumber (optional)	: TODO
+ * * **context** (optional)		: TODO
+ * * **mbid** (optional)		: TODO
+ * * **duration** (optional)	: TODO
+ * * **albumArtist (optional)	: TODO
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**.
+ *
+ * **HTTP request method** : POST.
+ * - - - 
+ *
+ * @todo docs, XML, testing
+ * @version Experimental
+ * @package Webservice
+ * @subpackage Track
+ * @api
+ */
+function method_track_updateNowPlaying() {
+	if (!isset($_POST['artist']) || !isset($_POST['track'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$userid = get_userid();
+	$xml = TrackXML::updateNowPlaying($userid,
+		$_POST['artist'],
+		$_POST['track'],
+		$_POST['album'],
+		$_POST['trackNumber'],
+		$_POST['context'],
+		$_POST['mbid'],
+		$_POST['duration'],
+		$_POST['albumArtist']);
 	respond($xml);
 }
 
