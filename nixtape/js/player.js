@@ -31,7 +31,7 @@ var player_ready = false;
 var playable_songs = false;
 var streaming = false;
 var example_tags = "e.g. guitar, violin, female vocals, piano";
-var song_errors = 0;
+var error_count = 0;
 
 /**
  * Initialises the javascript player (player.tpl must also be included on the target page)
@@ -149,7 +149,7 @@ function updateProgress() {
 	}
 
 	if(!now_playing && audio.currentTime > 0) {
-		song_errors = 0;
+		error_count = 0;
 		nowPlaying();
 	}
 
@@ -177,8 +177,8 @@ function songEnded() {
  * Loads the next song after a delay or does nothing if there has been several song errors in a row.
  */
 function songError() {
-	if (song_errors < 10 ) {
-		song_errors = song_errors + 1;
+	if (error_count < 10 ) {
+		error_count = error_count + 1;
 		setTimeout("songEnded()", 3000);
 	}
 }
