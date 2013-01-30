@@ -3,7 +3,7 @@
 # Jamendo database dumps can be fetched from: http://img.jamendo.com/data/dbdump_artistalbumtrack.xml.gz
 
 import xml.etree.cElementTree as ElementTree
-import sys, gzip, time, os, os.path, urllib, threading
+import sys, gzip, time, os, os.path, urllib, threading, statvfs
 
 MAX_THREADS = 10
 running_threads = 0
@@ -30,6 +30,7 @@ class DownloadJamendo:
 		if not os.path.exists(destination):
 			os.mkdir(destination)
 		self.destination = destination
+		self.MAX_FILENAME_LENGTH = os.statvfs(destination)[statvfs.F_NAMEMAX]
 
 
 	def parse(self, dump):
@@ -98,8 +99,9 @@ class DownloadJamendo:
 			for track in album["tracks"]:
 				if track["id"] and track["name"] and album["name"] and artist["name"] and self.free_license(track["license"]):
 					trackurl = "http://api.jamendo.com/get2/stream/track/redirect/?id=%d&streamencoding=ogg2" % track["id"]
-					trackfile = os.path.join(self.destination, "%s-%s-%s.ogg" % (artist["name"].replace("/", ""), album["name"].replace("/", ""), track["name"].replace("/", " ")))
-					trackfile = trackfile.encode('utf-8')
+					trackfile = "%s-%s-%s" % (artist["name"].replace("/", ""), album["name"].replace("/", ""), track["name"].replace("/", " "))
+					trackfile = "%s.ogg" % trackfile.encode('utf-8')[:self.MAX_FILENAME_LENGTH-4].decode('utf-8','ignore').encode('utf-8')
+					trackfile = os.path.join(self.destination, trackfile)
 					if os.path.exists(trackfile):
 						print "Already downloaded track %s" % trackfile
 					else:
