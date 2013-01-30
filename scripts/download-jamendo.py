@@ -101,15 +101,16 @@ class DownloadJamendo:
 					trackurl = "http://api.jamendo.com/get2/stream/track/redirect/?id=%d&streamencoding=ogg2" % track["id"]
 					trackfile = "%s-%s-%s-%s" % (track["id"], artist["name"].replace("/", ""), album["name"].replace("/", ""), track["name"].replace("/", " "))
 					trackfile = "%s.ogg" % trackfile.encode('utf-8')[:self.MAX_FILENAME_LENGTH-4].decode('utf-8','ignore').encode('utf-8')
-					trackfile = os.path.join(self.destination, trackfile)
-					if os.path.exists(trackfile):
-						print "Already downloaded track %s" % trackfile
+					trackfilepath = os.path.join(self.destination, trackfile)
+					if os.path.exists(trackfilepath):
+						print "Already downloaded track %s" % trackfilepath
 					else:
 						while running_threads > MAX_THREADS:
 							time.sleep(5)
-						print "Downloading %s to %s" % (trackurl, trackfile)
-						d = Downloader(trackfile, trackurl)
+						print "Downloading %s to %s" % (trackurl, trackfilepath)
+						d = Downloader(trackfilepath, trackurl)
 						d.start()
+						os.symlink(trackfile, os.path.join(self.destination, "%s.ogg2" % track["id"]))
 
 
 
