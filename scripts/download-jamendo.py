@@ -99,7 +99,7 @@ class DownloadJamendo:
 			for track in album["tracks"]:
 				if track["id"] and track["name"] and album["name"] and artist["name"] and self.free_license(track["license"]):
 					trackurl = "http://api.jamendo.com/get2/stream/track/redirect/?id=%d&streamencoding=ogg2" % track["id"]
-					trackfile = "%s-%s-%s" % (artist["name"].replace("/", ""), album["name"].replace("/", ""), track["name"].replace("/", " "))
+					trackfile = "%s-%s-%s-%s" % (track["id"], artist["name"].replace("/", ""), album["name"].replace("/", ""), track["name"].replace("/", " "))
 					trackfile = "%s.ogg" % trackfile.encode('utf-8')[:self.MAX_FILENAME_LENGTH-4].decode('utf-8','ignore').encode('utf-8')
 					trackfile = os.path.join(self.destination, trackfile)
 					if os.path.exists(trackfile):
