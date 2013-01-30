@@ -5,6 +5,8 @@
 import xml.etree.cElementTree as ElementTree
 import sys, gzip, time, os, os.path, urllib, threading, statvfs
 
+JAMENDO_DUMP_URL="http://img.jamendo.com/data/dbdump_artistalbumtrack.xml.gz"
+
 MAX_THREADS = 10
 running_threads = 0
 
@@ -31,9 +33,14 @@ class DownloadJamendo:
 			os.mkdir(destination)
 		self.destination = destination
 		self.MAX_FILENAME_LENGTH = os.statvfs(destination)[statvfs.F_NAMEMAX]
+		print "Downloading Jamendo dump from %s" % JAMENDO_DUMP_URL
+		(filename, headers) = urllib.urlretrieve(JAMENDO_DUMP_URL, os.path.join(destination, "dbdump_artistalbumtrack.xml.gz"))
+		print "Jamendo dump saved: %s" % filename
+		self.dump = gzip.open(filename, "r")
 
 
 	def parse(self, dump):
+		dump = dump or self.dump
 		for event, elem in ElementTree.iterparse(dump):
 			if elem.tag == "artist":
 				artist = self.proc_artist(elem)
@@ -122,14 +129,19 @@ class DownloadJamendo:
 
 if __name__ == "__main__":
 
-	if len(sys.argv) != 3:
-		print "Usage: download-jamendo.py <database dump> <destination>"
+	if len(sys.argv) != 2:
+		print "Usage: download-jamendo.py [<database dump>] <destination>"
 		sys.exit(1)
 
-	if sys.argv[1][-2:] == "gz":
-		dump = gzip.open(sys.argv[1], "r")
+	if len(sys.argv) == 3:
+		destination = sys.argv[2]
+		if sys.argv[1][-2:] == "gz":
+			dump = gzip.open(sys.argv[1], "r")
+		else:
+			dump = open(sys.argv[1], "r")
 	else:
-		dump = open(sys.argv[1], "r")
+		destination = sys.argv[1]
+		dump = None
 
-	downloader = DownloadJamendo(sys.argv[2])
+	downloader = DownloadJamendo(destination)
 	downloader.parse(dump)
