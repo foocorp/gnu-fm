@@ -53,6 +53,7 @@ function createArtistIfNew($artist) {
 		return createArtistIfNew($artist);
 	} else {
 		return $artist_id;
+	}
 }
 
 /**
@@ -87,6 +88,7 @@ function createAlbumIfNew($artist, $album) {
 		return createAlbumIfNew($artist, $album);
 	} else {
 		return $album_id;
+	}
 }
 
 /**
@@ -96,6 +98,7 @@ function createAlbumIfNew($artist, $album) {
  * @param string album		Album name.
  * @param string track		Track name.
  * @param string mbid		Track's musicbrainz ID.
+ * @param int duration		Track length in seconds.
  * @return int				Album ID.
  *
  * @todo Possible problem when doing case insensitive search for artist/album/track
@@ -103,7 +106,7 @@ function createAlbumIfNew($artist, $album) {
  *	different casing than the one inserted below.
  *	@todo Rename the function?
  */
-function getTrackCreateIfNew($artist, $album, $track, $mbid) {
+function getTrackCreateIfNew($artist, $album, $track, $mbid, $duration) {
 	global $adodb;
 
 	if ($album) {
@@ -124,10 +127,10 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 		}
 		
 		// Create new track
-		$query = 'INSERT INTO Track (name, artist_name, album_name, mbid) VALUES (?,?,?,?)';
-		$params = array($track, $artist, $album, $mbid);
+		$query = 'INSERT INTO Track (name, artist_name, album_name, mbid, duration) VALUES (?,?,?,?,?)';
+		$params = array($track, $artist, $album, $mbid, $duration);
 		$adodb->Execute($query, $params);
-		return getTrackCreateIfNew($artist, $album, $track, $mbid);
+		return getTrackCreateIfNew($artist, $album, $track, $mbid, $duration);
 	} else {
 		return $track_id;
 	}
@@ -159,4 +162,88 @@ function getOrCreateScrobbleSession($userid, $clientid=null) {
 		$adodb->Execute($query, $params);
 	}
 	return $sessionid;
+}
+
+/**
+ * Correct artist/album/track/mbid/timestamp input
+ *
+ * Returns array with $corrected_input with corrected input,
+ * and string $corrected with '1' or '0' depending on if the input was corrected.
+ *
+ * @param mixed input Input to be corrected.
+ * @param string type Type of input to be corrected.
+ * @return array Array(mixed $corrected_input, string $corrected)
+ *
+ * @todo docs
+ */
+function correctInput($input, $type) {
+	$old = $input;
+	$new = $old;
+
+	if ($type == 'artist' || $type == 'album' || $type == 'track') {
+		$new = str_replace(' (PREVIEW: buy it at www.magnatune.com)', '', $new);
+		$new = str_replace('testspam', '', $new);
+		$new = trim($new);
+
+		if (empty($new)) {
+			$new = null;
+		}
+	} else if ($type == 'mbid') {
+		if (isset($new)) {
+			$new = strtolower(rtrim($new));
+			if (preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $new)) {
+				//do nothing
+			} else {
+				$new = null;
+			}
+		} else {
+			$new = null;
+		}
+	} else if ($type == 'timestamp') {
+		//TODO do stuff
+	} else if ($type == 'duration') {
+		$new = (int) $new;
+	}
+
+	if ($old === $new) {
+		$corrected = '0';
+	} else {
+		$corrected = '1';
+	}
+	$result = array($new, $corrected);
+	return $result;
+}
+
+/**
+ * Decide if and why we should ignore a track
+ *
+ * @param string artist Artist name
+ * @param string track Track name
+ * @param int timestamp Timestamp
+ * @return array Array(int $ignored_code, string $ignored_message)
+ */
+function ignoreInput($artist, $track, $timestamp) {
+	$ignored_code = 0;
+	$ignored_message = '';
+
+	//TODO calculate timestamp $upperlimit, $lowerlimit
+
+	if (empty($artist)) {
+		$ignored_code = 1;
+		$ignored_message = 'Artist was ignored';
+	}
+	if (empty($track)) {
+		$ignored_code = 2;
+		$ignored_message = 'Track was ignored';
+	}
+	if ($timestamp > $upperlimit) {
+		$ignored_message = 'Timestamp is too new';
+		$ignored_code = '3';
+	}
+	if ($timestamp < $lowerlimit) {
+		$ignored_message = 'Timestamp is too old';
+		$ignored_code = '4';
+	}
+
+	return array($ignored_code, $ignored_message);
 }
