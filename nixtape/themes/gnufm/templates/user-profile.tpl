@@ -9,7 +9,7 @@
 {if $nowplaying|@count > 0}
 	<h3>{t}Now Playing:{/t}</h3>
 	{section name=i loop=$nowplaying}
-		<p><a href="{$nowplaying[i].trackurl|escape:'html':'UTF-8'}">{$nowplaying[i].track|escape:'html':'UTF-8'}</a> by <span class='artist-name'><a href='{$nowplaying[i].artisturl|escape:'html':'UTF-8'}'>{$nowplaying[i].artist|escape:'html':'UTF-8'}</a></span> with <span class='gobbler'>{$nowplaying[i].clientstr}</span> {if $nowplaying[i].loved}<img src='{$img_url}/love-small.png' alt='{t}Loved{/t}' title='{t}Loved{/t}' />{/if}</p>
+		<p><a href="{$nowplaying[i].trackurl|escape:'html':'UTF-8'}">{$nowplaying[i].track|escape:'html':'UTF-8'}</a> by <span class='artist-name'><a href='{$nowplaying[i].artisturl|escape:'html':'UTF-8'}'>{$nowplaying[i].artist|escape:'html':'UTF-8'}</a></span> with <span class='gobbler'>{if $nowplaying[i].clientname}<a href="{$nowplaying[i].clienturl|escape:'html':'UTF-8'}">{$nowplaying[i].clientname|escape:'html':'UTF-8'}</a>{else}{$nowplaying[i].client|escape:'html':'UTF-8'} (unknown, <a href="http://bugs.foocorp.net/projects/librefm/wiki/Clients">please tell us what this is</a>){/if}</span> {if $nowplaying[i].loved}<img src='{$img_url}/love-small.png' alt='{t}Loved{/t}' title='{t}Loved{/t}' />{/if}</p>
 	{/section}
 {/if}
 

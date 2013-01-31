@@ -31,6 +31,7 @@ require_once($install_path . '/utils/resolve-external.php');
 require_once($install_path . '/utils/licenses.php');
 require_once($install_path . '/utils/rewrite-encode.php');
 require_once($install_path . '/temp-utils.php'); // this is extremely dodgy and shameful
+require_once($install_path . '/data/clientcodes.php');
 
 /**
  * Provides access to server-wide data
@@ -452,16 +453,11 @@ class Server {
 							n.track,
 							n.album,
 							client,
-							ClientCodes.name,
-							ClientCodes.url,
-							ClientCodes.free,
 							n.mbid,
 							t.license
 						FROM Now_Playing n
 						LEFT OUTER JOIN Scrobble_Sessions ss
 							ON n.sessionid=ss.sessionid
-						LEFT OUTER JOIN ClientCodes
-							ON ss.client=ClientCodes.code
 						LEFT OUTER JOIN Track t
 							ON lower(n.artist) = lower(t.artist_name)
 							AND lower(n.album) = lower(t.album_name)
@@ -476,16 +472,11 @@ class Server {
 							n.track,
 							n.album,
 							client,
-							ClientCodes.name,
-							ClientCodes.url,
-							ClientCodes.free,
 							n.mbid,
 							t.license
 						FROM Now_Playing n
 						LEFT OUTER JOIN Scrobble_Sessions ss
 							ON n.sessionid=ss.sessionid
-						LEFT OUTER JOIN ClientCodes
-							ON ss.client=ClientCodes.code
 						LEFT OUTER JOIN Track t
 							ON lower(n.artist) = lower(t.artist_name)
 							AND lower(n.album) = lower(t.album_name)
@@ -501,15 +492,12 @@ class Server {
 
 		foreach ($data as &$i) {
 			$row = sanitize($i);
-			// this logic should be cleaned up and the free/nonfree decision be moved into the smarty templates
-			if ($row['name'] == '') {
-				$clientstr = strip_tags(stripslashes($row['client'])) . ' (unknown, <a href="http://ideas.libre.fm/index.php/Client_Codes">please tell us what this is</a>)';
-			} else if ($row['free'] == 'Y') {
-				$clientstr = '<a href="' . strip_tags(stripslashes($row['url'])) . '">' . strip_tags(stripslashes($row['name'])) . '</a>';
-			} else {
-				$clientstr = '<a href="http://en.wikipedia.org/wiki/Category:Free_media_players">' . strip_tags(stripslashes($row['name'])) . '</a>';
+			$client = getClientData($row['client']);
+			if(is_array($client)) {
+				$row['clientname'] = $client['name'];
+				$row['clienturl'] = $client['url'];
+				$row['clientfree'] = $client['free'];
 			}
-			$row['clientstr'] = $clientstr;
 			$row['username'] = uniqueid_to_username($row['userid']);
 			$row['userurl'] = Server::getUserURL($row['username']);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
