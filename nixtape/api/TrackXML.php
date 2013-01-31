@@ -161,7 +161,13 @@ class TrackXML {
 	public static function updateNowPlaying($userid, $artist, $track, $album, $trackNumber, $context, $mbid, $duration, $albumArtist) {
 		global $adodb;
 
-		//TODO input validation goes here
+		list($artist, $artist_corrected) = correctInput($artist, 'artist');
+		list($track, $track_corrected) = correctInput($track,  'track');
+		list($album, $album_corrected) = correctInput($album, 'album');
+		list($mbid, $mbid_corrected) = correctInput($mbid, 'mbid');
+		list($duration, $duration_corrected) = correctInput($duration, 'duration');
+
+		list($ignored_code, $ignored_message) = ignoreInput($artist, $track);
 
 		// Get a scrobble session id
 		$sessionid = getOrCreateScrobbleSession($userid);
@@ -171,28 +177,43 @@ class TrackXML {
 		$params = array($sessionid);
 		$adodb->Execute($query, $params);
 
-		// Create artist, album, track if not in db
-		getTrackCreateIfNew($artist, $album, $track, $mbid);
+		//calculate expiry time
+		if (!$duration || ($duration > 5400)) {
+			// Default expiry time of 5 minutes if $duration is false or above 5400
+			$expires = time() + 300;
+		} else {
+			$expires = time() + $duration;
+		}
 
-		// Add new track to database
-		$query = 'INSERT INTO Now_Playing(sessionid, track, artist, album, mbid, expires) VALUES (?,?,?,?,?,?)';
-		$params = array($sessionid, $track, $artist, $album, $mbid, $expires);
-		$adodb->Execute($query, $params);
+		if (!$ignored_code) {
+			// Create artist, album, track if not in db
+			getTrackCreateIfNew($artist, $album, $track, $mbid, $duration);
 
-		//TODO Clean up expired tracks in now_playing table
+			// Add new track to database
+			$query = 'INSERT INTO Now_Playing(sessionid, track, artist, album, mbid, expires) VALUES (?,?,?,?,?,?)';
+			$params = array($sessionid, $track, $artist, $album, $mbid, $expires);
+			$adodb->Execute($query, $params);
+
+			//TODO Clean up expired tracks in now_playing table
+		}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$root = $xml->addChild('nowplaying', null);
 		$track_node = $root->addChild('track', repamp($track));
-		$track_node->addAttribute('corrected', '0'); //TODO
+		$track_node->addAttribute('corrected', $track_corrected);
 		$artist_node = $root->addChild('artist', repamp($artist));
-		$artist_node->addAttribute('corrected', '0'); //TODO
+		$artist_node->addAttribute('corrected', $artist_corrected);
 		$album_node = $root->addChild('album', repamp($album));
-		$album_node->addAttribute('corrected', '0'); //TODO
-		$albumartist_node = $root->addChild('albumartist', null); //TODO
+		$album_node->addAttribute('corrected', $album_corrected);
+		$albumartist_node = $root->addChild('albumArtist', null); //TODO
 		$albumartist_node->addAttribute('corrected', '0'); //TODO
-		$ignoredmessage_node = $root->addChild('ignoredmessage', null); //TODO
-		$ignoredmessage_node->addAttribute('code', '0'); //TODO
+		$ignoredmessage_node = $root->addChild('ignoredMessage', $ignored_message);
+		$ignoredmessage_node->addAttribute('code', $ignored_code);
+		/* For dev purposes only
+		$duration_node = $root->addChild('duration', $duration);
+		$duration_node->addAttribute('corrected', $duration_corrected);
+		$expires_node = $root->addChild('expires', $expires - time());
+		/**/
 
 		return $xml;
 	}
