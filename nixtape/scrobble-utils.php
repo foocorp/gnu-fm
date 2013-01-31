@@ -19,49 +19,90 @@
 
 */
 
+/**
+ * Functions used by TrackXML.php:scrobble() and TrackXML.php:updateNowPlaying()
+ * Similar but not identical to gnukebox/scrobble-utils.php
+ */
+
 require_once('database.php');
 
-//TODO Docs
-function createArtistIfNew($artist) {
-	// TODO Possible problem when doing case insensitive search for artist,
-	// if foreign key checks are case sensitive when scrobbling an artist with
-	// different casing from the one inserted below.
 
+/**
+ * Add artist to database if it doesnt already exist.
+ *
+ * @param string artist		Artist name.
+ * @return int				Artist ID.
+ *
+ * @todo Possible problem when doing case insensitive search for artist
+ *	if foreign key checks are case sensitive when scrobbling with
+ *	different casing than the one inserted below.
+ *	@todo Rename the function?
+ */
+function createArtistIfNew($artist) {
 	global $adodb;
 
 	$query = 'SELECT id FROM Artist WHERE lower(name) = lower(?)';
 	$params = array($artist);
-	$id = $adodb->GetOne($query, $params);
+	$artist_id = $adodb->GetOne($query, $params);
 
-	if (!$id) {
+	if (!$artist_id) {
 		// Artist doesn't exist, so we create them
 		$query = 'INSERT INTO Artist (name) VALUES (?)';
 		$params = array($artist);
 		$res = $adodb->Execute($query, $params);
-	}
+		return createArtistIfNew($artist);
+	} else {
+		return $artist_id;
 }
 
-//TODO Docs
+/**
+ * Add album to database if it doesnt already exist.
+ *
+ * @param string artist		Artist name.
+ * @param string album		Album name.
+ * @return int				Album ID.
+ *
+ * @todo Possible problem when doing case insensitive search for artist/album
+ *	if foreign key checks are case sensitive when scrobbling with
+ *	different casing than the one inserted below.
+ *	@todo Rename the function?
+ *	@todo Maybe we should return artist ID too.
+ */
 function createAlbumIfNew($artist, $album) {
 	global $adodb;
 
 	$query = 'SELECT  id FROM Album WHERE lower(name) = lower(?) AND lower(artist_name) = lower(?)';
 	$params = array($album, $artist);
-	$id = $adodb->GetOne($query, $params);
+	$album_id = $adodb->GetOne($query, $params);
 
-	if (!$id) {
+	if (!$album_id) {
 		// Album doesn't exist, so create it
 
 		// First check if artist exist, if not create it
-		createArtistIfNew($artist);
+		$artist_id = createArtistIfNew($artist);
 
 		$query = 'INSERT INTO Album (name, artist_name) VALUES (?,?)';
 		$params = array($album, $artist);
 		$adodb->Execute($query, $params);
-	}
+		return createAlbumIfNew($artist, $album);
+	} else {
+		return $album_id;
 }
 
-//TODO Docs
+/**
+ * Add track to database if it doesnt already exist.
+ *
+ * @param string artist		Artist name.
+ * @param string album		Album name.
+ * @param string track		Track name.
+ * @param string mbid		Track's musicbrainz ID.
+ * @return int				Album ID.
+ *
+ * @todo Possible problem when doing case insensitive search for artist/album/track
+ *	if foreign key checks are case sensitive when scrobbling with
+ *	different casing than the one inserted below.
+ *	@todo Rename the function?
+ */
 function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	global $adodb;
 
@@ -72,32 +113,38 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 		$query = 'SELECT id FROM Track WHERE lower(name) = lower(?) AND lower(artist_name) = lower(?) AND album_name IS NULL';
 		$params = array($track, $artist);
 	}
-	$res = $adodb->GetOne($query, $params);
+	$track_id = $adodb->GetOne($query, $params);
 
-	if (!$res) {
+	if (!$track_id) {
 		// First check if artist and album exists, if not create them
 		if ($album) {
-			createAlbumIfNew($artist, $album);
+			$album_id = createAlbumIfNew($artist, $album);
 		} else {
-			createArtistIfNew($artist);
+			$artist_id = createArtistIfNew($artist);
 		}
 		
 		// Create new track
 		$query = 'INSERT INTO Track (name, artist_name, album_name, mbid) VALUES (?,?,?,?)';
 		$params = array($track, $artist, $album, $mbid);
-		$res = $adodb->Execute($query, $params);
+		$adodb->Execute($query, $params);
 		return getTrackCreateIfNew($artist, $album, $track, $mbid);
 	} else {
-		return $res;
+		return $track_id;
 	}
 }
 
 /**
- * Get or create a scrobble session for a user.
+ * Get scrobble session ID for a user.
+ *
+ * Gets the most recent scrobble session ID for userid,
+ * or creates a new session ID if it can't find one.
  *
  * @param int userid (required)			User ID.
- * @param string clientid (optional)	Client ID (3 letters) //TODO Not sure if we even need this.
+ * @param string clientid (optional)	Client ID (max 3 characters)
  * @return string						Session ID
+ *
+ * @todo Figure out how 2.0 client can be identified
+ * @todo rename the function?
  */
 function getOrCreateScrobbleSession($userid, $clientid=null) {
 	global $adodb;
