@@ -56,7 +56,7 @@ if (isset($user->name)) {
 	}
 	$smarty->assign('radio_session', $radio_session);
 
-	$submenu = user_menu($user, 'Radio Station');
+	$submenu = user_menu($user, 'Radio Stations');
 	$smarty->assign('submenu', $submenu);
 	$smarty->assign('type', $type);
 	$smarty->assign('headerfile', 'maxiprofile.tpl');
