@@ -1244,11 +1244,11 @@ function method_track_unban() {
  * * **track** (required)		: Track name.
  * * **sk** (required)			: Session key.
  * * **album** (optional)		: Album name.
- * * **trackNumber (optional)	: Track's number on the album
+ * * **tracknumber (optional)	: Track's number on the album
  * * **context** (optional)		: TODO
  * * **mbid** (optional)		: Track's musicbrainz ID
  * * **duration** (optional)	: Length of the track in seconds
- * * **albumArtist (optional)	: TODO
+ * * **albumartist (optional)	: TODO
  * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
  *
  * ###Additional info
@@ -1268,16 +1268,18 @@ function method_track_updateNowPlaying() {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
+	$_POST_lower = array_change_key_case($_POST, CASE_LOWER);
+
 	$userid = get_userid();
 	$xml = TrackXML::updateNowPlaying($userid,
 		$_POST['artist'],
 		$_POST['track'],
 		$_POST['album'],
-		$_POST['trackNumber'],
+		$_POST_lower['tracknumber'],
 		$_POST['context'],
 		$_POST['mbid'],
 		$_POST['duration'],
-		$_POST['albumArtist']);
+		$_POST_lower['albumartist']);
 
 	respond($xml);
 }
