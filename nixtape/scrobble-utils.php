@@ -1,6 +1,6 @@
 <?php
 
-/* GNUkebox -- a free software server for recording your listening habits
+/* GNU FM -- a free network service for sharing your music listening habits
 
    Copyright (C) 2013 Free Software Foundation, Inc
 
@@ -236,14 +236,16 @@ function ignoreInput($artist, $track, $timestamp) {
 		$ignored_code = 2;
 		$ignored_message = 'Track was ignored';
 	}
+	/* TODO Enable this when working on track.scrobble
 	if ($timestamp > $upperlimit) {
 		$ignored_message = 'Timestamp is too new';
-		$ignored_code = '3';
+		$ignored_code = 3;
 	}
 	if ($timestamp < $lowerlimit) {
 		$ignored_message = 'Timestamp is too old';
-		$ignored_code = '4';
+		$ignored_code = 4;
 	}
+	 */
 
 	return array($ignored_code, $ignored_message);
 }
