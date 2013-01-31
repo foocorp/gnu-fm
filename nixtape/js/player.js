@@ -31,6 +31,7 @@ var player_ready = false;
 var playable_songs = false;
 var streaming = false;
 var example_tags = "e.g. guitar, violin, female vocals, piano";
+var error_count = 0;
 
 /**
  * Initialises the javascript player (player.tpl must also be included on the target page)
@@ -79,6 +80,7 @@ function playerReady() {
 	loadSong(0);
 	audio.pause();
 	audio.addEventListener("ended", songEnded, false);
+	audio.addEventListener("error", songError, false);
 	updateProgress();
 	$("#play").fadeTo("normal", 1);
 	$("#pause").fadeTo("normal", 1);
@@ -100,9 +102,6 @@ function playerReady() {
  */
 function play() {
 	audio.play();
-	if(!now_playing) {
-		nowPlaying();
-	}
 	$("#play").hide();
 	$("#pause").show();
 	$("#seekforward").fadeTo("normal", 1);
@@ -148,6 +147,12 @@ function updateProgress() {
 	} else {
 		$("#duration").text(friendlyTime(0));
 	}
+
+	if(!now_playing && audio.currentTime > 0) {
+		error_count = 0;
+		nowPlaying();
+	}
+
 	if (!scrobbled && audio.currentTime > audio.duration / 2) {
 		scrobble();
 	}
@@ -164,6 +169,17 @@ function songEnded() {
 	} else {
 		loadSong(current_song+1);
 		play();
+	}
+}
+
+/**
+ * Called automatically when a song returns an error.
+ * Loads the next song after a delay or does nothing if there has been several song errors in a row.
+ */
+function songError() {
+	if (error_count < 10 ) {
+		error_count = error_count + 1;
+		setTimeout("songEnded()", 3000);
 	}
 }
 
@@ -331,7 +347,9 @@ function getRadioPlaylist() {
 					album = tracks[i].getElementsByTagName("album")[0].childNodes[0].nodeValue;
 					url = tracks[i].getElementsByTagName("location")[0].childNodes[0].nodeValue;
 					trackpage_url = tracks[i].getElementsByTagName("trackpage")[0].childNodes[0].nodeValue;
-					playlist.push({"artist" : artist, "album" : album, "track" : title, "url" : url, "trackpage" : trackpage_url});
+					if(checkDupe(playlist, artist, title) === false) {
+						playlist.push({"artist" : artist, "album" : album, "track" : title, "url" : url, "trackpage" : trackpage_url});
+					}
 				} catch(err) {
 				}
 			}
@@ -343,6 +361,24 @@ function getRadioPlaylist() {
 				$("#skipforward").fadeTo("normal", 1.0);
 			}
 		}, "text");
+}
+
+/**
+ * Check if track is already in playlist
+ *
+ * @param array Playlist array
+ * @param creator Track creator (artist name)
+ * @param title Track title
+ */
+function checkDupe(playlist, creator, title) {
+	var i;
+	var pl = playlist.slice(-40); //only check against 40 latest tracks in playlist
+	for(i in pl) {
+		if(pl[i].artist === creator && pl[i].track === title) {
+			return i;
+		}
+	}
+	return false;
 }
 
 /**
