@@ -1233,14 +1233,14 @@ function method_track_unban() {
  * Submits the user's currently playing song.
  * 
  * ###Parameters
- * * **artist** (required)		: Name of the tracks's artist.
- * * **track** (required)		: Name of the track.
+ * * **artist** (required)		: Artist name.
+ * * **track** (required)		: Track name.
  * * **sk** (required)			: Session key.
- * * **album** (optional)		: Name of the track's album.
- * * **trackNumber (optional)	: TODO
+ * * **album** (optional)		: Album name.
+ * * **trackNumber (optional)	: Track's number on the album
  * * **context** (optional)		: TODO
- * * **mbid** (optional)		: TODO
- * * **duration** (optional)	: TODO
+ * * **mbid** (optional)		: Track's musicbrainz ID
+ * * **duration** (optional)	: Length of the track in seconds
  * * **albumArtist (optional)	: TODO
  * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
  *
@@ -1271,6 +1271,7 @@ function method_track_updateNowPlaying() {
 		$_POST['mbid'],
 		$_POST['duration'],
 		$_POST['albumArtist']);
+
 	respond($xml);
 }
 

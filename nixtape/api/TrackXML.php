@@ -20,6 +20,7 @@
 
 require_once($install_path . '/database.php');
 require_once($install_path . '/data/Track.php');
+require_once($install_path . '/scrobble-utils.php');
 require_once('xml.php');
 
 /**
@@ -158,40 +159,40 @@ class TrackXML {
 
 
 	public static function updateNowPlaying($userid, $artist, $track, $album, $trackNumber, $context, $mbid, $duration, $albumArtist) {
-		global $base_url;
+		global $adodb;
 
-		if(empty($artist) || empty($track)) {
-			return(XML::error('failed', '6', 'Required parameters are empty'));
-		}
+		//TODO input validation goes here
 
-		$user = User::new_from_uniqueid_number($userid);
-		$session_id = $user->getScrobbleSession();
+		// Get a scrobble session id
+		$sessionid = getOrCreateScrobbleSession($userid);
 
-		$post_vars = array(
-			'a' => $artist,
-			'b' => $album,
-			't' => $track,
-			'l' => $duration,
-			's' => $session_id
-		);
+		// Delete last played track
+		$query = 'DELETE FROM Now_Playing WHERE sessionid = ?';
+		$params = array($sessionid);
+		$adodb->Execute($query, $params);
 
-		$url = $base_url . '/scrobble-proxy.php?method=nowplaying';
-		$mysession = curl_init($url);
-		curl_setopt($mysession, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($mysession, CURLOPT_POST, true);
-		curl_setopt($mysession, CURLOPT_POSTFIELDS, $post_vars);
+		// Create artist, album, track if not in db
+		getTrackCreateIfNew($artist, $album, $track, $mbid);
 
-		$response = curl_exec($mysession);
-		curl_close($mysession);
+		// Add new track to database
+		$query = 'INSERT INTO Now_Playing(sessionid, track, artist, album, mbid, expires) VALUES (?,?,?,?,?,?)';
+		$params = array($sessionid, $track, $artist, $album, $mbid, $expires);
+		$adodb->Execute($query, $params);
 
-		if($response == "OK\n1") {
-			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
-			$root = $xml->addChild('nowplaying', null);
-			$root->addChild('track', repamp($track));
-			$root->addChild('artist', repamp($artist));
-		}else{
-			$xml = new SimpleXMLElement('<lfm status="failed"></lfm>');
-		}
+		//TODO Clean up expired tracks in now_playing table
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('nowplaying', null);
+		$track_node = $root->addChild('track', repamp($track));
+		$track_node->addAttribute('corrected', '0'); //TODO
+		$artist_node = $root->addChild('artist', repamp($artist));
+		$artist_node->addAttribute('corrected', '0'); //TODO
+		$album_node = $root->addChild('album', repamp($album));
+		$album_node->addAttribute('corrected', '0'); //TODO
+		$albumartist_node = $root->addChild('albumartist', null); //TODO
+		$albumartist_node->addAttribute('corrected', '0'); //TODO
+		$ignoredmessage_node = $root->addChild('ignoredmessage', null); //TODO
+		$ignoredmessage_node->addAttribute('code', '0'); //TODO
 
 		return $xml;
 	}
