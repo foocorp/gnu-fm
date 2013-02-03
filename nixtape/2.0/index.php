@@ -1249,6 +1249,7 @@ function method_track_unban() {
  * * **mbid** (optional)		: Track's musicbrainz ID
  * * **duration** (optional)	: Length of the track in seconds
  * * **albumartist (optional)	: TODO
+ * * **api_key (optional)		: Client API key (for identification, warning: may be made public).
  * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
  *
  * ###Additional info
@@ -1280,7 +1281,9 @@ function method_track_updateNowPlaying() {
 		$_POST['context'],
 		$_POST['mbid'],
 		$_POST['duration'],
-		$_POST_lower['albumartist']);
+		$_POST_lower['albumartist'],
+		$_POST['api_key']
+	);
 
 	respond($xml);
 }
@@ -1305,6 +1308,7 @@ function method_track_updateNowPlaying() {
  * * **albumartist[i]** (optional)	: Album's artist.
  * * **duration[i]** (optional)		: Length of the track in seconds.
  * * **sk** (required)			: Session key.
+ * * **api_key (optional)		: Client API key (for identification, warning: may be made public).
  * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
  *
  * ###Additional info
@@ -1333,7 +1337,8 @@ function method_track_scrobble() {
 		$_POST['tracknumber'],
 		$_POST['mbid'],
 		$_POST['albumartist'],
-		$_POST['duration']
+		$_POST['duration'],
+		$_POST['api_key']
 	);
 	respond($xml);
 }

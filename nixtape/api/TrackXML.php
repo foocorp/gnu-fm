@@ -158,7 +158,7 @@ class TrackXML {
 	}
 
 
-	public static function updateNowPlaying($userid, $artist, $track, $album, $trackNumber, $context, $mbid, $duration, $albumArtist) {
+	public static function updateNowPlaying($userid, $artist, $track, $album, $trackNumber, $context, $mbid, $duration, $albumArtist, $api_key) {
 		global $adodb;
 
 		list($artist, $artist_corrected) = correctInput($artist, 'artist');
@@ -169,8 +169,8 @@ class TrackXML {
 
 		list($ignored_code, $ignored_message) = ignoreInput($artist, $track);
 
-		// Get a scrobble session id
-		$sessionid = getOrCreateScrobbleSession($userid);
+		// Get a scrobble session id. TODO check if we got one
+		$sessionid = getOrCreateScrobbleSession($userid, $api_key);
 
 		// Delete last played track
 		$query = 'DELETE FROM Now_Playing WHERE sessionid = ?';
@@ -228,10 +228,10 @@ class TrackXML {
 	}
 
 
-	public static function scrobble($userid, $artist, $track, $timestamp, $album, $tracknumber, $mbid, $albumartist, $duration) {
+	public static function scrobble($userid, $artist, $track, $timestamp, $album, $tracknumber, $mbid, $albumartist, $duration, $api_key) {
 		global $adodb;
-		// Get a scrobble session id
-		$sessionid = getOrCreateScrobbleSession($userid);
+		// Get a scrobble session id. TODO check if we got one
+		$sessionid = getOrCreateScrobbleSession($userid, $api_key);
 
 		$accepted_count = 0;
 		$ignored_count = 0;
@@ -306,6 +306,7 @@ class TrackXML {
 				// if valid track, scrobble it
 				try {
 					//scrobble
+					// TODO last.fm spec says we shouldnt scrobble corrected values, so maybe we should only use corrected values for validation and in xml
 					$query = 'INSERT INTO Scrobbles (userid, artist, album, track, time, mbid, source, rating, length, stid) VALUES (?,?,?,?,?,?,?,?,?,?)';
 					$params = array(
 						$userid,

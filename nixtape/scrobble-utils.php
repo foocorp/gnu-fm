@@ -172,25 +172,40 @@ function getOrCreateScrobbleTrack($artist, $album, $track, $mbid, $duration, $tr
  * or creates a new session ID if it can't find one.
  *
  * @param int userid (required)			User ID.
- * @param string clientid (optional)	Client ID (max 3 characters)
+ * @param string api_key (optional)		Client API key (32 characters)
  * @return string						Session ID
  *
  * @todo Figure out how 2.0 clients can be identified (add api keys to clients array?)
+ *		inprogress: added api_key field to Scrobble_Sessions
  * @todo We currently grab a sessionid that is not expired and has the right userid,
- *		this could have been created by another client and will display the wrong client id
+ *		this could have been created by another client and will display the wrong client id.
+ *		inprogress: if api_key is specified, we also compare against api_key field in Scrobble_Sessions table.
+ *
  * @todo rename the function?
  */
-function getOrCreateScrobbleSession($userid, $clientid=null) {
+function getOrCreateScrobbleSession($userid, $api_key = null) {
 	global $adodb;
-	$query = 'SELECT sessionid FROM Scrobble_Sessions WHERE userid = ? AND expires > ? ORDER BY expires DESC';
+	$query = 'SELECT sessionid FROM Scrobble_Sessions WHERE userid = ? AND expires > ?';
 	$params = array($userid, time());
+
+	//TODO not yet in install.php, alter table Scrobble_Sessions add column api_key varchar(32)
+	if (strlen($api_key) == 32) {
+		$query .= ' AND api_key=?';
+		$params[] = $api_key;
+	}
+
 	$sessionid = $adodb->GetOne($query, $params);
 	if (!$sessionid) {
 		$sessionid = md5(mt_rand() . time());
 		$expires = time() + 86400;
-		$query = 'INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires) VALUES (?,?,?,?)';
-		$params = array($userid, $sessionid, $clientid, $expires);
-		$adodb->Execute($query, $params);
+		$query = 'INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires, api_key) VALUES (?,?,?,?,?)';
+		$params = array($userid, $sessionid, $client_id, $expires, $api_key);
+		try {
+			$adodb->Execute($query, $params);
+		} catch (Exception $e) {
+			// TODO possible exception if inserting wrong length api_key, or sessionid=null
+			return false;
+		}
 	}
 	return $sessionid;
 }
