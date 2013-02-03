@@ -111,6 +111,7 @@ function getClientData($code=null, $api_key=null) {
 	$clients2 = array(
 		"thisisthelibreimport2pythonthing" => array("name" => "libreimport v2", "url" => "https://gitorious.org/fmthings/lasttolibre", "free" => True),
 		"thisisthelibrelovepythonthing123" => array("name" => "librelove", "url" => "https://gitorious.org/fmthings/lasttolibre", "free" => True),
+		"hellothisisthegnufmwebsiteplayer" => array("name" => $site_name, "url" => $base_url, "free" => True),
 	);
 
 	// 3 char client code
