@@ -1237,7 +1237,7 @@ function method_track_unban() {
  * track.updatenowplaying : Submits the user's currently playing track.
  *
  * ###Description
- * Submits the user's currently playing song.
+ * Submits the user's currently playing track.
  * 
  * ###Parameters
  * * **artist** (required)		: Artist name.
@@ -1257,8 +1257,9 @@ function method_track_unban() {
  * **HTTP request method** : POST.
  * - - - 
  *
- * @todo docs, XML, testing
- * @version Experimental
+ * @todo context parameter not used
+ * @todo tracknumber parameter not used
+ * @todo albumartist parameter not used
  * @package Webservice
  * @subpackage Track
  * @api
@@ -1289,12 +1290,20 @@ function method_track_updateNowPlaying() {
  *
  * ###Description
  *
- * Submits a track for scrobbling.
+ * Submits a track or a batch of tracks for scrobbling.
  * 
  * ###Parameters
- * * **artist** (required)		: Name of the tracks's artist.
- * * **track** (required)		: Name of the track.
- * * **timestamp** (required)	: The time the track started playing (in UNIX time)
+ * * **artist[i]** (required)		: Artist name.
+ * * **track[i]** (required)		: Track name.
+ * * **timestamp[i]** (required)	: The time the track started playing (in UNIX time).
+ * * **album[i]** (optional)		: Album name.
+ * * **context[i]** (optional)		: TODO
+ * * **streamid[i]** (optional)		: TODO
+ * * **chosenbyuser[i]** (optional)	: TODO
+ * * **tracknumber[i]** (optional)	: Track's number on album.
+ * * **mbid[i]** (optional)			: Track's Musicbrainz ID.
+ * * **albumartist[i]** (optional)	: Album's artist.
+ * * **duration[i]** (optional)		: Length of the track in seconds.
  * * **sk** (required)			: Session key.
  * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
  *
@@ -1319,7 +1328,13 @@ function method_track_scrobble() {
 	$xml = TrackXML::scrobble($userid,
 		$_POST['artist'],
 		$_POST['track'],
-		$_POST['timestamp']);
+		$_POST['timestamp'],
+		$_POST['album'],
+		$_POST['tracknumber'],
+		$_POST['mbid'],
+		$_POST['albumartist'],
+		$_POST['duration']
+	);
 	respond($xml);
 }
 

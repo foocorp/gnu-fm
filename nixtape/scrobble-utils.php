@@ -33,15 +33,12 @@ require_once('database.php');
  * @param string artist		Artist name.
  * @return int				Artist ID.
  *
- * @todo Possible problem when doing case insensitive search for artist
- *	if foreign key checks are case sensitive when scrobbling with
- *	different casing than the one inserted below.
- *	@todo Rename the function?
+ * @todo Rename the function?
  */
-function createArtistIfNew($artist) {
+function getOrCreateArtist($artist) {
 	global $adodb;
 
-	$query = 'SELECT id FROM Artist WHERE lower(name) = lower(?)';
+	$query = 'SELECT id FROM Artist WHERE name=?';
 	$params = array($artist);
 	$artist_id = $adodb->GetOne($query, $params);
 
@@ -50,7 +47,7 @@ function createArtistIfNew($artist) {
 		$query = 'INSERT INTO Artist (name) VALUES (?)';
 		$params = array($artist);
 		$res = $adodb->Execute($query, $params);
-		return createArtistIfNew($artist);
+		return getOrCreateArtist($artist);
 	} else {
 		return $artist_id;
 	}
@@ -63,16 +60,13 @@ function createArtistIfNew($artist) {
  * @param string album		Album name.
  * @return int				Album ID.
  *
- * @todo Possible problem when doing case insensitive search for artist/album
- *	if foreign key checks are case sensitive when scrobbling with
- *	different casing than the one inserted below.
  *	@todo Rename the function?
  *	@todo Maybe we should return artist ID too.
  */
-function createAlbumIfNew($artist, $album) {
+function getOrCreateAlbum($artist, $album) {
 	global $adodb;
 
-	$query = 'SELECT  id FROM Album WHERE lower(name) = lower(?) AND lower(artist_name) = lower(?)';
+	$query = 'SELECT id FROM Album WHERE name=? AND artist_name=?';
 	$params = array($album, $artist);
 	$album_id = $adodb->GetOne($query, $params);
 
@@ -80,12 +74,12 @@ function createAlbumIfNew($artist, $album) {
 		// Album doesn't exist, so create it
 
 		// First check if artist exist, if not create it
-		$artist_id = createArtistIfNew($artist);
+		$artist_id = getOrCreateArtist($artist);
 
 		$query = 'INSERT INTO Album (name, artist_name) VALUES (?,?)';
 		$params = array($album, $artist);
 		$adodb->Execute($query, $params);
-		return createAlbumIfNew($artist, $album);
+		return getOrCreateAlbum($artist, $album);
 	} else {
 		return $album_id;
 	}
@@ -101,19 +95,16 @@ function createAlbumIfNew($artist, $album) {
  * @param int duration		Track length in seconds.
  * @return int				Album ID.
  *
- * @todo Possible problem when doing case insensitive search for artist/album/track
- *	if foreign key checks are case sensitive when scrobbling with
- *	different casing than the one inserted below.
- *	@todo Rename the function?
+ * @todo Rename the function?
  */
-function getTrackCreateIfNew($artist, $album, $track, $mbid, $duration) {
+function getOrCreateTrack($artist, $album, $track, $mbid, $duration) {
 	global $adodb;
 
 	if ($album) {
-		$query = 'SELECT id FROM Track WHERE lower(name) = lower(?) AND lower(artist_name) = lower(?) AND lower(album_name) = lower(?)';
+		$query = 'SELECT id FROM Track WHERE name=? AND artist_name=? AND album_name=?';
 		$params = array($track, $artist, $album);
 	} else {
-		$query = 'SELECT id FROM Track WHERE lower(name) = lower(?) AND lower(artist_name) = lower(?) AND album_name IS NULL';
+		$query = 'SELECT id FROM Track WHERE name=? AND artist_name=? AND album_name IS NULL';
 		$params = array($track, $artist);
 	}
 	$track_id = $adodb->GetOne($query, $params);
@@ -121,18 +112,56 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid, $duration) {
 	if (!$track_id) {
 		// First check if artist and album exists, if not create them
 		if ($album) {
-			$album_id = createAlbumIfNew($artist, $album);
+			$album_id = getOrCreateAlbum($artist, $album);
 		} else {
-			$artist_id = createArtistIfNew($artist);
+			$artist_id = getOrCreateArtist($artist);
 		}
 		
 		// Create new track
 		$query = 'INSERT INTO Track (name, artist_name, album_name, mbid, duration) VALUES (?,?,?,?,?)';
 		$params = array($track, $artist, $album, $mbid, $duration);
 		$adodb->Execute($query, $params);
-		return getTrackCreateIfNew($artist, $album, $track, $mbid, $duration);
+		return getOrCreateTrack($artist, $album, $track, $mbid, $duration);
 	} else {
 		return $track_id;
+	}
+}
+
+/**
+ * Add track to Scrobble_Track db table
+ *
+ * @todo docs
+ */
+function getOrCreateScrobbleTrack($artist, $album, $track, $mbid, $duration, $track_id) {
+	global $adodb;
+
+	$query = 'SELECT id FROM Scrobble_Track WHERE name=lower(?) AND artist=lower(?)';
+	$params = array($track, $artist);
+
+	if ($album) {
+		$query .= ' AND album=lower(?)';
+		$params[] = $album;
+	} else {
+		$query .= ' AND album IS NULL';
+	}
+
+	if ($mbid) {
+		$query .= ' AND mbid=lower(?)';
+		$params[] = $mbid;
+	} else {
+		$query .= ' AND mbid IS NULL';
+	}
+
+	$scrobbletrack_id = $adodb->GetOne($query, $params);
+
+	if (!$scrobbletrack_id) {
+		// TODO we are sometimes running lower() on some null values here, i hope that's ok
+		$query = 'INSERT INTO Scrobble_Track (name, artist, album, mbid, track) VALUES (lower(?), lower(?), lower(?), lower(?), ?)';
+		$params = array($track, $artist, $album, $mbid, $track_id);
+		$res = $adodb->Execute($query, $params);
+		return getOrCreateScrobbleTrack($artist, $album, $track, $mbid, $duration, $track_id);
+	} else {
+		return $scrobbletrack_id;
 	}
 }
 
@@ -146,7 +175,9 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid, $duration) {
  * @param string clientid (optional)	Client ID (max 3 characters)
  * @return string						Session ID
  *
- * @todo Figure out how 2.0 client can be identified
+ * @todo Figure out how 2.0 clients can be identified (add api keys to clients array?)
+ * @todo We currently grab a sessionid that is not expired and has the right userid,
+ *		this could have been created by another client and will display the wrong client id
  * @todo rename the function?
  */
 function getOrCreateScrobbleSession($userid, $clientid=null) {
@@ -180,6 +211,8 @@ function correctInput($input, $type) {
 	$old = $input;
 	$new = $old;
 
+	//TODO truncate strings at 255 chars or whatever the field limit is
+
 	if ($type == 'artist' || $type == 'album' || $type == 'track') {
 		$new = str_replace(' (PREVIEW: buy it at www.magnatune.com)', '', $new);
 		$new = str_replace('testspam', '', $new);
@@ -205,10 +238,10 @@ function correctInput($input, $type) {
 		$new = (int) $new;
 	}
 
-	if ($old === $new) {
-		$corrected = '0';
+	if ($old == $new) { // TODO i dont think we need to do type comparison here
+		$corrected = 0;
 	} else {
-		$corrected = '1';
+		$corrected = 1;
 	}
 	$result = array($new, $corrected);
 	return $result;
@@ -221,12 +254,14 @@ function correctInput($input, $type) {
  * @param string track Track name
  * @param int timestamp Timestamp
  * @return array Array(int $ignored_code, string $ignored_message)
+ *
+ * @todo Rewrite code to look like the correctInput function?
  */
 function ignoreInput($artist, $track, $timestamp) {
 	$ignored_code = 0;
 	$ignored_message = '';
-
-	//TODO calculate timestamp $upperlimit, $lowerlimit
+	$timestamp_upperlimit = time() + 300;
+	$timestamp_lowerlimit = 1009000000;
 
 	if (empty($artist)) {
 		$ignored_code = 1;
@@ -236,16 +271,57 @@ function ignoreInput($artist, $track, $timestamp) {
 		$ignored_code = 2;
 		$ignored_message = 'Track was ignored';
 	}
-	/* TODO Enable this when working on track.scrobble
-	if ($timestamp > $upperlimit) {
+	if ($timestamp > $timestamp_upperlimit) {
 		$ignored_message = 'Timestamp is too new';
 		$ignored_code = 3;
 	}
-	if ($timestamp < $lowerlimit) {
+	if ($timestamp < $timestamp_lowerlimit) {
 		$ignored_message = 'Timestamp is too old';
 		$ignored_code = 4;
 	}
-	 */
 
 	return array($ignored_code, $ignored_message);
+}
+
+/**
+ * Tries to correct a track item's data or marks it as invalid.
+ *
+ * @param array item Array of data such as artist, album, track, duration..
+ * @return array Same array as item array, but with corrected data and added metadata.
+ */
+function validateScrobble($userid, $item) {
+	list($item['track'], $item['track_corrected']) = correctInput($item['track'], 'track');
+	list($item['artist'], $item['artist_corrected']) = correctInput($item['artist'], 'artist');
+	list($item['album'], $item['album_corrected']) = correctInput($item['album'], 'album');
+	list($item['mbid'], $item['mbid_corrected']) = correctInput($item['mbid'], 'mbid');
+	list($item['duration'], $item['duration_corrected']) = correctInput($item['duration'], 'duration');
+
+	$item['albumartist_corrected'] = 0; // we're currently not doing anything with this in GNU FM
+
+	list($item['ignoredcode'], $item['ignoredmessage']) = ignoreInput($item['artist'], $item['track'], $item['timestamp']);
+
+	// check if item has already been scrobbled	
+	if ($item['ignoredcode'] === 0) {
+		$exists = scrobbleExists($userid, $item['artist'], $item['track'], $item['timestamp']);
+		if ($exists) {
+			$item['ignoredcode'] = 9; // TODO should we use code 5?
+			$item['ignoredmessage'] = 'Already scrobbled';
+		}
+	}
+
+	return $item;
+}
+
+function scrobbleExists($userid, $artist, $track, $time) {
+	global $adodb;
+
+	$query = 'SELECT time FROM Scrobbles WHERE userid=? AND artist=? AND track=? AND time=?';
+	$params = array($userid, $artist, $track, $time);
+	$res = $adodb->GetOne($query, $params);
+
+	if (!$res) {
+		return false;
+	} else {
+		return true;
+	}
 }
