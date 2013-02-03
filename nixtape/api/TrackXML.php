@@ -167,7 +167,7 @@ class TrackXML {
 		list($mbid, $mbid_corrected) = correctInput($mbid, 'mbid');
 		list($duration, $duration_corrected) = correctInput($duration, 'duration');
 
-		list($ignored_code, $ignored_message) = ignoreInput($artist, $track);
+		list($ignored_code, $ignored_message) = ignoreInput($artist, $track, time()); //TODO remove ugly time hack
 
 		// Get a scrobble session id. TODO check if we got one
 		$sessionid = getOrCreateScrobbleSession($userid, $api_key);
