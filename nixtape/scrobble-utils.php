@@ -93,7 +93,7 @@ function getOrCreateAlbum($artist, $album) {
  * @param string track		Track name.
  * @param string mbid		Track's musicbrainz ID.
  * @param int duration		Track length in seconds.
- * @return int				Album ID.
+ * @return int				Track ID.
  *
  * @todo Rename the function?
  */
@@ -130,7 +130,13 @@ function getOrCreateTrack($artist, $album, $track, $mbid, $duration) {
 /**
  * Add track to Scrobble_Track db table
  *
- * @todo docs
+ * @param string artist		Artist name.
+ * @param string album		Album name.
+ * @param string track		Track name.
+ * @param string mbid		Track musicbrainz ID.
+ * @param int duration		Track length in seconds.
+ * @param int track_id		Track ID in Track database table
+ * @return int				Scrobble_Track ID.
  */
 function getOrCreateScrobbleTrack($artist, $album, $track, $mbid, $duration, $track_id) {
 	global $adodb;
@@ -155,7 +161,6 @@ function getOrCreateScrobbleTrack($artist, $album, $track, $mbid, $duration, $tr
 	$scrobbletrack_id = $adodb->GetOne($query, $params);
 
 	if (!$scrobbletrack_id) {
-		// TODO we are sometimes running lower() on some null values here, i hope that's ok
 		$query = 'INSERT INTO Scrobble_Track (name, artist, album, mbid, track) VALUES (lower(?), lower(?), lower(?), lower(?), ?)';
 		$params = array($track, $artist, $album, $mbid, $track_id);
 		$res = $adodb->Execute($query, $params);
@@ -188,7 +193,6 @@ function getOrCreateScrobbleSession($userid, $api_key = null) {
 	$query = 'SELECT sessionid FROM Scrobble_Sessions WHERE userid = ? AND expires > ?';
 	$params = array($userid, time());
 
-	//TODO not yet in install.php, alter table Scrobble_Sessions add column api_key varchar(32)
 	if (strlen($api_key) == 32) {
 		$query .= ' AND api_key=?';
 		$params[] = $api_key;
@@ -203,8 +207,7 @@ function getOrCreateScrobbleSession($userid, $api_key = null) {
 		try {
 			$adodb->Execute($query, $params);
 		} catch (Exception $e) {
-			// TODO possible exception if inserting wrong length api_key, or sessionid=null
-			return false;
+			return null;
 		}
 	}
 	return $sessionid;

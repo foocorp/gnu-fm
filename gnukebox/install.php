@@ -198,6 +198,7 @@ if (isset($_POST['install'])) {
 		userid INTEGER REFERENCES Users(uniqueid),
 		sessionid VARCHAR(32) PRIMARY KEY,
 		client CHAR(3),
+		api_key VARCHAR(32),
 		expires INTEGER)',
 
 		'CREATE TABLE Now_Playing(
