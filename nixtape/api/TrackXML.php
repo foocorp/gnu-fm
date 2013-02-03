@@ -175,7 +175,9 @@ class TrackXML {
 		// Delete last played track
 		$query = 'DELETE FROM Now_Playing WHERE sessionid = ?';
 		$params = array($sessionid);
-		$adodb->Execute($query, $params);
+		try {
+			$adodb->Execute($query, $params);
+		} catch (Exception $e) {}
 
 		//calculate expiry time
 		if (!$duration || ($duration > 5400)) {
@@ -186,15 +188,20 @@ class TrackXML {
 		}
 
 		if (!$ignored_code) {
-			// Create artist, album, track if not in db
-			getTrackCreateIfNew($artist, $album, $track, $mbid, $duration);
-
-			// Add new track to database
-			$query = 'INSERT INTO Now_Playing(sessionid, track, artist, album, mbid, expires) VALUES (?,?,?,?,?,?)';
-			$params = array($sessionid, $track, $artist, $album, $mbid, $expires);
-			$adodb->Execute($query, $params);
-
 			//TODO Clean up expired tracks in now_playing table
+
+			// Create artist, album, track if not in db
+			try {
+				getOrcreateTrack($artist, $album, $track, $mbid, $duration);
+
+				// Add new track to database
+				$query = 'INSERT INTO Now_Playing(sessionid, track, artist, album, mbid, expires) VALUES (?,?,?,?,?,?)';
+				$params = array($sessionid, $track, $artist, $album, $mbid, $expires);
+				$adodb->Execute($query, $params);
+
+			} catch (Exception $e) {
+				return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
+			}
 		}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
@@ -209,52 +216,168 @@ class TrackXML {
 		$albumartist_node->addAttribute('corrected', '0'); //TODO
 		$ignoredmessage_node = $root->addChild('ignoredMessage', $ignored_message);
 		$ignoredmessage_node->addAttribute('code', $ignored_code);
-		/* For dev purposes only
-		$duration_node = $root->addChild('duration', $duration);
+		/* begin debug
+		 */
+		$debug = $root->addChild('debug', null);
+		$duration_node = $debug->addChild('duration', $duration);
 		$duration_node->addAttribute('corrected', $duration_corrected);
-		$expires_node = $root->addChild('expires', $expires - time());
-		/**/
+		$expires_node = $debug->addChild('expires', $expires - time());
+		/* end debug */
 
 		return $xml;
 	}
 
 
-	public static function scrobble($userid, $artist, $track, $timestamp) {
-		global $base_url;
+	public static function scrobble($userid, $artist, $track, $timestamp, $album, $tracknumber, $mbid, $albumartist, $duration) {
+		global $adodb;
+		// Get a scrobble session id
+		$sessionid = getOrCreateScrobbleSession($userid);
 
-		if(empty($artist) || empty($track) || empty($timestamp)) {
-			return(XML::error('failed', '6', 'Required parameters are empty'));
+		$accepted_count = 0;
+		$ignored_count = 0;
+		$tracks_array = array();
+
+
+		// convert input to trackitem arrays and add them to tracks_array
+		if (is_array($artist)) {
+			for ($i = 0; $i < count($artist); $i++) {
+				$tracks_array[$i] = array(
+					'artist' => $artist[$i],
+					'track' => $track[$i],
+					'timestamp' => $timestamp[$i],
+					'album' => $album[$i],
+					'tracknumber' => $tracknumber[$i],
+					'mbid' => $mbid[$i],
+					'albumartist' => $albumartist[$i],
+					'duration' => $duration[$i],
+				);
+			}
+		} else {
+			$tracks_array[0] = array(
+				'artist' => $artist,
+				'track' => $track,
+				'timestamp' => $timestamp,
+				'album' => $album,
+				'tracknumber' => $tracknumber,
+				'mbid' => $mbid,
+				'albumartist' => $albumartist,
+				'duration' => $duration,
+			);
 		}
 
-		$user = User::new_from_uniqueid_number($userid);
-		$session_id = $user->getScrobbleSession();
+		// Validate tracks
+		for ($i = 0; $i < count($tracks_array); $i++) {
+			$item = $tracks_array[$i];
+			$item_corrected = validateScrobble($userid, $item);
+			$tracks_array[$i] = $item_corrected;
+		}
+		
 
-		$post_vars = array(
-			'a[0]' => $artist,
-			't[0]' => $track,
-			'i[0]' => $timestamp,
-			's' => $session_id
-		);
+		// if valid, create any artist, album and track not already in db
+		// TODO should this be moved into validateScrobble, and rename validateScrobble to prepareScrobble?
+		for ($i = 0; $i < count($tracks_array); $i++) {
+			$item = $tracks_array[$i];
+			if ($item['ignoredcode'] === 0) {
+				try {
+					// First check if track exists, if not create it
+					$track_id = getOrCreateTrack($item['artist'], $item['album'], $item['track'], $item['mbid'], $item['duration']);
 
-		$url = $base_url . '/scrobble-proxy.php?method=scrobble';
-		$mysession = curl_init($url);
-		curl_setopt($mysession, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($mysession, CURLOPT_POST, true);
-		curl_setopt($mysession, CURLOPT_POSTFIELDS, $post_vars);
+					$item['scrobbletrack_id'] = getOrCreateScrobbleTrack($item['artist'], $item['album'], $item['track'], $item['mbid'], $item['duration'], $track_id);
+					$tracks_array[$i] = $item;
+				} catch (Exception $e) {
+					// TODO roll back
+					//return XML::error('failed', '99', 'Exception caught when getting scrobbletrack_id');
+					/*begin debug
+					 */
+					$item['ignoredcode'] = 99;
+					$item['ignoredmessage'] = $e;
+					$tracks_array[$i] = $item;
+					/*end debug*/
+				}
+			}
+		}
 
-		$response = curl_exec($mysession);
-		curl_close($mysession);
+		// Scrobble
+		//$adodb->StartTrans();
+		for ($i = 0; $i < count($tracks_array); $i++) {
+			$item = $tracks_array[$i];
 
-		if($response == "OK\n1") {
-			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
-			$root = $xml->addChild('scrobbles', null);
+			if ($item['ignoredcode'] === 0) {
+				// if valid track, scrobble it
+				try {
+					//scrobble
+					$query = 'INSERT INTO Scrobbles (userid, artist, album, track, time, mbid, source, rating, length, stid) VALUES (?,?,?,?,?,?,?,?,?,?)';
+					$params = array(
+						$userid,
+						$item['artist'],
+						$item['album'],
+						$item['track'],
+						$item['timestamp'],
+						$item['mbid'],
+						null,
+						null,
+						$item['duration'],
+						$item['scrobbletrack_id']
+					);
+					$adodb->Execute($query, $params);
+				} catch (Exception $e) {
+					/*TODO if we get an exception here, we rollback all scrobbles in request and display error
+					 */
+					//$adodb->FailTrans();  //rollback all scrobbles if any inserts fail
+					//$adodb->CompleteTrans();
+					//return XML::error('failed', '999', $e);
+					/*begin debug
+					 */
+					$item['ignoredcode'] = 999;
+					$item['ignoredmessage'] = $e;
+					$tracks_array[$i] = $item;
+					/*end debug*/
+				}
+			}
+		}
+		//$adodb->CompleteTrans();
+
+
+		//TODO forward any successful scrobbles here?
+			
+		//build xml
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('scrobbles', null);
+
+		for ($i = 0; $i < count($tracks_array); $i++) {
+			$item = $tracks_array[$i];
+
 			$scrobble = $root->addChild('scrobble', null);
-			$scrobble->addChild('track', repamp($track));
-			$scrobble->addChild('artist', repamp($artist));
-			$scrobble->addChild('timestamp', $timestamp);
-		}else{
-			$xml = new SimpleXMLElement('<lfm status="failed"></lfm>');
+			$track_node = $scrobble->addChild('track', repamp($item['track']));
+			$track_node->addAttribute('corrected', $item['track_corrected']);
+			$artist_node = $scrobble->addChild('artist', repamp($item['artist']));
+			$artist_node->addAttribute('corrected', $item['artist_corrected']);
+			$album_node = $scrobble->addChild('album', repamp($item['album']));
+			$album_node->addAttribute('corrected', $item['album_corrected']);
+			$albumartist_node = $scrobble->addChild('albumArtist', repamp($item['albumartist']));
+			$albumartist_node->addAttribute('corrected', $item['albumartist_corrected']);
+			$scrobble->addChild('timestamp', $item['timestamp']);
+			$ignoredmessage_node = $scrobble->addChild('ignoredMessage', $item['ignoredmessage']);
+			$ignoredmessage_node->addAttribute('code', $item['ignoredcode']);
+			/** begin debug
+			 */
+			$debug = $scrobble->addChild('debug', null);
+			$debug->addChild('tracknumber', $item['tracknumber']);
+			$mbid_node = $debug->addChild('mbid', $item['mbid']);
+			$mbid_node->addAttribute('corrected', $item['mbid_corrected']);
+			$duration_node = $debug->addChild('duration', $item['duration']);
+			$duration_node->addAttribute('corrected', $item['duration_corrected']);
+			/* end debug*/
+
+			if ($item['ignoredcode'] === 0) {
+				$accepted_count += 1;
+			} else {
+				$ignored_count += 1;
+			}
+
 		}
+		$root->addAttribute('accepted', $accepted_count);
+		$root->addAttribute('ignored', $ignored_count);
 
 		return $xml;
 	}
