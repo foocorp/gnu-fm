@@ -225,10 +225,10 @@ function correctInput($input, $type) {
 	$old = $input;
 	$new = $old;
 
-	//TODO truncate strings at 255 chars or whatever the field limit is
-
 	if ($type == 'artist' || $type == 'album' || $type == 'track') {
-		switch (mb_detect_encoding($album)) {
+
+		//Limit strings to 255 chars
+		switch (mb_detect_encoding($new)) {
 		case 'ASCII':
 		case 'UTF-8':
 			$new = mb_strcut($new, 0, 255, 'UTF-8');
@@ -237,13 +237,14 @@ function correctInput($input, $type) {
 			$new = null;
 		}
 
+		// Remove spam and trim whitespace
 		$new = str_replace(' (PREVIEW: buy it at www.magnatune.com)', '', $new);
-		$new = str_replace('testspam', '', $new);
 		$new = trim($new);
 
 		if (empty($new)) {
 			$new = null;
 		}
+
 	} else if ($type == 'mbid') {
 		if (isset($new)) {
 			$new = strtolower(rtrim($new));
@@ -255,6 +256,7 @@ function correctInput($input, $type) {
 		} else {
 			$new = null;
 		}
+
 	} else if ($type == 'timestamp') {
 		$new = (int) $new;
 	} else if ($type == 'duration') {
