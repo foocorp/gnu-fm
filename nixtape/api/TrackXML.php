@@ -200,6 +200,8 @@ class TrackXML {
 				$adodb->Execute($query, $params);
 
 			} catch (Exception $e) {
+				//TODO roll back
+				reportError($e->getMessage(), $e->getTraceAsString());
 				return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
 			}
 		}
@@ -265,7 +267,7 @@ class TrackXML {
 			);
 		}
 
-		// Validate tracks
+		// Correct and inspect scrobbles to see if some should be ignored
 		for ($i = 0; $i < count($tracks_array); $i++) {
 			$item = $tracks_array[$i];
 			$item_corrected = validateScrobble($userid, $item);
@@ -273,8 +275,8 @@ class TrackXML {
 		}
 		
 
-		// if valid, create any artist, album and track not already in db
-		// TODO should this be moved into validateScrobble, and rename validateScrobble to prepareScrobble?
+		// if valid, create any artist, album and track not already in db, then scrobble
+		//$adodb->StartTrans();
 		for ($i = 0; $i < count($tracks_array); $i++) {
 			$item = $tracks_array[$i];
 			if ($item['ignoredcode'] === 0) {
@@ -283,31 +285,28 @@ class TrackXML {
 					$track_id = getOrCreateTrack($item['artist'], $item['album'], $item['track'], $item['mbid'], $item['duration']);
 
 					$item['scrobbletrack_id'] = getOrCreateScrobbleTrack($item['artist'], $item['album'], $item['track'], $item['mbid'], $item['duration'], $track_id);
-					$tracks_array[$i] = $item;
 				} catch (Exception $e) {
-					// TODO roll back
-					//return XML::error('failed', '99', 'Exception caught when getting scrobbletrack_id');
-					/*begin debug
-					 */
-					$item['ignoredcode'] = 99;
+					//rollback and display respond with error message
+					//$adodb->FailTrans();
+					//$adodb->CompleteTrans();
+					reportError($e->getMessage(), $e->getTraceAsString());
+					//return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
+
+					//TODO uncomment StartTrans, FailTrans, CompleteTrans, return XML when removing debug block below
+					/*begin debug*/
+					$item['ignoredcode'] = 92;
 					$item['ignoredmessage'] = $e;
-					$tracks_array[$i] = $item;
 					/*end debug*/
 				}
 			}
-		}
 
-		// Scrobble
-		//$adodb->StartTrans();
-		for ($i = 0; $i < count($tracks_array); $i++) {
-			$item = $tracks_array[$i];
-
-			if ($item['ignoredcode'] === 0) {
-				// if valid track, scrobble it
+			// if still valid track, scrobble it
+			if ($item['ignoredcode'] === 0) { //TODO we can remove this if block when debug code is removed
 				try {
 					//scrobble
-					// TODO last.fm spec says we shouldnt scrobble corrected values, so maybe we should only use corrected values for validation and in xml
-					$query = 'INSERT INTO Scrobbles (userid, artist, album, track, time, mbid, source, rating, length, stid) VALUES (?,?,?,?,?,?,?,?,?,?)';
+					// TODO last.fm spec says we shouldnt scrobble corrected values,
+					// so maybe we should only use corrected values for validation and in xml
+					$query = 'INSERT INTO Scrobbles (serid, artist, album, track, time, mbid, source, rating, length, stid) VALUES (?,?,?,?,?,?,?,?,?,?)';
 					$params = array(
 						$userid,
 						$item['artist'],
@@ -322,24 +321,23 @@ class TrackXML {
 					);
 					$adodb->Execute($query, $params);
 				} catch (Exception $e) {
-					/*TODO if we get an exception here, we rollback all scrobbles in request and display error
-					 */
 					//$adodb->FailTrans();  //rollback all scrobbles if any inserts fail
 					//$adodb->CompleteTrans();
-					//return XML::error('failed', '999', $e);
+					reportError($e->getMessage(), $e->getTraceAsString());
+					//return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
 					/*begin debug
 					 */
-					$item['ignoredcode'] = 999;
+					$item['ignoredcode'] = 93;
 					$item['ignoredmessage'] = $e;
-					$tracks_array[$i] = $item;
 					/*end debug*/
 				}
 			}
+			$tracks_array[$i] = $item;
 		}
 		//$adodb->CompleteTrans();
 
 
-		/*TODO forward any successful scrobbles here?
+		/*TODO forward any valid scrobbles here?
 		 * If we want to forward untouched track data, we should use the $item[*_old] data.
 		 */
 
