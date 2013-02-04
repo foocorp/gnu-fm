@@ -157,7 +157,6 @@ class TrackXML {
 		return $xml;
 	}
 
-
 	public static function updateNowPlaying($userid, $artist, $track, $album, $trackNumber, $context, $mbid, $duration, $albumArtist, $api_key) {
 		global $adodb;
 
@@ -191,6 +190,7 @@ class TrackXML {
 			//TODO Clean up expired tracks in now_playing table
 
 			// Create artist, album, track if not in db
+			$adodb->StartTrans();
 			try {
 				getOrCreateTrack($artist, $album, $track, $mbid, $duration);
 
@@ -200,10 +200,12 @@ class TrackXML {
 				$adodb->Execute($query, $params);
 
 			} catch (Exception $e) {
-				//TODO roll back
-				reportError($e->getMessage(), $e->getTraceAsString());
+				$adodb->FailTrans();
+				$adodb->CompleteTrans();
+				reportError('Error while inserting nowplaying', $e->getTraceAsString());
 				return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
 			}
+			$adodb->CompleteTrans();
 		}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
@@ -218,13 +220,6 @@ class TrackXML {
 		$albumartist_node->addAttribute('corrected', '0'); //TODO
 		$ignoredmessage_node = $root->addChild('ignoredMessage', $ignored_message);
 		$ignoredmessage_node->addAttribute('code', $ignored_code);
-		/* begin debug
-		 */
-		$debug = $root->addChild('debug', null);
-		$duration_node = $debug->addChild('duration', $duration);
-		$duration_node->addAttribute('corrected', $duration_corrected);
-		$expires_node = $debug->addChild('expires_in', $expires - time());
-		/* end debug */
 
 		return $xml;
 	}
@@ -276,7 +271,7 @@ class TrackXML {
 		
 
 		// if valid, create any artist, album and track not already in db, then scrobble
-		//$adodb->StartTrans();
+		$adodb->StartTrans();
 		for ($i = 0; $i < count($tracks_array); $i++) {
 			$item = $tracks_array[$i];
 			if ($item['ignoredcode'] === 0) {
@@ -286,22 +281,13 @@ class TrackXML {
 
 					$item['scrobbletrack_id'] = getOrCreateScrobbleTrack($item['artist'], $item['album'], $item['track'], $item['mbid'], $item['duration'], $track_id);
 				} catch (Exception $e) {
-					//rollback and display respond with error message
-					//$adodb->FailTrans();
-					//$adodb->CompleteTrans();
-					reportError($e->getMessage(), $e->getTraceAsString());
-					//return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
-
-					//TODO uncomment StartTrans, FailTrans, CompleteTrans, return XML when removing debug block below
-					/*begin debug*/
-					$item['ignoredcode'] = 92;
-					$item['ignoredmessage'] = $e;
-					/*end debug*/
+					//roll back, log error trace and return response with error message
+					$adodb->FailTrans();
+					$adodb->CompleteTrans();
+					reportError('Error while inserting scrobble_track, artist, album, track', $e->getTraceAsString());
+					return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
 				}
-			}
 
-			// if still valid track, scrobble it
-			if ($item['ignoredcode'] === 0) { //TODO we can remove this if block when debug code is removed
 				try {
 					//scrobble
 					// TODO last.fm spec says we shouldnt scrobble corrected values,
@@ -321,20 +307,16 @@ class TrackXML {
 					);
 					$adodb->Execute($query, $params);
 				} catch (Exception $e) {
-					//$adodb->FailTrans();  //rollback all scrobbles if any inserts fail
-					//$adodb->CompleteTrans();
-					reportError($e->getMessage(), $e->getTraceAsString());
-					//return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
-					/*begin debug
-					 */
-					$item['ignoredcode'] = 93;
-					$item['ignoredmessage'] = $e;
-					/*end debug*/
+					//roll back, log error trace and return response with error message
+					$adodb->FailTrans();
+					$adodb->CompleteTrans();
+					reportError('Error while inserting scrobble', $e->getTraceAsString());
+					return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
 				}
 			}
 			$tracks_array[$i] = $item;
 		}
-		//$adodb->CompleteTrans();
+		$adodb->CompleteTrans();
 
 
 		/*TODO forward any valid scrobbles here?
@@ -361,23 +343,14 @@ class TrackXML {
 			$scrobble->addChild('timestamp', $item['timestamp']);
 			$ignoredmessage_node = $scrobble->addChild('ignoredMessage', $item['ignoredmessage']);
 			$ignoredmessage_node->addAttribute('code', $item['ignoredcode']);
-			/** begin debug
-			 */
-			$debug = $scrobble->addChild('debug', null);
-			$debug->addChild('tracknumber', $item['tracknumber']);
-			$mbid_node = $debug->addChild('mbid', $item['mbid']);
-			$mbid_node->addAttribute('corrected', $item['mbid_corrected']);
-			$duration_node = $debug->addChild('duration', $item['duration']);
-			$duration_node->addAttribute('corrected', $item['duration_corrected']);
-			/* end debug*/
 
 			if ($item['ignoredcode'] === 0) {
 				$accepted_count += 1;
 			} else {
 				$ignored_count += 1;
 			}
-
 		}
+
 		$root->addAttribute('accepted', $accepted_count);
 		$root->addAttribute('ignored', $ignored_count);
 
