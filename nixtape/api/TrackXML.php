@@ -161,11 +161,11 @@ class TrackXML {
 	public static function updateNowPlaying($userid, $artist, $track, $album, $trackNumber, $context, $mbid, $duration, $albumArtist, $api_key) {
 		global $adodb;
 
-		list($artist, $artist_corrected) = correctInput($artist, 'artist');
-		list($track, $track_corrected) = correctInput($track,  'track');
-		list($album, $album_corrected) = correctInput($album, 'album');
-		list($mbid, $mbid_corrected) = correctInput($mbid, 'mbid');
-		list($duration, $duration_corrected) = correctInput($duration, 'duration');
+		list($artist_old, $artist, $artist_corrected) = correctInput($artist, 'artist');
+		list($track_old, $track, $track_corrected) = correctInput($track,  'track');
+		list($album_old, $album, $album_corrected) = correctInput($album, 'album');
+		list($mbid_old, $mbid, $mbid_corrected) = correctInput($mbid, 'mbid');
+		list($duration_old, $duration, $duration_corrected) = correctInput($duration, 'duration');
 
 		list($ignored_code, $ignored_message) = ignoreInput($artist, $track, time()); //TODO remove ugly time hack
 
@@ -192,7 +192,7 @@ class TrackXML {
 
 			// Create artist, album, track if not in db
 			try {
-				getOrcreateTrack($artist, $album, $track, $mbid, $duration);
+				getOrCreateTrack($artist, $album, $track, $mbid, $duration);
 
 				// Add new track to database
 				$query = 'INSERT INTO Now_Playing(sessionid, track, artist, album, mbid, expires) VALUES (?,?,?,?,?,?)';
@@ -221,7 +221,7 @@ class TrackXML {
 		$debug = $root->addChild('debug', null);
 		$duration_node = $debug->addChild('duration', $duration);
 		$duration_node->addAttribute('corrected', $duration_corrected);
-		$expires_node = $debug->addChild('expires', $expires - time());
+		$expires_node = $debug->addChild('expires_in', $expires - time());
 		/* end debug */
 
 		return $xml;
@@ -339,8 +339,11 @@ class TrackXML {
 		//$adodb->CompleteTrans();
 
 
-		//TODO forward any successful scrobbles here?
-			
+		/*TODO forward any successful scrobbles here?
+		 * If we want to forward untouched track data, we should use the $item[*_old] data.
+		 */
+
+
 		//build xml
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$root = $xml->addChild('scrobbles', null);

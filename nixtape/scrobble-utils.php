@@ -216,14 +216,10 @@ function getOrCreateScrobbleSession($userid, $api_key = null) {
 /**
  * Correct artist/album/track/mbid/timestamp input
  *
- * Returns array with $corrected_input with corrected input,
- * and string $corrected with '1' or '0' depending on if the input was corrected.
- *
  * @param mixed input Input to be corrected.
  * @param string type Type of input to be corrected.
- * @return array Array(mixed $corrected_input, int $corrected)
+ * @return array Array(mixed $old_input, mixed $corrected_input, int $corrected)
  *
- * @todo docs
  */
 function correctInput($input, $type) {
 	$old = $input;
@@ -253,15 +249,14 @@ function correctInput($input, $type) {
 	} else if ($type == 'timestamp') {
 		$new = (int) $new;
 	} else if ($type == 'duration') {
-		$new = (int) $new;
+		if($new) {
+			$new = (int) $new;
+		} else {
+			$new = null;
+		}
 	}
 
-	if ($old == $new) {
-		$corrected = 0;
-	} else {
-		$corrected = 1;
-	}
-	$result = array($new, $corrected);
+	$result = array($old, $new, (int)($old != $new));
 	return $result;
 }
 
@@ -309,12 +304,13 @@ function ignoreInput($artist, $track, $timestamp) {
  */
 function validateScrobble($userid, $item) {
 	// Correct scrobble data
-	list($item['track'], $item['track_corrected']) = correctInput($item['track'], 'track');
-	list($item['artist'], $item['artist_corrected']) = correctInput($item['artist'], 'artist');
-	list($item['album'], $item['album_corrected']) = correctInput($item['album'], 'album');
-	list($item['mbid'], $item['mbid_corrected']) = correctInput($item['mbid'], 'mbid');
-	list($item['duration'], $item['duration_corrected']) = correctInput($item['duration'], 'duration');
-	$item['albumartist_corrected'] = 0; // we're currently not doing anything with this in GNU FM
+	list($item['track_old'], $item['track'], $item['track_corrected']) = correctInput($item['track'], 'track');
+	list($item['artist_old'], $item['artist'], $item['artist_corrected']) = correctInput($item['artist'], 'artist');
+	list($item['album_old'], $item['album'], $item['album_corrected']) = correctInput($item['album'], 'album');
+	list($item['mbid_old'], $item['mbid'], $item['mbid_corrected']) = correctInput($item['mbid'], 'mbid');
+	list($item['duration_old'], $item['duration'], $item['duration_corrected']) = correctInput($item['duration'], 'duration');
+	list($item['timestamp_old'], $item['timestamp'], $item['timestamp_corrected']) = correctInput($item['timestamp'], 'timestamp');
+	$item['albumartist_corrected'] = 0; // we're currently not doing anything with albumartist in GNU FM
 
 	// Validate scrobble, any $item with ignoredcode != 0 will not be scrobbled
 	list($item['ignoredcode'], $item['ignoredmessage']) = ignoreInput($item['artist'], $item['track'], $item['timestamp']);
