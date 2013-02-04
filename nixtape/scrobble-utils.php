@@ -221,7 +221,7 @@ function getOrCreateScrobbleSession($userid, $api_key = null) {
  *
  * @param mixed input Input to be corrected.
  * @param string type Type of input to be corrected.
- * @return array Array(mixed $corrected_input, string $corrected)
+ * @return array Array(mixed $corrected_input, int $corrected)
  *
  * @todo docs
  */
@@ -251,12 +251,12 @@ function correctInput($input, $type) {
 			$new = null;
 		}
 	} else if ($type == 'timestamp') {
-		//TODO do stuff
+		$new = (int) $new;
 	} else if ($type == 'duration') {
 		$new = (int) $new;
 	}
 
-	if ($old == $new) { // TODO i dont think we need to do type comparison here
+	if ($old == $new) {
 		$corrected = 0;
 	} else {
 		$corrected = 1;
@@ -305,31 +305,38 @@ function ignoreInput($artist, $track, $timestamp) {
  * Tries to correct a track item's data or marks it as invalid.
  *
  * @param array item Array of data such as artist, album, track, duration..
- * @return array Same array as item array, but with corrected data and added metadata.
+ * @return array Same array as $item array, but with corrected data and added metadata.
  */
 function validateScrobble($userid, $item) {
+	// Correct scrobble data
 	list($item['track'], $item['track_corrected']) = correctInput($item['track'], 'track');
 	list($item['artist'], $item['artist_corrected']) = correctInput($item['artist'], 'artist');
 	list($item['album'], $item['album_corrected']) = correctInput($item['album'], 'album');
 	list($item['mbid'], $item['mbid_corrected']) = correctInput($item['mbid'], 'mbid');
 	list($item['duration'], $item['duration_corrected']) = correctInput($item['duration'], 'duration');
-
 	$item['albumartist_corrected'] = 0; // we're currently not doing anything with this in GNU FM
 
+	// Validate scrobble, any $item with ignoredcode != 0 will not be scrobbled
 	list($item['ignoredcode'], $item['ignoredmessage']) = ignoreInput($item['artist'], $item['track'], $item['timestamp']);
-
-	// check if item has already been scrobbled	
 	if ($item['ignoredcode'] === 0) {
 		$exists = scrobbleExists($userid, $item['artist'], $item['track'], $item['timestamp']);
 		if ($exists) {
-			$item['ignoredcode'] = 9; // TODO should we use code 5?
+			$item['ignoredcode'] = 91; // GNU FM specific
 			$item['ignoredmessage'] = 'Already scrobbled';
 		}
 	}
 
 	return $item;
 }
-
+/**
+ * Check if a scrobble has already been added to database.
+ *
+ * @param int userid		User ID
+ * @param string artist		Artist name
+ * @param string track		Track name
+ * @param int time			Timestamp
+ * @return bool				True is scrobble exists, False if not.
+ */
 function scrobbleExists($userid, $artist, $track, $time) {
 	global $adodb;
 
