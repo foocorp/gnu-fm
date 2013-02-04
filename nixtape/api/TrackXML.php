@@ -202,7 +202,7 @@ class TrackXML {
 			} catch (Exception $e) {
 				$adodb->FailTrans();
 				$adodb->CompleteTrans();
-				reportError('Error while inserting nowplaying', $e->getTraceAsString());
+				reportError($e->getMessage(), $e->getTraceAsString());
 				return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
 			}
 			$adodb->CompleteTrans();
@@ -284,7 +284,7 @@ class TrackXML {
 					//roll back, log error trace and return response with error message
 					$adodb->FailTrans();
 					$adodb->CompleteTrans();
-					reportError('Error while inserting scrobble_track, artist, album, track', $e->getTraceAsString());
+					reportError($e->getMessage(), $e->getTraceAsString());
 					return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
 				}
 
@@ -310,7 +310,7 @@ class TrackXML {
 					//roll back, log error trace and return response with error message
 					$adodb->FailTrans();
 					$adodb->CompleteTrans();
-					reportError('Error while inserting scrobble', $e->getTraceAsString());
+					reportError($e->getMessage(), $e->getTraceAsString());
 					return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
 				}
 			}

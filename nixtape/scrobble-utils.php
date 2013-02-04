@@ -228,6 +228,15 @@ function correctInput($input, $type) {
 	//TODO truncate strings at 255 chars or whatever the field limit is
 
 	if ($type == 'artist' || $type == 'album' || $type == 'track') {
+		switch (mb_detect_encoding($album)) {
+		case 'ASCII':
+		case 'UTF-8':
+			$new = mb_strcut($new, 0, 255, 'UTF-8');
+			break;
+		default:
+			$new = null;
+		}
+
 		$new = str_replace(' (PREVIEW: buy it at www.magnatune.com)', '', $new);
 		$new = str_replace('testspam', '', $new);
 		$new = trim($new);
