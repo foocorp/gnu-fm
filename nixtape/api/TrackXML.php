@@ -306,7 +306,7 @@ class TrackXML {
 					//scrobble
 					// TODO last.fm spec says we shouldnt scrobble corrected values,
 					// so maybe we should only use corrected values for validation and in xml
-					$query = 'INSERT INTO Scrobbles (serid, artist, album, track, time, mbid, source, rating, length, stid) VALUES (?,?,?,?,?,?,?,?,?,?)';
+					$query = 'INSERT INTO Scrobbles (userid, artist, album, track, time, mbid, source, rating, length, stid) VALUES (?,?,?,?,?,?,?,?,?,?)';
 					$params = array(
 						$userid,
 						$item['artist'],
