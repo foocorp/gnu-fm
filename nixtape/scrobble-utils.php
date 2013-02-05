@@ -357,3 +357,64 @@ function scrobbleExists($userid, $artist, $track, $time) {
 		return true;
 	}
 }
+
+/**
+ * Sends a scrobble on to any other services the user has connected to their account
+ *
+ * @todo copied from gnukebox/scrobble-utils.php,
+ *		we should review code and see if we can improve, additional params and batch scrobbling would be cool.
+ * @todo docs
+ */
+function forwardScrobble($userid, $artist, $album, $track, $time, $mbid, $source, $rating, $length) {
+	global $adodb, $lastfm_key, $lastfm_secret;
+
+	$artist = rawurlencode($artist);
+	$track = rawurlencode($track);
+	$album = rawurlencode($album);
+	$mbid = rawurlencode($mbid);
+	$source = rawurlencode($source);
+	$rating = rawurlencode($rating);
+	$length = rawurlencode($length);
+
+	$res = $adodb->CacheGetAll(600, 'SELECT * FROM Service_Connections WHERE userid = ' . $userid . ' AND forward = 1');
+	foreach ($res as &$row) {
+		$remote_key = $row['remote_key'];
+		$ws_url = $row['webservice_url'];
+		$curl_session = curl_init($ws_url);
+
+		$post_vars = '';
+		if ($album) {
+			$post_vars .= 'album[0]=' . $album . '&';
+		}
+		$post_vars .= 'api_key=' . $lastfm_key . '&artist[0]=' . $artist;
+		if ($length) {
+			$post_vars .= '&length[0]=' . $length;
+		}
+		if ($mbid) {
+			$post_vars .= '&mbid[0]=' . $mbid;
+		}
+		$post_vars .= '&method=track.scrobble';
+		if ($rating) {
+			$post_vars .= '&rating[0]=' . $rating;
+		}
+		$post_vars .= '&sk=' . $remote_key;
+		if ($source) {
+			$post_vars .= '&source[0]='. $source;
+		}
+		$post_vars .= '&timestamp[0]=' . $time . '&track[0]=' . $track;
+
+		$sig = urldecode(str_replace('&', '', $post_vars));
+		$sig = str_replace('=', '', $sig);
+		$sig = md5($sig . $lastfm_secret);
+
+		$post_vars .= '&api_sig=' . $sig;
+		curl_setopt($curl_session, CURLOPT_POST, true);
+		curl_setopt($curl_session, CURLOPT_POSTFIELDS, $post_vars);
+		curl_setopt($curl_session, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl_session, CURLOPT_CONNECTTIMEOUT, 1);
+		curl_setopt($curl_session, CURLOPT_TIMEOUT, 1);
+		$response = curl_exec($curl_session);
+
+		curl_close($curl_session);
+	}
+}

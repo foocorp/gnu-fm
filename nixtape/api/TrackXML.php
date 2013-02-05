@@ -195,8 +195,8 @@ class TrackXML {
 				getOrCreateTrack($artist, $album, $track, $mbid, $duration);
 
 				// Add new track to database
-				$query = 'INSERT INTO Now_Playing(sessionid, track, artist, album, mbid, expires) VALUES (?,?,?,?,?,?)';
 				$params = array($sessionid, $track, $artist, $album, $mbid, $expires);
+				$query = 'INSERT INTO Now_Playing(sessionid, track, artist, album, mbid, expires) VALUES (?,?,?,?,?,?)';
 				$adodb->Execute($query, $params);
 
 			} catch (Exception $e) {
@@ -234,7 +234,6 @@ class TrackXML {
 		$ignored_count = 0;
 		$tracks_array = array();
 
-
 		// convert input to trackitem arrays and add them to tracks_array
 		if (is_array($artist)) {
 			for ($i = 0; $i < count($artist); $i++) {
@@ -268,20 +267,17 @@ class TrackXML {
 			$item_corrected = validateScrobble($userid, $item);
 			$tracks_array[$i] = $item_corrected;
 		}
-		
 
-		// if valid, create any artist, album and track not already in db, then scrobble
 		$adodb->StartTrans();
 		for ($i = 0; $i < count($tracks_array); $i++) {
 			$item = $tracks_array[$i];
 			if ($item['ignoredcode'] === 0) {
 				try {
-					// First check if track exists, if not create it
+					// Create artist, album and track if not already in db
 					$track_id = getOrCreateTrack($item['artist'], $item['album'], $item['track'], $item['mbid'], $item['duration']);
-
 					$item['scrobbletrack_id'] = getOrCreateScrobbleTrack($item['artist'], $item['album'], $item['track'], $item['mbid'], $item['duration'], $track_id);
 				} catch (Exception $e) {
-					//roll back, log error trace and return response with error message
+					// Roll back database entries, log error and respond with error message
 					$adodb->FailTrans();
 					$adodb->CompleteTrans();
 					reportError($e->getMessage(), $e->getTraceAsString());
@@ -307,7 +303,7 @@ class TrackXML {
 					);
 					$adodb->Execute($query, $params);
 				} catch (Exception $e) {
-					//roll back, log error trace and return response with error message
+					// Roll back database entries, log error and respond with error message
 					$adodb->FailTrans();
 					$adodb->CompleteTrans();
 					reportError($e->getMessage(), $e->getTraceAsString());
@@ -319,9 +315,14 @@ class TrackXML {
 		$adodb->CompleteTrans();
 
 
-		/*TODO forward any valid scrobbles here?
-		 * If we want to forward untouched track data, we should use the $item[*_old] data.
-		 */
+		// Forward scrobbles, (we are forwarding unmodified input submitted by user, but only the scrobbles that passed our filters).
+		for ($i = 0; $i < count($tracks_array); $i++) {
+			$item = $tracks_array[$i];
+			if ($item['ignoredcode'] === 0) {
+				forwardScrobble($userid, $item['artist_old'], $item['album_old'], $item['track_old'], $item['timestamp_old'],
+					$item['mbid_old'], null, null, $item['duration_old'])
+			}
+		}
 
 
 		//build xml
