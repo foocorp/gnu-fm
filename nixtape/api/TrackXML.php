@@ -321,7 +321,7 @@ class TrackXML {
 			$item = $tracks_array[$i];
 			if ($item['ignoredcode'] === 0) {
 				forwardScrobble($userid, $item['artist_old'], $item['album_old'], $item['track_old'], $item['timestamp_old'],
-					$item['mbid_old'], null, null, $item['duration_old'])
+					$item['mbid_old'], null, null, $item['duration_old']);
 			}
 		}
 
