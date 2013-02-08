@@ -304,6 +304,7 @@ class TrackXML {
 					$adodb->Execute($query, $params);
 				} catch (Exception $e) {
 					// Roll back database entries, log error and respond with error message
+					// TODO what happens to User_Stats(scrobble_count) db field when we roll back scrobbles?
 					$adodb->FailTrans();
 					$adodb->CompleteTrans();
 					reportError($e->getMessage(), $e->getTraceAsString());
