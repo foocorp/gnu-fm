@@ -25,7 +25,7 @@
  * @param string $code Client code
  * @return array ("name" => string, "url" => string, "free" => boolean)
  */
-function getClientData($code) {
+function getClientData($code=null, $api_key=null) {
 	global $base_url, $site_name;
 
 	$clients = array(
@@ -108,9 +108,30 @@ function getClientData($code) {
 		"zom" => array("name" => "ZOMG", "url" => "http://zomg.alioth.debian.org/", "free" => True),
 	);
 
-	if(array_key_exists($code, $clients)) {
-		return $clients[$code];
-	}else{
+	$clients2 = array(
+		"thisisthelibreimport2pythonthing" => array("name" => "libreimport v2", "url" => "https://gitorious.org/fmthings/lasttolibre", "free" => True),
+		"thisisthelibrelovepythonthing123" => array("name" => "librelove", "url" => "https://gitorious.org/fmthings/lasttolibre", "free" => True),
+		"hellothisisthegnufmwebsiteplayer" => array("name" => $site_name, "url" => $base_url, "free" => True),
+	);
+
+	// 3 char client code
+	if (strlen($code) == 3) {
+		if(array_key_exists($code, $clients)) {
+			return $clients[$code];
+		}else{
+			return Null;
+		}
+
+	// quick n dirty way to get 2.0 client info, TODO add api_key field to our clients array instead and write code to find it
+	// 32 char api_key
+	} elseif (strlen($api_key) == 32) {
+		if(array_key_exists($api_key, $clients2)) {
+			return $clients2[$api_key];
+		}else{
+			return Null;
+		}
+	} else {
 		return Null;
 	}
+
 }

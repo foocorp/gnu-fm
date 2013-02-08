@@ -20,6 +20,7 @@
 
 require_once($install_path . '/database.php');
 require_once($install_path . '/data/Track.php');
+require_once($install_path . '/scrobble-utils.php');
 require_once('xml.php');
 
 /**
@@ -156,5 +157,206 @@ class TrackXML {
 		return $xml;
 	}
 
+	public static function updateNowPlaying($userid, $artist, $track, $album, $trackNumber, $context, $mbid, $duration, $albumArtist, $api_key) {
+		global $adodb;
+
+		list($artist_old, $artist, $artist_corrected) = correctInput($artist, 'artist');
+		list($track_old, $track, $track_corrected) = correctInput($track,  'track');
+		list($album_old, $album, $album_corrected) = correctInput($album, 'album');
+		list($mbid_old, $mbid, $mbid_corrected) = correctInput($mbid, 'mbid');
+		list($duration_old, $duration, $duration_corrected) = correctInput($duration, 'duration');
+
+		list($ignored_code, $ignored_message) = ignoreInput($artist, $track, time()); //TODO remove ugly time hack
+
+		// Get a scrobble session id. TODO check if we got one
+		$sessionid = getOrCreateScrobbleSession($userid, $api_key);
+
+		// Delete last played track
+		$query = 'DELETE FROM Now_Playing WHERE sessionid = ?';
+		$params = array($sessionid);
+		try {
+			$adodb->Execute($query, $params);
+		} catch (Exception $e) {}
+
+		//calculate expiry time
+		if (!$duration || ($duration > 5400)) {
+			// Default expiry time of 5 minutes if $duration is false or above 5400
+			$expires = time() + 300;
+		} else {
+			$expires = time() + $duration;
+		}
+
+		if (!$ignored_code) {
+			//TODO Clean up expired tracks in now_playing table
+
+			// Create artist, album, track if not in db
+			$adodb->StartTrans();
+			try {
+				getOrCreateTrack($artist, $album, $track, $mbid, $duration);
+
+				// Add new track to database
+				$params = array($sessionid, $track, $artist, $album, $mbid, $expires);
+				$query = 'INSERT INTO Now_Playing(sessionid, track, artist, album, mbid, expires) VALUES (?,?,?,?,?,?)';
+				$adodb->Execute($query, $params);
+
+			} catch (Exception $e) {
+				$adodb->FailTrans();
+				$adodb->CompleteTrans();
+				reportError($e->getMessage(), $e->getTraceAsString());
+				return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
+			}
+			$adodb->CompleteTrans();
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('nowplaying', null);
+		$track_node = $root->addChild('track', repamp($track));
+		$track_node->addAttribute('corrected', $track_corrected);
+		$artist_node = $root->addChild('artist', repamp($artist));
+		$artist_node->addAttribute('corrected', $artist_corrected);
+		$album_node = $root->addChild('album', repamp($album));
+		$album_node->addAttribute('corrected', $album_corrected);
+		$albumartist_node = $root->addChild('albumArtist', null); //TODO
+		$albumartist_node->addAttribute('corrected', '0'); //TODO
+		$ignoredmessage_node = $root->addChild('ignoredMessage', $ignored_message);
+		$ignoredmessage_node->addAttribute('code', $ignored_code);
+
+		return $xml;
+	}
+
+
+	public static function scrobble($userid, $artist, $track, $timestamp, $album, $tracknumber, $mbid, $albumartist, $duration, $api_key) {
+		global $adodb;
+		// Get a scrobble session id. TODO check if we got one
+		$sessionid = getOrCreateScrobbleSession($userid, $api_key);
+
+		$accepted_count = 0;
+		$ignored_count = 0;
+		$tracks_array = array();
+
+		// convert input to trackitem arrays and add them to tracks_array
+		if (is_array($artist)) {
+			for ($i = 0; $i < count($artist); $i++) {
+				$tracks_array[$i] = array(
+					'artist' => $artist[$i],
+					'track' => $track[$i],
+					'timestamp' => $timestamp[$i],
+					'album' => $album[$i],
+					'tracknumber' => $tracknumber[$i],
+					'mbid' => $mbid[$i],
+					'albumartist' => $albumartist[$i],
+					'duration' => $duration[$i],
+				);
+			}
+		} else {
+			$tracks_array[0] = array(
+				'artist' => $artist,
+				'track' => $track,
+				'timestamp' => $timestamp,
+				'album' => $album,
+				'tracknumber' => $tracknumber,
+				'mbid' => $mbid,
+				'albumartist' => $albumartist,
+				'duration' => $duration,
+			);
+		}
+
+		// Correct and inspect scrobbles to see if some should be ignored
+		for ($i = 0; $i < count($tracks_array); $i++) {
+			$item = $tracks_array[$i];
+			$item_corrected = validateScrobble($userid, $item);
+			$tracks_array[$i] = $item_corrected;
+		}
+
+		$adodb->StartTrans();
+		for ($i = 0; $i < count($tracks_array); $i++) {
+			$item = $tracks_array[$i];
+			if ($item['ignoredcode'] === 0) {
+				try {
+					// Create artist, album and track if not already in db
+					$track_id = getOrCreateTrack($item['artist'], $item['album'], $item['track'], $item['mbid'], $item['duration']);
+					$item['scrobbletrack_id'] = getOrCreateScrobbleTrack($item['artist'], $item['album'], $item['track'], $item['mbid'], $item['duration'], $track_id);
+				} catch (Exception $e) {
+					// Roll back database entries, log error and respond with error message
+					$adodb->FailTrans();
+					$adodb->CompleteTrans();
+					reportError($e->getMessage(), $e->getTraceAsString());
+					return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
+				}
+
+				try {
+					//scrobble
+					// TODO last.fm spec says we shouldnt scrobble corrected values,
+					// so maybe we should only use corrected values for validation and in xml
+					$query = 'INSERT INTO Scrobbles (userid, artist, album, track, time, mbid, source, rating, length, stid) VALUES (?,?,?,?,?,?,?,?,?,?)';
+					$params = array(
+						$userid,
+						$item['artist'],
+						$item['album'],
+						$item['track'],
+						$item['timestamp'],
+						$item['mbid'],
+						null,
+						null,
+						$item['duration'],
+						$item['scrobbletrack_id']
+					);
+					$adodb->Execute($query, $params);
+				} catch (Exception $e) {
+					// Roll back database entries, log error and respond with error message
+					// TODO what happens to User_Stats(scrobble_count) db field when we roll back scrobbles?
+					$adodb->FailTrans();
+					$adodb->CompleteTrans();
+					reportError($e->getMessage(), $e->getTraceAsString());
+					return XML::error('failed', '16', 'The service is temporarily unavailable, please try again.');
+				}
+			}
+			$tracks_array[$i] = $item;
+		}
+		$adodb->CompleteTrans();
+
+
+		// Forward scrobbles, (we are forwarding unmodified input submitted by user, but only the scrobbles that passed our filters).
+		for ($i = 0; $i < count($tracks_array); $i++) {
+			$item = $tracks_array[$i];
+			if ($item['ignoredcode'] === 0) {
+				forwardScrobble($userid, $item['artist_old'], $item['album_old'], $item['track_old'], $item['timestamp_old'],
+					$item['mbid_old'], null, null, $item['duration_old'])
+			}
+		}
+
+
+		//build xml
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('scrobbles', null);
+
+		for ($i = 0; $i < count($tracks_array); $i++) {
+			$item = $tracks_array[$i];
+
+			$scrobble = $root->addChild('scrobble', null);
+			$track_node = $scrobble->addChild('track', repamp($item['track']));
+			$track_node->addAttribute('corrected', $item['track_corrected']);
+			$artist_node = $scrobble->addChild('artist', repamp($item['artist']));
+			$artist_node->addAttribute('corrected', $item['artist_corrected']);
+			$album_node = $scrobble->addChild('album', repamp($item['album']));
+			$album_node->addAttribute('corrected', $item['album_corrected']);
+			$albumartist_node = $scrobble->addChild('albumArtist', repamp($item['albumartist']));
+			$albumartist_node->addAttribute('corrected', $item['albumartist_corrected']);
+			$scrobble->addChild('timestamp', $item['timestamp']);
+			$ignoredmessage_node = $scrobble->addChild('ignoredMessage', $item['ignoredmessage']);
+			$ignoredmessage_node->addAttribute('code', $item['ignoredcode']);
+
+			if ($item['ignoredcode'] === 0) {
+				$accepted_count += 1;
+			} else {
+				$ignored_count += 1;
+			}
+		}
+
+		$root->addAttribute('accepted', $accepted_count);
+		$root->addAttribute('ignored', $ignored_count);
+
+		return $xml;
+	}
 
 }

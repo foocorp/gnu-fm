@@ -453,6 +453,7 @@ class Server {
 							n.track,
 							n.album,
 							client,
+							api_key,
 							n.mbid,
 							t.license
 						FROM Now_Playing n
@@ -492,7 +493,7 @@ class Server {
 
 		foreach ($data as &$i) {
 			$row = sanitize($i);
-			$client = getClientData($row['client']);
+			$client = getClientData($row['client'], $row['api_key']);
 			if(is_array($client)) {
 				$row['clientname'] = $client['name'];
 				$row['clienturl'] = $client['url'];

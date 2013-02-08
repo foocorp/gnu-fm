@@ -115,6 +115,8 @@ $method_map = array(
 	'track.love'            => method_track_love,
 	'track.unlove'          => method_track_unlove,
 	'track.unban'           => method_track_unban,
+	'track.updatenowplaying' => method_track_updateNowPlaying,
+	'track.scrobble'        => method_track_scrobble,
 );
 
 /**
@@ -1228,6 +1230,116 @@ function method_track_unban() {
 
 	$userid = get_userid();
 	$xml = TrackXML::unban($_POST['artist'], $_POST['track'], $userid);
+	respond($xml);
+}
+
+/**
+ * track.updatenowplaying : Submits the user's currently playing track.
+ *
+ * ###Description
+ * Submits the user's currently playing track.
+ * 
+ * ###Parameters
+ * * **artist** (required)		: Artist name.
+ * * **track** (required)		: Track name.
+ * * **sk** (required)			: Session key.
+ * * **album** (optional)		: Album name.
+ * * **tracknumber (optional)	: Track's number on the album
+ * * **context** (optional)		: TODO
+ * * **mbid** (optional)		: Track's musicbrainz ID
+ * * **duration** (optional)	: Length of the track in seconds
+ * * **albumartist (optional)	: TODO
+ * * **api_key (optional)		: Client API key (for identification, warning: may be made public).
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**.
+ *
+ * **HTTP request method** : POST.
+ * - - - 
+ *
+ * @todo context parameter not used
+ * @todo tracknumber parameter not used
+ * @todo albumartist parameter not used
+ * @package Webservice
+ * @subpackage Track
+ * @api
+ */
+function method_track_updateNowPlaying() {
+	if (!isset($_POST['artist']) || !isset($_POST['track'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$_POST_lower = array_change_key_case($_POST, CASE_LOWER);
+
+	$userid = get_userid();
+	$xml = TrackXML::updateNowPlaying($userid,
+		$_POST['artist'],
+		$_POST['track'],
+		$_POST['album'],
+		$_POST_lower['tracknumber'],
+		$_POST['context'],
+		$_POST['mbid'],
+		$_POST['duration'],
+		$_POST_lower['albumartist'],
+		$_POST['api_key']
+	);
+
+	respond($xml);
+}
+
+/**
+ * track.scrobble : Submits a track for scrobbling.
+ *
+ * ###Description
+ *
+ * Submits a track or a batch of tracks for scrobbling.
+ * 
+ * ###Parameters
+ * * **artist[i]** (required)		: Artist name.
+ * * **track[i]** (required)		: Track name.
+ * * **timestamp[i]** (required)	: The time the track started playing (in UNIX time).
+ * * **album[i]** (optional)		: Album name.
+ * * **context[i]** (optional)		: TODO
+ * * **streamid[i]** (optional)		: TODO
+ * * **chosenbyuser[i]** (optional)	: TODO
+ * * **tracknumber[i]** (optional)	: Track's number on album.
+ * * **mbid[i]** (optional)			: Track's Musicbrainz ID.
+ * * **albumartist[i]** (optional)	: Album's artist.
+ * * **duration[i]** (optional)		: Length of the track in seconds.
+ * * **sk** (required)			: Session key.
+ * * **api_key (optional)		: Client API key (for identification, warning: may be made public).
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**.
+ *
+ * **HTTP request method** : POST.
+ * - - - 
+ *
+ * @todo docs, XML, testing, optional params, batch mode
+ * @version Experimental
+ * @package Webservice
+ * @subpackage Track
+ * @api
+ */
+function method_track_scrobble() {
+	if (!isset($_POST['artist']) || !isset($_POST['track']) || !isset($_POST['timestamp'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$userid = get_userid();
+	$xml = TrackXML::scrobble($userid,
+		$_POST['artist'],
+		$_POST['track'],
+		$_POST['timestamp'],
+		$_POST['album'],
+		$_POST['tracknumber'],
+		$_POST['mbid'],
+		$_POST['albumartist'],
+		$_POST['duration'],
+		$_POST['api_key']
+	);
 	respond($xml);
 }
 
