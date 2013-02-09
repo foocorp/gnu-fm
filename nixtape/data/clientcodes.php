@@ -19,7 +19,7 @@
 
  */
 
-$nonfree_code = ''
+$nonfree_code = '';
 $nonfree_apikey = 'thisisafakekeyfornonfreeclients'; //placeholder for non-free clients with unknown apikeys
 $nonfree_name = 'Unknown non-free client'; // We could return this instead of real name if apikey = $nonfree_apikey
 $nonfree_url = 'urltosomethinghere'; // We could return this instead of real url if apikey = $nonfree_apikey
