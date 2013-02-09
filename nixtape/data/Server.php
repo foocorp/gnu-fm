@@ -493,12 +493,14 @@ class Server {
 
 		foreach ($data as &$i) {
 			$row = sanitize($i);
+			
 			$client = getClientData($row['client'], $row['api_key']);
-			if(is_array($client)) {
-				$row['clientname'] = $client['name'];
-				$row['clienturl'] = $client['url'];
-				$row['clientfree'] = $client['free'];
-			}
+			$row['clientcode'] = $client['code'];
+			$row['clientapi_key'] = $client['code'];
+			$row['clientname'] = $client['name'];
+			$row['clienturl'] = $client['url'];
+			$row['clientfree'] = $client['free'];
+			
 			$row['username'] = uniqueid_to_username($row['userid']);
 			$row['userurl'] = Server::getUserURL($row['username']);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
