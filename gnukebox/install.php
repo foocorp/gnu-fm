@@ -389,12 +389,12 @@ if (isset($_POST['install'])) {
 
 	if(strtolower(substr($dbms, 0, 5)) == 'pgsql') {
 		// MySQL doesn't support the use of lower() to create case-insensitive indexes
-		$adodb->Execute("CREATE INDEX album_artistname_idx ON Album(lower(artist_name))");
-		$adodb->Execute("CREATE INDEX track_artist_idx ON Track(lower(artist_name))");
-		$adodb->Execute("CREATE INDEX track_name_idx ON Track(lower(name))");
-		$adodb->Execute("CREATE INDEX scrobbles_artist_idx on Scrobbles(lower(artist))");
-		$adodb->Execute("CREATE INDEX scrobbles_track_idx on Scrobbles(lower(track))");
-		$adodb->Execute("CREATE INDEX groups_groupname_idx ON Groups(lower(groupname))");
+		$adodb->Execute("CREATE INDEX album_lower_artistname_idx ON Album(lower(artist_name))");
+		$adodb->Execute("CREATE INDEX track_lower_artist_idx ON Track(lower(artist_name))");
+		$adodb->Execute("CREATE INDEX track_lower_name_idx ON Track(lower(name))");
+		$adodb->Execute("CREATE INDEX scrobbles_lower_artist_idx on Scrobbles(lower(artist))");
+		$adodb->Execute("CREATE INDEX scrobbles_lower_track_idx on Scrobbles(lower(track))");
+		$adodb->Execute("CREATE INDEX groups_lower_groupname_idx ON Groups(lower(groupname))");
 
 		// PostgreSQL stored functions
 		$adodb->Execute("CREATE OR REPLACE LANGUAGE plpgsql;");
