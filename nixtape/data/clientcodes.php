@@ -35,7 +35,7 @@ $free_apikey = ''; //placeholder for free clients with unknown apikeys
  */
 $clients = array(
 	array("code" => "amk", "apikey" => $free_apikey, "name" => "Amarok 1.4.x plugin", "url" => "http://amarok.kde.org/", "free" => True),
-	array("code" => "amp", "apikey" => $free_apikey, "name" => "Aimp2", "url" => "http://www.aimp.ru/", "free" => False),
+	array("code" => "amp", "apikey" => $nonfree_apikey, "name" => "Aimp2", "url" => "http://www.aimp.ru/", "free" => False),
 	array("code" => "amy", "apikey" => $free_apikey, "name" => "Anomaly", "url" => "https://chrome.google.com/webstore/detail/ajbkmdgmhbjjhephmgbpgialfbnjbmkb", "free" => True),
 	array("code" => "ark", "apikey" => $free_apikey, "name" => "Amarok", "url" => "http://amarok.kde.org/", "free" => True),
 	array("code" => "ass", "apikey" => $free_apikey, "name" => "Last.fm player", "url" => "http://www.last.fm/download", "free" => True),
