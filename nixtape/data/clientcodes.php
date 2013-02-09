@@ -17,121 +17,124 @@
    You should have received a copy of the GNU Affero General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-*/
+ */
+
+$nonfree_code = ''
+$nonfree_apikey = 'thisisafakekeyfornonfreeclients'; //placeholder for non-free clients with unknown apikeys
+$nonfree_name = 'Unknown non-free client'; // We could return this instead of real name if apikey = $nonfree_apikey
+$nonfree_url = 'urltosomethinghere'; // We could return this instead of real url if apikey = $nonfree_apikey
+
+$free_code = ''; //placeholder for free clients with unknown client codes
+$free_apikey = ''; //placeholder for free clients with unknown apikeys
+
+/* Array of clients (client code, api key, name, url, free software)
+ *
+ * If we can find a free client's api_key in their source code repo we consider it ok to add the api_key here.
+ * It is ok for clients to only have a code or a apikey or both, as some clients will use the 1.2 and/or the 2.0 API.
+ * For non-free clients we default to a bogus api_key for now, which we'll change on request(?).
+ */
+$clients = array(
+	array("code" => "amk", "apikey" => $free_apikey, "name" => "Amarok 1.4.x plugin", "url" => "http://amarok.kde.org/", "free" => True),
+	array("code" => "amp", "apikey" => $free_apikey, "name" => "Aimp2", "url" => "http://www.aimp.ru/", "free" => False),
+	array("code" => "amy", "apikey" => $free_apikey, "name" => "Anomaly", "url" => "https://chrome.google.com/webstore/detail/ajbkmdgmhbjjhephmgbpgialfbnjbmkb", "free" => True),
+	array("code" => "ark", "apikey" => $free_apikey, "name" => "Amarok", "url" => "http://amarok.kde.org/", "free" => True),
+	array("code" => "ass", "apikey" => $free_apikey, "name" => "Last.fm player", "url" => "http://www.last.fm/download", "free" => True),
+	array("code" => "atu", "apikey" => $free_apikey, "name" => "aTunes", "url" => "http://www.atunes.org/", "free" => True),
+	array("code" => "aud", "apikey" => $free_apikey, "name" => "Audacious", "url" => "http://audacious-media-player.org/", "free" => True),
+	array("code" => "bil", "apikey" => $nonfree_apikey, "name" => "billy", "url" => "http://www.sheepfriends.com/?page=billy", "free" => False),
+	array("code" => "blu", "apikey" => $free_apikey, "name" => "Bluemindo", "url" => "http://bluemindo.codingteam.net/", "free" => True),
+	array("code" => "bsh", "apikey" => $free_apikey, "name" => "Banshee", "url" => "http://banshee-project.org/", "free" => True),
+	array("code" => "bwt", "apikey" => $nonfree_apikey, "name" => "Bowtie", "url" => "http://www.bowtieapp.com/", "free" => False),
+	array("code" => "cmu", "apikey" => $free_apikey, "name" => "CmuScrobbler", "url" => "http://n.ethz.ch/%7edflatz/cmuscrobbler/", "free" => True),
+	array("code" => "cpl", "apikey" => $free_apikey, "name" => "cplay scrobbler", "url" => "http://sebi.tla.ro/cplay_scrobbler", "free" => True),
+	array("code" => "cub", "apikey" => $free_apikey, "name" => "Cuberok", "url" => "http://code.google.com/p/cuberok/", "free" => True),
+	array("code" => "dbl", "apikey" => $free_apikey, "name" => "Decibel Audio Player", "url" => "http://decibel.silent-blade.org/", "free" => True),
+	array("code" => "ddb", "apikey" => $free_apikey, "name" => "DeaDBeeF", "url" => "http://deadbeef.sourceforge.net/", "free" => True),
+	array("code" => "dms", "apikey" => $free_apikey, "name" => "donky mpdscrob", "url" => "http://github.com/mjhayes/donky/tree/master", "free" => True),
+	array("code" => "ems", "apikey" => $free_apikey, "name" => "EMMS", "url" => "http://www.gnu.org/software/emms/", "free" => True),
+	array("code" => "exa", "apikey" => $free_apikey, "name" => "Exaile", "url" => "http://www.exaile.org/", "free" => True),
+	array("code" => "foo", "apikey" => $free_apikey, "name" => "foobar2000", "url" => "http://www.foobar2000.org/", "free" => True),
+	array("code" => "gmb", "apikey" => $free_apikey, "name" => "gmusicbrowser", "url" => "http://gmusicbrowser.org/", "free" => True),
+	array("code" => "gmm", "apikey" => $free_apikey, "name" => "Goggles Music Manager", "url" => "http://code.google.com/p/gogglesmm/", "free" => True),
+	array("code" => "gst", "apikey" => $nonfree_apikey, "name" => "GimmeSome Tune", "url" => "http://www.eternalstorms.at/gimmesometune/", "free" => False),
+	array("code" => "gua", "apikey" => $free_apikey, "name" => "Guayadeque", "url" => "http://sourceforge.net/projects/guayadeque/", "free" => True),
+	array("code" => "isp", "apikey" => $free_apikey, "name" => "iSproggler", "url" => "http://iSproggler.org/", "free" => True),
+	array("code" => "jaj", "apikey" => $free_apikey, "name" => "Jajuk", "url" => "http://jajuk.info/", "free" => True),
+	array("code" => "ldr", "apikey" => $free_apikey, "name" => "Libre Droid", "url" => "http://linux.mikeasoft.com/libredroid/", "free" => True),
+	array("code" => "lfm", "apikey" => "hellothisisthegnufmwebsiteplayer", "name" => $site_name, "url" => $base_url, "free" => True),
+	array("code" => "lib", "apikey" => $free_apikey, "name" => "LibreTunes", "url" => "http://libretunes.sourceforge.net/", "free" => True),
+	array("code" => "liv", "apikey" => $free_apikey, "name" => "Livewwwire", "url" => "http://ciarang.com", "free" => True),
+	array("code" => "lpd", "apikey" => $free_apikey, "name" => "lastPod", "url" => "http://www.lastpod.org", "free" => True),
+	array("code" => "lsd", "apikey" => $free_apikey, "name" => "lastfmsubmitd", "url" => "http://www.red-bean.com/decklin/lastfmsubmitd/", "free" => True),
+	array("code" => "mae", "apikey" => $free_apikey, "name" => "maemoscrobbler", "url" => "https://garage.maemo.org/projects/maemoscrobbler", "free" => True),
+	array("code" => "maf", "apikey" => $free_apikey, "name" => "mafw-lastfm", "url" => "https://garage.maemo.org/projects/mafw-lastfm", "free" => True),
+	array("code" => "mcl", "apikey" => $nonfree_apikey, "name" => "MOCp-Scrobbler", "url" => "http://github.com/fluxid/mocp-scrobbler", "free" => False),
+	array("code" => "mcn", "apikey" => $free_apikey, "name" => "mpdcron", "url" => "http://mpd.wikia.com/wiki/Client:MPDCRON", "free" => True),
+	array("code" => "mdc", "apikey" => $free_apikey, "name" => "mpdscribble", "url" => "http://musicpd.org/", "free" => True),
+	array("code" => "mlr", "apikey" => $free_apikey, "name" => "mobbler", "url" => "http://code.google.com/p/mobbler/", "free" => True),
+	array("code" => "mmo", "apikey" => $nonfree_apikey, "name" => "MediaMonkey", "url" => "http://www.mediamonkey.com/", "free" => False),
+	array("code" => "mms", "apikey" => $free_apikey, "name" => "Maemo Scrobbler", "url" => "http://github.com/felipec/maemo-scrobbler", "free" => True),
+	array("code" => "moc", "apikey" => $free_apikey, "name" => "music on console", "url" => "http://moc.daper.net/", "free" => True),
+	array("code" => "mp5", "apikey" => $free_apikey, "name" => "mpdas", "url" => "http://50hz.ws/mpdas/", "free" => True),
+	array("code" => "mpc", "apikey" => $free_apikey, "name" => "Scrobby", "url" => "http://unkart.ovh.org/scrobby/", "free" => True),
+	array("code" => "osx", "apikey" => $nonfree_apikey, "name" => "iTunes", "url" => "http://www.apple.com/itunes/", "free" => False),
+	array("code" => "pyj", "apikey" => $free_apikey, "name" => "pyjama", "url" => "https://launchpad.net/pyjama", "free" => True),
+	array("code" => "qcd", "apikey" => $nonfree_apikey, "name" => "Quintessential Media Player", "url" => "http://www.quinnware.com/", "free" => False),
+	array("code" => "qlb", "apikey" => $free_apikey, "name" => "Quod Libet", "url" => "http://code.google.com/p/quodlibet/", "free" => True),
+	array("code" => "qmm", "apikey" => $free_apikey, "name" => "Qmmp", "url" => "http://qmmp.ylsoftware.com/index_en.php", "free" => True),
+	array("code" => "qmn", "apikey" => $free_apikey, "name" => "QMPDClient", "url" => "http://bitcheese.net/wiki/QMPDClient", "free" => True),
+	array("code" => "qts", "apikey" => $free_apikey, "name" => "QTScrobbler", "url" => "http://qtscrob.sourceforge.net/", "free" => True),
+	array("code" => "rbx", "apikey" => $free_apikey, "name" => "Rhythmbox", "url" => "http://projects.gnome.org/rhythmbox/", "free" => True),
+	array("code" => "sbd", "apikey" => $free_apikey, "name" => "Songbird", "url" => "http://www.getsongbird.com/", "free" => True),
+	array("code" => "scb", "apikey" => $free_apikey, "name" => "Scrobbl", "url" => "http://www.last.fm/group/scrobbl", "free" => True),
+	array("code" => "sfm", "apikey" => $free_apikey, "name" => "shell-fm", "url" => "http://nex.scrapping.cc/shell-fm/", "free" => True),
+	array("code" => "sls", "apikey" => $free_apikey, "name" => "Simple Last.fm Scrobbler", "url" => "http://code.google.com/p/a-simple-lastfm-scrobbler/", "free" => True),
+	array("code" => "sna", "apikey" => $free_apikey, "name" => "Sonata", "url" => "http://sonata.berlios.de/", "free" => True),
+	array("code" => "srd", "apikey" => $free_apikey, "name" => "scrobd", "url" => "http://codingteam.net/project/scrobd", "free" => True),
+	array("code" => "spc", "apikey" => $free_apikey, "name" => "scmpc", "url" => "http://ngls.zakx.de/scmpc/", "free" => True),
+	array("code" => "spm", "apikey" => $nonfree_apikey, "name" => "Spotify Mobile", "url" => "http://www.spotify.com/uk/mobile/overview/", "free" => False),
+	array("code" => "spy", "apikey" => $nonfree_apikey, "name" => "Spotify", "url" => "http://spotify.com/", "free" => False),
+	array("code" => "ss7", "apikey" => $free_apikey, "name" => "SqueezeScrobbler 7", "url" => "http://www.slimdevices.com/pi_features.html", "free" => True),
+	array("code" => "sub", "apikey" => $free_apikey, "name" => "Subsonic", "url" => "http://www.subsonic.org", "free" => True),
+	array("code" => "tmh", "apikey" => $free_apikey, "name" => "scrobble for iPhone", "url" => "http://www.nodomain.org/scrobble/", "free" => True),
+	array("code" => "tng", "apikey" => "75d20fb472be99275392aefa2760ea09", "name" => "Clementine Player", "url" => "http://code.google.com/p/clementine-player/", "free" => True),
+	array("code" => "trt", "apikey" => $nonfree_apikey, "name" => "Trout", "url" => "http://skwire.dcmembers.com/wb/pages/software/trout.php", "free" => False),
+	// TST IS FOR TESTING array("code" => "tst", "apikey" => $nonfree_apikey", "name" => "Ecoute", "url" => "http://ecouteapp.com/", "free" => False),
+	array("code" => "vag", "apikey" => $free_apikey, "name" => "vagalume", "url" => "http://vagalume.igalia.com/", "free" => True),
+	array("code" => "vlc", "apikey" => $free_apikey, "name" => "VLC", "url" => "http://videolan.org", "free" => True),
+	array("code" => "wa2", "apikey" => $nonfree_apikey, "name" => "WinAmp 2", "url" => "http://www.winamp.com/", "free" => False),
+	array("code" => "wmp", "apikey" => $nonfree_apikey, "name" => "Windows Media Player", "url" => "http://www.microsoft.com/windows/WindowsMedia/", "free" => False),
+	array("code" => "xbm", "apikey" => $free_apikey, "name" => "XBMC Media Center", "url" => "http://xbmc.org", "free" => True),
+	array("code" => "xm2", "apikey" => $free_apikey, "name" => "XMMS2", "url" => "http://www.xmms2.org/", "free" => True),
+	array("code" => "xmp", "apikey" => $free_apikey, "name" => "xmp-scrobbler", "url" => "http://www.un4seen.com/forum/?topic=5398.0", "free" => True),
+	array("code" => "xsp", "apikey" => $free_apikey, "name" => "xmms2-scrobbler-py", "url" => "http://code.google.com/p/xmms2-scrobbler-py/", "free" => True),
+	array("code" => "yan", "apikey" => $free_apikey, "name" => "Jerboa", "url" => "http://git.fredemmott.co.uk/?ph1.yanihp;asummary", "free" => True),
+	array("code" => "you", "apikey" => $free_apikey, "name" => "Youamp", "url" => "http://www.rojtberg.net/workspace/youamp/", "free" => True),
+	array("code" => "zom", "apikey" => $free_apikey, "name" => "ZOMG", "url" => "http://zomg.alioth.debian.org/", "free" => True),
+	array("code" => $free_code, "apikey" => "thisisthelibreimport2pythonthing", "name" => "libreimport v2", "url" => "https://gitorious.org/fmthings/lasttolibre", "free" => True),
+	array("code" => $free_code, "apikey" => "thisisthelibrelovepythonthing123", "name" => "librelove", "url" => "https://gitorious.org/fmthings/misc", "free" => True),
+);
 
 /**
  * Get name, url and license type of a scrobble client based on client code
  *
  * @param string $code Client code
- * @return array ("name" => string, "url" => string, "free" => boolean)
+ * @param string $apikey Client api key
+ * @return array ("code" => string, "apikey" => string, "name" => string, "url" => string, "free" => boolean)
  */
-function getClientData($code=null, $api_key=null) {
-	global $base_url, $site_name;
+function getClientData($code=null, $apikey=null) {
+	global $clients;
 
-	$clients = array(
-		"amk" => array("name" => "Amarok 1.4.x plugin", "url" => "http://amarok.kde.org/", "free" => True),
-		"amp" => array("name" => "Aimp2", "url" => "http://www.aimp.ru/", "free" => False),
-		"amy" => array("name" => "Anomaly", "url" => "https://chrome.google.com/webstore/detail/ajbkmdgmhbjjhephmgbpgialfbnjbmkb", "free" => True),
-		"ark" => array("name" => "Amarok", "url" => "http://amarok.kde.org/", "free" => True),
-		"ass" => array("name" => "Last.fm player", "url" => "http://www.last.fm/download", "free" => True),
-		"atu" => array("name" => "aTunes", "url" => "http://www.atunes.org/", "free" => True),
-		"aud" => array("name" => "Audacious", "url" => "http://audacious-media-player.org/", "free" => True),
-		"bil" => array("name" => "billy", "url" => "http://www.sheepfriends.com/?page=billy", "free" => False),
-		"blu" => array("name" => "Bluemindo", "url" => "http://bluemindo.codingteam.net/", "free" => True),
-		"bsh" => array("name" => "Banshee", "url" => "http://banshee-project.org/", "free" => True),
-		"bwt" => array("name" => "Bowtie", "url" => "http://www.bowtieapp.com/", "free" => False),
-		"cmu" => array("name" => "CmuScrobbler", "url" => "http://n.ethz.ch/%7edflatz/cmuscrobbler/", "free" => True),
-		"cpl" => array("name" => "cplay scrobbler", "url" => "http://sebi.tla.ro/cplay_scrobbler", "free" => True),
-		"cub" => array("name" => "Cuberok", "url" => "http://code.google.com/p/cuberok/", "free" => True),
-		"dbl" => array("name" => "Decibel Audio Player", "url" => "http://decibel.silent-blade.org/", "free" => True),
-		"ddb" => array("name" => "DeaDBeeF", "url" => "http://deadbeef.sourceforge.net/", "free" => True),
-		"dms" => array("name" => "donky mpdscrob", "url" => "http://github.com/mjhayes/donky/tree/master", "free" => True),
-		"ems" => array("name" => "EMMS", "url" => "http://www.gnu.org/software/emms/", "free" => True),
-		"exa" => array("name" => "Exaile", "url" => "http://www.exaile.org/", "free" => True),
-		"foo" => array("name" => "foobar2000", "url" => "http://www.foobar2000.org/", "free" => True),
-		"gmb" => array("name" => "gmusicbrowser", "url" => "http://gmusicbrowser.org/", "free" => True),
-		"gmm" => array("name" => "Goggles Music Manager", "url" => "http://code.google.com/p/gogglesmm/", "free" => True),
-		"gst" => array("name" => "GimmeSome Tune", "url" => "http://www.eternalstorms.at/gimmesometune/", "free" => False),
-		"gua" => array("name" => "Guayadeque", "url" => "http://sourceforge.net/projects/guayadeque/", "free" => True),
-		"isp" => array("name" => "iSproggler", "url" => "http://iSproggler.org/", "free" => True),
-		"jaj" => array("name" => "Jajuk", "url" => "http://jajuk.info/", "free" => True),
-		"ldr" => array("name" => "Libre Droid", "url" => "http://linux.mikeasoft.com/libredroid/", "free" => True),
-		"lfm" => array("name" => $site_name, "url" => $base_url, "free" => True),
-		"lib" => array("name" => "LibreTunes", "url" => "http://libretunes.sourceforge.net/", "free" => True),
-		"liv" => array("name" => "Livewwwire", "url" => "http://ciarang.com", "free" => True),
-		"lpd" => array("name" => "lastPod", "url" => "http://www.lastpod.org", "free" => True),
-		"lsd" => array("name" => "lastfmsubmitd", "url" => "http://www.red-bean.com/decklin/lastfmsubmitd/", "free" => True),
-		"mae" => array("name" => "maemoscrobbler", "url" => "https://garage.maemo.org/projects/maemoscrobbler", "free" => True),
-		"maf" => array("name" => "mafw-lastfm", "url" => "https://garage.maemo.org/projects/mafw-lastfm", "free" => True),
-		"mcl" => array("name" => "MOCp-Scrobbler", "url" => "http://github.com/fluxid/mocp-scrobbler", "free" => False),
-		"mcn" => array("name" => "mpdcron", "url" => "http://mpd.wikia.com/wiki/Client:MPDCRON", "free" => True),
-		"mdc" => array("name" => "mpdscribble", "url" => "http://musicpd.org/", "free" => True),
-		"mlr" => array("name" => "mobbler", "url" => "http://code.google.com/p/mobbler/", "free" => True),
-		"mmo" => array("name" => "MediaMonkey", "url" => "http://www.mediamonkey.com/", "free" => False),
-		"mms" => array("name" => "Maemo Scrobbler", "url" => "http://github.com/felipec/maemo-scrobbler", "free" => True),
-		"moc" => array("name" => "music on console", "url" => "http://moc.daper.net/", "free" => True),
-		"mp5" => array("name" => "mpdas", "url" => "http://50hz.ws/mpdas/", "free" => True),
-		"mpc" => array("name" => "Scrobby", "url" => "http://unkart.ovh.org/scrobby/", "free" => True),
-		"osx" => array("name" => "iTunes", "url" => "http://www.apple.com/itunes/", "free" => False),
-		"pyj" => array("name" => "pyjama", "url" => "https://launchpad.net/pyjama", "free" => True),
-		"qcd" => array("name" => "Quintessential Media Player", "url" => "http://www.quinnware.com/", "free" => False),
-		"qlb" => array("name" => "Quod Libet", "url" => "http://code.google.com/p/quodlibet/", "free" => True),
-		"qmm" => array("name" => "Qmmp", "url" => "http://qmmp.ylsoftware.com/index_en.php", "free" => True),
-		"qmn" => array("name" => "QMPDClient", "url" => "http://bitcheese.net/wiki/QMPDClient", "free" => True),
-		"qts" => array("name" => "QTScrobbler", "url" => "http://qtscrob.sourceforge.net/", "free" => True),
-		"rbx" => array("name" => "Rhythmbox", "url" => "http://projects.gnome.org/rhythmbox/", "free" => True),
-		"sbd" => array("name" => "Songbird", "url" => "http://www.getsongbird.com/", "free" => True),
-		"scb" => array("name" => "Scrobbl", "url" => "http://www.last.fm/group/scrobbl", "free" => True),
-		"sfm" => array("name" => "shell-fm", "url" => "http://nex.scrapping.cc/shell-fm/", "free" => True),
-		"sls" => array("name" => "Simple Last.fm Scrobbler", "url" => "http://code.google.com/p/a-simple-lastfm-scrobbler/", "free" => True),
-		"sna" => array("name" => "Sonata", "url" => "http://sonata.berlios.de/", "free" => True),
-		"srd" => array("name" => "scrobd", "url" => "http://codingteam.net/project/scrobd", "free" => True),
-		"spc" => array("name" => "scmpc", "url" => "http://ngls.zakx.de/scmpc/", "free" => True),
-		"spm" => array("name" => "Spotify Mobile", "url" => "http://www.spotify.com/uk/mobile/overview/", "free" => False),
-		"spy" => array("name" => "Spotify", "url" => "http://spotify.com/", "free" => False),
-		"ss7" => array("name" => "SqueezeScrobbler 7", "url" => "http://www.slimdevices.com/pi_features.html", "free" => True),
-		"sub" => array("name" => "Subsonic", "url" => "http://www.subsonic.org", "free" => True),
-		"tmh" => array("name" => "scrobble for iPhone", "url" => "http://www.nodomain.org/scrobble/", "free" => True),
-		"tng" => array("name" => "Clementine Player", "url" => "http://code.google.com/p/clementine-player/", "free" => True),
-		"trt" => array("name" => "Trout", "url" => "http://skwire.dcmembers.com/wb/pages/software/trout.php", "free" => False),
-		// TST IS FOR TESTING "tst" => array("name" => "Ecoute", "url" => "http://ecouteapp.com/", "free" => False),
-		"vag" => array("name" => "vagalume", "url" => "http://vagalume.igalia.com/", "free" => True),
-		"vlc" => array("name" => "VLC", "url" => "http://videolan.org", "free" => True),
-		"wa2" => array("name" => "WinAmp 2", "url" => "http://www.winamp.com/", "free" => False),
-		"wmp" => array("name" => "Windows Media Player", "url" => "http://www.microsoft.com/windows/WindowsMedia/", "free" => False),
-		"xbm" => array("name" => "XBMC Media Center", "url" => "http://xbmc.org", "free" => True),
-		"xm2" => array("name" => "XMMS2", "url" => "http://www.xmms2.org/", "free" => True),
-		"xmp" => array("name" => "xmp-scrobbler", "url" => "http://www.un4seen.com/forum/?topic=5398.0", "free" => True),
-		"xsp" => array("name" => "xmms2-scrobbler-py", "url" => "http://code.google.com/p/xmms2-scrobbler-py/", "free" => True),
-		"yan" => array("name" => "Jerboa", "url" => "http://git.fredemmott.co.uk/?ph1.yanihp;asummary", "free" => True),
-		"you" => array("name" => "Youamp", "url" => "http://www.rojtberg.net/workspace/youamp/", "free" => True),
-		"zom" => array("name" => "ZOMG", "url" => "http://zomg.alioth.debian.org/", "free" => True),
-	);
-
-	$clients2 = array(
-		"thisisthelibreimport2pythonthing" => array("name" => "libreimport v2", "url" => "https://gitorious.org/fmthings/lasttolibre", "free" => True),
-		"thisisthelibrelovepythonthing123" => array("name" => "librelove", "url" => "https://gitorious.org/fmthings/lasttolibre", "free" => True),
-		"hellothisisthegnufmwebsiteplayer" => array("name" => $site_name, "url" => $base_url, "free" => True),
-	);
-
-	// 3 char client code
-	if (strlen($code) == 3) {
-		if(array_key_exists($code, $clients)) {
-			return $clients[$code];
-		}else{
-			return Null;
-		}
-
-	// quick n dirty way to get 2.0 client info, TODO add api_key field to our clients array instead and write code to find it
-	// 32 char api_key
-	} elseif (strlen($api_key) == 32) {
-		if(array_key_exists($api_key, $clients2)) {
-			return $clients2[$api_key];
-		}else{
-			return Null;
-		}
-	} else {
-		return Null;
+	if ((strlen($code) != 3) && (strlen($apikey) != 32)) {
+		return null;
 	}
 
+	for($i = 0; $i < count($clients); $i++) {
+		if (strlen($code) == 3 && $clients[$i]['code'] == $code) {
+			return $clients[$i];
+		} else if (strlen($apikey) == 32 && $clients[$i]['apikey'] == $apikey) {
+			return $clients[$i];
+		}
+	}
+	return null;
 }
