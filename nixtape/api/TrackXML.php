@@ -178,7 +178,7 @@ class TrackXML {
 			$adodb->Execute($query, $params);
 		} catch (Exception $e) {}
 
-		//calculate expiry time
+		// Calculate expiry time
 		if (!$duration || ($duration > 5400)) {
 			// Default expiry time of 5 minutes if $duration is false or above 5400
 			$expires = time() + 300;
@@ -187,7 +187,10 @@ class TrackXML {
 		}
 
 		if (!$ignored_code) {
-			//TODO Clean up expired tracks in now_playing table
+			// Clean up expired tracks in now_playing table
+			$params = array(time());
+			$query = 'DELETE FROM Now_Playing WHERE expires < ?';
+			$adodb->Execute($query, $params);
 
 			// Create artist, album, track if not in db
 			$adodb->StartTrans();
@@ -225,7 +228,7 @@ class TrackXML {
 	}
 
 
-	public static function scrobble($userid, $artist, $track, $timestamp, $album, $tracknumber, $mbid, $albumartist, $duration, $api_key) {
+	public static function scrobble($userid, $artist, $track, $timestamp, $album, $context, $streamid, $chosenbyuser, $tracknumber, $mbid, $albumartist, $duration, $api_key) {
 		global $adodb;
 		// Get a scrobble session id. TODO check if we got one
 		$sessionid = getOrCreateScrobbleSession($userid, $api_key);
@@ -234,7 +237,7 @@ class TrackXML {
 		$ignored_count = 0;
 		$tracks_array = array();
 
-		// convert input to trackitem arrays and add them to tracks_array
+		// Convert input to trackitem arrays and add them to tracks_array
 		if (is_array($artist)) {
 			for ($i = 0; $i < count($artist); $i++) {
 				$tracks_array[$i] = array(
@@ -285,7 +288,7 @@ class TrackXML {
 				}
 
 				try {
-					//scrobble
+					// Scrobble
 					// TODO last.fm spec says we shouldnt scrobble corrected values,
 					// so maybe we should only use corrected values for validation and in xml
 					$query = 'INSERT INTO Scrobbles (userid, artist, album, track, time, mbid, source, rating, length, stid) VALUES (?,?,?,?,?,?,?,?,?,?)';
@@ -326,7 +329,7 @@ class TrackXML {
 		}
 
 
-		//build xml
+		// Build xml
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 		$root = $xml->addChild('scrobbles', null);
 
