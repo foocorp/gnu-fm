@@ -1240,17 +1240,17 @@ function method_track_unban() {
  * Submits the user's currently playing track.
  * 
  * ###Parameters
- * * **artist** (required)		: Artist name.
- * * **track** (required)		: Track name.
- * * **sk** (required)			: Session key.
+ * * **artist** (required)      : Artist name.
+ * * **track** (required)       : Track name.
+ * * **sk** (required)          : Session key.
  * * **album** (optional)		: Album name.
- * * **tracknumber (optional)	: Track's number on the album
- * * **context** (optional)		: TODO
- * * **mbid** (optional)		: Track's musicbrainz ID
- * * **duration** (optional)	: Length of the track in seconds
- * * **albumartist (optional)	: TODO
- * * **api_key (optional)		: Client API key (for identification, warning: may be made public).
- * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * * **tracknumber (optional)   : Track's number on the album.
+ * * **context** (optional)     : TODO
+ * * **mbid** (optional)        : Track's musicbrainz ID.
+ * * **duration** (optional)    : Length of the track in seconds.
+ * * **albumartist (optional)   : Album's artist.
+ * * **api_key (optional)       : Client API key.
+ * * **format** (optional)      : Format of response, **xml** or **json**. Default is xml.
  *
  * ###Additional info
  * **This method requires authentication**.
@@ -1296,20 +1296,20 @@ function method_track_updateNowPlaying() {
  * Submits a track or a batch of tracks for scrobbling.
  * 
  * ###Parameters
- * * **artist[i]** (required)		: Artist name.
- * * **track[i]** (required)		: Track name.
- * * **timestamp[i]** (required)	: The time the track started playing (in UNIX time).
- * * **album[i]** (optional)		: Album name.
- * * **context[i]** (optional)		: TODO
- * * **streamid[i]** (optional)		: TODO
- * * **chosenbyuser[i]** (optional)	: TODO
- * * **tracknumber[i]** (optional)	: Track's number on album.
- * * **mbid[i]** (optional)			: Track's Musicbrainz ID.
- * * **albumartist[i]** (optional)	: Album's artist.
- * * **duration[i]** (optional)		: Length of the track in seconds.
- * * **sk** (required)			: Session key.
- * * **api_key (optional)		: Client API key (for identification, warning: may be made public).
- * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * * **artist[i]** (required)       : Artist name.
+ * * **track[i]** (required)        : Track name.
+ * * **sk** (required)              : Session key.
+ * * **timestamp[i]** (required)    : The time the track started playing (in UNIX time).
+ * * **album[i]** (optional)        : Album name.
+ * * **context[i]** (optional)      : TODO
+ * * **streamid[i]** (optional)     : TODO
+ * * **chosenbyuser[i]** (optional) : TODO
+ * * **tracknumber[i]** (optional)  : Track's number on album.
+ * * **mbid[i]** (optional)         : Track's Musicbrainz ID.
+ * * **albumartist[i]** (optional)  : Album's artist.
+ * * **duration[i]** (optional)     : Length of the track in seconds.
+ * * **api_key (optional)           : Client API key.
+ * * **format** (optional)          : Format of response, **xml** or **json**. Default is xml.
  *
  * ###Additional info
  * **This method requires authentication**.
@@ -1317,8 +1317,11 @@ function method_track_updateNowPlaying() {
  * **HTTP request method** : POST.
  * - - - 
  *
- * @todo docs, XML, testing, optional params, batch mode
- * @version Experimental
+ * @todo context parameter not used
+ * @todo streamid parameter not used
+ * @todo chosenbyuser parameter not used
+ * @todo tracknumber parameter not used
+ * @todo albumartist parameter not used
  * @package Webservice
  * @subpackage Track
  * @api
@@ -1328,15 +1331,20 @@ function method_track_scrobble() {
 		report_failure(LFM_INVALID_PARAMS);
 	}
 
+	$_POST_lower = array_change_key_case($_POST, CASE_LOWER);
+
 	$userid = get_userid();
 	$xml = TrackXML::scrobble($userid,
 		$_POST['artist'],
 		$_POST['track'],
 		$_POST['timestamp'],
 		$_POST['album'],
-		$_POST['tracknumber'],
+		$_POST['context'],
+		$_POST_lower['streamid'],
+		$_POST_lower['chosenbyuser'],
+		$_POST_lower['tracknumber'],
 		$_POST['mbid'],
-		$_POST['albumartist'],
+		$_POST_lower['albumartist'],
 		$_POST['duration'],
 		$_POST['api_key']
 	);
