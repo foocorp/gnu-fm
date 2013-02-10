@@ -307,7 +307,8 @@ class TrackXML {
 					$adodb->Execute($query, $params);
 				} catch (Exception $e) {
 					// Roll back database entries, log error and respond with error message
-					// TODO what happens to User_Stats(scrobble_count) db field when we roll back scrobbles?
+					// TODO what happens to User_Stats(scrobble_count) db field when we roll back scrobbles,
+					// do we need to move sql function into php?
 					$adodb->FailTrans();
 					$adodb->CompleteTrans();
 					reportError($e->getMessage(), $e->getTraceAsString());
@@ -318,16 +319,22 @@ class TrackXML {
 		}
 		$adodb->CompleteTrans();
 
-
-		// Forward scrobbles, (we are forwarding unmodified input submitted by user, but only the scrobbles that passed our filters).
-		for ($i = 0; $i < count($tracks_array); $i++) {
-			$item = $tracks_array[$i];
-			if ($item['ignoredcode'] === 0) {
-				forwardScrobble($userid, $item['artist_old'], $item['album_old'], $item['track_old'], $item['timestamp_old'],
-					$item['mbid_old'], null, null, $item['duration_old']);
+		// TODO : Test forwarding!
+		// Check if forwarding is enabled before looping through array
+		$params = array($userid);
+		$query = 'SELECT userid FROM Service_Connections WHERE userid = ? AND forward = 1';
+		$forward_enabled = $adodb->CacheGetOne(600, $query, $params);
+		if ($forward_enabled) {
+			for ($i = 0; $i < count($tracks_array); $i++) {
+				$item = $tracks_array[$i];
+				if ($item['ignoredcode'] === 0) {
+					/* Forward scrobbles, we are forwarding unmodified input submitted by user,
+					 * but only the scrobbles that passed our filters. */
+					forwardScrobble($userid, $item['artist_old'], $item['album_old'], $item['track_old'], $item['timestamp_old'],
+						$item['mbid_old'], null, null, $item['duration_old']);
+				}
 			}
 		}
-
 
 		// Build xml
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
