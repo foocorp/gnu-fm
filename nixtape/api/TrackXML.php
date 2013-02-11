@@ -169,7 +169,7 @@ class TrackXML {
 		list($ignored_code, $ignored_message) = ignoreInput($artist, $track, time()); //TODO remove ugly time hack
 
 		// Get a scrobble session id. TODO check if we got one
-		$sessionid = getOrCreateScrobbleSession($userid, $api_key);
+		$sessionid = getScrobbleSessionID($userid, $api_key);
 
 		// Delete last played track
 		$query = 'DELETE FROM Now_Playing WHERE sessionid = ?';
@@ -192,12 +192,11 @@ class TrackXML {
 			$query = 'DELETE FROM Now_Playing WHERE expires < ?';
 			$adodb->Execute($query, $params);
 
-			// Create artist, album, track if not in db
 			$adodb->StartTrans();
 			try {
-				getOrCreateTrack($artist, $album, $track, $mbid, $duration);
+				// getTrackID will create the track in Track table if it doesnt exist
+				getTrackID($artist, $album, $track, $mbid, $duration);
 
-				// Add new track to database
 				$params = array($sessionid, $track, $artist, $album, $mbid, $expires);
 				$query = 'INSERT INTO Now_Playing(sessionid, track, artist, album, mbid, expires) VALUES (?,?,?,?,?,?)';
 				$adodb->Execute($query, $params);
@@ -231,7 +230,7 @@ class TrackXML {
 	public static function scrobble($userid, $artist, $track, $timestamp, $album, $context, $streamid, $chosenbyuser, $tracknumber, $mbid, $albumartist, $duration, $api_key) {
 		global $adodb;
 		// Get a scrobble session id. TODO check if we got one
-		$sessionid = getOrCreateScrobbleSession($userid, $api_key);
+		$sessionid = getScrobbleSessionID($userid, $api_key);
 
 		$accepted_count = 0;
 		$ignored_count = 0;
@@ -277,8 +276,8 @@ class TrackXML {
 			if ($item['ignoredcode'] === 0) {
 				try {
 					// Create artist, album and track if not already in db
-					$track_id = getOrCreateTrack($item['artist'], $item['album'], $item['track'], $item['mbid'], $item['duration']);
-					$item['scrobbletrack_id'] = getOrCreateScrobbleTrack($item['artist'], $item['album'], $item['track'], $item['mbid'], $item['duration'], $track_id);
+					$item['track_id'] = getTrackID($item['artist'], $item['album'], $item['track'], $item['mbid'], $item['duration']);
+					$item['scrobbletrack_id'] = getScrobbleTrackID($item['artist'], $item['album'], $item['track'], $item['mbid'], $item['duration'], $item['track_id']);
 				} catch (Exception $e) {
 					// Roll back database entries, log error and respond with error message
 					$adodb->FailTrans();
@@ -319,7 +318,6 @@ class TrackXML {
 		}
 		$adodb->CompleteTrans();
 
-		// TODO : Test forwarding!
 		// Check if forwarding is enabled before looping through array
 		$params = array($userid);
 		$query = 'SELECT userid FROM Service_Connections WHERE userid = ? AND forward = 1';
@@ -330,6 +328,7 @@ class TrackXML {
 				if ($item['ignoredcode'] === 0) {
 					/* Forward scrobbles, we are forwarding unmodified input submitted by user,
 					 * but only the scrobbles that passed our filters. */
+					// TODO : Test forwarding!
 					forwardScrobble($userid, $item['artist_old'], $item['album_old'], $item['track_old'], $item['timestamp_old'],
 						$item['mbid_old'], null, null, $item['duration_old']);
 				}
