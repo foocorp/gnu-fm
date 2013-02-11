@@ -28,14 +28,12 @@ require_once('database.php');
 
 
 /**
- * Add artist to database if it doesnt already exist.
+ * Get artist ID and add artist to database if it doesnt already exist.
  *
  * @param string artist		Artist name.
  * @return int				Artist ID.
- *
- * @todo Rename the function?
  */
-function getOrCreateArtist($artist) {
+function getArtistID($artist) {
 	global $adodb;
 
 	$query = 'SELECT id FROM Artist WHERE name=?';
@@ -47,23 +45,22 @@ function getOrCreateArtist($artist) {
 		$query = 'INSERT INTO Artist (name) VALUES (?)';
 		$params = array($artist);
 		$res = $adodb->Execute($query, $params);
-		return getOrCreateArtist($artist);
+		return getArtistID($artist);
 	} else {
 		return $artist_id;
 	}
 }
 
 /**
- * Add album to database if it doesnt already exist.
+ * Get album ID and add album to database if it doesnt already exist.
  *
  * @param string artist		Artist name.
  * @param string album		Album name.
  * @return int				Album ID.
  *
- *	@todo Rename the function?
- *	@todo Maybe we should return artist ID too.
+ *	@todo Maybe we should return artist ID too, we will need it when db gets normalized
  */
-function getOrCreateAlbum($artist, $album) {
+function getAlbumID($artist, $album) {
 	global $adodb;
 
 	$query = 'SELECT id FROM Album WHERE name=? AND artist_name=?';
@@ -74,19 +71,19 @@ function getOrCreateAlbum($artist, $album) {
 		// Album doesn't exist, so create it
 
 		// First check if artist exist, if not create it
-		$artist_id = getOrCreateArtist($artist);
+		$artist_id = getArtistID($artist);
 
 		$query = 'INSERT INTO Album (name, artist_name) VALUES (?,?)';
 		$params = array($album, $artist);
 		$adodb->Execute($query, $params);
-		return getOrCreateAlbum($artist, $album);
+		return getAlbumID($artist, $album);
 	} else {
 		return $album_id;
 	}
 }
 
 /**
- * Add track to database if it doesnt already exist.
+ * Get track ID and add track to database if it doesnt already exist.
  *
  * @param string artist		Artist name.
  * @param string album		Album name.
@@ -95,9 +92,8 @@ function getOrCreateAlbum($artist, $album) {
  * @param int duration		Track length in seconds.
  * @return int				Track ID.
  *
- * @todo Rename the function?
  */
-function getOrCreateTrack($artist, $album, $track, $mbid, $duration) {
+function getTrackID($artist, $album, $track, $mbid, $duration) {
 	global $adodb;
 
 	if ($album) {
@@ -112,23 +108,23 @@ function getOrCreateTrack($artist, $album, $track, $mbid, $duration) {
 	if (!$track_id) {
 		// First check if artist and album exists, if not create them
 		if ($album) {
-			$album_id = getOrCreateAlbum($artist, $album);
+			$album_id = getAlbumID($artist, $album);
 		} else {
-			$artist_id = getOrCreateArtist($artist);
+			$artist_id = getArtistID($artist);
 		}
 		
 		// Create new track
 		$query = 'INSERT INTO Track (name, artist_name, album_name, mbid, duration) VALUES (?,?,?,?,?)';
 		$params = array($track, $artist, $album, $mbid, $duration);
 		$adodb->Execute($query, $params);
-		return getOrCreateTrack($artist, $album, $track, $mbid, $duration);
+		return getTrackID($artist, $album, $track, $mbid, $duration);
 	} else {
 		return $track_id;
 	}
 }
 
 /**
- * Add track to Scrobble_Track db table
+ * Get scrobble_track ID and add track to Scrobble_Track db table if it doesnt already exist.
  *
  * @param string artist		Artist name.
  * @param string album		Album name.
@@ -138,7 +134,7 @@ function getOrCreateTrack($artist, $album, $track, $mbid, $duration) {
  * @param int track_id		Track ID in Track database table
  * @return int				Scrobble_Track ID.
  */
-function getOrCreateScrobbleTrack($artist, $album, $track, $mbid, $duration, $track_id) {
+function getScrobbleTrackID($artist, $album, $track, $mbid, $duration, $track_id) {
 	global $adodb;
 
 	$query = 'SELECT id FROM Scrobble_Track WHERE name=lower(?) AND artist=lower(?)';
@@ -164,7 +160,7 @@ function getOrCreateScrobbleTrack($artist, $album, $track, $mbid, $duration, $tr
 		$query = 'INSERT INTO Scrobble_Track (name, artist, album, mbid, track) VALUES (lower(?), lower(?), lower(?), lower(?), ?)';
 		$params = array($track, $artist, $album, $mbid, $track_id);
 		$res = $adodb->Execute($query, $params);
-		return getOrCreateScrobbleTrack($artist, $album, $track, $mbid, $duration, $track_id);
+		return getScrobbleTrackID($artist, $album, $track, $mbid, $duration, $track_id);
 	} else {
 		return $scrobbletrack_id;
 	}
@@ -178,17 +174,9 @@ function getOrCreateScrobbleTrack($artist, $album, $track, $mbid, $duration, $tr
  *
  * @param int userid (required)			User ID.
  * @param string api_key (optional)		Client API key (32 characters)
- * @return string						Session ID
- *
- * @todo Figure out how 2.0 clients can be identified (add api keys to clients array?)
- *		inprogress: added api_key field to Scrobble_Sessions
- * @todo We currently grab a sessionid that is not expired and has the right userid,
- *		this could have been created by another client and will display the wrong client id.
- *		inprogress: if api_key is specified, we also compare against api_key field in Scrobble_Sessions table.
- *
- * @todo rename the function?
+ * @return string						Scrobble session ID
  */
-function getOrCreateScrobbleSession($userid, $api_key = null) {
+function getScrobbleSessionID($userid, $api_key = null) {
 	global $adodb;
 	$query = 'SELECT sessionid FROM Scrobble_Sessions WHERE userid = ? AND expires > ?';
 	$params = array($userid, time());
