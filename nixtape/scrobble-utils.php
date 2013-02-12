@@ -262,67 +262,82 @@ function correctInput($input, $type) {
 /**
  * Decide if and why we should ignore a track
  *
- * @param string artist Artist name
- * @param string track Track name
- * @param int timestamp Timestamp
+ * @param string input Input data
+ * @param string type Type of input data
  * @return array Array(int $ignored_code, string $ignored_message)
- *
- * @todo Rewrite code to look like the correctInput function?
  */
-function ignoreInput($artist, $track, $timestamp) {
+function ignoreInput($input, $type) {
 	$ignored_code = 0;
 	$ignored_message = '';
-	$timestamp_upperlimit = time() + 300;
-	$timestamp_lowerlimit = 1009000000;
 
-	if (empty($artist)) {
+	if ($type == 'artist' && empty($input)) {
 		$ignored_code = 1;
 		$ignored_message = 'Artist was ignored';
 	}
-	if (empty($track)) {
+
+	if ($type == 'track' && empty($input)) {
 		$ignored_code = 2;
 		$ignored_message = 'Track was ignored';
 	}
-	if ($timestamp > $timestamp_upperlimit) {
-		$ignored_message = 'Timestamp is too new';
-		$ignored_code = 3;
-	}
-	if ($timestamp < $timestamp_lowerlimit) {
-		$ignored_message = 'Timestamp is too old';
-		$ignored_code = 4;
+
+	if ($type == 'timestamp') {
+		$timestamp_upperlimit = time() + 300;
+		$timestamp_lowerlimit = 1009000000;
+	
+		if ($input > $timestamp_upperlimit) {
+			$ignored_message = 'Timestamp is too new';
+			$ignored_code = 3;
+		}
+		if ($input < $timestamp_lowerlimit) {
+			$ignored_message = 'Timestamp is too old';
+			$ignored_code = 4;
+		}
 	}
 
 	return array($ignored_code, $ignored_message);
 }
 
 /**
- * Tries to correct a track item's data or marks it as invalid.
+ * Prepare a track for entering the database.
+ * Tries to correct a track's data or marks it as invalid
  *
- * @param array item Array of data such as artist, album, track, duration..
- * @return array Same array as $item array, but with corrected data and added metadata.
+ * @param array t Array of track data.
+ * @param int userid User ID.
+ * @param string type Type of track, 'nowplaying' or 'scrobble'.
+ * @return array Same array as t array, but with corrected data and added metadata.
  */
-function validateScrobble($userid, $item) {
-	// Correct scrobble data
-	list($item['track_old'], $item['track'], $item['track_corrected']) = correctInput($item['track'], 'track');
-	list($item['artist_old'], $item['artist'], $item['artist_corrected']) = correctInput($item['artist'], 'artist');
-	list($item['album_old'], $item['album'], $item['album_corrected']) = correctInput($item['album'], 'album');
-	list($item['mbid_old'], $item['mbid'], $item['mbid_corrected']) = correctInput($item['mbid'], 'mbid');
-	list($item['duration_old'], $item['duration'], $item['duration_corrected']) = correctInput($item['duration'], 'duration');
-	list($item['timestamp_old'], $item['timestamp'], $item['timestamp_corrected']) = correctInput($item['timestamp'], 'timestamp');
-	$item['albumartist_corrected'] = 0; // we're currently not doing anything with albumartist in GNU FM
+function prepareTrack($userid, $t, $type) {
+	list($t['track_old'], $t['track'], $t['track_corrected']) = correctInput($t['track'], 'track');
+	list($t['artist_old'], $t['artist'], $t['artist_corrected']) = correctInput($t['artist'], 'artist');
+	list($t['album_old'], $t['album'], $t['album_corrected']) = correctInput($t['album'], 'album');
+	list($t['mbid_old'], $t['mbid'], $t['mbid_corrected']) = correctInput($t['mbid'], 'mbid');
+	list($t['duration_old'], $t['duration'], $t['duration_corrected']) = correctInput($t['duration'], 'duration');
+	$t['albumartist_corrected'] = 0; // we're currently not doing anything with albumartist in GNU FM
+	$t['tracknumber_corrected'] = 0; // we're currently not doing anything with tracknumber in GNU FM
 
-	// Validate scrobble, any $item with ignoredcode != 0 will not be scrobbled
-	list($item['ignoredcode'], $item['ignoredmessage']) = ignoreInput($item['artist'], $item['track'], $item['timestamp']);
-	if ($item['ignoredcode'] === 0) {
-		$exists = scrobbleExists($userid, $item['artist'], $item['track'], $item['timestamp']);
-		if ($exists) {
-			$item['ignoredcode'] = 91; // GNU FM specific
-			$item['ignoredmessage'] = 'Already scrobbled';
-		}
+	//TODO not pretty
+	list($t['ignored_code'], $t['ignored_message']) = ignoreInput($t['artist'], 'artist');
+	if($t['ignored_code'] === 0) {
+		list($t['ignored_code'], $t['ignored_message']) = ignoreInput($t['track'], 'track');
 	}
 
-	return $item;
+	if ($type == 'scrobble') {
+		list($t['timestamp_old'], $t['timestamp'], $t['timestamp_corrected']) = correctInput($t['timestamp'], 'timestamp');
+
+		if($t['ignored_code'] === 0) {
+			list($t['ignoredcode'], $t['ignoredmessage']) = ignoreInput($t['timestamp'], 'timestamp');
+		}
+		if ($t['ignoredcode'] === 0) {
+			$exists = scrobbleExists($userid, $t['artist'], $t['track'], $t['timestamp']);
+			if ($exists) {
+				$t['ignoredcode'] = 91; // GNU FM specific
+				$t['ignoredmessage'] = 'Already scrobbled';
+			}
+		}
+	}
+	return $t;
 }
+
 /**
  * Check if a scrobble has already been added to database.
  *
