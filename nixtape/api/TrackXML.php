@@ -161,6 +161,8 @@ class TrackXML {
 	public static function updateNowPlaying($userid, $artist, $track, $album, $tracknumber, $context, $mbid, $duration, $albumartist, $api_key) {
 		global $adodb;
 
+		$sessionid = getScrobbleSessionID($userid, $api_key);
+
 		$t = array(
 			'artist' => $artist,
 			'track' => $track,
@@ -173,9 +175,6 @@ class TrackXML {
 
 		$t = prepareTrack($userid, $t, 'nowplaying');
 
-		// Get a scrobble session id. TODO check if we got one
-		$sessionid = getScrobbleSessionID($userid, $api_key);
-
 		// Delete last played track
 		$query = 'DELETE FROM Now_Playing WHERE sessionid = ?';
 		$params = array($sessionid);
@@ -185,7 +184,7 @@ class TrackXML {
 
 		// Calculate expiry time
 		if (!$t['duration'] || ($t['duration'] > 5400)) {
-			// Default expiry time of 5 minutes if $duration is false or above 5400
+			// Default expiry time of 300 seconds if duration is false or above 5400 seconds
 			$expires = time() + 300;
 		} else {
 			$expires = time() + $t['duration'];
@@ -234,14 +233,14 @@ class TrackXML {
 
 	public static function scrobble($userid, $artist, $track, $timestamp, $album, $context, $streamid, $chosenbyuser, $tracknumber, $mbid, $albumartist, $duration, $api_key) {
 		global $adodb;
-		// Get a scrobble session id. TODO check if we got one
+
 		$sessionid = getScrobbleSessionID($userid, $api_key);
 
 		$accepted_count = 0;
 		$ignored_count = 0;
 		$tracks_array = array();
 
-		// Convert input to track item arrays and add them to tracks_array
+		// Convert input to track arrays and add them to tracks_array
 		if (is_array($artist)) {
 			for ($i = 0; $i < count($artist); $i++) {
 				$tracks_array[$i] = array(
@@ -309,8 +308,6 @@ class TrackXML {
 					$adodb->Execute($query, $params);
 				} catch (Exception $e) {
 					// Roll back database entries, log error and respond with error message
-					// TODO what happens to User_Stats(scrobble_count) db field when we roll back scrobbles,
-					// do we need to move sql function into php?
 					$adodb->FailTrans();
 					$adodb->CompleteTrans();
 					reportError($e->getMessage(), $e->getTraceAsString());
@@ -330,8 +327,8 @@ class TrackXML {
 				$t = $tracks_array[$i];
 				if ($t['ignoredcode'] === 0) {
 					/* Forward scrobbles, we are forwarding unmodified input submitted by user,
-					 * but only the scrobbles that passed our filters. */
-					// TODO : Test forwarding!
+					 * but only the scrobbles that passed our ignore filters, see prepareTrack(). */
+					/* TODO : Test forwarding, disabled for now
 					forwardScrobble($userid,
 						$t['artist_old'],
 						$t['album_old'],
@@ -341,6 +338,7 @@ class TrackXML {
 						null,
 						null,
 						$t['duration_old']);
+					 */
 				}
 			}
 		}
