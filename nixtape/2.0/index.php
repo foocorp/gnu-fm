@@ -1259,8 +1259,8 @@ function method_track_unban() {
  * - - - 
  *
  * @todo context parameter not used
- * @todo tracknumber parameter not used
- * @todo albumartist parameter not used
+ * @todo tracknumber parameter not stored in db
+ * @todo albumartist parameter not stored in db
  * @package Webservice
  * @subpackage Track
  * @api
@@ -1320,8 +1320,8 @@ function method_track_updateNowPlaying() {
  * @todo context parameter not used
  * @todo streamid parameter not used
  * @todo chosenbyuser parameter not used
- * @todo tracknumber parameter not used
- * @todo albumartist parameter not used
+ * @todo tracknumber parameter not stored in db
+ * @todo albumartist parameter not stored in db
  * @package Webservice
  * @subpackage Track
  * @api

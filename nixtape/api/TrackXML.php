@@ -158,17 +158,17 @@ class TrackXML {
 	}
 
 
-	public static function updateNowPlaying($userid, $artist, $track, $album, $trackNumber, $context, $mbid, $duration, $albumArtist, $api_key) {
+	public static function updateNowPlaying($userid, $artist, $track, $album, $tracknumber, $context, $mbid, $duration, $albumartist, $api_key) {
 		global $adodb;
 
 		$t = array(
 			'artist' => $artist,
 			'track' => $track,
 			'album' => $album,
-			'tracknumber' => $trackNumber,
+			'tracknumber' => $tracknumber,
 			'mbid' => $mbid,
 			'duration' => $duration,
-			'albumartist' => $albumArtist
+			'albumartist' => $albumartist
 		);
 
 		$t = prepareTrack($userid, $t, 'nowplaying');
@@ -223,8 +223,8 @@ class TrackXML {
 		$artist_node->addAttribute('corrected', $t['artist_corrected']);
 		$album_node = $root->addChild('album', repamp($t['album']));
 		$album_node->addAttribute('corrected', $t['album_corrected']);
-		$albumartist_node = $root->addChild('albumArtist', null); //TODO
-		$albumartist_node->addAttribute('corrected', '0'); //TODO
+		$albumartist_node = $root->addChild('albumArtist', repamp($t['albumartist']));
+		$albumartist_node->addAttribute('corrected', $t['albumartist_corrected']);
 		$ignoredmessage_node = $root->addChild('ignoredMessage', $t['ignored_message']);
 		$ignoredmessage_node->addAttribute('code', $t['ignored_code']);
 
