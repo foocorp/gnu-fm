@@ -140,18 +140,18 @@ function getScrobbleTrackID($artist, $album, $track, $mbid, $duration, $track_id
 	$query = 'SELECT id FROM Scrobble_Track WHERE name=lower(?) AND artist=lower(?)';
 	$params = array($track, $artist);
 
-	if ($album) {
+	if ($album === null) {
+		$query .= ' AND album IS NULL';
+	} else {
 		$query .= ' AND album=lower(?)';
 		$params[] = $album;
-	} else {
-		$query .= ' AND album IS NULL';
 	}
 
-	if ($mbid) {
+	if ($mbid === null) {
+		$query .= ' AND mbid IS NULL';
+	} else {
 		$query .= ' AND mbid=lower(?)';
 		$params[] = $mbid;
-	} else {
-		$query .= ' AND mbid IS NULL';
 	}
 
 	$scrobbletrack_id = $adodb->GetOne($query, $params);
