@@ -96,21 +96,21 @@ function getAlbumID($artist, $album) {
 function getTrackID($artist, $album, $track, $mbid, $duration) {
 	global $adodb;
 
-	if ($album) {
-		$query = 'SELECT id FROM Track WHERE name=? AND artist_name=? AND album_name=?';
-		$params = array($track, $artist, $album);
-	} else {
+	if ($album === null) {
 		$query = 'SELECT id FROM Track WHERE name=? AND artist_name=? AND album_name IS NULL';
 		$params = array($track, $artist);
+	} else {
+		$query = 'SELECT id FROM Track WHERE name=? AND artist_name=? AND album_name=?';
+		$params = array($track, $artist, $album);
 	}
 	$track_id = $adodb->GetOne($query, $params);
 
 	if (!$track_id) {
 		// First check if artist and album exists, if not create them
-		if ($album) {
-			$album_id = getAlbumID($artist, $album);
-		} else {
+		if ($album === null) {
 			$artist_id = getArtistID($artist);
+		} else {
+			$album_id = getAlbumID($artist, $album);
 		}
 		
 		// Create new track
