@@ -213,7 +213,7 @@ function correctInput($input, $type) {
 	$old = $input;
 	$new = $old;
 
-	if ($type == 'artist' || $type == 'album' || $type == 'track') {
+	if ($type == 'artist' || $type == 'album' || $type == 'track' || $type == 'albumartist') {
 
 		//Limit strings to 255 chars
 		switch (mb_detect_encoding($new)) {
@@ -247,10 +247,18 @@ function correctInput($input, $type) {
 
 	} else if ($type == 'timestamp') {
 		$new = (int) $new;
+
 	} else if ($type == 'duration') {
 		if($new) {
 			$new = (int) $new;
 		} else {
+			$new = null;
+		}
+
+	} else if ($type == 'tracknumber') {
+		if($new) {
+			$new = (int) $new;
+		}else {
 			$new = null;
 		}
 	}
@@ -312,8 +320,8 @@ function prepareTrack($userid, $t, $type) {
 	list($t['album_old'], $t['album'], $t['album_corrected']) = correctInput($t['album'], 'album');
 	list($t['mbid_old'], $t['mbid'], $t['mbid_corrected']) = correctInput($t['mbid'], 'mbid');
 	list($t['duration_old'], $t['duration'], $t['duration_corrected']) = correctInput($t['duration'], 'duration');
-	$t['albumartist_corrected'] = 0; // we're currently not doing anything with albumartist in GNU FM
-	$t['tracknumber_corrected'] = 0; // we're currently not doing anything with tracknumber in GNU FM
+	list($t['albumartist_old'], $t['albumartist'], $t['albumartist_corrected']) = correctInput($t['albumartist'], 'albumartist');
+	list($t['tracknumber_old'], $t['tracknumber'], $t['tracknumber_corrected']) = correctInput($t['tracknumber'], 'tracknumber');
 
 	//TODO not pretty
 	list($t['ignored_code'], $t['ignored_message']) = ignoreInput($t['artist'], 'artist');
