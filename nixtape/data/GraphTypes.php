@@ -102,7 +102,6 @@ class GraphTopTracks extends Graph {
 	 * plotting utility.
 	 **/
 	private function buildGraphData() {
-		$this->begin = strtotime('-6 months');
 		$this->data_buffer = $this->user->getTopTracks($this->number_of_tracks, 0, False, $this->begin);
 		$tracks = array();
 		$listings = array();
