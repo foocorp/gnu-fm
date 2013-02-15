@@ -184,6 +184,13 @@ function getScrobbleSessionID($userid, $api_key = null) {
 	if (strlen($api_key) == 32) {
 		$query .= ' AND api_key=?';
 		$params[] = $api_key;
+	} elseif (strlen($api_key) == 3) {
+		// api_key is really a 3 char client code (2.0-scrobble-proxy.php sends client code in api_key)
+		$query .= ' AND client=?';
+		$client_id = $api_key;
+		$params[] = $client_id;
+		// we dont want to insert a 3 char code as api_key in db
+		$api_key = null;
 	}
 
 	$sessionid = $adodb->GetOne($query, $params);
