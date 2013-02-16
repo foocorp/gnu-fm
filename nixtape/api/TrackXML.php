@@ -334,8 +334,8 @@ class TrackXML {
 						$t['track_old'],
 						$t['timestamp_old'],
 						$t['mbid_old'],
-						null,
-						null,
+						'',
+						'',
 						$t['duration_old']);
 				}
 			}
