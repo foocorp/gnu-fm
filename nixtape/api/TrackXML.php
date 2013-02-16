@@ -328,7 +328,6 @@ class TrackXML {
 				if ($t['ignoredcode'] === 0) {
 					/* Forward scrobbles, we are forwarding unmodified input submitted by user,
 					 * but only the scrobbles that passed our ignore filters, see prepareTrack(). */
-					/* TODO : Test forwarding, disabled for now
 					forwardScrobble($userid,
 						$t['artist_old'],
 						$t['album_old'],
@@ -338,7 +337,6 @@ class TrackXML {
 						null,
 						null,
 						$t['duration_old']);
-					 */
 				}
 			}
 		}
