@@ -8,7 +8,10 @@
 			<p>You may now close this page.</p>
 		{else}
 			{if $clientname == 'Unknown client'}
-			<p><a href="{$clienturl}">{$clientname}</a> with API key: <b>{$api_key}</b><br />
+			<p><a href="{$clienturl}">{$clientname}</a> with<br /> API key: <b>{$api_key}</b><br />
+			{if $cb}
+				Callback URL: <b>{$cb}</b><br />
+			{/if}
 			{else}
 			<p><a href="{$clienturl}">{$clientname}</a>
 			{/if}
