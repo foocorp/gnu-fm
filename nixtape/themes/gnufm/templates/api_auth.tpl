@@ -1,6 +1,4 @@
-<html>
-	<body>
-		<h2>{$site_name}</h2>
+{include file='mini-header.tpl'}
 		{if $error_msg}
 			<p>{$error_msg}</p>
 		{elseif $stage == 'deskapp2.2'}
@@ -32,5 +30,4 @@
 				</p>
 			</form>
 		{/if}
-	</body>
-</html>
+{include file='mini-footer.tpl'}
