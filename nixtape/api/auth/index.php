@@ -60,15 +60,15 @@ function displayError($error_msg) {
 if (!isset($_REQUEST['api_key'])) {
 	displayError('Must submit a combination of parameters api_key and cb or api_key and token to proceed.');
 
-// Web app auth step 1
-} elseif (isset($_GET['api_key']) && isset($_GET['cb']) && !isset($_POST['token'])) {
+// Web app auth stage 1
+} elseif (isset($_GET['api_key']) && isset($_GET['cb']) && !isset($_REQUEST['token'])) {
 	$token = Server::getAuthToken();
-	$smarty->assign('info', 'webappauth1');
+	$smarty->assign('stage', 'webapp1');
 	$smarty->assign('token', $token);
 	$smarty->assign('cb', $_GET['cb']);
 	$smarty->assign('api_key', $_GET['api_key']);
 
-// Desktop app auth step 1
+// Desktop app auth stage 1
 } elseif (isset($_GET['api_key']) && isset($_GET['token']) && !isset($_GET['cb'])) {
 
 	// Ensures the token exists and is not already bound to a user
@@ -84,11 +84,11 @@ if (!isset($_REQUEST['api_key'])) {
 	if (!$result) {
 		displayError('Invalid token');
 	}
-	$smarty->assign('info', 'desktopappauth1');
+	$smarty->assign('stage', 'deskapp1');
 	$smarty->assign('api_key', $_GET['api_key']);
 	$smarty->assign('token', $_GET['token']);
 
-// Web/Desktop app auth step 2.1
+// Web/Desktop app auth stage 2.1
 } elseif (isset($_POST['username'], $_POST['api_key'], $_POST['token'], $_POST['password'])) {
 	// Authenticate the user using the submitted password
 	$query = 'SELECT username FROM Users WHERE lower(username) = lower(?) AND password = ?';
@@ -120,7 +120,7 @@ if (!isset($_REQUEST['api_key'])) {
 
 	// Desktop app auth step 2.2
 	} else {
-		$smarty->assign('info', 'webappauth2.2');
+		$smarty->assign('stage', 'deskapp2.2');
 		$smarty->assign('username', $_POST['username']);
 	}
 }
