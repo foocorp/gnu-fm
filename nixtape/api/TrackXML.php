@@ -116,15 +116,12 @@ class TrackXML {
 	}
 
 	public static function love($artist, $name, $userid) {
-		global $adodb;
-
 		try {
-			$res = $adodb->Execute('INSERT INTO Loved_Tracks VALUES ('
-				. $userid . ', '
-				. $adodb->qstr($name) . ', '
-				. $adodb->qstr($artist) . ', '
-				. time() . ')');
-		} catch (Exception $e) {}
+			$track = new Track($name, $artist);
+			$track->love($userid);
+		} catch (Exception $e) {
+			return(XML::error('failed', '7', 'Invalid resource specified'));
+		}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 
@@ -145,16 +142,16 @@ class TrackXML {
 
 
 	public static function unlove($artist, $name, $userid) {
-		global $adodb;
-
 		try {
-			$res = $adodb->Execute('DELETE FROM Loved_Tracks WHERE userid='	. $userid . ' AND track=' . $adodb->qstr($name) . ' AND artist=' . $adodb->qstr($artist));
-		} catch (Exception $e) {}
+			$track = new Track($name, $artist);
+			$track->unlove($userid);
+		} catch (Exception $e) {
+			return(XML::error('failed', '7', 'Invalid resource specified'));
+		}
 
 		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
 
 		return $xml;
 	}
-
 
 }

@@ -1,7 +1,8 @@
 <?php
+
 /* GNU FM -- a free network service for sharing your music listening habits
 
-   Copyright (C) 2009 Free Software Foundation, Inc
+   Copyright (C) 2013 Free Software Foundation, Inc
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -18,35 +19,43 @@
 
 */
 
-function artist_menu($artist, $active_page) {
+function album_menu($album, $active_page) {
 	global $this_user;
 
 	$submenu = array(
-		array('name' => _('Overview'), 'url' => $artist->getURL()),
-		array('name' => _('Tag'), 'url' => $artist->getURL('tag')),
+		array('name' => _('Overview'), 'url' => $album->getURL()),
 	);
-
-	foreach ($submenu as &$item) {
+	
+	foreach($submenu as &$item) {
 		$item['active'] = ($item['name'] == $active_page);
 	}
-
 	return $submenu;
 }
 
 try {
-	$artist = new Artist($_GET['artist']);
-	$smarty->assign(artist, $artist);
+	$album = new Album($_GET['album'], $_GET['artist']);
+	$smarty->assign('album', $album);
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Album not found.');
+	$smarty->assign('details', 'The album ' . $_GET['album'] . ' by artist ' . $_GET['artist'] . ' was not found in the database.');
+	$smarty->display('error.tpl');
+	die();
+}
+
+try {
+	$artist = new Artist($album->artist_name);
+	$smarty->assign('artist', $artist);
 } catch (Exception $e) {
 	$smarty->assign('pageheading', 'Artist not found.');
-	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');
+	$smarty->assign('details', 'The artist ' . $track->artist_name . ' was not found in the database.');
 	$smarty->display('error.tpl');
 	die();
 }
 
 if (isset($this_user) && $this_user->manages($artist->name)) {
-	$smarty->assign('manage_link', $artist->getManagementURL());
-	$smarty->assign('add_album_link', $artist->getAddAlbumURL());
+	$smarty->assign('edit_link', $album->getEditURL());
+	$smarty->assign('add_track_link', $album->getAddTrackURL());
 }
 
-$smarty->assign('pagetitle', $artist->name);
-$smarty->assign('headerfile', 'artist-header.tpl');
+$smarty->assign('pagetitle', $artist->name . ' : ' . $album->name);
+$smarty->assign('headerfile', 'album-header.tpl');
