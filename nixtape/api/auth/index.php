@@ -55,9 +55,10 @@ function displayError($error_msg) {
  *
  */
 
+$smarty->assign('site_name', $site_name);
 
-// We always need the api_key parameter
-if (!isset($_REQUEST['api_key'])) {
+// We always need the api_key parameter and parameter cb or token
+if (!isset($_REQUEST['api_key']) || !(isset($_REQUEST['cb']) || isset($_REQUEST['token']))) {
 	displayError('Must submit a combination of parameters api_key and cb or api_key and token to proceed.');
 
 // Web app auth stage 1
