@@ -32,6 +32,7 @@ var playable_songs = false;
 var streaming = false;
 var example_tags = "e.g. guitar, violin, female vocals, piano";
 var error_count = 0;
+var base_url = base_url || "";
 
 /**
  * Initialises the javascript player (player.tpl must also be included on the target page)
@@ -226,7 +227,7 @@ function scrobble() {
 		return;
 	}
 	timestamp = Math.round(new Date().getTime() / 1000);
-	$.post("/scrobble-proxy.php?method=scrobble", { "a[0]" : artist, "b[0]" : album, "t[0]" : track, "i[0]" : timestamp, "s" : session_key },
+	$.post(base_url + "/scrobble-proxy.php?method=scrobble", { "a[0]" : artist, "b[0]" : album, "t[0]" : track, "i[0]" : timestamp, "s" : session_key },
 			function(data){
 				if(data.substring(0, 2) == "OK") {
 					$("#scrobbled").text("Scrobbled");
@@ -250,7 +251,7 @@ function nowPlaying() {
 		return;
 	}
 	timestamp = Math.round(new Date().getTime() / 1000);
-	$.post("/scrobble-proxy.php?method=nowplaying", { "a" : artist, "b" : album, "t" : track, "l" : audio.duration, "s" : session_key}, function(data) {}, "text");
+	$.post(base_url + "/scrobble-proxy.php?method=nowplaying", { "a" : artist, "b" : album, "t" : track, "l" : audio.duration, "s" : session_key}, function(data) {}, "text");
 }
 
 /**
@@ -313,7 +314,7 @@ function loadSong(song) {
 	$("#love").fadeTo("normal", 1);
 
 	if($("#flattrstream")) {
-		$.getJSON('/2.0/', {'method' : 'artist.getflattr', 'artist' : artist, 'format' : 'json'}, updateFlattr);
+		$.getJSON(base_url + '/2.0/', {'method' : 'artist.getflattr', 'artist' : artist, 'format' : 'json'}, updateFlattr);
 	}
 }
 
@@ -336,7 +337,7 @@ function updateFlattr(data) {
  */
 function getRadioPlaylist() {
 	var tracks, artist, album, title, url, extension, trackpage_url, i;
-	$.get("/2.0/", {'method' : 'radio.getPlaylist', 'sk' : radio_key}, function(data) {
+	$.get(base_url + "/2.0/", {'method' : 'radio.getPlaylist', 'sk' : radio_key}, function(data) {
 			parser=new DOMParser();
 			xmlDoc=parser.parseFromString(data,"text/xml");
 			tracks = xmlDoc.getElementsByTagName("track")
@@ -409,14 +410,14 @@ function friendlyTime(timestamp) {
 }
 
 function love() {
-	$.post("/2.0/", {'method' : 'track.love', 'artist' : artist, 'track' : track, 'sk' : ws_key}, function(data) {}, "text");
+	$.post(base_url + "/2.0/", {'method' : 'track.love', 'artist' : artist, 'track' : track, 'sk' : ws_key}, function(data) {}, "text");
 	$("#love").fadeTo("normal", 0.5);
 	$("#scrobbled").text("Loved");
 	$("#scrobbled").fadeIn(5000, function() { $("#scrobbled").fadeOut(5000) } );
 }
 
 function ban() {
-	$.post("/2.0/", {'method' : 'track.ban', 'artist' : artist, 'track' : track, 'sk' : ws_key}, function(data) {}, "text");
+	$.post(base_url + "/2.0/", {'method' : 'track.ban', 'artist' : artist, 'track' : track, 'sk' : ws_key}, function(data) {}, "text");
 	$("#ban").fadeTo("normal", 0.5);
 	skipForward();
 }
@@ -430,7 +431,7 @@ function toggleTag() {
 function tag() {
 	var tags = $("#tags").val();
 	if (tags != example_tags && tags != "") {
-		$.post("/2.0/", {'method' : 'track.addtags', 'artist' : artist, 'track' : track, 'tags' : tags, 'sk' : ws_key}, function(data) {}, "text");
+		$.post(base_url + "/2.0/", {'method' : 'track.addtags', 'artist' : artist, 'track' : track, 'tags' : tags, 'sk' : ws_key}, function(data) {}, "text");
 		toggleTag();
 		$("#tags").val("");
 	}
