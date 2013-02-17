@@ -32,3 +32,36 @@ function track_menu($track, $active_page) {
 	}
 	return $submenu;
 }
+
+// Create Artist, Album and Track objects
+try {
+	$track = new Track($_GET['track'], $_GET['artist']);
+	$smarty->assign('track', $track);
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Track not found.');
+	$smarty->assign('details', 'The track ' . $_GET['track'] . ' by artist ' . $_GET['artist'] . ' was not found in the database.');
+	$smarty->display('error.tpl');
+	die();
+}
+
+try {
+	$album = new Album($track->album_name, $track->artist_name);
+	$smarty->assign('album', $album);
+} catch (Exception $e) {}
+
+try {
+	$artist = new Artist($track->artist_name);
+	$smarty->assign('artist', $artist);
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Artist not found.');
+	$smarty->assign('details', 'The artist ' . $track->artist_name . ' was not found in the database.');
+	$smarty->display('error.tpl');
+	die();
+}
+
+if (isset($this_user) && $this_user->manages($artist->name)) {
+	$smarty->assign('edit_link', $track->getEditURL());
+}
+
+$smarty->assign('pagetitle', $track->artist_name . ' : ' . $track->name);
+$smarty->assign('headerfile', 'track-header.tpl');

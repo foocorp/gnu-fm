@@ -44,8 +44,6 @@ class Track {
 	/**
 	 * Track constructor
 	 *
-	 * @todo throw Exception instead of setting $this->name to 'No such track: $name'
-
 	 * @param string $name The name of the track to load
 	 * @param string $artist The name of the artist who recorded this track
 	 */
@@ -58,7 +56,7 @@ class Track {
 			. 'ORDER BY streamable DESC';
 		$res = $adodb->CacheGetRow(600, $this->query);
 		if (!$res) {
-			$this->name = 'No such track: ' . $name;
+			throw new Exception('No such track: ' . $name);
 		} else {
 			$row = $res;
 			$this->name = $row['name'];
@@ -284,25 +282,17 @@ class Track {
 	/**
 	 * Gets the top tags for this track, ordered by tag count
 	 *
-	 * @todo Remove throw new Exception when track construct has been changed to throw it
-	 *
 	 * @param int $limit The number of tags to return (default is 10)
 	 * @param int $offset The position of the first tag to return (default is 0)
 	 * @param int $cache Caching period of query in seconds (default is 600)
 	 * @return array Tag details ((tag, freq) .. )
 	 */
 	function getTopTags($limit=10, $offset=0, $cache=600) {
-		if(substr($this->name, 0, 13) == 'No such track') {
-			throw new Exception('No such track');
-		}
-
 		return Tag::_getTagData($cache, $limit, $offset, null, $this->artist_name, null, $this->name);
 	}
 
 	/**
 	 * Get a specific user's tags for this track.
-	 *
-	 * @todo Remove throw new Exception when track construct has been changed to throw it
 	 *
 	 * @param int $userid Get tags for this user
 	 * @param int $limit The number of tags to return (default is 10)
@@ -312,10 +302,6 @@ class Track {
 	 */
 	function getTags($userid, $limit=10, $offset=0, $cache=600) {
 		if(isset($userid)) {
-			if(substr($this->name, 0, 13) == 'No such track') {
-				throw new Exception('No such track');
-			}
-
 			return Tag::_getTagData($cache, $limit, $offset, $userid, $this->artist_name, null, $this->name);
 		}
 	}
@@ -345,4 +331,59 @@ class Track {
 			} catch (Exception $e) {}
 		}
 	}
+
+	/**
+	 * Love a track
+	 *
+	 * @param int $userid The user loving this track
+	 */
+	function love($userid) {
+		global $adodb;
+		
+		try {
+			$adodb->Execute('INSERT INTO Loved_Tracks VALUES ('
+				. $userid . ', '
+				. $adodb->qstr($this->name) . ', '
+				. $adodb->qstr($this->artist_name) . ', '
+				. time() . ')');
+		} catch (Exception $e) {}
+	}
+
+	/**
+	 * Unlove a track
+	 *
+	 * @param int $userid The user unloving this track
+	 */
+	function unlove($userid) {
+		global $adodb;
+
+		try {
+			$adodb->Execute('DELETE FROM Loved_Tracks WHERE userid=' . $userid
+				. ' AND track=' . $adodb->qstr($this->name)
+				. ' AND artist=' . $adodb->qstr($this->artist_name));
+		} catch (Exception $e) {}
+	}
+
+	/**
+	 * Check if track has been loved by user
+	 *
+	 * @param int $userid The user we are looking for
+	 * @return bool True if track has been loved by user
+	 */
+	function isLoved($userid) {
+		global $adodb;
+
+		try {
+			$res = $adodb->GetRow('SELECT * FROM Loved_Tracks WHERE userid='
+				. $userid . ' AND track='
+				. $adodb->qstr($this->name) . ' AND artist='
+				. $adodb->qstr($this->artist_name));
+		} catch (Exception $e) {}
+
+		if($res) {
+			return True;
+		}
+		return False;
+	}
+	
 }
