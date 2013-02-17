@@ -706,20 +706,14 @@ function method_album_getTags() {
  * @api
  */
 function method_auth_getToken() {
-	global $adodb;
 
-	$key = md5(time() . rand());
+	$token = Server::getAuthToken();
 
-	try {
-	$result = $adodb->Execute('INSERT INTO Auth (token, expires) VALUES ('
-		. $adodb->qstr($key) . ', '
-		. (int)(time() + 3600)
-		. ')');
-	} catch (Exception $e) {
+	if(!$token) {
 		report_failure(LFM_SERVICE_OFFLINE);
 	}
 
-	$xml = simplexml_load_string('<lfm status="ok"><token>' . $key . '</token></lfm>');
+	$xml = simplexml_load_string('<lfm status="ok"><token>' . $token . '</token></lfm>');
 	respond($xml);
 }
 /**
