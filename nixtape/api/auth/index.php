@@ -31,31 +31,6 @@ function displayError($error_msg) {
 	exit();
 }
 
-/**
- * if !api_key
- *		error
- *
- * if api_key && cb && !token
- *		web app step 1
- *
- * if api_key && token && !cb
- *		desktop app step 1
- *
- * if username && api_key && token && password
- *		web/desktop app step 2.1
- *		
- *		if cb
- *			web app step 2.2
- *				redirect to callback_url with token as param
- *				client needs to do a auth.getsession within 60 minutes
- *		else
- *			desktop app step 2.2
- *				print success message
- *				client needs to do a auth.getsession within 60 minutes
- *		
- *
- */
-
 $smarty->assign('site_name', $site_name);
 if ($logged_in) {
 	$smarty->assign('username', $this_user->name);
