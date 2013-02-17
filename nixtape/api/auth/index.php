@@ -18,26 +18,30 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-
+//TODO move html to template
 require_once('../../database.php');
-?>
+require_once('../../templating.php');
 
-<html>
+function displayError($error_msg) {
+	global $smarty;
+	$smarty->assign('error_msg', $error_msg);
+	$smarty->display('api_auth.tpl');
+	exit();
+}
 
-<body>
-
-<?php
+// Desktop app auth
 if (isset($_POST['username'], $_POST['api_key'], $_POST['token'])) {
+
 	// Authenticate the user using the submitted password
 	try {
 		$result = $adodb->GetOne('SELECT username FROM Users WHERE '
 				. 'lower(username) = ' . $adodb->qstr(strtolower($_POST['username'])) . ' AND '
 				. 'password = ' . $adodb->qstr(md5($_POST['password'])));
 	} catch (Exception $e) {
-		die('Database error');
+		displayError('Database error');
 	}
 	if (!$result) {
-		die('Authentication failed');
+		displayError('Authentication failed');
 	}
 
 	// Bind the user to the token and cancel the expiration rule
@@ -48,19 +52,14 @@ if (isset($_POST['username'], $_POST['api_key'], $_POST['token'])) {
 				. 'WHERE '
 				. 'token = ' . $adodb->qstr($_POST['token']));
 	} catch (Exception $e) {
-		die('Database error');
+		displayError('Database error');
 	}
-	?>
+	$smarty->assign('username', $_POST['username']);
 
-		<p>Thank you very much, <?php print($_POST['username']); ?>.  Your authorization has been recorded.</p>
+} else if (!isset($_GET['api_key'], $_GET['token'])) {
 
-		<p>You may now close the browser.</p>
+	displayError('Must submit an api_key and token to proceed.');
 
-<?php } else if (!isset($_GET['api_key'], $_GET['token'])) { ?>
-
-			<p>Must submit an api_key and token to proceed.</p>
-
-<?php
 } else {
 
 	// Ensures the token exists and is not already bound to a user
@@ -69,29 +68,15 @@ if (isset($_POST['username'], $_POST['api_key'], $_POST['token'])) {
 				. 'token = ' . $adodb->qstr($_GET['token']) . ' AND '
 				. 'username IS NULL');
 	} catch (Exception $e) {
-		die('Database error');
+		displayError('Database error');
 	}
+
 	if (!$result) {
-		die('Invalid token');
+		displayError('Invalid token');
 	}
-?>
 
-				<form method="post" action="">
+	$smarty->assign('api_key', $_GET['api_key']);
+	$smarty->assign('token', $_GET['token']);
+}
 
-				<p>Your Username: <input type="text" name="username" /></p>
-
-				<p>Your Password: <input type="password" name="password" /></p>
-
-				<p>
-				<input type="submit" value="Submit" />
-				<input type="hidden" name="api_key" value="<?php print($_GET['api_key']); ?>" />
-				<input type="hidden" name="token" value="<?php print($_GET['token']); ?>" />
-				</p>
-
-				</form>
-
-<?php } ?>
-
-				</body>
-
-				</html>
+$smarty->display('api_auth.tpl');
