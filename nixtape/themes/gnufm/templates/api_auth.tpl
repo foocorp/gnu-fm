@@ -13,8 +13,8 @@
 				<input type="submit" value="Submit" />
 				<input type="hidden" name="api_key" value="{$api_key}" />
 				<input type="hidden" name="token" value="{$token}" />
-				{if $callback_url}
-					<input type="hidden" name="callback_url" value="{$callback_url}" />
+				{if $cb}
+					<input type="hidden" name="cb" value="{$cb}" />
 				{/if}
 				</p>
 			</form>
