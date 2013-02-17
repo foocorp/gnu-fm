@@ -69,7 +69,7 @@ if (!isset($_REQUEST['api_key'])) {
 	$smarty->assign('api_key', $_GET['api_key']);
 
 // Desktop app auth stage 1
-} elseif (isset($_GET['api_key']) && isset($_GET['token']) && !isset($_GET['cb'])) {
+} elseif (isset($_GET['api_key']) && isset($_GET['token']) && !isset($_GET['cb']) && !isset($_POST['username'])) {
 
 	// Ensures the token exists and is not already bound to a user
 	$query = 'SELECT * FROM Auth WHERE token = ? AND username IS NULL';
@@ -89,7 +89,7 @@ if (!isset($_REQUEST['api_key'])) {
 	$smarty->assign('token', $_GET['token']);
 
 // Web/Desktop app auth stage 2.1
-} elseif (isset($_POST['username'], $_POST['api_key'], $_POST['token'], $_POST['password'])) {
+} elseif (isset($_POST['username'], $_POST['api_key'], $_POST['token'])) {
 	// Authenticate the user using the submitted password
 	$query = 'SELECT username FROM Users WHERE lower(username) = lower(?) AND password = ?';
 	$params = array($_POST['username'], md5($_POST['password']));
