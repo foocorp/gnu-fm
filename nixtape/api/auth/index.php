@@ -22,6 +22,7 @@ require_once('../../config.php');
 require_once($install_path . '/database.php');
 require_once($install_path . '/templating.php');
 require_once($install_path . '/data/Server.php');
+require_once($install_path . '/data/clientcodes.php');
 
 function displayError($error_msg) {
 	global $smarty;
@@ -126,4 +127,7 @@ if (!isset($_REQUEST['api_key']) || !(isset($_REQUEST['cb']) || isset($_REQUEST[
 	}
 }
 
+$client = getClientData('null', $_REQUEST['api_key']);
+$smarty->assign('clientname', $client['name']);
+$smarty->assign('clienturl', $client['url']);
 $smarty->display('api_auth.tpl');
