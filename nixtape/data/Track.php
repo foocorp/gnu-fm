@@ -345,4 +345,27 @@ class Track {
 			} catch (Exception $e) {}
 		}
 	}
+
+	/**
+	 * Remove a tag from a track
+	 *
+	 * @param string $tag The tag to be removed
+	 * @param int $userid The user removing the tag
+	 */
+	function removeTag($tag, $userid) {
+		global $adodb;
+
+		$tag = trim($tag);
+		if(strlen($tag) == 0) {
+			return;
+		}
+		$query = 'DELETE FROM Tags WHERE tag = ? AND lower(artist) = lower(?) AND lower(track) = lower(?) AND userid = ?';
+		$params = array($tag, $this->artist_name, $this->name, $userid);
+		try {
+			$adodb->Execute($query, $params);
+		} catch (Exception $e) {
+			reportError($e->getMessage(), $e->getTraceAsString());
+		}
+	}
+
 }
