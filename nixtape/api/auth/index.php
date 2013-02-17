@@ -57,6 +57,9 @@ function displayError($error_msg) {
  */
 
 $smarty->assign('site_name', $site_name);
+if ($logged_in) {
+	$smarty->assign('username', $this_user->name);
+}
 
 // We always need the api_key parameter and parameter cb or token
 if (!isset($_REQUEST['api_key']) || !(isset($_REQUEST['cb']) || isset($_REQUEST['token']))) {
@@ -71,7 +74,7 @@ if (!isset($_REQUEST['api_key']) || !(isset($_REQUEST['cb']) || isset($_REQUEST[
 	$smarty->assign('api_key', $_GET['api_key']);
 
 // Desktop app auth stage 1
-} elseif (isset($_GET['api_key']) && isset($_GET['token']) && !isset($_GET['cb']) && !isset($_POST['username'])) {
+} elseif (isset($_GET['api_key']) && isset($_GET['token']) && !isset($_GET['cb']) && !isset($_POST['token'])) {
 
 	// Ensures the token exists and is not already bound to a user
 	$query = 'SELECT * FROM Auth WHERE token = ? AND username IS NULL';
@@ -91,23 +94,25 @@ if (!isset($_REQUEST['api_key']) || !(isset($_REQUEST['cb']) || isset($_REQUEST[
 	$smarty->assign('token', $_GET['token']);
 
 // Web/Desktop app auth stage 2.1
-} elseif (isset($_POST['username'], $_POST['api_key'], $_POST['token'])) {
-	// Authenticate the user using the submitted password
-	$query = 'SELECT username FROM Users WHERE lower(username) = lower(?) AND password = ?';
-	$params = array($_POST['username'], md5($_POST['password']));
-	try {
-		$result = $adodb->GetOne($query, $params);
-	} catch (Exception $e) {
-		reportError($e->getMessage(), $e->getTraceAsString());
-		displayError('Database error');
-	}
-	if (!$result) {
-		displayError('Authentication failed');
+} elseif (isset($_POST['api_key'], $_POST['token'])) {
+	if(!$logged_in) {
+		// Authenticate the user using the submitted password
+		$query = 'SELECT username FROM Users WHERE lower(username) = lower(?) AND password = ?';
+		$params = array($_POST['username'], md5($_POST['password']));
+		try {
+			$username = $adodb->GetOne($query, $params);
+		} catch (Exception $e) {
+			reportError($e->getMessage(), $e->getTraceAsString());
+			displayError('Database error');
+		}
+		if (!$username) {
+			displayError('Authentication failed');
+		}
 	}
 
 	// Bind the user to the token and cancel the expiration rule
 	$query = 'UPDATE Auth SET username = ?, expires = 0 WHERE token = ?';
-	$params = array($_POST['username'], $_POST['token']);
+	$params = array($username, $_POST['token']);
 	try {
 		$adodb->Execute($query, $params);
 	} catch (Exception $e) {
@@ -123,7 +128,7 @@ if (!isset($_REQUEST['api_key']) || !(isset($_REQUEST['cb']) || isset($_REQUEST[
 	// Desktop app auth step 2.2
 	} else {
 		$smarty->assign('stage', 'deskapp2.2');
-		$smarty->assign('username', $_POST['username']);
+		$smarty->assign('username', $username);
 	}
 }
 

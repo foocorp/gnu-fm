@@ -7,6 +7,7 @@
 			<p>Thank you very much {$username}. Your authorization has been recorded.</p>
 			<p>You may now close this page.</p>
 		{else}
+			{if $username}<h3>Hello {$username}</h3>{/if}
 			{if $clientname == 'Unknown client'}
 			<p><a href="{$clienturl}">{$clientname}</a> with<br /> API key: <b>{$api_key}</b><br />
 			{if $cb}
@@ -17,9 +18,11 @@
 			{/if}
 				wants your permission to talk with this service.</p>
 			<form method="post" action="">
+				{if !$logged_in}
 				<p>Your Username: <input type="text" name="username" /></p>
 				<p>Your Password: <input type="password" name="password" /></p>
 				<p>
+				{/if}
 				<input type="submit" value="Submit" />
 				<input type="hidden" name="api_key" value="{$api_key}" />
 				<input type="hidden" name="token" value="{$token}" />
