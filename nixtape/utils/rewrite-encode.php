@@ -27,10 +27,15 @@
  * @return string A mod_rewrite compatible encoding of the given text.
  */
 function rewrite_encode($url) {
-	$url = urlencode($url);
-	$url = preg_replace('/%2B/', '%252B', $url); // +
-	$url = preg_replace('/%2F/', '%252F', $url); // /
-	$url = preg_replace('/%26/', '%2526', $url); // &
-	$url = preg_replace('/%23/', '%2523', $url); // #
+	if (preg_match('/Apache/', $_SERVER['SERVER_SOFTWARE'])) {
+		$url = urlencode($url);
+		$url = preg_replace('/%2B/', '%252B', $url); // +
+		$url = preg_replace('/%2F/', '%252F', $url); // /
+		$url = preg_replace('/%26/', '%2526', $url); // &
+		$url = preg_replace('/%23/', '%2523', $url); // #
+	} else {
+		$url = rawurlencode($url);
+	}
+
 	return $url;
 }

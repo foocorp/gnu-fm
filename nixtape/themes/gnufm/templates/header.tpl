@@ -16,6 +16,9 @@
 	<script type="text/javascript" src="{$base_url}/js/jquery-1.4.4.min.js"></script>
 	<script type="text/javascript" src="{$base_url}/js/jquery-ui-1.7.1.custom.min.js"></script>
 	<script type="text/javascript" src="{$base_url}/js/jquery.placeholdr.js"></script>
+	<script type="text/javascript">
+		var base_url="{$base_url}";
+	</script>
 	<script type="text/javascript" src="{$base_url}/js/player.js"></script>
         <script type="text/javascript" src="{$base_url}/themes/{$default_theme}/js/modernizr.js"></script>
 	<meta name="author" content="FooCorp catalogue number FOO200 and contributors" />

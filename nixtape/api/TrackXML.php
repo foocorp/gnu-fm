@@ -43,6 +43,18 @@ class TrackXML {
 		return $xml;
 	}
 
+	public static function removeTag($userid, $artist, $trackName, $tag) {
+		try {
+			$track = new Track($trackName, $artist);
+			$track->removeTag($tag, $userid);
+		} catch (Exception $e) {
+			return(XML::error('failed', '7', 'Invalid resource specified'));
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		return $xml;
+	}
+
 	public static function getTopTags($artist, $name, $limit, $cache) {
 
 		try {

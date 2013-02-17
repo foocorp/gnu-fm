@@ -931,4 +931,25 @@ class Server {
 		return $result;
 	}
 
+	/**
+	 * Create a random authentication token and return it
+	 *
+	 * @return string Token.
+	 */
+	static function getAuthToken() {
+		global $adodb;
+
+		$key = md5(time() . rand());
+		$expires = (int) (time() + 3600);
+
+		$query = 'INSERT INTO Auth(token, expires) VALUES(?,?)';
+		$params = array($key, $expires);
+		try {
+			$adodb->Execute($query, $params);
+			return $key;
+		} catch (Exception $e) {
+			reportError($e->getMessage(), $e->getTraceAsString());
+		}
+	}
+
 }

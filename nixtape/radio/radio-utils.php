@@ -271,6 +271,11 @@ function get_artist_selection($artists, $artist = false) {
  */
 function get_loved_tracks($users) {
 	global $adodb;
+
+	if (!count($users)) {
+		return array();
+	}
+
 	$userclause = '( ';
 	for ($i = 0; $i < count($users); $i++) {
 		$userclause .= 'Loved_Tracks.userid = ' . $users[$i];
