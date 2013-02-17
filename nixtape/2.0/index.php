@@ -109,6 +109,7 @@ $method_map = array(
 	'tag.gettoptracks'      => method_tag_getTopTracks,
 	'tag.getinfo'           => method_tag_getInfo,
 	'track.addtags'         => method_track_addTags,
+	'track.removetag'       => method_track_removeTag,
 	'track.gettoptags'      => method_track_getTopTags,
 	'track.gettags'         => method_track_getTags,
 	'track.ban'             => method_track_ban,
@@ -1003,8 +1004,8 @@ function method_radio_getPlaylist() {
  * Add tags to a track using a comma-separated list of tags.
  * 
  * ###Parameters
- * * **artist** (required)		: Name of the tracks's artist.
- * * **track** (required)		: Name of the tracks.
+ * * **artist** (required)		: Name of the track's artist.
+ * * **track** (required)		: Name of the track.
  * * **tags** (required)		: Comma-separated list of tags.
  * * **sk** (required)			: Session key.
  * * **album** (optional)		: Name of the tracks's album.
@@ -1029,6 +1030,40 @@ function method_track_addTags() {
 	$xml = TrackXML::addTags($userid, $_POST['artist'], $_POST['album'], $_POST['track'], $_POST['tags']);
 	respond($xml);
 }
+
+/**
+ * track.removetag : Remove tag from a track.
+ *
+ * ###Description
+ * Remove a tag from a track.
+ * 
+ * ###Parameters
+ * * **artist** (required)		: Name of the track's artist.
+ * * **track** (required)		: Name of the track.
+ * * **tag** (required)			: Name of tag.
+ * * **sk** (required)			: Session key.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ *
+ * ###Additional info
+ * **This method requires authentication**.
+ *
+ * **HTTP request method** : POST.
+ * - - - 
+ *
+ * @package Webservice
+ * @subpackage Track
+ * @api
+ */
+function method_track_removeTag() {
+	if (!isset($_POST['artist']) || !isset($_POST['track']) || !isset($_POST['tag'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$userid = get_userid();
+	$xml = TrackXML::removeTag($userid, $_POST['artist'], $_POST['track'], $_POST['tag']);
+	respond($xml);
+}
+
 
 /**
  * track.gettoptags : Get the top tags for a track.
