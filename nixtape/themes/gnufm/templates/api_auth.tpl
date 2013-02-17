@@ -7,11 +7,11 @@
 			<p>Thank you very much {$username}. Your authorization has been recorded.</p>
 			<p>You may now close this page.</p>
 		{else}
-			<p>Uknown client with<br />
-			{if $stage == 'webapp1'}
-				URL: <b>{$cb}</b><br />
+			{if $clientname == 'Unknown client'}
+			<p><a href="{$clienturl}">{$clientname}</a> with API key: <b>{$api_key}</b><br />
+			{else}
+			<p><a href="{$clienturl}">{$clientname}</a>
 			{/if}
-				API key: <b>{$api_key}</b><br />
 				wants your permission to talk with this service.</p>
 			<form method="post" action="">
 				<p>Your Username: <input type="text" name="username" /></p>
