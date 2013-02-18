@@ -513,7 +513,7 @@ function method_artist_getTopTracks() {
  * artist.gettoptags : Get the top tags for an artist.
  *
  * ###Description
- * Get the top fans used for an artist, ordered by tag count.
+ * Get the top tags used for an artist, ordered by tag count.
  *
  * ###Parameters
  * * **artist** (required)		: Name of the artist.
