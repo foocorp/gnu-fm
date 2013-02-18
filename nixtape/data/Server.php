@@ -374,6 +374,7 @@ class Server {
 	static function getTopListeners($limit = 10, $offset = 0, $streamable = True, $begin = null, $end = null, $artist = null, $track = null, $cache = 600) {
 		global $adodb;
 
+		$params = array();
 		$query = 'SELECT s.userid, COUNT(*) as freq FROM Scrobbles s';
 
 		if ($streamable) {
@@ -391,7 +392,8 @@ class Server {
 			$begin = $begin - ($begin % 3600);
 			
 			$andquery ? $query .= ' AND' : $andquery = True ;
-			$query .= ' s.time>' . (int)$begin;
+			$query .= ' s.time > ?';
+			$params[] = (int)$begin;
 		}
 
 		if($end) {
@@ -399,24 +401,29 @@ class Server {
 			$end = $end - ($end % 3600);
 			
 			$andquery ? $query .= ' AND' : $andquery = True ;
-			$query .= ' s.time<' . (int)$end;
+			$query .= ' s.time < ?';
+			$params[] = (int)$end;
 		}
 
 		if($artist) {
 			$andquery ? $query .= ' AND' : $andquery = True;
-			$query .= ' lower(s.artist)=lower(' . $adodb->qstr($artist) . ')';
+			$query .= ' lower(s.artist)=lower(?)';
+			$params[] = $artist;
 
 			if($track) {
 				$andquery ? $query .= ' AND' : $andquery = True;
-				$query .= ' lower(s.track)=lower(' . $adodb->qstr($track) . ')';
+				$query .= ' lower(s.track)=lower(?)';
+				$params[] = $track;
 			}
 		}
 	
-		$query .= ' GROUP BY s.userid ORDER BY freq DESC LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
+		$query .= ' GROUP BY s.userid ORDER BY freq DESC LIMIT ? OFFSET ?';
+		$params[] = (int)$limit;
+		$params[] = (int)$offset;
 
 		try {
 			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-			$res = $adodb->CacheGetAll($cache, $query);
+			$res = $adodb->CacheGetAll($cache, $query, $params);
 		}catch (Exception $e) {
 			return array();
 		}
