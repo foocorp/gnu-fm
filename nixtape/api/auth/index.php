@@ -107,7 +107,7 @@ if (!isset($_REQUEST['api_key']) || !(isset($_REQUEST['cb']) || isset($_REQUEST[
 	}
 }
 
-$client = getClientData('null', $_REQUEST['api_key']);
+$client = getClientData(null, $_REQUEST['api_key']);
 $smarty->assign('clientname', $client['name']);
 $smarty->assign('clienturl', $client['url']);
 $smarty->display('api_auth.tpl');
