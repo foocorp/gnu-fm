@@ -357,6 +357,80 @@ class Server {
 		return $result;
 	}
 
+
+	/**
+	 * Get a list of users with the most listens
+	 *
+	 * @param int $limit Amount of results to return
+	 * @param int $offset Skip this many items before returning results
+	 * @param int $streamable Only return results for streamable tracks
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param string $artist Filter results by this artist
+	 * @param string $track Filter result by this track (need $artist to be set)
+	 * @param int $cache Caching period in seconds
+	 * @return array ((userid, freq, username, userurl) ..)
+	 */
+	static function getTopListeners($limit = 10, $offset = 0, $streamable = True, $begin = null, $end = null, $artist = null, $track = null, $cache = 600) {
+		global $adodb;
+
+		$query = 'SELECT s.userid, COUNT(*) as freq FROM Scrobbles s';
+
+		if ($streamable) {
+			$query .= ' WHERE ROW(s.artist, s.track) IN (SELECT artist_name, name FROM Track WHERE streamable=1)';
+			$andquery = True;
+		} else {
+			if($begin || $end || $artist) {
+				$query .= ' WHERE';
+				$andquery = False;
+			}
+		}
+
+		if($begin) {
+			//change time resolution to full hours (for easier caching)
+			$begin = $begin - ($begin % 3600);
+			
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' s.time>' . (int)$begin;
+		}
+
+		if($end) {
+			//change time resolution to full hours (for easier caching)
+			$end = $end - ($end % 3600);
+			
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' s.time<' . (int)$end;
+		}
+
+		if($artist) {
+			$andquery ? $query .= ' AND' : $andquery = True;
+			$query .= ' lower(s.artist)=lower(' . $adodb->qstr($artist) . ')';
+
+			if($track) {
+				$andquery ? $query .= ' AND' : $andquery = True;
+				$query .= ' lower(s.track)=lower(' . $adodb->qstr($track) . ')';
+			}
+		}
+	
+		$query .= ' GROUP BY s.userid ORDER BY freq DESC LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
+
+		try {
+			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+			$res = $adodb->CacheGetAll($cache, $query);
+		}catch (Exception $e) {
+			return array();
+		}
+
+		foreach($res as &$row) {
+			$row['username'] = uniqueid_to_username($row['userid']);
+			$row['userurl'] = Server::getUserURL($row['username']);
+			$result[] = $row;
+		}
+
+		return $result;
+	}
+
+
 	/**
 	 * Retrieves a list of loved tracks
 	 *
