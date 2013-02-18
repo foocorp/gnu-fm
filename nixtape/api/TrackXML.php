@@ -83,6 +83,43 @@ class TrackXML {
 		return $xml;
 	}
 
+	public static function getTopFans($name, $artistname, $limit, $cache) {
+		global $adodb;
+
+		try {
+			$track = new Track($name, $artistname);
+			$res = $track->getTopListeners($limit, 0, False, null, null, $cache);
+		} catch (Exception $e) {
+			return XML::error('error', '7', 'Invalid resource specified');
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('topfans', null);
+		$root->addAttribute('artist', $track->artist_name);
+		$root->addAttribute('track', $track->name);
+
+		$i = $offset + 1;
+		foreach($res as &$row) {
+			try {
+				$user = new User($row['username']);
+				$user_node = $root->addChild('user', null);
+				$user_node->addChild('name', $user->name);
+				$user_node->addChild('realname', $user->fullname);
+				$user_node->addChild('url', repamp($user->getURL()));
+				$image_small = $user_node->addChild('image', null);
+				$image_small->addAttribute('size', 'small');
+				$image_medium = $user_node->addChild('image', null);
+				$image_medium->addAttribute('size', 'medium');
+				$image_large = $user_node->addChild('image', null);
+				$image_large->addAttribute('size', 'large');
+				$user_node->addChild('weight', $row['freq']);
+			} catch (Exception $e) {}
+			$i++;
+		}
+
+		return $xml;
+	}
+
 	public static function getTags($artist, $name, $userid, $limit, $cache) {
 		
 		try {

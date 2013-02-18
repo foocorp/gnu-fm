@@ -86,13 +86,14 @@ $method_map = array(
 	'artist.getinfo'        => method_artist_getInfo,
 	'artist.gettoptracks'   => method_artist_getTopTracks,
 	'artist.gettoptags'     => method_artist_getTopTags,
+	'artist.gettopfans'     => method_artist_getTopFans,
 	'artist.gettags'        => method_artist_getTags,
 	'artist.getflattr'      => method_artist_getFlattr,
 	'album.addtags'         => method_album_addTags,
 	'album.gettoptags'      => method_album_getTopTags,
 	'album.gettags'         => method_album_getTags,
 	'user.getinfo'          => method_user_getInfo,
-	'user.gettopartists'	=> method_user_getTopArtists,
+	'user.gettopartists'    => method_user_getTopArtists,
 	'user.gettoptracks'     => method_user_getTopTracks,
 	'user.getrecenttracks'  => method_user_getRecentTracks,
 	'user.gettoptags'       => method_user_getTopTags,
@@ -111,6 +112,7 @@ $method_map = array(
 	'track.addtags'         => method_track_addTags,
 	'track.removetag'       => method_track_removeTag,
 	'track.gettoptags'      => method_track_getTopTags,
+	'track.gettopfans'      => method_track_getTopFans,
 	'track.gettags'         => method_track_getTags,
 	'track.ban'             => method_track_ban,
 	'track.love'            => method_track_love,
@@ -477,7 +479,7 @@ function method_artist_getInfo() {
 }
 
 /**
- * artist.gettoptracks : Get the top tracks for an aritst.
+ * artist.gettoptracks : Get the top tracks for an artist.
  *
  * ###Description
  * Get the top tracks for an artist, ordered by play count.
@@ -511,10 +513,10 @@ function method_artist_getTopTracks() {
  * artist.gettoptags : Get the top tags for an artist.
  *
  * ###Description
- * Get the top tags used for an artist, ordered by tag count.
+ * Get the top fans used for an artist, ordered by tag count.
  *
  * ###Parameters
- * * **artist** (required)		: Name of the album's artist.
+ * * **artist** (required)		: Name of the artist.
  * * **limit** (optional)		: How many items to show. Defaults to 50.
  * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
  * - - -
@@ -533,6 +535,35 @@ function method_artist_getTopTags() {
 	$cache = 600;	
 
 	$xml = ArtistXML::getTopTags($_REQUEST['artist'], $limit, $cache);
+	respond($xml);
+}
+
+/**
+ * artist.gettopfans : Get the top fans for an artist.
+ *
+ * ###Description
+ * Get the top fans used for an artist, ordered by play count.
+ *
+ * ###Parameters
+ * * **artist** (required)		: Name of the artist.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Artist
+ * @api
+ */
+function method_artist_getTopFans() {
+	if (!isset($_REQUEST['artist'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$limit = get_with_default('limit', 50);
+
+	$cache = 600;	
+
+	$xml = ArtistXML::getTopFans($_REQUEST['artist'], $limit, $cache);
 	respond($xml);
 }
 
@@ -1092,6 +1123,36 @@ function method_track_getTopTags() {
 	$cache = 600;
 
 	$xml = TrackXML::getTopTags($_REQUEST['artist'], $_REQUEST['track'], $limit, $cache);
+	respond($xml);
+}
+
+/**
+ * track.gettopfans : Get the top fans for a track.
+ *
+ * ###Description
+ * Get the top fans for a track, ordered by play count.
+ *
+ * ###Parameters
+ * * **artist** (required)		: Name of the artist.
+ * * **track** (required)		: Name of the track.
+ * * **limit** (optional)		: How many items to show. Defaults to 50.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Track
+ * @api
+ */
+function method_track_getTopFans() {
+	if (!isset($_REQUEST['artist']) OR !isset($_REQUEST['track'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$limit = get_with_default('limit', 50);
+
+	$cache = 600;	
+
+	$xml = TrackXML::getTopFans($_REQUEST['track'], $_REQUEST['artist'], $limit, $cache);
 	respond($xml);
 }
 
