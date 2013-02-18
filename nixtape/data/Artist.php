@@ -140,6 +140,21 @@ class Artist {
 	}
 
 	/**
+	 * Get this artist's top listeners
+	 *
+	 * @param int $limit Amount of results to return
+	 * @param int $offset Skip this many items before returning results
+	 * @param int $streamable Only return results for streamable tracks
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param int $cache Caching period in seconds
+	 * @return array ((userid, freq) ..)
+	 */
+	function getTopListeners($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $cache = 600) {
+		return Server::getTopListeners($limit, $offset, $streamable, $begin, $end, $this->name, null, $cache);
+	}
+
+	/**
 	 * Gives the URL for this artist
 	 *
 	 * @param string $component Type of page

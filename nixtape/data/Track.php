@@ -292,6 +292,21 @@ class Track {
 	}
 
 	/**
+	 * Get this track's top listeners
+	 *
+	 * @param int $limit Amount of results to return
+	 * @param int $offset Skip this many items before returning results
+	 * @param int $streamable Only return results for streamable tracks
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param int $cache Caching period in seconds
+	 * @return array ((userid, freq) ..)
+	 */
+	function getTopListeners($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $cache = 600) {
+		return Server::getTopListeners($limit, $offset, $streamable, $begin, $end, $this->artist_name, $this->name, $cache);
+	}
+
+	/**
 	 * Get a specific user's tags for this track.
 	 *
 	 * @param int $userid Get tags for this user
