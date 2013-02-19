@@ -46,19 +46,19 @@ if (isset($_GET['token']) && isset($_GET['webservice_url'])) {
 	$webservice_url = $_GET['webservice_url'];
 	$sig = md5('api_key' . $lastfm_key . 'methodauth.getSession' . 'token' . $token . $lastfm_secret);
 	$xmlresponse = simplexml_load_file($webservice_url . '?method=auth.getSession&token=' . $token . '&api_key=' . $lastfm_key . '&api_sig=' . $sig);
-	foreach ($xmlresponse->children() as $child => $value) {
-		if ($child == 'session') {
-			foreach ($value->children() as $child2 => $value2) {
-				if ($child2 == 'name') {
-					$remote_username = $value2;
-				} else if ($child2 == 'key') {
-					$remote_key = $value2;
+	if ($xmlresponse) {
+		foreach ($xmlresponse->children() as $child => $value) {
+			if ($child == 'session') {
+				foreach ($value->children() as $child2 => $value2) {
+					if ($child2 == 'name') {
+						$remote_username = $value2;
+					} else if ($child2 == 'key') {
+						$remote_key = $value2;
+					}
 				}
 			}
 		}
-	}
-
-	if (!isset($remote_username) || !isset($remote_key)) {
+	} elseif (!$xmlresponse || (!isset($remote_username) || !isset($remote_key))) {
 		$smarty->assign('pageheading', 'Error!');
 		$smarty->assign('details', 'Sorry, we weren\'t able to authenticate your account.');
 		$smarty->display('error.tpl');
