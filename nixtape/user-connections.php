@@ -32,6 +32,14 @@ if ($logged_in == false) {
 	die();
 }
 
+if (isset($_POST['remote_gnufm_url'])) {
+	// redirect to a foreign GNU FM service
+	$remote_url = $_POST['remote_gnufm_url'];
+	$callback_url = $base_url . '/user-connections.php?webservice_url=' . $remote_url . '/2.0/';
+	$url = $remote_url . '/api/auth/?api_key=' . $gnufm_key . '&cb=' . rawurlencode($callback_url);
+	header('Location: ' . $url);
+}
+
 if (isset($_GET['token']) && isset($_GET['webservice_url'])) {
 	// Handle authentication callback from a foreign service
 	$token = $_GET['token'];
@@ -87,6 +95,9 @@ if (isset($_GET['forward']) && isset($_GET['service'])) {
 
 if (isset($lastfm_key)) {
 	$smarty->assign('lastfm_key', $lastfm_key);
+}
+if (isset($gnufm_key)) {
+	$smarty->assign('gnufm_key', $gnufm_key);
 }
 
 $smarty->assign('connections', $this_user->getConnections());
