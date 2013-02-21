@@ -80,14 +80,16 @@
 		{if $playlist == 'track'}
 			var playlist = [{ldelim}"artist" : "{$track->artist_name|escape:'javascript'}", "album" : "{$track->album_name|escape:'javascript'}", "track" : "{$track->name|escape:'javascript'}", "url" : "{$track->streamurl}"{rdelim}];
 			var radio_session = false;
+			var station = false;
 		{else}
 			var playlist = false;
 			var radio_session = "{$radio_session}";
+			var station = "{$station}";
 		{/if}
 		{if isset($this_user)}
-		playerInit(playlist, "{$this_user->getScrobbleSession()}", "{$this_user->getWebServiceSession()}", radio_session);
+		playerInit(playlist, "{$this_user->getScrobbleSession()}", "{$this_user->getWebServiceSession()}", false, station);
 		{else}
-		playerInit(playlist, false, false, radio_session);
+		playerInit(playlist, false, false, radio_session, false);
 		{/if}
 	{rdelim});
 </script>
