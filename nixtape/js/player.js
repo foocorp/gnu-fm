@@ -100,11 +100,21 @@ function playerReady() {
 	$("#player > #interface").show();
 	$("#tags").placeholdr({placeholderText: example_tags});
 	$("#volume-slider").slider({range: "min", min: 0, max: 100, value: 60, slide: setVolume});
-	$('#tracktags ul').on('click', 'li', function(event) {
-		var tagname = event.target.textContent;
-		var tagstation = 'librefm://globaltags/' + tagname;
-		tune(tagstation);
-	});
+
+	// If logged in, enable tune buttons
+	if(ws_key) {
+		$('#artistname').css({'background' : '#ccc', 'border-radius' : '2px', 'padding' : '0px 2px'});
+		$('#artistname').on('click', function(event) {
+			var artistname = event.target.textContent;
+			var artiststation = 'librefm://artist/' + artistname;
+			tune(artiststation);
+		});
+		$('#tracktags ul').on('click', 'li', function(event) {
+			var tagname = event.target.textContent;
+			var tagstation = 'librefm://globaltags/' + tagname;
+			tune(tagstation);
+		});
+	}
 	loadVolume();
 	player_ready = true;
 }
