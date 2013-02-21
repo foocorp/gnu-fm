@@ -28,11 +28,11 @@ require_once('artist-menu.php');
 
 $station = 'librefm://artist/' . $artist->name;
 if (isset($this_user)) {
-	$radio_session = $this_user->getRadioSession($station);
+	$smarty->assign('station', $station);
 } else {
 	$radio_session = Server::getRadioSession($station);
+	$smarty->assign('radio_session', $radio_session);
 }
-$smarty->assign('radio_session', $radio_session);
 
 $smarty->assign('name', $artist->name);
 $smarty->assign('id', $artist->id);
