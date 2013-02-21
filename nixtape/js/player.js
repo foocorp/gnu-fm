@@ -59,7 +59,7 @@ function playerInit(list, sk, ws, rk) {
 		}
 		return;
 	}
-	$("#fallbackembed").replaceWith(""); // Get rid of the fallback embed, otherwise some html5 browsers will play it in addition to the js player
+	$("#fallbackembed").remove(); // Get rid of the fallback embed, otherwise some html5 browsers will play it in addition to the js player
 	if (streaming) {
 		// Get playlist from radio service
 		getRadioPlaylist();
