@@ -310,9 +310,17 @@ function getTopTrackTags() {
 				$('#tracktags ul').append('<li class="tunebutton">' + tagname + '</li>');
 			}else{
 				var i;
+				var max_length = 50;
+				var tags_length = 0;
 				for(i in tag_items) {
 					var tagname = tag_items[i].name;
-					$('#tracktags ul').append('<li class="tunebutton">' + tagname + '</li>');
+					tags_length = tags_length + tagname.length + 1;
+					//limit total length for tags
+					if (tags_length <= max_length) {
+						$('#tracktags ul').append('<li class="tunebutton">' + tagname + '</li>');
+					}else{
+						break;
+					}
 				}
 			}
 		}
