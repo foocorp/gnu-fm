@@ -16,10 +16,6 @@
 			<span id="artistname"></span> - <span id="trackname"></span> <span id="showplaylist"><a href="#" onclick="togglePlaylist(); return false;"><img src="{$img_url}/player/show-playlist.png" alt="{t}Show playlist{/t}" title="{t}Show playlist{/t}" /></a></span><span id="hideplaylist"><a href="#" onclick="togglePlaylist(); return false;"><img src="{$img_url}/player/hide-playlist.png" alt="{t}Hide playlist{/t}" title="{t}Hide playlist{/t}" /></a></span>
 			{if $logged_in}
 			<div id="tracktags">
-				<style>
-					#tracktags ul { display:inline; margin:0px;}
-					#tracktags li { background:#ccc; display:inline; border-radius:2px; padding:0px 2px; margin:0px 2px;}
-				</style>
 				<ul>
 				</ul>
 			</div>

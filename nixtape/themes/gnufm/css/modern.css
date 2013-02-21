@@ -138,6 +138,26 @@ body{ font:16px/24px sans-serif; }
     overflow: hidden;
     padding: 3px 5px;
 }
+#trackinfo > #tracktags {
+	display:none;
+}
+#trackinfo > #tracktags ul {
+	display:inline;
+	padding:0px;
+	margin:0px;
+}
+#trackinfo .tunebutton {
+	background: #eee;
+	cursor:pointer;
+	display:inline-block;
+	border-radius:2px;
+	padding:0px 2px;
+	margin:0px 2px;
+}
+#trackinfo .tunebutton:hover {
+	background:#ccc;
+}
+
 #player > #interface > #trackinfo > #playlist {
     display: none;
 }

@@ -103,7 +103,8 @@ function playerReady() {
 
 	// If logged in, enable tune buttons
 	if(ws_key) {
-		$('#artistname').css({'background' : '#ccc', 'border-radius' : '2px', 'padding' : '0px 2px'});
+		$('#tracktags').show();
+		$('#artistname').addClass('tunebutton');
 		$('#artistname').on('click', function(event) {
 			var artistname = event.target.textContent;
 			var artiststation = 'librefm://artist/' + artistname;
@@ -306,12 +307,12 @@ function getTopTrackTags() {
 			if ('name' in tag_items) {
 				// not an array
 				var tagname = tag_items.name;
-				$('#tracktags ul').append('<li>' + tagname + '</li>');
+				$('#tracktags ul').append('<li class="tunebutton">' + tagname + '</li>');
 			}else{
 				var i;
 				for(i in tag_items) {
 					var tagname = tag_items[i].name;
-					$('#tracktags ul').append('<li>' + tagname + '</li>');
+					$('#tracktags ul').append('<li class="tunebutton">' + tagname + '</li>');
 				}
 			}
 		}
