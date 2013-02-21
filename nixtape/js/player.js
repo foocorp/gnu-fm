@@ -100,6 +100,11 @@ function playerReady() {
 	$("#player > #interface").show();
 	$("#tags").placeholdr({placeholderText: example_tags});
 	$("#volume-slider").slider({range: "min", min: 0, max: 100, value: 60, slide: setVolume});
+	$('#tracktags ul').on('click', 'li', function(event) {
+		var tagname = event.target.textContent;
+		var tagstation = 'librefm://globaltags/' + tagname;
+		tune(tagstation);
+	});
 	loadVolume();
 	player_ready = true;
 }
@@ -258,6 +263,8 @@ function nowPlaying() {
 	}
 	timestamp = Math.round(new Date().getTime() / 1000);
 	$.post(base_url + "/scrobble-proxy.php?method=nowplaying", { "a" : artist, "b" : album, "t" : track, "l" : audio.duration, "s" : session_key}, function(data) {}, "text");
+
+	getTopTrackTags(); //TODO move this to updateProgress
 }
 
 /**
@@ -274,6 +281,31 @@ function tune(station) {
 					getRadioPlaylist();
 				}
 			}, 'json');
+}
+
+/**
+ * Get top tags for current track
+ *
+ */
+function getTopTrackTags() {
+	$.get(base_url + '/2.0/', {'method' : 'track.gettoptags', 'artist' : artist, 'track' : track, 'sk' : ws_key, 'format' : 'json'}, function(data) {
+		// remove old tags
+		$('#tracktags ul li').remove();
+		if('toptags' in data) {
+			var tag_items = data.toptags.tag;
+			if ('name' in tag_items) {
+				// not an array
+				var tagname = tag_items.name;
+				$('#tracktags ul').append('<li>' + tagname + '</li>');
+			}else{
+				var i;
+				for(i in tag_items) {
+					var tagname = tag_items[i].name;
+					$('#tracktags ul').append('<li>' + tagname + '</li>');
+				}
+			}
+		}
+	}, 'json');
 }
 
 /**
