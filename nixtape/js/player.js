@@ -25,7 +25,7 @@
 
 var audio;
 var scrobbled, now_playing;
-var artist, album, track, trackpage, session_key, radio_key, ws_key;
+var artist, album, track, trackpage, session_key, radio_key, ws_key, station;
 var playlist = [], current_song = 0;
 var player_ready = false;
 var playable_songs = false;
@@ -41,7 +41,7 @@ var base_url = base_url || "";
  * @param string sk Scrobble session key or false if the user isn't logged in
  * @param string rk Radio session key or false if streaming isn't required
  */
-function playerInit(list, sk, ws, rk) {
+function playerInit(list, sk, ws, rk, stationurl) {
 	audio = document.getElementById("audio");
 	if (!list) {
 		// We're playing a stream instead of a playlist
@@ -50,7 +50,8 @@ function playerInit(list, sk, ws, rk) {
 
 	session_key = sk;
 	ws_key = ws;
-	radio_key = rk;
+	radio_key = ws_key || rk;
+	station = stationurl || false;
 
 	if(typeof audio.duration == "undefined") {
 		//Browser doesn't support <audio>
@@ -61,8 +62,13 @@ function playerInit(list, sk, ws, rk) {
 	}
 	$("#fallbackembed").remove(); // Get rid of the fallback embed, otherwise some html5 browsers will play it in addition to the js player
 	if (streaming) {
-		// Get playlist from radio service
-		getRadioPlaylist();
+		// Logged in users need to tune to station
+		if(!rk && station) {
+			tune(station);
+		} else {
+			// Get playlist from radio service
+			getRadioPlaylist();
+		}
 	} else {
 		// Otherwise we have a static playlist
 		playlist = list;
@@ -252,6 +258,22 @@ function nowPlaying() {
 	}
 	timestamp = Math.round(new Date().getTime() / 1000);
 	$.post(base_url + "/scrobble-proxy.php?method=nowplaying", { "a" : artist, "b" : album, "t" : track, "l" : audio.duration, "s" : session_key}, function(data) {}, "text");
+}
+
+/**
+ * Tune to a station
+ *
+ * @param string station Station URL
+ */
+function tune(station) {
+	$.post(base_url + '/2.0/', {'method' : 'radio.tune', 'sk' : ws_key, 'station' : station, 'format' : 'json'},
+			function(data) {
+				if ('station' in data) {
+					// remove any future tracks in playlist and add tracks from new station
+					playlist = playlist.slice(0, current_song + 1);
+					getRadioPlaylist();
+				}
+			}, 'json');
 }
 
 /**
