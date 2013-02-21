@@ -7,17 +7,7 @@
 
 	{if $track->streamable}
 	<div id='player-container'>
-	{include file='player.tpl'}
-	<script type="text/javascript">
-		$(document).ready(function() {ldelim}
-			var playlist = [{ldelim}"artist" : "{$track->artist_name|escape:'javascript'}", "album" : "{$track->album_name|escape:'javascript'}", "track" : "{$track->name|escape:'javascript'}", "url" : "{$track->streamurl}"{rdelim}];
-			{if isset($this_user)}
-			playerInit(playlist, "{$this_user->getScrobbleSession()}", "{$this_user->getWebServiceSession()}", false);
-			{else}
-			playerInit(playlist, false, false, false);
-			{/if}
-		{rdelim});
-	</script>
+	{include file='player.tpl' playlist='track'}
 	</div>
 	{/if}
 

@@ -5,15 +5,6 @@
 {include file='flattr.tpl'}
 {include file='player.tpl'}
 <div id='error'></div>
-<script type="text/javascript">
-	$(document).ready(function() {ldelim}
-		{if isset($this_user)}
-		playerInit(false, "{$this_user->getScrobbleSession()}", "{$this_user->getWebServiceSession()}", "{$radio_session}");
-		{else}
-		playerInit(false, false, false, "{$radio_session}");
-		{/if}
-	{rdelim});
-</script>
 <br /><br />
 <div id='flattrstream' style='width: 50%; display: none;'>
 	<div id='flattr'></div>

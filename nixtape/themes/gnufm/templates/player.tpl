@@ -74,3 +74,20 @@
 	</div>
 
 </div>
+
+<script type="text/javascript">
+	$(document).ready(function() {ldelim}
+		{if $playlist == 'track'}
+			var playlist = [{ldelim}"artist" : "{$track->artist_name|escape:'javascript'}", "album" : "{$track->album_name|escape:'javascript'}", "track" : "{$track->name|escape:'javascript'}", "url" : "{$track->streamurl}"{rdelim}];
+			var radio_session = false;
+		{else}
+			var playlist = false;
+			var radio_session = "{$radio_session}";
+		{/if}
+		{if isset($this_user)}
+		playerInit(playlist, "{$this_user->getScrobbleSession()}", "{$this_user->getWebServiceSession()}", radio_session);
+		{else}
+		playerInit(playlist, false, false, radio_session);
+		{/if}
+	{rdelim});
+</script>
