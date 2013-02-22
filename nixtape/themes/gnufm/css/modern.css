@@ -157,9 +157,20 @@ body{ font:16px/24px sans-serif; }
 #trackinfo .tunebutton:hover {
 	background:#ccc;
 }
-
-#player > #interface > #trackinfo > #playlist {
-    display: none;
+#interface > #playlist {
+	border-radius: 8px;
+	display: none;
+	background-color: white;
+	border: 1px solid black;
+	margin-bottom:10px;
+}
+#interface > #playlist ul {
+	margin: 5px;
+	padding: 0px;
+}
+#interface > #playlist li {
+	list-style: none;
+	margin: 2px;
 }
 #showplaylist {
     float: right;
