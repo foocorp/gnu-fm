@@ -50,7 +50,7 @@
 			<div id="volume-slider"></div>
 		</div>
 
-		<div id="tag_input" style="display: none";>
+		<div id="tag_input" style="display: none;">
 			<p>{t}Enter a list of tags separated by commas:{/t}<br />
 			<input type='text' id='tags' name='tags' style='width: 75%; margin-top: 5px;' /><button id='tag_button' onclick="tag()" style='width: 20%; margin-top: 4px; float: right;'>{t}Tag{/t}</button></p>
 			{literal}
