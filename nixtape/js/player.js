@@ -309,6 +309,9 @@ function tune(station) {
 					// remove any future tracks in playlist and add tracks from new station
 					playlist = playlist.slice(0, current_song + 1);
 					getRadioPlaylist();
+
+					// set streaming to true to get player to fetch more songs if needed
+					streaming = true;
 				}
 			}, 'json');
 }
