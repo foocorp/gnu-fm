@@ -29,7 +29,7 @@
 		</div>
 
 		<div id="progress">
-			<div id="progressbar"></div>
+			<div id="progress-slider" title="Seek to time"></div>
 			<span id="scrobbled">Scrobbled</span>
 			<span id="currenttime"></span>/<span id="duration"></span>
 		</div>

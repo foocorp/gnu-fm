@@ -96,10 +96,14 @@ function playerReady() {
 	$("#love").fadeTo("normal", 1);
 	$("#open_tag").fadeTo("normal", 1);
 	$("#volume").fadeTo("normal", 1);
-	$("#progressbar").progressbar({ value: 0 });
 	$("#player > #interface").show();
 	$("#tags").placeholdr({placeholderText: example_tags});
 	$("#volume-slider").slider({range: "min", min: 0, max: 100, value: 60, slide: setVolume});
+	$("#progress-slider").slider({
+		value:0, range: "min", min:0, max:100, slide: function(event, progress) {
+			setProgress(progress.value);
+		}
+	});
 
 	// If logged in, enable tune buttons
 	if(ws_key) {
@@ -119,6 +123,17 @@ function playerReady() {
 	}
 	loadVolume();
 	player_ready = true;
+}
+
+/**
+ * Set progress of currently loaded track
+ *
+ * @param value Number between 0 and 100
+ */
+function setProgress(value) {
+	try {
+		audio.currentTime = audio.duration * (value / 100);
+	} catch (e) {}
 }
 
 /**
@@ -166,7 +181,7 @@ function seekForward() {
  */
 function updateProgress() {
 	if (audio.duration > 0) {
-		$("#progressbar").progressbar('option', 'value', (audio.currentTime / audio.duration) * 100);
+		$("#progress-slider").slider('option', 'value', (audio.currentTime / audio.duration) * 100);
 		$("#duration").text(friendlyTime(audio.duration));
 	} else {
 		$("#duration").text(friendlyTime(0));
