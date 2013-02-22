@@ -1,7 +1,7 @@
 {include file='header.tpl'}
 
 <center>
-{if isset($radio_session)}
+{if isset($radio_session) || isset($station)}
 {include file='flattr.tpl'}
 {include file='player.tpl'}
 <div id='error'></div>
