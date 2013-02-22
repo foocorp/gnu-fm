@@ -178,7 +178,7 @@ function updateProgress() {
 	}
 
 	if(ws_key && !tracktoptags) {
-		getTopTrackTags(); //TODO move this to updateProgress
+		trackGetTopTags(); //TODO move this to updateProgress
 		tracktoptags = true;
 	}
 
@@ -302,7 +302,7 @@ function tune(station) {
  * Get top tags for current track
  *
  */
-function getTopTrackTags() {
+function trackGetTopTags() {
 	$.get(base_url + '/2.0/', {'method' : 'track.gettoptags', 'artist' : artist, 'track' : track, 'sk' : ws_key, 'format' : 'json'}, function(data) {
 		if('toptags' in data) {
 			var tag_items = data.toptags.tag;
