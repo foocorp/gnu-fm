@@ -266,6 +266,27 @@ body{ font:16px/24px sans-serif; }
     top: 0;
 }
 
+#progress .ui-slider-horizontal {
+	height: 11px;
+	background:none;
+	cursor:pointer;
+}
+#progress .ui-slider-horizontal .ui-slider-range {
+	background-image: url("../img/player/pbar-ani.gif");
+}
+#progress .ui-slider .ui-slider-handle {
+	position: absolute;
+	z-index: 2;
+	width: 0em;
+	height: 1em;
+	cursor: pointer;
+}
+#progress .ui-slider-horizontal .ui-slider-handle {
+	top: -.1em;
+	margin-left: 0em;
+	background: #f57900;
+	display: none;
+}
 
 /* ==============
     MOBILE: Menu
