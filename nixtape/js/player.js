@@ -105,6 +105,7 @@ function playerReady() {
 	if(ws_key) {
 		$('#tracktags').show();
 		$('#artistname').addClass('tunebutton');
+		$('#artistname').prop('title', 'Tune to artist station');
 		$('#artistname').on('click', function(event) {
 			var artistname = event.target.textContent;
 			var artiststation = 'librefm://artist/' + artistname;
@@ -307,7 +308,7 @@ function getTopTrackTags() {
 			if ('name' in tag_items) {
 				// not an array
 				var tagname = tag_items.name;
-				$('#tracktags ul').append('<li class="tunebutton">' + tagname + '</li>');
+				$('#tracktags ul').append('<li class="tunebutton" title="Tune to tag station">' + tagname + '</li>');
 			}else{
 				var i;
 				var max_length = 50;
@@ -317,7 +318,7 @@ function getTopTrackTags() {
 					tags_length = tags_length + tagname.length + 1;
 					//limit total length for tags
 					if (tags_length <= max_length) {
-						$('#tracktags ul').append('<li class="tunebutton">' + tagname + '</li>');
+						$('#tracktags ul').append('<li class="tunebutton" title="Tune to tag station">' + tagname + '</li>');
 					}else{
 						break;
 					}
