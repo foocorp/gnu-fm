@@ -20,12 +20,6 @@
 				</ul>
 			</div>
 			{/if}
-			<div id="playlist">
-				<br />
-				<strong><u>{t}Playlist{/t}</u></strong>
-				<ul id="songs">
-				</ul>
-			</div>
 		</div>
 
 		<div id="progress">
@@ -68,6 +62,11 @@
 				});
 			</script>
 			{/literal}
+		</div>
+
+		<div id="playlist">
+			<ul id="songs">
+			</ul>
 		</div>
 
 	</div>
