@@ -303,7 +303,7 @@ function tune(station) {
  *
  */
 function trackGetTopTags() {
-	$.get(base_url + '/2.0/', {'method' : 'track.gettoptags', 'artist' : artist, 'track' : track, 'sk' : ws_key, 'format' : 'json'}, function(data) {
+	$.get(base_url + '/2.0/', {'method' : 'track.gettoptags', 'artist' : artist, 'track' : track, 'format' : 'json'}, function(data) {
 		if('toptags' in data) {
 			var tag_items = data.toptags.tag;
 			if ('name' in tag_items) {
