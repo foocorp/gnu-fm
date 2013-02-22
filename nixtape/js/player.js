@@ -251,7 +251,7 @@ function populatePlaylist() {
  * Shows/Hides the HTML playlist display
  */
 function togglePlaylist() {
-	$("#playlist").toggle(1000);
+	$("#playlist").slideToggle(1000);
 	$("#showplaylist").toggle();
 	$("#hideplaylist").toggle();
 }
@@ -517,7 +517,7 @@ function ban() {
 }
 
 function toggleTag() {
-	$("#tag_input").toggle(500);	
+	$("#tag_input").slideToggle(500);	
 	$("#open_tag").toggle();
 	$("#close_tag").toggle();
 }
@@ -535,7 +535,7 @@ function tag() {
  * Toggle visibility of the volume slider
  */
 function toggleVolume() {
-	$("#volume-box").toggle(500);
+	$("#volume-box").slideToggle(500);
 }
 
 /**
