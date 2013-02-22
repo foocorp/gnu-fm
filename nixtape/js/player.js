@@ -24,7 +24,7 @@
 */
 
 var audio;
-var scrobbled, now_playing;
+var scrobbled, now_playing, tracktoptags;
 var artist, album, track, trackpage, session_key, radio_key, ws_key, station;
 var playlist = [], current_song = 0;
 var player_ready = false;
@@ -177,6 +177,11 @@ function updateProgress() {
 		nowPlaying();
 	}
 
+	if(ws_key && !tracktoptags) {
+		getTopTrackTags(); //TODO move this to updateProgress
+		tracktoptags = true;
+	}
+
 	if (!scrobbled && audio.currentTime > audio.duration / 2) {
 		scrobble();
 	}
@@ -275,8 +280,6 @@ function nowPlaying() {
 	}
 	timestamp = Math.round(new Date().getTime() / 1000);
 	$.post(base_url + "/scrobble-proxy.php?method=nowplaying", { "a" : artist, "b" : album, "t" : track, "l" : audio.duration, "s" : session_key}, function(data) {}, "text");
-
-	getTopTrackTags(); //TODO move this to updateProgress
 }
 
 /**
@@ -301,8 +304,6 @@ function tune(station) {
  */
 function getTopTrackTags() {
 	$.get(base_url + '/2.0/', {'method' : 'track.gettoptags', 'artist' : artist, 'track' : track, 'sk' : ws_key, 'format' : 'json'}, function(data) {
-		// remove old tags
-		$('#tracktags ul li').remove();
 		if('toptags' in data) {
 			var tag_items = data.toptags.tag;
 			if ('name' in tag_items) {
@@ -390,6 +391,10 @@ function loadSong(song) {
 	if($("#flattrstream")) {
 		$.getJSON(base_url + '/2.0/', {'method' : 'artist.getflattr', 'artist' : artist, 'format' : 'json'}, updateFlattr);
 	}
+
+	// remove tags for previous track
+	$('#tracktags ul li').remove();
+	tracktoptags = false;
 }
 
 function updateFlattr(data) {
