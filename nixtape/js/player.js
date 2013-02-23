@@ -263,7 +263,7 @@ function updateProgress() {
 	}
 
 	if(ws_key && !tracktoptags) {
-		trackGetTopTags(); //TODO move this to updateProgress
+		trackGetTopTags();
 		tracktoptags = true;
 	}
 
