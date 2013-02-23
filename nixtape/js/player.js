@@ -30,7 +30,6 @@ var playlist = [], current_song = 0;
 var player_ready = false;
 var playable_songs = false;
 var streaming = false;
-var example_tags = "e.g. guitar, violin, female vocals, piano";
 var error_count = 0;
 var base_url = base_url || "";
 
@@ -60,7 +59,19 @@ function playerInit(list, sk, ws, rk, stationurl) {
 		}
 		return;
 	}
-	$("#fallbackembed").remove(); // Get rid of the fallback embed, otherwise some html5 browsers will play it in addition to the js player
+	 // Get rid of the fallback embed, otherwise some html5 browsers will play it in addition to the js player
+	$("#fallbackembed").remove();
+
+	// Make "Player problems?" clickable and hide problems box	
+	$('#toggleproblems').css({'text-decoration' : 'underline', 'cursor':'pointer'});
+	$('#toggleproblems').on('click', function() {
+		$('#player #problems').slideToggle(500);
+	});
+	$('#player #problems').hide();
+
+	// Display a message while waiting for player to get ready
+	$('#player #loading').text('Readying player and fetching playlist, this may take a while..');
+
 	if (streaming) {
 		// Logged in users need to tune to station
 		if(!rk && station) {
@@ -89,25 +100,53 @@ function playerReady() {
 	audio.addEventListener("ended", songEnded, false);
 	audio.addEventListener("error", songError, false);
 	updateProgress();
+
+	/** 
+	 * Set initial element properties
+	 */
+	$('#skipback').on('click', skipBack);
+
+	$('#seekback').on('click', seekBack);
+	$('#seekback').fadeTo("normal", 0.5);
+	//$('#seekback').hide();
+
+	$('#seekforward').on('click', seekForward);
+	$('#seekforward').fadeTo("normal", 0.5);
+	//$('#seekforward').hide();
+
+	$('#skipforward').on('click', skipForward);
+
+	$('#showplaylist').on('click', togglePlaylist);
+
+	$('#playlist').hide();
+
+	$('#hideplaylist').on('click', togglePlaylist);
+	$('#hideplaylist').hide();
+
+	$('#scrobbled').hide();
+
+	$('#play').on('click', play);
 	$("#play").fadeTo("normal", 1);
-	$("#pause").fadeTo("normal", 1);
+
+	$('#pause').on('click', pause);
 	$("#pause").hide();
-	$("#ban").fadeTo("normal", 1);
-	$("#love").fadeTo("normal", 1);
-	$("#open_tag").fadeTo("normal", 1);
+
+	$('#volume').on('click', toggleVolume);
 	$("#volume").fadeTo("normal", 1);
-	$("#player > #interface").show();
-	$("#tags").placeholdr({placeholderText: example_tags});
+
+	$('#volume-box').hide();
+
 	$("#volume-slider").slider({range: "min", min: 0, max: 100, value: 60, slide: setVolume});
+	loadVolume();
+
 	$("#progress-slider").slider({
 		value:0, range: "min", min:0, max:100, slide: function(event, progress) {
 			setProgress(progress.value);
 		}
 	});
 
-	// If logged in, enable tune buttons
-	if(ws_key) {
-		$('#tracktags').show();
+	if (ws_key) {
+		// Logged in 
 		$('#artistname').addClass('tunebutton');
 		$('#artistname').prop('title', 'Tune to artist station');
 		$('#artistname').on('click', function(event) {
@@ -115,13 +154,44 @@ function playerReady() {
 			var artiststation = 'librefm://artist/' + artistname;
 			tune(artiststation);
 		});
+
 		$('#tracktags ul').on('click', 'li', function(event) {
 			var tagname = event.target.textContent;
 			var tagstation = 'librefm://globaltags/' + tagname;
 			tune(tagstation);
 		});
+
+		$("#ban").fadeTo("normal", 1);
+		$('#ban').on('click', ban);
+
+		$('#love').on('click', love);
+		$("#love").fadeTo("normal", 1);
+
+		$('#open_tag').on('click', toggleTag);
+		$("#open_tag").fadeTo("normal", 1);
+
+		$('#close_tag').on('click', toggleTag);
+		$('#close_tag').hide();
+
+		$('#tag_button').on('click', tag);
+		$('#tags').keyup(function(event) {
+			if(event.keyCode == 13) {
+				tag();
+			}
+		});
+		$('#tag_input').hide();
+	} else {
+		// Not logged in
+		$('#tracktags').remove();
+		$('#ban').remove();
+		$('#love').remove();
+		$('#close_tag').remove();
+		$('#open_tag').remove();
+		$('#tag_input').remove();
 	}
-	loadVolume();
+
+	$('#player #loading').remove();
+	$("#player > #interface").show();
 	player_ready = true;
 }
 
@@ -527,7 +597,7 @@ function toggleTag() {
 
 function tag() {
 	var tags = $("#tags").val();
-	if (tags != example_tags && tags != "") {
+	if (tags != "") {
 		$.post(base_url + "/2.0/", {'method' : 'track.addtags', 'artist' : artist, 'track' : track, 'tags' : tags, 'sk' : ws_key}, function(data) {}, "text");
 		toggleTag();
 		$("#tags").val("");

@@ -68,7 +68,7 @@ td { vertical-align: top; }
     Author: Jonathan Verrecchia
    =================================================== */
 
-body{ font:16px/24px sans-serif; }
+body{ font:12px/18px sans-serif; }
 
 .wrapper{
 	width:90%;
@@ -111,20 +111,21 @@ body{ font:16px/24px sans-serif; }
     text-align: right;
     width: 340px;
 }
-#playerproblems {
-    text-align: justify;
+#player #fallbackembed {
+	width:200px;
+	height:50px;
 }
 #player > #interface {
     border: 1px solid black;
     border-radius: 8px 8px 8px 8px;
-    color: white;
+    color: black;
     display: none;
     padding: 10px 10px 0;
     text-align: left;
     width: 320px;
 }
-#player > #interface > #p_buttons a {
-    opacity: 0.5;
+#player > #interface .btn {
+	cursor: pointer;
 }
 #player > #interface > #progress {
     text-align: right;
@@ -137,9 +138,6 @@ body{ font:16px/24px sans-serif; }
     margin-bottom: 5px;
     overflow: hidden;
     padding: 3px 5px;
-}
-#trackinfo > #tracktags {
-	display:none;
 }
 #trackinfo > #tracktags ul {
 	display:inline;
@@ -159,7 +157,6 @@ body{ font:16px/24px sans-serif; }
 }
 #interface > #playlist {
 	border-radius: 8px;
-	display: none;
 	background-color: white;
 	border: 1px solid black;
 	margin-bottom:10px;
@@ -177,18 +174,29 @@ body{ font:16px/24px sans-serif; }
     margin-top: 2px;
 }
 #hideplaylist {
-    display: none;
     float: right;
     margin-top: 2px;
 }
 #scrobbled {
-    display: none;
     float: left;
 }
 #volume-box {
     font-size: 8px;
     margin-bottom: 1em;
     padding: 0;
+}
+#tag_input input {
+	width: 75%;
+	margin-top: 5px;
+}
+#tag_input #tag_button {
+	width: 20%;
+	margin-top: 4px;
+	float: right;
+}
+#player #problems {
+	width: 75%;
+	text-align: justify;
 }
 .ui-widget {
     font-family: Verdana,Arial,sans-serif;
