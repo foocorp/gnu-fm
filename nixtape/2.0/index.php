@@ -895,11 +895,11 @@ function method_auth_getSession() {
  * Remove a scrobble from user's library
  *
  * #Parameters
- * **timestamp** (required)
- * **artist** (required)
- * **track** (required)
- * **sk** (required)
- * **format** (optional)
+ * **timestamp** (required)		: Timestamp in Unix time.
+ * **artist** (required)		: Artist name.
+ * **track** (required)			: Track name.
+ * **sk** (required)			: Session key.
+ * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
  *
  * #Additional info
  * **This method requires authentication**.

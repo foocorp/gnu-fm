@@ -31,7 +31,7 @@ class Library {
 	 * Remove a scrobble.
 	 *
 	 * @param int userid User ID.
-	 * @param int timestamp
+	 * @param int timestamp Timestamp in Unix time.
 	 * @param string artist Artist name.
 	 * @param string track Track name.
 	 * @return bool True if scrobble was removed, False if not.
