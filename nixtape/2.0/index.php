@@ -32,6 +32,7 @@ require_once('../api/JSONEncoder.php');
 require_once('../api/TrackXML.php');
 require_once('../api/AlbumXML.php');
 require_once('../api/TagXML.php');
+require_once('../api/LibraryXML.php');
 require_once('../data/Server.php');
 require_once('../radio/radio-utils.php');
 
@@ -92,6 +93,7 @@ $method_map = array(
 	'album.addtags'         => method_album_addTags,
 	'album.gettoptags'      => method_album_getTopTags,
 	'album.gettags'         => method_album_getTags,
+	'library.removescrobble'=> method_library_removeScrobble,
 	'user.getinfo'          => method_user_getInfo,
 	'user.gettopartists'    => method_user_getTopArtists,
 	'user.gettoptracks'     => method_user_getTopTracks,
@@ -884,6 +886,39 @@ function method_auth_getSession() {
 		print("	</session>\n");
 		print("</lfm>");
 	}
+}
+
+/**
+ * library.removescrobble : Remove a scrobble
+ *
+ * ###Description
+ * Remove a scrobble from user's library
+ *
+ * #Parameters
+ * **timestamp** (required)
+ * **artist** (required)
+ * **track** (required)
+ * **sk** (required)
+ * **format** (optional)
+ *
+ * #Additional info
+ * **This method requires authentication**.
+ *
+ * **HTTP request method** : POST
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Library
+ * @api
+ */
+function method_library_removeScrobble() {
+	if (!isset($_POST['artist']) || !isset($_POST['track']) || !isset($_POST['timestamp'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$userid = get_userid();
+	$xml = LibraryXML::removeScrobble($userid, $_POST['timestamp'], $_POST['artist'], $_POST['track']);
+	respond($xml);
 }
 
 /**
