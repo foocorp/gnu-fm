@@ -40,11 +40,11 @@ class Library {
 		global $adodb;
 
 		$delete_query = 'DELETE FROM Scrobbles WHERE userid=? AND time=? AND artist=? AND track=?';
-		$delete_params = array($userid, $timestamp, $artist, $track);
+		$delete_params = array((int)$userid, (int)$timestamp, $artist, $track);
 
 		// TODO Should we have a db trigger for this?
 		$update_stats_query = 'UPDATE User_Stats SET scrobble_count=scrobble_count-1 WHERE userid=?';
-		$update_stats_params = array($userid);
+		$update_stats_params = array((int)$userid);
 
 		$adodb->StartTrans();
 		try {
