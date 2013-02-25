@@ -34,24 +34,32 @@ class TrackXML {
 	public static function addTags($userid, $artist, $album, $trackName, $tags) {
 		try {
 			$track = new Track($trackName, $artist);
-			$track->addTags($tags, $userid);
+			$res = $track->addTags($tags, $userid);
 		} catch (Exception $e) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
-		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		if(!$res) {
+			$xml = XML::error('failed', '7', 'Invalid resource specified');
+		} else {
+			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		}
 		return $xml;
 	}
 
 	public static function removeTag($userid, $artist, $trackName, $tag) {
 		try {
 			$track = new Track($trackName, $artist);
-			$track->removeTag($tag, $userid);
+			$res = $track->removeTag($tag, $userid);
 		} catch (Exception $e) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
-		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		if(!$res) {
+			$xml = XML::error('failed', '7', 'Invalid resource specified');
+		} else {
+			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		}
 		return $xml;
 	}
 
@@ -98,7 +106,6 @@ class TrackXML {
 		$root->addAttribute('artist', $track->artist_name);
 		$root->addAttribute('track', $track->name);
 
-		$i = $offset + 1;
 		foreach($res as &$row) {
 			try {
 				$user = new User($row['username']);
@@ -114,7 +121,6 @@ class TrackXML {
 				$image_large->addAttribute('size', 'large');
 				$user_node->addChild('weight', $row['freq']);
 			} catch (Exception $e) {}
-			$i++;
 		}
 
 		return $xml;

@@ -326,27 +326,31 @@ class Track {
 	/**
 	 * Add a list of tags to a track
 	 *
-	 * @param string $tags A comma-separated list of tags
-	 * @param int $userid The user adding these tags
+	 * @param string $tags A comma-separated list of tags.
+	 * @param int $userid The user adding these tags.
+	 * @return bool True if any tag was added, False if no tags were added.
 	 */
 	function addTags($tags, $userid) {
 		global $adodb;
 
 		$tags = explode(',', strtolower($tags));
+		$query = 'INSERT INTO Tags (tag, artist, album, track, userid) VALUES(?,?,?,?,?)';
 		foreach($tags as $tag) {
 			$tag = trim($tag);
 			if(strlen($tag) == 0) {
 				continue;
 			}
+			$params = array($tag, $this->artist_name, $this->album_name, $this->name, (int) $userid);
 			try {
-				$adodb->Execute('INSERT INTO Tags VALUES ('
-					. $adodb->qstr($tag) . ','
-					. $adodb->qstr($this->artist_name) . ', '
-					. $adodb->qstr($this->album_name) . ', '
-					. $adodb->qstr($this->name) . ', '
-					. $userid . ')');
-			} catch (Exception $e) {}
+				$adodb->Execute($query, $params);
+				if ($adodb->Affected_Rows()) {
+					$res = $res + 1;
+				}
+			} catch (Exception $e) {
+				reportError($e->GetMessage(), $e->GetTraceAsString());
+			}
 		}
+		return (bool) $res;
 	}
 
 	/**
@@ -354,7 +358,6 @@ class Track {
 	 *
 	 * @param int $userid The user loving this track.
 	 * @return bool True on success, False on fail.
-	 *
 	 */
 	function love($userid) {
 		global $adodb;
@@ -493,6 +496,7 @@ class Track {
 	 *
 	 * @param string $tag The tag to be removed
 	 * @param int $userid The user removing the tag
+	 * @return bool True on success, False on fail.
 	 */
 	function removeTag($tag, $userid) {
 		global $adodb;
@@ -501,13 +505,16 @@ class Track {
 		if(strlen($tag) == 0) {
 			return;
 		}
-		$query = 'DELETE FROM Tags WHERE tag = ? AND lower(artist) = lower(?) AND lower(track) = lower(?) AND userid = ?';
-		$params = array($tag, $this->artist_name, $this->name, $userid);
+		$query = 'DELETE FROM Tags WHERE tag=? AND artist=? AND track=? AND userid = ?';
+		$params = array($tag, $this->artist_name, $this->name, (int) $userid);
 		try {
 			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
 		} catch (Exception $e) {
 			reportError($e->getMessage(), $e->getTraceAsString());
+			return False;
 		}
+		return (bool) $res;
 	}
 
 }
