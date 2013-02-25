@@ -46,6 +46,8 @@ class Track {
 	 *
 	 * @param string $name The name of the track to load
 	 * @param string $artist The name of the artist who recorded this track
+	 *
+	 * @todo Should we call Track::create() instead of throwing "No such track" exception?
 	 */
 	function __construct($name, $artist) {
 		global $adodb;
@@ -350,33 +352,45 @@ class Track {
 	/**
 	 * Love a track
 	 *
-	 * @param int $userid The user loving this track
+	 * @param int $userid The user loving this track.
+	 * @return bool True on success, False on fail.
+	 *
 	 */
 	function love($userid) {
 		global $adodb;
-		
+
+		$query = 'INSERT INTO Loved_Tracks (userid, track, artist, time) VALUES(?,?,?,?)';
+		$params = array((int) $userid, $this->name, $this->artist_name, time());
 		try {
-			$adodb->Execute('INSERT INTO Loved_Tracks VALUES ('
-				. $userid . ', '
-				. $adodb->qstr($this->name) . ', '
-				. $adodb->qstr($this->artist_name) . ', '
-				. time() . ')');
-		} catch (Exception $e) {}
+			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+		return (bool) $res;
 	}
 
 	/**
 	 * Unlove a track
 	 *
-	 * @param int $userid The user unloving this track
+	 * @param int $userid The user unloving this track.
+	 * @return bool True on success, False on fail.
 	 */
 	function unlove($userid) {
 		global $adodb;
 
+		$query = 'DELETE FROM Loved_Tracks WHERE userid=? AND track=? AND artist=?';
+		$params = array((int) $userid, $this->name, $this->artist_name);
+
 		try {
-			$adodb->Execute('DELETE FROM Loved_Tracks WHERE userid=' . $userid
-				. ' AND track=' . $adodb->qstr($this->name)
-				. ' AND artist=' . $adodb->qstr($this->artist_name));
-		} catch (Exception $e) {}
+			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+		return (bool) $res;
 	}
 
 	/**
