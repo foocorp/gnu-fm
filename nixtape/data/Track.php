@@ -402,18 +402,91 @@ class Track {
 	function isLoved($userid) {
 		global $adodb;
 
+		$query = 'SELECT * FROM Loved_Tracks WHERE userid=? AND track=? AND artist=?';
+		$params = array((int) $userid, $this->name, $this->artist_name);
 		try {
-			$res = $adodb->GetRow('SELECT * FROM Loved_Tracks WHERE userid='
-				. $userid . ' AND track='
-				. $adodb->qstr($this->name) . ' AND artist='
-				. $adodb->qstr($this->artist_name));
-		} catch (Exception $e) {}
+			$res = $adodb->GetRow($query, $params);
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
 
 		if($res) {
 			return True;
 		}
 		return False;
 	}
+
+
+	/**
+	 * Ban a track
+	 *
+	 * @param int $userid The user banning this track.
+	 * @return bool True on success, False on fail.
+	 *
+	 */
+	function ban($userid) {
+		global $adodb;
+
+		$query = 'INSERT INTO Banned_Tracks (userid, track, artist, time) VALUES(?,?,?,?)';
+		$params = array((int) $userid, $this->name, $this->artist_name, time());
+		try {
+			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+		return (bool) $res;
+	}
+
+	/**
+	 * Unban a track
+	 *
+	 * @param int $userid The user unbanning this track.
+	 * @return bool True on success, False on fail.
+	 */
+	function unban($userid) {
+		global $adodb;
+
+		$query = 'DELETE FROM Banned_Tracks WHERE userid=? AND track=? AND artist=?';
+		$params = array((int) $userid, $this->name, $this->artist_name);
+
+		try {
+			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+		return (bool) $res;
+	}
+
+
+	/**
+	 * Check if track has been banned by user
+	 *
+	 * @param int $userid The user we are looking for
+	 * @return bool True if track has been banned by user
+	 */
+	function isBanned($userid) {
+		global $adodb;
+
+		$query = 'SELECT * FROM Banned_Tracks WHERE userid=? AND track=? AND artist=?';
+		$params = array((int) $userid, $this->name, $this->artist_name);
+		try {
+			$res = $adodb->GetRow($query, $params);
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+
+		if($res) {
+			return True;
+		}
+		return False;
+	}
+
 
 	/*	
 	 * Remove a tag from a track
