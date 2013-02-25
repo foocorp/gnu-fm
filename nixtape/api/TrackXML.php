@@ -149,18 +149,18 @@ class TrackXML {
 	}
 
 	public static function ban($artist, $name, $userid) {
-		global $adodb;
-
 		try {
-			$res = $adodb->Execute('INSERT INTO Banned_Tracks VALUES ('
-				. $userid . ', '
-				. $adodb->qstr($name) . ', '
-				. $adodb->qstr($artist) . ', '
-				. time() . ')');
-		} catch (Exception $e) {}
+			$track = new Track($name, $artist);
+			$res = $track->ban($userid);
+		} catch (Exception $e) {
+			return XML::error('failed', '7', 'Invalid resource specified');
+		}
 
-		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
-
+		if(!$res) {
+			$xml = XML::error('failed', '7', 'Invalid resource specified');
+		} else {
+			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		}
 		return $xml;
 	}
 
@@ -181,14 +181,18 @@ class TrackXML {
 	}
 
 	public static function unban($artist, $name, $userid) {
-		global $adodb;
-
 		try {
-			$res = $adodb->Execute('DELETE FROM Banned_Tracks WHERE userid=' . $userid . ' AND track=' . $adodb->qstr($name) . ' AND artist=' . $adodb->qstr($artist));
-		} catch (Exception $e) {}
+			$track = new Track($name, $artist);
+			$res = $track->unban($userid);
+		} catch (Exception $e) {
+			return XML::error('failed', '7', 'Invalid resource specified');
+		}
 
-		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
-
+		if(!$res) {
+			$xml = XML::error('failed', '7', 'Invalid resource specified');
+		} else {
+			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		}
 		return $xml;
 	}
 
