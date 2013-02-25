@@ -167,13 +167,16 @@ class TrackXML {
 	public static function love($artist, $name, $userid) {
 		try {
 			$track = new Track($name, $artist);
-			$track->love($userid);
+			$res = $track->love($userid);
 		} catch (Exception $e) {
-			return(XML::error('failed', '7', 'Invalid resource specified'));
+			return XML::error('failed', '7', 'Invalid resource specified');
 		}
 
-		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
-
+		if(!$res) {
+			$xml = XML::error('failed', '7', 'Invalid resource specified');
+		} else {
+			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		}
 		return $xml;
 	}
 
@@ -193,13 +196,16 @@ class TrackXML {
 	public static function unlove($artist, $name, $userid) {
 		try {
 			$track = new Track($name, $artist);
-			$track->unlove($userid);
+			$res = $track->unlove($userid);
 		} catch (Exception $e) {
-			return(XML::error('failed', '7', 'Invalid resource specified'));
+			return XML::error('failed', '7', 'Invalid resource specified');
 		}
 
-		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
-
+		if(!$res) {
+			$xml = XML::error('failed', '7', 'Invalid resource specified');
+		} else {
+			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		}
 		return $xml;
 	}
 
