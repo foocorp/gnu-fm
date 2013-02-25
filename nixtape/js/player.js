@@ -25,7 +25,7 @@
 
 var audio;
 var scrobbled, now_playing, tracktoptags;
-var artist, album, track, trackpage, session_key, radio_key, ws_key, station;
+var artist, album, track, trackpage, radio_key, ws_key, station;
 var playlist = [], current_song = 0;
 var player_ready = false;
 var playable_songs = false;
@@ -40,14 +40,14 @@ var base_url = base_url || "";
  * @param string sk Scrobble session key or false if the user isn't logged in
  * @param string rk Radio session key or false if streaming isn't required
  */
-function playerInit(list, sk, ws, rk, stationurl) {
+function playerInit(list, ws, rk, stationurl) {
 	audio = document.getElementById("audio");
 	if (!list) {
 		// We're playing a stream instead of a playlist
 		streaming = true;
 	}
 
-	session_key = sk;
+	api_key = 'hellothisisthegnufmwebsiteplayer';
 	ws_key = ws;
 	radio_key = ws_key || rk;
 	station = stationurl || false;
@@ -335,21 +335,21 @@ function togglePlaylist() {
 function scrobble() {
 	var timestamp;
 	scrobbled = true;
-	if(!session_key) {
+	if(!ws_key) {
 		//Not authenticated
 		return;
 	}
 	timestamp = Math.round(new Date().getTime() / 1000);
-	$.post(base_url + "/scrobble-proxy.php?method=scrobble", { "a[0]" : artist, "b[0]" : album, "t[0]" : track, "i[0]" : timestamp, "s" : session_key },
+	$.post(base_url + '/2.0/', { 'method':'track.scrobble', 'artist':artist, 'album':album, 'track':track, 'duration':audio.duration, 'timestamp':timestamp, 'sk':ws_key, 'api_key':api_key, 'format':'json'},
 			function(data){
-				if(data.substring(0, 2) == "OK") {
+				if('scrobbles' in data) {
 					$("#scrobbled").text("Scrobbled");
 					$("#scrobbled").fadeIn(5000, function() { $("#scrobbled").fadeOut(5000) } );
 				} else {
 					$("#scrobbled").text(data);
 					$("#scrobbled").fadeIn(1000);
 				}
-			}, "text");
+			}, 'json');
 }
 
 /**
@@ -359,12 +359,12 @@ function scrobble() {
 function nowPlaying() {
 	var timestamp;
 	now_playing = true;
-	if(!session_key) {
+	if(!ws_key) {
 		//Not authenticated
 		return;
 	}
 	timestamp = Math.round(new Date().getTime() / 1000);
-	$.post(base_url + "/scrobble-proxy.php?method=nowplaying", { "a" : artist, "b" : album, "t" : track, "l" : audio.duration, "s" : session_key}, function(data) {}, "text");
+	$.post(base_url + '/2.0/', { 'method':'track.updatenowplaying', 'artist':artist, 'album':album, 'track':track, 'duration':audio.duration, 'sk':ws_key, 'api_key':api_key}, function(data) {}, "text");
 }
 
 /**
