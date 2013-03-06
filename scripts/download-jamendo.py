@@ -27,21 +27,21 @@ class Downloader(threading.Thread):
 
 class DownloadJamendo:
 
-
-	def __init__(self, destination):
+	def __init__(self, destination, dump):
 		if not os.path.exists(destination):
 			os.mkdir(destination)
 		self.destination = destination
 		self.MAX_FILENAME_LENGTH = os.statvfs(destination)[statvfs.F_NAMEMAX]
-		print "Downloading Jamendo dump from %s" % JAMENDO_DUMP_URL
-		(filename, headers) = urllib.urlretrieve(JAMENDO_DUMP_URL, os.path.join(destination, "dbdump_artistalbumtrack.xml.gz"))
-		print "Jamendo dump saved: %s" % filename
-		self.dump = gzip.open(filename, "r")
+		self.dump = dump or None
+		if not self.dump:
+			print "Downloading Jamendo dump from %s" % JAMENDO_DUMP_URL
+			(filename, headers) = urllib.urlretrieve(JAMENDO_DUMP_URL, os.path.join(destination, "dbdump_artistalbumtrack.xml.gz"))
+			print "Jamendo dump saved: %s" % filename
+			self.dump = gzip.open(filename, "r")
 
 
-	def parse(self, dump):
-		dump = dump or self.dump
-		for event, elem in ElementTree.iterparse(dump):
+	def parse(self):
+		for event, elem in ElementTree.iterparse(self.dump):
 			if elem.tag == "artist":
 				artist = self.proc_artist(elem)
 				self.download_artist(artist)
@@ -110,15 +110,22 @@ class DownloadJamendo:
 					trackfile = "%s.ogg" % trackfile.encode('utf-8')[:self.MAX_FILENAME_LENGTH-4].decode('utf-8','ignore').encode('utf-8')
 					trackfilepath = os.path.join(self.destination, trackfile)
 					if os.path.exists(trackfilepath):
-						print "Already downloaded track %s" % trackfilepath
-					else:
-						while running_threads > MAX_THREADS:
-							time.sleep(5)
-						print "Downloading %s to %s" % (trackurl, trackfilepath)
-						d = Downloader(trackfilepath, trackurl)
-						d.start()
-						os.symlink(trackfile, os.path.join(self.destination, "%s.ogg2" % track["id"]))
-
+						if os.path.getsize(trackfilepath) < 1024:
+							print "Removing file with size below 1024 bytes: %s" % trackfilepath
+							os.remove(trackfilepath)
+						else:
+							print "Already downloaded track %s" % trackfilepath
+							continue
+						
+					while running_threads > MAX_THREADS:
+						time.sleep(5)
+					print "Downloading %s to %s" % (trackurl, trackfilepath)
+					d = Downloader(trackfilepath, trackurl)
+					d.start()
+					tracksymlink = os.path.join(self.destination, "%s.ogg2" % track["id"])
+					if os.path.lexists(tracksymlink):
+						os.remove(tracksymlink)
+					os.symlink(trackfile, tracksymlink)
 
 
 
@@ -129,7 +136,7 @@ class DownloadJamendo:
 
 if __name__ == "__main__":
 
-	if len(sys.argv) != 2:
+	if len(sys.argv) < 2:
 		print "Usage: download-jamendo.py [<database dump>] <destination>"
 		sys.exit(1)
 
@@ -143,5 +150,5 @@ if __name__ == "__main__":
 		destination = sys.argv[1]
 		dump = None
 
-	downloader = DownloadJamendo(destination)
-	downloader.parse(dump)
+	downloader = DownloadJamendo(destination, dump)
+	downloader.parse()
