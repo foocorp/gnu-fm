@@ -118,7 +118,7 @@ class DownloadJamendo:
 							continue
 						
 					while running_threads > MAX_THREADS:
-						time.sleep(5)
+						time.sleep(1)
 					print "Downloading %s to %s" % (trackurl, trackfilepath)
 					d = Downloader(trackfilepath, trackurl)
 					d.start()
@@ -126,6 +126,8 @@ class DownloadJamendo:
 					if os.path.lexists(tracksymlink):
 						os.remove(tracksymlink)
 					os.symlink(trackfile, tracksymlink)
+					# 1 second delay between every new request to be nice to server
+					time.sleep(1)
 
 
 
