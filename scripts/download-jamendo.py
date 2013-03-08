@@ -3,11 +3,12 @@
 # Jamendo database dumps can be fetched from: http://img.jamendo.com/data/dbdump_artistalbumtrack.xml.gz
 
 import xml.etree.cElementTree as ElementTree
-import sys, gzip, time, os, os.path, urllib, threading, statvfs
+import sys, gzip, time, os, os.path, urllib, threading, statvfs, magic
 
 JAMENDO_DUMP_URL="http://img.jamendo.com/data/dbdump_artistalbumtrack.xml.gz"
 
 MAX_THREADS = 10
+MAX_RETRIES = 5
 running_threads = 0
 
 class Downloader(threading.Thread):
@@ -21,7 +22,18 @@ class Downloader(threading.Thread):
 
 	def run(self):
 		global running_threads
-		urllib.urlretrieve(self.url, self.filename)
+		global MAX_RETRIES
+		correct_mime = "application/ogg; charset=binary"
+		m = magic.open(magic.MAGIC_MIME)
+		m.load()
+		retries = 0
+		current_mime = ""
+		while retries < MAX_RETRIES and current_mime != correct_mime:
+			urllib.urlretrieve(self.url, self.filename)
+			current_mime = m.file(self.filename)
+			retries += 1
+		if current_mime != correct_mime:
+			os.rename(self.filename, '%s.ign' % self.filename[:-4])
 		running_threads -= 1
 
 
@@ -108,7 +120,14 @@ class DownloadJamendo:
 					trackurl = "http://api.jamendo.com/get2/stream/track/redirect/?id=%d&streamencoding=ogg2" % track["id"]
 					trackfile = "%s-%s-%s-%s" % (track["id"], artist["name"].replace("/", ""), album["name"].replace("/", ""), track["name"].replace("/", " "))
 					trackfile = "%s.ogg" % trackfile.encode('utf-8')[:self.MAX_FILENAME_LENGTH-4].decode('utf-8','ignore').encode('utf-8')
+					ignorefile = "%s.ign" % trackfile[:-4]
 					trackfilepath = os.path.join(self.destination, trackfile)
+					ignorefilepath = os.path.join(self.destination, ignorefile)
+
+					if os.path.exists(ignorefilepath):
+						print "Found ignore file for %s" % trackfile
+						continue
+
 					if os.path.exists(trackfilepath):
 						if os.path.getsize(trackfilepath) < 1024:
 							print "Removing file with size below 1024 bytes: %s" % trackfilepath
