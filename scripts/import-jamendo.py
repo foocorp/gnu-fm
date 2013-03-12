@@ -195,7 +195,7 @@ class JamendoImport:
 
 					for track in album["tracks"]:
 
-						if "http://creativecommons.org/licenses/by-sa" not in track["license"] and not "http://creativecommons.org/licenses/by/" in track["license"] and not "http://artlibre.org/licence.php/lal.html" in track["license"]:
+						if not self.free_license(track["license"]):
 							streamable = 0
 						else:
 							streamable = 1
@@ -406,6 +406,8 @@ class JamendoImport:
 		except:
 			return False
 
+	def free_license(self, license):
+		return ("http://creativecommons.org/licenses/by-sa" in license or "http://creativecommons.org/licenses/by/" in license or "http://artlibre.org/licence.php/lal.html" in license)
 
 if __name__ == "__main__":
 
