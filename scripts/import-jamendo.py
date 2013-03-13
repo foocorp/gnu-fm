@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
 import xml.etree.cElementTree as ElementTree
-import sys, gzip, time
+import sys, gzip, time, httplib
 import psycopg2 as ordbms
+
+JAMENDO_MIRROR = "gigue.rrbone.net"
 
 genremap = {
 	0 : "Blues",
@@ -195,11 +197,11 @@ class JamendoImport:
 
 					for track in album["tracks"]:
 
-						if not self.free_license(track["license"]):
-							streamable = 0
-						else:
+						if self.free_license(track["license"]) and self.is_in_mirror(track["id"]):
 							streamable = 1
 							any_streamable_tracks = 1
+						else:
+							streamable = 0
 
 						try:
 							duration = int(track["duration"])
@@ -408,6 +410,18 @@ class JamendoImport:
 
 	def free_license(self, license):
 		return ("http://creativecommons.org/licenses/by-sa" in license or "http://creativecommons.org/licenses/by/" in license or "http://artlibre.org/licence.php/lal.html" in license)
+
+	def is_in_mirror(self, id):
+		try:
+			trackfile = "/" + str(id) + ".ogg2"
+			connection = httplib.HTTPConnection(JAMENDO_MIRROR)
+			connection.request("HEAD", trackfile)
+			response = connection.getresponse()
+			connection.close()
+		except:
+			return False
+		else:
+			return response.status == 200 and response.getheader('Content-Type') == 'audio/ogg'
 
 if __name__ == "__main__":
 
