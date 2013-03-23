@@ -58,4 +58,3 @@ if (isset($this_user) && $this_user->manages($artist->name)) {
 }
 
 $smarty->assign('pagetitle', $artist->name . ' : ' . $album->name);
-$smarty->assign('headerfile', 'album-header.tpl');
