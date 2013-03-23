@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='header.tpl' subheader='track-header.tpl'}
 {if $flattr_uid}
 {include file='flattr.tpl'}
 {/if}

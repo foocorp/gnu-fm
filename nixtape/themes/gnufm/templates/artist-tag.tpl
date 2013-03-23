@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='header.tpl' subheader='artist-header.tpl'}
 
 <div about="{$id}" typeof="mo:MusicArtist">
 
