@@ -2,8 +2,6 @@ Options +FollowSymLinks -MultiViews
 RewriteEngine on
 
 RewriteRule ^user/([^/]+)/?$					user-profile.php?user=$1			[NC,QSA]
-RewriteRule ^user/([^/]+)/journal/?$				user-journal.php?user=$1			[NC,QSA]
-RewriteRule ^user/([^/]+)/groups/?$				user-groups.php?user=$1				[NC,QSA]
 RewriteRule ^user/([^/]+)/recent-tracks/?$			user-recent-tracks.php?user=$1			[NC,QSA]
 RewriteRule ^user/([^/]+)/stats/?$				user-stats.php?user=$1				[NC,QSA]
 RewriteRule ^user/([^/]+)/station/?$				user-station.php?user=$1			[NC,QSA]
@@ -20,12 +18,8 @@ RewriteRule ^artist/([^/]+)/album/([^/]+)/?$			album.php?artist=$1&album=$2 			[
 RewriteRule ^artist/([^/]+)/?$					artist.php?artist=$1				[NC,QSA]
 RewriteRule ^artist/([^/]+)/manage/?$				artist-manage.php?artist=$1			[NC,QSA]
 RewriteRule ^artist/([^/]+)/tag/?$				artist-tag.php?artist=$1			[NC,QSA]
-RewriteRule ^group/new$						edit_group.php?group=new			[NC,QSA]
-RewriteRule ^group/([^/]+)/?$					group.php?group=$1				[NC,QSA]
-RewriteRule ^group/?$						group.php					[NC,QSA]
 RewriteRule ^country/([^/]+)/?$					location.php?country=$1				[NC,QSA]
 RewriteRule ^logout 						login.php?action=logout				[NC,QSA]
 RewriteRule ^listen 						listen.php					[NC,QSA]
 RewriteRule ^music 						popular.php					[NC,QSA]
-RewriteRule ^users						users.php					[NC,QSA]
 RewriteRule ^tag/([^/]+)/?$					tag.php?tag=$1					[NC,QSA]
