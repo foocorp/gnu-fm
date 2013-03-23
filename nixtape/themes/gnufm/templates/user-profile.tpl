@@ -1,5 +1,11 @@
-{include file='header.tpl' subheader='user-header.tpl' showbio=true}
+{include file='header.tpl' subheader='user-header.tpl'}
 
+{if $me->bio}
+<div id='bio'>
+	<blockquote>{$me->bio|escape:'html':'UTF-8'}</blockquote>
+</div>
+{/if}
+<br />
 {if $nowplaying|@count > 0}
 	<h3>{t}Now Playing:{/t}</h3>
 	{section name=i loop=$nowplaying}
