@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='header.tpl' subheader='user-header.tpl'}
 
 <center>
 	<h4>
