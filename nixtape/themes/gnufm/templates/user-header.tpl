@@ -13,4 +13,12 @@
 {/if}
 
 	<p>
+{if $showbio == true}
+	{if $me->bio}
+	<div id='bio'>
+		<blockquote>{$me->bio|escape:'html':'UTF-8'}</blockquote>
+	</div>
+	{/if}
+{/if}
+
 </div>
