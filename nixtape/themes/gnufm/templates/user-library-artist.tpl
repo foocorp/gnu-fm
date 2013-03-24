@@ -15,10 +15,12 @@
 
 <br />
 {if $page->albums}
+	<h4>Albums by this artist</h4>
 	{include file='albumlist.tpl' class=#librarytable# items=$page->albums thead=true fimage=true fcount=true fstream=true}
 {/if}
 
 {if $page->tracks}
+	<h4>Tracks by this artist</h4>
 	{include file='tracklist.tpl' class=#librarytable# items=$page->tracks thead=true fstream=true flove=true ftag=true fcount=true}
 {/if}
 

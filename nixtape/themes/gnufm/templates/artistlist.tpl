@@ -23,7 +23,7 @@
 		{if $fimage}
 			<th></th>
 		{/if}
-			<th><a href="{$page->urls['sort_name']}">Artist</a></th>
+			<th class="title"><a href="{$page->urls['sort_name']}">Title</a></th>
 		{if $ftag}
 			<th></th>
 		{/if}

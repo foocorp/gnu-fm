@@ -17,9 +17,9 @@
 		{if $fimage}
 		<th></th>
 		{/if}
-		<th><a href="{$url_sort_name}">Tag</a></th>
+		<th class="title">Tag</th>
 		{if $fcount}
-		<th class="count"><a href="{$url_sort_count}">Count</a></th>
+		<th class="count">Count</th>
 		{/if}
 	</thead>
 	{/if}

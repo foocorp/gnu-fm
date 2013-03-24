@@ -32,7 +32,7 @@
 {else}
 
 	{if $page->tags}
-		{include file='taglist.tpl' class=#librarytable# items=$page->tags fcount=true}
+		{include file='taglist.tpl' class=#librarytable# items=$page->tags thead=true fcount=true}
 	{/if}
 {/if}
 
