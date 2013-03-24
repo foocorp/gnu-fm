@@ -13,7 +13,8 @@
 </div>
 <br />
 {if $page->tracks}
-	{include file='tracklist.tpl' class=#librarytable# items=$page->tracks thead=true fstream=true flove=true ftag=true fcount=true}
+	<h4>Tracks on this album</h4>
+	{include file='tracklist.tpl' class=#librarytable# items=$page->tracks fstream=true flove=true ftag=true fcount=true}
 {/if}
 
 {include file='footer.tpl'}

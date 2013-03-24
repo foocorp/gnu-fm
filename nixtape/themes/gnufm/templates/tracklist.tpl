@@ -27,7 +27,7 @@
 		{if $fimage}
 		<th></th>
 		{/if}
-		<th><a href="{$url_sort_name}">Track</a></th>
+		<th class="title">Title</th>
 		{if $flove}
 		<th class="icon"></th>
 		{/if}
@@ -38,7 +38,7 @@
 		<th></th>
 		{/if}
 		{if $fcount}
-		<th class="count"><a href="{$url_sort_count}">Plays</a></th>
+		<th class="count">Plays</th>
 		{/if}
 		{if $ftime}
 		<th class="time">Time</th>

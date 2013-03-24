@@ -24,12 +24,12 @@
 		{if $fimage}
 		<th></th>
 		{/if}
-		<th><a href="{$url_sort_name}">Album</a></th>
+		<th class="title">Title</th>
 		{if $fbutton}
 		<th class="buttons"></th>
 		{/if}
 		{if $fcount}
-		<th class="count"><a href="{$url_sort_count}">Plays</a></th>
+		<th class="count">Plays</th>
 		{/if}
 	</thead>
 {/if}
