@@ -89,7 +89,6 @@ if (isset($user->name)) {
 
 	$submenu = user_menu($user, 'Overview');
 	$smarty->assign('submenu', $submenu);
-	$smarty->assign('headerfile', 'maxiprofile.tpl');
 
 	$smarty->display('user-profile.tpl');
 } else {

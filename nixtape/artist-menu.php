@@ -49,4 +49,3 @@ if (isset($this_user) && $this_user->manages($artist->name)) {
 }
 
 $smarty->assign('pagetitle', $artist->name);
-$smarty->assign('headerfile', 'artist-header.tpl');

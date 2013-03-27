@@ -64,4 +64,3 @@ if (isset($this_user) && $this_user->manages($artist->name)) {
 }
 
 $smarty->assign('pagetitle', $track->artist_name . ' : ' . $track->name);
-$smarty->assign('headerfile', 'track-header.tpl');

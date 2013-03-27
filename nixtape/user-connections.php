@@ -106,5 +106,4 @@ $submenu = user_menu($this_user, 'Edit');
 $smarty->assign('submenu', $submenu);
 
 $smarty->assign('me', $this_user);
-$smarty->assign('headerfile', 'maxiprofile.tpl');
 $smarty->display('user-connections.tpl');
