@@ -97,8 +97,14 @@ if (!isset($_REQUEST['api_key']) || !(isset($_REQUEST['cb']) || isset($_REQUEST[
 
 	// Web app auth step 2.2
 	if(isset($_POST['cb'])) {
-		$redirect_url = $_POST['cb'];
-		header('Location:' . $redirect_url . '&token=' . $_POST['token']);
+		$callback_url = $_POST['cb'];
+		if (preg_match("/\?/", $callback_url)) {
+			$redirect_url = $callback_url . '&token=' . $_POST['token'];
+		} else {
+			$redirect_url = $callback_url . '?token=' . $_POST['token'];
+		}
+
+		header('Location:' . $redirect_url);
 
 	// Desktop app auth step 2.2
 	} else {
