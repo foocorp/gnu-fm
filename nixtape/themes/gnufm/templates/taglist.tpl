@@ -23,7 +23,7 @@
 		{/if}
 	</thead>
 	{/if}
-	{foreach $items as $i}
+	{foreach from=$items item=i}
 	<tr>
 		{if $fimage}
 		<td class="image"><img src="{$i.image}" /></td>
