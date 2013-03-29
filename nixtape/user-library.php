@@ -91,7 +91,7 @@ if ($page->section == 'music') {
 	$smarty->display('user-library-loved.tpl');
 
 } else if ($page->section == 'banned') {
-	if (isset($_POST['banned'])) {
+	if (isset($_POST['unban'])) {
 		$track = new Track($_POST['track'], $_POST['artist']);
 		$track->unban($this_user->uniqueid);
 		$nocache = true;
