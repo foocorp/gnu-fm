@@ -215,6 +215,10 @@ class Library_page {
 			$query .= ' AND streamable=1';
 		}
 
+		/* BEGIN temporary limit query to one month in the past so we dont melt libre.fm server */
+		$query .= ' AND s.time > ' . (int) (time() - (3600 * 24 * 30));
+		/* END temporary limit */
+
 		$query .= ' GROUP BY s.artist, image';
 
 		if($this->sortby) {
