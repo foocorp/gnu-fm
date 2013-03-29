@@ -12,9 +12,9 @@
 {include file='paginate.tpl'}
 
 {if $page->streamable}
-	<a href="{$page->urls['streamable']}">All artists</a>
+	<a href="{$page->urls.streamable}">All artists</a>
 {else}
-	<a href="{$page->urls['streamable']}">Streamable artists</a>
+	<a href="{$page->urls.streamable}">Streamable artists</a>
 {/if}
 
 {include file='footer.tpl'}
