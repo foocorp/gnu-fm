@@ -23,7 +23,7 @@
 		{if $fimage}
 			<th></th>
 		{/if}
-			<th class="title"><a href="{$page->urls['sort_name']}">Title</a></th>
+			<th class="title"><a href="{$page->urls.sort_name}">Title</a></th>
 		{if $ftag}
 			<th></th>
 		{/if}
@@ -31,7 +31,7 @@
 			<th></th>
 		{/if}
 		{if $fcount}
-			<th><a href="{$page->urls['sort_count']}">Plays</a></th>
+			<th><a href="{$page->urls.sort_count}">Plays</a></th>
 		{/if}
 		{if $ftime}
 			<th></th>
