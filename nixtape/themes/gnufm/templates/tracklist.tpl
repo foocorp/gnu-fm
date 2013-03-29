@@ -45,7 +45,7 @@
 		{/if}
 	</thead>
 {/if}
-	{foreach $items as $i}
+	{foreach from=$items item=i}
 	<tr>
 		{if $fstream}
 		{if $i.streamable}<td class="icon" title="Track is streamable"><i class="icon-music"></i></td>{else}<td class="icon"></td>{/if}
