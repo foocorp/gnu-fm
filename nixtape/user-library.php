@@ -66,7 +66,13 @@ if ($page->section == 'music') {
 
 	} else {
 		// Music -> Artists
-		$page->getArtists();
+		try {
+			$page->getArtists();
+		} catch (Exception $e) {
+			$smarty->assign('details', $e->getMessage());
+			$smarty->display('error.tpl');
+			die();
+		}
 		$smarty->assign('page', $page);
 		$smarty->display('user-library-music.tpl');
 	}
