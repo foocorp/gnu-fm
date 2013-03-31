@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='header.tpl' subheader='track-header.tpl'}
 
 <div about="{$track->id|escape:'html':'UTF-8'}" typeof="mo:Track" class="haudio">
 	{if !empty($tagcloud)}

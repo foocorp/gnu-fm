@@ -34,11 +34,11 @@ if (isset($_GET['only_loved']) && $_GET['only_loved']) {
 
 if (isset($station)) {
 	if (isset($this_user)) {
-		$radio_session = $this_user->getRadioSession($station);
+		$smarty->assign('station', $station);
 	} else {
 		$radio_session = Server::getRadioSession($station);
+		$smarty->assign('radio_session', $radio_session);
 	}
-	$smarty->assign('radio_session', $radio_session);
 }
 $smarty->assign('pageheading', _('Go ahead, listen all you want'));
 $smarty->display('listen.tpl');

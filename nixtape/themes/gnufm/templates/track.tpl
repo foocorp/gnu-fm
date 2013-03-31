@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='header.tpl' subheader='track-header.tpl'}
 {if $flattr_uid}
 {include file='flattr.tpl'}
 {/if}
@@ -7,17 +7,7 @@
 
 	{if $track->streamable}
 	<div id='player-container'>
-	{include file='player.tpl'}
-	<script type="text/javascript">
-		$(document).ready(function() {ldelim}
-			var playlist = [{ldelim}"artist" : "{$track->artist_name|escape:'javascript'}", "album" : "{$track->album_name|escape:'javascript'}", "track" : "{$track->name|escape:'javascript'}", "url" : "{$track->streamurl}"{rdelim}];
-			{if isset($this_user)}
-			playerInit(playlist, "{$this_user->getScrobbleSession()}", "{$this_user->getWebServiceSession()}", false);
-			{else}
-			playerInit(playlist, false, false, false);
-			{/if}
-		{rdelim});
-	</script>
+	{include file='player.tpl' playlist='track'}
 	</div>
 	{/if}
 
@@ -29,10 +19,12 @@
 			<a about="{$artist->id|escape:'html':'UTF-8'}" typeof="mo:MusicArtist" property="foaf:name" class="url fn org"
 				rel="foaf:page" rev="foaf:primaryTopic" href="{$artist->getURL()|escape:'html':'UTF-8'}">{$artist->name|escape:'html':'UTF-8'}</a>
 		</dd>
+		{if $album}
 		<dt>{t}Album:{/t}</dt>
 		<dd rev="mo:track">
 			<a about="{$album->id|escape:'html':'UTF-8'}" typeof="mo:Record" property="dc:title" class="album"
 				rel="foaf:page" rev="foaf:primaryTopic" href="{$album->getURL()|escape:'html':'UTF-8'}">{$album->name|escape:'html':'UTF-8'}</a>
+		{/if}
 		</dd>
 		{if $track->mbid != ""}
 		<dt>MusicBrainz ID:</dt>
@@ -58,6 +50,18 @@
 	{elseif $track->streamurl}
 	<p style='padding-left: 1em;'><b><a href='{$track->streamurl}'>{t}Download track{/t}</a></b></p>
 	{/if}
+	{/if}
+
+	{if $logged_in}
+		{if $isloved}
+				<form action='' method='post'>
+					<input type='submit' name='unlove' id='unlove' value='{t}Unlove this track{/t}' />
+				</form>
+		{else}
+			<form action='' method='post'>
+				<input type='submit' name='love' id='love' value='{t}Love this track{/t}' />
+				</form>
+		{/if}
 	{/if}
 	
 	{if !empty($tagcloud)}

@@ -19,38 +19,16 @@
 
 */
 
-
 require_once('database.php');
 require_once('templating.php');
 require_once('data/Album.php');
-
-$album = new Album($_GET['album'], $_GET['artist']);
-
-try {
-	$artist = new Artist($album->artist_name);
-} catch (Exception $e) {
-	$smarty->assign('pageheading', 'Artist not found.');
-	$smarty->assign('details', 'The artist ' . $track->artist_name . ' was not found in the database.');
-	$smarty->display('error.tpl');
-	die();
-}
-
-if (isset($this_user) && $this_user->manages($artist->name)) {
-	$smarty->assign('edit_link', $album->getEditURL());
-}
+require_once('album-menu.php');
 
 $smarty->assign('name', $album->name);
 $smarty->assign('id', $album->id);
-$smarty->assign('artist', $artist);
-$smarty->assign('album', $album);
-$smarty->assign('pagetitle', $artist->name . ' : ' . $album->name);
 $aAlbumTracks = $album->getTracks();
 if ($aAlbumTracks) {
 	$smarty->assign('tracks', $aAlbumTracks);
-}
-
-if (isset($this_user) && $this_user->manages($artist->name)) {
-	$smarty->assign('add_track_link', $album->getAddTrackURL());
 }
 
 $smarty->assign('extra_head_links', array(
@@ -62,5 +40,4 @@ $smarty->assign('extra_head_links', array(
 			)
 	));
 
-$smarty->assign('headerfile', 'album-header.tpl');
 $smarty->display('album.tpl');

@@ -33,21 +33,11 @@ if ($logged_in == false) {
 	die();
 }
 
-try {
-	$artist = new Artist($_GET['artist']);
-} catch (Exception $e) {
-	$smarty->assign('pageheading', 'Artist not found.');
-	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');
-	$smarty->display('error.tpl');
-	die();
-}
-
 if ($_POST['tag']) {
 	$artist->addTags($_POST['tags'], $this_user->uniqueid);
 }
 
 $smarty->assign('name', $artist->name);
-$smarty->assign('pagetitle', $artist->name);
 
 try {
 	$tagCloud = TagCloud::generateTagCloud('tags', 'tag', 10, 'artist', $artist->name);
@@ -61,5 +51,4 @@ $smarty->assign('mytags', $this_user->getTagsForArtist($artist->name));
 $submenu = artist_menu($artist, 'Tag');
 $smarty->assign('submenu', $submenu);
 
-$smarty->assign('headerfile', 'artist-header.tpl');
 $smarty->display('artist-tag.tpl');

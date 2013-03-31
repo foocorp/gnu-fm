@@ -18,80 +18,102 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+require_once('../../config.php');
+require_once($install_path . '/database.php');
+require_once($install_path . '/templating.php');
+require_once($install_path . '/data/Server.php');
+require_once($install_path . '/data/clientcodes.php');
 
-require_once('../../database.php');
-?>
+function displayError($error_msg) {
+	global $smarty;
+	$smarty->assign('error_msg', $error_msg);
+	$smarty->display('api_auth.tpl');
+	exit();
+}
 
-<html>
+$smarty->assign('site_name', $site_name);
+if ($logged_in) {
+	$smarty->assign('username', $this_user->name);
+}
 
-<body>
+// We always need the api_key parameter and parameter cb or token
+if (!isset($_REQUEST['api_key']) || !(isset($_REQUEST['cb']) || isset($_REQUEST['token']))) {
+	displayError('Must submit a combination of parameters api_key and cb or api_key and token to proceed.');
 
-<?php
-if (isset($_POST['username'], $_POST['api_key'], $_POST['token'])) {
-	// Authenticate the user using the submitted password
+// Web app auth stage 1
+} elseif (isset($_GET['api_key']) && isset($_GET['cb']) && !isset($_REQUEST['token'])) {
+	$token = Server::getAuthToken();
+	$smarty->assign('stage', 'webapp1');
+	$smarty->assign('token', $token);
+	$smarty->assign('cb', $_GET['cb']);
+	$smarty->assign('api_key', $_GET['api_key']);
+
+// Desktop app auth stage 1
+} elseif (isset($_GET['api_key']) && isset($_GET['token']) && !isset($_GET['cb']) && !isset($_POST['token'])) {
+
+	// Ensures the token exists and is not already bound to a user
+	$query = 'SELECT * FROM Auth WHERE token = ? AND username IS NULL';
+	$params = array($_GET['token']);
 	try {
-		$result = $adodb->GetOne('SELECT username FROM Users WHERE '
-				. 'lower(username) = ' . $adodb->qstr(strtolower($_POST['username'])) . ' AND '
-				. 'password = ' . $adodb->qstr(md5($_POST['password'])));
+		$result = $adodb->GetRow($query, $params);
 	} catch (Exception $e) {
-		die('Database error');
+		reportError($e->getMessage(), $e->getTraceAsString());
+		displayError('Database error');
 	}
+
 	if (!$result) {
-		die('Authentication failed');
+		displayError('Invalid token');
+	}
+	$smarty->assign('stage', 'deskapp1');
+	$smarty->assign('api_key', $_GET['api_key']);
+	$smarty->assign('token', $_GET['token']);
+
+// Web/Desktop app auth stage 2.1
+} elseif (isset($_POST['api_key'], $_POST['token'])) {
+	if(!$logged_in) {
+		// Authenticate the user using the submitted password
+		$query = 'SELECT username FROM Users WHERE lower(username) = lower(?) AND password = ?';
+		$params = array($_POST['username'], md5($_POST['password']));
+		try {
+			$username = $adodb->GetOne($query, $params);
+		} catch (Exception $e) {
+			reportError($e->getMessage(), $e->getTraceAsString());
+			displayError('Database error');
+		}
+		if (!$username) {
+			displayError('Authentication failed');
+		}
 	}
 
 	// Bind the user to the token and cancel the expiration rule
+	$query = 'UPDATE Auth SET username = ?, expires = 0 WHERE token = ?';
+	$params = array($username, $_POST['token']);
 	try {
-		$result = $adodb->Execute('UPDATE Auth SET '
-				. 'username = ' . $adodb->qstr($_POST['username']) . ', '
-				. 'expires = 0 '
-				. 'WHERE '
-				. 'token = ' . $adodb->qstr($_POST['token']));
+		$adodb->Execute($query, $params);
 	} catch (Exception $e) {
-		die('Database error');
+		reportError($e->getMessage(), $e->getTraceAsString());
+		displayError('Database error');
 	}
-	?>
 
-		<p>Thank you very much, <?php print($_POST['username']); ?>.  Your authorization has been recorded.</p>
+	// Web app auth step 2.2
+	if(isset($_POST['cb'])) {
+		$callback_url = $_POST['cb'];
+		if (preg_match("/\?/", $callback_url)) {
+			$redirect_url = $callback_url . '&token=' . $_POST['token'];
+		} else {
+			$redirect_url = $callback_url . '?token=' . $_POST['token'];
+		}
 
-		<p>You may now close the browser.</p>
+		header('Location:' . $redirect_url);
 
-<?php } else if (!isset($_GET['api_key'], $_GET['token'])) { ?>
-
-			<p>Must submit an api_key and token to proceed.</p>
-
-<?php
-} else {
-
-	// Ensures the token exists and is not already bound to a user
-	try {
-		$result = $adodb->GetRow('SELECT * FROM Auth WHERE '
-				. 'token = ' . $adodb->qstr($_GET['token']) . ' AND '
-				. 'username IS NULL');
-	} catch (Exception $e) {
-		die('Database error');
+	// Desktop app auth step 2.2
+	} else {
+		$smarty->assign('stage', 'deskapp2.2');
+		$smarty->assign('username', $username);
 	}
-	if (!$result) {
-		die('Invalid token');
-	}
-?>
+}
 
-				<form method="post" action="">
-
-				<p>Your Username: <input type="text" name="username" /></p>
-
-				<p>Your Password: <input type="password" name="password" /></p>
-
-				<p>
-				<input type="submit" value="Submit" />
-				<input type="hidden" name="api_key" value="<?php print($_GET['api_key']); ?>" />
-				<input type="hidden" name="token" value="<?php print($_GET['token']); ?>" />
-				</p>
-
-				</form>
-
-<?php } ?>
-
-				</body>
-
-				</html>
+$client = getClientData(null, $_REQUEST['api_key']);
+$smarty->assign('clientname', $client['name']);
+$smarty->assign('clienturl', $client['url']);
+$smarty->display('api_auth.tpl');

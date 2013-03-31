@@ -68,7 +68,7 @@ td { vertical-align: top; }
     Author: Jonathan Verrecchia
    =================================================== */
 
-body{ font:16px/24px sans-serif; }
+body{ font:12px/18px sans-serif; }
 
 .wrapper{
 	width:90%;
@@ -100,6 +100,110 @@ body{ font:16px/24px sans-serif; }
 ::-moz-selection { background: #f16529; color: #fff; text-shadow: none; }
 ::selection      { background: #f16529; color: #fff; text-shadow: none; }
 
+#submenu li {
+	display:inline-block;
+}
+
+#submenu li.active {
+	font-weight:bold;
+}
+
+.pagination li {
+	display:inline-block;
+}
+
+.pagination li.disabled {
+	visibility:hidden;
+}
+
+.inline {
+	display:inline;
+}
+
+.librarytable {
+	width:100%;
+	/*border:1px solid black;*/
+}
+
+.librarytable td {
+	/*border-left:1px dotted black;*/
+	padding:2px;
+}
+
+.librarytable .icon {
+	width: 16px;
+}
+
+.librarytable .image {
+	width:24px;
+}
+
+.librarytable .title {
+	text-align:left;
+}
+
+.librarytable .count {
+	width:50px;
+	text-align:center;
+}
+.librarytable .time {
+	white-space:nowrap;
+	text-align:center;
+	width:100px;
+}
+
+.librarytable .icon-heart {
+	display:inline-block;
+	height:14px;
+	width:14px;
+	background-image:url("/themes/gnufm/img/love-small.png");
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+.librarytable .icon-music {
+	display:inline-block;
+	height:14px;
+	width:14px;
+	/*background-image:url("/themes/gnufm/img/love-small.png");*/
+	background-color:green;
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+.librarytable .icon-tag {
+	display:inline-block;
+	height:14px;
+	width:14px;
+	/*background-image:url("/themes/gnufm/img/love-small.png");*/
+	background-color:blue;
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+.librarytable .image img {
+	width:24px;
+	height:24px;
+}
+
+.librarytable tr .buttons form {
+	visibility:hidden;
+	width:50px;
+}
+
+.librarytable tbody tr:hover td {
+	background-color:#ddd;
+}
+
+.librarytable tbody tr:hover .buttons form {
+	visibility:visible;
+}
+
+.librarytable .buttons form {
+	margin:0px;
+}
+
+
 /* ==============
 
    GNU FM player
@@ -111,20 +215,21 @@ body{ font:16px/24px sans-serif; }
     text-align: right;
     width: 340px;
 }
-#playerproblems {
-    text-align: justify;
+#player #fallbackembed {
+	width:200px;
+	height:50px;
 }
 #player > #interface {
     border: 1px solid black;
     border-radius: 8px 8px 8px 8px;
-    color: white;
+    color: black;
     display: none;
     padding: 10px 10px 0;
     text-align: left;
     width: 320px;
 }
-#player > #interface > #p_buttons a {
-    opacity: 0.5;
+#player > #interface .btn {
+	cursor: pointer;
 }
 #player > #interface > #progress {
     text-align: right;
@@ -138,26 +243,64 @@ body{ font:16px/24px sans-serif; }
     overflow: hidden;
     padding: 3px 5px;
 }
-#player > #interface > #trackinfo > #playlist {
-    display: none;
+#trackinfo > #tracktags ul {
+	display:inline;
+	padding:0px;
+	margin:0px;
+}
+#trackinfo .tunebutton {
+	background: #eee;
+	cursor:pointer;
+	display:inline-block;
+	border-radius:2px;
+	padding:0px 2px;
+	margin:0px 2px;
+}
+#trackinfo .tunebutton:hover {
+	background:#ccc;
+}
+#interface > #playlist {
+	border-radius: 8px;
+	background-color: white;
+	border: 1px solid black;
+	margin-bottom:10px;
+}
+#interface > #playlist ul {
+	margin: 5px;
+	padding: 0px;
+}
+#interface > #playlist li {
+	list-style: none;
+	margin: 2px;
 }
 #showplaylist {
     float: right;
     margin-top: 2px;
 }
 #hideplaylist {
-    display: none;
     float: right;
     margin-top: 2px;
 }
 #scrobbled {
-    display: none;
     float: left;
 }
 #volume-box {
     font-size: 8px;
     margin-bottom: 1em;
     padding: 0;
+}
+#tag_input input {
+	width: 75%;
+	margin-top: 5px;
+}
+#tag_input #tag_button {
+	width: 20%;
+	margin-top: 4px;
+	float: right;
+}
+#player #problems {
+	width: 75%;
+	text-align: justify;
 }
 .ui-widget {
     font-family: Verdana,Arial,sans-serif;
@@ -246,6 +389,27 @@ body{ font:16px/24px sans-serif; }
     top: 0;
 }
 
+#progress .ui-slider-horizontal {
+	height: 11px;
+	background:none;
+	cursor:pointer;
+}
+#progress .ui-slider-horizontal .ui-slider-range {
+	background-image: url("../img/player/pbar-ani.gif");
+}
+#progress .ui-slider .ui-slider-handle {
+	position: absolute;
+	z-index: 2;
+	width: 0em;
+	height: 1em;
+	cursor: pointer;
+}
+#progress .ui-slider-horizontal .ui-slider-handle {
+	top: -.1em;
+	margin-left: 0em;
+	background: #f57900;
+	display: none;
+}
 
 /* ==============
     MOBILE: Menu

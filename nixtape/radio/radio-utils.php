@@ -42,6 +42,11 @@ function radio_title_from_url($url) {
 		$artist = $regs[2];
 		return $host_name . ' ' . ucwords($artist) . ' Similar Artist Radio';
 	}
+	if (preg_match('@l(ast|ibre)fm://artist/(.*)/album/(.*)@', $url, $regs)) {
+		$artist = $regs[2];
+		$album = $regs[3];
+		return $host_name . ' ' . ucwords($artist) . ' - ' . ucwords($album) . ' Album Radio';
+	}
 	if (preg_match('@l(ast|ibre)fm://artist/(.*)@', $url, $regs)) {
 		$artist = $regs[2];
 		return $host_name . ' ' . ucwords($artist) . ' Artist Radio';
@@ -111,6 +116,10 @@ function make_playlist($session, $old_format = false, $format='xml') {
 		}
 		$similarArtists = $artist->getSimilar(20);
 		$res = get_artist_selection($similarArtists, $artist);
+	} else if (preg_match('@l(ast|ibre)fm://artist/(.*)/album/(.*)@', $url, $regs)) {
+		$query = 'SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND lower(artist_name)=lower(?) AND lower(album_name)=lower(?)';
+		$params = array($regs[2], $regs[3]);
+		$res = $adodb->CacheGetAll(7200, $query, $params);
 	} else if (preg_match('@l(ast|ibre)fm://artist/(.*)@', $url, $regs)) {
 		$artist = $regs[2];
 		$res = $adodb->CacheGetAll(7200, 'SELECT name, artist_name, album_name, duration, streamurl FROM Track WHERE streamable=1 AND lower(artist_name) = lower(' . $adodb->qstr($artist) . ')');
@@ -271,6 +280,11 @@ function get_artist_selection($artists, $artist = false) {
  */
 function get_loved_tracks($users) {
 	global $adodb;
+
+	if (!count($users)) {
+		return array();
+	}
+
 	$userclause = '( ';
 	for ($i = 0; $i < count($users); $i++) {
 		$userclause .= 'Loved_Tracks.userid = ' . $users[$i];

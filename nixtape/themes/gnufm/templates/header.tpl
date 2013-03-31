@@ -1,3 +1,4 @@
+{config_load file='theme.conf' scope='global'}
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
@@ -13,9 +14,12 @@
 		<title>{$pagetitle|escape:'html':'UTF-8'} &mdash; {$site_name}</title>
 	{/if}
 	<link rel="stylesheet" href="{$base_url}/themes/{$default_theme}/css/modern.css" type="text/css" />
-	<script type="text/javascript" src="{$base_url}/js/jquery-1.4.4.min.js"></script>
-	<script type="text/javascript" src="{$base_url}/js/jquery-ui-1.7.1.custom.min.js"></script>
+	<script type="text/javascript" src="{$base_url}/js/jquery.min.js"></script>
+	<script type="text/javascript" src="{$base_url}/js/jquery-ui.custom.min.js"></script>
 	<script type="text/javascript" src="{$base_url}/js/jquery.placeholdr.js"></script>
+	<script type="text/javascript">
+		var base_url="{$base_url}";
+	</script>
 	<script type="text/javascript" src="{$base_url}/js/player.js"></script>
         <script type="text/javascript" src="{$base_url}/themes/{$default_theme}/js/modernizr.js"></script>
 	<meta name="author" content="FooCorp catalogue number FOO200 and contributors" />
@@ -38,10 +42,10 @@
   <div id="main-container">
     <div id="main" class="wrapper clearfix">
       
-      <article>
-	<header>
-				{if isset($headerfile)}
-					{include file="$headerfile"}
+		<article>
+			<header>
+				{if isset($subheader)}
+					{include file="$subheader"}
 				{/if}
 				{if isset($pageheading)}
 					<h1 id="page-title" class="asset-name">{$pageheading}</h1>

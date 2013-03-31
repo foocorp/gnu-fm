@@ -31,6 +31,7 @@ require_once($install_path . '/utils/resolve-external.php');
 require_once($install_path . '/utils/licenses.php');
 require_once($install_path . '/utils/rewrite-encode.php');
 require_once($install_path . '/temp-utils.php'); // this is extremely dodgy and shameful
+require_once($install_path . '/data/clientcodes.php');
 
 /**
  * Provides access to server-wide data
@@ -356,6 +357,87 @@ class Server {
 		return $result;
 	}
 
+
+	/**
+	 * Get a list of users with the most listens
+	 *
+	 * @param int $limit Amount of results to return
+	 * @param int $offset Skip this many items before returning results
+	 * @param int $streamable Only return results for streamable tracks
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param string $artist Filter results by this artist
+	 * @param string $track Filter result by this track (need $artist to be set)
+	 * @param int $cache Caching period in seconds
+	 * @return array ((userid, freq, username, userurl) ..)
+	 */
+	static function getTopListeners($limit = 10, $offset = 0, $streamable = True, $begin = null, $end = null, $artist = null, $track = null, $cache = 600) {
+		global $adodb;
+
+		$params = array();
+		$query = 'SELECT s.userid, COUNT(*) as freq FROM Scrobbles s';
+
+		if ($streamable) {
+			$query .= ' WHERE ROW(s.artist, s.track) IN (SELECT artist_name, name FROM Track WHERE streamable=1)';
+			$andquery = True;
+		} else {
+			if($begin || $end || $artist) {
+				$query .= ' WHERE';
+				$andquery = False;
+			}
+		}
+
+		if($begin) {
+			//change time resolution to full hours (for easier caching)
+			$begin = $begin - ($begin % 3600);
+			
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' s.time > ?';
+			$params[] = (int)$begin;
+		}
+
+		if($end) {
+			//change time resolution to full hours (for easier caching)
+			$end = $end - ($end % 3600);
+			
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' s.time < ?';
+			$params[] = (int)$end;
+		}
+
+		if($artist) {
+			$andquery ? $query .= ' AND' : $andquery = True;
+			$query .= ' lower(s.artist)=lower(?)';
+			$params[] = $artist;
+
+			if($track) {
+				$andquery ? $query .= ' AND' : $andquery = True;
+				$query .= ' lower(s.track)=lower(?)';
+				$params[] = $track;
+			}
+		}
+	
+		$query .= ' GROUP BY s.userid ORDER BY freq DESC LIMIT ? OFFSET ?';
+		$params[] = (int)$limit;
+		$params[] = (int)$offset;
+
+		try {
+			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+			$res = $adodb->CacheGetAll($cache, $query, $params);
+		}catch (Exception $e) {
+			return array();
+		}
+
+		foreach($res as &$row) {
+			$row['username'] = uniqueid_to_username($row['userid']);
+			$row['userurl'] = Server::getUserURL($row['username']);
+			$result[] = $row;
+		}
+
+		return $result;
+	}
+
+
 	/**
 	 * Retrieves a list of loved tracks
 	 *
@@ -452,16 +534,11 @@ class Server {
 							n.track,
 							n.album,
 							client,
-							ClientCodes.name,
-							ClientCodes.url,
-							ClientCodes.free,
 							n.mbid,
 							t.license
 						FROM Now_Playing n
 						LEFT OUTER JOIN Scrobble_Sessions ss
 							ON n.sessionid=ss.sessionid
-						LEFT OUTER JOIN ClientCodes
-							ON ss.client=ClientCodes.code
 						LEFT OUTER JOIN Track t
 							ON lower(n.artist) = lower(t.artist_name)
 							AND lower(n.album) = lower(t.album_name)
@@ -476,16 +553,11 @@ class Server {
 							n.track,
 							n.album,
 							client,
-							ClientCodes.name,
-							ClientCodes.url,
-							ClientCodes.free,
 							n.mbid,
 							t.license
 						FROM Now_Playing n
 						LEFT OUTER JOIN Scrobble_Sessions ss
 							ON n.sessionid=ss.sessionid
-						LEFT OUTER JOIN ClientCodes
-							ON ss.client=ClientCodes.code
 						LEFT OUTER JOIN Track t
 							ON lower(n.artist) = lower(t.artist_name)
 							AND lower(n.album) = lower(t.album_name)
@@ -501,15 +573,12 @@ class Server {
 
 		foreach ($data as &$i) {
 			$row = sanitize($i);
-			// this logic should be cleaned up and the free/nonfree decision be moved into the smarty templates
-			if ($row['name'] == '') {
-				$clientstr = strip_tags(stripslashes($row['client'])) . ' (unknown, <a href="http://ideas.libre.fm/index.php/Client_Codes">please tell us what this is</a>)';
-			} else if ($row['free'] == 'Y') {
-				$clientstr = '<a href="' . strip_tags(stripslashes($row['url'])) . '">' . strip_tags(stripslashes($row['name'])) . '</a>';
-			} else {
-				$clientstr = '<a href="http://en.wikipedia.org/wiki/Category:Free_media_players">' . strip_tags(stripslashes($row['name'])) . '</a>';
+			$client = getClientData($row['client']);
+			if(is_array($client)) {
+				$row['clientname'] = $client['name'];
+				$row['clienturl'] = $client['url'];
+				$row['clientfree'] = $client['free'];
 			}
-			$row['clientstr'] = $clientstr;
 			$row['username'] = uniqueid_to_username($row['userid']);
 			$row['userurl'] = Server::getUserURL($row['username']);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
@@ -941,6 +1010,27 @@ class Server {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Create a random authentication token and return it
+	 *
+	 * @return string Token.
+	 */
+	static function getAuthToken() {
+		global $adodb;
+
+		$key = md5(time() . rand());
+		$expires = (int) (time() + 3600);
+
+		$query = 'INSERT INTO Auth(token, expires) VALUES(?,?)';
+		$params = array($key, $expires);
+		try {
+			$adodb->Execute($query, $params);
+			return $key;
+		} catch (Exception $e) {
+			reportError($e->getMessage(), $e->getTraceAsString());
+		}
 	}
 
 }

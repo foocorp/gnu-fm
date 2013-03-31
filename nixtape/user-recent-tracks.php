@@ -57,7 +57,6 @@ try {
 
 $smarty->assign('isme', ($this_user->name == $user->name));
 $smarty->assign('me', $user);
-$smarty->assign('profile', true);
 $smarty->assign('pagetitle', $user->name . '\'s recent tracks');
 
 $smarty->assign('extra_head_links', array(
@@ -77,6 +76,5 @@ $smarty->assign('extra_head_links', array(
 
 $submenu = user_menu($user, 'Recent Tracks');
 $smarty->assign('submenu', $submenu);
-$smarty->assign('headerfile', 'maxiprofile.tpl');
 
 $smarty->display('user-recent-tracks.tpl');

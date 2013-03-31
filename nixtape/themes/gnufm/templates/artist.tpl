@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='header.tpl' subheader='artist-header.tpl'}
 
 {if $flattr_uid}
 {include file='flattr.tpl'}
@@ -11,15 +11,6 @@
 		{if $streamable}
 		<div id='player-container'>
 		{include file='player.tpl'}
-		<script type="text/javascript">
-			$(document).ready(function() {ldelim}
-				{if isset($this_user)}
-					playerInit(false, "{$this_user->getScrobbleSession()}", "{$this_user->getWebServiceSession()}", "{$radio_session}");
-				{else}
-					playerInit(false, false, false, "{$radio_session}");
-				{/if}
-			{rdelim});
-		</script>
 		</div>
 		{/if}
 

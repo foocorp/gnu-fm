@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='header.tpl' subheader='user-header.tpl'}
 <script type="text/javascript" src="{$base_url}/js/stats/user.js"></script>
 <script type="text/javascript" src="{$base_url}/js/jquery.jqplot.min.js"></script> 
 <script type="text/javascript" src="{$base_url}/js/plugins/jqplot.barRenderer.min.js"></script>
