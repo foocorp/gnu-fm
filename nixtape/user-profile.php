@@ -51,8 +51,8 @@ if (isset($user->name)) {
 		$smarty->assign('nowplaying', $aUserNowPlaying);
 	} catch (Exception $e) {}
 	if ($user->hasLoved()) {
-		$recommendedArtists = $user->getRecommended(10);
-		$smarty->assign('recommendedArtists', $recommendedArtists);
+		//$recommendedArtists = $user->getRecommended(10);
+		//$smarty->assign('recommendedArtists', $recommendedArtists);
 		$lovedArtists = TagCloud::generateTagCloud('loved', 'artist', 10, 'userid', $user->uniqueid);
 		$smarty->assign('lovedArtists', $lovedArtists);
 	}
