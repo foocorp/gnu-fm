@@ -368,7 +368,7 @@ class Artist {
 		// Narrow down similar artists to ones that at least share the most common tag and get hold of their other tags
 		$otherArtists = $adodb->CacheGetAll(86400, 'SELECT artist, lower(tag) as ltag, count(tag) as num FROM Tags INNER JOIN Artist ON Artist.name = Tags.artist WHERE Artist.streamable = 1 AND artist in '
 			. '(SELECT distinct(artist) FROM Tags WHERE lower(tag) = ' . $adodb->qstr($tmpTags[0]['ltag']) . ') '
-			. 'GROUP BY artist, ltag ORDER BY num DESC');
+			. 'GROUP BY artist, ltag ORDER BY num DESC LIMIT 1000');
 
 
 		$totalTags = array();
