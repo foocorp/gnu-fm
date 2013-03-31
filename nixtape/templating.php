@@ -68,6 +68,7 @@ $smarty->setPluginsDir(array(
 ));
 $smarty->setCompileDir($install_path . '/themes/' . $theme . '/templates_c/');
 $smarty->setCacheDir($install_path . '/cache/');
+$smarty->setConfigDir(array($install_path . '/themes/' . $theme . '/config/', $install_path . '/themes/gnufm/config/'));
 
 $current_lang = preg_replace('/.UTF-8/', '', $current_lang);
 $smarty->assign('lang_selector_array', array(($current_lang) => 1));
