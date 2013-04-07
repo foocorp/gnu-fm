@@ -44,10 +44,10 @@ class Track {
 	/**
 	 * Track constructor
 	 *
-	 * @todo throw Exception instead of setting $this->name to 'No such track: $name'
-
 	 * @param string $name The name of the track to load
 	 * @param string $artist The name of the artist who recorded this track
+	 *
+	 * @todo Should we call Track::create() instead of throwing "No such track" exception?
 	 */
 	function __construct($name, $artist) {
 		global $adodb;
@@ -58,7 +58,7 @@ class Track {
 			. 'ORDER BY streamable DESC';
 		$res = $adodb->CacheGetRow(600, $this->query);
 		if (!$res) {
-			$this->name = 'No such track: ' . $name;
+			throw new Exception('No such track: ' . $name);
 		} else {
 			$row = $res;
 			$this->name = $row['name'];
@@ -284,25 +284,32 @@ class Track {
 	/**
 	 * Gets the top tags for this track, ordered by tag count
 	 *
-	 * @todo Remove throw new Exception when track construct has been changed to throw it
-	 *
 	 * @param int $limit The number of tags to return (default is 10)
 	 * @param int $offset The position of the first tag to return (default is 0)
 	 * @param int $cache Caching period of query in seconds (default is 600)
 	 * @return array Tag details ((tag, freq) .. )
 	 */
 	function getTopTags($limit=10, $offset=0, $cache=600) {
-		if(substr($this->name, 0, 13) == 'No such track') {
-			throw new Exception('No such track');
-		}
-
 		return Tag::_getTagData($cache, $limit, $offset, null, $this->artist_name, null, $this->name);
 	}
 
 	/**
-	 * Get a specific user's tags for this track.
+	 * Get this track's top listeners
 	 *
-	 * @todo Remove throw new Exception when track construct has been changed to throw it
+	 * @param int $limit Amount of results to return
+	 * @param int $offset Skip this many items before returning results
+	 * @param int $streamable Only return results for streamable tracks
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param int $cache Caching period in seconds
+	 * @return array ((userid, freq, username, userurl) ..)
+	 */
+	function getTopListeners($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $cache = 600) {
+		return Server::getTopListeners($limit, $offset, $streamable, $begin, $end, $this->artist_name, $this->name, $cache);
+	}
+
+	/**
+	 * Get a specific user's tags for this track.
 	 *
 	 * @param int $userid Get tags for this user
 	 * @param int $limit The number of tags to return (default is 10)
@@ -312,10 +319,6 @@ class Track {
 	 */
 	function getTags($userid, $limit=10, $offset=0, $cache=600) {
 		if(isset($userid)) {
-			if(substr($this->name, 0, 13) == 'No such track') {
-				throw new Exception('No such track');
-			}
-
 			return Tag::_getTagData($cache, $limit, $offset, $userid, $this->artist_name, null, $this->name);
 		}
 	}
@@ -323,26 +326,195 @@ class Track {
 	/**
 	 * Add a list of tags to a track
 	 *
-	 * @param string $tags A comma-separated list of tags
-	 * @param int $userid The user adding these tags
+	 * @param string $tags A comma-separated list of tags.
+	 * @param int $userid The user adding these tags.
+	 * @return bool True if any tag was added, False if no tags were added.
 	 */
 	function addTags($tags, $userid) {
 		global $adodb;
 
 		$tags = explode(',', strtolower($tags));
+		$query = 'INSERT INTO Tags (tag, artist, album, track, userid) VALUES(?,?,?,?,?)';
 		foreach($tags as $tag) {
 			$tag = trim($tag);
 			if(strlen($tag) == 0) {
 				continue;
 			}
+			$params = array($tag, $this->artist_name, $this->album_name, $this->name, (int) $userid);
 			try {
-				$adodb->Execute('INSERT INTO Tags VALUES ('
-					. $adodb->qstr($tag) . ','
-					. $adodb->qstr($this->artist_name) . ', '
-					. $adodb->qstr($this->album_name) . ', '
-					. $adodb->qstr($this->name) . ', '
-					. $userid . ')');
-			} catch (Exception $e) {}
+				$adodb->Execute($query, $params);
+				if ($adodb->Affected_Rows()) {
+					$res = $res + 1;
+				}
+			} catch (Exception $e) {
+				reportError($e->GetMessage(), $e->GetTraceAsString());
+			}
 		}
+		return (bool) $res;
 	}
+
+	/**
+	 * Love a track
+	 *
+	 * @param int $userid The user loving this track.
+	 * @return bool True on success, False on fail.
+	 */
+	function love($userid) {
+		global $adodb;
+
+		$query = 'INSERT INTO Loved_Tracks (userid, track, artist, time) VALUES(?,?,?,?)';
+		$params = array((int) $userid, $this->name, $this->artist_name, time());
+		try {
+			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+		return (bool) $res;
+	}
+
+	/**
+	 * Unlove a track
+	 *
+	 * @param int $userid The user unloving this track.
+	 * @return bool True on success, False on fail.
+	 */
+	function unlove($userid) {
+		global $adodb;
+
+		$query = 'DELETE FROM Loved_Tracks WHERE userid=? AND track=? AND artist=?';
+		$params = array((int) $userid, $this->name, $this->artist_name);
+
+		try {
+			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+		return (bool) $res;
+	}
+
+	/**
+	 * Check if track has been loved by user
+	 *
+	 * @param int $userid The user we are looking for
+	 * @return bool True if track has been loved by user
+	 */
+	function isLoved($userid) {
+		global $adodb;
+
+		$query = 'SELECT * FROM Loved_Tracks WHERE userid=? AND track=? AND artist=?';
+		$params = array((int) $userid, $this->name, $this->artist_name);
+		try {
+			$res = $adodb->GetRow($query, $params);
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+
+		if($res) {
+			return True;
+		}
+		return False;
+	}
+
+
+	/**
+	 * Ban a track
+	 *
+	 * @param int $userid The user banning this track.
+	 * @return bool True on success, False on fail.
+	 *
+	 */
+	function ban($userid) {
+		global $adodb;
+
+		$query = 'INSERT INTO Banned_Tracks (userid, track, artist, time) VALUES(?,?,?,?)';
+		$params = array((int) $userid, $this->name, $this->artist_name, time());
+		try {
+			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+		return (bool) $res;
+	}
+
+	/**
+	 * Unban a track
+	 *
+	 * @param int $userid The user unbanning this track.
+	 * @return bool True on success, False on fail.
+	 */
+	function unban($userid) {
+		global $adodb;
+
+		$query = 'DELETE FROM Banned_Tracks WHERE userid=? AND track=? AND artist=?';
+		$params = array((int) $userid, $this->name, $this->artist_name);
+
+		try {
+			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+		return (bool) $res;
+	}
+
+
+	/**
+	 * Check if track has been banned by user
+	 *
+	 * @param int $userid The user we are looking for
+	 * @return bool True if track has been banned by user
+	 */
+	function isBanned($userid) {
+		global $adodb;
+
+		$query = 'SELECT * FROM Banned_Tracks WHERE userid=? AND track=? AND artist=?';
+		$params = array((int) $userid, $this->name, $this->artist_name);
+		try {
+			$res = $adodb->GetRow($query, $params);
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+
+		if($res) {
+			return True;
+		}
+		return False;
+	}
+
+
+	/*	
+	 * Remove a tag from a track
+	 *
+	 * @param string $tag The tag to be removed
+	 * @param int $userid The user removing the tag
+	 * @return bool True on success, False on fail.
+	 */
+	function removeTag($tag, $userid) {
+		global $adodb;
+
+		$tag = trim($tag);
+		if(strlen($tag) == 0) {
+			return;
+		}
+		$query = 'DELETE FROM Tags WHERE tag=? AND artist=? AND track=? AND userid = ?';
+		$params = array($tag, $this->artist_name, $this->name, (int) $userid);
+		try {
+			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
+		} catch (Exception $e) {
+			reportError($e->getMessage(), $e->getTraceAsString());
+			return False;
+		}
+		return (bool) $res;
+	}
+
 }

@@ -59,6 +59,7 @@ $smarty = new Smarty();
 $smarty->template_dir = array($install_path . '/themes/'. $theme . '/templates/', $install_path . '/themes/gnufm/templates/');
 $smarty->compile_dir = $install_path. '/themes/' . $theme . '/templates_c/';
 $smarty->cache_dir = $install_path. '/cache/';
+$smarty->config_dir = array($install_path . '/themes/' . $theme . '/config/', $install_path . '/themes/gnufm/config/');
 
 $current_lang = preg_replace('/.UTF-8/', '', $current_lang);
 $smarty->assign('lang_selector_array', array(($current_lang) => 1));

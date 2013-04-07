@@ -24,13 +24,12 @@
 */
 
 var audio;
-var scrobbled, now_playing;
-var artist, album, track, trackpage, session_key, radio_key, ws_key;
+var scrobbled, now_playing, tracktoptags;
+var artist, album, track, trackpage, session_key, radio_key, ws_key, station;
 var playlist = [], current_song = 0;
 var player_ready = false;
 var playable_songs = false;
 var streaming = false;
-var example_tags = "e.g. guitar, violin, female vocals, piano";
 var error_count = 0;
 var base_url = base_url || "";
 
@@ -41,7 +40,7 @@ var base_url = base_url || "";
  * @param string sk Scrobble session key or false if the user isn't logged in
  * @param string rk Radio session key or false if streaming isn't required
  */
-function playerInit(list, sk, ws, rk) {
+function playerInit(list, sk, ws, rk, stationurl) {
 	audio = document.getElementById("audio");
 	if (!list) {
 		// We're playing a stream instead of a playlist
@@ -50,7 +49,8 @@ function playerInit(list, sk, ws, rk) {
 
 	session_key = sk;
 	ws_key = ws;
-	radio_key = rk;
+	radio_key = ws_key || rk;
+	station = stationurl || false;
 
 	if(typeof audio.duration == "undefined") {
 		//Browser doesn't support <audio>
@@ -59,10 +59,27 @@ function playerInit(list, sk, ws, rk) {
 		}
 		return;
 	}
-	$("#fallbackembed").replaceWith(""); // Get rid of the fallback embed, otherwise some html5 browsers will play it in addition to the js player
+	 // Get rid of the fallback embed, otherwise some html5 browsers will play it in addition to the js player
+	$("#fallbackembed").remove();
+
+	// Make "Player problems?" clickable and hide problems box	
+	$('#toggleproblems').css({'text-decoration' : 'underline', 'cursor':'pointer'});
+	$('#toggleproblems').on('click', function() {
+		$('#player #problems').slideToggle(500);
+	});
+	$('#player #problems').hide();
+
+	// Display a message while waiting for player to get ready
+	$('#player #loading').text('Readying player and fetching playlist, this may take a while..');
+
 	if (streaming) {
-		// Get playlist from radio service
-		getRadioPlaylist();
+		// Logged in users need to tune to station
+		if(!rk && station) {
+			tune(station);
+		} else {
+			// Get playlist from radio service
+			getRadioPlaylist();
+		}
 	} else {
 		// Otherwise we have a static playlist
 		playlist = list;
@@ -83,19 +100,110 @@ function playerReady() {
 	audio.addEventListener("ended", songEnded, false);
 	audio.addEventListener("error", songError, false);
 	updateProgress();
+
+	/** 
+	 * Set initial element properties
+	 */
+	$('#skipback').on('click', skipBack);
+
+	$('#seekback').on('click', seekBack);
+	$('#seekback').fadeTo("normal", 0.5);
+	//$('#seekback').hide();
+
+	$('#seekforward').on('click', seekForward);
+	$('#seekforward').fadeTo("normal", 0.5);
+	//$('#seekforward').hide();
+
+	$('#skipforward').on('click', skipForward);
+
+	$('#showplaylist').on('click', togglePlaylist);
+
+	$('#playlist').hide();
+
+	$('#hideplaylist').on('click', togglePlaylist);
+	$('#hideplaylist').hide();
+
+	$('#scrobbled').hide();
+
+	$('#play').on('click', play);
 	$("#play").fadeTo("normal", 1);
-	$("#pause").fadeTo("normal", 1);
+
+	$('#pause').on('click', pause);
 	$("#pause").hide();
-	$("#ban").fadeTo("normal", 1);
-	$("#love").fadeTo("normal", 1);
-	$("#open_tag").fadeTo("normal", 1);
+
+	$('#volume').on('click', toggleVolume);
 	$("#volume").fadeTo("normal", 1);
-	$("#progressbar").progressbar({ value: 0 });
-	$("#player > #interface").show();
-	$("#tags").placeholdr({placeholderText: example_tags});
+
+	$('#volume-box').hide();
+
 	$("#volume-slider").slider({range: "min", min: 0, max: 100, value: 60, slide: setVolume});
 	loadVolume();
+
+	$("#progress-slider").slider({
+		value:0, range: "min", min:0, max:100, slide: function(event, progress) {
+			setProgress(progress.value);
+		}
+	});
+
+	if (ws_key) {
+		// Logged in 
+		$('#artistname').addClass('tunebutton');
+		$('#artistname').prop('title', 'Tune to artist station');
+		$('#artistname').on('click', function(event) {
+			var artistname = event.target.textContent;
+			var artiststation = 'librefm://artist/' + artistname;
+			tune(artiststation);
+		});
+
+		$('#tracktags ul').on('click', 'li', function(event) {
+			var tagname = event.target.textContent;
+			var tagstation = 'librefm://globaltags/' + tagname;
+			tune(tagstation);
+		});
+
+		$("#ban").fadeTo("normal", 1);
+		$('#ban').on('click', ban);
+
+		$('#love').on('click', love);
+		$("#love").fadeTo("normal", 1);
+
+		$('#open_tag').on('click', toggleTag);
+		$("#open_tag").fadeTo("normal", 1);
+
+		$('#close_tag').on('click', toggleTag);
+		$('#close_tag').hide();
+
+		$('#tag_button').on('click', tag);
+		$('#tags').keyup(function(event) {
+			if(event.keyCode == 13) {
+				tag();
+			}
+		});
+		$('#tag_input').hide();
+	} else {
+		// Not logged in
+		$('#tracktags').remove();
+		$('#ban').remove();
+		$('#love').remove();
+		$('#close_tag').remove();
+		$('#open_tag').remove();
+		$('#tag_input').remove();
+	}
+
+	$('#player #loading').remove();
+	$("#player > #interface").show();
 	player_ready = true;
+}
+
+/**
+ * Set progress of currently loaded track
+ *
+ * @param value Number between 0 and 100
+ */
+function setProgress(value) {
+	try {
+		audio.currentTime = audio.duration * (value / 100);
+	} catch (e) {}
 }
 
 /**
@@ -143,7 +251,7 @@ function seekForward() {
  */
 function updateProgress() {
 	if (audio.duration > 0) {
-		$("#progressbar").progressbar('option', 'value', (audio.currentTime / audio.duration) * 100);
+		$("#progress-slider").slider('option', 'value', (audio.currentTime / audio.duration) * 100);
 		$("#duration").text(friendlyTime(audio.duration));
 	} else {
 		$("#duration").text(friendlyTime(0));
@@ -152,6 +260,11 @@ function updateProgress() {
 	if(!now_playing && audio.currentTime > 0) {
 		error_count = 0;
 		nowPlaying();
+	}
+
+	if(ws_key && !tracktoptags) {
+		trackGetTopTags();
+		tracktoptags = true;
 	}
 
 	if (!scrobbled && audio.currentTime > audio.duration / 2) {
@@ -208,7 +321,7 @@ function populatePlaylist() {
  * Shows/Hides the HTML playlist display
  */
 function togglePlaylist() {
-	$("#playlist").toggle(1000);
+	$("#playlist").slideToggle(1000);
 	$("#showplaylist").toggle();
 	$("#hideplaylist").toggle();
 }
@@ -252,6 +365,56 @@ function nowPlaying() {
 	}
 	timestamp = Math.round(new Date().getTime() / 1000);
 	$.post(base_url + "/scrobble-proxy.php?method=nowplaying", { "a" : artist, "b" : album, "t" : track, "l" : audio.duration, "s" : session_key}, function(data) {}, "text");
+}
+
+/**
+ * Tune to a station
+ *
+ * @param string station Station URL
+ */
+function tune(station) {
+	$.post(base_url + '/2.0/', {'method' : 'radio.tune', 'sk' : ws_key, 'station' : station, 'format' : 'json'},
+			function(data) {
+				if ('station' in data) {
+					// remove any future tracks in playlist and add tracks from new station
+					playlist = playlist.slice(0, current_song + 1);
+					getRadioPlaylist();
+
+					// set streaming to true to get player to fetch more songs if needed
+					streaming = true;
+				}
+			}, 'json');
+}
+
+/**
+ * Get top tags for current track
+ *
+ */
+function trackGetTopTags() {
+	$.get(base_url + '/2.0/', {'method' : 'track.gettoptags', 'artist' : artist, 'track' : track, 'format' : 'json'}, function(data) {
+		if('toptags' in data) {
+			var tag_items = data.toptags.tag;
+			if ('name' in tag_items) {
+				// not an array
+				var tagname = tag_items.name;
+				$('#tracktags ul').append('<li class="tunebutton" title="Tune to tag station">' + tagname + '</li>');
+			}else{
+				var i;
+				var max_length = 50;
+				var tags_length = 0;
+				for(i in tag_items) {
+					var tagname = tag_items[i].name;
+					tags_length = tags_length + tagname.length + 1;
+					//limit total length for tags
+					if (tags_length <= max_length) {
+						$('#tracktags ul').append('<li class="tunebutton" title="Tune to tag station">' + tagname + '</li>');
+					}else{
+						break;
+					}
+				}
+			}
+		}
+	}, 'json');
 }
 
 /**
@@ -316,6 +479,10 @@ function loadSong(song) {
 	if($("#flattrstream")) {
 		$.getJSON(base_url + '/2.0/', {'method' : 'artist.getflattr', 'artist' : artist, 'format' : 'json'}, updateFlattr);
 	}
+
+	// remove tags for previous track
+	$('#tracktags ul li').remove();
+	tracktoptags = false;
 }
 
 function updateFlattr(data) {
@@ -423,14 +590,14 @@ function ban() {
 }
 
 function toggleTag() {
-	$("#tag_input").toggle(500);	
+	$("#tag_input").slideToggle(500);	
 	$("#open_tag").toggle();
 	$("#close_tag").toggle();
 }
 
 function tag() {
 	var tags = $("#tags").val();
-	if (tags != example_tags && tags != "") {
+	if (tags != "") {
 		$.post(base_url + "/2.0/", {'method' : 'track.addtags', 'artist' : artist, 'track' : track, 'tags' : tags, 'sk' : ws_key}, function(data) {}, "text");
 		toggleTag();
 		$("#tags").val("");
@@ -441,7 +608,7 @@ function tag() {
  * Toggle visibility of the volume slider
  */
 function toggleVolume() {
-	$("#volume-box").toggle(500);
+	$("#volume-box").slideToggle(500);
 }
 
 /**

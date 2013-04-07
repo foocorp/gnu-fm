@@ -35,12 +35,32 @@ class TrackXML {
 	public static function addTags($userid, $artist, $album, $trackName, $tags) {
 		try {
 			$track = new Track($trackName, $artist);
-			$track->addTags($tags, $userid);
+			$res = $track->addTags($tags, $userid);
 		} catch (Exception $e) {
 			return(XML::error('failed', '7', 'Invalid resource specified'));
 		}
 
-		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		if(!$res) {
+			$xml = XML::error('failed', '7', 'Invalid resource specified');
+		} else {
+			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		}
+		return $xml;
+	}
+
+	public static function removeTag($userid, $artist, $trackName, $tag) {
+		try {
+			$track = new Track($trackName, $artist);
+			$res = $track->removeTag($tag, $userid);
+		} catch (Exception $e) {
+			return(XML::error('failed', '7', 'Invalid resource specified'));
+		}
+
+		if(!$res) {
+			$xml = XML::error('failed', '7', 'Invalid resource specified');
+		} else {
+			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		}
 		return $xml;
 	}
 
@@ -67,6 +87,41 @@ class TrackXML {
 			$tag_node->addChild('name', repamp($row['tag']));
 			$tag_node->addChild('count', $row['freq']);
 			$tag_node->addChild('url', Server::getTagURL($row['tag']));
+		}
+
+		return $xml;
+	}
+
+	public static function getTopFans($name, $artistname, $limit, $cache) {
+		global $adodb;
+
+		try {
+			$track = new Track($name, $artistname);
+			$res = $track->getTopListeners($limit, 0, False, null, null, $cache);
+		} catch (Exception $e) {
+			return XML::error('error', '7', 'Invalid resource specified');
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('topfans', null);
+		$root->addAttribute('artist', $track->artist_name);
+		$root->addAttribute('track', $track->name);
+
+		foreach($res as &$row) {
+			try {
+				$user = new User($row['username']);
+				$user_node = $root->addChild('user', null);
+				$user_node->addChild('name', $user->name);
+				$user_node->addChild('realname', $user->fullname);
+				$user_node->addChild('url', repamp($user->getURL()));
+				$image_small = $user_node->addChild('image', null);
+				$image_small->addAttribute('size', 'small');
+				$image_medium = $user_node->addChild('image', null);
+				$image_medium->addAttribute('size', 'medium');
+				$image_large = $user_node->addChild('image', null);
+				$image_large->addAttribute('size', 'large');
+				$user_node->addChild('weight', $row['freq']);
+			} catch (Exception $e) {}
 		}
 
 		return $xml;
@@ -101,59 +156,67 @@ class TrackXML {
 	}
 
 	public static function ban($artist, $name, $userid) {
-		global $adodb;
-
 		try {
-			$res = $adodb->Execute('INSERT INTO Banned_Tracks VALUES ('
-				. $userid . ', '
-				. $adodb->qstr($name) . ', '
-				. $adodb->qstr($artist) . ', '
-				. time() . ')');
-		} catch (Exception $e) {}
+			$track = new Track($name, $artist);
+			$res = $track->ban($userid);
+		} catch (Exception $e) {
+			return XML::error('failed', '7', 'Invalid resource specified');
+		}
 
-		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
-
+		if(!$res) {
+			$xml = XML::error('failed', '7', 'Invalid resource specified');
+		} else {
+			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		}
 		return $xml;
 	}
 
 	public static function love($artist, $name, $userid) {
-		global $adodb;
-
 		try {
-			$res = $adodb->Execute('INSERT INTO Loved_Tracks VALUES ('
-				. $userid . ', '
-				. $adodb->qstr($name) . ', '
-				. $adodb->qstr($artist) . ', '
-				. time() . ')');
-		} catch (Exception $e) {}
+			$track = new Track($name, $artist);
+			$res = $track->love($userid);
+		} catch (Exception $e) {
+			return XML::error('failed', '7', 'Invalid resource specified');
+		}
 
-		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
-
+		if(!$res) {
+			$xml = XML::error('failed', '7', 'Invalid resource specified');
+		} else {
+			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		}
 		return $xml;
 	}
 
 	public static function unban($artist, $name, $userid) {
-		global $adodb;
-
 		try {
-			$res = $adodb->Execute('DELETE FROM Banned_Tracks WHERE userid=' . $userid . ' AND track=' . $adodb->qstr($name) . ' AND artist=' . $adodb->qstr($artist));
-		} catch (Exception $e) {}
+			$track = new Track($name, $artist);
+			$res = $track->unban($userid);
+		} catch (Exception $e) {
+			return XML::error('failed', '7', 'Invalid resource specified');
+		}
 
-		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
-
+		if(!$res) {
+			$xml = XML::error('failed', '7', 'Invalid resource specified');
+		} else {
+			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		}
 		return $xml;
 	}
 
 
 	public static function unlove($artist, $name, $userid) {
-		global $adodb;
-
 		try {
-			$res = $adodb->Execute('DELETE FROM Loved_Tracks WHERE userid='	. $userid . ' AND track=' . $adodb->qstr($name) . ' AND artist=' . $adodb->qstr($artist));
-		} catch (Exception $e) {}
+			$track = new Track($name, $artist);
+			$res = $track->unlove($userid);
+		} catch (Exception $e) {
+			return XML::error('failed', '7', 'Invalid resource specified');
+		}
 
-		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
-
+		if(!$res) {
+			$xml = XML::error('failed', '7', 'Invalid resource specified');
+		} else {
+			$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		}
 		return $xml;
 	}
 

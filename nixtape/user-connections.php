@@ -32,25 +32,33 @@ if ($logged_in == false) {
 	die();
 }
 
+if (isset($_POST['remote_gnufm_url'])) {
+	// redirect to a foreign GNU FM service
+	$remote_url = $_POST['remote_gnufm_url'];
+	$callback_url = $base_url . '/user-connections.php?webservice_url=' . $remote_url . '/2.0/';
+	$url = $remote_url . '/api/auth/?api_key=' . $gnufm_key . '&cb=' . rawurlencode($callback_url);
+	header('Location: ' . $url);
+}
+
 if (isset($_GET['token']) && isset($_GET['webservice_url'])) {
 	// Handle authentication callback from a foreign service
 	$token = $_GET['token'];
 	$webservice_url = $_GET['webservice_url'];
 	$sig = md5('api_key' . $lastfm_key . 'methodauth.getSession' . 'token' . $token . $lastfm_secret);
 	$xmlresponse = simplexml_load_file($webservice_url . '?method=auth.getSession&token=' . $token . '&api_key=' . $lastfm_key . '&api_sig=' . $sig);
-	foreach ($xmlresponse->children() as $child => $value) {
-		if ($child == 'session') {
-			foreach ($value->children() as $child2 => $value2) {
-				if ($child2 == 'name') {
-					$remote_username = $value2;
-				} else if ($child2 == 'key') {
-					$remote_key = $value2;
+	if ($xmlresponse) {
+		foreach ($xmlresponse->children() as $child => $value) {
+			if ($child == 'session') {
+				foreach ($value->children() as $child2 => $value2) {
+					if ($child2 == 'name') {
+						$remote_username = $value2;
+					} else if ($child2 == 'key') {
+						$remote_key = $value2;
+					}
 				}
 			}
 		}
-	}
-
-	if (!isset($remote_username) || !isset($remote_key)) {
+	} elseif (!$xmlresponse || (!isset($remote_username) || !isset($remote_key))) {
 		$smarty->assign('pageheading', 'Error!');
 		$smarty->assign('details', 'Sorry, we weren\'t able to authenticate your account.');
 		$smarty->display('error.tpl');
@@ -88,6 +96,9 @@ if (isset($_GET['forward']) && isset($_GET['service'])) {
 if (isset($lastfm_key)) {
 	$smarty->assign('lastfm_key', $lastfm_key);
 }
+if (isset($gnufm_key)) {
+	$smarty->assign('gnufm_key', $gnufm_key);
+}
 
 $smarty->assign('connections', $this_user->getConnections());
 
@@ -95,5 +106,4 @@ $submenu = user_menu($this_user, 'Edit');
 $smarty->assign('submenu', $submenu);
 
 $smarty->assign('me', $this_user);
-$smarty->assign('headerfile', 'maxiprofile.tpl');
 $smarty->display('user-connections.tpl');

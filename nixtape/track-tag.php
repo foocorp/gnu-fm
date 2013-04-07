@@ -31,22 +31,9 @@ if ($logged_in == false) {
 	die();
 }
 
-try {
-	$track = new Track($_GET['track'], $_GET['artist']);
-	$smarty->assign('track', $track);
-} catch (Exception $e) {
-	//TODO Make track throw exception
-	$smarty->assign('pageheading', 'Track not found.');
-	$smarty->assign('details', 'The track ' . $_GET['track'] . ' was not found in the database.');
-	$smarty->display('error.tpl');
-	die();
-}
-
 if($_POST['tag']) {
 	$track->addTags($_POST['tags'], $this_user->uniqueid);
 }
-
-$smarty->assign('pagetitle', $track->artist_name . ' : ' . $track->name);
 
 try {
 	$tagCloud = TagCloud::generateTagCloud('tags', 'tag', 10, 'track', array($track->name, $track->artist_name));
@@ -59,6 +46,4 @@ $smarty->assign('mytags', $track->getTags($this_user->uniqueid, null, null, 0));
 
 $submenu = track_menu($track, 'Tag');
 $smarty->assign('submenu', $submenu);
-
-$smarty->assign('headerfile', 'track-header.tpl');
 $smarty->display('track-tag.tpl');

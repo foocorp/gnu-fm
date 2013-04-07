@@ -140,6 +140,21 @@ class Artist {
 	}
 
 	/**
+	 * Get this artist's top listeners
+	 *
+	 * @param int $limit Amount of results to return
+	 * @param int $offset Skip this many items before returning results
+	 * @param int $streamable Only return results for streamable tracks
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param int $cache Caching period in seconds
+	 * @return array ((userid, freq, username, userurl) ..)
+	 */
+	function getTopListeners($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $cache = 600) {
+		return Server::getTopListeners($limit, $offset, $streamable, $begin, $end, $this->name, null, $cache);
+	}
+
+	/**
 	 * Gives the URL for this artist
 	 *
 	 * @param string $component Type of page
@@ -353,7 +368,7 @@ class Artist {
 		// Narrow down similar artists to ones that at least share the most common tag and get hold of their other tags
 		$otherArtists = $adodb->CacheGetAll(86400, 'SELECT artist, lower(tag) as ltag, count(tag) as num FROM Tags INNER JOIN Artist ON Artist.name = Tags.artist WHERE Artist.streamable = 1 AND artist in '
 			. '(SELECT distinct(artist) FROM Tags WHERE lower(tag) = ' . $adodb->qstr($tmpTags[0]['ltag']) . ') '
-			. 'GROUP BY artist, ltag ORDER BY num DESC');
+			. 'GROUP BY artist, ltag ORDER BY num DESC LIMIT 1000');
 
 
 		$totalTags = array();

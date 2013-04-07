@@ -32,3 +32,20 @@ function artist_menu($artist, $active_page) {
 
 	return $submenu;
 }
+
+try {
+	$artist = new Artist($_GET['artist']);
+	$smarty->assign(artist, $artist);
+} catch (Exception $e) {
+	$smarty->assign('pageheading', 'Artist not found.');
+	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');
+	$smarty->display('error.tpl');
+	die();
+}
+
+if (isset($this_user) && $this_user->manages($artist->name)) {
+	$smarty->assign('manage_link', $artist->getManagementURL());
+	$smarty->assign('add_album_link', $artist->getAddAlbumURL());
+}
+
+$smarty->assign('pagetitle', $artist->name);
