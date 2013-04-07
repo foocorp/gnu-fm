@@ -198,6 +198,7 @@ if (isset($_POST['install'])) {
 		userid INTEGER REFERENCES Users(uniqueid),
 		sessionid VARCHAR(32) PRIMARY KEY,
 		client CHAR(3),
+		api_key VARCHAR(32),
 		expires INTEGER)',
 
 		'CREATE TABLE Now_Playing(
@@ -378,17 +379,22 @@ if (isset($_POST['install'])) {
 	}
 
 	$adodb->Execute("CREATE INDEX scrobbles_time_idx ON Scrobbles(time)");
-	$adodb->Execute("CREATE INDEX scrobbles_userid_idx ON Scrobbles(userid)");
+	$adodb->Execute("CREATE INDEX scrobbles_userid_time_idx ON Scrobbles(userid, time)");
+	$adodb->Execute("CREATE INDEX scrobbles_track_idx on Scrobbles(track)");
+	$adodb->Execute("CREATE INDEX scrobble_track_name_idx ON Scrobble_Track(name)");
 	$adodb->Execute("CREATE INDEX track_streamable_idx on Track(streamable);");
+	$adodb->Execute("CREATE INDEX track_name_idx ON Track(name)");
+	$adodb->Execute("CREATE INDEX album_name_idx ON Album(name)");
+	$adodb->Execute("CREATE INDEX artist_name_idx ON Artist(name)");
 
 	if(strtolower(substr($dbms, 0, 5)) == 'pgsql') {
 		// MySQL doesn't support the use of lower() to create case-insensitive indexes
-		$adodb->Execute("CREATE INDEX album_artistname_idx ON Album(lower(artist_name))");
-		$adodb->Execute("CREATE INDEX track_artist_idx ON Track(lower(artist_name))");
-		$adodb->Execute("CREATE INDEX track_name_idx ON Track(lower(name))");
-		$adodb->Execute("CREATE INDEX scrobbles_artist_idx on Scrobbles(lower(artist))");
-		$adodb->Execute("CREATE INDEX scrobbles_track_idx on Scrobbles(lower(track))");
-		$adodb->Execute("CREATE INDEX groups_groupname_idx ON Groups(lower(groupname))");
+		$adodb->Execute("CREATE INDEX album_lower_artistname_idx ON Album(lower(artist_name))");
+		$adodb->Execute("CREATE INDEX track_lower_artist_idx ON Track(lower(artist_name))");
+		$adodb->Execute("CREATE INDEX track_lower_name_idx ON Track(lower(name))");
+		$adodb->Execute("CREATE INDEX scrobbles_lower_artist_idx on Scrobbles(lower(artist))");
+		$adodb->Execute("CREATE INDEX scrobbles_lower_track_idx on Scrobbles(lower(track))");
+		$adodb->Execute("CREATE INDEX groups_lower_groupname_idx ON Groups(lower(groupname))");
 
 		// PostgreSQL stored functions
 		$adodb->Execute("CREATE OR REPLACE LANGUAGE plpgsql;");
