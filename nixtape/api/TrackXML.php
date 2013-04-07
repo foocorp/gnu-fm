@@ -338,7 +338,7 @@ class TrackXML {
 		$adodb->StartTrans();
 		for ($i = 0; $i < count($tracks_array); $i++) {
 			$t = $tracks_array[$i];
-			if ($t['ignoredcode'] === 0) {
+			if ($t['ignored_code'] === 0) {
 				try {
 					// Create artist, album and track if not already in db
 					$t['track_id'] = getTrackID($t['artist'], $t['album'], $t['track'], $t['mbid'], $t['duration']);
@@ -388,7 +388,7 @@ class TrackXML {
 		if ($forward_enabled) {
 			for ($i = 0; $i < count($tracks_array); $i++) {
 				$t = $tracks_array[$i];
-				if ($t['ignoredcode'] === 0) {
+				if ($t['ignored_code'] === 0) {
 					/* Forward scrobbles, we are forwarding unmodified input submitted by user,
 					 * but only the scrobbles that passed our ignore filters, see prepareTrack(). */
 					forwardScrobble($userid,
@@ -421,10 +421,10 @@ class TrackXML {
 			$albumartist_node = $scrobble->addChild('albumArtist', repamp($t['albumartist']));
 			$albumartist_node->addAttribute('corrected', $t['albumartist_corrected']);
 			$scrobble->addChild('timestamp', $t['timestamp']);
-			$ignoredmessage_node = $scrobble->addChild('ignoredMessage', $t['ignoredmessage']);
-			$ignoredmessage_node->addAttribute('code', $t['ignoredcode']);
+			$ignoredmessage_node = $scrobble->addChild('ignoredMessage', $t['ignored_message']);
+			$ignoredmessage_node->addAttribute('code', $t['ignored_code']);
 
-			if ($t['ignoredcode'] === 0) {
+			if ($t['ignored_code'] === 0) {
 				$accepted_count += 1;
 			} else {
 				$ignored_count += 1;
