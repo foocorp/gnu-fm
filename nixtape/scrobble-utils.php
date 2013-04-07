@@ -340,13 +340,13 @@ function prepareTrack($userid, $t, $type) {
 		list($t['timestamp_old'], $t['timestamp'], $t['timestamp_corrected']) = correctInput($t['timestamp'], 'timestamp');
 
 		if($t['ignored_code'] === 0) {
-			list($t['ignoredcode'], $t['ignoredmessage']) = ignoreInput($t['timestamp'], 'timestamp');
+			list($t['ignored_code'], $t['ignored_message']) = ignoreInput($t['timestamp'], 'timestamp');
 		}
-		if ($t['ignoredcode'] === 0) {
+		if ($t['ignored_code'] === 0) {
 			$exists = scrobbleExists($userid, $t['artist'], $t['track'], $t['timestamp']);
 			if ($exists) {
-				$t['ignoredcode'] = 91; // GNU FM specific
-				$t['ignoredmessage'] = 'Already scrobbled';
+				$t['ignored_code'] = 91; // GNU FM specific
+				$t['ignored_message'] = 'Already scrobbled';
 			}
 		}
 	}
