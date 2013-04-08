@@ -74,9 +74,9 @@
 			var station = "{$station}";
 		{/if}
 		{if isset($this_user)}
-		playerInit(playlist, "{$this_user->getScrobbleSession()}", "{$this_user->getWebServiceSession()}", false, station);
+		playerInit(playlist, "{$this_user->getWebServiceSession()}", false, station);
 		{else}
-		playerInit(playlist, false, false, radio_session, false);
+		playerInit(playlist, false, radio_session, false);
 		{/if}
 	{rdelim});
 </script>
