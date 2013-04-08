@@ -100,6 +100,110 @@ body{ font:12px/18px sans-serif; }
 ::-moz-selection { background: #f16529; color: #fff; text-shadow: none; }
 ::selection      { background: #f16529; color: #fff; text-shadow: none; }
 
+#submenu li {
+	display:inline-block;
+}
+
+#submenu li.active {
+	font-weight:bold;
+}
+
+.pagination li {
+	display:inline-block;
+}
+
+.pagination li.disabled {
+	visibility:hidden;
+}
+
+.inline {
+	display:inline;
+}
+
+.librarytable {
+	width:100%;
+	/*border:1px solid black;*/
+}
+
+.librarytable td {
+	/*border-left:1px dotted black;*/
+	padding:2px;
+}
+
+.librarytable .icon {
+	width: 16px;
+}
+
+.librarytable .image {
+	width:24px;
+}
+
+.librarytable .title {
+	text-align:left;
+}
+
+.librarytable .count {
+	width:50px;
+	text-align:center;
+}
+.librarytable .time {
+	white-space:nowrap;
+	text-align:center;
+	width:100px;
+}
+
+.librarytable .icon-heart {
+	display:inline-block;
+	height:14px;
+	width:14px;
+	background-image:url("/themes/gnufm/img/love-small.png");
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+.librarytable .icon-music {
+	display:inline-block;
+	height:14px;
+	width:14px;
+	/*background-image:url("/themes/gnufm/img/love-small.png");*/
+	background-color:green;
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+.librarytable .icon-tag {
+	display:inline-block;
+	height:14px;
+	width:14px;
+	/*background-image:url("/themes/gnufm/img/love-small.png");*/
+	background-color:blue;
+	background-repeat:no-repeat;
+	background-position:center;
+}
+
+.librarytable .image img {
+	width:24px;
+	height:24px;
+}
+
+.librarytable tr .buttons form {
+	visibility:hidden;
+	width:50px;
+}
+
+.librarytable tbody tr:hover td {
+	background-color:#ddd;
+}
+
+.librarytable tbody tr:hover .buttons form {
+	visibility:visible;
+}
+
+.librarytable .buttons form {
+	margin:0px;
+}
+
+
 /* ==============
 
    GNU FM player

@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='header.tpl' subheader='user-header.tpl'}
 
 <center><h3>Edit your profile | <a href='{$base_url}/user-connections.php'>Connections to other services</a></h3></center>
 

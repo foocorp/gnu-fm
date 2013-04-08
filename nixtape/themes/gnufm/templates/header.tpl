@@ -1,3 +1,4 @@
+{config_load file='theme.conf' scope='global'}
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
@@ -41,10 +42,10 @@
   <div id="main-container">
     <div id="main" class="wrapper clearfix">
       
-      <article>
-	<header>
-				{if isset($headerfile)}
-					{include file="$headerfile"}
+		<article>
+			<header>
+				{if isset($subheader)}
+					{include file="$subheader"}
 				{/if}
 				{if isset($pageheading)}
 					<h1 id="page-title" class="asset-name">{$pageheading}</h1>

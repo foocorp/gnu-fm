@@ -46,6 +46,8 @@ class Track {
 	 *
 	 * @param string $name The name of the track to load
 	 * @param string $artist The name of the artist who recorded this track
+	 *
+	 * @todo Should we call Track::create() instead of throwing "No such track" exception?
 	 */
 	function __construct($name, $artist) {
 		global $adodb;
@@ -324,59 +326,74 @@ class Track {
 	/**
 	 * Add a list of tags to a track
 	 *
-	 * @param string $tags A comma-separated list of tags
-	 * @param int $userid The user adding these tags
+	 * @param string $tags A comma-separated list of tags.
+	 * @param int $userid The user adding these tags.
+	 * @return bool True if any tag was added, False if no tags were added.
 	 */
 	function addTags($tags, $userid) {
 		global $adodb;
 
 		$tags = explode(',', strtolower($tags));
+		$query = 'INSERT INTO Tags (tag, artist, album, track, userid) VALUES(?,?,?,?,?)';
 		foreach($tags as $tag) {
 			$tag = trim($tag);
 			if(strlen($tag) == 0) {
 				continue;
 			}
+			$params = array($tag, $this->artist_name, $this->album_name, $this->name, (int) $userid);
 			try {
-				$adodb->Execute('INSERT INTO Tags VALUES ('
-					. $adodb->qstr($tag) . ','
-					. $adodb->qstr($this->artist_name) . ', '
-					. $adodb->qstr($this->album_name) . ', '
-					. $adodb->qstr($this->name) . ', '
-					. $userid . ')');
-			} catch (Exception $e) {}
+				$adodb->Execute($query, $params);
+				if ($adodb->Affected_Rows()) {
+					$res = $res + 1;
+				}
+			} catch (Exception $e) {
+				reportError($e->GetMessage(), $e->GetTraceAsString());
+			}
 		}
+		return (bool) $res;
 	}
 
 	/**
 	 * Love a track
 	 *
-	 * @param int $userid The user loving this track
+	 * @param int $userid The user loving this track.
+	 * @return bool True on success, False on fail.
 	 */
 	function love($userid) {
 		global $adodb;
-		
+
+		$query = 'INSERT INTO Loved_Tracks (userid, track, artist, time) VALUES(?,?,?,?)';
+		$params = array((int) $userid, $this->name, $this->artist_name, time());
 		try {
-			$adodb->Execute('INSERT INTO Loved_Tracks VALUES ('
-				. $userid . ', '
-				. $adodb->qstr($this->name) . ', '
-				. $adodb->qstr($this->artist_name) . ', '
-				. time() . ')');
-		} catch (Exception $e) {}
+			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+		return (bool) $res;
 	}
 
 	/**
 	 * Unlove a track
 	 *
-	 * @param int $userid The user unloving this track
+	 * @param int $userid The user unloving this track.
+	 * @return bool True on success, False on fail.
 	 */
 	function unlove($userid) {
 		global $adodb;
 
+		$query = 'DELETE FROM Loved_Tracks WHERE userid=? AND track=? AND artist=?';
+		$params = array((int) $userid, $this->name, $this->artist_name);
+
 		try {
-			$adodb->Execute('DELETE FROM Loved_Tracks WHERE userid=' . $userid
-				. ' AND track=' . $adodb->qstr($this->name)
-				. ' AND artist=' . $adodb->qstr($this->artist_name));
-		} catch (Exception $e) {}
+			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+		return (bool) $res;
 	}
 
 	/**
@@ -388,12 +405,14 @@ class Track {
 	function isLoved($userid) {
 		global $adodb;
 
+		$query = 'SELECT * FROM Loved_Tracks WHERE userid=? AND track=? AND artist=?';
+		$params = array((int) $userid, $this->name, $this->artist_name);
 		try {
-			$res = $adodb->GetRow('SELECT * FROM Loved_Tracks WHERE userid='
-				. $userid . ' AND track='
-				. $adodb->qstr($this->name) . ' AND artist='
-				. $adodb->qstr($this->artist_name));
-		} catch (Exception $e) {}
+			$res = $adodb->GetRow($query, $params);
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
 
 		if($res) {
 			return True;
@@ -401,11 +420,83 @@ class Track {
 		return False;
 	}
 
+
+	/**
+	 * Ban a track
+	 *
+	 * @param int $userid The user banning this track.
+	 * @return bool True on success, False on fail.
+	 *
+	 */
+	function ban($userid) {
+		global $adodb;
+
+		$query = 'INSERT INTO Banned_Tracks (userid, track, artist, time) VALUES(?,?,?,?)';
+		$params = array((int) $userid, $this->name, $this->artist_name, time());
+		try {
+			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+		return (bool) $res;
+	}
+
+	/**
+	 * Unban a track
+	 *
+	 * @param int $userid The user unbanning this track.
+	 * @return bool True on success, False on fail.
+	 */
+	function unban($userid) {
+		global $adodb;
+
+		$query = 'DELETE FROM Banned_Tracks WHERE userid=? AND track=? AND artist=?';
+		$params = array((int) $userid, $this->name, $this->artist_name);
+
+		try {
+			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+		return (bool) $res;
+	}
+
+
+	/**
+	 * Check if track has been banned by user
+	 *
+	 * @param int $userid The user we are looking for
+	 * @return bool True if track has been banned by user
+	 */
+	function isBanned($userid) {
+		global $adodb;
+
+		$query = 'SELECT * FROM Banned_Tracks WHERE userid=? AND track=? AND artist=?';
+		$params = array((int) $userid, $this->name, $this->artist_name);
+		try {
+			$res = $adodb->GetRow($query, $params);
+		} catch (Exception $e) {
+			reportError($e->GetMessage(), $e->GetTraceAsString());
+			return False;
+		}
+
+		if($res) {
+			return True;
+		}
+		return False;
+	}
+
+
 	/*	
 	 * Remove a tag from a track
 	 *
 	 * @param string $tag The tag to be removed
 	 * @param int $userid The user removing the tag
+	 * @return bool True on success, False on fail.
 	 */
 	function removeTag($tag, $userid) {
 		global $adodb;
@@ -414,13 +505,16 @@ class Track {
 		if(strlen($tag) == 0) {
 			return;
 		}
-		$query = 'DELETE FROM Tags WHERE tag = ? AND lower(artist) = lower(?) AND lower(track) = lower(?) AND userid = ?';
-		$params = array($tag, $this->artist_name, $this->name, $userid);
+		$query = 'DELETE FROM Tags WHERE tag=? AND artist=? AND track=? AND userid = ?';
+		$params = array($tag, $this->artist_name, $this->name, (int) $userid);
 		try {
 			$adodb->Execute($query, $params);
+			$res = $adodb->Affected_Rows();
 		} catch (Exception $e) {
 			reportError($e->getMessage(), $e->getTraceAsString());
+			return False;
 		}
+		return (bool) $res;
 	}
 
 }
