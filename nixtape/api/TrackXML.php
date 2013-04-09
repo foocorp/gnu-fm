@@ -224,7 +224,7 @@ class TrackXML {
 	public static function updateNowPlaying($userid, $artist, $track, $album, $tracknumber, $context, $mbid, $duration, $albumartist, $api_key) {
 		global $adodb;
 
-		$sessionid = getScrobbleSessionID($userid, $api_key);
+		$sessionid = Server::getScrobbleSession($userid, $api_key);
 
 		$t = array(
 			'artist' => $artist,
@@ -297,7 +297,7 @@ class TrackXML {
 	public static function scrobble($userid, $artist, $track, $timestamp, $album, $context, $streamid, $chosenbyuser, $tracknumber, $mbid, $albumartist, $duration, $api_key) {
 		global $adodb;
 
-		$sessionid = getScrobbleSessionID($userid, $api_key);
+		$sessionid = Server::getScrobbleSession($userid, $api_key);
 
 		$accepted_count = 0;
 		$ignored_count = 0;

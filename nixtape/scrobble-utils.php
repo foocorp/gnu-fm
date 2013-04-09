@@ -167,48 +167,6 @@ function getScrobbleTrackID($artist, $album, $track, $mbid, $duration, $track_id
 }
 
 /**
- * Get scrobble session ID for a user.
- *
- * Gets the most recent scrobble session ID for userid,
- * or creates a new session ID if it can't find one.
- *
- * @param int userid (required)			User ID.
- * @param string api_key (optional)		Client API key (32 characters)
- * @return string						Scrobble session ID
- */
-function getScrobbleSessionID($userid, $api_key = null) {
-	global $adodb;
-	$query = 'SELECT sessionid FROM Scrobble_Sessions WHERE userid = ? AND expires > ?';
-	$params = array($userid, time());
-
-	if (strlen($api_key) == 32) {
-		$query .= ' AND api_key=?';
-		$params[] = $api_key;
-	} elseif (strlen($api_key) == 3) {
-		// api_key is really a 3 char client code (2.0-scrobble-proxy.php sends client code in api_key)
-		$query .= ' AND client=?';
-		$client_id = $api_key;
-		$params[] = $client_id;
-		// we dont want to insert a 3 char code as api_key in db
-		$api_key = null;
-	}
-
-	$sessionid = $adodb->GetOne($query, $params);
-	if (!$sessionid) {
-		$sessionid = md5(mt_rand() . time());
-		$expires = time() + 86400;
-		$query = 'INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires, api_key) VALUES (?,?,?,?,?)';
-		$params = array($userid, $sessionid, $client_id, $expires, $api_key);
-		try {
-			$adodb->Execute($query, $params);
-		} catch (Exception $e) {
-			return null;
-		}
-	}
-	return $sessionid;
-}
-
-/**
  * Correct artist/album/track/mbid/timestamp input
  *
  * @param mixed input Input to be corrected.
