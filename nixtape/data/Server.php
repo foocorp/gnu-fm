@@ -922,6 +922,7 @@ class Server {
 	 * @return string						Scrobble session ID
 	 */
 	static function getScrobbleSession($userid, $api_key = null, $expire_limit = 86400) {
+		//TODO Add code to remove expired sessions (this is currently only done in gnukebox)
 		global $adodb;
 		$query = 'SELECT sessionid FROM Scrobble_Sessions WHERE userid = ? AND expires > ?';
 		$params = array( (int) $userid, time());
