@@ -233,18 +233,7 @@ class User {
 	 * @return array A string containing the session key to be used for scrobbling
 	 */
 	function getScrobbleSession() {
-		global $adodb;
-		$session_id = md5(mt_rand() . time());
-		$sql = 'INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires) VALUES ('
-			. ($this->uniqueid) . ','
-			. $adodb->qstr($session_id) . ','
-			. '\'lfm\','
-			. (time() + 86400) . ')';
-		if ($adodb->Execute($sql)) {
-			return $session_id;
-		} else {
-			return false;
-		}
+		return Server::getScrobbleSession($this->uniqueid);
 	}
 
 	/**
