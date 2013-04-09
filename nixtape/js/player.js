@@ -25,7 +25,7 @@
 
 var audio;
 var scrobbled, now_playing, tracktoptags;
-var artist, album, track, trackpage, radio_key, ws_key, station;
+var artist, album, track, trackpage, radio_key, ws_key, api_key, station;
 var playlist = [], current_song = 0;
 var player_ready = false;
 var playable_songs = false;
@@ -37,17 +37,19 @@ var base_url = base_url || "";
  * Initialises the javascript player (player.tpl must also be included on the target page)
  *
  * @param array list A playlist in the form ([artist, album, track, trackurl, trackpage], [...]) or false if playing a radio stream
- * @param string sk Scrobble session key or false if the user isn't logged in
- * @param string rk Radio session key or false if streaming isn't required
+ * @param string wk Web service session key or false if the user isn't logged in
+ * @param string rk Radio session key or false if streaming isn't required or user is logged in
+ * @param string stationurl Station to tune to if user is logged in.
+ * @param string gnufm_key GNU FM api key (should be set in config.php)
  */
-function playerInit(list, ws, rk, stationurl) {
+function playerInit(list, ws, rk, stationurl, gnufm_key) {
 	audio = document.getElementById("audio");
 	if (!list) {
 		// We're playing a stream instead of a playlist
 		streaming = true;
 	}
 
-	api_key = 'hellothisisthegnufmwebsiteplayer';
+	api_key = gnufm_key;
 	ws_key = ws;
 	radio_key = ws_key || rk;
 	station = stationurl || false;

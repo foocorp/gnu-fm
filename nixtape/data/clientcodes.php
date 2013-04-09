@@ -68,7 +68,7 @@ $clients = array(
 	array('code' => 'isp', 'api_key' => $free_apikey, 'name' => 'iSproggler', 'url' => 'http://iSproggler.org/', 'free' => True),
 	array('code' => 'jaj', 'api_key' => $free_apikey, 'name' => 'Jajuk', 'url' => 'http://jajuk.info/', 'free' => True),
 	array('code' => 'ldr', 'api_key' => $free_apikey, 'name' => 'Libre Droid', 'url' => 'http://linux.mikeasoft.com/libredroid/', 'free' => True),
-	array('code' => 'lfm', 'api_key' => 'hellothisisthegnufmwebsiteplayer', 'name' => $site_name, 'url' => $base_url, 'free' => True),
+	array('code' => 'lfm', 'api_key' => 'default_gnufm_32_char_identifier', 'name' => $site_name, 'url' => $base_url, 'free' => True),
 	array('code' => 'lib', 'api_key' => $free_apikey, 'name' => 'LibreTunes', 'url' => 'http://libretunes.sourceforge.net/', 'free' => True),
 	array('code' => 'liv', 'api_key' => $free_apikey, 'name' => 'Livewwwire', 'url' => 'http://ciarang.com', 'free' => True),
 	array('code' => 'lpd', 'api_key' => $free_apikey, 'name' => 'lastPod', 'url' => 'http://www.lastpod.org', 'free' => True),
