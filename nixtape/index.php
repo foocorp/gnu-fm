@@ -20,18 +20,27 @@
 */
 
 require_once('database.php');
-require_once('templating.php');
-require_once('data/sanitize.php');
-require_once('data/Server.php');
-require_once('data/TagCloud.php');
 
-try {
-	$aTagCloud = TagCloud::GenerateTagCloud('loved', 'artist');
-	$smarty->assign('tagcloud', $aTagCloud);
-} catch(Exception $e) {
-	// Installation doesn't have any loved tracks yet
+if (isset($_REQUEST['hs']) && isset($_REQUEST['p'])) {
+	if (substr($_REQUEST['p'], 0, 3) == '1.2') {
+		require_once('1.x/submissions/1.2/handshake.php');
+	} else if (substr($_REQUEST['p'], 0, 3) == '1.1') {
+		require_once('1.x/submissions/1.1/handshake.php');
+	}
+} else {
+	//If we're not handshaking we display the nixtape start page
+	require_once('templating.php');
+	require_once('data/sanitize.php');
+	require_once('data/Server.php');
+	require_once('data/TagCloud.php');
+	try {
+		$aTagCloud = TagCloud::GenerateTagCloud('loved', 'artist');
+		$smarty->assign('tagcloud', $aTagCloud);
+	} catch(Exception $e) {
+		// Installation doesn't have any loved tracks yet
+	}
+
+	$smarty->assign('headerfile', 'welcome-header.tpl');
+	$smarty->assign('welcome', true);
+	$smarty->display('welcome.tpl');
 }
-
-$smarty->assign('headerfile', 'welcome-header.tpl');
-$smarty->assign('welcome', true);
-$smarty->display('welcome.tpl');
