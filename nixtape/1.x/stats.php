@@ -20,9 +20,10 @@
 */
 
 header('Content-type: text/html; charset=utf-8');
-require_once('database.php');
-require_once('utils/human-time.php');
-require_once('temp-utils.php');
+require_once('../config.php');
+require_once($install_path . 'database.php');
+require_once($install_path . 'utils/human-time.php');
+require_once($install_path . 'temp-utils.php');
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
