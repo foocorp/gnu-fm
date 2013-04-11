@@ -19,8 +19,9 @@
 
 */
 
-require_once('database.php');	// include the database connection string
-require_once('temp-utils.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
+require_once($install_path . 'database.php');
+require_once($install_path . 'temp-utils.php');
 
 function useridFromSID($session_id) {
 	//derive the username from a session ID

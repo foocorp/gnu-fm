@@ -16,11 +16,12 @@
    You should have received a copy of the GNU Affero General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-*/
+ */
 
-require_once('../../database.php');
-require_once('../../scrobble-utils.php');
-require_once('../../auth-utils.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
+require_once($install_path . 'database.php');
+require_once($install_path . '1.x/scrobble-utils.php');
+require_once($install_path . '1.x/auth-utils.php');
 
 header('Content-Type: text/plain');
 
