@@ -24,7 +24,7 @@
 // force a 1.1 client to give us a session key that can be used by the 1.2 protocol handler, so we only handle handshakes for
 // 1.1 then pass all submissions off to the 1.2 handler.
 
-require_once('auth-utils.php');
+require_once('1.x/auth-utils.php');
 require_once('config.php');
 require_once('temp-utils.php');
 
@@ -66,5 +66,5 @@ $res = $adodb->Execute('INSERT INTO Scrobble_Sessions(userid, sessionid, client,
 
 echo "UPTODATE\n";
 echo $timestamp . "\n";
-echo $submissions_server . "/submissions/1.2/\n";
+echo $base_url . "/1.x/submissions/1.2/\n";
 echo "INTERVAL 1\n";

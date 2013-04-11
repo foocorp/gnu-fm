@@ -20,7 +20,7 @@
 
 // Implements the submissions handshake protocol as detailed at: http://www.last.fm/api/submissions
 
-require_once('auth-utils.php');
+require_once('1.x/auth-utils.php');
 require_once('config.php');
 require_once('temp-utils.php');
 
@@ -76,5 +76,5 @@ try {
 
 echo "OK\n";
 echo $session_id . "\n";
-echo $submissions_server . "/nowplaying/1.2/\n";
-echo $submissions_server . "/submissions/1.2/\n";
+echo $base_url . "/1.x/nowplaying/1.2/\n";
+echo $base_url . "/1.x/submissions/1.2/\n";
