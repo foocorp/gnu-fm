@@ -17,9 +17,9 @@
    You should have received a copy of the GNU Affero General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-*/
-
-require_once('database.php');
+ */
+require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
+require_once($install_path . 'database.php');
 
 function check_web_auth($username, $token, $timestamp, $api_key, $sk) {
 	// Validates authentication using a web services token
