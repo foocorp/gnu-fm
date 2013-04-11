@@ -1369,12 +1369,12 @@ function method_track_unban() {
  * * **track** (required)       : Track name.
  * * **sk** (required)          : Session key.
  * * **album** (optional)		: Album name.
- * * **tracknumber (optional)   : Track's number on the album.
+ * * **tracknumber** (optional) : Track's number on the album.
  * * **context** (optional)     : TODO
  * * **mbid** (optional)        : Track's musicbrainz ID.
  * * **duration** (optional)    : Length of the track in seconds.
- * * **albumartist (optional)   : Album's artist.
- * * **api_key (optional)       : Client API key.
+ * * **albumartist** (optional) : Album's artist.
+ * * **api_key** (optional)     : Client API key.
  * * **format** (optional)      : Format of response, **xml** or **json**. Default is xml.
  *
  * ###Additional info
@@ -1433,7 +1433,7 @@ function method_track_updateNowPlaying() {
  * * **mbid[i]** (optional)         : Track's Musicbrainz ID.
  * * **albumartist[i]** (optional)  : Album's artist.
  * * **duration[i]** (optional)     : Length of the track in seconds.
- * * **api_key (optional)           : Client API key.
+ * * **api_key** (optional)         : Client API key.
  * * **format** (optional)          : Format of response, **xml** or **json**. Default is xml.
  *
  * ###Additional info
