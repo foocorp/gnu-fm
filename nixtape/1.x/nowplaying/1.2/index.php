@@ -20,7 +20,7 @@
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
 require_once($install_path . 'database.php');
-require_once($install_path . '1.x/scrobble-utils.php');
+require_once($install_path . 'scrobble-utils.php');
 require_once($install_path . '1.x/auth-utils.php');
 
 header('Content-Type: text/plain');
@@ -29,74 +29,57 @@ if (!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t'])) {
 	die("FAILED Required POST parameters are not set\n");
 }
 
-//trim parameters
-$session_id = trim($_POST['s']);
-$artist = trim($_POST['a']);
-$artist = noSpamTracks($artist);
-$track = trim($_POST['t']);
-$track = noSpamTracks($track);
-
-if (empty($session_id) || empty($artist) || empty($track)) {
-	die("FAILED Required POST parameters are empty\n");
-}
-
-if (isset($_POST['b'])) {
-	$album = trim($_POST['b']);
-	$album = noSpamTracks($album);
-}
-if (empty($album)) {
-	$album = 'NULL';
-}
-
-if (isset($_POST['l']) && is_numeric($_POST['l'])) {
-	$length = (int) $_POST['l'];
-	if ($length > 5400) {
-		$expires = time() + 600;
-	} else {
-		$expires = time() + (int) $_POST['l'];
-	}
-} else {
-	$expires = time() + 250; //Expire in 5 minutes if we don't know the track length
-}
-
-$mbid = validateMBID($_POST['m']);
-if (!$mbid) {
-	$mbid = 'NULL';
-}
-
-//quote strings
-$session_id = $adodb->qstr($session_id);
-$artist = $adodb->qstr($artist);
-$track = $adodb->qstr($track);
-if($album != 'NULL') {
-	$album = $adodb->qstr($album);
-}
-if ($mbid != 'NULL') {
-	$mbid = $adodb->qstr($mbid);
-}
-
-//Delete this user's last playing song (if any)
-$adodb->Execute('DELETE FROM Now_Playing WHERE sessionid = ' . ($session_id));
-
-if (!check_session($session_id)) {
+$sessionid = trim($_POST['s']);
+if (!check_session($adodb->qstr($sessionid))) {
 	die("BADSESSION\n");
 }
 
+$t = array(
+	'artist' => $_POST['a'],
+	'track' => $_POST['t'],
+	'album' => $_POST['b'],
+	'tracknumber' => $_POST['n'],
+	'mbid' => $_POST['m'],
+	'duration' => $_POST['l'],
+	'albumartist' => $albumartist
+);
+
+$t = prepareTrack($userid, $t, 'nowplaying');
+
+// Delete last played track
+$query = 'DELETE FROM Now_Playing WHERE sessionid = ?';
+$params = array($sessionid);
 try {
-	$adodb->Execute('INSERT INTO Now_Playing (sessionid, artist, album, track, expires, mbid) VALUES ('
-			. $session_id . ', '
-			. $artist . ', '
-			. $album . ', '
-			. $track . ', '
-			. $expires . ', '
-			. $mbid . ')');
-} catch (Exception $e) {
-	die('FAILED ' . $e->getMessage() . "\n");
+	$adodb->Execute($query, $params);
+} catch (Exception $e) {}
+
+// Calculate expiry time
+if (!$t['duration'] || ($t['duration'] > 5400)) {
+	// Default expiry time of 300 seconds if duration is false or above 5400 seconds
+	$expires = time() + 300;
+} else {
+	$expires = time() + $t['duration'];
 }
 
-getTrackCreateIfNew($artist, $album, $track, $mbid);
-
-//Expire old tracks
-$adodb->Execute('DELETE FROM Now_Playing WHERE expires < ' . time());
+if ($t['ignored_code'] === 0) {
+	// Clean up expired tracks in now_playing table
+	$params = array(time());
+	$query = 'DELETE FROM Now_Playing WHERE expires < ?';
+	$adodb->Execute($query, $params);
+		$adodb->StartTrans();
+	try {
+		// getTrackID will create the track in Track table if it doesnt exist
+		getTrackID($t['artist'], $t['album'], $t['track'], $t['mbid'], $t['duration']);
+			$params = array($sessionid, $t['track'], $t['artist'], $t['album'], $t['mbid'], $expires);
+		$query = 'INSERT INTO Now_Playing(sessionid, track, artist, album, mbid, expires) VALUES (?,?,?,?,?,?)';
+		$adodb->Execute($query, $params);
+		} catch (Exception $e) {
+		$adodb->FailTrans();
+		$adodb->CompleteTrans();
+		reportError($e->getMessage(), $e->getTraceAsString());
+		die('FAILED');
+	}
+	$adodb->CompleteTrans();
+}
 
 die("OK\n");

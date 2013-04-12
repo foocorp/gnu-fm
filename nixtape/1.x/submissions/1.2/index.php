@@ -16,10 +16,12 @@
    You should have received a copy of the GNU Affero General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-*/
+ */
+
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
 require_once($install_path . 'database.php');
-require_once($install_path . '1.x/scrobble-utils.php');
+require_once($install_path . 'scrobble-utils.php');
+require_once($install_path . 'temp-utils.php');
 
 if (!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t']) || !isset($_POST['i'])) {
 	die("FAILED Required POST parameters are not set\n");
@@ -35,197 +37,130 @@ if (!is_array($_POST['a']) || !is_array($_POST['t']) || !is_array($_POST['i'])) 
 $session_id = $_POST['s'];
 
 $userid = useridFromSID($session_id);
-$rowvalues = array();
-$forwardvalues = array();
-$actualcount = 0;
-$timeisstupid = 0;
 
-for ($i = 0; $i < count($_POST['a']); $i++) {
+$artist = $_POST['a'];
+$track = $_POST['t'];
+$timestamp = $_POST['i'];
+//$source = $_POST['o'];
+//$rating = $_POST['r'];
+$duration = $_POST['l'];
+$album = $_POST['b'];
+$tracknumber = $_POST['n'];
+$mbid = $_POST['m'];
 
-	if (!isset($_POST['t'][$i]) || !isset($_POST['a'][$i]) || !isset($_POST['i'][$i])) {
-		$f = isset($_POST['t'][$i]) ? "T({$_POST['t'][$i]})" : 't';
-		$f .= isset($_POST['a'][$i]) ? "A({$_POST['a'][$i]})" : 'a';
-		$f .= isset($_POST['i'][$i]) ? "I({$_POST['i'][$i]})" : 'i';
-
-		//Add error message to db and skip to next scrobble
-		reportError("FAILED Track $i was submitted with empty mandatory field(s)",
-			"artist:{$_POST['a'][$i]}, album:{$_POST['b'][$i]}, track:{$_POST['t'][$i]}, time:{$_POST['i'][$i]}");
-		continue;
-	}
-
-	$artist = trim($_POST['a'][$i]);
-	$artist = noSpamTracks($artist);
-	if (empty($artist)) {
-		//Add error message to db and skip to next scrobble
-		reportError("FAILED Track $i was submitted with empty artist field",
-			"artist:{$_POST['a'][$i]}, album:{$_POST['b'][$i]}, track:{$_POST['t'][$i]}, time:{$_POST['i'][$i]}");
-		continue;
-	} else {
-		switch (mb_detect_encoding($artist)) {
-			case 'ASCII':
-			case 'UTF-8':
-				$artist = $adodb->qstr(trim(mb_strcut($artist, 0, 255, 'UTF-8')));
-				break;
-			default:
-				die("FAILED Bad encoding in artist submission $i\n");
-		}
-	}
-
-	$track = trim($_POST['t'][$i]);
-	$track = noSpamTracks($track);
-	if (empty($track)) {
-		//Add error message to db and skip to next scrobble
-		reportError("FAILED Track $i was submitted with empty track field",
-			"artist:{$_POST['a'][$i]}, album:{$_POST['b'][$i]}, track:{$_POST['t'][$i]}, time:{$_POST['i'][$i]}");
-		continue;
-	} else {
-		switch (mb_detect_encoding($track)) {
-		case 'ASCII':
-		case 'UTF-8':
-			$track = $adodb->qstr(trim(mb_strcut($track, 0, 255, 'UTF-8')));
-			break;
-		default:
-			die("FAILED Bad encoding in title submission $i\n");
-		}
-	}
-
-	if (is_numeric($_POST['i'][$i])) {
-		$time = (int) $_POST['i'][$i];
+// Convert timestamps to unix time if needed
+for ($i = 0; $i < count($timestamp); $i++) {
+	if (is_numeric($timestamp[$i])) {
+		$timestamp[$i] = (int) $timestamp[$i];
 	} else {
 		// 1.1 time format
 		date_default_timezone_set('UTC');
-		$time = strtotime($_POST['i'][$i]);
+		$timestamp[$i] = strtotime($timestamp[$i]);
 	}
+}
 
-	$album = trim($_POST['b'][$i]);
-	$album = noSpamTracks($album);
-	if (!empty($album)) {
-		switch (mb_detect_encoding($album)) {
-			case 'ASCII':
-			case 'UTF-8':
-				$album = $adodb->qstr(trim(mb_strcut($album, 0, 255, 'UTF-8')));
-				break;
-			default:
-				die("FAILED Bad encoding in album submission $i\n");
-		}
-	} else {
-		$album = 'NULL';
+
+$tracks_array = array();
+
+if (is_array($artist)) {
+	for ($i = 0; $i < count($artist); $i++) {
+		$tracks_array[$i] = array(
+			'artist' => $artist[$i],
+			'track' => $track[$i],
+			'timestamp' => $timestamp[$i],
+			'album' => $album[$i],
+			'tracknumber' => $tracknumber[$i],
+			'mbid' => $mbid[$i],
+			'albumartist' => $albumartist[$i],
+			'duration' => $duration[$i],
+		);
 	}
+} else {
+	$tracks_array[0] = array(
+		'artist' => $artist,
+		'track' => $track,
+		'timestamp' => $timestamp,
+		'album' => $album,
+		'tracknumber' => $tracknumber,
+		'mbid' => $mbid,
+		'albumartist' => $albumartist,
+		'duration' => $duration,
+	);
+}
 
-	$mb = validateMBID($_POST['m'][$i]);
 
-	if ($mb) {
-		$mbid = $adodb->qstr($mb);
-	} else {
-		$mbid = 'NULL';
-	}
+// Correct and inspect scrobbles to see if some should be ignored
+for ($i = 0; $i < count($tracks_array); $i++) {
+	$tracks_array[$i] = prepareTrack($userid, $tracks_array[$i], 'scrobble');
+}
 
-	if (isset($_POST['o'][$i])) {
-		$source = $adodb->qstr($_POST['o'][$i]);
-	} else {
-		$source = 'NULL';
-	}
-
-	if (!empty($_POST['r'][$i])) {
-		$rating = $adodb->qstr($_POST['r'][$i]);
-	} else {
-		$rating = $adodb->qstr('0'); // use the fake rating code 0 for now
-	}
-
-	if (isset($_POST['l'][$i])) {
-		$length = (int)($_POST['l'][$i]);
-	} else {
-		$length = 'NULL';
-	}
-
-	if (($time - time()) > 300) {
-		die("FAILED Submitted track has timestamp in the future\n"); // let's try a 5-minute tolerance
-	}
-
-	if ($time <= 1009000000) {
-		$timeisstupid = 1;
-	}
-
-	$failed = false;
-	try {
-		$exists = scrobbleExists($userid, $artist, $track, $time);
-		
-		if (!$exists) {
-			$stid = getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid);
+$adodb->StartTrans();
+for ($i = 0; $i < count($tracks_array); $i++) {
+	$t = $tracks_array[$i];
+	if ($t['ignored_code'] === 0) {
+		try {
+			// Create artist, album and track if not already in db
+			$t['track_id'] = getTrackID($t['artist'], $t['album'], $t['track'], $t['mbid'], $t['duration']);
+			$t['scrobbletrack_id'] = getScrobbleTrackID($t['artist'], $t['album'], $t['track'], $t['mbid'], $t['duration'], $t['track_id']);
+		} catch (Exception $e) {
+			// Roll back database entries, log error and respond with error message
+			$adodb->FailTrans();
+			$adodb->CompleteTrans();
+			reportError($e->getMessage(), $e->getTraceAsString());
+			die('FAILED');
 		}
 
-	} catch (Exception $ex) {
-		$failed = true;
-		reportError($ex->getMessage(), '');
-	}
-
-	if (!$exists && $rating != 'S' && !$failed) {
-		$rowvalues[$actualcount] = '('
-			. $userid . ', '
-			. $artist . ', '
-			. $album . ', '
-			. $track . ', '
-			. $time . ', '
-			. $mbid . ', '
-			. $source . ','
-			. $rating . ','
-			. $length . ','
-			. $stid . ')';
-
-		// Create array with tracks to be forwarded
-		if (isset($lastfm_key)) {
-			$forwardvalues[$actualcount] = array(
+		try {
+			// Scrobble
+			// TODO last.fm spec says we shouldnt scrobble corrected values,
+			// so maybe we should only use corrected values for validation and in xml
+			$query = 'INSERT INTO Scrobbles (userid, artist, album, track, time, mbid, source, rating, length, stid) VALUES (?,?,?,?,?,?,?,?,?,?)';
+			$params = array(
 				$userid,
-				$_POST['a'][$i],
-				$_POST['b'][$i],
-				$_POST['t'][$i],
-				$time,
-				$_POST['m'][$i],
-				$_POST['o'][$i],
-				$_POST['r'][$i],
-				$_POST['l'][$i]
+				$t['artist'],
+				$t['album'],
+				$t['track'],
+				$t['timestamp'],
+				$t['mbid'],
+				null,
+				null,
+				$t['duration'],
+				$t['scrobbletrack_id']
 			);
-		}
-
-		$actualcount++;
-	}
-
-	if (($i + 1) == count($_POST['a'])) {
-		if ($actualcount > 0) {
-
-			$adodb->StartTrans();
-
-			for ($j = 0; $j < $actualcount; $j++) {
-
-				// Scrobble!
-				$sql = 'INSERT INTO Scrobbles (userid, artist, album, track, time, mbid, source, rating, length, stid) VALUES ' . $rowvalues[$j];
-				try {
-					$res =& $adodb->Execute($sql);
-					if (isset($lastfm_key)) {
-						call_user_func_array("forwardScrobble", $forwardvalues[$j]);
-					}
-				} catch (Exception $e) {
-					$msg = $e->getMessage();
-					$adodb->FailTrans();
-					$adodb->CompleteTrans();
-					reportError($msg, $sql);
-				}
-
-			}
-
-			try {
-				$adodb->CompleteTrans();
-			} catch (Exception $e) {
-				die('FAILED ' . $e->getMessage() . "\n");
-			}
-
-		} else {
-			if ($timeisstupid == 1) {
-				die("FAILED Too many submitted tracks with invalid timestamps\n");
-			}
+			$adodb->Execute($query, $params);
+		} catch (Exception $e) {
+			// Roll back database entries, log error and respond with error message
+			$adodb->FailTrans();
+			$adodb->CompleteTrans();
+			reportError($e->getMessage(), $e->getTraceAsString());
+			die('FAILED');
 		}
 	}
+	$tracks_array[$i] = $t;
+}
+$adodb->CompleteTrans();
 
+// Check if forwarding is enabled before looping through array
+$params = array($userid);
+$query = 'SELECT userid FROM Service_Connections WHERE userid = ? AND forward = 1';
+$forward_enabled = $adodb->CacheGetOne(600, $query, $params);
+if ($forward_enabled) {
+	for ($i = 0; $i < count($tracks_array); $i++) {
+		$t = $tracks_array[$i];
+		if ($t['ignored_code'] === 0) {
+			/* Forward scrobbles, we are forwarding unmodified input submitted by user,
+			 * but only the scrobbles that passed our ignore filters, see prepareTrack(). */
+			forwardScrobble($userid,
+				$t['artist_old'],
+				$t['album_old'],
+				$t['track_old'],
+				$t['timestamp_old'],
+				$t['mbid_old'],
+				null,
+				null,
+				$t['duration_old']);
+		}
+	}
 }
 
 die("OK\n");
