@@ -49,7 +49,7 @@ if (abs($timestamp - time()) > 300) {
 }
 
 if (isset($_REQUEST['api_key']) && isset($_REQUEST['sk'])) {
-	$authed = check_web_auth($username, $auth_token, $timestamp, $_REQUEST['api_key'], $_REQUEST['sk']);
+	$authed = check_web_auth($username, $_REQUEST['api_key'], $_REQUEST['sk']);
 } else {
 	$authed = check_standard_auth($username, $auth_token, $timestamp);
 }

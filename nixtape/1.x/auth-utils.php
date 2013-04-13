@@ -21,8 +21,15 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
 require_once($install_path . 'database.php');
 
-function check_web_auth($username, $token, $timestamp, $api_key, $sk) {
-	// Validates authentication using a web services token
+/**
+ * Validate authentication using a web services token.
+ *
+ * @param string $username User name.
+ * @param string $api_key 32 character API key.
+ * @param string $sk Web services token.
+ * @return bool
+ */
+function check_web_auth($username, $api_key, $sk) {
 	global $adodb;
 
 	// Using the valid_api_key function from nixtape/2.0/index.php would be appropriate here
@@ -30,11 +37,9 @@ function check_web_auth($username, $token, $timestamp, $api_key, $sk) {
 		return false;
 	}
 
-	$adodb->SetFetchMode(ADODB_FETCH_ASSOC); // this query should get the uniqueid and then return it on success
-	$result = $adodb->GetOne('SELECT username FROM Auth WHERE '
-		//. 'expires > ' . time() . ' AND '   // session keys have an infinite lifetime
-		. 'sk = ' . $adodb->qstr($sk)
-		);
+	$query = 'SELECT username FROM Auth WHERE sk = ?';
+	$params = array($sk);
+	$result = $adodb->GetOne($query, $params);
 	if (!$result) {
 		// TODO: Log failures somewhere
 		return false;
@@ -43,12 +48,21 @@ function check_web_auth($username, $token, $timestamp, $api_key, $sk) {
 	return $result == $username;
 }
 
+/**
+ * Validates authentication using a standard authentication token.
+ *
+ * @param string $username User name.
+ * @param string $token Token.
+ * @param int $timestamp Timestamp in seconds since Epoch.
+ * @return bool
+ */
 function check_standard_auth($username, $token, $timestamp) {
 	// Validates authentication using a standard authentication token
 	global $adodb;
 
-	$adodb->SetFetchMode(ADODB_FETCH_ASSOC); // this query should get the uniqueid and then return it on success
-	$pass = $adodb->GetOne('SELECT password FROM Users WHERE lower(username) = lower(' . $adodb->qstr($username) . ')');
+	$query = 'SELECT password FROM Users WHERE lower(username) = lower(?)';
+	$params = array($username);
+	$pass = $adodb->GetOne($query, $params);
 	if (!$pass) {
 		// TODO: Log failures somewhere
 		return false;
@@ -60,15 +74,17 @@ function check_standard_auth($username, $token, $timestamp) {
 }
 
 /**
- * Checks if the session is still valid. Assumes $sessionID is already quoted.
+ * Checks if the session is still valid.
+ *
+ * @param $sessionid Scrobble session id.
+ * @return bool True if session exists and is still valid.
  */
-function check_session($sessionID) {
+function check_session($sessionid) {
 	global $adodb;
 
-	$session = $adodb->GetOne('SELECT expires from Scrobble_Sessions WHERE sessionid = ' . $sessionID);
-	if (!$session) {
-		return(false);
-	}
+	$query = 'SELECT expires FROM Scrobble_Sessions WHERE sessionid = ? AND expires >= ?';
+	$params = array($sessionid, time());
+	$session = $adodb->GetOne($query, $params);
 
-	return($session >= time());
+	return (bool) $session;
 }
