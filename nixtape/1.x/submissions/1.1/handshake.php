@@ -24,9 +24,9 @@
 // force a 1.1 client to give us a session key that can be used by the 1.2 protocol handler, so we only handle handshakes for
 // 1.1 then pass all submissions off to the 1.2 handler.
 
-require_once('1.x/auth-utils.php');
-require_once('config.php');
-require_once('temp-utils.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
+require_once($install_path . '1.x/auth-utils.php');
+require_once($install_path . 'temp-utils.php');
 
 $supported_protocols = array('1.1');
 
