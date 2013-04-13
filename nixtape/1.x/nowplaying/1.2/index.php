@@ -70,10 +70,10 @@ if ($t['ignored_code'] === 0) {
 	try {
 		// getTrackID will create the track in Track table if it doesnt exist
 		getTrackID($t['artist'], $t['album'], $t['track'], $t['mbid'], $t['duration']);
-			$params = array($sessionid, $t['track'], $t['artist'], $t['album'], $t['mbid'], $expires);
+		$params = array($sessionid, $t['track'], $t['artist'], $t['album'], $t['mbid'], $expires);
 		$query = 'INSERT INTO Now_Playing(sessionid, track, artist, album, mbid, expires) VALUES (?,?,?,?,?,?)';
 		$adodb->Execute($query, $params);
-		} catch (Exception $e) {
+	} catch (Exception $e) {
 		$adodb->FailTrans();
 		$adodb->CompleteTrans();
 		reportError($e->getMessage(), $e->getTraceAsString());
