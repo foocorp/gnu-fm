@@ -18,15 +18,18 @@
 
 */
 
-// Implements the submissions handshake protocol 1.1 as detailed at: http://www.audioscrobbler.net/wiki/Protocol1.1.merged
-//
-// By sending the timestamp as the md5 challenge then creating the session key from md5(md5($password) . $timestamp) we can
-// force a 1.1 client to give us a session key that can be used by the 1.2 protocol handler, so we only handle handshakes for
-// 1.1 then pass all submissions off to the 1.2 handler.
-
+/** 
+ * Implements the submissions handshake protocol 1.1 as detailed at: http://www.audioscrobbler.net/wiki/Protocol1.1.merged
+ *
+ * By sending the timestamp as the md5 challenge then creating the session key from md5(md5($password) . $timestamp) we can
+ * force a 1.1 client to give us a session key that can be used by the 1.2 protocol handler, so we only handle handshakes for
+ * 1.1 then pass all submissions off to the 1.2 handler.
+ */
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
 require_once($install_path . '1.x/auth-utils.php');
 require_once($install_path . 'temp-utils.php');
+
+header('Content-Type: text/plain');
 
 $supported_protocols = array('1.1');
 
@@ -34,7 +37,9 @@ if (!isset($_REQUEST['p']) || !isset($_REQUEST['u']) || !isset($_REQUEST['c'])) 
 	die("FAILED\n");
 }
 
-$protocol = $_REQUEST['p']; $username = $_REQUEST['u']; $client = $_REQUEST['c'];
+$protocol = $_REQUEST['p'];
+$username = $_REQUEST['u'];
+$client = $_REQUEST['c'];
 
 if (!in_array($protocol, $supported_protocols)) {
 	die("FAILED Unsupported protocol version\n");
@@ -42,24 +47,21 @@ if (!in_array($protocol, $supported_protocols)) {
 
 $timestamp = time();
 
-$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+$select_query = 'SELECT uniqueid, password FROM Users WHERE lower(username) = lower(?)';
+$select_params = array($username);
 try {
-	$row = $adodb->GetRow('SELECT uniqueid,password FROM Users WHERE lower(username) = lower(' . $adodb->qstr($username) . ')');
+	list($userid, $password) = $adodb->GetRow($select_query, $select_params);
 } catch (Exception $e) {
 	die('FAILED ' . $e->getMessage() . "\n");
 }
-if (!$row) {
+if (!$password) {
 	die("BADUSER\n");
 }
-$password = $row['password'];
-$uniqueid = $row['uniqueid'];
-$session_id = md5($password . $timestamp);
+$sessionid = md5($password . $timestamp);
+$insert_query = 'INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires) VALUES (?,?,?,?)';
+$insert_params = array($userid, $sessionid, $client, time() + 86400);
 try {
-$res = $adodb->Execute('INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires) VALUES ('
-	. ($uniqueid) . ','
-	. $adodb->qstr($session_id, 'text') . ','
-	. $adodb->qstr($client, 'text') . ','
-	. $adodb->qstr(time() + 86400) . ')');
+	$res = $adodb->Execute($insert_query, $insert_params);
 } catch (Exception $e) {
 	die('FAILED ' . $e->getMessage() . "\n");
 }
