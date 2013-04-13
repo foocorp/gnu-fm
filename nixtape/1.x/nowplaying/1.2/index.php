@@ -30,7 +30,7 @@ if (!isset($_POST['s']) || !isset($_POST['a']) || !isset($_POST['t'])) {
 }
 
 $sessionid = trim($_POST['s']);
-if (!check_session($adodb->qstr($sessionid))) {
+if (!check_session($sessionid)) {
 	die("BADSESSION\n");
 }
 
