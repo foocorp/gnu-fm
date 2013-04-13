@@ -20,9 +20,9 @@
 
 // Implements the submissions handshake protocol as detailed at: http://www.last.fm/api/submissions
 
-require_once('1.x/auth-utils.php');
-require_once('config.php');
-require_once('temp-utils.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
+require_once($install_path . '1.x/auth-utils.php');
+require_once($install_path . 'temp-utils.php');
 
 $supported_protocols = array('1.2', '1.2.1');
 
