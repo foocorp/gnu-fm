@@ -21,8 +21,11 @@
 // Implements the submissions handshake protocol as detailed at: http://www.last.fm/api/submissions
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
+require_once($install_path . 'data/Server.php');
 require_once($install_path . '1.x/auth-utils.php');
 require_once($install_path . 'temp-utils.php');
+
+header('Content-Type: text/plain');
 
 $supported_protocols = array('1.2', '1.2.1');
 
@@ -35,10 +38,6 @@ $username = $_REQUEST['u'];
 $timestamp = $_REQUEST['t'];
 $auth_token = $_REQUEST['a'];
 $client = $_REQUEST['c'];
-
-if ($client == 'import') {
-	die("FAILED Import scripts are broken\n"); // this should be removed or changed to check the version once import.php is fixed
-}
 
 if (!in_array($protocol, $supported_protocols)) {
 	die("FAILED Unsupported protocol version\n");
@@ -58,23 +57,14 @@ if (!$authed) {
 	die("BADAUTH\n");
 }
 
-$uniqueid = username_to_uniqueid($username);
-$session_id = md5($auth_token . time());
-$sql = 'INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires) VALUES ('
-	. $uniqueid . ','
-	. $adodb->qstr($session_id) . ','
-	. $adodb->qstr($client) . ','
-	. (time() + 86400) . ')';
+$userid = username_to_uniqueid($username);
+$session_id = Server::getScrobbleSession($userid, $client);
 
-try {
-	$res = $adodb->Execute($sql);
-} catch (Exception $e) {
-	$msg = $e->getMessage();
-	reportError($msg, $sql);
-	die('FAILED ' . $msg . "\n");
+if ($session_id) {
+	echo "OK\n";
+	echo $session_id . "\n";
+	echo $base_url . "/1.x/nowplaying/1.2/\n";
+	echo $base_url . "/1.x/submissions/1.2/\n";
+} else {
+	echo "FAILED\n";
 }
-
-echo "OK\n";
-echo $session_id . "\n";
-echo $base_url . "/1.x/nowplaying/1.2/\n";
-echo $base_url . "/1.x/submissions/1.2/\n";
