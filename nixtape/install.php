@@ -52,7 +52,7 @@ if (isset($_POST['install'])) {
 	$install_path = dirname(__FILE__) . '/';
 
 	$default_theme = $_POST['default_theme'];
-	$site_name = $_POST['site_name'];
+	$site_name = addslashes($_POST['site_name']);
 	$base_url = $_POST['base_url'];
 
 	if ($base_url[strlen($base_url) - 1] === '/') {
