@@ -23,6 +23,7 @@ require_once('database.php');
 require_once('templating.php');
 require_once('user-menu.php');
 require_once('data/User.php');
+require_once('data/RemoteUser.php');
 require_once('data/TagCloud.php');
 require_once('data/Server.php');
 
@@ -34,7 +35,11 @@ if (!isset($_GET['user']) && $logged_in == false) {
 }
 
 try {
-	$user = new User($_GET['user']);
+	if(strstr($_GET['user'], '@')) {
+		$user = new RemoteUser($_GET['user']);
+	} else {
+		$user = new User($_GET['user']);
+	}
 } catch (Exception $e) {
 	$smarty->assign('pageheading', 'User not found');
 	$smarty->assign('details', 'Shall I call in a missing persons report?');

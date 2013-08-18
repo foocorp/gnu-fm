@@ -23,6 +23,7 @@ require_once('database.php');
 require_once('user-menu.php');
 require_once('templating.php');
 require_once('data/User.php');
+require_once('data/RemoteUser.php');
 require_once('data/TagCloud.php');
 require_once('data/Server.php');
 
@@ -34,7 +35,13 @@ if (!isset($_GET['user']) && $logged_in == false) {
 }
 
 try {
-	$user = new User($_GET['user']);
+	if(strstr($_GET['user'], '@')) {
+		$user = new RemoteUser($_GET['user']);
+		$remote = true;
+	} else {
+		$user = new User($_GET['user']);
+		$remote = false;
+	}
 } catch (Exception $e) {
 	$error = 'User not found';
 }
@@ -42,6 +49,8 @@ try {
 if (isset($user->name)) {
 	if (isset($_GET['type'])) {
 		$type = $_GET['type'];
+	} elseif($remote) {
+		$type = 'recommended';
 	} else {
 		$type = 'loved';
 	}
@@ -59,7 +68,7 @@ if (isset($user->name)) {
 	$submenu = user_menu($user, 'Radio Stations');
 	$smarty->assign('submenu', $submenu);
 	$smarty->assign('type', $type);
-
+	$smarty->assign('remote', $remote);
 	$smarty->display('user-station.tpl');
 } else {
 	$smarty->assign('pageheading', $error);
