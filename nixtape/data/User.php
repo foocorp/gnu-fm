@@ -36,6 +36,7 @@ class User {
 	public $name, $email, $fullname, $bio, $location, $homepage, $error, $userlevel;
 	public $id, $acctid, $avatar_uri, $location_uri, $webid_uri, $laconica_profile, $journal_rss;
 	public $password, $has_identica, $created, $modified, $uniqueid, $anticommercial, $receive_emails;
+	public $remote = false;
 
 	/**
 	 * User constructor
