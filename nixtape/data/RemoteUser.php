@@ -427,7 +427,14 @@ class RemoteUser extends User {
 		if ($this->lastfm) {
 			$wsurl .= '&api_key=' . $lastfm_key;
 		}
-		return simplexml_load_file($wsurl);
+
+		$response = @simplexml_load_file($wsurl);
+
+		if($response == false) {
+			throw new Exception("Unable to find remote user");
+		}
+
+		return $response;
 	}
 
 }
