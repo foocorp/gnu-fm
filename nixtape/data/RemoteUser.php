@@ -50,7 +50,7 @@ class RemoteUser extends User {
 
 		$base = preg_replace('#/$#', '', $base_url);
 
-		$components = explode("@", $name, 2);
+		$components = explode('@', $name, 2);
 		$this->username = $components[0];
 		$this->domain = $components[1];
 
@@ -99,7 +99,7 @@ class RemoteUser extends User {
 	}
 
 	function save() {
-		throw Exception("Unable to save remote user");
+		throw Exception('Unable to save remote user');
 	}
 
 	/**
@@ -431,13 +431,13 @@ class RemoteUser extends User {
 		global $lastfm_key, $adodb;
 
 		// Delete any expired blacklist entries
-		$adodb->Execute("DELETE FROM Domain_Blacklist WHERE expires < " . time());
+		$adodb->Execute('DELETE FROM Domain_Blacklist WHERE expires < ' . time());
 		// Check that we haven't blacklisted this domain
-		$rawdomain = explode("/", $this->domain, 2)[0];
-		$blackcheck = sprintf("SELECT COUNT(*) FROM Domain_Blacklist WHERE domain=%s", $adodb->qstr($rawdomain));
+		$rawdomain = explode('/', $this->domain, 2)[0];
+		$blackcheck = sprintf('SELECT COUNT(*) FROM Domain_Blacklist WHERE domain=%s', $adodb->qstr($rawdomain));
 		if($adodb->CacheGetOne(200, $blackcheck) > 0) {
 			// This domain is blacklisted
-			throw new Exception("Unable to find remote user");
+			throw new Exception('EUSER', 22);
 		}
 
 		$wsurl = 'http://' . $this->domain . '/2.0/' . $params;
@@ -449,10 +449,10 @@ class RemoteUser extends User {
 
 		if($response == false) {
 			// Blacklist this domain for the next hour
-			$blackq = sprintf("INSERT INTO Domain_Blacklist VALUES(%s, %d)", $adodb->qstr($rawdomain), time() + 3600);
+			$blackq = sprintf('INSERT INTO Domain_Blacklist VALUES(%s, %d)', $adodb->qstr($rawdomain), time() + 3600);
 			$adodb->Execute($blackq);
 			$adodb->CacheFlush($blackcheck);
-			throw new Exception("Unable to find remote user");
+			throw new Exception('EUSER', 22);
 		}
 
 		return $response;
