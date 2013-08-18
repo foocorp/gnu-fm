@@ -420,6 +420,13 @@ class RemoteUser extends User {
 		return array();
 	}
 
+	/**
+	 * Fetch XML data from a remote GNU FM (or compatible) server. Requests to servers which don't respond to
+	 * GNU FM requests will result in that domain being blacklisted for an hour.
+	 *
+	 * @param string The 2.0 webservice parameters to contact the remote server with
+	 * @return A SimpleXML object
+	 */
 	function getXML($params) {
 		global $lastfm_key, $adodb;
 
