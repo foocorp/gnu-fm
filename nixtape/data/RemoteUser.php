@@ -68,7 +68,7 @@ class RemoteUser extends User {
 		} else {
 			global $adodb;
 		
-			$row = $this->get_xml('?method=user.getInfo&user=' . $this->username);
+			$row = $this->getXML('?method=user.getInfo&user=' . $this->username);
 			if (!isset($row->user)) {
 				throw new Exception('EUSER', 22);
 			} else {
@@ -111,7 +111,7 @@ class RemoteUser extends User {
 	 */
 	function getScrobbles($number, $offset = 0) {
 		$page = (int) $offset / $number + 1;
-		$xml = $this->get_xml('?method=user.getRecentTracks&user=' . $this->username . '&limit=' . $number . '&page=' . $page);
+		$xml = $this->getXML('?method=user.getRecentTracks&user=' . $this->username . '&limit=' . $number . '&page=' . $page);
 		$tracks = array();
 		foreach($xml->recenttracks->track as $xmltrack) {
 			$track = array();
@@ -296,7 +296,7 @@ class RemoteUser extends User {
 	 */
 	function getLovedTracks($limit = 20, $offset = 0, $streamable = False, $artist = null, $cache = 600) {
 		$page = (int) $offset / $limit + 1;
-		$xml = $this->get_xml('?method=user.getLovedTracks&user=' . $this->username . '&limit=' . $limit . '&page=' . $page);
+		$xml = $this->getXML('?method=user.getLovedTracks&user=' . $this->username . '&limit=' . $limit . '&page=' . $page);
 		$loved = array();
 		foreach($xml->lovedtracks->track as $l) {
 			$track = array();
@@ -420,8 +420,18 @@ class RemoteUser extends User {
 		return array();
 	}
 
-	function get_xml($params) {
-		global $lastfm_key;
+	function getXML($params) {
+		global $lastfm_key, $adodb;
+
+		// Delete any expired blacklist entries
+		$adodb->Execute("DELETE FROM Domain_Blacklist WHERE expires < " . time());
+		// Check that we haven't blacklisted this domain
+		$rawdomain = explode("/", $this->domain, 2)[0];
+		$blackcheck = sprintf("SELECT COUNT(*) FROM Domain_Blacklist WHERE domain=%s", $adodb->qstr($rawdomain));
+		if($adodb->CacheGetOne(200, $blackcheck) > 0) {
+			// This domain is blacklisted
+			throw new Exception("Unable to find remote user");
+		}
 
 		$wsurl = 'http://' . $this->domain . '/2.0/' . $params;
 		if ($this->lastfm) {
@@ -431,6 +441,10 @@ class RemoteUser extends User {
 		$response = @simplexml_load_file($wsurl);
 
 		if($response == false) {
+			// Blacklist this domain for the next hour
+			$blackq = sprintf("INSERT INTO Domain_Blacklist VALUES(%s, %d)", $adodb->qstr($rawdomain), time() + 3600);
+			$adodb->Execute($blackq);
+			$adodb->CacheFlush($blackcheck);
 			throw new Exception("Unable to find remote user");
 		}
 
