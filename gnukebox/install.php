@@ -341,7 +341,12 @@ if (isset($_POST['install'])) {
 		'CREATE TABLE User_Stats (
 			userid INTEGER REFERENCES Users(uniqueid) ON DELETE CASCADE,
 			scrobble_count INTEGER NOT NULL,
-			PRIMARY KEY (userid))'
+			PRIMARY KEY (userid))',
+
+		'CREATE TABLE Domain_Blacklist (
+			domain TEXT,
+			expires INTEGER,
+			PRIMARY KEY(domain))'
 	);
 
 	foreach ($stage_one_queries as $query) {
