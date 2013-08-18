@@ -24,6 +24,7 @@ function user_menu($user, $active_page) {
 	$submenu = array(
 		array('name' => _('Overview'), 'url' => $user->getURL()),
 		array('name' => _('Stats'), 'url' => $user->getURL('stats')),
+//		array('name' => _('Library'), 'url' => $user->getURL('library')),
 		array('name' => _('Recent Tracks'), 'url' => $user->getURL('recent-tracks'))
 	);
 	if ($user->hasLoved()) {

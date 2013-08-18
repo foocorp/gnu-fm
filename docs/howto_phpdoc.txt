@@ -1,0 +1,23 @@
+How to install phpdoc and generate api docs gnu-fm (on Debian Squeeze)
+----------
+
+---
+1. Install dependencies and phpDocumentor-alpha:
+---
+# aptitude install php-pear php5-xsl
+# pear channel-discover pear.phpdoc.org
+# pear install phpdoc/phpDocumentor-alpha
+
+for other ways to install, see http://www.phpdoc.org/docs/latest/for-users/installation.html
+
+---
+2. Create dir which will be holding the docs, and generate docs:
+---
+cd /path/to/gnu-fm/nixtape
+mkdir docs
+phpdoc -d 2.0/ -t docs/
+
+The docs can now be found at http://mynixtapedomain.tld/docs/
+
+Add something similar to this to your crontab to keep the docs up-to-date:
+0 0 * * * phpdoc -q -d /path/to/gnu-fm/nixtape/2.0/ -t /path/to/gnu-fm/nixtape/docs

@@ -48,3 +48,26 @@ function uniqueid_to_username($uniqueid) {
 
 	return $username;
 }
+
+function useridFromSID($session_id) {
+	//derive the username from a session ID
+	global $adodb; 	   // include the Database connector
+
+	// Delete any expired session ids
+	$adodb->Execute('DELETE FROM Scrobble_Sessions WHERE expires < ' . time());
+
+	try {
+		$res = $adodb->GetOne('SELECT userid FROM Scrobble_Sessions WHERE sessionid = ' . $adodb->qstr($session_id)); // get the username from the table
+	} catch (Exception $e) {
+		die('FAILED ufs ' . $e->getMessage() . '\n');
+		// die is there is an error, printing the error
+	}
+
+	if (!$res) {
+		die("BADSESSION\n");
+		// the user has no session
+	}
+
+	return $res;
+	// return the first user
+}

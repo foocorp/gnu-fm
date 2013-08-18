@@ -59,18 +59,16 @@ if (isset($user->name)) {
 
 	$station = 'librefm://user/' . $user->name . '/' . $type;
 	if (isset($this_user)) {
-		$radio_session = $this_user->getRadioSession($station);
+		$smarty->assign('station', $station);
 	} else {
 		$radio_session = Server::getRadioSession($station);
+		$smarty->assign('radio_session', $radio_session);
 	}
-	$smarty->assign('radio_session', $radio_session);
 
-	$submenu = user_menu($user, 'Radio Station');
+	$submenu = user_menu($user, 'Radio Stations');
 	$smarty->assign('submenu', $submenu);
 	$smarty->assign('type', $type);
-	$smarty->assign('headerfile', 'maxiprofile.tpl');
 	$smarty->assign('remote', $remote);
-
 	$smarty->display('user-station.tpl');
 } else {
 	$smarty->assign('pageheading', $error);

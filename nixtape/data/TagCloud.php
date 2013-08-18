@@ -24,19 +24,38 @@ require_once($install_path . '/data/Album.php');
 require_once($install_path . '/data/Track.php');
 require_once($install_path . '/data/Tag.php');
 
+/**
+ * Provides access to functions for generating tag clouds
+ */
 class TagCloud {
 
 	/**
 	 * Generate array for use when building tag clouds
-	 * 
-	 * @param string $set The set to return data from (artists, tracks, tags, loved)
-	 * @param string $item The item to count in the set (artist, track, tag)
-	 * @param int $limit Max amount of items to return (default is 40)
-	 * @param string $constraint_type The type of constraint to filter by (artist, track, tag, userid) (default is null)
-	 * @param string $constraint The constraint value(s) to filter by (default is null)
-	 * @param bool $streamable Only return streamable artists/albums/tracks (default is true)
-	 * @param int $cache int The caching period in seconds (default is 7200)
-	 * @return array An array of items ((name, count, size, pageurl) .. )
+	 *
+	 * The *size* value in the resulting array corresponds to a CSS font-size in the range of xx-small to xx-large.
+	 *
+	 * Examples
+	 * --------
+	 * Get an array with a track's top 10 tags: ((name, count, size, pageurl) .. )
+	 *
+	 * `$trackTags = generateTagCloud('tags', 'tag', 10, 'track', array($trackname, $artistname));`
+	 *
+	 * Get an array with a user's top 10 streamable artists: ((name, count, size, pageurl) .. )
+	 *
+	 * `$userArtists = generateTagCloud('artists', 'artist', 10, 'userid', $userid)`
+	 *
+	 * Get an array with the top 10 of all loved tracks: ((name, count, size, artist_name, pageurl) .. )
+	 *
+	 * `$lovedTracks = generateTagCloud('loved', 'track', 10, null, null, False);`
+	 *
+	 * @param string $set The set to return data from (artists|tracks|tags|loved)
+	 * @param string $item The item to count in the set (artist|track|tag)
+	 * @param int $limit Max amount of items to return
+	 * @param string $constraint_type The type of constraint to filter by (artist|track|tag|userid|null)
+	 * @param string|array $constraint The constraint value to filter by
+	 * @param bool $streamable Only return streamable artists/albums/tracks
+	 * @param int $cache int The caching period in seconds
+	 * @return array Items ((name, count, size, pageurl) .. )
 	 */
 	static function generateTagCloud($set, $item, $limit=40, $constraint_type=null, $constraint=null, $streamable = True, $cache=7200) {
 

@@ -22,21 +22,28 @@
 require_once($install_path . '/database.php');
 require_once($install_path . '/data/sanitize.php');
 
+/**
+ * Provides access to functions used for retrieving data involving tags.
+ */
 class Tag {
 
 	/**
 	 * Get various data involving tags, used by other tag related functions.
 	 *
-	 * @param int $cache Caching period of sql query in seconds (default is 600)
-	 * @param int $limit The number of results to return (default is no limit)
-	 * @param int $offset The position of the first result to return (default is 0)
-	 * @param int $userid The userid to return results for
+	 * This function is not meant to be used directly,
+	 * it is easier to use higher-level functions such as Tag::getTopTags()
+	 * to get the data needed.
+	 *
+	 * @param int $cache Caching period of sql query in seconds
+	 * @param int $limit The number of results to return
+	 * @param int $offset The position of the first result to return
+	 * @param int $user The userid to return results for
 	 * @param string $artist The artist to return results for
 	 * @param string $album The album to return results for
 	 * @param string $track The track to return results for
-	 * @param sting $tag The tag to return results for
+	 * @param string $tag The tag to return results for
 	 * @param string $taggingtype The type of tag to return results for (artist|album|track)
-	 * @param boolean $streamable Only return streamable results if True (default is False)
+	 * @param boolean $streamable Only return streamable results if True
 	 * @return array An array of results
 	 */
 	function _getTagData($cache=600, $limit=null, $offset=null, $user=null, $artist=null, $album=null,
@@ -164,7 +171,7 @@ class Tag {
 	 * @param int $limit The number of tags to return (default is 10)
 	 * @param int $offset The position of the first tag to return (default is 0)
 	 * @param int $cache Caching period of query in seconds (default is 600)
-	 * @return array An array of tag details ((tag, freq) .. )
+	 * @return array Tag details ((tag, freq) .. )
 	 */
 	function getTopTags($limit=10, $offset=0, $cache=600) {
 		return Tag::_getTagData($cache, $limit, $offset);
@@ -178,7 +185,7 @@ class Tag {
 	 * @param int $offset The position of the first artist to return (default is 0)
 	 * @param boolean $streamable Only return streamable artists if True (default is True)
 	 * @param int $cache Caching period of query in seconds (default is 600)
-	 * @return array An array of artist details ((artist, freq) .. )
+	 * @return array Artist details ((artist, freq) .. )
 	 */
 	function getTopArtists($tag, $limit=10, $offset=0, $streamable=True, $cache=600) {
 		if(isset($tag)) {
@@ -194,7 +201,7 @@ class Tag {
 	 * @param int $offset The position of the first album to return (default is 0)
 	 * @param boolean $streamable Only return albums by streamable artists if True (default is True)
 	 * @param int $cache Caching period of query in seconds (default is 600)
-	 * @return array An array of album details ((artist, album, freq) .. )
+	 * @return array Album details ((artist, album, freq) .. )
 	 */
 	function getTopAlbums($tag, $limit=10, $offset=0, $streamable=True, $cache=600) {
 		if(isset($tag)) {
@@ -210,7 +217,7 @@ class Tag {
 	 * @param int $offset The position of the first track to return (default is 0)
 	 * @param boolean $streamable Only return tracks by streamable artists if True (default is True)
 	 * @param int $cache Caching period of query in seconds (default is 600)
-	 * @return array An array of track details ((artist, track, freq) .. )
+	 * @return array Track details ((artist, track, freq) .. )
 	 */
 	function getTopTracks($tag, $limit=10, $offset=0, $streamable=True, $cache=600) {
 		if(isset($tag)) {
@@ -223,7 +230,7 @@ class Tag {
 	 *
 	 * @param string $tag The tag to return tag count for
 	 * @param int $cache Caching period of query in seconds (default is 600)
-	 * @return array An array of track details ((tag, freq) .. )
+	 * @return array Tag details ((tag, freq) .. )
 	 */
 	function getInfo($tag, $cache=600) {
 		if(isset($tag)) {

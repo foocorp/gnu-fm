@@ -34,7 +34,18 @@ try {
 	die("Unable to connect to database.");
 }
 
-// To keep compatibility with existing code
-function reportError($title, $msg) {
+/**
+ * Write error to Error database table
+ *
+ * @param string msg Message
+ * @param string data Data
+ * @return null
+ */
+function reportError($msg, $data) {
+	global $adodb;
 
+	$adodb->Execute('INSERT INTO Error(msg, data, time) VALUES('
+		. $adodb->qstr($msg) . ', '
+		. $adodb->qstr($data) . ', '
+		. time() . ')');
 }

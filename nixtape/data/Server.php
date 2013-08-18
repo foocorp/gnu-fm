@@ -31,6 +31,7 @@ require_once($install_path . '/utils/resolve-external.php');
 require_once($install_path . '/utils/licenses.php');
 require_once($install_path . '/utils/rewrite-encode.php');
 require_once($install_path . '/temp-utils.php'); // this is extremely dodgy and shameful
+require_once($install_path . '/data/clientcodes.php');
 
 /**
  * Provides access to server-wide data
@@ -43,7 +44,9 @@ class Server {
 	 * Retrieves a list of recent scrobbles
 	 *
 	 * @param int $number The number of scrobbles to return
-	 * @return An array of scrobbles or null in case of failure
+	 * @param int $userid The user id to return scrobbles for
+	 * @param int $offset Amount of entries to skip before returning scrobbles
+	 * @return array Scrobbles or null in case of failure
 	 */
 	static function getRecentScrobbles($number = 10, $userid = false, $offset = 0) {
 		global $adodb;
@@ -237,7 +240,7 @@ class Server {
 	 * @param bool $streamable Only return streamable artists
 	 * @param int $userid Only return results from this userid
 	 * @param int $cache Caching period in seconds
-	 * @return array An array of artists ((artist, freq, artisturl) ..) or empty array in case of failure
+	 * @return array Artists ((artist, freq, artisturl) ..) or empty array in case of failure
 	 */
 	static function getLovedArtists($limit = 20, $offset = 0, $streamable = False, $userid = null, $cache = 600) {
 		global $adodb;
@@ -290,7 +293,7 @@ class Server {
 	 * @param int $artist Only return results from this artist
 	 * @param int $userid Only return results from this userid
 	 * @param int $cache Caching period in seconds
-	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
+	 * @return array Tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
 	 */
 	static function getTopTracks($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $artist = null, $userid = null, $cache = 600) {
 		global $adodb;
@@ -354,6 +357,87 @@ class Server {
 		return $result;
 	}
 
+
+	/**
+	 * Get a list of users with the most listens
+	 *
+	 * @param int $limit Amount of results to return
+	 * @param int $offset Skip this many items before returning results
+	 * @param int $streamable Only return results for streamable tracks
+	 * @param int $begin Only use scrobbles with time higher than this timestamp
+	 * @param int $end Only use scrobbles with time lower than this timestamp
+	 * @param string $artist Filter results by this artist
+	 * @param string $track Filter result by this track (need $artist to be set)
+	 * @param int $cache Caching period in seconds
+	 * @return array ((userid, freq, username, userurl) ..)
+	 */
+	static function getTopListeners($limit = 10, $offset = 0, $streamable = True, $begin = null, $end = null, $artist = null, $track = null, $cache = 600) {
+		global $adodb;
+
+		$params = array();
+		$query = 'SELECT s.userid, COUNT(*) as freq FROM Scrobbles s';
+
+		if ($streamable) {
+			$query .= ' WHERE ROW(s.artist, s.track) IN (SELECT artist_name, name FROM Track WHERE streamable=1)';
+			$andquery = True;
+		} else {
+			if($begin || $end || $artist) {
+				$query .= ' WHERE';
+				$andquery = False;
+			}
+		}
+
+		if($begin) {
+			//change time resolution to full hours (for easier caching)
+			$begin = $begin - ($begin % 3600);
+			
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' s.time > ?';
+			$params[] = (int)$begin;
+		}
+
+		if($end) {
+			//change time resolution to full hours (for easier caching)
+			$end = $end - ($end % 3600);
+			
+			$andquery ? $query .= ' AND' : $andquery = True ;
+			$query .= ' s.time < ?';
+			$params[] = (int)$end;
+		}
+
+		if($artist) {
+			$andquery ? $query .= ' AND' : $andquery = True;
+			$query .= ' lower(s.artist)=lower(?)';
+			$params[] = $artist;
+
+			if($track) {
+				$andquery ? $query .= ' AND' : $andquery = True;
+				$query .= ' lower(s.track)=lower(?)';
+				$params[] = $track;
+			}
+		}
+	
+		$query .= ' GROUP BY s.userid ORDER BY freq DESC LIMIT ? OFFSET ?';
+		$params[] = (int)$limit;
+		$params[] = (int)$offset;
+
+		try {
+			$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
+			$res = $adodb->CacheGetAll($cache, $query, $params);
+		}catch (Exception $e) {
+			return array();
+		}
+
+		foreach($res as &$row) {
+			$row['username'] = uniqueid_to_username($row['userid']);
+			$row['userurl'] = Server::getUserURL($row['username']);
+			$result[] = $row;
+		}
+
+		return $result;
+	}
+
+
 	/**
 	 * Retrieves a list of loved tracks
 	 *
@@ -363,7 +447,7 @@ class Server {
 	 * @param int $artist Only return results from this artist
 	 * @param int $userid Only return results from this userid
 	 * @param int $cache Caching period in seconds
-	 * @return array An array of tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
+	 * @return array Tracks ((artist, track, freq, listeners, artisturl, trackurl) ..) or empty array in case of failure
 	 */
 	static function getLovedTracks($limit = 20, $offset = 0, $streamable = False, $artist = null, $userid = null, $cache = 600) {
 		global $adodb;
@@ -411,6 +495,11 @@ class Server {
 		return $result;
 	}
 
+	/**
+	 * Get a list of users
+	 *
+	 * @param string $alpha Search for user names starting with this string
+	 */
 	static function getUserList($alpha) {
 		global $adodb;
 
@@ -430,7 +519,8 @@ class Server {
 	 * Retrieves a list of the currently playing tracks
 	 *
 	 * @param int $number The maximum number of tracks to return
-	 * @return An array of now playing data or null in case of failure
+	 * @param string $username The name of the user to retrieve playing tracks for
+	 * @return array Now playing data or null in case of failure
 	 */
 	static function getNowPlaying($number = 1, $username = false) {
 		global $adodb;
@@ -444,16 +534,12 @@ class Server {
 							n.track,
 							n.album,
 							client,
-							ClientCodes.name,
-							ClientCodes.url,
-							ClientCodes.free,
+							api_key,
 							n.mbid,
 							t.license
 						FROM Now_Playing n
 						LEFT OUTER JOIN Scrobble_Sessions ss
 							ON n.sessionid=ss.sessionid
-						LEFT OUTER JOIN ClientCodes
-							ON ss.client=ClientCodes.code
 						LEFT OUTER JOIN Track t
 							ON lower(n.artist) = lower(t.artist_name)
 							AND lower(n.album) = lower(t.album_name)
@@ -468,16 +554,11 @@ class Server {
 							n.track,
 							n.album,
 							client,
-							ClientCodes.name,
-							ClientCodes.url,
-							ClientCodes.free,
 							n.mbid,
 							t.license
 						FROM Now_Playing n
 						LEFT OUTER JOIN Scrobble_Sessions ss
 							ON n.sessionid=ss.sessionid
-						LEFT OUTER JOIN ClientCodes
-							ON ss.client=ClientCodes.code
 						LEFT OUTER JOIN Track t
 							ON lower(n.artist) = lower(t.artist_name)
 							AND lower(n.album) = lower(t.album_name)
@@ -493,15 +574,14 @@ class Server {
 
 		foreach ($data as &$i) {
 			$row = sanitize($i);
-			// this logic should be cleaned up and the free/nonfree decision be moved into the smarty templates
-			if ($row['name'] == '') {
-				$clientstr = strip_tags(stripslashes($row['client'])) . ' (unknown, <a href="http://ideas.libre.fm/index.php/Client_Codes">please tell us what this is</a>)';
-			} else if ($row['free'] == 'Y') {
-				$clientstr = '<a href="' . strip_tags(stripslashes($row['url'])) . '">' . strip_tags(stripslashes($row['name'])) . '</a>';
-			} else {
-				$clientstr = '<a href="http://en.wikipedia.org/wiki/Category:Free_media_players">' . strip_tags(stripslashes($row['name'])) . '</a>';
-			}
-			$row['clientstr'] = $clientstr;
+			
+			$client = getClientData($row['client'], $row['api_key']);
+			$row['clientcode'] = $client['code'];
+			$row['clientapi_key'] = $client['code'];
+			$row['clientname'] = $client['name'];
+			$row['clienturl'] = $client['url'];
+			$row['clientfree'] = $client['free'];
+			
 			$row['username'] = uniqueid_to_username($row['userid']);
 			$row['userurl'] = Server::getUserURL($row['username']);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
@@ -526,12 +606,15 @@ class Server {
 	}
 
 	/**
+	 * Gets the URL to a user's profile page
+	 *
 	 * The get*URL functions are implemented here rather than in their respective
 	 * objects so that we can produce URLs without needing to build whole objects.
 	 *
-	 * @param string $username The username we want a URL for
+	 * @param string $username The user name we want a URL for
+	 * @param string $component Type of URL to return
 	 * @param string $params Trailing get parameters
-	 * @return A string containing URL to the user's profile
+	 * @return string URL to the user's profile
 	 */
 	static function getUserURL ($username, $component = 'profile', $params = false) {
 		global $friendly_urls, $base_url;
@@ -551,6 +634,12 @@ class Server {
 		}
 	}
 
+	/**
+	 * Gets the URL to a group's page
+	 *
+	 * @param string $groupname The group we want a URL for
+	 * @return string URL to the group's page
+	 */
 	static function getGroupURL($groupname) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
@@ -560,6 +649,13 @@ class Server {
 		}
 	}
 
+	/**
+	 * Gets the URL to an artist's page
+	 *
+	 * @param string $artist The artist we want a URL for
+	 * @param string $component Type of URL to return
+	 * @return string URL to the artist's page
+	 */
 	static function getArtistURL($artist, $component = '') {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
@@ -572,7 +668,12 @@ class Server {
 			}
 		}
 	}
-
+	/**
+	 * Gives the URL to the management interface for an artist
+	 *
+	 * @param string $artist The artist we want a URL for
+	 * @return string URL for an artist's management interface
+	 */
 	static function getArtistManagementURL($artist) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
@@ -582,6 +683,12 @@ class Server {
 		}
 	}
 
+	/**
+	 * Gives the URL for managers to add a new album to an artist
+	 *
+	 * @param string $artist The artist we want a URL for
+	 * @return string URL for adding albums to an artist
+	 */
 	static function getAddAlbumURL($artist) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
@@ -591,6 +698,13 @@ class Server {
 		}
 	}
 
+	/**
+	 * Gets the URL to an album's page
+	 *
+	 * @param string $artist The artist name of the album
+	 * @param string $album The name of the album
+	 * @return string URL to the album's page
+	 */
 	static function getAlbumURL($artist, $album) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
@@ -600,6 +714,13 @@ class Server {
 		}
 	}
 
+	/**
+	 * Gives the URL for managers to add a new track to an album
+	 *
+	 * @param string $artist The artist name of the album
+	 * @param string $album The name of the album
+	 * @return string URL for adding tracks to an album
+	 */
 	static function getAddTrackURL($artist, $album) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
@@ -609,7 +730,15 @@ class Server {
 		}
 	}
 
-
+	/**
+	 * Gets the URL to a track's page
+	 *
+	 * @param string $artist The artist name of the track
+	 * @param string $album The album name of this track (optional)
+	 * @param string $track The name of the track
+	 * @param string $component Type of page
+	 * @return string URL to the track's page
+	 */
 	static function getTrackURL($artist, $album, $track, $component = '') {
 		global $friendly_urls, $base_url;
 
@@ -635,6 +764,14 @@ class Server {
 		return $trackurl;
 	}
 
+	/**
+	 * Gets the URL to a track's edit page
+	 *
+	 * @param string $artist The artist name of the track
+	 * @param string $album The album name of this track (optional)
+	 * @param string $track The name of the track
+	 * @return string URL to the track's edit page
+	 */
 	static function getTrackEditURL($artist, $album, $track) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls && $album) {
@@ -655,6 +792,12 @@ class Server {
 		}
 	}
 
+	/**
+	 * Gets the URL to a tag's page
+	 *
+	 * @param string $tag The name of the tag
+	 * @return string URL to the tag's page
+	 */
 	static function getTagURL($tag) {
 		global $friendly_urls, $base_url;
 		if ($friendly_urls) {
@@ -724,7 +867,7 @@ class Server {
 	 * @param string $station The station to be played
 	 * @param string $username The user to associate this session with (optional)
 	 * @param string $session_id Allows for a custom session id to be set, allowing for compatibility with webservices
-	 * @return A string containing the session key to be used for streaming
+	 * @return string Session key to be used for streaming
 	 */
 	static function getRadioSession($station, $username = false, $session_id = false) {
 		global $adodb;
@@ -753,7 +896,7 @@ class Server {
 	 * Log in to web services
 	 *
 	 * @param string $username The user to create a session for
-	 * @return A string containing the web service session key
+	 * @return string The web service session key
 	 */
 	static function getWebServiceSession($username) {
 		global $adodb;
@@ -767,7 +910,55 @@ class Server {
 		return $sk;
 	}
 
+	/**
+	 * Get scrobble session ID for a user.
+	 *
+	 * Gets the most recent scrobble session ID for userid,
+	 * or creates a new session ID if it can't find one.
+	 *
+	 * @param int userid (required)			User ID.
+	 * @param string api_key (optional)		Client API key (32 characters)
+	 * @param int expire_limit (optional)	Amount of time in seconds before session will expire (defaults to 86400 = 24 hours)
+	 * @return string						Scrobble session ID
+	 */
+	static function getScrobbleSession($userid, $api_key = null, $expire_limit = 86400) {
+		//TODO Add code to remove expired sessions (this is currently only done in gnukebox)
+		global $adodb;
+		$query = 'SELECT sessionid FROM Scrobble_Sessions WHERE userid = ? AND expires > ?';
+		$params = array( (int) $userid, time());
 
+		if (strlen($api_key) == 32) {
+			$query .= ' AND api_key=?';
+			$params[] = $api_key;
+		} elseif (strlen($api_key) == 3) {
+			// api_key is really a 3 char client code (2.0-scrobble-proxy.php sends client code in api_key)
+			$query .= ' AND client=?';
+			$client_id = $api_key;
+			$params[] = $client_id;
+			// we dont want to insert a 3 char code as api_key in db
+			$api_key = null;
+		}
+
+		$sessionid = $adodb->GetOne($query, $params);
+		if (!$sessionid) {
+			$sessionid = md5(mt_rand() . time());
+			$expires = time() + (int) $expire_limit;
+			$query = 'INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires, api_key) VALUES (?,?,?,?,?)';
+			$params = array($userid, $sessionid, $client_id, $expires, $api_key);
+			try {
+				$adodb->Execute($query, $params);
+			} catch (Exception $e) {
+				return null;
+			}
+		}
+		return $sessionid;
+	}
+
+	/**
+	 * Get all artists
+	 *
+	 * @return array Artists ordered by name
+	 */
 	static function getAllArtists() {
 		global $adodb;
 
@@ -790,7 +981,16 @@ class Server {
 		return $result;
 	}
 
-
+	/**
+	 * Search for users, artists or tags
+	 *
+	 * Does a lower-case search of %search_term%
+	 *
+	 * @param string $search_term
+	 * @param string $search_type Type of search, artist|user|tag
+	 * @param int $limit How many items to return
+	 * @return array Results
+	 */
 	static function search($search_term, $search_type, $limit = 40) {
 		global $adodb;
 		switch ($search_type) {
@@ -857,6 +1057,27 @@ class Server {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Create a random authentication token and return it
+	 *
+	 * @return string Token.
+	 */
+	static function getAuthToken() {
+		global $adodb;
+
+		$key = md5(time() . rand());
+		$expires = (int) (time() + 3600);
+
+		$query = 'INSERT INTO Auth(token, expires) VALUES(?,?)';
+		$params = array($key, $expires);
+		try {
+			$adodb->Execute($query, $params);
+			return $key;
+		} catch (Exception $e) {
+			reportError($e->getMessage(), $e->getTraceAsString());
+		}
 	}
 
 }

@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='header.tpl' subheader='album-header.tpl'}
 <div about="{$id}" typeof="mo:Record" class="haudio">
 
 	<div{if $album->image != false} rel="foaf:depiction"{/if}>

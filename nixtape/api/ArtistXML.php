@@ -21,6 +21,13 @@
 require_once($install_path . '/data/Artist.php');
 require_once('xml.php');
 
+/**
+ * Class with functions that returns XML-formatted data for artists.
+ *
+ * These functions are mainly used by web service methods.
+ *
+ * @package API
+ */
 class ArtistXML {
 
 	/**
@@ -121,6 +128,42 @@ class ArtistXML {
 				$image_medium->addAttribute('size', 'medium');
 				$image_large = $track_node->addChild('image', $artist->image_large);
 				$image_large->addAttribute('size', 'large');
+			} catch (Exception $e) {}
+			$i++;
+		}
+
+		return $xml;
+	}
+
+	public static function getTopFans($artistname, $limit, $cache) {
+		global $adodb;
+
+		try {
+			$artist = new Artist($artistname);
+			$res = $artist->getTopListeners($limit, 0, False, null, null, $cache);
+		} catch (Exception $e) {
+			return XML::error('error', '7', 'Invalid resource specified');
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('topfans', null);
+		$root->addAttribute('artist', $artist->name);
+
+		$i = $offset + 1;
+		foreach($res as &$row) {
+			try {
+				$user = new User($row['username']);
+				$user_node = $root->addChild('user', null);
+				$user_node->addChild('name', $user->name);
+				$user_node->addChild('realname', $user->fullname);
+				$user_node->addChild('url', repamp($user->getURL()));
+				$image_small = $user_node->addChild('image', null);
+				$image_small->addAttribute('size', 'small');
+				$image_medium = $user_node->addChild('image', null);
+				$image_medium->addAttribute('size', 'medium');
+				$image_large = $user_node->addChild('image', null);
+				$image_large->addAttribute('size', 'large');
+				$user_node->addChild('weight', $row['freq']);
 			} catch (Exception $e) {}
 			$i++;
 		}

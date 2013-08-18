@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='header.tpl' subheader='user-header.tpl'}
 
 <center><h3><a href='{$base_url}/user-edit.php'>{t}Edit your profile{/t}</a> | {t}Connections to other services{/t}</h3></center>
 
@@ -38,8 +38,14 @@
 	{if isset($lastfm_key)}
 		<a href='http://www.last.fm/api/auth/?api_key={$lastfm_key}'>{t}Connect to a Last.fm account{/t}</a><br /><br />
 	{/if}
+	{if isset($gnufm_key)}
+			<form method="post">
+				<h4>Connect to a remote GNU FM account</h4>
+				<input name="remote_gnufm_url" type="text" placeholder="http://mygnufmserver.tld" />
+				<button type="submit">Connect</button>
+			</form>
+	{/if}
 	</center>
 </div>
-
 
 {include file='footer.tpl'}
