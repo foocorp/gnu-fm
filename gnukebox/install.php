@@ -345,8 +345,7 @@ if (isset($_POST['install'])) {
 
 		'CREATE TABLE Domain_Blacklist (
 			domain TEXT,
-			expires INTEGER,
-			PRIMARY KEY(domain))'
+			expires INTEGER)'
 	);
 
 	foreach ($stage_one_queries as $query) {
