@@ -90,7 +90,7 @@ $clients = array(
 	array('code' => 'pyj', 'api_key' => $free_apikey, 'name' => 'pyjama', 'url' => 'https://launchpad.net/pyjama', 'free' => True),
 	array('code' => 'qcd', 'api_key' => $nonfree_apikey, 'name' => 'Quintessential Media Player', 'url' => 'http://www.quinnware.com/', 'free' => False),
 	array('code' => 'qlb', 'api_key' => $free_apikey, 'name' => 'Quod Libet', 'url' => 'http://code.google.com/p/quodlibet/', 'free' => True),
-	array('code' => 'qmm', 'api_key' => $free_apikey, 'name' => 'Qmmp', 'url' => 'http://qmmp.ylsoftware.com/index_en.php', 'free' => True),
+	array('code' => 'qmm', 'api_key' => $free_apikey, 'name' => 'Qmmp', 'url' => 'http://qmmp.ylsoftware.com', 'free' => True),
 	array('code' => 'qmn', 'api_key' => $free_apikey, 'name' => 'QMPDClient', 'url' => 'http://bitcheese.net/wiki/QMPDClient', 'free' => True),
 	array('code' => 'qts', 'api_key' => $free_apikey, 'name' => 'QTScrobbler', 'url' => 'http://qtscrob.sourceforge.net/', 'free' => True),
 	array('code' => 'rbx', 'api_key' => $free_apikey, 'name' => 'Rhythmbox', 'url' => 'http://projects.gnome.org/rhythmbox/', 'free' => True),
