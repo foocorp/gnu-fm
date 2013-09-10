@@ -57,6 +57,7 @@ $clients = array(
 	array('code' => 'dbl', 'api_key' => $free_apikey, 'name' => 'Decibel Audio Player', 'url' => 'http://decibel.silent-blade.org/', 'free' => True),
 	array('code' => 'ddb', 'api_key' => $free_apikey, 'name' => 'DeaDBeeF', 'url' => 'http://deadbeef.sourceforge.net/', 'free' => True),
 	array('code' => 'dms', 'api_key' => $free_apikey, 'name' => 'donky mpdscrob', 'url' => 'http://github.com/mjhayes/donky/tree/master', 'free' => True),
+	array('code' => 'ecm', 'api_key' => $nonfree_apikey, 'name' => 'Electrocompaniet Network Media Player', 'url' => 'http://www.electrocompaniet.no', 'free' => False),
 	array('code' => 'ems', 'api_key' => $free_apikey, 'name' => 'EMMS', 'url' => 'http://www.gnu.org/software/emms/', 'free' => True),
 	array('code' => 'exa', 'api_key' => $free_apikey, 'name' => 'Exaile', 'url' => 'http://www.exaile.org/', 'free' => True),
 	array('code' => 'foo', 'api_key' => $free_apikey, 'name' => 'foobar2000', 'url' => 'http://www.foobar2000.org/', 'free' => True),
