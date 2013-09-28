@@ -38,7 +38,7 @@ class RemoteUser extends User {
 	public $lastfm = false;
 	public $remote = true;
 
-	private $nowplaying = [];
+	private $nowplaying = array();
 
 	/**
 	 * User constructor
