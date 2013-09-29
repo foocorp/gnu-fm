@@ -59,16 +59,13 @@ if (isset($_POST['login'])) {
 			$smarty->assign('invalid', true);
 		} else {
 			// Give the user a session id, like any other client
-			$session_id = md5(md5($password) . time());
 			if (isset($remember)) {
-				$session_time = time() + 31536000; // 1 year
+				$expire_limit = 31536000; // 1 year
 			} else {
-				$session_time = time() + 86400; // 1 day
+				$expire_limit = 86400; // 1 day
 			}
-			$adodb->Execute('INSERT INTO Scrobble_Sessions (userid, sessionid, expires) VALUES ('
-				. ($userid) . ', '
-				. $adodb->qstr($session_id) . ', '
-				. (int)($session_time) . ')');
+			$session_id = Server::getScrobbleSession($userid, $gnufm_key, $expire_limit);
+			$session_time = time() + $expire_limit;
 
 			setcookie('session_id', $session_id, $session_time);
 			$logged_in = true;

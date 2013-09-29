@@ -73,6 +73,7 @@ $smarty->setConfigDir(array($install_path . '/themes/' . $theme . '/config/', $i
 $current_lang = preg_replace('/.UTF-8/', '', $current_lang);
 $smarty->assign('lang_selector_array', array(($current_lang) => 1));
 $smarty->assign('base_url', $base_url);
+$smarty->assign('gnufm_key', $gnufm_key);
 $smarty->assign('default_theme', $default_theme);
 $smarty->assign('site_name', $site_name);
 $smarty->assign('img_url', $base_url . '/themes/' . $theme . '/img/');

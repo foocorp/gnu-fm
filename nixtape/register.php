@@ -28,9 +28,8 @@ if ($logged_in == true) {
 	exit();
 }
 
-function sendEmail($text, $email) {
-	$subject = $site_name . ' Account Activation - Action needed!';
-	mail($email, $subject, $text);
+function sendEmail($to, $subject, $message) {
+	mail($to, $subject, $message);
 }
 
 if (isset($_GET['auth'])) {
@@ -147,7 +146,8 @@ if (isset($_POST['register'])) {
 			. "your account within 48 hours, after which time all information provided by you and "
 			. "your activation code will be permanently deleted from our database. If you do not want to activate your account, "
 			. "please disregard this email.\n\n" . $url . "\n\n- The " . $site_name . " Team";
-		sendEmail($content, $email);
+		$subject = $site_name . ' Account Activation - Action needed!';
+		sendEmail($email, $subject, $content);
 
 		$smarty->assign('registered', true);
 	} else {

@@ -534,6 +534,7 @@ class Server {
 							n.track,
 							n.album,
 							client,
+							api_key,
 							n.mbid,
 							t.license
 						FROM Now_Playing n
@@ -573,12 +574,14 @@ class Server {
 
 		foreach ($data as &$i) {
 			$row = sanitize($i);
-			$client = getClientData($row['client']);
-			if(is_array($client)) {
-				$row['clientname'] = $client['name'];
-				$row['clienturl'] = $client['url'];
-				$row['clientfree'] = $client['free'];
-			}
+			
+			$client = getClientData($row['client'], $row['api_key']);
+			$row['clientcode'] = $client['code'];
+			$row['clientapi_key'] = $client['code'];
+			$row['clientname'] = $client['name'];
+			$row['clienturl'] = $client['url'];
+			$row['clientfree'] = $client['free'];
+			
 			$row['username'] = uniqueid_to_username($row['userid']);
 			$row['userurl'] = Server::getUserURL($row['username']);
 			$row['artisturl'] = Server::getArtistURL($row['artist']);
@@ -905,6 +908,50 @@ class Server {
 			. (int)(time() + 86400) . ', '
 			. $adodb->qstr($username) . ')');
 		return $sk;
+	}
+
+	/**
+	 * Get scrobble session ID for a user.
+	 *
+	 * Gets the most recent scrobble session ID for userid,
+	 * or creates a new session ID if it can't find one.
+	 *
+	 * @param int userid (required)			User ID.
+	 * @param string api_key (optional)		Client API key (32 characters)
+	 * @param int expire_limit (optional)	Amount of time in seconds before session will expire (defaults to 86400 = 24 hours)
+	 * @return string						Scrobble session ID
+	 */
+	static function getScrobbleSession($userid, $api_key = null, $expire_limit = 86400) {
+		//TODO Add code to remove expired sessions (this is currently only done in gnukebox)
+		global $adodb;
+		$query = 'SELECT sessionid FROM Scrobble_Sessions WHERE userid = ? AND expires > ?';
+		$params = array( (int) $userid, time());
+
+		if (strlen($api_key) == 32) {
+			$query .= ' AND api_key=?';
+			$params[] = $api_key;
+		} elseif (strlen($api_key) == 3) {
+			// api_key is really a 3 char client code (2.0-scrobble-proxy.php sends client code in api_key)
+			$query .= ' AND client=?';
+			$client_id = $api_key;
+			$params[] = $client_id;
+			// we dont want to insert a 3 char code as api_key in db
+			$api_key = null;
+		}
+
+		$sessionid = $adodb->GetOne($query, $params);
+		if (!$sessionid) {
+			$sessionid = md5(mt_rand() . time());
+			$expires = time() + (int) $expire_limit;
+			$query = 'INSERT INTO Scrobble_Sessions(userid, sessionid, client, expires, api_key) VALUES (?,?,?,?,?)';
+			$params = array($userid, $sessionid, $client_id, $expires, $api_key);
+			try {
+				$adodb->Execute($query, $params);
+			} catch (Exception $e) {
+				return null;
+			}
+		}
+		return $sessionid;
 	}
 
 	/**
