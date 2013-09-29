@@ -74,6 +74,7 @@ $clients = array(
 	array('code' => 'lib', 'api_key' => $free_apikey, 'name' => 'LibreTunes', 'url' => 'http://libretunes.sourceforge.net/', 'free' => True),
 	array('code' => 'liv', 'api_key' => $free_apikey, 'name' => 'Livewwwire', 'url' => 'http://ciarang.com', 'free' => True),
 	array('code' => 'lpd', 'api_key' => $free_apikey, 'name' => 'lastPod', 'url' => 'http://www.lastpod.org', 'free' => True),
+	array('code' => 'lsb', 'api_key' => $free_apikey, 'name' => 'libreScrobbleBerry', 'url' => 'https://gitorious.org/librescrobbleberry', 'free' => True),
 	array('code' => 'lsd', 'api_key' => $free_apikey, 'name' => 'lastfmsubmitd', 'url' => 'http://www.red-bean.com/decklin/lastfmsubmitd/', 'free' => True),
 	array('code' => 'mae', 'api_key' => $free_apikey, 'name' => 'maemoscrobbler', 'url' => 'https://garage.maemo.org/projects/maemoscrobbler', 'free' => True),
 	array('code' => 'maf', 'api_key' => $free_apikey, 'name' => 'mafw-lastfm', 'url' => 'https://garage.maemo.org/projects/mafw-lastfm', 'free' => True),
