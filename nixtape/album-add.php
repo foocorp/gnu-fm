@@ -26,17 +26,13 @@ require_once('data/Album.php');
 try {
 	$artist = new Artist($_GET['artist']);
 } catch (Exception $e) {
-	$smarty->assign('pageheading', 'Artist not found.');
-	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');
-	$smarty->display('error.tpl');
-	die();
+	displayError("Artist not found",
+		"The artist {$_GET['artist']} was not found in the database.");
 }
 
 if (!isset($this_user) || !$this_user->manages($artist->name)) {
-	$smarty->assign('pageheading', 'Permission denied');
-	$smarty->assign('error', 'You don\'t have permission to edit this artist\'s details.');
-	$smarty->display('error.tpl');
-	die();
+	displayError("Permission denied",
+		"You don't have permission to edit this artist's details.");
 }
 
 $edit = false;
@@ -46,10 +42,8 @@ if (isset($_GET['album'])) {
 	try {
 		$album = new Album($_GET['album'], $artist->name);
 	} catch (Exception $e) {
-		$smarty->assign('pageheading', 'Album not found.');
-		$smarty->assign('details', 'The album ' . $_GET['album'] . ' by artist ' . $artist->name . ' was not found in the database.');
-		$smarty->display('error.tpl');
-		die();
+		displayError("Album not found",
+			"The album {$_GET['album']} by artist {$artist->name} was not found in the database.");
 	}
 	
 }

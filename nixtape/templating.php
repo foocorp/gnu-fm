@@ -24,6 +24,15 @@ require_once('config.php');
 require_once('auth.php');
 require_once(SMARTY_DIR . 'Smarty.class.php');
 
+function displayError($error_title, $error_message) {
+	global $smarty;
+	$smarty->assign('pagetitle', $error_title);
+	$smarty->assign('pageheading', $error_title); #librefm theme compat, may be removed after switch to BS3 theme
+	$smarty->assign('error_message', $error_message);
+	$smarty->display('error.tpl');
+	die();
+}
+
 if (isset($_GET['lang'])) {
 	$languages = array($_GET['lang'] . '.UTF-8');
  	setcookie('lang', $_GET['lang'] . '.UTF-8', time() + 31536000, '/');

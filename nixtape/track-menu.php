@@ -38,10 +38,8 @@ try {
 	$track = new Track($_GET['track'], $_GET['artist']);
 	$smarty->assign('track', $track);
 } catch (Exception $e) {
-	$smarty->assign('pageheading', 'Track not found.');
-	$smarty->assign('details', 'The track ' . $_GET['track'] . ' by artist ' . $_GET['artist'] . ' was not found in the database.');
-	$smarty->display('error.tpl');
-	die();
+	displayError("Track not found",
+		"The track {$_GET['track']} by artist {$_GET['artist']} was not found in the database.");
 }
 
 try {
@@ -53,10 +51,8 @@ try {
 	$artist = new Artist($track->artist_name);
 	$smarty->assign('artist', $artist);
 } catch (Exception $e) {
-	$smarty->assign('pageheading', 'Artist not found.');
-	$smarty->assign('details', 'The artist ' . $track->artist_name . ' was not found in the database.');
-	$smarty->display('error.tpl');
-	die();
+	displayError("Artist not found",
+		"The artist {$track->artist_name} was not found in the database");
 }
 
 if (isset($this_user) && $this_user->manages($artist->name)) {

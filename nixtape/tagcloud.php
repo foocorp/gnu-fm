@@ -18,9 +18,7 @@ try {
 	$aTagCloud = TagCloud::GenerateTagCloud('Free_Scrobbles', 'artist', $n);
 	$smarty->assign('tagcloud', $aTagCloud);
 } catch (Exception $e) {
-	$smarty->assign('errors', $errors);
-	$smarty->display('error.tpl');
-	die();
+	displayError("Error", $errors);
 }
 
 $smarty->display('tagcloud.tpl');
