@@ -28,10 +28,7 @@ require_once('data/TagCloud.php');
 require_once('data/Server.php');
 
 if (!isset($_GET['user']) && $logged_in == false) {
-	$smarty->assign('pageheading', 'Error!');
-	$smarty->assign('details', 'User not set! You shouldn\'t be here!');
-	$smarty->display('error.tpl');
-	die();
+	displayError("Error", "User not set. You shouldn't be here.");
 }
 
 try {
@@ -41,10 +38,7 @@ try {
 		$user = new User($_GET['user']);
 	}
 } catch (Exception $e) {
-	$smarty->assign('pageheading', 'User not found');
-	$smarty->assign('details', 'Shall I call in a missing persons report?');
-	$smarty->display('error.tpl');
-	die();
+	displayError("User not found", "User not found, shall i call in a missing persons report?");
 }
 
 $scrobbleCount = (int)$_GET['count'];

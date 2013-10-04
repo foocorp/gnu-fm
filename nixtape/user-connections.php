@@ -26,10 +26,7 @@ require_once('data/User.php');
 require_once('data/TagCloud.php');
 
 if ($logged_in == false) {
-	$smarty->assign('pageheading', 'Error!');
-	$smarty->assign('details', 'Not logged in! You shouldn\'t be here!');
-	$smarty->display('error.tpl');
-	die();
+	displayError("Error", "Not logged in. You shouldn't be here.");
 }
 
 if (isset($_POST['remote_gnufm_url'])) {
@@ -59,10 +56,7 @@ if (isset($_GET['token']) && isset($_GET['webservice_url'])) {
 			}
 		}
 	} elseif (!$xmlresponse || (!isset($remote_username) || !isset($remote_key))) {
-		$smarty->assign('pageheading', 'Error!');
-		$smarty->assign('details', 'Sorry, we weren\'t able to authenticate your account.');
-		$smarty->display('error.tpl');
-		die();
+		displayError("Error", "Sorry, we weren't able to authenticate your account.");
 	}
 
 	// Delete any old connection to this service

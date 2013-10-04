@@ -27,10 +27,7 @@ require_once('data/TagCloud.php');
 require_once('artist-menu.php');
 
 if ($logged_in == false) {
-	$smarty->assign('pageheading', 'Log in required');
-	$smarty->assign('details', 'You need to log in to tag artists.');
-	$smarty->display('error.tpl');
-	die();
+	displayError("Log in required", "You need to log in to tag artists.");
 }
 
 if ($_POST['tag']) {

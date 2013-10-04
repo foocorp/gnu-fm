@@ -38,10 +38,7 @@ if (isset($_GET['auth'])) {
 	try {
 		$row = $adodb->GetRow('SELECT * FROM AccountActivation WHERE authcode = ' . $adodb->qstr($authcode));
 	} catch (Exception $e) {
-		$errors = 'Unknown activationcode.';
-		$smarty->assign('errors', $errors);
-		$smarty->display('error.tpl');
-		die();
+		displayError("Error", "Unknown activation code.");
 	}
 
 	$sql_update = 'UPDATE Users SET active = 1 WHERE username = ' . $adodb->qstr($row['username']);
@@ -50,12 +47,7 @@ if (isset($_GET['auth'])) {
 		$res = $adodb->Execute($sql_update);
 		$res = $adodb->Execute($sql_delete);
 	} catch (Exception $e) {
-		$errors = 'An error occurred.';
-		$details = $e->getMessage();
-		$smarty->assign('pageheading', $errors);
-		$smarty->assign('details', $details);
-		$smarty->display('error.tpl');
-		die();
+		displayError("Error", $e->getMessage());
 	}
 	$smarty->assign('activated', true);
 }
@@ -115,12 +107,7 @@ if (isset($_POST['register'])) {
 			$insert = $adodb->Execute($sql);
 		} catch (Exception $e) {
 			reportError('Create user, insert, register.php', $e->getMessage());
-			$errors .= 'An error occurred.';
-			$details = $e->getMessage();
-			$smarty->assign('pageheading', $errors);
-			$smarty->assign('details', $details);
-			$smarty->display('error.tpl');
-			die();
+			displayError("Error", $e->getMessage());
 		}
 
 		$code = md5($username . time());
@@ -132,12 +119,7 @@ if (isset($_POST['register'])) {
 			$res = $adodb->Execute($sql);
 		} catch (Exception $e) {
 			reportError('AccountActivation, insert, register.php', $e->getMessage());
-			$errors .= 'An error occurred.';
-			$details = $e->getMessage();
-			$smarty->assign('pageheading', $errors);
-			$smarty->assign('details', $details);
-			$smarty->display('error.tpl');
-			die();
+			displayError("Error", $e->getMessage());
 		}
 
 		$url = $base_url . '/register.php?auth=' . $code;

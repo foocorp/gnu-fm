@@ -67,7 +67,5 @@ if ($_REQUEST['country']) {
 
 	$smarty->display('location-country.tpl');
 } else {
-	$smarty->assign('pageheading', 'Location not found');
-	$smarty->assign('details', 'Shall I call in a missing locations report?');
-	$smarty->display('error.tpl');
+	displayError("Location not found", "Location not found, shall i call in a missing locations report?");
 }

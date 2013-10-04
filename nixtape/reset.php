@@ -37,10 +37,7 @@ if (isset($_GET['code'])) {
 		. ' AND expires > ' . $adodb->qstr(time());
 	$row = $adodb->GetRow($sql);
 	if (!$row) {
-		$errors .= "Invalid reset token.\n";
-		$smarty->assign('errors', $errors);
-		$smarty->display('error.tpl');
-		die();
+		displayError("Error", "Invalid reset token.");
 	}
 
 	$password = '';
@@ -81,10 +78,7 @@ if (isset($_GET['code'])) {
 	}
 
 	if ($err || !$row) {
-		$errors .= "User not found.\n";
-		$smarty->assign('details', $errors);
-		$smarty->display('error.tpl');
-		die();
+		displayError("Error", "User not found.");
 	}
 	$username = $row['username'];
 	$code = md5($username . $row['email'] . time());
@@ -100,10 +94,7 @@ if (isset($_GET['code'])) {
 			$adodb->Execute($sql);
 		}
 	} catch (Exception $e) {
-		$errors .= 'Error on: ' . $sql;
-		$smarty->assign('details', $errors);
-		$smarty->display('error.tpl');
-		die();
+		displayError("Error", "Error on: {$sql}");
 	}
 
 	$sql = 'INSERT INTO Recovery_Request (username, email, code, expires) VALUES('
@@ -115,10 +106,7 @@ if (isset($_GET['code'])) {
 	try {
 		$res = $adodb->Execute($sql);
 	} catch (Exception $e) {
-		$errors .= 'Error on: ' . $sql;
-		$smarty->assign('details', $errors);
-		$smarty->display('error.tpl');
-		die();
+		displayError("Error", "Error on: {$sql}");
 	}
 
 	$url = $base_url . '/reset.php?code=' . $code;
@@ -131,11 +119,8 @@ if (isset($_GET['code'])) {
 
 	$status = sendEmail($content, $row['email']);
 	if (!$status) {
-		$errors = 'Error while trying to send email to: ' . $row['email'];
-		$errors .= '. Please try again later, or contact the site administrators.';
-		$smarty->assign('details', $errors);
-		$smarty->display('error.tpl');
-		die();
+		displayError("Error",
+			"Error while trying to send email to: {$row['email']}. Please try again later, or contact the site administrators.")
 	}
 
 	$smarty->assign('sent', true);
