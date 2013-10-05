@@ -38,7 +38,7 @@ try {
 		$user = new User($_GET['user']);
 	}
 } catch (Exception $e) {
-	displayError("User not found", "User not found, shall i call in a missing persons report?");
+	displayError("User not found", "User not found, shall I call in a missing persons report?");
 }
 
 $scrobbleCount = (int)$_GET['count'];
