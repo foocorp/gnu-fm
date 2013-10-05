@@ -34,7 +34,7 @@ if (!isset($_GET['user']) && $logged_in == false) {
 try {
 	$user = new User($_GET['user']);
 } catch (Exception $e) {
-	displayError("User not found", "User not found, shall i call in a missing persons report?");
+	displayError("User not found", "User not found, shall I call in a missing persons report?");
 }
 
 $smarty->assign('geo', Server::getLocationDetails($user->location_uri));

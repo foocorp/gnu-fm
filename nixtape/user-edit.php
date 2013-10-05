@@ -181,5 +181,5 @@ if (isset($this_user->name)) {
 	$smarty->assign('errors', $errors);
 	$smarty->display('user-edit.tpl');
 } else {
-	displayError("User not found", "User not found, shall i call in a missing persons report?");
+	displayError("User not found", "User not found, shall I call in a missing persons report?");
 }

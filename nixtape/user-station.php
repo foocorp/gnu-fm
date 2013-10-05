@@ -68,5 +68,5 @@ if (isset($user->name)) {
 	$smarty->assign('remote', $remote);
 	$smarty->display('user-station.tpl');
 } else {
-	displayError("User not found", "User not found, shall i call in a missing persons report?");
+	displayError("User not found", "User not found, shall I call in a missing persons report?");
 }
