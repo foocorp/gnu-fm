@@ -973,7 +973,7 @@ function method_radio_tune() {
 	$stationurl = 'http://libre.fm';
 
 	if ($_REQUEST['format'] == 'json') {
-		header('Content-Type: text/javascript');
+		header('Content-Type: application/json; charset=utf-8');
 		$json_data = array('station' => array('type' => $stationtype, 'name' => $stationname, 'url' => $stationurl, 'supportsdiscovery' => 1));
 		print(json_encode($json_data));
 	} else {
@@ -1057,7 +1057,7 @@ function method_radio_getPlaylist() {
 				'track' => $tracks)
 			);
 
-		header('Content-Type: text/javascript');
+		header('Content-Type: application/json; charset=utf-8');
 		print(json_encode($playlist));
 	}else{
 		//we return XSPF playlists by default
@@ -1677,7 +1677,7 @@ function xml_response($xml) {
 }
 
 function json_response($data) {
-	header('Content-Type: text/javascript');
+	header('Content-Type: application/json; charset=utf-8');
 	if ($_REQUEST['callback']) {
 		print($_REQUEST['callback'] . '(' . $data . ');');
 	} else {
