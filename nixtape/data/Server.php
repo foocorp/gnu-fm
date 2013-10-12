@@ -46,71 +46,57 @@ class Server {
 	 * @param int $number The number of scrobbles to return
 	 * @param int $userid The user id to return scrobbles for
 	 * @param int $offset Amount of entries to skip before returning scrobbles
+	 * @param int $from Only return scrobbles with time higher than this timestamp
+	 * @param int $to Only return scrobbles with time lower than this timestamp
 	 * @return array Scrobbles or null in case of failure
 	 */
-	static function getRecentScrobbles($number = 10, $userid = false, $offset = 0) {
+	static function getRecentScrobbles($number = 10, $userid = false, $offset = 0, $from = false, $to = false) {
 		global $adodb;
 
 		$adodb->SetFetchMode(ADODB_FETCH_ASSOC);
-		try {
-			if ($userid) {
-				$res = $adodb->CacheGetAll(60,
-					'SELECT Scrobbles.*, Loved_Tracks.userid as loved
-					FROM Scrobbles LEFT JOIN Loved_Tracks ON (Scrobbles.track=Loved_Tracks.track AND Scrobbles.artist=Loved_Tracks.artist AND Scrobbles.userid=Loved_Tracks.userid) WHERE Scrobbles.userid = ' . ($userid) . ' ORDER BY Scrobbles.time DESC LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
 
-				/**
+		if ($userid) {
+			$params = array();
+			$query = 'SELECT s.*, lt.userid as loved FROM Scrobbles s LEFT JOIN Loved_Tracks lt ON (s.track=lt.track AND s.artist=lt.artist AND s.userid=lt.userid) WHERE s.userid=?';
+			$params[] = $userid;
 
-
-						s.userid,
-						s.artist,
-						s.track,
-						s.album,
-						s.time,
-						s.mbid,
-						a.mbid AS artist_mbid,
-						l.mbid AS album_mbid,
-						l.image AS album_image,
-						l.artwork_license,
-						t.license,
-						t.mbid AS track_mbid
-
-	                                removed this.
-
-					LEFT JOIN Artist a
-						ON s.artist=a.name
-					LEFT JOIN Album l
-						ON l.artist_name=s.artist
-						AND l.name=s.album
-					LEFT JOIN Scrobble_Track st
-						ON s.stid = st.id
-					LEFT JOIN Track t
-						ON st.track = t.id
-
-				*/
-
-
-			} else {
-				$res = $adodb->CacheGetAll(60,
-					'SELECT *
-					FROM Scrobbles ORDER BY time DESC
-					LIMIT ' . (int)($number) . ' OFFSET ' . $offset);
-
-
-				/**
-
-					LEFT JOIN Artist a
-						ON s.artist=a.name
-					LEFT JOIN Album l
-						ON l.artist_name=s.artist
-						AND l.name=s.album
-					LEFT JOIN Scrobble_Track st
-						ON s.stid = st.id
-					LEFT JOIN Track t
-						ON st.track = t.id
-
-				 */
+			if ($from) {
+				$query .= ' AND s.time>?';
+				$params[] = (int) $from;
 			}
+
+			if ($to) {
+				$query .= ' AND s.time<?';
+				$params[] = (int) $to;
+			}
+
+		} else {
+			$params = array();
+			$query = 'SELECT s.* FROM Scrobbles s';
+
+			if ($from) {
+				$query .= ' WHERE s.time>?';
+				$params[] = (int) $from;
+				if ($to) {
+					$query .= ' AND s.time<?';
+					$params[] = (int) $to;
+				}
+			} else {
+				if ($to) {
+					$query .= ' WHERE s.time<?';
+					$params[] = (int) $to;
+				}
+			}
+		}
+
+		$query .= ' ORDER BY s.time DESC LIMIT ? OFFSET ?';
+		$params[] = (int) $number;
+		$params[] = (int) $offset;
+
+		try {
+			$res = $adodb->CacheGetAll(60, $query, $params);
 		} catch (Exception $e) {
+			reportError($e->getMessage(), $e->getTraceAsString());
 			return null;
 		}
 
