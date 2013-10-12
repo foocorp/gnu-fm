@@ -24,7 +24,7 @@ require_once('data/User.php');
 require_once('utils/random_code_generator.php');
 
 if ($logged_in == false) {
-	displayError("Error", "Not logged in. You shouldn't be here.")
+	displayError("Error", "Not logged in. You shouldn't be here.");
 } else if (isset($_GET['code'])) {
 	$adodb->Execute('DELETE FROM Delete_Request WHERE expires < ' . (int)(time()));
 
