@@ -120,7 +120,7 @@ if (isset($_GET['code'])) {
 	$status = sendEmail($content, $row['email']);
 	if (!$status) {
 		displayError("Error",
-			"Error while trying to send email to: {$row['email']}. Please try again later, or contact the site administrators.")
+			"Error while trying to send email to: {$row['email']}. Please try again later, or contact the site administrators.");
 	}
 
 	$smarty->assign('sent', true);
