@@ -215,7 +215,7 @@ class UserXML {
 		return $xml;
 	}
 
-	public static function getRecentTracks($u, $limit, $page) {
+	public static function getRecentTracks($u, $limit, $page, $from, $to) {
 		global $adodb;
 
 		if (!isset($limit)) {
@@ -229,7 +229,7 @@ class UserXML {
 			if ($page == 1) {
 				$npres = $user->getNowPlaying(1);
 			}
-			$res = $user->getScrobbles($limit, $offset);
+			$res = $user->getScrobbles($limit, $offset, $from, $to);
 		} catch (Exception $e) {
 			$err = 1;
 		}

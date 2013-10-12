@@ -169,6 +169,8 @@ function method_user_getTopArtists() {
  * * **user** (required)		: Name of the user.
  * * **limit** (optional)		: How many items to show. Defaults to 50.
  * * **page** (optional)		: The page to show. Defaults to 1.
+ * * **from** (optional)		: Show items newer than this timestamp (UNIX format)
+ * * **to** (optional)			: Show items older than this timestamp (UNIX format)
  * * **format** (optional)		: Format of response, **xml** or **json**. Default is xml.
  * - - -
  *
@@ -184,7 +186,7 @@ function method_user_getRecentTracks() {
 	$limit = get_with_default('limit', 50);
 	$page = get_with_default('page', 1);
 
-	$xml = UserXML::getRecentTracks($_REQUEST['user'], $limit, $page);
+	$xml = UserXML::getRecentTracks($_REQUEST['user'], $limit, $page, $_REQUEST['from'], $_REQUEST['to']);
 	respond($xml);
 }
 
