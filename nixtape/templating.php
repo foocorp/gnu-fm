@@ -92,6 +92,7 @@ $smarty->assign('this_page_absolute',
 	. (empty($_SERVER['HOST']) ? $_SERVER['SERVER_NAME'] : $_SERVER['HOST'])
 	. (($_SERVER['SERVER_PORT'] == 80) ? '' : (':' . $_SERVER['SERVER_PORT']))
 	. $_SERVER['REQUEST_URI']);
+$smarty->assign('registration_disabled', $registration_disabled);
 
 if (isset($logged_in) && $logged_in) {
 	$smarty->assign('logged_in', true);
