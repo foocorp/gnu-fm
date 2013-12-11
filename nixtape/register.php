@@ -28,6 +28,10 @@ if ($logged_in == true) {
 	exit();
 }
 
+if ($registration_disabled == true) {
+	displayError("Registration disabled", "Registration has been disabled by the site owner, sorry!");
+}
+
 function sendEmail($to, $subject, $message) {
 	mail($to, $subject, $message);
 }
