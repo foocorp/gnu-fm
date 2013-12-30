@@ -822,6 +822,8 @@ function method_auth_getMobileSession() {
 		$json_data = array('session' => array('name' => $username, 'key' => $session, 'subscriber' => 0));
 		json_response(json_encode($json_data));
 	} else {
+		header('Content-Type: text/xml');
+		print("<?xml version=\"1.0\"?>\n");
 		print("<lfm status=\"ok\">\n");
 		print("	<session>\n");
 		print("		<name>{$username}</name>\n");
