@@ -25,10 +25,7 @@ require_once('data/TagCloud.php');
 require_once('track-menu.php');
 
 if ($logged_in == false) {
-	$smarty->assign('pageheading', 'Log in required');
-	$smarty->assign('details', 'You need to log in to tag tracks.');
-	$smarty->display('error.tpl');
-	die();
+	displayError("Log in required", "You need to log in to tag tracks.");
 }
 
 if($_POST['tag']) {

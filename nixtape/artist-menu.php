@@ -37,10 +37,7 @@ try {
 	$artist = new Artist($_GET['artist']);
 	$smarty->assign(artist, $artist);
 } catch (Exception $e) {
-	$smarty->assign('pageheading', 'Artist not found.');
-	$smarty->assign('details', 'The artist ' . $_GET['artist'] . ' was not found in the database.');
-	$smarty->display('error.tpl');
-	die();
+	displayError("Artist not found", "The artist {$_GET['artist']} was not found in the database");
 }
 
 if (isset($this_user) && $this_user->manages($artist->name)) {

@@ -1,9 +1,9 @@
 {include file='mini-header.tpl'}
 
 <h2>{t}Login{/t}</h2>
-
+{if !($registration_disabled)}
 <h3>{t}Need an account?{/t} <a href="{$base_url}/register.php">{t}Register now!{/t}</a></h3>
-
+{/if}
 {if isset($errors)}
         <p id='errors'>{$errors}</p>
 {/if}

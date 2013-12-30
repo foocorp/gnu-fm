@@ -19,9 +19,19 @@
 
 */
 
+define('SMARTY_DIR', '/usr/share/php/smarty3/');
 require_once('config.php');
 require_once('auth.php');
-require_once('smarty/Smarty.class.php');
+require_once(SMARTY_DIR . 'Smarty.class.php');
+
+function displayError($error_title, $error_message) {
+	global $smarty;
+	$smarty->assign('pagetitle', $error_title);
+	$smarty->assign('pageheading', $error_title); #librefm theme compat, may be removed after switch to BS3 theme
+	$smarty->assign('error_message', $error_message);
+	$smarty->display('error.tpl');
+	die();
+}
 
 if (isset($_GET['lang'])) {
 	$languages = array($_GET['lang'] . '.UTF-8');
@@ -56,10 +66,18 @@ textdomain('nixtape');
 
 $smarty = new Smarty();
 
-$smarty->template_dir = array($install_path . '/themes/'. $theme . '/templates/', $install_path . '/themes/gnufm/templates/');
-$smarty->compile_dir = $install_path. '/themes/' . $theme . '/templates_c/';
-$smarty->cache_dir = $install_path. '/cache/';
-$smarty->config_dir = array($install_path . '/themes/' . $theme . '/config/', $install_path . '/themes/gnufm/config/');
+$smarty->setTemplateDir(array(
+	$install_path . '/themes/'. $theme . '/templates/',
+	$install_path . '/themes/gnufm/templates/'
+));
+$smarty->setPluginsDir(array(
+	SMARTY_DIR . '/plugins/',
+	$install_path. '/themes/' . $theme . '/plugins/',
+	$install_path . '/themes/gnufm/plugins/'
+));
+$smarty->setCompileDir($install_path . '/themes/' . $theme . '/templates_c/');
+$smarty->setCacheDir($install_path . '/cache/');
+$smarty->setConfigDir(array($install_path . '/themes/' . $theme . '/config/', $install_path . '/themes/gnufm/config/'));
 
 $current_lang = preg_replace('/.UTF-8/', '', $current_lang);
 $smarty->assign('lang_selector_array', array(($current_lang) => 1));
@@ -74,6 +92,7 @@ $smarty->assign('this_page_absolute',
 	. (empty($_SERVER['HOST']) ? $_SERVER['SERVER_NAME'] : $_SERVER['HOST'])
 	. (($_SERVER['SERVER_PORT'] == 80) ? '' : (':' . $_SERVER['SERVER_PORT']))
 	. $_SERVER['REQUEST_URI']);
+$smarty->assign('registration_disabled', $registration_disabled);
 
 if (isset($logged_in) && $logged_in) {
 	$smarty->assign('logged_in', true);

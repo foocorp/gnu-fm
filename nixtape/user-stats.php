@@ -29,10 +29,7 @@ require_once('data/Statistic.php');
 require_once('data/GraphTypes.php');
 
 if (!isset($_GET['user']) && $logged_in == false) {
-	$smarty->assign('pageheading', 'Error!');
-	$smarty->assign('details', 'User not set! You shouldn\'t be here!');
-	$smarty->display('error.tpl');
-	die();
+	displayError("Error", "User not set. You shouldn't be here.");
 }
 
 try {
@@ -43,9 +40,9 @@ try {
 	}
 } catch (Exception $e) {
 	if ($e->getCode() == 22) {
-		echo('We had some trouble locating that user.  Are you sure you spelled it correctly?' . "\n");
+		$error = "We had some trouble locating that user.  Are you sure you spelled it correctly?";
 	} else {
-		echo 'Caught exception: ', $e->getMessage(), "\n";
+		$error = $e->getMessage();
 	}
 	$user = null;
 }
@@ -64,6 +61,10 @@ if (isset($user->name)) {
 	$begin = null;
 	$total_tracks_limit = 15000;
 	$total_tracks = $user->getTotalTracks();
+	if(!$total_tracks) {
+		displayError("No stats for user",
+			"User {$user->name} doesn't seem to have scrobbled anything yet.");
+	}
 
 	// Limit stats to timeperiod if track count is higher than limit
 	if($total_tracks > $total_tracks_limit) {
@@ -84,12 +85,8 @@ if (isset($user->name)) {
 	$smarty->assign('toptrackspx', 25 * $toptracks);
 	try {
 		$smarty->assign('graphtoptracks', new GraphTopTracks($user, $toptracks, $begin));
-	} catch (exception $e) {
-		$smarty->assign('pageheading', 'Couldn\'t get users top tracks!');
-		$smarty->assign('details', 'User ' . $user->name . ' doesn\'t seem to have scrobbled anything yet.');
-		$smarty->display('error.tpl');
-		die();
-	}
+	} catch (exception $e) {}
+
 	$smarty->assign('totaltracks', $total_tracks);
 	
 	$smarty->assign('me', $user);
@@ -118,7 +115,5 @@ if (isset($user->name)) {
 	$smarty->assign('stats', true);
 	$smarty->display('user-stats.tpl');
 } else {
-	$smarty->assign('pageheading', 'User not found');
-	$smarty->assign('details', 'Shall I call in a missing persons report?');
-	$smarty->display('error.tpl');
+	displayError("User not found", "User not found, shall I call in a missing persons report?");
 }

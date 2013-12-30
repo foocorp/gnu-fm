@@ -28,9 +28,12 @@ if ($logged_in == true) {
 	exit();
 }
 
-function sendEmail($text, $email) {
-	$subject = $site_name . ' Account Activation - Action needed!';
-	mail($email, $subject, $text);
+if ($registration_disabled == true) {
+	displayError("Registration disabled", "Registration has been disabled by the site owner, sorry!");
+}
+
+function sendEmail($to, $subject, $message) {
+	mail($to, $subject, $message);
 }
 
 if (isset($_GET['auth'])) {
@@ -39,10 +42,7 @@ if (isset($_GET['auth'])) {
 	try {
 		$row = $adodb->GetRow('SELECT * FROM AccountActivation WHERE authcode = ' . $adodb->qstr($authcode));
 	} catch (Exception $e) {
-		$errors = 'Unknown activationcode.';
-		$smarty->assign('errors', $errors);
-		$smarty->display('error.tpl');
-		die();
+		displayError("Error", "Unknown activation code.");
 	}
 
 	$sql_update = 'UPDATE Users SET active = 1 WHERE username = ' . $adodb->qstr($row['username']);
@@ -51,12 +51,7 @@ if (isset($_GET['auth'])) {
 		$res = $adodb->Execute($sql_update);
 		$res = $adodb->Execute($sql_delete);
 	} catch (Exception $e) {
-		$errors = 'An error occurred.';
-		$details = $e->getMessage();
-		$smarty->assign('pageheading', $errors);
-		$smarty->assign('details', $details);
-		$smarty->display('error.tpl');
-		die();
+		displayError("Error", $e->getMessage());
 	}
 	$smarty->assign('activated', true);
 }
@@ -116,12 +111,7 @@ if (isset($_POST['register'])) {
 			$insert = $adodb->Execute($sql);
 		} catch (Exception $e) {
 			reportError('Create user, insert, register.php', $e->getMessage());
-			$errors .= 'An error occurred.';
-			$details = $e->getMessage();
-			$smarty->assign('pageheading', $errors);
-			$smarty->assign('details', $details);
-			$smarty->display('error.tpl');
-			die();
+			displayError("Error", $e->getMessage());
 		}
 
 		$code = md5($username . time());
@@ -133,12 +123,7 @@ if (isset($_POST['register'])) {
 			$res = $adodb->Execute($sql);
 		} catch (Exception $e) {
 			reportError('AccountActivation, insert, register.php', $e->getMessage());
-			$errors .= 'An error occurred.';
-			$details = $e->getMessage();
-			$smarty->assign('pageheading', $errors);
-			$smarty->assign('details', $details);
-			$smarty->display('error.tpl');
-			die();
+			displayError("Error", $e->getMessage());
 		}
 
 		$url = $base_url . '/register.php?auth=' . $code;
@@ -147,7 +132,8 @@ if (isset($_POST['register'])) {
 			. "your account within 48 hours, after which time all information provided by you and "
 			. "your activation code will be permanently deleted from our database. If you do not want to activate your account, "
 			. "please disregard this email.\n\n" . $url . "\n\n- The " . $site_name . " Team";
-		sendEmail($content, $email);
+		$subject = $site_name . ' Account Activation - Action needed!';
+		sendEmail($email, $subject, $content);
 
 		$smarty->assign('registered', true);
 	} else {

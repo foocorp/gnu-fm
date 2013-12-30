@@ -24,10 +24,7 @@ require_once('data/User.php');
 require_once('utils/random_code_generator.php');
 
 if ($logged_in == false) {
-	$smarty->assign('pageheading', 'Error!');
-	$smarty->assign('details', 'Not logged in! You shouldn\'t be here!');
-	$smarty->display('error.tpl');
-	die();
+	displayError("Error", "Not logged in. You shouldn't be here.");
 } else if (isset($_GET['code'])) {
 	$adodb->Execute('DELETE FROM Delete_Request WHERE expires < ' . (int)(time()));
 
@@ -39,10 +36,7 @@ if ($logged_in == false) {
 		exit;
 	}
 	if (!$res) {
-		$smarty->assign('pageheading', 'Error!');
-		$smarty->assign('details', 'Invalid code.');
-		$smarty->display('error.tpl');
-		die();
+		displayError("Error", "Invalid code.");
 	} else {
 		try {
 			$adodb->Execute('DELETE FROM Scrobble_Sessions WHERE userid = ' . $this_user->uniqueid);
@@ -61,10 +55,7 @@ if ($logged_in == false) {
 			$adodb->Execute('DELETE FROM Service_Connections WHERE userid = ' . $this_user->uniqueid);
 			$adodb->Execute('DELETE FROM Users WHERE uniqueid = ' . $this_user->uniqueid);
 		} catch (Exception $e) {
-			$smarty->assign('error', 'Error!');
-			$smarty->assign('details', 'Something went amiss.');
-			$smarty->display('error.tpl');
-			die();
+			displayError("Error", "Something went amiss.");
 		}
 		session_destroy();
 		$smarty->display('account-deleted.tpl');

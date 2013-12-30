@@ -28,19 +28,13 @@ require_once('data/Server.php');
 
 
 if (!isset($_GET['user']) && $logged_in == false) {
-	$smarty->assign('pageheading', 'Error!');
-	$smarty->assign('details', 'User not set! You shouldn\'t be here!');
-	$smarty->display('error.tpl');
-	die();
+	displayError("Error", "User not set. You shouldn't be here.");
 }
 
 try {
 	$user = new User($_GET['user']);
 } catch (Exception $e) {
-	$smarty->assign('pageheading', 'User not found');
-	$smarty->assign('details', 'Shall I call in a missing persons report?');
-	$smarty->display('error.tpl');
-	die();
+	displayError("User not found", "User not found, shall I call in a missing persons report?");
 }
 
 $smarty->assign('geo', Server::getLocationDetails($user->location_uri));

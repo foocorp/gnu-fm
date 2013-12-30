@@ -25,19 +25,13 @@ require_once('data/Album.php');
 require_once('data/Track.php');
 
 if (!isset($_GET['user']) && $logged_in == false) {
-	$smarty->assign('pageheading', 'Error!');
-	$smarty->assign('details', 'User not set! You shouldn\'t be here!');
-	$smarty->display('error.tpl');
-	die();
+	displayError("Error", "User not set. You shouldn't be here.");
 }
 
 try {
 	$user = new User($_GET['user']);
 } catch (Exception $e) {
-	$smarty->assign('pageheading', 'User not found');
-	$smarty->assign('details', 'Shall I call in a missing persons report?');
-	$smarty->display('error.tpl');
-	die();
+	displayError("User not found", "User not found, shall I call in a missing persons report?");
 }
 
 $submenu = user_menu($user, 'Library');
@@ -69,9 +63,7 @@ if ($page->section == 'music') {
 		try {
 			$page->getArtists();
 		} catch (Exception $e) {
-			$smarty->assign('details', $e->getMessage());
-			$smarty->display('error.tpl');
-			die();
+			displayError("Error", $e->getMessage());
 		}
 		$smarty->assign('page', $page);
 		$smarty->display('user-library-music.tpl');

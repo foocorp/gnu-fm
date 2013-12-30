@@ -182,10 +182,12 @@ class User {
 	 *
 	 * @param int $number The number of scrobbles to return
 	 * @param int $offset The position of the first scrobble to return
+	 * @param int $from Only return scrobbles with time higher than this timestamp
+	 * @param int $to Only return scrobbles with time lower than this timestamp
 	 * @return array An array of scrobbles with human time
 	 */
-	function getScrobbles($number, $offset = 0) {
-		$data = Server::getRecentScrobbles($number, $this->uniqueid, $offset);
+	function getScrobbles($number, $offset = 0, $from = false, $to = false) {
+		$data = Server::getRecentScrobbles($number, $this->uniqueid, $offset, $from, $to);
 
 		if ($data == null) {
 			return array();
