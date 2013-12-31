@@ -2,12 +2,11 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    id: page
     property bool loggingIn: false;
 
     Component.onCompleted: {
-        if(settings.value("user", false) !== false) {
-            doLogin(settings.value("user"), settings.value("auth"));
+        if(settings.value("username", false) !== false) {
+            doLogin(settings.value("username"), settings.value("authToken"));
         }
     }
 
@@ -16,7 +15,7 @@ Page {
         source: "../images/librefm-logo.png"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: 100
+        anchors.topMargin: 50
     }
 
     Column {
@@ -28,7 +27,7 @@ Page {
         anchors.leftMargin: 10
         anchors.rightMargin: 10
         anchors.top: logo.bottom
-        anchors.topMargin: 100
+        anchors.topMargin: 50
 
         TextField {
             id: username
@@ -58,11 +57,6 @@ Page {
             }
         }
 
-        Item {
-            height: 10
-            width: 1
-        }
-
         Button {
             id: button
             text: "Log in"
@@ -85,7 +79,7 @@ Page {
         Label {
             width: parent.width
             wrapMode: Text.WordWrap
-            font.pixelSize: 20
+            font.pointSize: 12
             onLinkActivated: Qt.openUrlExternally(link)
             horizontalAlignment: Text.AlignHCenter
             textFormat: Text.RichText
@@ -97,19 +91,26 @@ Page {
     function doLogin(user, auth) {
 
         loggingIn = true;
-        request(wsUrl + "?method=auth.getmobilesession&username=" + user + "&authToken=" + auth, function (doc) {
+        request("method=auth.getmobilesession&username=" + user + "&authToken=" + auth, "get", function (doc) {
             loggingIn = false;
-            console.log(doc.responseText)
             var e = doc.responseXML.documentElement;
             for(var i = 0; i < e.childNodes.length; i++) {
-                console.log(e.childNodes[i]);
                 if(e.childNodes[i].nodeName === "error") {
                     showError(e.childNodes[i]);
                 }
-                if(e.childNodes[i].nodeName === "key") {
-                    settings.setValue("username", user);
-                    settings.setValue("authToken", auth);
-                    wsKey = e.childNodes[i].nodeValue;
+                if(e.childNodes[i].nodeName === "session") {
+                    var sess = e.childNodes[i];
+                    for(var j = 0; j < sess.childNodes.length; j++ ) {
+                        if(sess.childNodes[j].nodeName === "key") {
+                            settings.setValue("username", user);
+                            settings.setValue("authToken", auth);
+                            wsKey = sess.childNodes[j].childNodes[0].nodeValue;
+                            wsUser = user;
+                            pageStack.clear();
+                            pageStack.push(menuPage);
+                            console.log(wsKey);
+                        }
+                    }
                 }
             }
 
@@ -125,7 +126,7 @@ Page {
 
     Column {
         anchors.centerIn: parent
-        anchors.verticalCenterOffset: 20
+        anchors.verticalCenterOffset: 100
         visible: loggingIn
         spacing: 20
 

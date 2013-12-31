@@ -9,7 +9,7 @@
 
 int main(int argc, char *argv[])
 {
-    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, "/home/nemo/.local/share/harbour-librefm/");
+    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, "/home/nemo/.local/share/harbour-librefm");
     Settings settings;
     QGuiApplication *app = SailfishApp::application(argc, argv);
     QQuickWindow::setDefaultAlphaBuffer(true);

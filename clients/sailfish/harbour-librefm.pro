@@ -23,7 +23,9 @@ OTHER_FILES += qml/harbour-librefm.qml \
     qml/images/librefm-tower.png \
     qml/images/librefm-logo.png \
     qml/images/librefm.svg \
-    qml/images/empty-album.png
+    qml/images/empty-album.png \
+    qml/pages/MenuPage.qml \
+    qml/pages/RadioPage.qml
 
 HEADERS += \
     src/settings.h
