@@ -248,7 +248,7 @@ function make_playlist($session, $old_format = false, $format='xml') {
 	}else{
 		$smarty->assign('radiotracks', $radiotracks);
 		$smarty->assign('date', date("c"));
-		
+		header('Content-Type: text/xml');
 		if ($old_format) {
 			$smarty->display('radio_oldxspf.tpl');
 		} else {
