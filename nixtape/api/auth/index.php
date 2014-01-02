@@ -24,12 +24,12 @@ require_once($install_path . '/templating.php');
 require_once($install_path . '/data/Server.php');
 require_once($install_path . '/data/clientcodes.php');
 
-function displayError($error_msg) {
-	global $smarty;
-	$smarty->assign('error_msg', $error_msg);
-	$smarty->display('api_auth.tpl');
-	exit();
-}
+// function displayError($error_msg) {
+// 	global $smarty;
+// 	$smarty->assign('error_msg', $error_msg);
+// 	$smarty->display('api_auth.tpl');
+// 	exit();
+// }
 
 $smarty->assign('site_name', $site_name);
 if ($logged_in) {
