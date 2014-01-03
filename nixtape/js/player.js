@@ -175,11 +175,9 @@ function playerReady() {
 		$('#close_tag').on('click', toggleTag);
 		$('#close_tag').hide();
 
-		$('#tag_button').on('click', tag);
-		$('#tags').keyup(function(event) {
-			if(event.keyCode == 13) {
-				tag();
-			}
+		$('#tag_input').on('submit', function(event) {
+			event.preventDefault();
+			tag();
 		});
 		$('#tag_input').hide();
 	} else {
