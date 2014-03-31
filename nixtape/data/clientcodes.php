@@ -94,7 +94,7 @@ $clients = array(
 	array('code' => 'qmm', 'api_key' => $free_apikey, 'name' => 'Qmmp', 'url' => 'http://qmmp.ylsoftware.com', 'free' => True),
 	array('code' => 'qmn', 'api_key' => $free_apikey, 'name' => 'QMPDClient', 'url' => 'http://bitcheese.net/wiki/QMPDClient', 'free' => True),
 	array('code' => 'qts', 'api_key' => $free_apikey, 'name' => 'QTScrobbler', 'url' => 'http://qtscrob.sourceforge.net/', 'free' => True),
-	array('code' => 'rbx', 'api_key' => $free_apikey, 'name' => 'Rhythmbox', 'url' => 'http://projects.gnome.org/rhythmbox/', 'free' => True),
+	array('code' => 'rbx', 'api_key' => 'a string 32 characters in length', 'name' => 'Rhythmbox', 'url' => 'http://projects.gnome.org/rhythmbox/', 'free' => True),
 	array('code' => 'sbd', 'api_key' => $free_apikey, 'name' => 'Songbird', 'url' => 'http://www.getsongbird.com/', 'free' => True),
 	array('code' => 'scb', 'api_key' => $free_apikey, 'name' => 'Scrobbl', 'url' => 'http://www.last.fm/group/scrobbl', 'free' => True),
 	array('code' => 'sfm', 'api_key' => $free_apikey, 'name' => 'shell-fm', 'url' => 'http://nex.scrapping.cc/shell-fm/', 'free' => True),
