@@ -113,6 +113,7 @@ $method_map = array(
 	'tag.getinfo'           => method_tag_getInfo,
 	'track.addtags'         => method_track_addTags,
 	'track.removetag'       => method_track_removeTag,
+	'track.getinfo'		=> method_track_getInfo,
 	'track.gettoptags'      => method_track_getTopTags,
 	'track.gettopfans'      => method_track_getTopFans,
 	'track.gettags'         => method_track_getTags,
@@ -1136,6 +1137,31 @@ function method_track_removeTag() {
 	respond($xml);
 }
 
+
+/**
+ * track.getinfo : Get general information about a track.
+ *
+ * ###Description
+ * Get further information about this track.
+ *
+ * ###Parameters
+ * * **artist** (required)		: Name of the track's artist.
+ * * **track** (required)		: Name of the track.
+ * * **username** (optional)		: User to get track info for (e.g. whether loved or not)
+ * ---
+ *
+ * @package Webservice
+ * @subpackage Track
+ * @api
+ */
+function method_track_getInfo() {
+	if (!isset($_REQUEST['artist']) || !isset($_REQUEST['track'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$xml = TrackXML::getInfo($_REQUEST['artist'], $_REQUEST['track'], $_REQUEST['username']);
+	respond($xml);
+}
 
 /**
  * track.gettoptags : Get the top tags for a track.
