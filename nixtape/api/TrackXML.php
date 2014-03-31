@@ -64,6 +64,33 @@ class TrackXML {
 		return $xml;
 	}
 
+	public static function getInfo($artist, $name, $username) {
+		global $adodb;
+
+		try {
+			$track = new Track($name, $artist);
+		} catch (Exception $e) {
+			return(XML::error('failed', '7', 'Invalid resource specified'));
+		}
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('track', null);
+		$root->addChild('name', $track->name);
+		$root->addChild('mbid', $track->mbid);
+		$root->addChild('url', $track->getURL());
+		$root->addChild('duration', $track->duration * 1000);
+		$streamable = $root->addChild('streamable', $track->streamable);
+		$streamable->addAttribute('fulltrack', $track->streamable);
+		$root->addChild('listeners', $track->getListenerCount());
+		$root->addChild('playcount', $track->getPlayCount());
+		if($username) {
+			$userid = $adodb->GetOne('SELECT uniqueid FROM Users WHERE '
+				                . 'username = ' . $adodb->qstr($username));
+			$root->addChild('userloved', $track->isLoved($userid) ? 1 : 0);
+		}
+		return $xml;
+	}
+
 	public static function getTopTags($artist, $name, $limit, $cache) {
 
 		try {
