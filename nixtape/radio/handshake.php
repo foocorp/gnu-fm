@@ -38,11 +38,13 @@ $adodb->Execute('DELETE FROM Radio_Sessions WHERE expires < ' . (int)(time()));
 
 $adodb->Execute('INSERT INTO Radio_Sessions (username, session, expires) VALUES ( ' . $adodb->qstr($username) . ', ' . $adodb->qstr($session) . ', ' . (int)(time() + 259200) . ')');
 
+$radio_base = preg_replace('/https?:\/\//i', '', $base_url, 1);
+
 echo 'session=' . $session . "\n";
 echo "stream_url=this.is.broken.{$username}.example.com\n";
 echo "subscriber=0\n";
 echo "framehack=0..\n";
-echo "base_url=alpha.libre.fm\n";
+echo "base_url=$radio_base\n";
 echo "base_path=/radio\n";
 echo "info_message=\n";
 echo "fingerprint_upload_url=http://this.is.broken.example.com/fingerprint/upload.php\n";
