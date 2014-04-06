@@ -39,6 +39,7 @@ $adodb->Execute('DELETE FROM Radio_Sessions WHERE expires < ' . (int)(time()));
 $adodb->Execute('INSERT INTO Radio_Sessions (username, session, expires) VALUES ( ' . $adodb->qstr($username) . ', ' . $adodb->qstr($session) . ', ' . (int)(time() + 259200) . ')');
 
 $radio_base = preg_replace('/https?:\/\//i', '', $base_url, 1);
+$radio_base = preg_replace('/^\/\//', '', $radio_base, 1);
 
 echo 'session=' . $session . "\n";
 echo "stream_url=this.is.broken.{$username}.example.com\n";
