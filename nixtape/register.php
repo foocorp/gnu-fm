@@ -33,7 +33,16 @@ if ($registration_disabled == true) {
 }
 
 function sendEmail($to, $subject, $message) {
-	mail($to, $subject, $message);
+
+        $foo = parse_url($base_url);
+
+        $domain = $foo['host'];
+
+        $headers = 'From: do-not-reply@' . $domain . "\r\n" .
+        'Reply-To: do-not-reply@' . $domain . "\r\n" .
+        'X-Mailer: GNU FM';
+     
+	mail($to, $subject, $message, $headers);
 }
 
 if (isset($_GET['auth'])) {
