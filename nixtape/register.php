@@ -32,10 +32,9 @@ if ($registration_disabled == true) {
 	displayError("Registration disabled", "Registration has been disabled by the site owner, sorry!");
 }
 
-function sendEmail($to, $subject, $message) {
+function sendEmail($to, $subject, $message, $base_url) {
 
         $foo = parse_url($base_url);
-
         $domain = $foo['host'];
 
         $headers = 'From: do-not-reply@' . $domain . "\r\n" .
@@ -142,7 +141,7 @@ if (isset($_POST['register'])) {
 			. "your activation code will be permanently deleted from our database. If you do not want to activate your account, "
 			. "please disregard this email.\n\n" . $url . "\n\n- The " . $site_name . " Team";
 		$subject = $site_name . ' Account Activation - Action needed!';
-		sendEmail($email, $subject, $content);
+		sendEmail($email, $subject, $content, $base_url);
 
 		$smarty->assign('registered', true);
 	} else {
