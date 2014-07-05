@@ -42,7 +42,7 @@ class Library {
 		$delete_query = 'DELETE FROM Scrobbles WHERE userid=? AND time=? AND artist=? AND track=?';
 		$delete_params = array((int)$userid, (int)$timestamp, $artist, $track);
 
-		// TODO Should we have a db trigger for this?
+-		// TODO Should we have a db trigger for this?
 		$update_stats_query = 'UPDATE User_Stats SET scrobble_count=scrobble_count-1 WHERE userid=?';
 		$update_stats_params = array((int)$userid);
 
@@ -51,6 +51,10 @@ class Library {
 			$adodb->Execute($delete_query, $delete_params);
 			$delete_count = $adodb->Affected_Rows();
 			if($delete_count) {
+                // This clears the *entire* cache, but we don't know which
+                // cached queries will reference the deleted scrobbles so
+                // we can't clear the cache for only those specific queries.
+                $adodb->CacheFlush($sql=false);
 				$adodb->Execute($update_stats_query, $update_stats_params);
 			}
 		} catch (Exception $e) {

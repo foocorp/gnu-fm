@@ -1,6 +1,6 @@
 {include file='header.tpl' subheader='user-header.tpl'}
 
-<center><h3><a href='{$base_url}/user-edit.php'>{t}Edit your profile{/t}</a> | {t}Connections to other services{/t}</h3></center>
+<center><h3><a href='{$base_url}/user-edit.php'>{t}Edit your profile{/t}</a> | {t}Connections to other services{/t} | <a href='{$base_url}/user-delete-tracks.php'>{t}Delete plays{/t}</a></h3></center>
 
 {if isset($errors)}
 <div id="errors">
