@@ -1,10 +1,12 @@
-## GNU FM
+# GNU FM
 
 A music community platform in PHP.
 
+## License
+
 License: Affero GPL version 3.0 or later.
 
-### Main GNU FM developers:
+## Main GNU FM developers:
 
 *   [Michael Sheldon](http://blog.mikeasoft.com/) ([elleo](http://gitorious.org/~elleo))
 *   Clint Adams ([clint](http://gitorious.org/~clint))
@@ -16,7 +18,7 @@ License: Affero GPL version 3.0 or later.
 
 *   Jonas Haraldsson ([kabniel](http://gitorious.org/~kabniel))
 
-### All developers
+### All contributors
 
 *   [Justin Baugh](http://deadmemes.net/) ([baughj](http://gitorious.org/~baughj))
 *   Carlos Perilla (deepspawn)
