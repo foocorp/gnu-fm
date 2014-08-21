@@ -143,7 +143,7 @@ class RemoteUser extends User {
 			return $this->avatar_uri;
 		}
 
-		return 'http://www.gravatar.com/avatar/' . md5(strtolower($this->email)) . '?s=' . $size . '&d=monsterid';
+		return 'https://www.gravatar.com/avatar/' . md5(strtolower($this->email)) . '?s=' . $size . '&d=monsterid';
 	}
 
 	function getURL($component = 'profile', $params = false) {
