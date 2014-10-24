@@ -67,7 +67,7 @@ if (isset($user->name)) {
 	$smarty->assign('isme', ($this_user->name == $user->name));
 	$smarty->assign('me', $user);
 	$smarty->assign('pagetitle', $user->name);
-        $smarty->assign('awesomenumber', $user->id);
+        $smarty->assign('awesomenumber', $user->uniqueid);
 
 	$smarty->assign('extra_head_links', array(
 				array(
