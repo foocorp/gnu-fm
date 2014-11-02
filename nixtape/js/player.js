@@ -45,7 +45,7 @@ var base_url = base_url || "";
  */
 function playerInit(list, ws, rk, stationurl, gnufm_key) {
 	audio = document.getElementById("audio");
-        dlbutton = document.getElementById("dlbutton");
+	dlbutton = document.getElementById("dlbutton");
 	if (!list) {
 		// We're playing a stream instead of a playlist
 		streaming = true;
@@ -454,7 +454,7 @@ function loadSong(song) {
 	scrobbled = false;
 	now_playing = false;
 	audio.src = url;
-        dlbutton.href = url;
+	dlbutton.href = url;
 	audio.load();
 
 	if(streaming && current_song > playlist.length - 3) {
