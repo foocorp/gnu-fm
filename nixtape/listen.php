@@ -24,6 +24,11 @@ require_once('templating.php');
 
 if (isset($_GET['tag'])) {
 	$station = 'librefm://globaltags/' . $_GET['tag'];
+	if(empty($_GET['tag'])) {
+		// The user's just hit 'listen' without selecting a tag
+		// so we default to the community station
+		$station = "librefm://community/loved";
+	}
 } else if (isset($_GET['station'])) {
 	$station = $_GET['station'];
 }
