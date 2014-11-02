@@ -33,6 +33,7 @@ require_once('../api/TrackXML.php');
 require_once('../api/AlbumXML.php');
 require_once('../api/TagXML.php');
 require_once('../api/LibraryXML.php');
+require_once('../api/ChartXML.php');
 require_once('../data/Server.php');
 require_once('../radio/radio-utils.php');
 
@@ -123,6 +124,7 @@ $method_map = array(
 	'track.unban'           => method_track_unban,
 	'track.updatenowplaying' => method_track_updateNowPlaying,
 	'track.scrobble'        => method_track_scrobble,
+	'chart.gettopartists'   => method_chart_getTopArtists,
 );
 
 /**
@@ -1506,6 +1508,7 @@ function method_track_scrobble() {
 	respond($xml);
 }
 
+
 /**
  * tag.gettoptags : Get the top tags.
  *
@@ -1651,6 +1654,34 @@ function method_tag_getInfo() {
 	$xml = TagXML::getInfo($_REQUEST['tag'], $cache);
 	respond($xml);
 }
+
+/**
+ * chart.gettopartists : Get the most popular artists on the site
+ *
+ * ###Description
+ * Get a list of the artists that have been loved the most on the site.
+ *
+ * ###Parameters
+ * * **page** (optional)		: The page to show. Defaults to 1.
+ * * **limit** (optional)       : How many items to show. Defaults to 50.
+ * * **format** (optional)      : Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Chart
+ * @api
+ */
+function method_chart_getTopArtists() {
+	$limit = get_with_default('limit', 50);
+	$page = get_with_default('page', 1);
+
+	$streamable = True;
+	$cache = 600;
+
+	$xml = ChartXML::getTopArtists($limit, $page, $streamable, $cache);
+	respond($xml);
+}
+
 
 function get_userid() {
 	global $adodb;
