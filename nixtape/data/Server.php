@@ -162,7 +162,7 @@ class Server {
 	 * @param int $cache Caching period in seconds
 	 * @return array An array of artists ((artist, freq, artisturl) ..) or empty array in case of failure
 	 */
-	static function getTopArtists($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $userid = null, $cache = 600) {
+	static function getTopArtists($limit = 21, $offset = 0, $streamable = False, $begin = null, $end = null, $userid = null, $cache = 600) {
 		global $adodb;
 
 		$query = ' SELECT artist, COUNT(artist) as freq FROM Scrobbles s';
@@ -975,9 +975,10 @@ class Server {
 	 * @param string $search_term
 	 * @param string $search_type Type of search, artist|user|tag
 	 * @param int $limit How many items to return
+	 * @param bool $streamable Only return streamable artists
 	 * @return array Results
 	 */
-	static function search($search_term, $search_type, $limit = 40) {
+	static function search($search_term, $search_type, $limit = 40, $streamable = false) {
 		global $adodb;
 		switch ($search_type) {
 			case 'artist':
@@ -985,6 +986,10 @@ class Server {
 				$search_fields[] = 'name';
 				$data_fields[] = 'name';
 				$data_fields[] = 'bio_summary';
+				$data_fields[] = 'streamable';
+				$data_fields[] = 'image_small';
+				$data_fields[] = 'image_medium';
+				$data_fields[] = 'image_large';
 				break;
 			case 'user':
 				$table = 'Users';
@@ -1019,6 +1024,10 @@ class Server {
 				$sql .= ' OR ';
 			}
 			$sql .= 'LOWER(' . $search_fields[$i] . ') LIKE LOWER(' . $adodb->qstr('%' . $search_term . '%') . ')';
+		}
+
+		if ($streamable) {
+			$sql .= " AND streamable = 1 ";
 		}
 
 		$sql .= 'LIMIT ' . $limit;

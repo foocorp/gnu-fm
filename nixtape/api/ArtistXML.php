@@ -243,4 +243,32 @@ class ArtistXML {
 	}
 
 
+	public static function search($artistQuery, $streamable) {
+
+		$res = Server::search($artistQuery, "artist", 40, $streamable);
+
+		$xml = new SimpleXMLElement('<lfm status="ok"></lfm>');
+		$root = $xml->addChild('results', null);
+		$root->addAttribute('xmlns:opensearch', 'http://a9.com/-/spec/opensearch/1.1/');
+		$root->addAttribute('for', $artistQuery);
+
+		$matches = $root->addChild('artistmatches', null);
+		foreach($res as &$row) {
+			$artist = $matches->addChild('artist', null);
+			$artist->addChild('name', repamp($row['name']));
+			$artist->addChild('mbid', $row['mbid']);
+			$artist->addChild('url', $row['url']);
+			$artist->addChild('streamable', $row['streamable'] ? "1" : "0");
+			$image_small = $artist->addChild('image', $row['image_small']);
+			$image_small->addAttribute('size', 'small');
+			$image_medium = $artist->addChild('image', $row['image_medium']);
+			$image_medium->addAttribute('size', 'medium');
+			$image_large = $artist->addChild('image', $row['image_large']);
+			$image_large->addAttribute('size', 'large');
+		}
+
+		return $xml;
+	}
+
+
 }

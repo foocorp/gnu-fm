@@ -91,6 +91,7 @@ $method_map = array(
 	'artist.gettopfans'     => method_artist_getTopFans,
 	'artist.gettags'        => method_artist_getTags,
 	'artist.getflattr'      => method_artist_getFlattr,
+	'artist.search'         => method_artist_search,
 	'album.addtags'         => method_album_addTags,
 	'album.gettoptags'      => method_album_getTopTags,
 	'album.gettags'         => method_album_getTags,
@@ -632,6 +633,33 @@ function method_artist_getFlattr() {
 	}
 
 	$xml = ArtistXML::getFlattr($_REQUEST['artist']);
+	respond($xml);
+}
+
+/**
+ * artist.server : Search for an artist
+ *
+ * ###Description
+ * Search for an artist.
+ *
+ * ###Parameters
+ * * **artist**					: Name of the artist.
+ * * **streamable**				: Only return streamable artists
+ * * **format** (optional)			: Format of response, **xml** or **json**. Default is xml.
+ * - - -
+ *
+ * @package Webservice
+ * @subpackage Artist
+ * @api
+ */
+function method_artist_search() {
+	if (!isset($_REQUEST['artist'])) {
+		report_failure(LFM_INVALID_PARAMS);
+	}
+
+	$streamable = get_with_default('streamable', 0);
+
+	$xml = ArtistXML::search($_REQUEST['artist'], $streamable);
 	respond($xml);
 }
 
