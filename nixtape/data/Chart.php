@@ -32,16 +32,14 @@ class Chart {
 
 	/**
 	 * Get the site's top artists
-	 *
-	 * @param int $limit The number of artists to return
-	 * @param int $offset Skip this number of rows before returning artists
-	 * @param bool $streamable Only return streamable artists
-	 * @param int $begin Only use scrobbles with time higher than this timestamp
-	 * @param int $end Only use scrobbles with time lower than this timestamp
-	 * @param int $cache Caching period in seconds
-	 * @return array An array of artists ((artist, freq, artisturl) ..) or empty array in case of failure
-	 */
-	function getTopArtists($limit = 20, $offset = 0, $streamable = False, $begin = null, $end = null, $cache = 600) {
-		return Server::getTopArtists($limit, $offset, $streamable, $begin, $end, null, $cache);
+         *
+         * @param int $limit The number of artists to return
+         * @param int $offset Skip this number of rows before returning artists
+         * @param bool $streamable Only return streamable artists
+         * @param int $cache Caching period in seconds
+         * @return array Artists ((artist, freq, artisturl) ..) or empty array in case of failure
+         */
+	function getTopArtists($limit = 20, $offset = 0, $streamable = False, $cache = 600) {
+		return Server::getLovedArtists($limit, $offset, $streamable, null, $cache);
 	}
 }
