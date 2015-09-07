@@ -2,7 +2,7 @@
 
 /* GNUkebox -- a free software server for recording your listening habits
 
-   Copyright (C) 2009 Free Software Foundation, Inc
+   Copyright (C) 2009, 2015 Free Software Foundation, Inc
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -19,8 +19,7 @@
 
 */
 
-require_once('adodb/adodb-exceptions.inc.php');
-require_once('adodb/adodb.inc.php');
+require_once(__DIR__ . '/vendor/autoload.php');
 require_once('version.php');
 require_once('utils/get_absolute_url.php');
 
@@ -444,7 +443,7 @@ if (isset($_POST['install'])) {
 	$install_path = dirname(__FILE__) . '/';
 
 	//Write out the configuration
-	$config = "<?php\n \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$submissions_server = '" . $submissions_server . "';\n \$install_path = '" . $install_path . "';\n \$adodb_connect_string = '" . $adodb_connect_string . "'; ";
+	$config = "<?php\n \$config_version = " . $version .";\n \$connect_string = '" . $connect_string . "';\n \$submissions_server = '" . $submissions_server . "';\n \$install_path = '" . $install_path . "';\n \$adodb_connect_string = '" . $adodb_connect_string . "';\n\n require_once(__DIR__ . '/vendor/autoload.php');\n";
 
 	$conf_file = fopen('config.php', 'w');
 	$result = fwrite($conf_file, $config);

@@ -1,3 +1,5 @@
 gnukebox/config.php
+gnukebox/vendor
 nixtape/config.php
 nixtape/themes/gnufm/templates_c/
+nixtape/vendor

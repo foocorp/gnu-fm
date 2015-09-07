@@ -8,7 +8,7 @@
 <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	{if !($pagetitle)}
+	{if ! isset($pagetitle)}
 		<title>{$site_name}</title>
 	{else}
 		<title>{$pagetitle|escape:'html':'UTF-8'} &mdash; {$site_name}</title>
@@ -23,9 +23,11 @@
 	<script type="text/javascript" src="{$base_url}/js/player.js"></script>
         <script type="text/javascript" src="{$base_url}/themes/{$default_theme}/js/modernizr.js"></script>
 	<meta name="author" content="FooCorp catalogue number FOO200 and contributors" />
+{if isset($extra_head_links)}
 {section name=i loop=$extra_head_links}
 	<link rel="{$extra_head_links[i].rel|escape:'html':'UTF-8'}" href="{$extra_head_links[i].href|escape:'UTF-8'}" type="{$extra_head_links[i].type|escape:'html':'UTF-8'}" title="{$extra_head_links[i].title|escape:'html':'UTF-8'}"  />
 {/section}
+{/if}
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
 
@@ -41,7 +43,7 @@
 
   <div id="main-container">
     <div id="main" class="wrapper clearfix">
-      
+
 		<article>
 			<header>
 				{if isset($subheader)}

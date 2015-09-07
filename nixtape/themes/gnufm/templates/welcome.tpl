@@ -1,5 +1,5 @@
 {include file='header.tpl'}
-{if ($logged_in)}
+{if isset($logged_in) && $logged_in}
 <div id="welcome-box">
 <br />
 <p>{t escape=no userurl=$this_user->getURL() statsurl=$this_user->getURL('stats')}<a href="%1">Go to your profile</a> or <a href="%2">view your listening statistics</a>.{/t}</p>

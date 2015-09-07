@@ -2,7 +2,7 @@
 
 /* GNU FM -- a free network service for sharing your music listening habits
 
-   Copyright (C) 2009 Free Software Foundation, Inc
+   Copyright (C) 2009, 2015 Free Software Foundation, Inc
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -19,10 +19,8 @@
 
 */
 
-define('SMARTY_DIR', '/usr/share/php/smarty3/');
 require_once('config.php');
 require_once('auth.php');
-require_once(SMARTY_DIR . 'Smarty.class.php');
 
 function displayError($error_title, $error_message) {
 	global $smarty;
@@ -71,13 +69,14 @@ $smarty->setTemplateDir(array(
 	$install_path . '/themes/gnufm/templates/'
 ));
 $smarty->setPluginsDir(array(
-	SMARTY_DIR . '/plugins/',
+	__DIR__ . '/vendor/smarty/smarty/libs/plugins/',
 	$install_path. '/themes/' . $theme . '/plugins/',
 	$install_path . '/themes/gnufm/plugins/'
 ));
 $smarty->setCompileDir($install_path . '/themes/' . $theme . '/templates_c/');
 $smarty->setCacheDir($install_path . '/cache/');
-$smarty->setConfigDir(array($install_path . '/themes/' . $theme . '/config/', $install_path . '/themes/gnufm/config/'));
+$smarty->setConfigDir(array($install_path . '/themes/' . $theme . '/config/',
+							$install_path . '/themes/gnufm/config/'));
 
 $current_lang = preg_replace('/.UTF-8/', '', $current_lang);
 $smarty->assign('lang_selector_array', array(($current_lang) => 1));
@@ -101,4 +100,3 @@ if (isset($logged_in) && $logged_in) {
 }
 
 header('Content-Type: text/html; charset=utf-8');
-

@@ -2,7 +2,7 @@
 
 /* GNUkebox -- a free software server for recording your listening habits
 
-   Copyright (C) 2009, 2011 Free Software Foundation, Inc
+   Copyright (C) 2009, 2011, 2015 Free Software Foundation, Inc
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -114,7 +114,7 @@ PT+wyF3sxnlLADr6ApYcCQvAxHJLyUHQySqJx5+kAABArRU6QMrASTlYQ7gFsDVdowWsjLStEQIA
 Ow==" alt="" />
 
 <p>The Libre.fm wiki has a <a
-href="http://bugs.foocorp.net/projects/librefm/wiki/Clients">good list
+href="https://bugz.foocorp.net/w/projects/libre.fm/clients/">good list
 of players</a> that can be configured to support GNU FM servers, such
 as this one.</p>
 

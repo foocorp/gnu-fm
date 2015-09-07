@@ -1,5 +1,5 @@
 <ul>
-{if ($logged_in)}
+{if isset($logged_in) && $logged_in}
         <li><a href="{$this_user->getURL()}">{t}Profile{/t}</a></li>
 	<li><a href="{$base_url}/listen.php">{t}Listen{/t}</a></li>
         <li><a href="{$base_url}">{t}Popular{/t}</a></li>
