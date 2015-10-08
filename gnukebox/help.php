@@ -114,7 +114,7 @@ PT+wyF3sxnlLADr6ApYcCQvAxHJLyUHQySqJx5+kAABArRU6QMrASTlYQ7gFsDVdowWsjLStEQIA
 Ow==" alt="" />
 
 <p>The Libre.fm wiki has a <a
-href="https://bugz.foocorp.net/w/projects/libre.fm/clients/">good list
+href="https://git.gnu.io/foocorp/librefm/wikis/Clients">good list
 of players</a> that can be configured to support GNU FM servers, such
 as this one.</p>
 
