@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d4b64c97f79aa2ab95e92b4cab22f0fc",
+    "hash": "d322038fc35e9d801a3651a209bf0cc1",
     "packages": [
         {
             "name": "adodb/adodb-php",
@@ -152,6 +152,50 @@
                 "templating"
             ],
             "time": "2015-06-18 00:55:59"
+        },
+        {
+            "name": "suin/php-rss-writer",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/suin/php-rss-writer.git",
+                "reference": "a7dd2bbc287a05b266406d3afa298d44ebf115f3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/suin/php-rss-writer/zipball/a7dd2bbc287a05b266406d3afa298d44ebf115f3",
+                "reference": "a7dd2bbc287a05b266406d3afa298d44ebf115f3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Suin\\RSSWriter": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hidehito Nozawa aka Suin",
+                    "email": "suinyeze@gmail.com"
+                }
+            ],
+            "description": "Yet another simple RSS writer library for PHP 5.4 or later.",
+            "homepage": "https://github.com/suin/php-rss-writer",
+            "keywords": [
+                "feed",
+                "generator",
+                "php",
+                "rss",
+                "writer"
+            ],
+            "time": "2016-03-19 06:15:37"
         }
     ],
     "packages-dev": [
