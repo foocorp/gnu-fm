@@ -82,17 +82,17 @@ if (isset($_POST['submit'])) {
 		$errors[] = 'A streaming URL must be specified.';
 	}
 	$streaming_url = $_POST['streaming_url'];
-	if (substr($streaming_url, 0, 7) != 'http://') {
-		$streaming_url = 'http://' . $streaming_url;
+	if (substr($streaming_url, 0, 7) != 'https://') {
+		$streaming_url = 'https://' . $streaming_url;
 	}
 
-	if (preg_match('@http://[^/]*archive.org/.*/items/([^/]*)/([^/]*)@', $streaming_url, $matches)) {
+	if (preg_match('@https://[^/]*archive.org/.*/items/([^/]*)/([^/]*)@', $streaming_url, $matches)) {
 		// Convert mirror URL into canonical URL
-		$streaming_url = 'http://www.archive.org/download/' . $matches[1] . '/' . $matches[2];
+		$streaming_url = 'https://www.archive.org/download/' . $matches[1] . '/' . $matches[2];
 	}
 
-	if (!preg_match('@http://(www.)?archive.org/download/([^\/]*)/.*@', $streaming_url, $matches)) {
-		$errors[] = 'Sorry, the streaming URL must be hosted at archive.org.';
+	if (!preg_match('@https://(www.)?archive.org/download/([^\/]*)/.*@', $streaming_url, $matches)) {
+		$errors[] = 'Sorry, the streaming URL must be hosted at archive.org and be HTTPS';
 	} else {
 		// Check we've been given correct file types
 		$finfo = new finfo(FILEINFO_MIME_TYPE);
@@ -134,7 +134,7 @@ if (isset($_POST['submit'])) {
 
 		// Check the license
 		$archive_name = $matches[2];
-		$meta_url = 'http://www.archive.org/download/' . $archive_name . '/' . $archive_name . '_meta.xml';
+		$meta_url = 'https://www.archive.org/download/' . $archive_name . '/' . $archive_name . '_meta.xml';
 		try {
 			$meta = simplexml_load_file($meta_url);
 			$license = $meta->licenseurl;
