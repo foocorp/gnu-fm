@@ -2,7 +2,7 @@
 
 /* GNUkebox -- a free software server for recording your listening habits
 
-   Copyright (C) 2009 Free Software Foundation, Inc
+   Copyright (C) 2009, 2016 Free Software Foundation, Inc
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -55,6 +55,12 @@ require_once('temp-utils.php');
 				die('sql error');
 			}
 			echo '<p>' . stripslashes($total) . ' users.</p>';
+			
+			$total = $adodb->CacheGetOne(500, 'SELECT COUNT(*) as total from Users_Stats');
+			if (!$total) {
+				die('sql error');
+			}
+			echo '<p>' . stripslashes($total) . ' users active.</p>';
 
 		?>
 </body>
