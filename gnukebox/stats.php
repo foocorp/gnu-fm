@@ -56,7 +56,7 @@ require_once('temp-utils.php');
 			}
 			echo '<p>' . stripslashes($total) . ' users.</p>';
 			
-			$total = $adodb->CacheGetOne(500, 'SELECT COUNT(*) as total from Users_Stats');
+			$total = $adodb->CacheGetOne(500, 'SELECT COUNT(*) as total from User_Stats');
 			if (!$total) {
 				die('sql error');
 			}
