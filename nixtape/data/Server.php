@@ -981,7 +981,7 @@ class Server {
 	static function search($search_term, $search_type, $limit = 40, $streamable = false) {
 		global $adodb;
 
-		if $search_term {
+		if ($search_term) {
 
 		    switch ($search_type) {
 		    case 'artist':
