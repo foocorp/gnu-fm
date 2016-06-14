@@ -980,76 +980,81 @@ class Server {
 	 */
 	static function search($search_term, $search_type, $limit = 40, $streamable = false) {
 		global $adodb;
-		switch ($search_type) {
-			case 'artist':
-				$table = 'Artist';
-				$search_fields[] = 'name';
-				$data_fields[] = 'name';
-				$data_fields[] = 'bio_summary';
-				$data_fields[] = 'streamable';
-				$data_fields[] = 'image_small';
-				$data_fields[] = 'image_medium';
-				$data_fields[] = 'image_large';
-				break;
-			case 'user':
-				$table = 'Users';
-				$search_fields[] = 'username';
-				$search_fields[] = 'fullname';
-				$data_fields[] = 'username';
-				$data_fields[] = 'fullname';
-				$data_fields[] = 'bio';
-				break;
-			case 'tag':
-				$table = 'Tags';
-				$search_fields[] = 'tag';
-				$data_fields[] = 'tag';
-				break;
-			default:
-				return array();
-		}
 
-		$sql = 'SELECT DISTINCT ';
+		if $search_term {
 
-		for ($i = 0; $i < count($data_fields); $i++) {
-			$sql .= $data_fields[$i];
-			if ($i < count($data_fields) - 1) {
-				$sql .= ', ';
-			}
-		}
+		    switch ($search_type) {
+		    case 'artist':
+		      $table = 'Artist';
+		      $search_fields[] = 'name';
+		      $data_fields[] = 'name';
+		      $data_fields[] = 'bio_summary';
+		      $data_fields[] = 'streamable';
+		      $data_fields[] = 'image_small';
+		      $data_fields[] = 'image_medium';
+		      $data_fields[] = 'image_large';
+		      break;
+		    case 'user':
+		      $table = 'Users';
+		      $search_fields[] = 'username';
+		      $search_fields[] = 'fullname';
+		      $data_fields[] = 'username';
+		      $data_fields[] = 'fullname';
+		      $data_fields[] = 'bio';
+		      break;
+		    case 'tag':
+		      $table = 'Tags';
+		      $search_fields[] = 'tag';
+		      $data_fields[] = 'tag';
+		      break;
+		    default:
+		      return array();
+		    }
 
-		$sql .= ' FROM ' . $table . ' WHERE ';
+		    $sql = 'SELECT DISTINCT ';
 
-		for ($i = 0; $i < count($search_fields); $i++) {
-			if ($i > 0) {
-				$sql .= ' OR ';
-			}
-			$sql .= 'LOWER(' . $search_fields[$i] . ') LIKE LOWER(' . $adodb->qstr('%' . $search_term . '%') . ')';
-		}
+		    for ($i = 0; $i < count($data_fields); $i++) {
+		      $sql .= $data_fields[$i];
+		      if ($i < count($data_fields) - 1) {
+			$sql .= ', ';
+		      }
+		    }
 
-		if ($streamable) {
-			$sql .= " AND streamable = 1 ";
-		}
+		    $sql .= ' FROM ' . $table . ' WHERE ';
 
-		$sql .= 'LIMIT ' . $limit;
+		    for ($i = 0; $i < count($search_fields); $i++) {
+		      if ($i > 0) {
+			$sql .= ' OR ';
+		      }
+		      $sql .= 'LOWER(' . $search_fields[$i] . ') LIKE LOWER(' . $adodb->qstr('%' . $search_term . '%') . ')';
+		    }
 
-		$res = $adodb->CacheGetAll(600, $sql);
+		    if ($streamable) {
+		      $sql .= " AND streamable = 1 ";
+		    }
 
-		$result = array();
-		foreach ($res as &$i) {
-			$row = sanitize($i);
-			switch ($search_type) {
-				case 'artist':
-					$row['url'] = Server::getArtistURL($row['name']);
-					break;
-				case 'user':
-					$row['url'] = Server::getUserURL($row['username']);
-					break;
-				case 'tag':
-					$row['url'] = Server::getTagURL($row['tag']);
-					break;
-			}
-			$result[] = $row;
-		}
+		    $sql .= 'LIMIT ' . $limit;
+
+		    $res = $adodb->CacheGetAll(600, $sql);
+
+		    $result = array();
+		    foreach ($res as &$i) {
+		      $row = sanitize($i);
+		      switch ($search_type) {
+		      case 'artist':
+			$row['url'] = Server::getArtistURL($row['name']);
+			break;
+		      case 'user':
+			$row['url'] = Server::getUserURL($row['username']);
+			break;
+		      case 'tag':
+			$row['url'] = Server::getTagURL($row['tag']);
+			break;
+		      }
+		      $result[] = $row;
+		    }
+
+		  }
 
 		return $result;
 	}
