@@ -123,10 +123,10 @@ function getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid) {
 		$tid = getTrackCreateIfNew($artist, $album, $track, $mbid);
 
 		$sql = 'INSERT INTO Scrobble_Track (name, artist, album, mbid, track) VALUES ('
-			. 'lower(' . $track . '), '
-			. 'lower(' . $artist . '), '
-			. (($album == 'NULL') ? 'NULL' : 'lower(' . $album . ')') . ', '
-			. (($mbid == 'NULL') ? 'NULL' : 'lower(' . $mbid . ')') . ', '
+			. $track . ', '
+			. $artist . ', '
+			. (($album == 'NULL') ? 'NULL' : $album . ', '
+			. (($mbid == 'NULL') ? 'NULL' : '$mbid . ', '
 			. $tid . ')';
 		$res = $adodb->Execute($sql);
 		return getScrobbleTrackCreateIfNew($artist, $album, $track, $mbid);
