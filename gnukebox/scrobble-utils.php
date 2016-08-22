@@ -85,7 +85,7 @@ function getTrackCreateIfNew($artist, $album, $track, $mbid) {
 	global $adodb;
 
 	if ($album != 'NULL') {
-		$res = $adodb->GetOne('SELECT id FROM Track WHERE name = ' . $track . ' AND artist_name = ' . $artist . ' AND album_name = ' . $album . ')');
+		$res = $adodb->GetOne('SELECT id FROM Track WHERE name = ' . $track . ' AND artist_name = ' . $artist . ' AND album_name = ' . $album);
 	} else {
 		$res = $adodb->GetOne('SELECT id FROM Track WHERE name = ' . $track . ' AND artist_name = ' . $artist . ' AND album_name IS NULL');
 	}
