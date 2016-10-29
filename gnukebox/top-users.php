@@ -27,7 +27,7 @@ require_once('version.php');
 $adodb->SetFetchMode(ADODB_FETCH_ASSOC);
 
 try {
-	$res = $adodb->CacheGetAll(300, 'select users.username, user_stats.scrobble_count from user_stats left join users on user_stats.userid=users.uniqueid order by user_stats.scrobble_count desc LIMIT 100;');
+	$res = $adodb->CacheGetAll(300, 'select users.username, user_stats.scrobble_count from user_stats left join users on user_stats.userid=users.uniqueid order by user_stats.scrobble_count desc LIMIT 1000;');
 } catch (Exception $e) {
 	die($e->getMessage());
 }
@@ -40,15 +40,15 @@ try {
 <body>
 	<h2>Top users</h2>
 
-	<ul>
+	<ol>
 	    <?php
 	    	$list = [];
 			foreach ($res as $row) {
-				$list []= '<li><a href=http://libre.fm/user/' . $row['username'] . '>' . $row['username'] . '&mdash;' . $row['scrobble_count'] . '</li>';
+				$list []= '<li><a href=http://libre.fm/user/' . $row['username'] . '>' . $row['username'] . '</a>&mdash;' . $row['scrobble_count'] . '</li>';
 			}
 			echo implode('', $list);
 		?>
-	</ul>
+	</ol>
 
 <p>This server is powered by <a href="https://gitorious.org/foocorp/gnu-fm">GNU FM</a> version <?php echo $version; ?></p>
 </body>
