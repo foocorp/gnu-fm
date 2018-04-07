@@ -47,6 +47,7 @@ $clients = array(
 	array('code' => 'ass', 'api_key' => $free_apikey, 'name' => 'Last.fm player', 'url' => 'http://www.last.fm/download', 'free' => True),
 	array('code' => 'atu', 'api_key' => $free_apikey, 'name' => 'aTunes', 'url' => 'http://www.atunes.org/', 'free' => True),
 	array('code' => 'aud', 'api_key' => $free_apikey, 'name' => 'Audacious', 'url' => 'http://audacious-media-player.org/', 'free' => True),
+	array('code' => 'aus', 'api_key' => '5190DEE005D346288EE891733C4F510A', 'name' => 'AudioStreamerScrobbler', 'url' => 'https://github.com/vvdleun/audiostreamerscrobbler', 'free' => True),
 	array('code' => 'bil', 'api_key' => $nonfree_apikey, 'name' => 'billy', 'url' => 'http://www.sheepfriends.com/?page=billy', 'free' => False),
 	array('code' => 'blu', 'api_key' => $free_apikey, 'name' => 'Bluemindo', 'url' => 'http://bluemindo.codingteam.net/', 'free' => True),
 	array('code' => 'bsh', 'api_key' => $free_apikey, 'name' => 'Banshee', 'url' => 'http://banshee-project.org/', 'free' => True),
