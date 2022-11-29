@@ -35,6 +35,6 @@ License: Affero GPL version 3.0 or later.
 *   Mikael Nordfeldth (mmn)
 *   Nikola Plejic (nikolaplejic)
 *   Daniel Watkins (odd_bloke)
-*   [Rob Myers](http://robmyers.org/) ([robmyers](http://gitorious.org/~robmyers))
+*   [Rhea Myers](http://rhea.art/) rheaplex
 *   Tony Biondo (tonyb486)
 *   [Ward Vandewege](http://ward.vandewege.net/) ([cure](http://gitorious.org/~cure))
