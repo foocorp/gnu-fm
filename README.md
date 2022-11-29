@@ -1,6 +1,6 @@
 # GNU FM
 
-A music community platform in PHP.
+A music community platform in PHP. Powers Libre.fm (2009-2022) -- plans are afoot for a new piece of software to run Libre.fm
 
 ## License
 
